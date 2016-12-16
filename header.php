@@ -40,6 +40,17 @@
 		<script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap4.min.js"></script>
 		
 
+
+         <script src="bootstrap-master/dist/bootstrap-wysihtml5-0.0.2.js"></script>
+       <script src="bootstrap-master/lib/js/wysihtml5-0.3.0.js"></script>
+       <script src="bootstrap-master/src/bootstrap3-wysihtml5.js"></script>
+       
+             <link rel="stylesheet" href="bootstrap-master/src/bootstrap-wysihtml5.css" >
+             <link rel="stylesheet" href="bootstrap-master/lib/css/bootstrap3-wysiwyg5.css" >
+          <link rel="stylesheet" href="bootstrap-master/dist/bootstrap-wysihtml5-0.0.2.css" >
+
+
+
 		<script src="chosen/chosen.jquery.js"></script>
 
 		<script src="jquery-ui/jquery-ui.js"></script>

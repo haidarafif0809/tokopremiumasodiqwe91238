@@ -10,9 +10,9 @@
 $tahun_sekarang = date('Y');
 $bulan_sekarang = date('m');
 $tanggal_sekarang = date('Y-m-d');
-$jam_sekarang = date('H:i:sa');
+$jam_sekarang = date('H:i:s');
 $tahun_terakhir = substr($tahun_sekarang, 2);
-$waktu = date('Y-m-d H:i:sa');
+$waktu = date('Y-m-d H:i:s');
 
 
 //mengecek jumlah karakter dari bulan sekarang
@@ -58,8 +58,6 @@ $no_faktur = $nomor."/IM/".$data_bulan_terakhir."/".$tahun_terakhir;
 
 
  }
-
-
 
   // buat prepared statements
         $stmt = $db->prepare("INSERT INTO item_masuk (no_faktur, total, tanggal, jam, user, keterangan)

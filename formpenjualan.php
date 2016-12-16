@@ -16,6 +16,30 @@ $session_id = session_id();
 
  ?>
 
+<!-- Modal Untuk Confirm PESAN alert-->
+<div id="modal_promo_alert" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+    <div class="modal-header">
+
+  
+        <button type="button" class="close" data-dismiss="modal">&times;</button>       
+    </div>
+    <div class="modal-body">
+      <span id="tampil_alert">
+      </span>
+    </div>
+    <div class="modal-footer">
+        
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Closed</button>
+    </div>
+    </div>
+  </div>
+</div>
+<!--modal end pesan alert-->
+
+
 <!-- js untuk tombol shortcut -->
  <script src="shortcut.js"></script>
 <!-- js untuk tombol shortcut -->
@@ -795,6 +819,20 @@ else if (level_harga == "Level 3") {
   document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang');
 
 
+$.post("lihat_promo_alert.php",{id:$(this).attr('id-barang')},function(data){
+
+    if (data == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(data);
+    }
+
+});
+
+
   $('#myModal').modal('hide'); 
   $("#jumlah_barang").focus();
 
@@ -971,9 +1009,8 @@ $(document).ready(function(){
       
 </script>
 
-    <script>
-   
-   //untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
+<script>
+//untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
   $("#submit_barcode").click(function(){
 
     var kode_barang = $("#kode_barcode").val();
@@ -993,7 +1030,11 @@ alert("Barang Yang Anda Pesan Tidak Tersedia !!")
 }
 
 else{
+
+
 $("#kode_barcode").focus();
+
+
 $.post("barcode.php",{kode_barang:kode_barang,sales:sales,level_harga:level_harga},function(data){
 
 
@@ -1016,6 +1057,26 @@ $.post("barcode.php",{kode_barang:kode_barang,sales:sales,level_harga:level_harg
         });
      
      });
+
+
+$.getJSON('lihat_nama_barang.php',{kode_barang:kode_barang}, function(json){
+
+$.post("lihat_promo_alert.php",{id:json.id},function(info){
+
+    if (info == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(info);
+    }
+
+});
+
+});
+
+
 }
 
 });
@@ -2281,6 +2342,20 @@ $(function() {
         $('#satuan_konversi').val(json.satuan);
         $('#id_produk').val(json.id);
         $('#ber_stok').val(json.berkaitan_dgn_stok);
+
+$.post("lihat_promo_alert.php",{id:json.id},function(data){
+
+    if (data == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(data);
+    }
+
+});
+
       }
                                               
         });

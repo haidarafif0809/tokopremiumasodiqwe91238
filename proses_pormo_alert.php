@@ -25,10 +25,10 @@ if (!$perintah)
 }
 else 
 {
+echo '<META HTTP-EQUIV="Refresh" Content="0; URL=promo_alert.php">';
 
 }
 
-echo '<META HTTP-EQUIV="Refresh" Content="0; URL=promo_alert.php">';
 
 
  ?>

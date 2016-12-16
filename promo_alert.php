@@ -86,8 +86,6 @@ $query = $db->query("SELECT pa.status,pa.id_promo_alert,b.nama_barang,pa.pesan_a
 <div id="modal_hapus" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
-
-
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -100,7 +98,7 @@ $query = $db->query("SELECT pa.status,pa.id_promo_alert,b.nama_barang,pa.pesan_a
    <p>Apakah Anda yakin Ingin Menghapus Data ini ?</p>
    <form >
     <div class="form-group">
-		<input type="text" id="id_hapus" class="form-control" > 
+		<input type="hidden" id="id_hapus" class="form-control" > 
     </div>
    
    </form>
@@ -152,7 +150,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 			echo "<tr class='tr-id-". $data['id_promo_alert'] ."'>
 			
 			<td>". $data['nama_barang'] ."</td>
-			<td><button class='btn btn-success detaili' data-id='".$data['id_promo_alert']."'><span class='glyphicon glyphicon-list'></span> Lihat Pesan </button></td>
+			<td><button class='btn btn-success detaili' data-id='".$data['id_promo_alert']."'><span class='fa fa-list'></span> Lihat Pesan </button></td>
 			";
 			if ($data['status'] == "1")
 			{
@@ -163,8 +161,8 @@ tr:nth-child(even){background-color: #f2f2f2}
 			echo "<td>Tidak Aktif</td>";
 			};
 		
-		echo "<td><button class='btn btn-danger btn-hapus' data-id='". $data['id_promo_alert'] ."'> <span class='glyphicon glyphicon-trash'></span> Hapus </button></td>
-			<td><button class='btn btn-info btn-edit' data-namabarang='". $data['nama_barang'] ."'  data-status='". $data['status'] ."' data-id='". $data['id_promo_alert'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button></td>
+		echo "<td><button class='btn btn-danger btn-hapus' data-id='". $data['id_promo_alert'] ."'> <span class='fa fa-trash'></span> Hapus </button></td>
+			<td><a href='edit_promo_alert.php?id=". $data['id_promo_alert']."' class='btn btn-warning'><span class='fa fa-edit'></span> Edit </a> </td>
 			</tr>";
 			}
 
@@ -259,10 +257,7 @@ $(function() {
 
 
         <script type="text/javascript">
-                             
-								$(document).ready(function(){
-
-					//fungsi hapus data 
+//fungsi hapus data 
 								$(".btn-hapus").click(function(){
 
 								var id = $(this).attr("data-id");

@@ -49,6 +49,7 @@
              <link rel="stylesheet" href="bootstrap-master/lib/css/bootstrap3-wysiwyg5.css" >
           <link rel="stylesheet" href="bootstrap-master/dist/bootstrap-wysihtml5-0.0.2.css" >
 
+		<script src="ckeditor/ckeditor.js"></script>
 
 
 		<script src="chosen/chosen.jquery.js"></script>

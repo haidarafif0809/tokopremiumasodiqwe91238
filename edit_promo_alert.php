@@ -30,7 +30,7 @@
 		<div class="form-group">
 					
 					<label> Nama Produk </label><br>
-					<input name="kode_barang" id="kode_barang" class="form-control ss"  value="<?php echo $data['kode_barang'];?>(<?php echo $data['nama_barang'];?>)" placeholder="Ketik Nama Produk (Promo)" autocomplete="off" required="" >
+					<input name="kode_barang" id="kode_barang" class="form-control ss"  value="<?php echo $data['kode_barang'];?>(<?php echo $data['nama_barang'];?>)" placeholder="Ketik Nama/Kode Produk (Promo)" autocomplete="off" required="" >
 <br>					
 
 					<input type="hidden" name="id_produk" id="id_produk" value="<?php echo $data['id'];?>">
@@ -107,13 +107,11 @@ $(function() {
 });
 </script>
 
-<script type="text/javascript">
-$(function () {
- $("#pesan_alert").wysihtml5();
-
-});
-</script>
-
+	<script>
+                // Replace the <textarea id="editor1"> with a CKEditor
+                // instance, using default configuration.
+                CKEDITOR.replace( 'pesan_alert' );
+            </script>
 
 <?php
  include 'footer.php'; ?>

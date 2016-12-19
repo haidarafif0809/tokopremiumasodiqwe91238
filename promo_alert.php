@@ -4,7 +4,7 @@ include 'navbar.php';
 include 'db.php';
 
 
-$query = $db->query("SELECT pa.status,pa.id_promo_alert,b.nama_barang,pa.pesan_alert,pa.id_produk FROM promo_alert pa INNER JOIN barang b ON pa.id_produk = b.id ");
+
 
  ?>
 
@@ -41,8 +41,9 @@ $query = $db->query("SELECT pa.status,pa.id_promo_alert,b.nama_barang,pa.pesan_a
 
 
 
-  <button id="coba" type="submit" class="btn btn-primary" data-toggle="collapse"  data-target="#demo"  accesskey="r" ><i class='fa fa-plus'> </i>&nbsp;Tambah</button>
+  <button id="tambah" type="submit" class="btn btn-primary" data-toggle="collapse"  accesskey="r" ><i class='fa fa-plus'> </i>&nbsp;Tambah</button>
 
+<button style="display:none" data-toggle="collapse tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Klik untuk kembali ke utama.'><i class="fa fa-reply"></i> <u>K</u>embali </button>
 
 <br>
 <br>
@@ -53,7 +54,7 @@ $query = $db->query("SELECT pa.status,pa.id_promo_alert,b.nama_barang,pa.pesan_a
 		<div class="form-group">
 					
 					<label> Nama Produk </label><br>
-					<input name="kode_barang" id="kode_barang" class="form-control ss"  placeholder="Ketik Nama Produk (Promo)" autocomplete="off" required="" >
+					<input name="kode_barang" id="kode_barang" class="form-control "  placeholder="Ketik Nama/Kode Produk (Promo)" autocomplete="off" required="" >
 <br>					
 
 					<input type="hidden" name="id_produk" id="id_produk">
@@ -62,7 +63,7 @@ $query = $db->query("SELECT pa.status,pa.id_promo_alert,b.nama_barang,pa.pesan_a
 					<textarea name="pesan_alert" id="pesan_alert" style="height:250px" class="form-control"  placeholder="Pesan Alert Promo" required=""></textarea>  <br>
 
 					<label> Status </label><br>
-					<select name="status" id="status" class="form-control ss" autocomplete="off" required="" >
+					<select name="status" id="status" class="form-control " autocomplete="off" required="" >
 					<option value="1">Aktif</option>
 					<option value="2">Tidak Aktif</option>
 					</select><br>					
@@ -132,7 +133,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <div class="table-responsive">
 <span id="table_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_promo_alert" class="table table-bordered">
 		<thead>
 			<th style='background-color: #4CAF50; color: white'> Nama Produk</th>
 			<th style='background-color: #4CAF50; color: white'> Pesan Alert</th>
@@ -141,39 +142,70 @@ tr:nth-child(even){background-color: #f2f2f2}
 			<th style='background-color: #4CAF50; color: white'> Edit </th>	
 		</thead>
 		
-		<tbody id="tbody">
-		<?php
-
-		
-			while ($data = mysqli_fetch_array($query))
-			{
-			echo "<tr class='tr-id-". $data['id_promo_alert'] ."'>
-			
-			<td>". $data['nama_barang'] ."</td>
-			<td><button class='btn btn-success detaili' data-id='".$data['id_promo_alert']."'><span class='fa fa-list'></span> Lihat Pesan </button></td>
-			";
-			if ($data['status'] == "1")
-			{
-			echo "<td>Aktif</td>";
-			}
-			else
-			{
-			echo "<td>Tidak Aktif</td>";
-			};
-		
-		echo "<td><button class='btn btn-danger btn-hapus' data-id='". $data['id_promo_alert'] ."'> <span class='fa fa-trash'></span> Hapus </button></td>
-			<td><a href='edit_promo_alert.php?id=". $data['id_promo_alert']."' class='btn btn-warning'><span class='fa fa-edit'></span> Edit </a> </td>
-			</tr>";
-			}
-
-			//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-		</tbody>
-
 	</table>
 </span>
 </div>
+
+
+<!--script disable hubungan pasien-->
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $("#tambah").click(function(){
+  $("#demo").show();
+  $("#kembali").show();
+   $("#tambah").hide();
+  });
+
+  $("#kembali").click(function(){
+  $("#demo").hide();
+  $("#tambah").show();
+  $("#kembali").hide();
+
+  });
+});
+</script>
+
+	
+<!--DATA TABLE MENGGUNAKAN AJAX-->
+<script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
+
+          var dataTable = $('#table_promo_alert').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_promo_alert.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_promo_alert").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[5]+'');
+            },
+        });
+
+        $("#form").submit(function(){
+        return false;
+        });
+        
+
+      } );
+    </script>
+<!--/DATA TABLE MENGGUNAKAN AJAX-->
+
+
+		
+			<script>
+                // Replace the <textarea id="editor1"> with a CKEditor
+                // instance, using default configuration.
+                CKEDITOR.replace( 'pesan_alert' );
+            </script>
 
 
 <!--   script untuk detail layanan -->
@@ -257,8 +289,9 @@ $(function() {
 
 
         <script type="text/javascript">
-//fungsi hapus data 
-								$(".btn-hapus").click(function(){
+        $(document).ready(function(){
+
+            $(document).on('click', '.btn-hapus', function (e) {
 
 								var id = $(this).attr("data-id");
 								$("#id_hapus").val(id);
@@ -266,7 +299,6 @@ $(function() {
 								
 								
 								});
-								
 								
 								$("#btn_jadi_hapus").click(function(){
 								
@@ -283,16 +315,10 @@ $(function() {
 								});
 								
 								});
+			});
 					// end fungsi hapus data
 </script>
 
-
-<script type="text/javascript">
-$(function () {
- $("#pesan_alert").wysihtml5();
-
-});
-</script>
 
 
 <?php

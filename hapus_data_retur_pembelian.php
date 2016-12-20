@@ -29,7 +29,7 @@ $insert_retur_pembelian = $db->query("INSERT INTO history_retur_pembelian (no_fa
 $detail_retur_pembelian = $db->query("SELECT * FROM detail_retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur'");
 while($data_detail_retur_pembelian = mysqli_fetch_array($detail_retur_pembelian)){
 
-      $insert_retur_pembelian = "INSERT INTO history_detail_retur_pembelian (no_faktur_retur, no_faktur_pembelian, tanggal, jam, kode_barang, nama_barang, jumlah_beli, jumlah_retur, harga, subtotal, potongan, tax, user_hapus) VALUES ('$no_faktur_retur', '$data_detail_retur_pembelian[no_faktur_pembelian]', '$data_detail_retur_pembelian[tanggal]', '$data_detail_retur_pembelian[jam]', '$data_detail_retur_pembelian[kode_barang]', '$data_detail_retur_pembelian[nama_barang]', '$data_detail_retur_pembelian[jumlah_beli]', '$data_detail_retur_pembelian[jumlah_retur]', '$data_detail_retur_pembelian[harga]', '$data_detail_retur_pembelian[subtotal]', '$data_detail_retur_pembelian[potongan]', '$data_detail_retur_pembelian[tax]', '$user')";
+      $insert_retur_pembelian = "INSERT INTO history_detail_retur_pembelian (no_faktur_retur, no_faktur_pembelian, tanggal, jam, kode_barang, nama_barang, jumlah_beli, jumlah_retur, harga, subtotal, potongan, tax, user_hapus, no_faktur_hutang, kredit_lama) VALUES ('$no_faktur_retur', '$data_detail_retur_pembelian[no_faktur_pembelian]', '$data_detail_retur_pembelian[tanggal]', '$data_detail_retur_pembelian[jam]', '$data_detail_retur_pembelian[kode_barang]', '$data_detail_retur_pembelian[nama_barang]', '$data_detail_retur_pembelian[jumlah_beli]', '$data_detail_retur_pembelian[jumlah_retur]', '$data_detail_retur_pembelian[harga]', '$data_detail_retur_pembelian[subtotal]', '$data_detail_retur_pembelian[potongan]', '$data_detail_retur_pembelian[tax]', '$user', '$data_detail_retur_pembelian[no_faktur_hutang]', '$data_detail_retur_pembelian[kredit_lama]')";
 
 if ($db->query($insert_retur_pembelian) === TRUE) {
     
@@ -49,8 +49,10 @@ echo "sukses";
 }
 else
 {
-	
-	}
+}
+
+// Jurnalnya dihapus disini, karena kalo ditrigger pembelian nya jadi gak update
+$delete = $db->query("DELETE FROM jurnal_trans WHERE no_faktur = '$no_faktur_retur' ");
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

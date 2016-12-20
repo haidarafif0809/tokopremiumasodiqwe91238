@@ -12,12 +12,11 @@ $jumlah_retur = angkadoang($_POST['jumlah_retur']);
 $jumlah_potongan = angkadoang($_POST['jumlah_potongan']);
 $harga = angkadoang($_POST['harga']);
 $jumlah_tax = angkadoang($_POST['jumlah_tax']);
+$subtotal = angkadoang($_POST['subtotal']);
 
 
 $user = $_SESSION['nama'];
 $id = stringdoang($_POST['id']);
-
-echo $subtotal = $harga * $jumlah_baru - $jumlah_potongan;
 
 
 $query00 = $db->query("SELECT * FROM tbs_retur_pembelian WHERE id = '$id'");

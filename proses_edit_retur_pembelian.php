@@ -8,6 +8,7 @@ include 'db.php';
 $no_faktur_retur = $_GET['no_faktur_retur'];
 $cara_bayar = $_GET['cara_bayar'];
 $nama = $_GET['nama'];
+$suplier = $_GET['suplier'];
 
 
 $perintah3 = $db->query("SELECT * FROM tbs_retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur'");
@@ -41,7 +42,7 @@ $perintah1 = $db->query("INSERT INTO tbs_retur_pembelian (no_faktur_retur, no_fa
 
 }
 
- header ('location:edit_retur_pembelian.php?no_faktur_retur='.$no_faktur_retur.'&nama='.$nama.'&cara_bayar='.$cara_bayar.'');
+ header ('location:edit_retur_pembelian.php?no_faktur_retur='.$no_faktur_retur.'&nama='.$nama.'&cara_bayar='.$cara_bayar.'&suplier='.$suplier.'');
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

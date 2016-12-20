@@ -11,6 +11,11 @@ $tanggal_sekarang = date('Y-m-d');
 $jam_sekarang = date('H:i:sa');
 $tahun_terakhir = substr($tahun_sekarang, 2);
 
+    $total = angkadoang($_POST['total']);
+
+    $no_faktur_hutang = stringdoang($_POST['no_faktur_hutang']);
+
+
     $tanggal = stringdoang($_POST['tanggal']);
 
     $no_faktur_retur = stringdoang($_POST['no_faktur_retur']);
@@ -27,23 +32,34 @@ $tahun_terakhir = substr($tahun_sekarang, 2);
     $datauser = mysqli_fetch_array($query_user);
     $user_buat = $datauser['user_buat'];
 
+
+    $hutang = $db->query("SELECT kredit_lama AS kredit FROM detail_retur_pembelian WHERE no_faktur_hutang = '$no_faktur_hutang' ORDER BY id ASC LIMIT 1 ");
+    $data_hutang = mysqli_fetch_array($hutang);
+    $data_hutang['kredit']; 
+
     $perintah1 = $db->query("DELETE FROM detail_retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur'");
 
 
+    $update_pembelian_kredit_awal = $db->query("UPDATE pembelian SET kredit = '$data_hutang[kredit]' WHERE no_faktur = '$no_faktur_hutang'");
+
+    if ($data_hutang['kredit'] >= $total) {
+    $total_setelah_dipotong_hutang = 0;
+    }
+    else{
+    $total_setelah_dipotong_hutang = $total - $data_hutang['kredit'];
+    }
 
 
   // buat prepared statements
-        $stmt = $db->prepare("UPDATE retur_pembelian SET no_faktur_retur = ?, tanggal = ?, jam = ?, tanggal_edit = ?, nama_suplier = ?,
-                total = ?, potongan = ?, tax = ?, user_edit = ?, cara_bayar = ?, tunai = ?, sisa = ?, ppn = ? WHERE no_faktur_retur = ?");
+        $stmt = $db->prepare("UPDATE retur_pembelian SET no_faktur_retur = ?, tanggal = ?, jam = ?, tanggal_edit = ?, nama_suplier = ?, total = ?, potongan = ?, tax = ?, user_edit = ?, cara_bayar = ?, tunai = ?, sisa = ?, ppn = ? WHERE no_faktur_retur = ?");
             
   // hubungkan "data" dengan prepared statements
         $stmt->bind_param("sssssiiissiiss", 
-        $no_faktur_retur, $tanggal, $jam_sekarang, $tanggal_sekarang, $nama_suplier , $total, $potongan, $tax_jadi, $user_edit, $cara_bayar, $pembayaran, $sisa, $ppn_input, $no_faktur_retur);        
+        $no_faktur_retur, $tanggal, $jam_sekarang, $tanggal_sekarang, $nama_suplier , $total_setelah_dipotong_hutang, $potongan, $tax_jadi, $user_edit, $cara_bayar, $pembayaran, $sisa, $ppn_input, $no_faktur_retur);        
 
   // siapkan "data" query
     $no_faktur_retur = stringdoang($_POST['no_faktur_retur']);
     $nama_suplier = stringdoang($_POST['nama_suplier']);
-    $total = angkadoang($_POST['total']);
     $total1 = angkadoang($_POST['total1']);
     $pembayaran = angkadoang($_POST['pembayaran']);
     $sisa = angkadoang($_POST['sisa']);
@@ -91,8 +107,8 @@ $tahun_terakhir = substr($tahun_sekarang, 2);
         $jumlah_barang = $data['jumlah_retur'];
       }
 
-        $query2 = "INSERT INTO detail_retur_pembelian (no_faktur_retur, no_faktur_pembelian, tanggal, kode_barang, nama_barang, jumlah_beli, jumlah_retur, harga, subtotal, potongan, tax, satuan, asal_satuan) 
-		VALUES ('$data[no_faktur_retur]','$data[no_faktur_pembelian]','$tanggal','$data[kode_barang]','$data[nama_barang]','$data[jumlah_beli]','$jumlah_barang','$harga','$data[subtotal]','$data[potongan]','$data[tax]', '$data[satuan]', '$data[satuan_beli]')";
+        $query2 = "INSERT INTO detail_retur_pembelian (no_faktur_retur, no_faktur_pembelian, tanggal, kode_barang, nama_barang, jumlah_beli, jumlah_retur, harga, subtotal, potongan, tax, satuan, asal_satuan,no_faktur_hutang, kredit_lama) 
+		VALUES ('$data[no_faktur_retur]','$data[no_faktur_pembelian]','$tanggal','$data[kode_barang]','$data[nama_barang]','$data[jumlah_beli]','$jumlah_barang','$harga','$data[subtotal]','$data[potongan]','$data[tax]', '$data[satuan]', '$data[satuan_beli]','$no_faktur_hutang','$data_hutang[kredit]')";
 
         if ($db->query($query2) === TRUE) {
 
@@ -103,7 +119,41 @@ $tahun_terakhir = substr($tahun_sekarang, 2);
     }
 
 
-    $select_suplier = $db->query("SELECT id,nama FROM suplier WHERE id = '$nama_suplier'");
+
+
+// UPDATE PEMBELIAN HUTANG RETUR <START>
+$no_faktur_retur = stringdoang($_POST['no_faktur_retur']);
+$no_faktur_hutang = stringdoang($_POST['no_faktur_hutang']);
+
+if ($no_faktur_hutang != "") {
+
+
+$sub_total = $db->query("SELECT SUM(subtotal) AS sub_total FROM detail_retur_pembelian WHERE no_faktur_hutang = '$no_faktur_hutang'");
+$data_sub = mysqli_fetch_array($sub_total);
+$data_sub['sub_total'];
+
+
+if ($total > $data_hutang['kredit']) {
+  $sub_akhir = $data_hutang['kredit'];
+}
+else{
+  $sub_akhir = $total;
+
+}
+
+$update_pembelian_total = $db->query("UPDATE pembelian SET kredit = kredit - $sub_akhir WHERE no_faktur = '$no_faktur_hutang'");
+$update_pembelian_lunas = $db->query("UPDATE pembelian SET status = 'Lunas' WHERE kredit = 0 AND no_faktur = '$no_faktur_hutang'");
+$update_pembelian_hutang = $db->query("UPDATE pembelian SET status = 'Hutang' WHERE kredit < 0 AND no_faktur = '$no_faktur_hutang'");
+
+}
+
+// UPDATE PEMBELIAN HUTANG RETUR </END>
+
+ // Jurnalnya dihapus disini, karena kalo ditrigger pembelian nya jadi gak update
+    $delete = $db->query("DELETE FROM jurnal_trans WHERE no_faktur = '$no_faktur_retur' ");
+ // Jurnalnya dihapus disini, karena kalo ditrigger pembelian nya jadi gak update
+
+$select_suplier = $db->query("SELECT id,nama FROM suplier WHERE id = '$nama_suplier'");
 $ambil_suplier = mysqli_fetch_array($select_suplier);
     
 $select_setting_akun = $db->query("SELECT * FROM setting_akun");
@@ -141,7 +191,7 @@ $ambil_tbs = mysqli_fetch_array($select_pot_pemb);
                     if ($ppn_input == "Non") {  
                     
                     $persediaan = $total_hpp ;
-                    $total_akhir = $total;
+                    $total_akhir = $total_setelah_dipotong_hutang;
                     
                     
                     //PERSEDIAAN    
@@ -157,7 +207,7 @@ $ambil_tbs = mysqli_fetch_array($select_pot_pemb);
                     
                     $pajak = $total_tax;
                     $persediaan = $total_hpp;
-                    $total_akhir = $total;
+                    $total_akhir = $total_setelah_dipotong_hutang;
                     
                     
                     //PERSEDIAAN    
@@ -176,7 +226,7 @@ $ambil_tbs = mysqli_fetch_array($select_pot_pemb);
                     //ppn == Exclude
                       $pajak = $tax_jadi;
                     $persediaan = $total_hpp;                
-                    $total_akhir = $total;
+                    $total_akhir = $total_setelah_dipotong_hutang;
                     
                     
                     //PERSEDIAAN    
@@ -195,6 +245,26 @@ $ambil_tbs = mysqli_fetch_array($select_pot_pemb);
 
  //KAS
         $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat,user_edit) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Pembelian - $ambil_suplier[nama]', '$cara_bayar', '$total_akhir', '0', 'Retur Pembelian', '$no_faktur_retur','1', '$user_buat','$user_edit')");
+
+
+if ($no_faktur_hutang != "") {    
+
+  if ($total > $data_hutang['kredit']) {
+     $retur_hutang = $data_hutang['kredit'];  
+  }
+  else{
+     $retur_hutang = $total;
+  }
+
+
+
+ //RETUR HUTANG
+        $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat,user_edit) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Pembelian - $ambil_suplier[nama]', '$ambil_setting[bayar_hutang_retur]','0','$retur_hutang','Retur Pembelian', '$no_faktur_retur','1', '$user_buat','')");
+
+//HUTANG DAGANG
+        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Pembelian - $ambil_suplier[nama]', '$ambil_setting[hutang]', '$retur_hutang', '0', 'Retur Pembelian', '$no_faktur_retur','1', '$user_buat')");
+  
+}
 
  
 if ($potongan != "" || $potongan != 0 ) {
@@ -224,12 +294,16 @@ else{
 }
 
 
-
+    
     $query3 = $db->query("DELETE  FROM tbs_retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur'");
+
+   
     echo "Success";
+
+    echo '<script>window.location.href="retur_pembelian.php";</script>';
+
 
     //Untuk Memutuskan Koneksi Ke Database
     mysqli_close($db);
 
-echo '<script>window.location.href="retur_pembelian.php";</script>';
     ?>

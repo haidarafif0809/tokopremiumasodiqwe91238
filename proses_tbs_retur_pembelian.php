@@ -110,7 +110,6 @@ else {
 
         // menampilkan data
       echo "<tr class='tr-id-".$data1['id']."'>
-      <td>". $data1['no_faktur_pembelian'] ."</td>
       <td>". $data1['kode_barang'] ."</td>
       <td>". $data1['nama_barang'] ."</td>
       <td>". rp($data1['jumlah_beli']) ." ".$data1['satuan_beli']."</td>
@@ -125,7 +124,7 @@ else {
       <td><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
 
 
-      <td><button class='btn btn-danger btn-hapus-tbs' id='btn-hapus-".$data1['id']."' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-faktur='". $data1['no_faktur_pembelian'] ."' data-subtotal='". $data1['subtotal'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>
+      <td><button class='btn btn-danger btn-sm btn-hapus-tbs' id='btn-hapus-".$data1['id']."' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-faktur='". $data1['no_faktur_pembelian'] ."' data-subtotal='". $data1['subtotal'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>
 
       </tr>";
       

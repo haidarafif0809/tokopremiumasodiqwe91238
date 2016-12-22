@@ -251,7 +251,8 @@ if ($lihat['persediaan_lihat'] > 0){
 }
 
  if ($lihat['retur_pembelian_lihat'] > 0){
-                            echo '<li><a href="retur_pembelian.php" class="waves-effect">Retur Pembelian</a></li>';
+                            echo '<li><a href="retur_pembelian_faktur.php" class="waves-effect">Retur Pembelian / Faktur</a></li>';
+                            echo '<li><a href="retur_pembelian.php" class="waves-effect">Retur Pembelian Non Faktur</a></li>';
 }
 
 if ($lihat['retur_lihat'] > 0){

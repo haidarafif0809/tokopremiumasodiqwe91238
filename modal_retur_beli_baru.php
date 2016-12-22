@@ -34,7 +34,7 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql = "SELECT b.id AS id_produk,b.satuan AS satuan_dasar, s.nama AS satuan_beli ,ss.nama AS satuan_asli, dp.no_faktur, dp.tanggal, dp.kode_barang, dp.nama_barang, dp.jumlah_barang, dp.satuan, dp.harga, dp.subtotal, dp.potongan, dp.tax, dp.status, p.suplier, hm.harga_unit, IFNULL(SUM(hpm.sisa),0) + IFNULL(hm.sisa,0) AS sisa, dp.satuan, dp.asal_satuan ";
+$sql = "SELECT b.id AS id_produk,b.satuan AS satuan_dasar, s.nama AS satuan_beli, b.harga_beli, ss.nama AS satuan_asli, dp.no_faktur, dp.tanggal, dp.kode_barang, dp.nama_barang, dp.jumlah_barang, dp.satuan, dp.harga, dp.subtotal, dp.potongan, dp.tax, dp.status, p.suplier, hm.harga_unit, IFNULL(SUM(hpm.sisa),0) + IFNULL(hm.sisa,0) AS sisa, dp.satuan, dp.asal_satuan ";
 $sql.=" FROM detail_pembelian dp LEFT JOIN pembelian p ON dp.no_faktur = p.no_faktur LEFT JOIN hpp_masuk hm ON dp.no_faktur = hm.no_faktur AND dp.kode_barang = hm.kode_barang LEFT JOIN hpp_masuk hpm ON dp.no_faktur = hpm.no_faktur_hpp_masuk AND dp.kode_barang = hpm.kode_barang INNER JOIN satuan s ON dp.satuan = s.id INNER JOIN satuan ss ON dp.asal_satuan = ss.id INNER JOIN barang b ON dp.kode_barang = b.kode_barang ";
 $sql.=" WHERE (hpm.sisa > 0 OR hm.sisa > 0) ";
 $sql.=" AND p.suplier = '$nama_suplier' GROUP BY dp.no_faktur, dp.kode_barang";
@@ -46,7 +46,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql = "SELECT b.id AS id_produk,b.satuan AS satuan_dasar, s.nama AS satuan_beli ,ss.nama AS satuan_asli, dp.no_faktur, dp.tanggal, dp.kode_barang, dp.nama_barang, dp.jumlah_barang, dp.satuan, dp.harga, dp.subtotal, dp.potongan, dp.tax, dp.status, p.suplier, hm.harga_unit, IFNULL(SUM(hpm.sisa),0) + IFNULL(hm.sisa,0) AS sisa, dp.satuan, dp.asal_satuan ";
+$sql = "SELECT b.id AS id_produk,b.satuan AS satuan_dasar, b.harga_beli, s.nama AS satuan_beli ,ss.nama AS satuan_asli, dp.no_faktur, dp.tanggal, dp.kode_barang, dp.nama_barang, dp.jumlah_barang, dp.satuan, dp.harga, dp.subtotal, dp.potongan, dp.tax, dp.status, p.suplier, hm.harga_unit, IFNULL(SUM(hpm.sisa),0) + IFNULL(hm.sisa,0) AS sisa, dp.satuan, dp.asal_satuan ";
 $sql.=" FROM detail_pembelian dp LEFT JOIN pembelian p ON dp.no_faktur = p.no_faktur LEFT JOIN hpp_masuk hm ON dp.no_faktur = hm.no_faktur AND dp.kode_barang = hm.kode_barang LEFT JOIN hpp_masuk hpm ON dp.no_faktur = hpm.no_faktur_hpp_masuk AND dp.kode_barang = hpm.kode_barang INNER JOIN satuan s ON dp.satuan = s.id INNER JOIN satuan ss ON dp.asal_satuan = ss.id INNER JOIN barang b ON dp.kode_barang = b.kode_barang ";
 $sql.=" WHERE (hpm.sisa > 0 OR hm.sisa > 0) ";
 $sql.=" AND p.suplier = '$nama_suplier' ";
@@ -72,7 +72,7 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {
 
 
-$sum_sisa = $db->query("SELECT IFNULL(SUM(sisa),0) AS jumlah_sisa_produk FROM hpp_masuk WHERE sisa > 0 AND kode_barang = '$row[kode_barang]' AND jenis_transaksi = 'Pembelian'");
+$sum_sisa = $db->query("SELECT IFNULL(SUM(sisa),0) AS jumlah_sisa_produk FROM hpp_masuk WHERE sisa > 0 AND kode_barang = '$row[kode_barang]' AND (jenis_transaksi = 'Pembelian' OR jenis_transaksi = 'Retur Penjualan') ");
 $data_sum_sisa = mysqli_fetch_array($sum_sisa);
 
 

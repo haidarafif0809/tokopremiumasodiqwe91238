@@ -51,16 +51,18 @@ $tahun_terakhir = substr($tahun_sekarang, 2);
 
 
   // buat prepared statements
-        $stmt = $db->prepare("UPDATE retur_pembelian SET no_faktur_retur = ?, tanggal = ?, jam = ?, tanggal_edit = ?, nama_suplier = ?, total = ?, potongan = ?, tax = ?, user_edit = ?, cara_bayar = ?, tunai = ?, sisa = ?, ppn = ? WHERE no_faktur_retur = ?");
+        $stmt = $db->prepare("UPDATE retur_pembelian SET no_faktur_retur = ?, tanggal = ?, jam = ?, tanggal_edit = ?, nama_suplier = ?, total = ?, potongan = ?, tax = ?, user_edit = ?, cara_bayar = ?, tunai = ?, sisa = ?, ppn = ?, total_bayar = ?, potongan_hutang = ? WHERE no_faktur_retur = ?");
             
   // hubungkan "data" dengan prepared statements
-        $stmt->bind_param("sssssiiissiiss", 
-        $no_faktur_retur, $tanggal, $jam_sekarang, $tanggal_sekarang, $nama_suplier , $total_setelah_dipotong_hutang, $potongan, $tax_jadi, $user_edit, $cara_bayar, $pembayaran, $sisa, $ppn_input, $no_faktur_retur);        
+        $stmt->bind_param("sssssiiissiisiis", 
+        $no_faktur_retur, $tanggal, $jam_sekarang, $tanggal_sekarang, $nama_suplier , $total_setelah_dipotong_hutang, $potongan, $tax_jadi, $user_edit, $cara_bayar, $pembayaran, $sisa, $ppn_input, $total, $potong_hutang, $no_faktur_retur);        
 
   // siapkan "data" query
     $no_faktur_retur = stringdoang($_POST['no_faktur_retur']);
     $nama_suplier = stringdoang($_POST['nama_suplier']);
     $total1 = angkadoang($_POST['total1']);
+    $total = angkadoang($_POST['total']);
+    $potong_hutang = angkadoang($_POST['potong_hutang']);
     $pembayaran = angkadoang($_POST['pembayaran']);
     $sisa = angkadoang($_POST['sisa']);
     $ppn_input = stringdoang($_POST['ppn_input']);

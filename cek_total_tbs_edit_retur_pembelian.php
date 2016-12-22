@@ -23,8 +23,9 @@ $satuan = stringdoang($_POST['satuan']);
     	$abc = $jumlah_baru;
     }
 
- $queryy = $db->query("SELECT SUM(sisa) AS total_sisa FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur' OR no_faktur_hpp_masuk = '$no_faktur'");
+ $queryy = $db->query("SELECT SUM(sisa) AS total_sisa FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND jenis_transaksi = 'Pembelian' OR jenis_transaksi = 'Retur Penjualan' ");
  $dataaa = mysqli_fetch_array($queryy);
+
 
  $queryyy = $db->query("SELECT IFNULL(dp.jumlah_retur,0) AS jumlah_detail ,IFNULL(tp.jumlah_retur,0) AS jumlah_tbs FROM detail_retur_pembelian dp LEFT JOIN tbs_retur_pembelian tp ON dp.no_faktur_pembelian = tp.no_faktur_pembelian WHERE dp.kode_barang = '$kode_barang' AND dp.no_faktur_pembelian = '$no_faktur' AND dp.no_faktur_retur = '$no_faktur_retur' ");
  $data000 = mysqli_fetch_array($queryyy);

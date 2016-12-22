@@ -9,7 +9,7 @@ include 'db.php';
  $id_produk = $_POST['id_produk'];
  $no_faktur = $_POST['no_faktur'];
 
- $queryy = $db->query("SELECT SUM(sisa) AS total_sisa FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND jenis_transaksi = 'Pembelian'");
+ $queryy = $db->query("SELECT SUM(sisa) AS total_sisa FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND (jenis_transaksi = 'Pembelian' OR jenis_transaksi = 'Retur Penjualan')");
  $dataaa = mysqli_fetch_array($queryy);
 
  $stok = $dataaa['total_sisa'] ;

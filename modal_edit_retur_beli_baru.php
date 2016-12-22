@@ -71,7 +71,7 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {
 
 
-$sum_sisa = $db->query("SELECT IFNULL(SUM(sisa),0) AS jumlah_sisa_produk FROM hpp_masuk WHERE sisa > 0 AND kode_barang = '$row[kode_barang]' AND jenis_transaksi = 'Pembelian'");
+$sum_sisa = $db->query("SELECT IFNULL(SUM(sisa),0) AS jumlah_sisa_produk FROM hpp_masuk WHERE sisa > 0 AND kode_barang = '$row[kode_barang]' AND (jenis_transaksi = 'Pembelian' OR jenis_transaksi = 'Retur Penjualan') ");
 $data_sum_sisa = mysqli_fetch_array($sum_sisa);
 
 

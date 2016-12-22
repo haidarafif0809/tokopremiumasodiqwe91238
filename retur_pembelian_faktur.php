@@ -17,7 +17,7 @@ $perintah = $db->query("SELECT p.id,p.no_faktur_retur,p.keterangan,p.total,p.nam
 
 <div class="container"> <!--start of container-->
 
-<h3><b> DATA RETUR PEMBELIAN NON FAKTUR </b></h3><hr>
+<h3><b> DATA RETUR PEMBELIAN FAKTUR </b></h3><hr>
 
 <!--membuat link-->
 <?php
@@ -27,7 +27,7 @@ $pembelian = mysqli_fetch_array($pilih_akses_pembelian);
 
 if ($pembelian['retur_pembelian_tambah'] > 0) {
 
-echo '<a href="form_retur_pembelian.php"  class="btn btn-info"><i class="fa fa-plus"> </i> RETUR PEMBELIAN NON FAKTUR</a>';
+echo '<a href="form_retur_pembelian.php"  class="btn btn-info"><i class="fa fa-plus"> </i> RETUR PEMBELIAN FAKTUR</a>';
 
 }
 ?>

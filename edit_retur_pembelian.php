@@ -471,6 +471,8 @@ $data_tbs = mysqli_num_rows($tbs);
 
   <div class="col-sm-4"> <!--tag pembuka col sm 4-->
 
+<div class="card card-block">
+
   <form action="proses_bayar_retur_beli.php" id="form_beli" method="POST"><!--tag pembuka form-->
 
 <div class="row">
@@ -553,6 +555,9 @@ $data_tbs = mysqli_num_rows($tbs);
      
 
           </form><!--tag penutup form-->
+
+          </div>
+          
 <div class="alert alert-success" id="alert_berhasil" style="display:none">
   <strong>Success!</strong> Pembayaran Berhasil
 </div>

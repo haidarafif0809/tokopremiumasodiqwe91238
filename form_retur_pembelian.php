@@ -350,6 +350,7 @@ $session_id = session_id();
 
   <div class="col-sm-4"> <!--tag pembuka col sm 4-->
 
+<div class="card card-block">
   <form action="proses_bayar_retur_beli.php" id="form_beli" method="POST"><!--tag pembuka form-->
 
 <div class="row">
@@ -400,14 +401,10 @@ $session_id = session_id();
           
 
 
-      <input type="hidden" name="jumlah" id="jumlah1" class="form-control" placeholder="jumlah"><br>
-
+      <input type="hidden" name="jumlah" id="jumlah1" class="form-control" placeholder="jumlah">
       <input type="hidden" name="ppn_input" id="ppn_input" value="Include" class="form-control" placeholder="ppn input">  
       
       
-
-      
-
 
 <!-- memasukan teks pada kolom suplier, dan nomor faktur namun disembunyikan -->
       <input type="hidden" name="session_id" class="form-control" value="<?php echo $session_id; ?>" required="" >
@@ -430,6 +427,10 @@ $session_id = session_id();
      
 
 					</form><!--tag penutup form-->
+</div>
+
+
+
 <div class="alert alert-success" id="alert_berhasil" style="display:none">
   <strong>Success!</strong> Pembayaran Berhasil
 </div>

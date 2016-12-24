@@ -9,7 +9,7 @@ include 'db.php';
 
 
 //menampilkan seluruh data yang ada pada tabel pembelian dalan DB
-$perintah = $db->query("SELECT p.id,p.no_faktur_retur,p.keterangan,p.total,p.nama_suplier,p.tanggal,p.tanggal_edit,p.jam,p.user_buat,p.user_edit,p.potongan,p.tax,p.tunai,p.sisa,p.cara_bayar,p.total_bayar,p.potongan_hutang,s.nama FROM retur_pembelian p INNER JOIN suplier s ON p.nama_suplier = s.id ORDER BY p.id DESC");
+$perintah = $db->query("SELECT p.id,p.no_faktur_retur,p.keterangan,p.total,p.nama_suplier,p.tanggal,p.tanggal_edit,p.jam,p.user_buat,p.user_edit,p.potongan,p.tax,p.tunai,p.sisa,p.cara_bayar,s.nama FROM retur_pembelian p INNER JOIN suplier s ON p.nama_suplier = s.id WHERE p.total_bayar IS NULL ORDER BY p.id DESC");
 
  ?>
 
@@ -27,7 +27,7 @@ $pembelian = mysqli_fetch_array($pilih_akses_pembelian);
 
 if ($pembelian['retur_pembelian_tambah'] > 0) {
 
-echo '<a href="form_retur_pembelian.php"  class="btn btn-info"><i class="fa fa-plus"> </i> RETUR PEMBELIAN FAKTUR</a>';
+echo '<a href="form_retur_pembelian_faktur.php"  class="btn btn-info"><i class="fa fa-plus"> </i> RETUR PEMBELIAN FAKTUR</a>';
 
 }
 ?>
@@ -133,18 +133,18 @@ if ($pembelian['retur_pembelian_hapus'] > 0) {
 ?>
 
 			<th style='background-color: #4CAF50; color:white'> Cetak </th>
-			<th style='background-color: #4CAF50; color:white'> Faktur Retur </th>
-			<th style='background-color: #4CAF50; color:white'> Suplier </th>
-			<th style='background-color: #4CAF50; color:white'> Total Retur </th>
-			<th style='background-color: #4CAF50; color:white'> Potong Hutang </th>
-			<th style='background-color: #4CAF50; color:white'> Kas </th>
-			<th style='background-color: #4CAF50; color:white'> Diskon </th>
-			<th style='background-color: #4CAF50; color:white'> Pajak </th>
+			<th style='background-color: #4CAF50; color:white'> Nomor Faktur Retur </th>
+			<th style='background-color: #4CAF50; color:white'> Nama Suplier </th>
+			<th style='background-color: #4CAF50; color:white'> Total </th>
+			<th style='background-color: #4CAF50; color:white'> Potongan </th>
+			<th style='background-color: #4CAF50; color:white'> Tax </th>
 			<th style='background-color: #4CAF50; color:white'> Tanggal </th>
 			<th style='background-color: #4CAF50; color:white'> Jam </th>
 			<th style='background-color: #4CAF50; color:white'> User Buat </th>
 			<th style='background-color: #4CAF50; color:white'> User Edit </th>
 			<th style='background-color: #4CAF50; color:white'> Tanggal Edit</th>
+			<th style='background-color: #4CAF50; color:white'> Tunai </th>
+			<th style='background-color: #4CAF50; color:white'> Kembalian </th>
 			
 		</thead>
 		
@@ -161,7 +161,7 @@ if ($pembelian['retur_pembelian_hapus'] > 0) {
 
 if ($pembelian['retur_pembelian_edit'] > 0) {
 
-			echo "<td> <a href='proses_edit_retur_pembelian.php?no_faktur_retur=". $data1['no_faktur_retur']."&nama=". $data1['nama']."&cara_bayar=".$data1['cara_bayar']."&suplier=".$data1['nama_suplier']."' class='btn btn-success'> <span class='glyphicon glyphicon-edit'></span> Edit </a> </td> ";
+			echo "<td> <a href='proses_edit_retur_pembelian_faktur.php?no_faktur_retur=". $data1['no_faktur_retur']."&nama=". $data1['nama']."&cara_bayar=".$data1['cara_bayar']."&suplier=".$data1['nama_suplier']."' class='btn btn-success'> <span class='glyphicon glyphicon-edit'></span> Edit </a> </td> ";
 		}
 
 if ($pembelian['retur_pembelian_hapus'] > 0) {
@@ -172,8 +172,6 @@ if ($pembelian['retur_pembelian_hapus'] > 0) {
 			echo "<td> <a href='cetak_lap_retur_pembelian.php?no_faktur_retur=".$data1['no_faktur_retur']."&nama_suplier=".$data1['nama']."' class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print'> </span> Cetak </a> </td>
 			<td>". $data1['no_faktur_retur'] ."</td>
 			<td>". $data1['nama'] ."</td>
-			<td>". rp($data1['total_bayar']) ."</td>
-			<td>". rp($data1['potongan_hutang']) ."</td>
 			<td>". rp($data1['total']) ."</td>
 			<td>". rp($data1['potongan']) ."</td>
 			<td>". rp($data1['tax']) ."</td>
@@ -182,6 +180,8 @@ if ($pembelian['retur_pembelian_hapus'] > 0) {
 			<td>". $data1['user_buat'] ."</td>
 			<td>". $data1['user_edit'] ."</td>
 			<td>". $data1['tanggal_edit'] ."</td>
+			<td>". rp($data1['tunai']) ."</td>
+			<td>". rp($data1['sisa']) ."</td>
 			
 			</tr>";
 			}
@@ -214,7 +214,7 @@ mysqli_close($db);
 		
 		$("#modal_detail").modal('show');
 		
-		$.post('detail_retur_pembelian.php',{no_faktur_retur:no_faktur_retur},function(info) {
+		$.post('detail_retur_pembelian_faktur.php',{no_faktur_retur:no_faktur_retur},function(info) {
 		
 		$("#modal-detail").html(info);
 		
@@ -247,7 +247,7 @@ mysqli_close($db);
 				var id = $(this).attr("data-id");
 				var no_faktur_retur =  $("#data_faktur").val();
 
-				$.post("hapus_data_retur_pembelian.php",{no_faktur_retur:no_faktur_retur,id:id},function(data){
+				$.post("hapus_data_retur_pembelian_faktur.php",{no_faktur_retur:no_faktur_retur,id:id},function(data){
 				if (data != "") {
 
 				$("#modal_hapus").modal('hide');

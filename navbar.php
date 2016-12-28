@@ -110,6 +110,10 @@ if ($lihat['kategori_lihat'] > 0){
                                 echo '<li><a href="kategori_barang.php" class="waves-effect">Kategori</a></li>';
 }
 
+//if ($lihat['program_promo_produk'] > 0){
+                                echo '<li><a href="program_promo.php" class="waves-effect">Program Promo</a></li>';
+//}
+
 if ($lihat['komisi_produk_lihat'] > 0){
                                 echo '<li><a href="fee_produk.php" class="waves-effect">Komisi Produk</a></li>';
 }

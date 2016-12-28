@@ -246,7 +246,7 @@ else{
 }
 
     $query3 = $db->query("DELETE  FROM tbs_retur_pembelian WHERE session_id = '$session_id'");
-    echo "Success";
+
 
 
 //Untuk Memutuskan Koneksi Ke Database

@@ -668,17 +668,27 @@ $(document).ready(function(){
     var harga = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_produk").val()))));
     var potongan1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
     var potongan2 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan2").val()))));
+    var potong_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
+    var pajak_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
 
     var sisa = sisabarang - jumlah_retur;
+
+             if (pajak_faktur == '') 
+             {
+             pajak_faktur = 0;
+             }          
+             if (potong_faktur == '') 
+             {
+             potong_faktur = 0;
+             }
+
 
           if (potongan1 == '') 
           {
              potongan1 = 0;
           }
 
-   
-
-        else
+          else
           {
             var pos = potongan1.search("%");
            if (pos > 0) 
@@ -689,17 +699,19 @@ $(document).ready(function(){
             };
           }
 
-
           var subtotal = parseInt(jumlah_retur, 10) *  parseInt(harga, 10) - parseInt(potongan1, 10);
           
           
-          var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian").val()))));
+          var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian1").val()))));
           if (total == '') 
           {
           total = 0;
           };
 
-    var total_akhir = parseInt(total,10) + parseInt(subtotal,10);
+      var total_akhir = parseInt(total,10) + parseInt(subtotal,10);
+      var nilai_pajak = parseInt(pajak_faktur,10) * parseInt(total_akhir,10) / 100; 
+      var nilai_diskon = parseInt(potong_faktur,10) * parseInt(total_akhir,10) / 100; 
+      var nilai_akhir =  parseInt(total_akhir,10) - parseInt(nilai_diskon,10) + parseInt(nilai_pajak,10);   
 
 
      $("#jumlah_retur").val('');
@@ -718,8 +730,9 @@ $(document).ready(function(){
   {
 
 
-    $("#total_retur_pembelian").val(tandaPemisahTitik(total_akhir));
+    $("#total_retur_pembelian").val(tandaPemisahTitik(nilai_akhir));
     $("#total_retur_pembelian1").val(tandaPemisahTitik(total_akhir));
+    $("#potongan_pembelian").val(tandaPemisahTitik(nilai_diskon));
       $("#kode_barang").focus();
 
     $.post("proses_tbs_retur_pembelian_faktur.php",{kode_barang:kode_barang,jumlah_retur:jumlah_retur,satuan_produk:satuan_produk,nama_barang:nama_barang,no_faktur_pembelian:no_faktur2,harga:harga,potongan1:potongan1,tax1:tax1,satuan_beli:satuan_beli},function(info) {
@@ -1251,23 +1264,35 @@ $(document).on('click','.btn-hapus-tbs',function(e){
     var id = $(this).attr("data-id");
     var subtotal_tbs = $(this).attr("data-subtotal");
     var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian1").val()))));
+    var potong_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
+    var pajak_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
 
     if (total == '') 
         {
           total = 0;
         };
+    if (pajak_faktur == '') 
+        {
+          pajak_faktur = 0;
+        };
+    if (potong_faktur == '') 
+        {
+          potong_faktur = 0;
+        };
+
       var total_akhir = parseInt(total,10) - parseInt(subtotal_tbs,10);
+      var nilai_pajak = parseInt(pajak_faktur,10) * parseInt(total_akhir,10) / 100; 
+      var nilai_diskon = parseInt(potong_faktur,10) * parseInt(total_akhir,10) / 100; 
+      var nilai_akhir =  parseInt(total_akhir,10) - parseInt(nilai_diskon,10) + parseInt(nilai_pajak,10);      
 
-      $("#total_retur_pembelian").val(tandaPemisahTitik(total_akhir));
+      $("#total_retur_pembelian").val(tandaPemisahTitik(nilai_akhir));
       $("#total_retur_pembelian1").val(tandaPemisahTitik(total_akhir));
-
-
+      $("#potongan_pembelian").val(tandaPemisahTitik(nilai_diskon));
 
     $.post("hapus_tbs_retur_pembelian_faktur.php",{id:id,kode_barang:kode_barang,no_faktur_pembelian:no_faktur_pembelian},function(data){
 
     $("#kode_barang").focus();
-    $(".tr-id-"+id+"").remove();
-    
+    $(".tr-id-"+id+"").remove();   
 
     
     });
@@ -1442,7 +1467,7 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
                                     var subtotal = parseInt(harga,10) * parseInt(jumlah_baru,10) - parseInt(potongan,10);
                                     
-                                    var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian").val()))));
+                                    var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian1").val()))));
                                     
                                     var subtotal_penjualan_akhir = parseInt(subtotal_penjualan,10) - parseInt(subtotal_lama,10) + parseInt(subtotal,10);
 
@@ -1508,9 +1533,8 @@ $(document).on('click','.btn-hapus-tbs',function(e){
                                     $("#input-jumlah-"+id+"").attr("type", "hidden"); 
                                     $("#text-tax-"+id+"").text(jumlah_tax);
                                     $("#total_retur_pembelian").val(tandaPemisahTitik(subtotal_akhir)); 
-                                    $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_penjualan_akhir));
-                                    $("#potongan_pembelian").val(tandaPemisahTitik(potongan_faktur)); 
-                                    $("#kode_barang").val(tandaPemisahTitik(tax_faktur)); 
+                                    $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_penjualan_akhir ));
+                                    $("#potongan_pembelian").val(tandaPemisahTitik(potongan_faktur));
 
                                      $.post("update_pesanan_barang_retur_pembelian_faktur.php",{harga:harga,jumlah_retur:jumlah_retur,jumlah_tax:jumlah_tax,potongan:potongan,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,subtotal:subtotal},function(info){    
 

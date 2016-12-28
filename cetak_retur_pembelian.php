@@ -75,7 +75,7 @@ $data001 = mysqli_fetch_array($perintah);
 <br>
 <div class="container">
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
         <thead>
 
            <th> Kode Barang </th>
@@ -94,20 +94,17 @@ $data001 = mysqli_fetch_array($perintah);
         <tbody>
         <?php
 
-            $query5 = $db->query("SELECT * FROM detail_retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur' ");
+            $query5 = $db->query("SELECT dp.kode_barang, dp.nama_barang, dp.jumlah_retur, dp.satuan, dp.harga, dp.potongan, dp.subtotal, dp.tax, s.nama AS nama_satuan FROM detail_retur_pembelian dp INNER JOIN satuan s ON dp.satuan = s.id WHERE dp.no_faktur_retur = '$no_faktur_retur' ");
             //menyimpan data sementara yang ada pada $perintah
             while ($data5 = mysqli_fetch_array($query5))
             {
-
-              $query01 = $db->query("SELECT * FROM barang WHERE kode_barang = '$data5[kode_barang]'");
-              $cek = mysqli_fetch_array($query01);
 
               
             echo "<tr>
                 <td>". $data5['kode_barang'] ."</td>
                 <td>". $data5['nama_barang'] ."</td>
                 <td>". $data5['jumlah_retur'] ."</td>
-                <td>". $cek['satuan'] ."</td>
+                <td>". $data5['nama_satuan'] ."</td>
                 <td>". rp($data5['harga']) ."</td>
                 <td>". rp($data5['potongan']) ."</td>
                 <td>". rp($data0['total']) ."</td>

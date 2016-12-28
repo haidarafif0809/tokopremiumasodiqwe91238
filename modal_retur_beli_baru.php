@@ -52,8 +52,7 @@ $sql.=" WHERE (hpm.sisa > 0 OR hm.sisa > 0) ";
 $sql.=" AND p.suplier = '$nama_suplier' ";
 
   $sql.=" AND ( dp.kode_barang LIKE '".$requestData['search']['value']."%' ";  
-  $sql.=" OR dp.nama_barang LIKE '".$requestData['search']['value']."%' ";
-  $sql.=" OR p.suplier LIKE '".$requestData['search']['value']."%')";
+  $sql.=" OR dp.nama_barang LIKE '".$requestData['search']['value']."%' )";
 
 }
 
@@ -75,7 +74,6 @@ while( $row=mysqli_fetch_array($query) ) {
 $sum_sisa = $db->query("SELECT IFNULL(SUM(sisa),0) AS jumlah_sisa_produk FROM hpp_masuk WHERE sisa > 0 AND kode_barang = '$row[kode_barang]' AND (jenis_transaksi = 'Pembelian' OR jenis_transaksi = 'Retur Penjualan') ");
 $data_sum_sisa = mysqli_fetch_array($sum_sisa);
 
-
       $konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE id_satuan = '$row[satuan]' AND kode_produk = '$row[kode_barang]'");
       $data_konversi = mysqli_fetch_array($konversi);
       $num_rows = mysqli_num_rows($konversi);
@@ -93,45 +91,43 @@ $data_sum_sisa = mysqli_fetch_array($sum_sisa);
       }
 
   $nestedData=array(); 
-
-
-  $nestedData[] = $row["kode_barang"];
-  $nestedData[] = $row["nama_barang"];
+   
+    $nestedData[] = $row["kode_barang"];
+    $nestedData[] = $row["nama_barang"];
 
     if ($sisa == 0) {
-  $konversi_data = $row['sisa'] / $data_konversi['konversi'];
-  $nestedData[] = "$konversi_data";
-      }
-      else
-      {
-  $nestedData[] = $row["jumlah_barang"];
-      }
+    $konversi_data = $row['sisa'] / $data_konversi['konversi'];
+    $nestedData[] = "$konversi_data";
+    }
+    else
+    {
+    $nestedData[] = $row["jumlah_barang"];
+    }   
+  
+    $nestedData[] = $row["satuan_beli"];
 
-  $nestedData[] = $row["satuan_beli"];
+    if ($sisa == 0) {
+      $nestedData[] = rp("$harga");
+    }
+    else{
+      $nestedData[] = rp($row["harga"]);
+    }
 
-  if ($sisa == 0) {
-    $nestedData[] = rp("$harga");
-      }
-  else{
-    $nestedData[] = rp($row["harga"]);
+    $nestedData[] = rp($row["subtotal"]);
+    $nestedData[] = rp($row["potongan"]);
+    $nestedData[] = rp($row["tax"]);
 
-  }
+    $nestedData[] = $data_sum_sisa["jumlah_sisa_produk"] ." ".$row["satuan_asli"];  
 
-  $nestedData[] = rp($row["subtotal"]);
-  $nestedData[] = rp($row["potongan"]);
-  $nestedData[] = rp($row["tax"]);
-
-  $nestedData[] = $data_sum_sisa["jumlah_sisa_produk"] ." ".$row["satuan_asli"];
-
-  $nestedData[] = $row["harga"];
-  $nestedData[] = $row["asal_satuan"];
-  $nestedData[] = "$sisa";
-  $nestedData[] = $row["id_produk"];
-  $nestedData[] = $row["satuan"];
-  $nestedData[] = $row["sisa"];  
-  $nestedData[] = $row["no_faktur"];
-  $nestedData[] = $row["satuan_dasar"];
-  $nestedData[] = $row["harga"];
+    $nestedData[] = $row["harga"];
+    $nestedData[] = $row["asal_satuan"];
+    $nestedData[] = "$sisa";
+    $nestedData[] = $row["id_produk"];
+    $nestedData[] = $row["satuan"];
+    $nestedData[] = $row["sisa"];  
+    $nestedData[] = $row["no_faktur"];
+    $nestedData[] = $row["satuan_dasar"];
+    $nestedData[] = $row["harga"];
 
   
   $data[] = $nestedData;

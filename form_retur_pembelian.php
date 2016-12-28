@@ -111,8 +111,7 @@ $session_id = session_id();
 
       <div id="col-faktur-hutang" class="col-sm-3" style="display: none">
           <label> No. Faktur Hutang </label><br>          
-          <select data-placeholder="--SILAHKAN PILIH--" name="no_faktur_hutang" id="no_faktur_hutang" class="form-control chosen" required="" >         
-          <option value="">--SILAHKAN PILIH--</option>
+          <select data-placeholder="--SILAHKAN PILIH--" name="no_faktur_hutang" id="no_faktur_hutang" multiple class="form-control chosen" required="" >         
           <?php 
           
           // menampilkan seluruh data yang ada pada tabel suplier
@@ -390,7 +389,7 @@ $session_id = session_id();
 
   <div class="col-sm-12">
       <label><b> KAS </b></label><br>
-      <input style="height: 20px; font-size: 20px;" type="text" name="pembayaran" id="pembayaran_pembelian" autocomplete="off" class="form-control" placeholder="KAS" readonly="">
+      <input style="height: 20px; font-size: 20px;" type="text" name="pembayaran" id="pembayaran_pembelian" autocomplete="off" class="form-control" placeholder="KAS" >
   </div>
 
   <div class="col-sm-6" style="display: none">
@@ -850,7 +849,8 @@ $("#cari_produk_pembelian").click(function(){
   var total1 = $("#total_retur_pembelian1"). val();
   var satuan_dasar = $("#satuan_pcs"). val();
   var potong_hutang = $("#potong_hutang"). val();
-  var no_faktur_hutang = $("#no_faktur_hutang_hidden"). val();
+  var no_faktur_hutang = $("#no_faktur_hutang"). val();
+  var no_faktur_hutang_hidden = $("#no_faktur_hutang_hidden"). val();
 
 if (total == "")
  {
@@ -876,7 +876,7 @@ alert("Suplier Harus Di Isi");
   $("#batal").hide();
 
 
-$.post("proses_bayar_retur_beli.php",{session_id:session_id,sisa:sisa,nama_suplier:suplier,total:total,cara_bayar:carabayar,potongan:potongan_pembelian,tax:tax,pembayaran:pembayaran_pembelian,total1:total1,ppn_input:ppn_input,satuan_dasar:satuan_dasar, no_faktur_hutang:no_faktur_hutang,total1:total1,potong_hutang:potong_hutang},function(info) {
+$.post("proses_bayar_retur_beli.php",{session_id:session_id,sisa:sisa,nama_suplier:suplier,total:total,cara_bayar:carabayar,potongan:potongan_pembelian,tax:tax,pembayaran:pembayaran_pembelian,total1:total1,ppn_input:ppn_input,satuan_dasar:satuan_dasar, no_faktur_hutang:no_faktur_hutang,total1:total1,potong_hutang:potong_hutang,no_faktur_hutang_hidden:no_faktur_hutang_hidden},function(info) {
 
      $("#alert_berhasil").show();
      $("#result").html(info);
@@ -1284,7 +1284,9 @@ $(document).ready(function(){
 
         $.post("nilai_hutang_pembelian.php",{no_faktur_hutang: no_faktur_hutang},function(data){
 
+
           var info_data = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(data))));
+         
 
           var data_kas = parseInt(total_retur,10) - parseInt(info_data,10);
           if (data_kas > 0) {
@@ -1368,6 +1370,7 @@ $(document).ready(function(){
 $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});  
 
 </script>
+
                               
 
 <script type="text/javascript">
@@ -1666,6 +1669,7 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
 <!-- Datatable AJAX -->
 <script type="text/javascript" language="javascript" >
+$(document).ready(function() {
   $(document).on('click', '#cari_produk_pembelian', function (e) {
     $('#table_retur').DataTable().destroy();
         var dataTable = $('#table_retur').DataTable( {
@@ -1683,7 +1687,7 @@ $(document).on('click','.btn-hapus-tbs',function(e){
             error: function(){  // error handling
               $(".employee-grid-error").html("");
               $("#table_retur").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-              $("#employee-grid_processing").css("display","none");             
+              $("#employee-grid_processing").css("display","none");
               
             }
           },
@@ -1710,7 +1714,7 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
 
   });
-
+});
  </script>
  <!-- Datatable AJAX -->
 
@@ -1723,23 +1727,27 @@ $(function() {
 
       if (data_toogle == "0") {
 
-      $("#no_faktur_hutang").chosen("destroy");
+        $("#no_faktur_hutang").chosen("destroy");
         $('#col-faktur-hutang').show();
         $("#no_faktur_hutang").chosen({no_results_text: "Maaf, Data Tidak Ada!"});  
         $(this).attr("data-toogle", 1);
+        $("#pembayaran_pembelian").attr("readonly", true);
       }
       else{
 
-      $("#no_faktur_hutang").chosen("destroy");
+        $("#no_faktur_hutang").chosen("destroy");
         $('#col-faktur-hutang').hide();
         $("#no_faktur_hutang").chosen({no_results_text: "Maaf, Data Tidak Ada!"});  
         $(this).attr("data-toogle", 0);
+        $("#pembayaran_pembelian").attr("readonly", false);
       }
 
     });
 });
 </script>
  <!-- Potongan Hutang Faktur -->
+
+
 
 <!-- memasukan file footer.php -->
 <?php include 'footer.php'; ?>

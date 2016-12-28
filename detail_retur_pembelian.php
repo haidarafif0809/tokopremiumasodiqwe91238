@@ -6,7 +6,7 @@ include 'db.php';
 
  $no_faktur_retur = $_POST['no_faktur_retur'];
 
- $query = $db->query ("SELECT tp.id,tp.no_faktur_retur,tp.no_faktur_pembelian,tp.kode_barang,tp.nama_barang,tp.jumlah_beli,tp.jumlah_retur,tp.harga,tp.potongan,tp.tax,tp.subtotal, s.nama AS satuan_dasar, ss.nama AS satuan_beli FROM detail_retur_pembelian tp INNER JOIN barang bb ON tp.kode_barang = bb.kode_barang INNER JOIN satuan s ON bb.satuan = s.id INNER JOIN satuan ss ON tp.asal_satuan = ss.id WHERE tp.no_faktur_retur = '$no_faktur_retur'");
+ $query = $db->query ("SELECT tp.id,tp.no_faktur_retur,tp.no_faktur_pembelian,tp.kode_barang,tp.nama_barang,tp.jumlah_beli,tp.jumlah_retur,tp.harga,tp.potongan,tp.tax,tp.subtotal, s.nama AS satuan_dasar, ss.nama AS satuan_beli FROM detail_retur_pembelian tp INNER JOIN barang bb ON tp.kode_barang = bb.kode_barang INNER JOIN satuan s ON bb.satuan = s.id INNER JOIN satuan ss ON tp.asal_satuan = ss.id WHERE tp.no_faktur_retur = '$no_faktur_retur' GROUP BY tp.no_faktur_retur, tp.kode_barang ");
 
  ?>
 

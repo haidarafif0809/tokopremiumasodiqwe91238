@@ -128,9 +128,9 @@ $suplier = $_GET['nama_suplier'];
     <div class="col-sm-3"> 
 <table>
   <tbody>
-    <tr><td>Jumlah Retur</td> <td>:&nbsp;</td><td><?php echo rp($data0['tax']); ?></td></tr>
-    <tr><td>Potongan</td> <td>:&nbsp;</td><td><?php echo $j_retur; ?></td></tr>
-    <tr><td>Pajak</td> <td>:&nbsp;</td><td><?php echo rp($data0['potongan']); ?></td></tr>
+    <tr><td>Jumlah Retur</td> <td>:&nbsp;</td><td><?php echo $j_retur; ?></td></tr>
+    <tr><td>Potongan</td> <td>:&nbsp;</td><td><?php echo rp($data0['potongan']); ?></td></tr>
+    <tr><td>Pajak</td> <td>:&nbsp;</td><td><?php echo rp($data0['tax']); ?></td></tr>
   </tbody>
 </table>    
 
@@ -141,7 +141,7 @@ $suplier = $_GET['nama_suplier'];
 <table>
   <tbody>
     <tr><td>Subtotal</td> <td>:&nbsp;</td><td><?php echo rp($j_subtotal); ?></td></tr>
-    <tr><td>Total Akhir</td> <td>:&nbsp;</td><td><?php echo rp($data0['total']); ?></td></tr>
+    <tr><td><b>Total Akhir</b></td> <td>:&nbsp;</td><td><b><?php echo rp($data0['total']); ?></b></td></tr>
     <tr><td>Tunai</td> <td>:&nbsp;</td><td><?php echo rp($data0['tunai']); ?></td></tr>
     <tr><td>Kembalian</td> <td>:&nbsp;</td><td><?php echo rp($data0['sisa']); ?></td></tr>
 

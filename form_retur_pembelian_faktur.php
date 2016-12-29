@@ -709,8 +709,9 @@ $(document).ready(function(){
           };
 
       var total_akhir = parseInt(total,10) + parseInt(subtotal,10);
-      var nilai_pajak = parseInt(pajak_faktur,10) * parseInt(total_akhir,10) / 100; 
       var nilai_diskon = parseInt(potong_faktur,10) * parseInt(total_akhir,10) / 100; 
+      var total_akhir_stlah_dipotong = parseInt(total_akhir,10) - parseInt(nilai_diskon,10);
+      var nilai_pajak = parseInt(pajak_faktur,10) * parseInt(total_akhir_stlah_dipotong,10) / 100; 
       var nilai_akhir =  parseInt(total_akhir,10) - parseInt(nilai_diskon,10) + parseInt(nilai_pajak,10);   
 
 
@@ -1074,9 +1075,14 @@ $("#potongan_pembelian").keyup(function(){
              var sisa_potongan = total - potongan_rupiah;             
              var t_tax = ((parseInt(sisa_potongan,10) * parseInt(tax,10)) / 100);
              var hasil_akhir = parseInt(sisa_potongan, 10) + parseInt(Math.round(t_tax,10));
+            var total_tmbh_tax = parseInt(total, 10) + parseInt(Math.round(t_tax,10));
         
         if (potongan_persen > 100) {
           alert ("Potongan %, Tidak Boleh Lebih Dari 100%");
+        $("#potongan_persen").val('0');
+        $("#tax").val('0');
+        potongan_rupiah = 0;
+        hasil_akhir = total;
         }
 
         
@@ -1122,14 +1128,16 @@ $("#potongan_pembelian").keyup(function(){
               var total_akhir = parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) + Math.round(parseInt(t_tax,10));
               
           
+          if (tax > 100) {
+                alert ('Jumlah Tax Tidak Boleh Lebih Dari 100%');
+                 $("#tax").val('0');
+                 total_akhir = t_total;
+              }
+
 
               $("#total_retur_pembelian").val(tandaPemisahTitik(total_akhir));
 
-              if (tax > 100) {
-                alert ('Jumlah Tax Tidak Boleh Lebih Dari 100%');
-                 $("#tax").val('');
-
-              }
+              
 
 
 
@@ -1281,8 +1289,9 @@ $(document).on('click','.btn-hapus-tbs',function(e){
         };
 
       var total_akhir = parseInt(total,10) - parseInt(subtotal_tbs,10);
-      var nilai_pajak = parseInt(pajak_faktur,10) * parseInt(total_akhir,10) / 100; 
       var nilai_diskon = parseInt(potong_faktur,10) * parseInt(total_akhir,10) / 100; 
+      var total_akhir_stlah_dipotong = parseInt(total_akhir,10) - parseInt(nilai_diskon,10);
+      var nilai_pajak = parseInt(pajak_faktur,10) * parseInt(total_akhir_stlah_dipotong,10) / 100; 
       var nilai_akhir =  parseInt(total_akhir,10) - parseInt(nilai_diskon,10) + parseInt(nilai_pajak,10);      
 
       $("#total_retur_pembelian").val(tandaPemisahTitik(nilai_akhir));
@@ -1485,7 +1494,9 @@ $(document).on('click','.btn-hapus-tbs',function(e){
                                       tax_faktur = 0;
                                     }
 
-                                     tax_faktur = parseInt(tax_faktur) * parseInt(subtotal_penjualan_akhir) / 100;
+                                    var sub_setelah_dipotong = parseInt(subtotal_penjualan_akhir,10) - Math.round(parseInt(potongan_faktur,10));
+
+                                     tax_faktur = parseInt(tax_faktur) * parseInt(sub_setelah_dipotong) / 100;
 
                                     var tax_tbs = tax / subtotal_lama * 100;
                                     var jumlah_tax = tax_tbs * subtotal / 100;
@@ -1535,6 +1546,7 @@ $(document).on('click','.btn-hapus-tbs',function(e){
                                     $("#total_retur_pembelian").val(tandaPemisahTitik(subtotal_akhir)); 
                                     $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_penjualan_akhir ));
                                     $("#potongan_pembelian").val(tandaPemisahTitik(potongan_faktur));
+                                    
 
                                      $.post("update_pesanan_barang_retur_pembelian_faktur.php",{harga:harga,jumlah_retur:jumlah_retur,jumlah_tax:jumlah_tax,potongan:potongan,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,subtotal:subtotal},function(info){    
 

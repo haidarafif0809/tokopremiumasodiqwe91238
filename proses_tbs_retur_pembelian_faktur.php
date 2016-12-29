@@ -161,30 +161,66 @@ else {
                                     var kode_barang = $(this).attr("data-kode");
                                     var no_faktur = $(this).attr("data-faktur");
                                     var harga = $(this).attr("data-harga");
-                                    var satuan = $(this).attr("data-satuan");
-
                                     var jumlah_retur = $("#text-jumlah-"+id+"").text();
+                                    var no_faktur_retur = $("#nomorfaktur").val();
+                                    var satuan = $(this).attr("data-satuan");
 
                                     var subtotal_lama = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-subtotal-"+id+"").text()))));
                                    
                                     var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-potongan-"+id+"").text()))));
 
+                                    var potong_hutang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potong_hutang").val()))));
+
+                                    if (potong_hutang == "") {
+                                      potong_hutang = 0;
+                                    }
+
+                                    var sub_total = parseInt(harga,10) * parseInt(jumlah_baru,10);
+                                   
+                                   var total_tbs = parseInt(harga,10) * parseInt(jumlah_retur,10);
+                                   // rupiah to persen
+                                    var potongan_tbs = parseInt(Math.round(potongan, 10)) / parseInt(total_tbs) * 100;
+                                    //rupiah to persen
+
+                                    var jumlah_potongan = parseInt(Math.round(potongan_tbs)) * parseInt(sub_total) / 100;
+
+
                                     var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-tax-"+id+"").text()))));
 
-                                    var subtotal = parseInt(harga,10) * parseInt(jumlah_baru,10) - parseInt(potongan,10);
+                                    var subtotal = parseInt(sub_total,10) - parseInt(jumlah_potongan,10);
                                     
-                                    var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian").val()))));
-                                    
+                                    var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian1").val()))));
+                                    var potongan_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
+                                    potongan_faktur = parseInt(potongan_faktur) * parseInt(sub_total) / 100;
+
                                     subtotal_penjualan = parseInt(subtotal_penjualan,10) - parseInt(subtotal_lama,10) + parseInt(subtotal,10);
 
+                                    var sub_setelah_potongan_faktur = parseInt(subtotal_penjualan,10) - Math.round(parseInt(potongan_faktur,10));
+
+                                    var tax_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
+                                     tax_faktur = parseInt(tax_faktur) * parseInt(sub_setelah_potongan_faktur) / 100;
+
+
+                                    
                                     var tax_tbs = tax / subtotal_lama * 100;
                                     var jumlah_tax = tax_tbs * subtotal / 100;
 
-                                      if (jumlah_baru == 0) {
+                                    var subtotal_akhir = parseInt(subtotal_penjualan,10) - parseInt(potongan_faktur,10) + parseInt(tax_faktur,10);
 
-                                      alert ("Jumlah Retur Tidak Boleh 0!");
+                                    var total_retur_dikurang_hutang = parseInt(subtotal_akhir,10) - parseInt(potong_hutang,10);
+                                    if (total_retur_dikurang_hutang > 0) {
+                                      var total_akhir_edit = parseInt(subtotal_akhir,10) - parseInt(potong_hutang,10);
+                                    }
+                                    else{
+                                      var total_akhir_edit = 0;
+                                    }
 
-                                      $("#input-jumlah-"+id+"").val(jumlah_retur);
+
+                                     if (jumlah_baru == 0) {
+
+                                       alert ("Jumlah Retur Tidak Boleh 0!");
+                                       
+                                       $("#input-jumlah-"+id+"").val(jumlah_retur);
                                        $("#text-jumlah-"+id+"").text(jumlah_retur);
                                        $("#text-jumlah-"+id+"").show();
                                        $("#input-jumlah-"+id+"").attr("type", "hidden");
@@ -192,48 +228,48 @@ else {
 
                                     else{
 
-                                    $.post("cek_stok_pesanan_barang_retur_pembelian.php",{kode_barang:kode_barang, jumlah_baru:jumlah_baru, no_faktur:no_faktur,satuan:satuan},function(data){
+                                   $.post("cek_total_tbs_edit_retur_pembelian.php",{kode_barang:kode_barang, jumlah_baru:jumlah_baru, no_faktur:no_faktur,no_faktur_retur:no_faktur_retur,satuan:satuan},function(data){
 
-                                      if (data < 0) {
+                                       if (data < 0) {
 
                                        alert ("Jumlah Yang Di Masukan Melebihi Stok !");
                                         $("#input-jumlah-"+id+"").val(jumlah_retur);
-                                       $("#text-jumlah-"+id+"").show();
+                                        $("#text-jumlah-"+id+"").show();
                                         $("#input-jumlah-"+id+"").attr("type", "hidden");
                                      }
 
 
-                                      else if (jumlah_baru == '0') {
+                                      else{
 
-                                       alert ("Jumlah Yang Di Masukan Tidak Boleh (0/Kosong) ");
-                                        $("#input-jumlah-"+id+"").val(jumlah_retur);
-                                       $("#text-jumlah-"+id+"").show();
-                                        $("#input-jumlah-"+id+"").attr("type", "hidden");
-                                     }
-
-                                      else {
-
-                                     $.post("update_pesanan_barang_retur_pembelian.php",{harga:harga,jumlah_retur:jumlah_retur,jumlah_tax:jumlah_tax,potongan:potongan,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,subtotal:subtotal},function(info){
-
-                            
                                     $("#text-jumlah-"+id+"").show();
                                     $("#text-jumlah-"+id+"").text(jumlah_baru);
                                     $("#text-subtotal-"+id+"").text(tandaPemisahTitik(subtotal));
                                     $("#btn-hapus-"+id).attr("data-subtotal", subtotal);
                                     $("#input-jumlah-"+id+"").attr("type", "hidden"); 
-                                    $("#text-tax-"+id+"").text(jumlah_tax);
-                                    $("#total_retur_pembelian").val(tandaPemisahTitik(subtotal_penjualan)); 
-                                    $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_penjualan));         
+                                    $("#text-tax-"+id+"").text(Math.round(jumlah_tax));
+                                    $("#text-potongan-"+id+"").text(Math.round(jumlah_potongan));
+                                    $("#total_retur_pembelian").val(tandaPemisahTitik(subtotal_akhir)); 
+                                    $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_penjualan));
+                                    $("#pembayaran_pembelian").val(tandaPemisahTitik(total_akhir_edit));
+                                    $("#potongan_pembelian").val(tandaPemisahTitik(potongan_faktur));
 
+                                     $.post("update_pesanan_barang_retur_pembelian.php",{harga:harga,jumlah_retur:jumlah_retur,jumlah_tax:Math.round(jumlah_tax),jumlah_potongan:Math.round(jumlah_potongan),id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,subtotal:subtotal},function(info){
+
+                                  
+                                     
                                     });
 
                                    }
 
+
                                  });
 
-                                  }// else
-       
-                                    $("#kode_barang").focus();
+
+                                    }
+
+
+ 
+
 
                                  });
 

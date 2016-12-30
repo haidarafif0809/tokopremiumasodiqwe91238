@@ -710,7 +710,7 @@ $(document).ready(function(){
 
       var total_akhir = parseInt(total,10) + parseInt(subtotal,10);
       var nilai_diskon = parseInt(potong_faktur,10) * parseInt(total_akhir,10) / 100; 
-      var total_akhir_stlah_dipotong = parseInt(total_akhir,10) - parseInt(nilai_diskon,10);
+      var total_akhir_stlah_dipotong = parseInt(total_akhir,10) - Math.round(parseInt(nilai_diskon,10));
       var nilai_pajak = parseInt(pajak_faktur,10) * parseInt(total_akhir_stlah_dipotong,10) / 100; 
       var nilai_akhir =  parseInt(total_akhir,10) - parseInt(nilai_diskon,10) + parseInt(nilai_pajak,10);   
 
@@ -733,7 +733,7 @@ $(document).ready(function(){
 
     $("#total_retur_pembelian").val(tandaPemisahTitik(nilai_akhir));
     $("#total_retur_pembelian1").val(tandaPemisahTitik(total_akhir));
-    $("#potongan_pembelian").val(tandaPemisahTitik(nilai_diskon));
+    $("#potongan_pembelian").val(tandaPemisahTitik(Math.round(nilai_diskon)));
       $("#kode_barang").focus();
 
     $.post("proses_tbs_retur_pembelian_faktur.php",{kode_barang:kode_barang,jumlah_retur:jumlah_retur,satuan_produk:satuan_produk,nama_barang:nama_barang,no_faktur_pembelian:no_faktur2,harga:harga,potongan1:potongan1,tax1:tax1,satuan_beli:satuan_beli},function(info) {
@@ -1105,13 +1105,13 @@ $("#potongan_pembelian").keyup(function(){
 
       $("#tax").keyup(function(){
 
-        var potongan_rupiah = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_pembelian").val() ))));
         var potongan_persen = $("#potongan_persen").val();
         var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian1").val() ))));
+        var potongan_rupiah = ((parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(total,10))))) * parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(potongan_persen,10)))))) / 100);
        
               var cara_bayar = $("#carabayar1").val();
               var tax = $("#tax").val();
-              var t_total = total - potongan_rupiah;
+              var t_total = total - Math.round(potongan_rupiah);
 
               if (tax == "") {
                 tax = 0;
@@ -1290,13 +1290,13 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
       var total_akhir = parseInt(total,10) - parseInt(subtotal_tbs,10);
       var nilai_diskon = parseInt(potong_faktur,10) * parseInt(total_akhir,10) / 100; 
-      var total_akhir_stlah_dipotong = parseInt(total_akhir,10) - parseInt(nilai_diskon,10);
+      var total_akhir_stlah_dipotong = parseInt(total_akhir,10) - Math.round(parseInt(nilai_diskon,10));
       var nilai_pajak = parseInt(pajak_faktur,10) * parseInt(total_akhir_stlah_dipotong,10) / 100; 
       var nilai_akhir =  parseInt(total_akhir,10) - parseInt(nilai_diskon,10) + parseInt(nilai_pajak,10);      
 
       $("#total_retur_pembelian").val(tandaPemisahTitik(nilai_akhir));
       $("#total_retur_pembelian1").val(tandaPemisahTitik(total_akhir));
-      $("#potongan_pembelian").val(tandaPemisahTitik(nilai_diskon));
+      $("#potongan_pembelian").val(tandaPemisahTitik(Math.round(nilai_diskon)));
 
     $.post("hapus_tbs_retur_pembelian_faktur.php",{id:id,kode_barang:kode_barang,no_faktur_pembelian:no_faktur_pembelian},function(data){
 

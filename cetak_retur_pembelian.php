@@ -52,6 +52,7 @@ $data001 = mysqli_fetch_array($perintah);
 
 <table>
   <tbody>
+    <tr><td>Petugas</td> <td>:&nbsp;</td><td><?php echo $_SESSION['nama']; ?></td></tr>
     <tr><td>No Faktur</td> <td>:&nbsp;</td><td><?php echo $data0['no_faktur_retur']; ?></td></tr>
     <tr><td>Tanggal</td> <td>:&nbsp;</td><td><?php echo tanggal($data0['tanggal']);?></td></tr>
     <tr><td>Supplier</td> <td>:&nbsp;</td><td><?php echo $data001['nama']; ?></td></tr>
@@ -60,11 +61,6 @@ $data001 = mysqli_fetch_array($perintah);
                  
         </div><!--penutup colsm4-->
 
-        <div class="col-sm-2">
-                <br><br><br><br><br>
-                User: <?php echo $_SESSION['user_name']; ?>  <br>
-
-        </div><!--penutup colsm4-->
 
 
         

@@ -49,6 +49,7 @@ $suplier = $_GET['nama_suplier'];
 
 <table>
   <tbody>
+    <tr><td>Petugas</td> <td>:&nbsp;</td><td><?php echo $_SESSION['nama']; ?></td></tr>
     <tr><td>No Faktur</td> <td>:&nbsp;</td><td><?php echo $data0['no_faktur_retur']; ?></td></tr>
     <tr><td>Tanggal</td> <td>:&nbsp;</td><td><?php echo tanggal($data0['tanggal']);?></td></tr>
     <tr><td>Supplier</td> <td>:&nbsp;</td><td><?php echo $suplier; ?></td></tr>
@@ -57,11 +58,6 @@ $suplier = $_GET['nama_suplier'];
                  
         </div><!--penutup colsm4-->
 
-        <div class="col-sm-2">
-                <br><br><br><br><br>
-                User: <?php echo $_SESSION['user_name']; ?>  <br>
-
-        </div><!--penutup colsm4-->
 
 
         
@@ -72,7 +68,7 @@ $suplier = $_GET['nama_suplier'];
 <br>
 <div class="container">
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
         <thead>
 
            <th> Kode Barang </th>
@@ -81,7 +77,6 @@ $suplier = $_GET['nama_suplier'];
            <th> Satuan </th>
            <th> Harga </th>
            <th> Potongan </th>
-           <th> Total </th>
            <th> Subtotal </th>
            <th> Tax </th>
            
@@ -104,7 +99,6 @@ $suplier = $_GET['nama_suplier'];
                 <td>". $data5['nama'] ."</td>
                 <td>". rp($data5['harga']) ."</td>
                 <td>". rp($data5['potongan']) ."</td>
-                <td>". rp($data0['total']) ."</td>
                 <td>". rp($data5['subtotal']) ."</td>
                 <td>". rp($data5['tax']) ."</td>
             <tr>";

@@ -271,6 +271,27 @@ $daftar_akun2 = $db->query("SELECT kode_daftar_akun, nama_daftar_akun FROM dafta
  </select>
 
       </td></tr>
+      <tr><td  width="45%"><p>Pembayaran Hutang Retur</p></td> <td width="7%"> :&nbsp;</td>
+      <td> 
+
+<select class="form-control" name="bayar_hutang_retur">
+<?php 
+$daftar_akun2 = $db->query("SELECT kode_daftar_akun, nama_daftar_akun FROM daftar_akun ");
+		while($data_hutang = mysqli_fetch_array($daftar_akun2))
+		{
+		
+		echo "<option value='".$data_hutang['kode_daftar_akun'] ."'";
+
+		if ($data_setting['bayar_hutang_retur'] == $data_hutang['kode_daftar_akun']) {
+			echo "selected";
+		}
+
+		echo ">".$data_hutang['kode_daftar_akun'] ." - ".$data_hutang['nama_daftar_akun'] ."</option>";
+		} 
+ ?>
+ </select>
+
+      </td></tr>
 
   </tbody>
 </table>

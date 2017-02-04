@@ -2,14 +2,17 @@
     // memasukan file yang ada pada db.php
     include 'sanitasi.php';
     include 'db.php';
+    session_start();
+
+    $session_id = session_id();
 
     
-   $kode_barang = stringdoang($_POST['kode_barang']);
-   $harga = angkadoang($_POST['harga']);
-   $jumlah_retur = angkadoang($_POST['jumlah_retur']);
-   $satuan_produk = stringdoang($_POST['satuan_produk']);
-   $satuan_beli = stringdoang($_POST['satuan_beli']);
+  $kode_barang = stringdoang($_POST['kode_barang']);
+  $harga = angkadoang($_POST['harga']);
+  $no_faktur_pembelian = stringdoang($_POST['no_faktur_pembelian']);
+  $jumlah_retur = angkadoang($_POST['jumlah_retur']);
 
+      $potongan1 = stringdoang($_POST['potongan1']);
       $pajak = angkadoang($_POST['tax1']);
 
           $potongan = stringdoang($_POST['potongan1']);
@@ -39,17 +42,26 @@
 
     $tax_persen = round($tax_persen1);
     
+    
     $subtotal = $harga * $jumlah_retur - $potongan_jadi;
 
+   
+   $query9 = $db->prepare("UPDATE detail_pembelian SET sisa = sisa - ? WHERE no_faktur = ?  ");
 
+   $query9->bind_param("is",
+    $jumlah_retur, $no_faktur_pembelian);
     
-    $no_faktur_retur = stringdoang($_POST['no_faktur_retur']);
+    $jumlah_retur = angkadoang($_POST['jumlah_retur']);
     $no_faktur_pembelian = stringdoang($_POST['no_faktur_pembelian']);
+
+
+   $query9->execute();
+    
     
     $cek2 = $db->query("SELECT * FROM detail_pembelian WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur_pembelian'");
     $data= mysqli_fetch_array($cek2); 
 
-    $konversi = $db->query("SELECT $data[jumlah_barang] / konversi AS jumlah_beli FROM satuan_konversi WHERE kode_produk = '$kode_barang' AND id_satuan = '$data[satuan]' ");
+     $konversi = $db->query("SELECT $data[jumlah_barang] / konversi AS jumlah_beli FROM satuan_konversi WHERE kode_produk = '$kode_barang' AND id_satuan = '$data[satuan]' ");
      $num_rows = mysqli_num_rows($konversi);
      $data_konversi = mysqli_fetch_array($konversi); 
      
@@ -63,15 +75,17 @@
      }
 
 
-   $perintah = $db->prepare("INSERT INTO tbs_retur_pembelian (no_faktur_retur,no_faktur_pembelian,kode_barang,nama_barang,jumlah_beli,jumlah_retur,harga,subtotal,potongan,tax,satuan,satuan_beli) VALUES (?,?,?,?,'$jumlah_beli',?,'$harga',?,?,?,?,?)");
+   $perintah = $db->prepare("INSERT INTO tbs_retur_pembelian (session_id,no_faktur_pembelian,kode_barang,nama_barang,jumlah_beli,jumlah_retur,harga,subtotal,potongan,tax,satuan,satuan_beli) VALUES (?,?,?,?,'$jumlah_beli',?,'$harga',?,?,?,?,?)");
 
    $perintah->bind_param("ssssiiiiss",
-    $no_faktur_retur, $no_faktur_pembelian, $kode_barang, $nama_barang, $jumlah_retur, $subtotal, $potongan_tampil, $tax_persen,$satuan_produk,$satuan_beli);
+    $session_id, $no_faktur_pembelian, $kode_barang, $nama_barang, $jumlah_retur, $subtotal,$potongan_tampil,$tax_persen,$satuan_produk,$satuan_beli);
 
-    $no_faktur_retur = stringdoang($_POST['no_faktur_retur']);
     $no_faktur_pembelian = stringdoang($_POST['no_faktur_pembelian']);
     $nama_barang = stringdoang($_POST['nama_barang']);
     $kode_barang = stringdoang($_POST['kode_barang']);
+    $jumlah_retur = angkadoang($_POST['jumlah_retur']);
+    $satuan_produk = stringdoang($_POST['satuan_produk']);
+    $satuan_beli = stringdoang($_POST['satuan_beli']);
 
    $perintah->execute();
 
@@ -86,30 +100,26 @@ else {
 
 
 
-    
- 
-    ?>
 
-    <?php
-
+   
     //untuk menampilkan semua data yang ada pada tabel tbs pembelian dalam DB
-    $perintah = $db->query("SELECT tp.id,tp.no_faktur_pembelian,tp.kode_barang,tp.nama_barang,tp.jumlah_beli,tp.jumlah_retur,tp.satuan,tp.harga,tp.potongan,tp.tax,tp.subtotal, s.nama AS satuan_retur, ss.nama AS satuan_beli FROM tbs_retur_pembelian tp INNER JOIN satuan s ON tp.satuan = s.id INNER JOIN satuan ss ON tp.satuan_beli = ss.id WHERE tp.no_faktur_retur = '$no_faktur_retur' ORDER BY id DESC LIMIT 1");
+    $perintah = $db->query("SELECT ss.nama AS satuan_retur, s.nama AS satuan_beli, tp.id,tp.no_faktur_pembelian,tp.kode_barang,tp.nama_barang,tp.jumlah_beli,tp.jumlah_retur,tp.harga,tp.potongan,tp.tax,tp.subtotal,tp.satuan FROM tbs_retur_pembelian tp INNER JOIN satuan s ON tp.satuan_beli = s.id INNER JOIN satuan ss ON tp.satuan = ss.id WHERE tp.session_id = '$session_id' ORDER BY id DESC LIMIT 1");
 
     //menyimpan data sementara yang ada pada $perintah
-     $data1 = mysqli_fetch_array($perintah);
+      $data1 = mysqli_fetch_array($perintah);
 
         // menampilkan data
       echo "<tr class='tr-id-".$data1['id']."'>
+      <td>". $data1['no_faktur_pembelian'] ."</td>
       <td>". $data1['kode_barang'] ."</td>
       <td>". $data1['nama_barang'] ."</td>
       <td>". rp($data1['jumlah_beli']) ." ".$data1['satuan_beli']."</td>
 
 
-      <td class='edit-jumlah' data-id='".$data1['id']."' data-faktur='".$data1['no_faktur_pembelian']."' data-kode='".$data1['kode_barang']."'> <span id='text-jumlah-".$data1['id']."'> ".$data1['jumlah_retur']." </span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_retur']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-faktur='".$data1['no_faktur_pembelian']."' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' onkeydown='return numbersonly(this, event);'> </td>
+      <td class='edit-jumlah' data-id='".$data1['id']."' data-faktur='".$data1['no_faktur_pembelian']."' data-kode='".$data1['kode_barang']."'> <span id='text-jumlah-".$data1['id']."'> ".$data1['jumlah_retur']." </span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_retur']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-faktur='".$data1['no_faktur_pembelian']."' data-kode='".$data1['kode_barang']."' data-satuan='".$data1['satuan']."' data-harga='".$data1['harga']."'onkeydown='return numbersonly(this, event);'> </td>
 
-      <td>". $data1['satuan_retur']."</td>
+      <td>". $data1['satuan_retur'] ."</td>
       <td>". rp($data1['harga']) ."</td>
-
       <td><span id='text-potongan-".$data1['id']."'>". rp($data1['potongan']) ."</span></td>
       <td><span id='text-tax-".$data1['id']."'>". rp($data1['tax']) ."</span></td>
       <td><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
@@ -118,15 +128,16 @@ else {
       <td><button class='btn btn-danger btn-sm btn-hapus-tbs' id='btn-hapus-".$data1['id']."' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-faktur='". $data1['no_faktur_pembelian'] ."' data-subtotal='". $data1['subtotal'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>
 
       </tr>";
-  
-
+      
 //Untuk Memutuskan Koneksi Ke Database
-           mysqli_close($db);  
-
+                mysqli_close($db);   
       
     ?>
 
-    <script type="text/javascript">
+
+
+
+                <script type="text/javascript">
                                  
                                  $(".edit-jumlah").dblclick(function(){
 
@@ -179,14 +190,10 @@ else {
                                     var subtotal = parseInt(sub_total,10) - parseInt(jumlah_potongan,10);
                                     
                                     var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian1").val()))));
+                                    var potongan_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
+                                    potongan_faktur = parseInt(potongan_faktur) * parseInt(sub_total) / 100;
 
                                     subtotal_penjualan = parseInt(subtotal_penjualan,10) - parseInt(subtotal_lama,10) + parseInt(subtotal,10);
-
-                                    
-                                    var potongan_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
-                                    potongan_faktur = parseInt(potongan_faktur) * parseInt(subtotal_penjualan) / 100;
-
-                                    
 
                                     var sub_setelah_potongan_faktur = parseInt(subtotal_penjualan,10) - Math.round(parseInt(potongan_faktur,10));
 

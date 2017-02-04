@@ -2,6 +2,8 @@
 
 include 'db.php';
 include 'sanitasi.php';
+
+
     
 $id_produk = angkadoang($_GET['id_produk']);
  $satuan_konversi = $db->query("SELECT sk.id, sk.id_satuan, sk.id_produk, sk.konversi, sk.harga_pokok, sk.harga_jual_konversi, s.nama FROM satuan_konversi sk INNER JOIN satuan s ON sk.id_satuan = s.id WHERE sk.id_produk = '$id_produk'");
@@ -49,7 +51,7 @@ $id_produk = angkadoang($_GET['id_produk']);
       echo  '</select>
       </td>';
 
-      echo " <td class='edit-konversi' data-id='".$data['id']."'><span id='text-konversi-".$data['id']."'>". rp($data['konversi'])." ".$ddd['nama']."</span> <input type='hidden' id='input-konversi-".$data['id']."' value='".$data['konversi']."' class='input_konversi' data-id='".$data['id']."' autofocus=''> </td>
+      echo " <td class='edit-konversi' data-id='".$data['id']."'><span id='text-konversi-".$data['id']."'>". rp($data['konversi'])." </span> <input type='hidden' id='input-konversi-".$data['id']."' value='".$data['konversi']."' class='input_konversi' data-id='".$data['id']."' autofocus=''> </td>
 
       <td class='edit-harga' data-id='".$data['id']."'><span id='text-harga-".$data['id']."'>". rp($data['harga_pokok']) ."</span> <input type='hidden' id='input-harga-".$data['id']."' value='".$data['harga_pokok']."' class='input_harga' data-id='".$data['id']."' autofocus=''> </td>";
 /*

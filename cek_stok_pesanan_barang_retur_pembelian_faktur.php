@@ -13,16 +13,16 @@ $satuan = stringdoang($_POST['satuan']);
     $data_konversi = mysqli_fetch_array($konversi); 
 
     if ($num_rows > 0) {
-    	$abc = $jumlah_baru * $data_konversi['konversi'];
+    	 $abc = $jumlah_baru * $data_konversi['konversi'];
     }
     else
     {
-    	$abc = $jumlah_baru;
+    	 $abc = $jumlah_baru;
     }
 
-
-$select_hpp = $db->query("SELECT SUM(sisa) AS sisa FROM hpp_masuk WHERE kode_barang = '$kode_barang'");
+$select_hpp = $db->query("SELECT SUM(sisa) AS sisa FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur' OR no_faktur_hpp_masuk = '$no_faktur' ");
 $data = mysqli_fetch_array($select_hpp);
+
 
 echo $a = $data['sisa'] - $abc;
 

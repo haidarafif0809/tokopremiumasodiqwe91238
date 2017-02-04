@@ -1,4 +1,4 @@
-<?php include 'session_login.php';
+	<?php include 'session_login.php';
 
 
 //memasukkan file session login, header, navbar, db.php
@@ -52,6 +52,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 				<li><a href="lap_penjualan_rekap.php"> Laporan Penjualan Rekap </a></li> 
 				<li><a href="lap_penjualan_detail.php"> Laporan Penjualan Detail </a></li>
 				<li><a href="lap_penjualan_harian.php"> Laporan Penjualan Harian </a></li>
+				<li><a href="lap_jual_puluh_besar.php"> Laporan 10 Besar Penjualan </a></li>
 				<!--
 				
 				<li><a href="lap_pelanggan_rekap.php"> Laporan Jual Per Pelanggan Rekap </a></li>

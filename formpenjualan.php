@@ -448,13 +448,18 @@ $session_id = session_id();
                 </div>
                 <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom jumlah barang jika ingin mengedit.</i></h6>
                 <h6 style="text-align: left ;"><i><b> * Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</b></i></h6>
-<?php 
+
+
+<!--
+
+//php 
 $hud = $db->query("SELECT setting_tampil FROM setting_antrian");
 $my = mysqli_fetch_array($hud);
 
 if ($my['setting_tampil'] == 'Tampil')
 {
 ?>
+
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Antrian  </button>
 </p>
@@ -478,7 +483,7 @@ tr:nth-child(even){background-color: #f2f2f2}
    </thead>
 <tbody>
 
-  <?php
+  ?php
                 
                 //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
                 $perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan FROM penjualan p INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE p.status = 'Simpan Sementara' ORDER BY p.id DESC ");
@@ -499,17 +504,16 @@ tr:nth-child(even){background-color: #f2f2f2}
                 </tr>";
                 }
 
-                ?>
-
+                ?
 
 </tbody>
  </table>
 </div>
-<?php
+?php
 }
-?>
+>
 
-  
+  -->
 
 
 

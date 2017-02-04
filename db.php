@@ -1,7 +1,4 @@
-<?php
-
-date_default_timezone_set("Asia/Jakarta");
-
+<?php date_default_timezone_set("Asia/Jakarta");
 
 $servername = "localhost";
 $username = "root";
@@ -12,7 +9,8 @@ $conn = mysqli_connect($servername, $username, $password, $dbname) or die("Conne
 
 
 // perintah untuk mengkoneksikan php ke database mysql
-$db = new mysqli('localhost','root','','surya');
+
+ $db = new mysqli('localhost','root','','surya');  
 
 
 // Check connection

@@ -75,6 +75,7 @@ include 'db.php';
       $(document).ready(function() {
 $(document).on('click','#btntgl',function(e) {
 
+
     var daritgl = $("#daritgl").val();
     var sampaitgl = $("#sampaitgl").val();
 
@@ -89,6 +90,8 @@ $(document).on('click','#btntgl',function(e) {
     else
     {
                $('#tabel_tampil').DataTable().destroy();
+
+
 
           var dataTable = $('#tabel_tampil').DataTable( {
           "processing": true,
@@ -118,7 +121,9 @@ $(document).on('click','#btntgl',function(e) {
 
         } );
           $("#result").show()
+
     }
+
 
    } );  
   $("#perhari").submit(function(){

@@ -81,8 +81,17 @@ $no_faktur = $nomor."/IM/".$data_bulan_terakhir."/".$tahun_terakhir;
     while ($data = mysqli_fetch_array($query))
     {
         
-        $query2 = $db->query("INSERT INTO detail_item_masuk (no_faktur, tanggal, kode_barang, nama_barang, jumlah, satuan, harga, subtotal, jam, waktu) 
-		VALUES ('$no_faktur','$tanggal_sekarang','$data[kode_barang]','$data[nama_barang]','$data[jumlah]','$data[satuan]','$data[harga]','$data[subtotal]', '$jam_sekarang','$waktu')");
+        $query2 = "INSERT INTO detail_item_masuk (no_faktur, tanggal, kode_barang, nama_barang, jumlah, satuan, harga, subtotal, jam, waktu) 
+		VALUES ('$no_faktur','$tanggal_sekarang','$data[kode_barang]','$data[nama_barang]','$data[jumlah]','$data[satuan]','$data[harga]','$data[subtotal]', '$jam_sekarang','$waktu')";
+
+        if ($db->query($query2) === TRUE) {
+  
+} 
+else 
+      {
+    echo "Error: " . $query2 . "<br>" . $db->error;
+      }
+
     }
 
 

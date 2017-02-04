@@ -71,16 +71,38 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {
 
 
-$sum_sisa = $db->query("SELECT IFNULL(SUM(sisa),0) AS jumlah_sisa_produk FROM hpp_masuk WHERE sisa > 0 AND kode_barang = '$row[kode_barang]' AND (jenis_transaksi = 'Pembelian' OR jenis_transaksi = 'Retur Penjualan') ");
-$data_sum_sisa = mysqli_fetch_array($sum_sisa);
-
-
 //harga tabel penjualan
 $harga_beli = $row['harga'];
 //no faktur jual
 $no_faktur_beli = $row['no_faktur'];
 // kode barang
 $kode_barang = $row['kode_barang'];
+
+
+
+
+$sum_sisa = $db->query("SELECT IFNULL(SUM(sisa),0) AS jumlah_sisa_produk FROM hpp_masuk WHERE sisa > 0 AND kode_barang = '$row[kode_barang]' AND (jenis_transaksi = 'Pembelian' OR jenis_transaksi = 'Retur Penjualan') ");
+$data_sum_sisa = mysqli_fetch_array($sum_sisa);
+
+$jum_retur_detail = $db->query("SELECT SUM(jumlah_retur) AS jumlah_retur_detail FROM detail_retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur' AND kode_barang = '$kode_barang'");
+$data_jum_retur_detail = mysqli_fetch_array($jum_retur_detail);
+
+$jum_retur_tbs = $db->query("SELECT SUM(jumlah_retur) AS jumlah_retur_tbs FROM tbs_retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur' AND kode_barang = '$kode_barang'");
+$data_jum_retur_tbs = mysqli_fetch_array($jum_retur_tbs);
+
+$tbs_retur = $db->query("SELECT * FROM tbs_retur_pembelian WHERE  no_faktur_retur = '$no_faktur_retur' AND kode_barang = '$kode_barang' ");
+$data_tbs_retur = mysqli_num_rows($tbs_retur);
+
+if ($data_tbs_retur > 0) {
+  $total_sisa_produk = ( $data_sum_sisa['jumlah_sisa_produk'] + $data_jum_retur_detail['jumlah_retur_detail'] ) - $data_jum_retur_tbs['jumlah_retur_tbs'];
+}
+
+else{
+  $total_sisa_produk = $data_sum_sisa['jumlah_sisa_produk'] + $data_jum_retur_detail['jumlah_retur_detail'];
+}
+
+
+
 
 // sisa barang hpp keluar
 $select_sisa = $db->query("SELECT SUM(sisa) AS sisa FROM hpp_masuk WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
@@ -182,13 +204,13 @@ else{
   $nestedData[] = rp($row["potongan"]);
   $nestedData[] = rp($row["tax"]);
 
-  $nestedData[] = $data_sum_sisa["jumlah_sisa_produk"] ." ".$row["satuan_asli"];
+  $nestedData[] = $total_sisa_produk ." ".$row["satuan_asli"];
 
   $nestedData[] = $row["harga"];
   $nestedData[] = $row["asal_satuan"];
   $nestedData[] = $row["id_produk"];
   $nestedData[] = $row["satuan"];
-  $nestedData[] = $data_sum_sisa["jumlah_sisa_produk"];  
+  $nestedData[] = $total_sisa_produk;  
   $nestedData[] = $row["no_faktur"];
   $nestedData[] = $row["satuan_dasar"];
   $nestedData[] = $row["harga"];

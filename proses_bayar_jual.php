@@ -10,7 +10,7 @@
 $tahun_sekarang = date('Y');
 $bulan_sekarang = date('m');
 $tanggal_sekarang = date('Y-m-d');
-$jam_sekarang = date('H:i:sa');
+$jam_sekarang = date('H:i:s');
 $tahun_terakhir = substr($tahun_sekarang, 2);
 
 
@@ -168,7 +168,7 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
     // hubungkan "data" dengan prepared statements
               $stmt->bind_param("sssissssiiisiss",
               $no_faktur, $kode_gudang, $kode_pelanggan, $total, $tanggal_sekarang, $jam_sekarang, $user, $sales, $potongan, $tax, $sisa, $cara_bayar, $pembayaran, $keterangan, $ppn_input);
-              
+
               
               $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
               $keterangan = stringdoang($_POST['keterangan']);
@@ -176,9 +176,18 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
               $total = angkadoang($_POST['total']);
               $total2 = angkadoang($_POST['total2']);
               $potongan = angkadoang($_POST['potongan']);
+              if ($potongan == '') {
+                $potongan = 0;
+              }              
               $tax = angkadoang($_POST['tax']);
+              if ($tax == '') {
+                $tax = 0;
+              }
               $sisa_pembayaran = angkadoang($_POST['sisa_pembayaran']);
               $sisa = angkadoang($_POST['sisa']);
+              if ($sisa == '') {
+                $sisa = 0;
+              }
               $cara_bayar = stringdoang($_POST['cara_bayar']);
               $pembayaran = angkadoang($_POST['pembayaran']);
               $sales = stringdoang($_POST['sales']);

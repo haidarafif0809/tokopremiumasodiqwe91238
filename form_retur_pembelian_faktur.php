@@ -1544,9 +1544,10 @@ $(document).on('click','.btn-hapus-tbs',function(e){
                                     $("#input-jumlah-"+id+"").attr("type", "hidden"); 
                                     $("#text-tax-"+id+"").text(jumlah_tax);
                                     $("#total_retur_pembelian").val(tandaPemisahTitik(subtotal_akhir)); 
+r
                                     $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_penjualan_akhir ));
                                     $("#potongan_pembelian").val(tandaPemisahTitik(potongan_faktur));
-                                    
+
 
                                      $.post("update_pesanan_barang_retur_pembelian_faktur.php",{harga:harga,jumlah_retur:jumlah_retur,jumlah_tax:jumlah_tax,potongan:potongan,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,subtotal:subtotal},function(info){    
 

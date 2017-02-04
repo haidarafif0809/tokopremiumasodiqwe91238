@@ -178,20 +178,42 @@ else {
 
                                     var subtotal = parseInt(harga,10) * parseInt(jumlah_baru,10) - parseInt(potongan,10);
                                     
-                                    var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian").val()))));
+                                    var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian1").val()))));
                                     
                                     var subtotal_akhir = parseInt(subtotal_penjualan,10) - parseInt(subtotal_lama,10) + parseInt(subtotal,10);
 
-                                    var total_retur_dikurang_hutang = parseInt(subtotal_akhir,10) - parseInt(potong_hutang,10);
+                                    var potongan_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
+
+                                    if (potongan_faktur == "") {
+                                      potongan_faktur = 0;
+                                    }
+
+                                    potongan_faktur = parseInt(potongan_faktur) * parseInt(subtotal_akhir) / 100;
+
+                                    var tax_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
+
+                                    if (tax_faktur == "") {
+                                      tax_faktur = 0;
+                                    }
+
+                                    var sub_setelah_dipotong = parseInt(subtotal_akhir,10) - Math.round(parseInt(potongan_faktur,10));
+
+                                     tax_faktur = parseInt(tax_faktur) * parseInt(sub_setelah_dipotong) / 100;
+
+                                    
+
+                                    var tax_tbs = tax / subtotal_lama * 100;
+                                    var jumlah_tax = tax_tbs * subtotal / 100;
+
+                                    var nilai_total_akhir = parseInt(subtotal_akhir,10) - Math.round(parseInt(potongan_faktur,10)) + Math.round(parseInt(tax_faktur,10));
+
+                                    var total_retur_dikurang_hutang = parseInt(nilai_total_akhir,10) - parseInt(potong_hutang,10);
                                     if (total_retur_dikurang_hutang > 0) {
-                                      var total_akhir_edit = parseInt(subtotal_akhir,10) - parseInt(potong_hutang,10);
+                                      var total_akhir_edit = parseInt(nilai_total_akhir,10) - parseInt(potong_hutang,10);
                                     }
                                     else{
                                       var total_akhir_edit = 0;
                                     }
-
-                                    var tax_tbs = tax / subtotal_lama * 100;
-                                    var jumlah_tax = tax_tbs * subtotal / 100;
 
                                       if (jumlah_baru == 0) {
 
@@ -232,9 +254,10 @@ else {
                                     $("#btn-hapus-"+id).attr("data-subtotal", subtotal);
                                     $("#input-jumlah-"+id+"").attr("type", "hidden"); 
                                     $("#text-tax-"+id+"").text(jumlah_tax);
-                                    $("#total_retur_pembelian").val(tandaPemisahTitik(subtotal_akhir)); 
+                                    $("#total_retur_pembelian").val(tandaPemisahTitik(nilai_total_akhir)); 
                                     $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_akhir)); 
                                     $("#pembayaran_pembelian").val(tandaPemisahTitik(total_akhir_edit)); 
+                                    $("#potongan_pembelian").val(tandaPemisahTitik(potongan_faktur));
 
                                      $.post("update_pesanan_barang_retur_pembelian.php",{harga:harga,jumlah_retur:jumlah_retur,jumlah_tax:jumlah_tax,potongan:potongan,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,subtotal:subtotal},function(info){                            
                                             

@@ -12,7 +12,7 @@ include 'db.php';
 
 
 
-<h1> LAPORAN 10 BESAR PENJUALAN</h1><hr>
+<h1> LAPORAN KEKUATAN PENJUALAN PER ITEM</h1><hr>
 <br>
 
 
@@ -46,6 +46,7 @@ include 'db.php';
       <th  style='background-color: #4CAF50; color: white'> Penjualan Periode </th>
       <th  style='background-color: #4CAF50; color: white'> Penjualan Per Hari </th>
       <th  style='background-color: #4CAF50; color: white'> Stok </th>
+      <th  style='background-color: #4CAF50; color: white'> Stok Habis (hari)</th>
         
         </thead> <!-- tag penutup tabel -->
   </table>
@@ -75,7 +76,6 @@ include 'db.php';
       $(document).ready(function() {
 $(document).on('click','#btntgl',function(e) {
 
-
     var daritgl = $("#daritgl").val();
     var sampaitgl = $("#sampaitgl").val();
 
@@ -89,9 +89,7 @@ $(document).on('click','#btntgl',function(e) {
     }
     else
     {
-               $('#tabel_tampil').DataTable().destroy();
-
-
+                   $('#tabel_tampil').DataTable().destroy();
 
           var dataTable = $('#tabel_tampil').DataTable( {
           "processing": true,
@@ -101,7 +99,7 @@ $(document).on('click','#btntgl',function(e) {
         "emptyTable":     "My Custom Message On Empty Table"
     },
           "ajax":{
-            url :"proses_lap_jual_puluh_besar.php", // json datasource
+            url :"proses_lap_kekuatan_jual_item.php", // json datasource
              "data": function ( d ) {
                 d.dari_tanggal = $("#daritgl").val();
                 d.sampai_tanggal = $("#sampaitgl").val();
@@ -121,8 +119,8 @@ $(document).on('click','#btntgl',function(e) {
 
         } );
           $("#result").show()
-
     }
+
 
 
    } );  
@@ -196,8 +194,8 @@ $(document).on('click','#btntgl',function(e) {
 
           $("#judul").show();
           $("#judul").text(judul);
-          $("#trx").attr('href','cetak_lap_jual_puluh_besar.php?dari_tanggal='+dari_tanggal+'&sampai_tanggal='+sampai_tanggal+"");
-          $("#btn-export").attr("href","export_lap_jual_puluh_besar.php?dari_tanggal="+dari_tanggal+"&sampai_tanggal="+sampai_tanggal+"");
+          $("#trx").attr('href','cetak_lap_kekuatan_jual_item.php?dari_tanggal='+dari_tanggal+'&sampai_tanggal='+sampai_tanggal+"");
+          $("#btn-export").attr("href","export_lap_kekuatan_jual_item.php?dari_tanggal="+dari_tanggal+"&sampai_tanggal="+sampai_tanggal+"");
 
     });  
 

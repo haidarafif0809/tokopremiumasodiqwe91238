@@ -52,7 +52,11 @@ $sql.=" WHERE (hpm.sisa > 0 OR hm.sisa > 0) ";
 $sql.=" AND p.suplier = '$nama_suplier' ";
 
   $sql.=" AND ( dp.kode_barang LIKE '".$requestData['search']['value']."%' ";  
-  $sql.=" OR dp.nama_barang LIKE '".$requestData['search']['value']."%' )";
+
+  $sql.=" OR dp.nama_barang LIKE '".$requestData['search']['value']."%')";
+
+  $sql.=" GROUP BY dp.no_faktur, dp.kode_barang ";
+
 
 }
 

@@ -1002,6 +1002,10 @@ $("#potongan_pembelian").keyup(function(){
         
         if (potongan_persen > 100) {
           alert ("Potongan %, Tidak Boleh Lebih Dari 100%");
+        $("#potongan_persen").val('0');
+        $("#tax").val('0');
+        potongan_rupiah = 0;
+        hasil_akhir = total;
         }
 
         
@@ -1044,14 +1048,16 @@ $("#potongan_pembelian").keyup(function(){
 
               var total_akhir = parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) + Math.round(parseInt(t_tax,10));
              
+             if (tax > 100) {
+                alert ('Jumlah Tax Tidak Boleh Lebih Dari 100%');
+                 $("#tax").val('0');
+                 total_akhir = t_total;
+
+              }
               
               $("#total_retur_pembelian").val(tandaPemisahTitik(total_akhir));
 
-              if (tax > 100) {
-                alert ('Jumlah Tax Tidak Boleh Lebih Dari 100%');
-                 $("#tax").val('');
 
-              }
 
 
 
@@ -1487,8 +1493,6 @@ $(document).ready(function(){
                                     $("#total_retur_pembelian").val(tandaPemisahTitik(subtotal_akhir)); 
                                     $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_penjualan));
                                     $("#potongan_pembelian").val(tandaPemisahTitik(potongan_faktur));
-                                    $("#kode_barang").val(tandaPemisahTitik(potongan_faktur));
-                                    $("#jumlah_retur").val(tandaPemisahTitik(Math.round(tax_faktur)));
 
                                      $.post("update_pesanan_barang_retur_pembelian_faktur.php",{harga:harga,jumlah_retur:jumlah_retur,jumlah_tax:Math.round(jumlah_tax),jumlah_potongan:Math.round(jumlah_potongan),id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,subtotal:subtotal},function(info){
 

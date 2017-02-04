@@ -55,20 +55,25 @@ $suplier = $_GET['nama_suplier'];
     <tr><td>Petugas</td> <td>:&nbsp;</td><td><?php echo $_SESSION['nama']; ?></td></tr>
     <tr><td>No Faktur</td> <td>:&nbsp;</td><td><?php echo $data0['no_faktur_retur']; ?></td></tr>
     <tr><td>Tanggal</td> <td>:&nbsp;</td><td><?php echo tanggal($data0['tanggal']);?></td></tr>
-    <tr><td>Supplier</td> <td>:&nbsp;</td><td><?php echo $suplier; ?></td></tr>
+    <tr><td>Supplier</td> <td>:&nbsp;</td><td><?php echo $suplier; ?></td></tr>https://github.com/fahrizalrahman/TokoSurya/pull/7/conflict?name=form_retur_pembelian_faktur.php&ancestor_oid=fd36527f8ed0c031ab91c2e3ca860cc5dcaea72b&base_oid=91e7baa6fc8740f92e1a95721620c33836d15e67&head_oid=651b0aaae434d2cc5616fc6f98805d6867b009c6
   </tbody>
 </table>         
                  
         </div><!--penutup colsm4-->
 
-</div><!--penutup row1-->
+
+
+
+        
+    </div><!--penutup row1-->
+
 </div> <!-- end of container-->
 
 
 <br>
 <div class="container">
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
         <thead>
 
            <th> Kode Barang </th>
@@ -77,7 +82,6 @@ $suplier = $_GET['nama_suplier'];
            <th> Satuan </th>
            <th> Harga </th>
            <th> Potongan </th>
-           <th> Total </th>
            <th> Subtotal </th>
            <th> Tax </th>
            
@@ -100,7 +104,6 @@ $suplier = $_GET['nama_suplier'];
                 <td>". $data5['nama'] ."</td>
                 <td>". rp($data5['harga']) ."</td>
                 <td>". rp($data5['potongan']) ."</td>
-                <td>". rp($data0['total']) ."</td>
                 <td>". rp($data5['subtotal']) ."</td>
                 <td>". rp($data5['tax']) ."</td>
             <tr>";
@@ -137,7 +140,7 @@ $suplier = $_GET['nama_suplier'];
 <table>
   <tbody>
     <tr><td>Subtotal</td> <td>:&nbsp;</td><td><?php echo rp($j_subtotal); ?></td></tr>
-    <tr><td>Total Akhir</td> <td>:&nbsp;</td><td><?php echo rp($data0['total']); ?></td></tr>
+    <tr><td><b>Total Akhir</b></td> <td>:&nbsp;</td><td><b><?php echo rp($data0['total']); ?></b></td></tr>
     <tr><td>Tunai</td> <td>:&nbsp;</td><td><?php echo rp($data0['tunai']); ?></td></tr>
     <tr><td>Kembalian</td> <td>:&nbsp;</td><td><?php echo rp($data0['sisa']); ?></td></tr>
 

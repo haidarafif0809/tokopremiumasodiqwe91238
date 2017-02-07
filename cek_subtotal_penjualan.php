@@ -2,7 +2,6 @@
 // memasukan file db.php
 include 'db.php';
 include 'sanitasi.php';
-session_start();
 
 // mengirim data no faktur menggunakan metode POST
  $session_id = session_id();

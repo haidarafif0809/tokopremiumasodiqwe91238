@@ -6,7 +6,7 @@ include 'sanitasi.php';
 include 'db.php';
 
 
-$query = $db->query("SELECT id, kode_daftar_akun, nama_daftar_akun FROM daftar_akun WHERE tipe_akun = 'Kas & Bank' ");
+$query = $db->query("SELECT id, kode_daftar_akun, nama_daftar_akun FROM daftar_akun WHERE tipe_akun = 'Kas & Bank'  ");
 
 
 
@@ -107,8 +107,13 @@ $kas_edit = mysqli_fetch_array($pilih_akses_kas_edit);
             $query0 = $db->query("SELECT SUM(debit) - SUM(kredit) AS total_kas FROM jurnal_trans WHERE kode_akun_jurnal = '$data[kode_daftar_akun]'");
             $cek0 = mysqli_fetch_array($query0);
             $total_kas = $cek0['total_kas'];
-
-            echo "<td>". rp($total_kas) ."</td>";
+            if ($total_kas >= 0) {
+              echo "<td>". rp($total_kas) ."</td>";
+            }
+            else{
+              echo "<td>-</td>";
+            }
+            
             $sett_akun = $db->query("SELECT kas FROM setting_akun");
             $data_sett = mysqli_fetch_array($sett_akun);
             
@@ -123,8 +128,15 @@ $kas_edit = mysqli_fetch_array($pilih_akses_kas_edit);
             
             
     if ($kas_edit['kas_edit'] > 0) {
+
+      if ($total_kas >= 0) {
+              echo "<td> <button class='btn btn-info btn-edit-default' data-id='".$data['id']."' data-kode='".$data['kode_daftar_akun']."'> <span class='glyphicon glyphicon-edit'></span> Edit</button> </td>";
+            }
+            else{
+              echo "<td>-</td>";
+            }
             
-            echo "<td> <button class='btn btn-info btn-edit-default' data-id='".$data['id']."' data-kode='".$data['kode_daftar_akun']."'> <span class='glyphicon glyphicon-edit'></span> Edit</button> </td>";
+            
             
             }
 

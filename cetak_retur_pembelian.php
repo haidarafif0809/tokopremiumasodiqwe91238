@@ -38,7 +38,7 @@ $data001 = mysqli_fetch_array($perintah);
                 <img src='save_picture/<?php echo $data1['foto']; ?>' class='img-rounded' alt='Cinque Terre' width='160' height='140`'> 
         </div><!--penutup colsm2-->
 
-        <div class="col-sm-4">
+        <div class="col-sm-6">
                  <h3> <b> BUKTI RETUR PEMBELIAN </b></h3>
                  <hr>
                  <h4> <b> <?php echo $data1['nama_perusahaan']; ?> </b> </h4> 
@@ -52,6 +52,7 @@ $data001 = mysqli_fetch_array($perintah);
 
 <table>
   <tbody>
+    <tr><td>Petugas</td> <td>:&nbsp;</td><td><?php echo $_SESSION['nama']; ?></td></tr>
     <tr><td>No Faktur</td> <td>:&nbsp;</td><td><?php echo $data0['no_faktur_retur']; ?></td></tr>
     <tr><td>Tanggal</td> <td>:&nbsp;</td><td><?php echo tanggal($data0['tanggal']);?></td></tr>
     <tr><td>Supplier</td> <td>:&nbsp;</td><td><?php echo $data001['nama']; ?></td></tr>
@@ -60,11 +61,6 @@ $data001 = mysqli_fetch_array($perintah);
                  
         </div><!--penutup colsm4-->
 
-        <div class="col-sm-2">
-                <br><br><br><br><br>
-                User: <?php echo $_SESSION['user_name']; ?>  <br>
-
-        </div><!--penutup colsm4-->
 
 
         
@@ -75,7 +71,7 @@ $data001 = mysqli_fetch_array($perintah);
 <br>
 <div class="container">
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
         <thead>
 
            <th> Kode Barang </th>
@@ -94,20 +90,17 @@ $data001 = mysqli_fetch_array($perintah);
         <tbody>
         <?php
 
-            $query5 = $db->query("SELECT * FROM detail_retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur' ");
+            $query5 = $db->query("SELECT dp.kode_barang, dp.nama_barang, dp.jumlah_retur, dp.satuan, dp.harga, dp.potongan, dp.subtotal, dp.tax, s.nama AS nama_satuan FROM detail_retur_pembelian dp INNER JOIN satuan s ON dp.satuan = s.id WHERE dp.no_faktur_retur = '$no_faktur_retur' ");
             //menyimpan data sementara yang ada pada $perintah
             while ($data5 = mysqli_fetch_array($query5))
             {
-
-              $query01 = $db->query("SELECT * FROM barang WHERE kode_barang = '$data5[kode_barang]'");
-              $cek = mysqli_fetch_array($query01);
 
               
             echo "<tr>
                 <td>". $data5['kode_barang'] ."</td>
                 <td>". $data5['nama_barang'] ."</td>
                 <td>". $data5['jumlah_retur'] ."</td>
-                <td>". $cek['satuan'] ."</td>
+                <td>". $data5['nama_satuan'] ."</td>
                 <td>". rp($data5['harga']) ."</td>
                 <td>". rp($data5['potongan']) ."</td>
                 <td>". rp($data0['total']) ."</td>

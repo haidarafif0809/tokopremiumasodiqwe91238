@@ -16,6 +16,30 @@ $session_id = session_id();
 
  ?>
 
+<!-- Modal Untuk Confirm PESAN alert-->
+<div id="modal_promo_alert" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+    <div class="modal-header">
+
+  
+        <button type="button" class="close" data-dismiss="modal">&times;</button>       
+    </div>
+    <div class="modal-body">
+      <span id="tampil_alert">
+      </span>
+    </div>
+    <div class="modal-footer">
+        
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Closed</button>
+    </div>
+    </div>
+  </div>
+</div>
+<!--modal end pesan alert-->
+
+
 <!-- js untuk tombol shortcut -->
  <script src="shortcut.js"></script>
 <!-- js untuk tombol shortcut -->
@@ -424,13 +448,18 @@ $session_id = session_id();
                 </div>
                 <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom jumlah barang jika ingin mengedit.</i></h6>
                 <h6 style="text-align: left ;"><i><b> * Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</b></i></h6>
-<?php 
+
+
+<!--
+
+//php 
 $hud = $db->query("SELECT setting_tampil FROM setting_antrian");
 $my = mysqli_fetch_array($hud);
 
 if ($my['setting_tampil'] == 'Tampil')
 {
 ?>
+
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Antrian  </button>
 </p>
@@ -454,7 +483,7 @@ tr:nth-child(even){background-color: #f2f2f2}
    </thead>
 <tbody>
 
-  <?php
+  ?php
                 
                 //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
                 $perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan FROM penjualan p INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE p.status = 'Simpan Sementara' ORDER BY p.id DESC ");
@@ -475,17 +504,16 @@ tr:nth-child(even){background-color: #f2f2f2}
                 </tr>";
                 }
 
-                ?>
-
+                ?
 
 </tbody>
  </table>
 </div>
-<?php
+?php
 }
-?>
+>
 
-  
+  -->
 
 
 
@@ -795,6 +823,20 @@ else if (level_harga == "Level 3") {
   document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang');
 
 
+$.post("lihat_promo_alert.php",{id:$(this).attr('id-barang')},function(data){
+
+    if (data == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(data);
+    }
+
+});
+
+
   $('#myModal').modal('hide'); 
   $("#jumlah_barang").focus();
 
@@ -971,9 +1013,8 @@ $(document).ready(function(){
       
 </script>
 
-    <script>
-   
-   //untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
+<script>
+//untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
   $("#submit_barcode").click(function(){
 
     var kode_barang = $("#kode_barcode").val();
@@ -993,7 +1034,11 @@ alert("Barang Yang Anda Pesan Tidak Tersedia !!")
 }
 
 else{
+
+
 $("#kode_barcode").focus();
+
+
 $.post("barcode.php",{kode_barang:kode_barang,sales:sales,level_harga:level_harga},function(data){
 
 
@@ -1016,6 +1061,26 @@ $.post("barcode.php",{kode_barang:kode_barang,sales:sales,level_harga:level_harg
         });
      
      });
+
+
+$.getJSON('lihat_nama_barang.php',{kode_barang:kode_barang}, function(json){
+
+$.post("lihat_promo_alert.php",{id:json.id},function(info){
+
+    if (info == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(info);
+    }
+
+});
+
+});
+
+
 }
 
 });
@@ -2281,6 +2346,20 @@ $(function() {
         $('#satuan_konversi').val(json.satuan);
         $('#id_produk').val(json.id);
         $('#ber_stok').val(json.berkaitan_dgn_stok);
+
+$.post("lihat_promo_alert.php",{id:json.id},function(data){
+
+    if (data == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(data);
+    }
+
+});
+
       }
                                               
         });

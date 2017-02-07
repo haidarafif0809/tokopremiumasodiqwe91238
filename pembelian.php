@@ -150,7 +150,7 @@ echo '<a href="formpembelian.php"  class="btn btn-info"> <i class="fa fa-plus"> 
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="table-baru" > 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th> Detail </th>
 

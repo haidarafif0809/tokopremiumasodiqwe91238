@@ -110,6 +110,10 @@ if ($lihat['kategori_lihat'] > 0){
                                 echo '<li><a href="kategori_barang.php" class="waves-effect">Kategori</a></li>';
 }
 
+//if ($lihat['program_promo_produk'] > 0){
+                                echo '<li><a href="program_promo.php" class="waves-effect">Program Promo</a></li>';
+//}
+
 if ($lihat['komisi_produk_lihat'] > 0){
                                 echo '<li><a href="fee_produk.php" class="waves-effect">Komisi Produk</a></li>';
 }
@@ -136,6 +140,8 @@ if ($lihat['set_akun_lihat'] > 0){
 ?>
 
 <li><a href="setting_antrian_pelanggan.php" class="waves-effect">Setting Antrian</a></li>
+<li><a href="promo_alert.php" class="waves-effect">Promo Alert</a></li>
+
 
 <?php
 if ($lihat['set_perusahaan_lihat'] > 0){
@@ -250,11 +256,12 @@ if ($lihat['persediaan_lihat'] > 0){
 }
 
  if ($lihat['retur_penjualan_lihat'] > 0){
-                            echo '<li><a href="retur_penjualan.php" class="waves-effect">Retur Penjualan</a></li>';
+                            echo '<li><a href="retur_penjualan.php" class="waves-effect">R. Penjualan</a></li>';
 }
 
  if ($lihat['retur_pembelian_lihat'] > 0){
-                            echo '<li><a href="retur_pembelian.php" class="waves-effect">Retur Pembelian</a></li>';
+                            echo '<li><a href="retur_pembelian_faktur.php" class="waves-effect">R. Pembelian / Faktur</a></li>';
+                            echo '<li><a href="retur_pembelian.php" class="waves-effect">R. Pembelian Non Faktur</a></li>';
 }
 
 if ($lihat['retur_lihat'] > 0){

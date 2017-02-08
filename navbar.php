@@ -236,6 +236,9 @@ if ($lihat['pembayaran_hutang_lihat'] > 0){
 
 echo '<li><a href="kartu_stok.php" class="waves-effect" style="font-size: 16px">Kartu Stok</a></li>';
 
+echo '<li><a href="perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Perubahan Harga Masal</a></li>';
+
+
  if ($lihat['laporan_mutasi_stok_lihat'] > 0){
                             echo '<li><a href="lap_mutasi_stok.php" class="waves-effect">Lap. Mutasi Stok</a></li>';
 }
@@ -341,6 +344,8 @@ if ($lihat['akuntansi_lihat'] > 0){
  if ($lihat['laporan_pembayaran_hutang_lihat'] > 0){
                             echo '<li><a href="lap_pembayaran_hutang.php" class="waves-effect" style="font-size: 15px">Lap. Pembayaran Hutang</a></li>';
 }
+
+echo '<li><a href="laporan_perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Lap. Perubahan Harga Masal</a></li>';
 
  if ($lihat['laporan_komisi_lihat'] > 0){
                             echo '<li><a href="lap_jumlah_fee.php" class="waves-effect">Lap. Komisi </a></li>';

@@ -114,7 +114,7 @@ $session_id = session_id();
 <div class="col-sm-2">
           <label class="gg" > Gudang </label><br>
           
-          <select style="font-size:15px; height:35px" name="kode_gudang" id="kode_gudang" class="form-control gg" required="" >
+          <select style="font-size:13px; height:35px" name="kode_gudang" id="kode_gudang" class="form-control gg" required="" >
           <?php 
           
           // menampilkan seluruh data yang ada pada tabel suplier
@@ -124,7 +124,7 @@ $session_id = session_id();
           while($data = mysqli_fetch_array($query))
           {
 
-            if ($data['default_sett'] == '1') {
+            if ($data['default_set'] == '1') {
 
                 echo "<option selected value='".$data['kode_gudang'] ."'>".$data['nama_gudang'] ."</option>";
               
@@ -145,7 +145,7 @@ $session_id = session_id();
 
 <div class="col-sm-2">
     <label> Level Harga </label><br>
-  <select style="font-size:15px; height:35px" type="text" name="level_harga" id="level_harga" class="form-control" required="" >
+  <select style="font-size:13px; height:35px" type="text" name="level_harga" id="level_harga" class="form-control" required="" >
   <option>Level 1</option>
   <option>Level 2</option>
   <option>Level 3</option>
@@ -156,7 +156,7 @@ $session_id = session_id();
 
 <div class="col-sm-2">
 <label class="gg" >Sales</label>
-<select style="font-size:15px; height:35px" name="sales" id="sales" class="form-control gg" required="">
+<select style="font-size:13px; height:35px" name="sales" id="sales" class="form-control gg" required="">
 
   <?php 
     
@@ -187,7 +187,7 @@ $session_id = session_id();
 
 <div class="col-sm-2">
           <label class="gg">PPN</label>
-          <select type="hidden" style="font-size:15px; height:35px" name="ppn" id="ppn" class="form-control gg">
+          <select type="hidden" style="font-size:13px; height:35px" name="ppn" id="ppn" class="form-control gg">
             <option value="Include">Include</option>  
             <option value="Exclude">Exclude</option>
             <option value="Non">Non</option>          
@@ -337,7 +337,7 @@ $session_id = session_id();
 
   <div class="col-sm-3">
 
-    <input type="text" style="height:15px" class="form-control" name="kode_barang" autocomplete="off" id="kode_barang" placeholder="Kode Barang" >
+    <input type="text" style="height:13px" class="form-control" name="kode_barang" autocomplete="off" id="kode_barang" placeholder="Kode Barang" >
 
   </div>
 
@@ -345,12 +345,12 @@ $session_id = session_id();
     <input type="hidden" class="form-control" name="nama_barang" autocomplete="off" id="nama_barang" placeholder="nama" >
 
   <div class="col-sm-2">
-    <input style="height:15px;" type="text" class="form-control" name="jumlah_barang" autocomplete="off" id="jumlah_barang" placeholder="Jumlah" >
+    <input style="height:13px;" type="text" class="form-control" name="jumlah_barang" autocomplete="off" id="jumlah_barang" placeholder="Jumlah" >
   </div>
 
   <div class="col-sm-2">
           
-          <select style="font-size:15px; height:35px" type="text" name="satuan_konversi" id="satuan_konversi" class="form-control"  required="">
+          <select style="font-size:13px; height:35px" type="text" name="satuan_konversi" id="satuan_konversi" class="form-control"  required="">
           
           <?php 
           
@@ -369,7 +369,7 @@ $session_id = session_id();
 
 
    <div class="col-sm-2">
-    <input style="height:15px;" type="text" class="form-control" name="potongan" autocomplete="off" id="potongan1" data-toggle="tooltip" data-placement="top" title="Jika Ingin Potongan Dalam Bentuk Persen (%), input : 10%" placeholder="Potongan">
+    <input style="height:13px;" type="text" class="form-control" name="potongan" autocomplete="off" id="potongan1" data-toggle="tooltip" data-placement="top" title="Jika Ingin Potongan Dalam Bentuk Persen (%), input : 10%" placeholder="Potongan">
   </div>
 
    <div class="col-sm-1">
@@ -592,7 +592,7 @@ tr:nth-child(even){background-color: #f2f2f2}
            <div class="col-sm-6">
              
            <label> Tanggal</label>
-           <input type="text" name="tanggal_jt" id="tanggal_jt"  value="" style="height:10px;font-size:15px" placeholder="Tanggal JT" class="form-control" >
+           <input type="text" name="tanggal_jt" id="tanggal_jt"  value="" style="height:12px;font-size:14px" placeholder="Tanggal JT" class="form-control" >
 
            </div>
 

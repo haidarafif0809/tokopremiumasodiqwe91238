@@ -52,15 +52,13 @@ $t_barang = $cek011['total_barang'];
 
  ?>
 <div class="container">
+<center><h3> <b> LAPORAN PENJUALAN REKAP </b></h3><hr></center>
  <div class="row"><!--row1-->
         <div class="col-sm-2">
-        <br><br>
                 <img src='save_picture/<?php echo $data1['foto']; ?>' class='img-rounded' alt='Cinque Terre' width='160' height='140`'> 
         </div><!--penutup colsm2-->
 
         <div class="col-sm-6">
-                 <h3> <b> LAPORAN PENJUALAN REKAP </b></h3>
-                 <hr>
                  <h4> <b> <?php echo $data1['nama_perusahaan']; ?> </b> </h4> 
                  <p> <?php echo $data1['alamat_perusahaan']; ?> </p> 
                  <p> No.Telp:<?php echo $data1['no_telp']; ?> </p> 
@@ -125,7 +123,7 @@ $t_barang = $cek011['total_barang'];
                   echo "<tr>
                   <td>". $data11['no_faktur'] ."</td>
                   <td>". $data11['tanggal'] ."</td>
-                  <td>". $data11['kode_pelanggan'] ." ". $data11['nama_pelanggan'] ."</td>
+                  <td>". $data11['kode_pelanggan'] ." - ". $data11['nama_pelanggan'] ."</td>
                   <td>". $total_barang ."</td>
                   <td>". rp($total_subtotal) ."</td>
                   <td>". rp($data11['potongan']) ."</td>

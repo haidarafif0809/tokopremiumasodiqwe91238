@@ -65,7 +65,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <div class="table-responsive">
  <table id="table_lap_pembelian_rekap" class="table table-bordered">
-        <thead>
+    <thead>
 			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
 			<th style="background-color: #4CAF50; color: white;"> Nama Suplier </th>
 			<th style="background-color: #4CAF50; color: white;"> Total </th>

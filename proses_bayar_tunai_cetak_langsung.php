@@ -9,7 +9,7 @@
 $tahun_sekarang = date('Y');
 $bulan_sekarang = date('m');
 $tanggal_sekarang = date('Y-m-d');
-$jam_sekarang = date('H:i:sa');
+$jam_sekarang = date('H:i:s');
 $tahun_terakhir = substr($tahun_sekarang, 2);
 
 
@@ -73,7 +73,7 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
     $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
 
     
-    $perintah0 = $db->query("SELECT * FROM fee_faktur WHERE nama_petugas = '$sales'");
+    $perintah0 = $db->query("SELECT * FROM fee_faktur WHERE nama_petugas = '$sales' ");
     $cek = mysqli_fetch_array($perintah0);
     $nominal = $cek['jumlah_uang'];
     $prosentase = $cek['jumlah_prosentase'];
@@ -97,7 +97,7 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
 
 
               
-    $query0 = $db->query("SELECT * FROM tbs_fee_produk WHERE nama_petugas = '$sales'");
+    $query0 = $db->query("SELECT * FROM tbs_fee_produk WHERE nama_petugas = '$sales' AND no_faktur = '$no_faktur'");
    while  ($cek0 = mysqli_fetch_array($query0)){
 
 
@@ -108,9 +108,7 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
     }
 
 
-
-
-    $query = $db->query("SELECT * FROM tbs_penjualan WHERE session_id = '$session_id'");
+    $query = $db->query("SELECT no_faktur_order,SUM(jumlah_barang) AS jumlah_barang ,SUM(subtotal) AS subtotal,satuan,kode_barang,harga,nama_barang,potongan,tax,tanggal,jam  FROM tbs_penjualan WHERE session_id = '$session_id' GROUP BY kode_barang ");
     while ($data = mysqli_fetch_array($query))
       {
 
@@ -129,7 +127,7 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
       }
         
     
-        $query2 = "INSERT INTO detail_penjualan (no_faktur, tanggal, jam, kode_barang, nama_barang, jumlah_barang, asal_satuan,satuan, harga, subtotal, potongan, tax, sisa) VALUES ('$no_faktur', '$tanggal_sekarang', '$jam_sekarang', '$data[kode_barang]','$data[nama_barang]','$jumlah_barang','$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]', '$jumlah_barang')";
+        $query2 = "INSERT INTO detail_penjualan (no_faktur, tanggal, jam, kode_barang, nama_barang, jumlah_barang, asal_satuan,satuan, harga, subtotal, potongan, tax, sisa) VALUES ('$no_faktur', '$data[tanggal]', '$data[jam]', '$data[kode_barang]','$data[nama_barang]','$jumlah_barang','$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]', '$jumlah_barang')";
 
         if ($db->query($query2) === TRUE) {
         } 
@@ -137,6 +135,16 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
         else {
         echo "Error: " . $query2 . "<br>" . $db->error;
         }
+
+        $update_order = "UPDATE penjualan_order SET status_order = 'Selesai Order' WHERE no_faktur_order = '$data[no_faktur_order]'";
+
+        if ($db->query($update_order) === TRUE) {
+        } 
+
+        else {
+        echo "Error: " . $update_order . "<br>" . $db->error;
+        }
+
         
       }
 

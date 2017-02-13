@@ -166,9 +166,9 @@ else{
     <div class="form-group">
     <label>Kode Pelanggan :</label>
      <input type="text" id="kode_pelanggan" class="form-control" readonly=""> 
-     <input type="hidden" id="id_hapus" class="form-control" > 
-     <input type="hidden" id="kode_meja" class="form-control" > 
-     <input type="hidden" id="faktur_hapus" class="form-control" > 
+     <input type="text" id="id_hapus" class="form-control" > 
+     <input type="text" id="kode_meja" class="form-control" > 
+     <input type="text" id="faktur_hapus" class="form-control" > 
     </div>
    
    </form>
@@ -543,9 +543,13 @@ mysqli_close($db);
 		var id = $(this).attr("data-id");
 		var no_faktur = $(this).attr("data-faktur");
 		var kode_meja = $(this).attr("kode_meja");
+
+
 		$("#kode_pelanggan").val(kode_pelanggan);
+    $("#id_hapus").val(id);
 		$("#faktur_hapus").val(no_faktur);
 		$("#kode_meja").val(kode_meja);
+
 		$("#modal_hapus").modal('show');
 		$("#btn_jadi_hapus").attr("data-id", id);
 		

@@ -66,6 +66,11 @@
             $jumlah_penjualan = $cek3['jumlah_penjualan'];
 
 
+            $query3 = $db->query("SELECT SUM(jumlah_barang) AS jumlah_penjualan FROM detail_penjualan_order WHERE kode_barang = '$data1[kode_barang]'");
+            $cek3 = mysqli_fetch_array($query3);
+            $jumlah_penjualan_order = $cek3['jumlah_penjualan'];
+
+
             $query4 = $db->query("SELECT SUM(jumlah) AS jumlah_item_keluar FROM detail_item_keluar WHERE kode_barang = '$data1[kode_barang]'");
             $cek4 = mysqli_fetch_array($query4);
             $jumlah_item_keluar = $cek4['jumlah_item_keluar'];
@@ -80,7 +85,7 @@
 
 
 //total barang 2
-            $total_2 = $jumlah_penjualan + $jumlah_item_keluar + $jumlah_retur_pembelian;
+            $total_2 = $jumlah_penjualan + $jumlah_penjualan_order + $jumlah_item_keluar + $jumlah_retur_pembelian;
 
 
 
@@ -95,9 +100,17 @@
             <td>". rp($data1['harga_beli']) ."</td>
             <td>". rp($data1['harga_jual']) ."</td>
             <td>". rp($data1['harga_jual2']) ."</td>
-            <td>". rp($data1['harga_jual3']) ."</td>
-            <td>". $stok_barang ."</td>
-            <td>". $data1['nama'] ."</td>
+            <td>". rp($data1['harga_jual3']) ."</td>";
+            if ($data1['berkaitan_dgn_stok'] == 'Jasa')
+            {
+                echo "<td>0</td>";
+            }
+            else
+                {
+                    echo "<td>". $stok_barang ."</td>";
+                }
+
+            echo "<td>". $data1['nama'] ."</td>
             <td>". $data1['kategori'] ."</td>
             <td>". $data1['status'] ."</td>
             <td>". $data1['suplier'] ."</td>

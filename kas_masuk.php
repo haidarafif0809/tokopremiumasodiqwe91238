@@ -7,13 +7,6 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-
-//menampilkan seluruh data yang ada pada tabel pembelian dalan DB
-$perintah = $db->query("SELECT km.id, km.no_faktur, km.keterangan, km.ke_akun, km.jumlah, km.tanggal, km.jam, km.user, da.nama_daftar_akun FROM kas_masuk km INNER JOIN daftar_akun da ON km.ke_akun = da.kode_daftar_akun");
-
-
-
-
  ?>
 
 <style>
@@ -139,8 +132,6 @@ tr:nth-child(even){background-color: #f2f2f2}
 <h3><b>DATA KAS MASUK</b></h3><hr>
 
 <?php
-include 'db.php';
-
 $pilih_akses_kas_masuk = $db->query("SELECT * FROM otoritas_kas_masuk WHERE id_otoritas = '$_SESSION[otoritas_id]'");
 $kas_masuk = mysqli_fetch_array($pilih_akses_kas_masuk);
 
@@ -154,7 +145,7 @@ echo '<a href="form_kas_masuk.php"  class="btn btn-info"><i class="fa fa-plus"> 
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="tabel-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_kas_masuk" class="table table-bordered">
 		<thead>
 			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
 			<th style='background-color: #4CAF50; color:white'> Ke Akun </th>
@@ -183,45 +174,6 @@ if ($kas_masuk['kas_masuk_hapus'] > 0) {
 			
 			
 		</thead>
-		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-				//menampilkan data
-			echo "<tr class='tr-id-".$data1['id']."'>
-			<td>". $data1['no_faktur'] ."</td>			
-			<td>". $data1['nama_daftar_akun'] ."</td>
-			<td>". rp($data1['jumlah']) ."</td>			
-			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['jam'] ."</td>
-			<td>". $data1['user'] ."</td>
-			
-
-
-			<td> <button class=' btn btn-info detail' no_faktur='". $data1['no_faktur'] ."'> <span class='glyphicon glyphicon-th-list'></span> Detail </button> </td>";
-
-if ($kas_masuk['kas_masuk_edit'] > 0) {
-
-			echo "<td> <a href='proses_edit_data_kas_masuk.php?no_faktur=". $data1['no_faktur']."&nama_daftar_akun=". $data1['nama_daftar_akun']."' class='btn btn-success'> <span class='glyphicon glyphicon-edit'></span> Edit </a> </td>";
-		}
-
-if ($kas_masuk['kas_masuk_hapus'] > 0) {
-			echo "<td> <button class=' btn btn-danger btn-hapus' data-id='". $data1['id'] ."' no-faktur='". $data1['no_faktur'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td> 
-
-
-			</tr>";
-			}
-
-		}
-
-		//Untuk Memutuskan Koneksi Ke Database
-		mysqli_close($db);   
-		?>
-		</tbody>
-
 	</table>
 </span>
 </div>
@@ -232,14 +184,39 @@ if ($kas_masuk['kas_masuk_hapus'] > 0) {
 
 </div><!--end of container-->
 
-<script>
+<script type="text/javascript">
+	$(document).ready(function(){
+			$('#table_kas_masuk').DataTable().destroy();
+			
+          var dataTable = $('#table_kas_masuk').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_kas_masuk.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_kas_masuk").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[9]+'');
+            },
+
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
 		
-		// untk menampilkan datatable atau filter seacrh
-		$(document).ready(function(){
-		$('#tableuser').DataTable();
 		});
 		
-		$(".detail").click(function(){
+</script>
+
+<script type="text/javascript">
+		$(document).on('click','.detail',function(e){
 		var no_faktur = $(this).attr('no_faktur');
 		
 		
@@ -261,7 +238,7 @@ if ($kas_masuk['kas_masuk_hapus'] > 0) {
 <script type="text/javascript">
 			
 //fungsi hapus data 
-		$(".btn-hapus").click(function(){
+		$(document).on('click','.btn-hapus',function(e){
 		var no_faktur = $(this).attr("no-faktur");
 		var id = $(this).attr("data-id");
 		$("#hapus_no_faktur").val(no_faktur);

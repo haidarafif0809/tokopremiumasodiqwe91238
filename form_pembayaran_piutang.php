@@ -426,8 +426,7 @@ mysqli_close($db);
       $("#totalbayar").val(jumlah_bayar);
       $("#total").val(total_kredit);
       $("#potongan1").val(potongan);
-      $("#faktur").val(no_faktur_penjualan); 
-      $("#kredit").val('');
+      $("#faktur").val(no_faktur_penjualan);
       $("#jumlah_bayar").val('');
       $("#potongan_penjualan").val('');
       
@@ -438,7 +437,7 @@ mysqli_close($db);
       
       }
       
-      else if (jumlah_bayar == ""){
+      else if (jumlah_bayar == "" || jumlah_bayar == 0){
       alert("Jumlah Bayar Harus Diisi");
       }
       else if (kode_pelanggan == ""){

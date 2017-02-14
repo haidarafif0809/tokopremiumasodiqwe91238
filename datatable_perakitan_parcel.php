@@ -9,8 +9,8 @@ $requestData= $_REQUEST;
 
 $columns = array( 
 // datatable column index  => database column name
-	0 =>'id', 
-	1 => 'kode_parcel',
+  0 =>'id', 
+  1 => 'kode_parcel',
   2 => 'nama_parcel',
   3 => 'harga_parcel',
   4 => 'harga_parcel_2',
@@ -55,10 +55,10 @@ $query=mysqli_query($conn, $sql) or die("Salahnya Disini 3");
 $data = array();
 
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
-	$nestedData=array();
+  $nestedData=array();
 
-	$nestedData[] = $row["kode_parcel"];
-	$nestedData[] = $row["nama_parcel"];
+  $nestedData[] = $row["kode_parcel"];
+  $nestedData[] = $row["nama_parcel"];
   $nestedData[] = rp($row["harga_parcel"]); 
   $nestedData[] = rp($row["harga_parcel_2"]); 
   $nestedData[] = rp($row["harga_parcel_3"]); 
@@ -66,25 +66,27 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
   $nestedData[] = rp($row["harga_parcel_5"]); 
   $nestedData[] = rp($row["harga_parcel_6"]); 
   $nestedData[] = rp($row["harga_parcel_7"]); 
-	$nestedData[] = $row["user_input"];
+  $nestedData[] = $row["user_input"];
   $nestedData[] = $row["user_edit"];
 
-  $nestedData[] = "<button class='btn btn-success btn-sm btn-edit-parcel' data-kode='". $row['kode_parcel'] ."' data-nama='". $row['nama_parcel'] ."' data-harga-1='". $row['harga_parcel'] ."' data-harga-2='". $row['harga_parcel_2'] ."' data-harga-3='". $row['harga_parcel_3'] ."' data-harga-4='". $row['harga_parcel_4'] ."' data-harga-5='". $row['harga_parcel_5'] ."' data-harga-6='". $row['harga_parcel_6'] ."' data-harga-7='". $row['harga_parcel_7'] ."' data-id='". $row['id'] ."' > Edit </button>";
+  $nestedData[] ="<a href='detail_perakitan_parcel.php?id=".$row['id']."&kode_parcel=".$row['kode_parcel']."' class='btn btn-detail-parcel btn-warning'> <i class='fa fa-cart-plus'> </i></a>";
 
-  $nestedData[] = "<button class='btn btn-danger btn-sm btn-hapus-parcel' data-id='". $row['id']."' > Hapus </button>";
+  $nestedData[] = "<button class='btn btn-edit-parcel btn-success' data-kode='". $row['kode_parcel'] ."' data-nama='". $row['nama_parcel'] ."' data-harga-1='". $row['harga_parcel'] ."' data-harga-2='". $row['harga_parcel_2'] ."' data-harga-3='". $row['harga_parcel_3'] ."' data-harga-4='". $row['harga_parcel_4'] ."' data-harga-5='". $row['harga_parcel_5'] ."' data-harga-6='". $row['harga_parcel_6'] ."' data-harga-7='". $row['harga_parcel_7'] ."' data-id='". $row['id'] ."' > Edit </button>";
+
+  $nestedData[] = "<button class='btn btn-hapus-parcel btn-danger' data-id='". $row['id']."' data-nama='". $row['nama_parcel']."' > Hapus </button>";
   $nestedData[] = $row["id"];
-	
-	$data[] = $nestedData;
+  
+  $data[] = $nestedData;
 }
 
 
 
 $json_data = array(
-			"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
-			"recordsTotal"    => intval( $totalData ),  // total number of records
-			"recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
-			"data"            => $data   // total data array
-			);
+      "draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+      "recordsTotal"    => intval( $totalData ),  // total number of records
+      "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
+      "data"            => $data   // total data array
+      );
 
 echo json_encode($json_data);  // send data as json format
 

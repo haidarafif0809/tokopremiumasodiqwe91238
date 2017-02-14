@@ -15,7 +15,7 @@ include 'sanitasi.php';
 	$nama_petugas = $_SESSION['nama'];
 
 
-		$update_perakitan_parcel = "UPDATE perakitan_parcel SET nama_parcel = '$nama_parcel', harga_parcel = '$harga_parcel_1', harga_parcel_2 = '$harga_parcel_2', harga_parcel_3 = '$harga_parcel_3', harga_parcel_4 = '$harga_parcel_4', harga_parcel_5 = '$harga_parcel_5', harga_parcel_6 = '$harga_parcel_6', harga_parcel_7 = '$harga_parcel_7', user_input = '$nama_petugas' WHERE id = '$id_edit' ";
+		$update_perakitan_parcel = "UPDATE perakitan_parcel SET nama_parcel = '$nama_parcel', harga_parcel = '$harga_parcel_1', harga_parcel_2 = '$harga_parcel_2', harga_parcel_3 = '$harga_parcel_3', harga_parcel_4 = '$harga_parcel_4', harga_parcel_5 = '$harga_parcel_5', harga_parcel_6 = '$harga_parcel_6', harga_parcel_7 = '$harga_parcel_7', user_edit = '$nama_petugas' WHERE id = '$id_edit' ";
 
 		if ($db->query($update_perakitan_parcel) === TRUE) {
 			} 
@@ -30,3 +30,5 @@ include 'sanitasi.php';
 mysqli_close($db);   
 
  ?>
+
+ <!--UPDATE DATA PARCEL-->

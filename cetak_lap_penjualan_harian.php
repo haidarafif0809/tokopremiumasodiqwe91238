@@ -98,11 +98,11 @@ $total_bayar = $total_total - $total_kredit;
             $t_bayar = $t_total - $t_kredit;
 
           echo "<tr>
-          <td>". $data['tanggal'] ."</td>
-          <td>". $data1."</td>
-          <td>". rp($t_total) ."</td>
-          <td>". rp($t_bayar) ."</td>
-          <td>". rp($t_kredit) ."</td>
+          <td align='left'>". $data['tanggal'] ."</td>
+          <td align='left'>". $data1."</td>
+          <td align='left'>". rp($t_total) ."</td>
+          <td align='left'>". rp($t_bayar) ."</td>
+          <td align='left'>". rp($t_kredit) ."</td>
 
 
           </tr>";
@@ -124,11 +124,15 @@ $total_bayar = $total_total - $total_kredit;
 <br>
 
 <div class="container">
- <table>
+ <table class="table table-hover">
   <tbody>
 
       <tr>
-      <td><b><i>TOTAL : </b></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $data11; ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo rp($total_total); ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo rp($total_bayar); ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo rp($total_kredit); ?> </td>
+          <td align="left" style="width: 8%;"><b>TOTAL : </b></td>
+          <td align="left" style="width: 8%;"><b> <?php echo $data11; ?> </b></td>
+          <td align="left" style="width: 8%;"><b> <?php echo rp($total_total); ?></b></td>
+          <td align="left" style="width: 8%;"><b> <?php echo rp($total_bayar); ?></b></td>
+          <td align="left" style="width: 8%;"><b> <?php echo rp($total_kredit); ?> </b></td>
       </tr>
                  
   </tbody>

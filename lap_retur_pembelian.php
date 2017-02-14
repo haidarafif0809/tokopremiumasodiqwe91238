@@ -7,8 +7,6 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-//menampilkan seluruh data yang ada pada tabel retur_pembelian
-$perintah = $db->query("SELECT p.id,p.no_faktur_retur,p.total,p.nama_suplier,p.tunai,p.tanggal,p.jam,p.user_buat,p.potongan,p.tax,p.sisa,s.nama FROM retur_pembelian p INNER JOIN suplier s ON p.nama_suplier = s.id ORDER BY p.id DESC");
  ?>
 
 <div class="container">
@@ -38,7 +36,7 @@ $perintah = $db->query("SELECT p.id,p.no_faktur_retur,p.total,p.nama_suplier,p.t
 <br>
  <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_laporan_retur_pembelian" class="table table-bordered">
 		<thead>
 			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur Retur </th>
 			<th style="background-color: #4CAF50; color: white;"> Tanggal </th>
@@ -50,46 +48,40 @@ $perintah = $db->query("SELECT p.id,p.no_faktur_retur,p.total,p.nama_suplier,p.t
 			<th style="background-color: #4CAF50; color: white;"> Tunai </th>
 
 		</thead>
-		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-				$perintah1 = $db->query("SELECT jumlah_retur FROM detail_retur_pembelian WHERE no_faktur_retur = '$data1[no_faktur_retur]'");
-				$cek = mysqli_fetch_array($perintah1);
-				$jumlah_retur = $cek['jumlah_retur'];
-				//menampilkan data
-			echo "<tr>
-			<td>". $data1['no_faktur_retur'] ."</td>
-			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['nama'] ."</td>
-			<td>". $jumlah_retur ."</td>
-			<td>". rp($data1['total']) ."</td>
-			<td>". rp($data1['potongan']) ."</td>
-			<td>". rp($data1['tax']) ."</td>
-			<td>". rp($data1['tunai']) ."</td>
-
-			
-			</tr>";
-			}
-
-			//Untuk Memutuskan Koneksi Ke Database
-			mysqli_close($db);   
-		?>
-		</tbody>
 
 	</table>
 </span>
 </div> <!--/ responsive-->
 </div> <!--/ container-->
 
-		<script>
+<script type="text/javascript">
+	$(document).ready(function(){
+          var dataTable = $('#table_laporan_retur_pembelian').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_laporan_retur_pembelian.php", // json datasource
+           	
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_laporan_retur_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[5]+'');
+            },
+
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
 		
-		$(document).ready(function(){
-		$('#tableuser').DataTable();
 		});
-		</script>
+		
+</script>
 
 <?php include 'footer.php'; ?>

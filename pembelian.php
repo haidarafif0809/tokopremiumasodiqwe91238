@@ -7,10 +7,6 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-//menampilkan seluruh data yang ada pada tabel pembelian dalan DB
-$perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.suplier,p.tanggal,p.tanggal_jt,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit,s.nama,g.nama_gudang, g.kode_gudang FROM pembelian p INNER JOIN suplier s ON p.suplier = s.id INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang ORDER BY p.id DESC");
-
-
  ?>
 
 
@@ -150,9 +146,9 @@ echo '<a href="formpembelian.php"  class="btn btn-info"> <i class="fa fa-plus"> 
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="table-baru" > 
-<table id="tableuser" class="table table-bordered">
+<table id="table_pembelian" class="table table-bordered table-sm">
 		<thead>
-			<th> Detail </th>
+			<th style='background-color: #4CAF50; color:white'> Detail </th>
 
 <?php 
 include 'db.php';
@@ -162,7 +158,7 @@ $pembelian_edit = mysqli_num_rows($pilih_akses_pembelian_edit);
 
 
     if ($pembelian_edit > 0){
-				echo "<th> Edit </th>";
+				echo "<th style='background-color: #4CAF50; color:white'> Edit </th>";
 
 			}
 ?>
@@ -175,128 +171,29 @@ $pembelian_hapus = mysqli_num_rows($pilih_akses_pembelian_hapus);
 
 
     if ($pembelian_hapus > 0){
-				echo "<th> Hapus </th>";
+				echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
 	}
 	?>
 			
-			<th> Cetak Tunai </th>
-			<th> Cetak Hutang </th>
-			<th> Nomor Faktur </th>
-			<th> Gudang </th>
-			<th> Suplier </th>
-			<th> Total </th>
-			<th> Tanggal </th>
-			<th> Tanggal Jatuh Tempo </th>
-			<th> Jam </th>
-			<th> User </th>
-			<th> Status </th>
-			<th> Potongan </th>
-			<th> Tax </th>
-			<th> Kembalian</th>
-			<th> Kredit </th>
-			
-			
-			
+			<th style='background-color: #4CAF50; color:white'> Cetak Tunai </th>
+			<th style='background-color: #4CAF50; color:white'> Cetak Hutang </th>
+			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
+			<th style='background-color: #4CAF50; color:white'> Gudang </th>
+			<th style='background-color: #4CAF50; color:white'> Suplier </th>
+			<th style='background-color: #4CAF50; color:white'> Total </th>
+			<th style='background-color: #4CAF50; color:white'> Tanggal </th>
+			<th style='background-color: #4CAF50; color:white'> Tanggal Jatuh Tempo </th>
+			<th style='background-color: #4CAF50; color:white'> Jam </th>
+			<th style='background-color: #4CAF50; color:white'> User </th>
+			<th style='background-color: #4CAF50; color:white'> Status </th>
+			<th style='background-color: #4CAF50; color:white'> Potongan </th>
+			<th style='background-color: #4CAF50; color:white'> Tax </th>
+			<th style='background-color: #4CAF50; color:white'> Kembalian</th>
+			<th style='background-color: #4CAF50; color:white'> Kredit </th>
 			
 		</thead>
 		
-		<tbody>
-		<?php
-
-			//menyimpan  sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-
-				//menampilkan data
-			echo "<tr class='tr-id-".$data1['id']."'>
-			<td> <button class='btn btn-info detail' no_faktur='". $data1['no_faktur'] ."'> <span class='glyphicon glyphicon-th-list'></span> Detail </button> </td>";
-
 		
-
-include 'db.php';
-
-$pilih_akses_pembelian_edit = $db->query("SELECT pembelian_edit FROM otoritas_pembelian WHERE id_otoritas = '$_SESSION[otoritas_id]' AND pembelian_edit = '1'");
-$pembelian_edit = mysqli_num_rows($pilih_akses_pembelian_edit);
-
-
-    if ($pembelian_edit > 0){
-				echo "<td> <a href='proses_edit_pembelian.php?no_faktur=". $data1['no_faktur']."&suplier=". $data1['suplier']."&nama_gudang=".$data1['nama_gudang']."&kode_gudang=".$data1['kode_gudang']."&nama_suplier=".$data1['nama']."' class='btn btn-success'> <span class='glyphicon glyphicon-edit'></span> Edit </a> </td>"; 
-}
-
-
-include 'db.php';
-
-$pilih_akses_pembelian_hapus = $db->query("SELECT pembelian_hapus FROM otoritas_pembelian WHERE id_otoritas = '$_SESSION[otoritas_id]' AND pembelian_hapus = '1'");
-$pembelian_hapus = mysqli_num_rows($pilih_akses_pembelian_hapus);
-
-
-    if ($pembelian_hapus > 0){
-
- $retur = $db->query ("SELECT no_faktur_pembelian FROM detail_retur_pembelian WHERE no_faktur_pembelian = '$data1[no_faktur]'");
- $row_retur = mysqli_num_rows($retur);
-
- $hpp_masuk_penjualan = $db->query ("SELECT no_faktur FROM hpp_masuk WHERE no_faktur = '$data1[no_faktur]' AND sisa != jumlah_kuantitas");
- $row_masuk = mysqli_num_rows($hpp_masuk_penjualan);
-
- $hutang = $db->query ("SELECT no_faktur_pembelian FROM detail_pembayaran_hutang WHERE no_faktur_pembelian = '$data1[no_faktur]'");
- $row_hutang = mysqli_num_rows($hutang);
-		
-		if ($row_retur > 0 || $row_masuk > 0 || $row_hutang > 0) {
-
-			echo "<td> <button class='btn btn-danger btn-alert' data-id='".$data1['id']."' data-faktur='".$data1['no_faktur']."'><span class='glyphicon glyphicon-trash'></span> Hapus  </button> </td>"; 
-
-		}
-		else{
-
-			echo "<td> <button class='btn btn-danger btn-hapus' data-id='".$data1['id']."' data-suplier='".$data1['nama']."' data-faktur='".$data1['no_faktur']."'><span class='glyphicon glyphicon-trash'></span> Hapus  </button> </td>"; 
-
-		} 
-			
-			}
-
-			
-
-			if ($data1['status'] == 'Lunas') {
-
-			echo "<td> <a href='cetak_lap_pembelian_tunai.php?no_faktur=".$data1['no_faktur']."&suplier=".$data1['nama']."' id='cetak_tunai' class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print' > </span> Cetak Tunai </a> </td>";
-}
-
-else{
-
-	echo "<td> </td>";
-	
-}
-
-			
-if ($data1['status'] == 'Hutang'){
-	echo "<td> <a href='cetak_lap_pembelian_hutang.php?no_faktur=".$data1['no_faktur']."&suplier=".$data1['nama']."' id='cetak_piutang' class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print' > </span> Cetak Hutang </a> </td>";
-}
-
-else {
-
-	echo "<td> </td>";
-}
-			echo "<td>". $data1['no_faktur'] ."</td>
-			<td>". $data1['nama_gudang'] ."</td>
-			<td>". $data1['nama'] ."</td>
-			<td>". rp($data1['total']) ."</td>
-			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['tanggal_jt'] ."</td>
-			<td>". $data1['jam'] ."</td>
-			<td>". $data1['user'] ."</td>
-			<td>". $data1['status'] ."</td>
-			<td>". rp($data1['potongan']) ."</td>
-			<td>". rp($data1['tax']) ."</td>
-			<td>". rp($data1['sisa']) ."</td>
-			<td>". rp($data1['kredit']) ."</td>
-			</tr>";
-			}
-
-			//Untuk Memutuskan Koneksi Ke Database
-			mysqli_close($db);   
-		?>
-		</tbody>
-
 	</table>
 </span>
 </div>
@@ -307,18 +204,47 @@ else {
 
 </div><!--end of container-->
 
-<!--menampilkan detail penjualan-->
-		<script>
-		
-		$(document).ready(function(){
-		$('#tableuser').DataTable(
-			{"ordering": false});
-		});
-		</script>
+<!--DATA TABLE MENGGUNAKAN AJAX-->
+<script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
+          $('#table_pembelian').DataTable().destroy();
+          var status = $("#status").val();
+          var dataTable = $('#table_pembelian').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_pembelian.php", // json datasource
+            "data": function ( d ) {
+                      d.status = $("#status").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[18]+'');
+            },
+        });
 
+        $("#form").submit(function(){
+        return false;
+        });
+        
+
+      } );
+    </script>
+<!--/DATA TABLE MENGGUNAKAN AJAX-->
+
+<!--menampilkan detail penjualan-->
 		<script type="text/javascript">
 		
-		$(".detail").click(function(){
+		$(document).on('click','.detail',function(e){
 		var no_faktur = $(this).attr('no_faktur');
 		
 		

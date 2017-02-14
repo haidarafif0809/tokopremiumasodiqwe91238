@@ -16,6 +16,30 @@ $session_id = session_id();
 
  ?>
 
+<!-- Modal Untuk Confirm PESAN alert-->
+<div id="modal_promo_alert" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+    <div class="modal-header">
+
+  
+        <button type="button" class="close" data-dismiss="modal">&times;</button>       
+    </div>
+    <div class="modal-body">
+      <span id="tampil_alert">
+      </span>
+    </div>
+    <div class="modal-footer">
+        
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Closed</button>
+    </div>
+    </div>
+  </div>
+</div>
+<!--modal end pesan alert-->
+
+
 <!-- js untuk tombol shortcut -->
  <script src="shortcut.js"></script>
 <!-- js untuk tombol shortcut -->
@@ -90,7 +114,7 @@ $session_id = session_id();
 <div class="col-sm-2">
           <label class="gg" > Gudang </label><br>
           
-          <select style="font-size:15px; height:35px" name="kode_gudang" id="kode_gudang" class="form-control gg" required="" >
+          <select style="font-size:13px; height:35px" name="kode_gudang" id="kode_gudang" class="form-control gg" required="" >
           <?php 
           
           // menampilkan seluruh data yang ada pada tabel suplier
@@ -100,7 +124,7 @@ $session_id = session_id();
           while($data = mysqli_fetch_array($query))
           {
 
-            if ($data['default_sett'] == '1') {
+            if ($data['default_set'] == '1') {
 
                 echo "<option selected value='".$data['kode_gudang'] ."'>".$data['nama_gudang'] ."</option>";
               
@@ -121,7 +145,7 @@ $session_id = session_id();
 
 <div class="col-sm-2">
     <label> Level Harga </label><br>
-  <select style="font-size:15px; height:35px" type="text" name="level_harga" id="level_harga" class="form-control" required="" >
+  <select style="font-size:13px; height:35px" type="text" name="level_harga" id="level_harga" class="form-control" required="" >
   <option>Level 1</option>
   <option>Level 2</option>
   <option>Level 3</option>
@@ -132,7 +156,7 @@ $session_id = session_id();
 
 <div class="col-sm-2">
 <label class="gg" >Sales</label>
-<select style="font-size:15px; height:35px" name="sales" id="sales" class="form-control gg" required="">
+<select style="font-size:13px; height:35px" name="sales" id="sales" class="form-control gg" required="">
 
   <?php 
     
@@ -163,7 +187,7 @@ $session_id = session_id();
 
 <div class="col-sm-2">
           <label class="gg">PPN</label>
-          <select type="hidden" style="font-size:15px; height:35px" name="ppn" id="ppn" class="form-control gg">
+          <select type="hidden" style="font-size:13px; height:35px" name="ppn" id="ppn" class="form-control gg">
             <option value="Include">Include</option>  
             <option value="Exclude">Exclude</option>
             <option value="Non">Non</option>          
@@ -313,7 +337,7 @@ $session_id = session_id();
 
   <div class="col-sm-3">
 
-    <input type="text" style="height:15px" class="form-control" name="kode_barang" autocomplete="off" id="kode_barang" placeholder="Kode Barang" >
+    <input type="text" style="height:13px" class="form-control" name="kode_barang" autocomplete="off" id="kode_barang" placeholder="Kode Barang" >
 
   </div>
 
@@ -321,12 +345,12 @@ $session_id = session_id();
     <input type="hidden" class="form-control" name="nama_barang" autocomplete="off" id="nama_barang" placeholder="nama" >
 
   <div class="col-sm-2">
-    <input style="height:15px;" type="text" class="form-control" name="jumlah_barang" autocomplete="off" id="jumlah_barang" placeholder="Jumlah" >
+    <input style="height:13px;" type="text" class="form-control" name="jumlah_barang" autocomplete="off" id="jumlah_barang" placeholder="Jumlah" >
   </div>
 
   <div class="col-sm-2">
           
-          <select style="font-size:15px; height:35px" type="text" name="satuan_konversi" id="satuan_konversi" class="form-control"  required="">
+          <select style="font-size:13px; height:35px" type="text" name="satuan_konversi" id="satuan_konversi" class="form-control"  required="">
           
           <?php 
           
@@ -345,7 +369,7 @@ $session_id = session_id();
 
 
    <div class="col-sm-2">
-    <input style="height:15px;" type="text" class="form-control" name="potongan" autocomplete="off" id="potongan1" data-toggle="tooltip" data-placement="top" title="Jika Ingin Potongan Dalam Bentuk Persen (%), input : 10%" placeholder="Potongan">
+    <input style="height:13px;" type="text" class="form-control" name="potongan" autocomplete="off" id="potongan1" data-toggle="tooltip" data-placement="top" title="Jika Ingin Potongan Dalam Bentuk Persen (%), input : 10%" placeholder="Potongan">
   </div>
 
    <div class="col-sm-1">
@@ -424,13 +448,18 @@ $session_id = session_id();
                 </div>
                 <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom jumlah barang jika ingin mengedit.</i></h6>
                 <h6 style="text-align: left ;"><i><b> * Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</b></i></h6>
-<?php 
+
+
+<!--
+
+//php 
 $hud = $db->query("SELECT setting_tampil FROM setting_antrian");
 $my = mysqli_fetch_array($hud);
 
 if ($my['setting_tampil'] == 'Tampil')
 {
 ?>
+
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Antrian  </button>
 </p>
@@ -454,7 +483,7 @@ tr:nth-child(even){background-color: #f2f2f2}
    </thead>
 <tbody>
 
-  <?php
+  ?php
                 
                 //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
                 $perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan FROM penjualan p INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE p.status = 'Simpan Sementara' ORDER BY p.id DESC ");
@@ -475,17 +504,16 @@ tr:nth-child(even){background-color: #f2f2f2}
                 </tr>";
                 }
 
-                ?>
-
+                ?
 
 </tbody>
  </table>
 </div>
-<?php
+?php
 }
-?>
+>
 
-  
+  -->
 
 
 
@@ -564,7 +592,7 @@ tr:nth-child(even){background-color: #f2f2f2}
            <div class="col-sm-6">
              
            <label> Tanggal</label>
-           <input type="text" name="tanggal_jt" id="tanggal_jt"  value="" style="height:10px;font-size:15px" placeholder="Tanggal JT" class="form-control" >
+           <input type="text" name="tanggal_jt" id="tanggal_jt"  value="" style="height:12px;font-size:14px" placeholder="Tanggal JT" class="form-control" >
 
            </div>
 
@@ -795,6 +823,20 @@ else if (level_harga == "Level 3") {
   document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang');
 
 
+$.post("lihat_promo_alert.php",{id:$(this).attr('id-barang')},function(data){
+
+    if (data == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(data);
+    }
+
+});
+
+
   $('#myModal').modal('hide'); 
   $("#jumlah_barang").focus();
 
@@ -971,9 +1013,8 @@ $(document).ready(function(){
       
 </script>
 
-    <script>
-   
-   //untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
+<script>
+//untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
   $("#submit_barcode").click(function(){
 
     var kode_barang = $("#kode_barcode").val();
@@ -993,7 +1034,11 @@ alert("Barang Yang Anda Pesan Tidak Tersedia !!")
 }
 
 else{
+
+
 $("#kode_barcode").focus();
+
+
 $.post("barcode.php",{kode_barang:kode_barang,sales:sales,level_harga:level_harga},function(data){
 
 
@@ -1016,6 +1061,26 @@ $.post("barcode.php",{kode_barang:kode_barang,sales:sales,level_harga:level_harg
         });
      
      });
+
+
+$.getJSON('lihat_nama_barang.php',{kode_barang:kode_barang}, function(json){
+
+$.post("lihat_promo_alert.php",{id:json.id},function(info){
+
+    if (info == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(info);
+    }
+
+});
+
+});
+
+
 }
 
 });
@@ -2281,6 +2346,20 @@ $(function() {
         $('#satuan_konversi').val(json.satuan);
         $('#id_produk').val(json.id);
         $('#ber_stok').val(json.berkaitan_dgn_stok);
+
+$.post("lihat_promo_alert.php",{id:json.id},function(data){
+
+    if (data == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(data);
+    }
+
+});
+
       }
                                               
         });

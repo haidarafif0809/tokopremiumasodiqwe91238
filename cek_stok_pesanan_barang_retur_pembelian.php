@@ -21,7 +21,7 @@ $satuan = stringdoang($_POST['satuan']);
     }
 
 
-$select_hpp = $db->query("SELECT SUM(sisa) AS sisa FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur' OR no_faktur_hpp_masuk = '$no_faktur' ");
+$select_hpp = $db->query("SELECT SUM(sisa) AS sisa FROM hpp_masuk WHERE kode_barang = '$kode_barang'");
 $data = mysqli_fetch_array($select_hpp);
 
 echo $a = $data['sisa'] - $abc;

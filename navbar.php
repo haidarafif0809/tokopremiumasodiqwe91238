@@ -111,6 +111,10 @@ if ($lihat['kategori_lihat'] > 0){
                                 echo '<li><a href="kategori_barang.php" class="waves-effect">Kategori</a></li>';
 }
 
+//if ($lihat['program_promo_produk'] > 0){
+                                echo '<li><a href="program_promo.php" class="waves-effect">Program Promo</a></li>';
+//}
+
 if ($lihat['komisi_produk_lihat'] > 0){
                                 echo '<li><a href="fee_produk.php" class="waves-effect">Komisi Produk</a></li>';
 }
@@ -137,6 +141,8 @@ if ($lihat['set_akun_lihat'] > 0){
 ?>
 
 <li><a href="setting_antrian_pelanggan.php" class="waves-effect">Setting Antrian</a></li>
+<li><a href="promo_alert.php" class="waves-effect">Promo Alert</a></li>
+
 
 <?php
 if ($lihat['set_perusahaan_lihat'] > 0){
@@ -231,6 +237,11 @@ if ($lihat['pembayaran_hutang_lihat'] > 0){
 
 echo '<li><a href="kartu_stok.php" class="waves-effect" style="font-size: 16px">Kartu Stok</a></li>';
 
+echo '<li><a href="cache_produk_penjualan.php" class="waves-effect" style="font-size: 16px">Update Cache Produk</a></li>';
+
+echo '<li><a href="perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Perubahan Harga Masal</a></li>';
+
+
  if ($lihat['laporan_mutasi_stok_lihat'] > 0){
                             echo '<li><a href="lap_mutasi_stok.php" class="waves-effect">Lap. Mutasi Stok</a></li>';
 }
@@ -248,11 +259,12 @@ if ($lihat['persediaan_lihat'] > 0){
 }
 
  if ($lihat['retur_penjualan_lihat'] > 0){
-                            echo '<li><a href="retur_penjualan.php" class="waves-effect">Retur Penjualan</a></li>';
+                            echo '<li><a href="retur_penjualan.php" class="waves-effect">R. Penjualan</a></li>';
 }
 
  if ($lihat['retur_pembelian_lihat'] > 0){
-                            echo '<li><a href="retur_pembelian.php" class="waves-effect">Retur Pembelian</a></li>';
+                            echo '<li><a href="retur_pembelian_faktur.php" class="waves-effect">R. Pembelian / Faktur</a></li>';
+                            echo '<li><a href="retur_pembelian.php" class="waves-effect">R. Pembelian Non Faktur</a></li>';
 }
 
 if ($lihat['retur_lihat'] > 0){
@@ -335,6 +347,8 @@ if ($lihat['akuntansi_lihat'] > 0){
  if ($lihat['laporan_pembayaran_hutang_lihat'] > 0){
                             echo '<li><a href="lap_pembayaran_hutang.php" class="waves-effect" style="font-size: 15px">Lap. Pembayaran Hutang</a></li>';
 }
+
+echo '<li><a href="laporan_perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Lap. Perubahan Harga Masal</a></li>';
 
  if ($lihat['laporan_komisi_lihat'] > 0){
                             echo '<li><a href="lap_jumlah_fee.php" class="waves-effect">Lap. Komisi </a></li>';

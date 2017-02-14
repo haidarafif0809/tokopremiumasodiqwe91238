@@ -15,11 +15,17 @@
     $a = $harga * $jumlah_barang;$tahun_sekarang = date('Y');
     $bulan_sekarang = date('m');
     $tanggal_sekarang = date('Y-m-d');
-    $jam_sekarang = date('H:i:sa');
+    $jam_sekarang = date('H:i:s');
     $tahun_terakhir = substr($tahun_sekarang, 2);
 
 
-          if(strpos($potongan, "%") !== false)
+    if ($potongan == '') {
+      $potongan_jadi = 0;
+      $potongan_tampil = 0;
+    }
+    else
+    {
+           if(strpos($potongan, "%") !== false)
           {
               $potongan_jadi = $a * $potongan / 100;
               $potongan_tampil = $potongan_jadi;
@@ -29,6 +35,7 @@
              $potongan_jadi = $potongan;
              $potongan_tampil = $potongan;
           }
+    }
 
 
     $tax = stringdoang($_POST['tax']);
@@ -142,6 +149,9 @@ $jumlah = mysqli_num_rows($cek);
             $jumlah_barang = angkadoang($_POST['jumlah_barang']);
             $kode_barang = stringdoang($_POST['kode_barang']);
             $tax = angkadoang($_POST['tax']);
+            if ($tax == '') {
+              $tax = 0;
+            }
             $subtotal = $harga* $jumlah_barang - $potongan_jadi;
 
         $query1->execute();
@@ -163,6 +173,9 @@ $jumlah = mysqli_num_rows($cek);
             $satuan = stringdoang($_POST['satuan']);
             $harga = angkadoang($_POST['harga']);
             $tax = angkadoang($_POST['tax']);
+            if ($tax == '') {
+              $tax = 0;
+            }
             $subtotal = $harga * $jumlah_barang - $potongan_jadi;
             
             

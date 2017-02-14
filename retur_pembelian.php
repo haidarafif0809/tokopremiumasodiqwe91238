@@ -7,17 +7,13 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-
-//menampilkan seluruh data yang ada pada tabel pembelian dalan DB
-$perintah = $db->query("SELECT p.id,p.no_faktur_retur,p.keterangan,p.total,p.nama_suplier,p.tanggal,p.tanggal_edit,p.jam,p.user_buat,p.user_edit,p.potongan,p.tax,p.tunai,p.sisa,p.cara_bayar,s.nama FROM retur_pembelian p INNER JOIN suplier s ON p.nama_suplier = s.id ORDER BY p.id DESC");
-
  ?>
 
 
 
 <div class="container"> <!--start of container-->
 
-<h3><b> DATA RETUR PEMBELIAN </b></h3><hr>
+<h3><b> DATA RETUR PEMBELIAN NON FAKTUR </b></h3><hr>
 
 <!--membuat link-->
 <?php
@@ -27,7 +23,7 @@ $pembelian = mysqli_fetch_array($pilih_akses_pembelian);
 
 if ($pembelian['retur_pembelian_tambah'] > 0) {
 
-echo '<a href="form_retur_pembelian.php"  class="btn btn-info"><i class="fa fa-plus"> </i> RETUR PEMBELIAN</a>';
+echo '<a href="form_retur_pembelian.php"  class="btn btn-info"><i class="fa fa-plus"> </i> RETUR PEMBELIAN NON FAKTUR</a>';
 
 }
 ?>
@@ -114,7 +110,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="tabel_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_retur_pembelian" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color:white'> Detail </th>
 
@@ -133,62 +129,20 @@ if ($pembelian['retur_pembelian_hapus'] > 0) {
 ?>
 
 			<th style='background-color: #4CAF50; color:white'> Cetak </th>
-			<th style='background-color: #4CAF50; color:white'> Nomor Faktur Retur </th>
-			<th style='background-color: #4CAF50; color:white'> Nama Suplier </th>
-			<th style='background-color: #4CAF50; color:white'> Total </th>
-			<th style='background-color: #4CAF50; color:white'> Potongan </th>
-			<th style='background-color: #4CAF50; color:white'> Tax </th>
+			<th style='background-color: #4CAF50; color:white'> Faktur Retur </th>
+			<th style='background-color: #4CAF50; color:white'> Suplier </th>
+			<th style='background-color: #4CAF50; color:white'> Total Retur </th>
+			<th style='background-color: #4CAF50; color:white'> Potong Hutang </th>
+			<th style='background-color: #4CAF50; color:white'> Kas </th>
+			<th style='background-color: #4CAF50; color:white'> Diskon </th>
+			<th style='background-color: #4CAF50; color:white'> Pajak </th>
 			<th style='background-color: #4CAF50; color:white'> Tanggal </th>
 			<th style='background-color: #4CAF50; color:white'> Jam </th>
 			<th style='background-color: #4CAF50; color:white'> User Buat </th>
 			<th style='background-color: #4CAF50; color:white'> User Edit </th>
 			<th style='background-color: #4CAF50; color:white'> Tanggal Edit</th>
-			<th style='background-color: #4CAF50; color:white'> Tunai </th>
-			<th style='background-color: #4CAF50; color:white'> Kembalian </th>
 			
 		</thead>
-		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-				//menampilkan data
-			echo "<tr class='tr-id-".$data1['id']."'>
-
-			<td> <button class='btn btn-info detail' no_faktur_retur='". $data1['no_faktur_retur'] ."' ><span class='glyphicon glyphicon-th-list'></span> Detail </button> </td>";
-
-if ($pembelian['retur_pembelian_edit'] > 0) {
-
-			echo "<td> <a href='proses_edit_retur_pembelian.php?no_faktur_retur=". $data1['no_faktur_retur']."&nama=". $data1['nama']."&cara_bayar=".$data1['cara_bayar']."' class='btn btn-success'> <span class='glyphicon glyphicon-edit'></span> Edit </a> </td> ";
-		}
-
-if ($pembelian['retur_pembelian_hapus'] > 0) {
-
-			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."' data-faktur='". $data1['no_faktur_retur'] ."' data-suplier='". $data1['nama'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-		} 
-			
-			echo "<td> <a href='cetak_lap_retur_pembelian.php?no_faktur_retur=".$data1['no_faktur_retur']."&nama_suplier=".$data1['nama']."' class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print'> </span> Cetak Retur</a> </td>
-			<td>". $data1['no_faktur_retur'] ."</td>
-			<td>". $data1['nama'] ."</td>
-			<td>". rp($data1['total']) ."</td>
-			<td>". rp($data1['potongan']) ."</td>
-			<td>". rp($data1['tax']) ."</td>
-			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['jam'] ."</td>
-			<td>". $data1['user_buat'] ."</td>
-			<td>". $data1['user_edit'] ."</td>
-			<td>". $data1['tanggal_edit'] ."</td>
-			<td>". rp($data1['tunai']) ."</td>
-			<td>". rp($data1['sisa']) ."</td>
-			
-			</tr>";
-			}
-			//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-		</tbody>
 
 	</table>
 	</span>
@@ -199,16 +153,41 @@ mysqli_close($db);
 		<span id="demo"> </span>
 </div><!--end of container-->
 		
+<script type="text/javascript">
+	$(document).ready(function(){
+			$('#table_retur_pembelian').DataTable().destroy();
+			
+          var dataTable = $('#table_retur_pembelian').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_retur_pembelian.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_retur_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[16]+'');
+            },
+
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
+		
+		});
+		
+</script>
 
 				<!--menampilkan detail penjualan-->
-				<script>
+<script type="text/javascript">
 				
-				$(document).ready(function(){
-				$('#tableuser').DataTable();
-				});
-				
-				
-		$(".detail").click(function(){
+		$(document).on('click','.detail',function(e){
 		var no_faktur_retur = $(this).attr('no_faktur_retur');
 		
 		
@@ -222,14 +201,13 @@ mysqli_close($db);
 		});
 		
 		});
-
-				
-				</script>
+	
+	</script>
 				
 				<script type="text/javascript">
 				
 				//fungsi hapus data 
-				$(".btn-hapus").click(function(){
+				$(document).on('click','.btn-hapus',function(e){
 				var kode_suplier = $(this).attr("data-suplier");
 				var no_faktur_retur = $(this).attr("data-faktur");
 				var id = $(this).attr("data-id");

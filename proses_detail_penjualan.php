@@ -25,8 +25,6 @@ $detail = $db->query("SELECT * FROM detail_penjualan WHERE no_faktur = '$no_fakt
       <?php 
              if ($_SESSION['otoritas'] == 'Pimpinan')
              {
-             
-             
              echo "<th> Hpp </th>";
              }
       ?>
@@ -46,6 +44,7 @@ $detail = $db->query("SELECT * FROM detail_penjualan WHERE no_faktur = '$no_fakt
 
 						$query = $db->query("SELECT dp.id, dp.no_faktur, dp.kode_barang, dp.nama_barang, dp.jumlah_barang / sk.konversi AS jumlah_produk, dp.jumlah_barang, dp.satuan, dp.harga, dp.potongan, dp.subtotal, dp.tax, dp.sisa, sk.id_satuan, s.nama, sa.nama AS satuan_asal, SUM(hk.sisa_barang) AS sisa_barang FROM detail_penjualan dp LEFT JOIN satuan_konversi sk ON dp.satuan = sk.id_satuan LEFT JOIN satuan s ON dp.satuan = s.id LEFT JOIN satuan sa ON dp.asal_satuan = sa.id LEFT JOIN hpp_keluar hk ON dp.no_faktur = hk.no_faktur AND dp.kode_barang = hk.kode_barang WHERE dp.no_faktur = '$no_faktur' AND dp.kode_barang = '$data1[kode_barang]' ");
 						$data = mysqli_fetch_array($query);
+						
 					//menampilkan data
 					echo "<tr>
 					<td>". $data['no_faktur'] ."</td>

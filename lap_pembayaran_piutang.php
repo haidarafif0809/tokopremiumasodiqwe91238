@@ -7,9 +7,6 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-//menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT p.nama_pelanggan,da.nama_daftar_akun,pp.no_faktur_pembayaran,pp.tanggal,pp.nama_suplier,pp.dari_kas,pp.total FROM pembayaran_piutang pp INNER JOIN daftar_akun da ON pp.dari_kas = da.kode_daftar_akun INNER JOIN pelanggan p ON pp.nama_suplier = p.kode_pelanggan ");
-
  ?>
 
 <div class="container">
@@ -32,7 +29,7 @@ $perintah = $db->query("SELECT p.nama_pelanggan,da.nama_daftar_akun,pp.no_faktur
 <br>
  <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_lap_pembayaran_piutang" class="table table-bordered">
 		<thead>
 			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
 			<th style="background-color: #4CAF50; color: white;"> Tanggal </th>
@@ -41,45 +38,42 @@ $perintah = $db->query("SELECT p.nama_pelanggan,da.nama_daftar_akun,pp.no_faktur
 			<th style="background-color: #4CAF50; color: white;"> Potongan </th>
 			<th style="background-color: #4CAF50; color: white;"> Jumlah Bayar </th>
 
-			
-			
 		</thead>
-		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-				$perintah0 = $db->query("SELECT * FROM detail_pembayaran_piutang WHERE no_faktur_pembayaran = '$data1[no_faktur_pembayaran]'");
-				$cek = mysqli_fetch_array($perintah0);
-			echo "<tr>
-			<td>". $data1['no_faktur_pembayaran'] ."</td>
-			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['nama_suplier'] ." ". $data1['nama_pelanggan'] ."</td>
-			<td>". $data1['nama_daftar_akun'] ."</td>
-			<td>". $cek['potongan'] ."</td>
-			<td>". rp($data1['total']) ."</td>
-
-			
-			</tr>";
-			}
-
-			//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-		</tbody>
 
 	</table>
 </span>
 </div> <!--/ responsive-->
 </div> <!--/ container-->
 
-		<script>
-		
+<script type="text/javascript">
 		$(document).ready(function(){
-		$('#tableuser').DataTable();
+		
+		var dataTable = $('#table_lap_pembayaran_piutang').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_lap_pembayaran_piutang.php", // json datasource
+           	
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_lap_pembayaran_piutang").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[5]+'');
+            },
+
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
+		
 		});
+		
 		</script>
 
 <?php include 'footer.php'; ?>

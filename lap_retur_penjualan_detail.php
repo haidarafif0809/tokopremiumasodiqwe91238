@@ -10,19 +10,7 @@ include 'db.php';
 
  ?>
 
-     <script>
-    $(function() {
-    $( "#dari_tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
-    });
-    </script>
-
-
-    <script>
-    $(function() {
-    $( "#sampai_tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
-    });
-    </script>
-
+    
  <div class="container">
 
 <h3> LAPORAN RETUR PENJUALAN DETAIL </h3><hr>
@@ -69,41 +57,102 @@ include 'db.php';
 					</table>
 </span>
 </div> <!--/ responsive-->
+
+<span id="table_tampil" style="display: none;"> 
+	<div class="card card-block">
+
+<div class="table-responsive">
+					<table id="table_laporan_retur_penjualan" class="table table-bordered">
+					<thead>
+
+					<th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
+					<th style="background-color: #4CAF50; color: white;"> Tanggal </th>					
+					<th style="background-color: #4CAF50; color: white;"> Kode Barang </th>
+					<th style="background-color: #4CAF50; color: white;"> Nama Barang </th>
+					<th style="background-color: #4CAF50; color: white;"> Jumlah Retur </th>
+					<th style="background-color: #4CAF50; color: white;"> Satuan </th>
+					<th style="background-color: #4CAF50; color: white;"> Harga </th>
+					<th style="background-color: #4CAF50; color: white;"> Potongan </th>
+					<th style="background-color: #4CAF50; color: white;"> Subtotal </th>
+
+					</thead>
+					</table>
+</div>
+
+<br>
+
+       <a href='cetak_lap_retur_penjualan_detail.php' id="cetak_lap" class='btn btn-success' target='blank' ><i class='fa fa-print'> </i> Cetak Retur Penjualan </a>
+
+</div>
+</span>
 </div> <!--/ container-->
 
-		<script>
+ <script>
+    $(function() {
+    $( "#dari_tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
+    });
+    </script>
+
+
+    <script>
+    $(function() {
+    $( "#sampai_tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
+    });
+    </script>
+
+<script type="text/javascript">
+	$(document).on('click','#submit',function(e){
+			$('#table_laporan_retur_penjualan').DataTable().destroy();
+			var dari_tanggal = $("#dari_tanggal").val();
+      		var sampai_tanggal = $("#sampai_tanggal").val();
+      		
+      		if (dari_tanggal == '') {
+            alert("Silakan dari tanggal diisi terlebih dahulu.");
+            $("#dari_tanggal").focus();
+          }
+          else if (sampai_tanggal == '') {
+            alert("Silakan sampai tanggal diisi terlebih dahulu.");
+            $("#sampai_tanggal").focus();
+          }
+            else{
+            $('#table_tampil').show();
+			$('#result').hide();
+          var dataTable = $('#table_laporan_retur_penjualan').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_laporan_retur_penjualan_detail.php", // json datasource
+           	"data": function ( d ) {
+                      d.dari_tanggal = $("#dari_tanggal").val();
+                      d.sampai_tanggal = $("#sampai_tanggal").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_laporan_retur_penjualan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[5]+'');
+            },
+
+        });
+
+        
+
+    	$("#cetak_lap").attr("href", "cetak_lap_retur_penjualan_detail.php?&dari_tanggal="+dari_tanggal+"&sampai_tanggal="+sampai_tanggal+"");
+        }//end else
+        $("form").submit(function(){
+        return false;
+        });
 		
-		$(document).ready(function(){
-		$('.table').DataTable();
 		});
-		</script>
-
 		
-		<script type="text/javascript">
-		$("#submit").click(function(){
-		
-		var dari_tanggal = $("#dari_tanggal").val();
-		var sampai_tanggal = $("#sampai_tanggal").val();
-		
-		
-		$.post("proses_lap_retur_penjualan_detail.php", {dari_tanggal:dari_tanggal,sampai_tanggal:sampai_tanggal},function(info){
-		
-		$("#result").html(info);
-		
-		});
-		
-		
-		});      
-		$("form").submit(function(){
-		
-		return false;
-		
-		});
-		
-		</script>
-
-
-
+</script>
 
 <?php 
 include 'footer.php';

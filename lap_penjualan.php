@@ -7,26 +7,25 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-//menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT pel.nama_pelanggan ,p.total, p.no_faktur ,p.kode_pelanggan ,p.tanggal ,p.jam ,p.user ,p.status ,p.potongan ,p.tax ,p.sisa FROM penjualan p INNER JOIN pelanggan pel ON p.kode_pelanggan = pel.kode_pelanggan ORDER BY p.no_faktur DESC");
-
-
+//sum total bersih penjualan
 $jumlah_total_bersih = $db->query("SELECT SUM(total) AS total_bersih FROM penjualan");
 $ambil = mysqli_fetch_array($jumlah_total_bersih);
 
 $sub_total_bersih = $ambil['total_bersih'];
 
-
+//sum total kotor detail penjualan
 $jumlah_total_kotor = $db->query("SELECT SUM(subtotal) AS total_kotor FROM detail_penjualan");
 $ambil_kotor = mysqli_fetch_array($jumlah_total_kotor);
 
 $sub_total_kotor = $ambil_kotor['total_kotor'];
 
+// sum total disc penjualan
 $jumlah_potongan = $db->query("SELECT SUM(potongan) AS total_potongan FROM penjualan");
 $ambil_potongan = mysqli_fetch_array($jumlah_potongan);
 
 $sub_total_potongan = $ambil_potongan['total_potongan'];
 
+//sum total tax penjualan
 $jumlah_total_tax = $db->query("SELECT SUM(tax) AS total_tax FROM penjualan");
 $ambil_tax = mysqli_fetch_array($jumlah_total_tax);
 
@@ -49,9 +48,12 @@ tr:nth-child(even){background-color: #f2f2f2}
              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:150px"> Jenis Laporan <span class="caret"></span></button>
 
              <ul class="dropdown-menu">
-				<li><a href="lap_penjualan_rekap.php"> Laporan Penjualan Rekap </a></li> 
-				<li><a href="lap_penjualan_detail.php"> Laporan Penjualan Detail </a></li>
-				<li><a href="lap_penjualan_harian.php"> Laporan Penjualan Harian </a></li>
+				<li><a href="lap_penjualan_rekap.php" target="blank"> Laporan Penjualan Rekap </a></li> 
+				<li><a href="lap_penjualan_detail.php" target="blank"> Laporan Penjualan Detail </a></li>
+				<li><a href="lap_penjualan_harian.php" target="blank"> Laporan Penjualan Harian </a></li>
+				<li><a href="lap_jual_puluh_besar.php" target="blank"> Laporan 10 Besar Penjualan </a></li>
+				<li><a href="lap_kekuatan_jual_item.php" target="blank"> Laporan Kekuatan Penjualan Per Item </a></li>
+
 				<!--
 				
 				<li><a href="lap_pelanggan_rekap.php"> Laporan Jual Per Pelanggan Rekap </a></li>
@@ -66,7 +68,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 <br>
  <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_lap_penjualan" class="table table-bordered">
 		<thead>
 			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
 			<th style="background-color: #4CAF50; color: white;"> Kode Pelanggan</th>
@@ -81,44 +83,6 @@ tr:nth-child(even){background-color: #f2f2f2}
 			<th style="background-color: #4CAF50; color: white;"> Kembalian </th>
 						
 		</thead>
-		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-
-			{
-
-				$sum_subtotal = $db->query("SELECT SUM(subtotal) AS total_kotor FROM detail_penjualan WHERE no_faktur = '$data1[no_faktur]' ");
-
-				$ambil_sum_subtotal = mysqli_fetch_array($sum_subtotal);
-				$total_kotor = $ambil_sum_subtotal['total_kotor'];
-
-
-				//menampilkan data
-			echo "<tr>
-			<td>". $data1['no_faktur'] ."</td>
-			<td>". $data1['kode_pelanggan'] ." ". $data1['nama_pelanggan'] ."</td>
-			<td>". rp($total_kotor) ."</td>
-			<td>". rp($data1['total']) ."</td>
-			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['jam'] ."</td>
-			<td>". $data1['user'] ."</td>
-			<td>". $data1['status'] ."</td>
-			<td>". rp($data1['potongan']) ."</td>
-			<td>". rp($data1['tax']) ."</td>
-			<td>". rp($data1['sisa']) ."</td>
-			</tr>";
-
-
-			}
-
-			//Untuk Memutuskan Koneksi Ke Database
-			mysqli_close($db);   
-		?>
-		</tbody>
-
 	</table>
 </span>
 </div> <!--/ responsive-->
@@ -126,11 +90,36 @@ tr:nth-child(even){background-color: #f2f2f2}
 <h3><i> Total Potongan : <b>Rp. <?php echo rp($sub_total_potongan); ?></b> --- Total Pajak : <b>Rp. <?php echo rp($sub_total_tax); ?></b></i></h3> 
 </div> <!--/ container-->
 
-		<script>
-		
-		$(document).ready(function(){
-		$('#tableuser').DataTable();
-		});
-		</script>
+
+<!--DATA TABLE MENGGUNAKAN AJAX-->
+<script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
+          var dataTable = $('#table_lap_penjualan').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_lap_penjualan.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_lap_penjualan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[11]+'');
+            },
+        });
+
+        $("#form").submit(function(){
+        return false;
+        });
+        
+
+      } );
+    </script>
+<!--/DATA TABLE MENGGUNAKAN AJAX-->
 
 <?php include 'footer.php'; ?>

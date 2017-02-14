@@ -10,16 +10,6 @@ include 'db.php';
 //menampilkan seluruh data yang ada pada tabel penjualan
 $status = $_GET['status'];
 
-if ($status == 'semua') {
-    
-    $perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan FROM penjualan p INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan ORDER BY p.id DESC");
-
-}
-
-else{
-    $perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan FROM penjualan p INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE p.status = '$status' ORDER BY p.id DESC");
-}
-
  ?>
 
 
@@ -166,9 +156,9 @@ else{
     <div class="form-group">
     <label>Kode Pelanggan :</label>
      <input type="text" id="kode_pelanggan" class="form-control" readonly=""> 
-     <input type="hidden" id="id_hapus" class="form-control" > 
-     <input type="hidden" id="kode_meja" class="form-control" > 
-     <input type="hidden" id="faktur_hapus" class="form-control" > 
+     <input type="text" id="id_hapus" class="form-control" > 
+     <input type="text" id="kode_meja" class="form-control" > 
+     <input type="text" id="faktur_hapus" class="form-control" > 
     </div>
    
    </form>
@@ -254,8 +244,6 @@ else{
 <div class="col-sm-5">
 
 <?php 
-include 'db.php';
-
 $pilih_akses_penjualan_tambah = $db->query("SELECT penjualan_tambah FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]' AND penjualan_tambah = '1'");
 $penjualan_tambah = mysqli_num_rows($pilih_akses_penjualan_tambah);
 
@@ -316,14 +304,12 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_penjualan" class="table table-bordered">
 		<thead>
 
 		
 			
 <?php 
-include 'db.php';
-
 $pilih_akses_penjualan_edit = $db->query("SELECT penjualan_edit FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]' AND penjualan_edit = '1'");
 $penjualan_edit = mysqli_num_rows($pilih_akses_penjualan_edit);
 
@@ -337,8 +323,6 @@ $penjualan_edit = mysqli_num_rows($pilih_akses_penjualan_edit);
 
 
 <?php 
-include 'db.php';
-
 $pilih_akses_penjualan_hapus = $db->query("SELECT penjualan_hapus FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]' AND penjualan_hapus = '1'");
 $penjualan_hapus = mysqli_num_rows($pilih_akses_penjualan_hapus);
 
@@ -367,136 +351,10 @@ $penjualan_hapus = mysqli_num_rows($pilih_akses_penjualan_hapus);
 			<th style='background-color: #4CAF50; color:white'> Tax </th>
 			<th style='background-color: #4CAF50; color:white'> Kembalian </th>
 			<th style='background-color: #4CAF50; color:white'> Kredit </th>
-			
-			
 
-			
 		</thead>
 		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-
-			{
-
-
-
-include 'db.php';
-
-$pilih_akses_penjualan_edit = $db->query("SELECT penjualan_edit FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]' AND penjualan_edit = '1'");
-$penjualan_edit = mysqli_num_rows($pilih_akses_penjualan_edit);
-
-
-    if ($penjualan_edit > 0){
-
-			echo "<tr class='tr-id-".$data1['id']."'> <td> <a href='proses_edit_penjualan.php?no_faktur=". $data1['no_faktur']."&kode_pelanggan=". $data1['kode_pelanggan']."&nama_gudang=".$data1['nama_gudang']."&kode_gudang=".$data1['kode_gudang']."' class='btn btn-success'>Edit</a> </td>";	
-
-
-		}
-
-
-include 'db.php';
-
-$pilih_akses_penjualan_hapus = $db->query("SELECT penjualan_hapus FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]' AND penjualan_hapus = '1'");
-$penjualan_hapus = mysqli_num_rows($pilih_akses_penjualan_hapus);
-
-
-	if ($penjualan_hapus > 0){
-
-$pilih = $db->query("SELECT no_faktur_penjualan FROM detail_retur_penjualan WHERE no_faktur_penjualan = '$data1[no_faktur]'");
-$row_retur = mysqli_num_rows($pilih);
-
-$pilih = $db->query("SELECT no_faktur_penjualan FROM detail_pembayaran_piutang WHERE no_faktur_penjualan = '$data1[no_faktur]'");
-$row_piutang = mysqli_num_rows($pilih);
-
-if ($row_retur > 0 || $row_piutang > 0) {
-
-			echo "<td> <button class='btn btn-danger btn-alert' data-id='".$data1['id']."' data-faktur='".$data1['no_faktur']."'>Hapus</button></td>";
-
-} 
-
-else {
-
-			echo "<td> <button class='btn btn-danger btn-hapus' data-id='".$data1['id']."' data-pelanggan='".$data1['nama_pelanggan']."' data-faktur='".$data1['no_faktur']."' kode_meja='".$data1['kode_meja']."'>Hapus</button></td>";
-}
-
-
-
-
-		}
-
-
-
-
-if ($data1['status'] == 'Lunas') {
-
-	echo'<td>
-
-				<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:150px"> Cetak Penjualan <span class="caret"></span></button>
-				
-				<ul class="dropdown-menu">
-				<li><a href="cetak_lap_penjualan_tunai.php?no_faktur='.$data1["no_faktur"].'" target="blank"> Cetak Penjualan </a></li> 
-				<li><a href="cetak_lap_penjualan_tunai_besar.php?no_faktur='.$data1["no_faktur"].'" target="blank"> Cetak Penjualan Besar </a></li>
-				</ul>
-				</div>
-		 </td>';
-}
-
-else{
-
-	echo "<td> </td>";
-}
-
-
-
-if ($data1['status'] == 'Piutang') {
-	echo "<td> <a href='cetak_lap_penjualan_piutang.php?no_faktur=".$data1['no_faktur']."' id='cetak_piutang' class='btn btn-warning' target='blank'>Cetak Piutang</a> </td>";
-}
-
-else{
-
-	echo "<td>  </td>";
-	
-}
-
-			echo "<td> <button class='btn btn-info detail' no_faktur='". $data1['no_faktur'] ."' >Detail</button> </td>
-			<td>". $data1['no_faktur'] ."</td>
-			<td>". $data1['nama_gudang'] ."</td>";
-			
-
-if ($data1['status'] == 'Simpan Sementara') {
-	echo "<td> <a href='proses_pesanan_barang.php?no_faktur=".$data1['no_faktur']."&kode_pelanggan=".$data1['kode_pelanggan']."&nama_pelanggan=".$data1['nama_pelanggan']."&nama_gudang=".$data1['nama_gudang']."&kode_gudang=".$data1['kode_gudang']."' class='btn btn-primary'>Bayar</a> </td>";
-}
-
-else{
-
-	echo "<td>  </td>";
-	
-}
-			echo "<td>". $data1['kode_pelanggan'] ." - ". $data1['nama_pelanggan'] ."</td>
-			<td>". rp($data1['total']) ."</td>
-			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['tanggal_jt'] ."</td>
-			<td>". $data1['jam'] ."</td>
-			<td>". $data1['user'] ."</td>
-			<td>". $data1['sales'] ."</td>
-			<td>". $data1['status'] ."</td>
-			<td>". rp($data1['potongan']) ."</td>
-			<td>". rp($data1['tax']) ."</td>
-			<td>". rp($data1['sisa']) ."</td>
-			<td>". rp($data1['kredit']) ."</td>
-			</tr>";
-			}
-
-//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-		</tbody>
-
-	</table>
+</table>
 </span>
 </div>
 
@@ -504,19 +362,46 @@ mysqli_close($db);
 
 </div><!--end of container-->
 		
+<!--DATA TABLE MENGGUNAKAN AJAX-->
+<script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
+          $('#table_penjualan').DataTable().destroy();
+          var status = $("#status").val();
+          var dataTable = $('#table_penjualan').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_penjualan.php", // json datasource
+            "data": function ( d ) {
+                      d.status = $("#status").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_penjualan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[20]+'');
+            },
+        });
+
+        $("#form").submit(function(){
+        return false;
+        });
+        
+
+      } );
+    </script>
+<!--/DATA TABLE MENGGUNAKAN AJAX-->
 
 <!--menampilkan detail penjualan-->
-		<script>
-		
-		$(document).ready(function(){
-		$('#tableuser').DataTable(
-			{"ordering": false});
-		});
-		</script>
-
-		<script type="text/javascript">
-		
-		$(".detail").click(function(){
+<script type="text/javascript">
+    $(document).on('click', '.detail', function (e){
 		var no_faktur = $(this).attr('no_faktur');
 		
 		
@@ -543,9 +428,13 @@ mysqli_close($db);
 		var id = $(this).attr("data-id");
 		var no_faktur = $(this).attr("data-faktur");
 		var kode_meja = $(this).attr("kode_meja");
+
+
 		$("#kode_pelanggan").val(kode_pelanggan);
+    $("#id_hapus").val(id);
 		$("#faktur_hapus").val(no_faktur);
 		$("#kode_meja").val(kode_meja);
+
 		$("#modal_hapus").modal('show');
 		$("#btn_jadi_hapus").attr("data-id", id);
 		
@@ -560,10 +449,31 @@ mysqli_close($db);
 		var kode_meja = $("#kode_meja").val();
 		
 		
-		$(".tr-id-"+id).remove();
+		
 		$("#modal_hapus").modal('hide');
 		$.post("hapus_data_penjualan.php",{id:id,no_faktur:no_faktur,kode_meja:kode_meja},function(data){
-
+      var dataTable = $('#table_penjualan').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_penjualan.php", // json datasource
+            "data": function ( d ) {
+                      d.status = $("#status").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_penjualan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[20]+'');
+            },
+        });
 		
 		});
 		

@@ -17,19 +17,10 @@ $session_id = session_id();
  
  // menyimpan data sementara yg ada pada $query
  $data = mysqli_fetch_array($query);
- $total = $data['total_penjualan'];
+ echo $total = $data['total_penjualan'];
 
 
-$a =  intval($total);
-
-echo rp($a);
-
-        //Untuk Memutuskan Koneksi Ke Database
-
-        mysqli_close($db); 
-        
-
-
+        //Untuk Memutuskan Koneksi Ke Database    
   ?>
 
 

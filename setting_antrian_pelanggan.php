@@ -18,7 +18,7 @@ tr:nth-child(even){background-color: #f2f2f2}
   <div class="container">
 
 
-<h3><b> SETTING ANTRIAN PELANGGAN </b></h3> <hr>
+<h3><b> SETTING ANTRIAN & ORDER PENJUALAN  </b></h3> <hr>
 
 <br>
 <br>

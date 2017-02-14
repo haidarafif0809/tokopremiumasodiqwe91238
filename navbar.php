@@ -308,6 +308,7 @@ if ($lihat['akuntansi_lihat'] > 0){
  if ($lihat['laporan_penjualan_lihat'] > 0){
                             echo '<li><a href="lap_penjualan.php" class="waves-effect">Lap. Penjualan</a></li>';
 }
+echo "<li><a href='lap_bucket_size.php' class='waves-effect'>Lap. Backet Size</a></li>";
 
  if ($lihat['laporan_pembelian_lihat'] > 0){
                             echo '<li><a href="lap_pembelian.php" class="waves-effect">Lap. Pembelian</a></li>';

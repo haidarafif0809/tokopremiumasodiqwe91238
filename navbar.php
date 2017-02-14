@@ -236,8 +236,6 @@ if ($lihat['pembayaran_hutang_lihat'] > 0){
 
 echo '<li><a href="kartu_stok.php" class="waves-effect" style="font-size: 16px">Kartu Stok</a></li>';
 
-echo '<li><a href="cache_produk_penjualan.php" class="waves-effect" target="blank" style="font-size: 16px">Update Cache Produk</a></li>';
-
 echo '<li><a href="perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Perubahan Harga Masal</a></li>';
 
 

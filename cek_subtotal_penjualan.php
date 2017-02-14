@@ -14,10 +14,10 @@ include 'sanitasi.php';
  $total = $data['total_penjualan'];
 
 if ($subtotal_tampil == $total) {
-		echo "1";
+		echo "Oke";
 	}
 	else{
-		echo "0";
+		echo "Zonk";
 	}
 
 //Untuk Memutuskan Koneksi Ke Database

@@ -655,7 +655,7 @@ else{
           
 
           
-          <label style="font-size:15px">Total Akhir</label><br>
+          <label style="font-size:15px"> Total Akhir</label><br>
           <b><input type="text" name="total" id="total1" class="form-control" value="<?php echo rp($total_akhir); ?>" style="height: 50px; width:90%; font-size:25px;" placeholder="Total" readonly="" ></b>
 
 <div class="row">
@@ -986,7 +986,8 @@ $(document).ready(function(){
    //untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
   $("#submit_produk").click(function(){
 
-    var no_faktur = $("#nomor_faktur_penjualan").val();
+    var no_faktur = $("#nomor_faktur_penjualan"
+).val();
     var kode_pelanggan = $("#kd_pelanggan").val();
     var kode_barang = $("#kode_barang").val();
     var nama_barang = $("#nama_barang").val();
@@ -1122,7 +1123,8 @@ $(document).ready(function(){
 
 $("#submit_produk").mouseleave(function(){
 
-        var no_faktur = $("#nomor_faktur_penjualan").val();
+        var no_faktur = $("#nomor_faktur_penjualan"
+).val();
         
         $.post("cek_total_bayar_pesanan_barang.php",
         {

@@ -9,7 +9,7 @@ include 'db.php';
 $no_faktur_retur = $_GET['no_faktur_retur'];
 $suplier = $_GET['nama_suplier'];
 
-    $query0 = $db->query("SELECT rp.no_faktur_retur ,rp.tanggal ,rp.total ,rp.tax ,rp.potongan ,rp.total ,rp.tunai ,rp.sisa,sp.nama FROM retur_pembelian rp INNER JOIN suplier sp ON rp.nama_suplier = sp.id WHERE rp.no_faktur_retur = '$no_faktur_retur'");
+    $query0 = $db->query("SELECT rp.no_faktur_retur ,rp.tanggal ,rp.total ,rp.tax ,rp.potongan ,rp.tunai ,rp.sisa,sp.nama FROM retur_pembelian rp INNER JOIN suplier sp ON rp.nama_suplier = sp.id WHERE rp.no_faktur_retur = '$no_faktur_retur'");
     $data0 = mysqli_fetch_array($query0);
 
     $query1 = $db->query("SELECT * FROM perusahaan ");
@@ -55,7 +55,7 @@ $suplier = $_GET['nama_suplier'];
     <tr><td>Petugas</td> <td>:&nbsp;</td><td><?php echo $_SESSION['nama']; ?></td></tr>
     <tr><td>No Faktur</td> <td>:&nbsp;</td><td><?php echo $data0['no_faktur_retur']; ?></td></tr>
     <tr><td>Tanggal</td> <td>:&nbsp;</td><td><?php echo tanggal($data0['tanggal']);?></td></tr>
-    <tr><td>Supplier</td> <td>:&nbsp;</td><td><?php echo $suplier; ?></td></tr>https://github.com/fahrizalrahman/TokoSurya/pull/7/conflict?name=form_retur_pembelian_faktur.php&ancestor_oid=fd36527f8ed0c031ab91c2e3ca860cc5dcaea72b&base_oid=91e7baa6fc8740f92e1a95721620c33836d15e67&head_oid=651b0aaae434d2cc5616fc6f98805d6867b009c6
+    <tr><td>Supplier</td> <td>:&nbsp;</td><td><?php echo $suplier; ?></td></tr>
   </tbody>
 </table>         
                  

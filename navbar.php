@@ -104,6 +104,7 @@ if ($lihat['pelanggan_lihat'] > 0){
 
 if ($lihat['item_lihat'] > 0){
                                 echo '<li><a href="barang.php?kategori=semua&tipe=barang_jasa" class="waves-effect" >Produk</a></li>';
+                                echo '<li><a href="data_parcel.php" class="waves-effect" >Produk Parcel</a></li>';
 }
 
 if ($lihat['satuan_lihat'] > 0){

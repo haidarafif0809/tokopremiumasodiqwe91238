@@ -66,7 +66,11 @@ $lihat = mysqli_fetch_array($pilih_akses_lihat);
 if ($lihat['penjualan_lihat'] > 0){
                 echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> <i class="fa fa-shopping-cart"></i> Penjualan </a></li>';
 }
+?>
 
+<li><a href="order_penjualan.php" class="waves-effect"> <i class="fa fa-shopping-cart"></i> Order Penjualan </a></li>
+
+<?php
 if ($lihat['pembelian_lihat'] > 0){
 
                 echo '<li><a href="pembelian.php" class="waves-effect"> <i class="fa fa-shopping-basket"></i> Pembelian </a></li>';
@@ -139,7 +143,7 @@ if ($lihat['set_akun_lihat'] > 0){
 }
 ?>
 
-<li><a href="setting_antrian_pelanggan.php" class="waves-effect">Setting Antrian</a></li>
+<li><a href="setting_antrian_pelanggan.php" class="waves-effect">Setting Antrian & Order </a></li>
 <li><a href="promo_alert.php" class="waves-effect">Promo Alert</a></li>
 
 

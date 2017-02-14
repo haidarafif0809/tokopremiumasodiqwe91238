@@ -16,6 +16,8 @@ $session_id = session_id();
     $kode_barang = stringdoang($_POST['kode_barang']);
     $sales = stringdoang($_POST['sales']);
     $level_harga = stringdoang($_POST['level_harga']);
+    $no_faktur = stringdoang($_POST['no_faktur']);
+
 
     $tipe = $db->query("SELECT berkaitan_dgn_stok FROM barang WHERE kode_barang = '$kode_barang'");
     $data_tipe = mysqli_fetch_array($tipe);
@@ -359,7 +361,7 @@ $jumlah = mysqli_num_rows($cek);
     if ($ber_stok == 'Jasa' OR ($ber_stok == 'Barang' AND $stok_barang >= 0)){
 
   //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
-                $perintah = $db->query("SELECT tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama FROM tbs_penjualan tp INNER JOIN satuan s ON tp.satuan = s.id WHERE tp.session_id = '$session_id' AND tp.kode_barang = '$kode_barang' AND tp.no_faktur_order IS NULL ORDER BY no_faktur_order ASC ");
+                $perintah = $db->query("SELECT tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama FROM tbs_penjualan tp INNER JOIN satuan s ON tp.satuan = s.id WHERE tp.no_faktur = '$no_faktur' AND tp.kode_barang = '$kode_barang' AND tp.no_faktur_order IS NULL  ");
                 
                 //menyimpan data sementara yang ada pada $perintah
                 

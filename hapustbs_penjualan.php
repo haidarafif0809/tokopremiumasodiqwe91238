@@ -16,7 +16,7 @@ $query2 = $db->query("DELETE FROM tbs_fee_produk WHERE kode_produk = '$kode_bara
 //jika $query benar maka akan menuju file formpenjualan.php , jika salah maka failed
 if ($query == TRUE)
 {
-echo "sukses";
+echo "1";
 }
 else
 {

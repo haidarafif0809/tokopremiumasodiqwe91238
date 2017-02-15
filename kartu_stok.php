@@ -29,11 +29,22 @@ include 'db.php';
       </div>
       <div class="modal-body">
 
+      <center>
       <div class="table-resposive">
-<span class="modal_baru">
-
-  </span>
-</div>
+           <table id="table_modal_kartu_stok" class="table table-bordered table-sm">
+           <thead> <!-- untuk memberikan nama pada kolom tabel -->
+                              
+            <th> Kode Barang </th>
+            <th> Nama Barang </th>
+            <th> Jumlah Barang </th>
+            <th> Satuan </th>
+            <th> Kategori </th>
+            <th> Status </th>
+                              
+           </thead> <!-- tag penutup tabel -->
+           </table>
+      </div>
+</center>
 </div> <!-- tag penutup modal-body-->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -102,9 +113,10 @@ include 'db.php';
 </form>
 
 
-<div class="table-responsive">
-<span id="result"><!--span untuk table-->       
-    <table id="table-kartustok" class="table table-bordered">
+
+<span id="result"><!--span untuk table--> 
+<div class="table-responsive">      
+    <table id="table_kartu_stok" class="table table-bordered">
 
         <thead>
 
@@ -123,9 +135,28 @@ include 'db.php';
             
       </tbody>
      </table>
+    </div>
 </span><!--akhir span untuk table-->
-</div>
 
+
+<span id="tampil_table" style="display: none;">
+  <div class="table-responsive">
+    <table id="table_kartu_stoknya" class="table table-sm">
+
+        <!-- membuat nama kolom tabel -->
+        <thead>
+
+      <th style='background-color: #4CAF50; color:white'> No Faktur </th>
+      <th style='background-color: #4CAF50; color:white'> Tipe </th>
+      <th style='background-color: #4CAF50; color:white'> Tanggal </th>
+      <th style='background-color: #4CAF50; color:white'> Jumlah Masuk </th>
+      <th style='background-color: #4CAF50; color:white'> Jumlah Keluar </th>
+      <th style='background-color: #4CAF50; color:white'> Saldo</th>
+
+        </thead>
+    </table>
+  </div>
+</span>
 </div><!--Div Container-->
 
 
@@ -158,13 +189,44 @@ include 'db.php';
         }
         else
         {
+            $("#result").hide();
+            $("#tampil_table").show();
+            $('#table_kartu_stoknya').DataTable().destroy();
+          
+              var dataTable = $('#table_kartu_stoknya').DataTable( {
+              "processing": true,
+              "serverSide": true,
+              "ajax":{
+                url :"datatable_kartu_stok.php", // json datasource
+                "data": function ( d ) {
+                var kode_barang = $("#kode_barang").val();
+                d.kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));       
+                d.nama_barang = $("#nama_barang").val();   
+                d.id_produk = $("#id_produk").val();        
+                d.bulan = $("#bulan").val();        
+                d.tahun = $("#tahun").val();
+                // d.custom = $('#myInput').
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+                type: "post",  // method  , by default get
+                error: function(){  // error handling
+                  $(".employee-grid-error").html("");
+                  $("#table_kartu_stoknya").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                  $("#employee-grid_processing").css("display","none");
+                }
+            },
+                
+                "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                    $(nRow).attr('class','tr-id-'+aData[10]+'');
+                },
 
-        $.post("show_kartu_stok.php", {kode_barang:kode_barang,nama_barang:nama_barang,id_produk:id_produk,bulan:bulan,tahun:tahun},function(info){
-        
-        $("#result").html(info);
+            });
 
-        });
-            }  
+            $("form").submit(function(){
+            return false;
+            });
+          }// /else 
         });
            
         $("form").submit(function(){
@@ -176,15 +238,7 @@ include 'db.php';
 </script>
 
 
-<script>
-// untuk memunculkan data tabel 
-$(document).ready(function() {
-        $('#table-kartustok').DataTable({"ordering":false});
-    });
-
-</script>
-
-<script type="text/javascript">
+<!--<script type="text/javascript">
   $("#cari_produk_penjualan").click(function() {
 
       //menyembunyikan notif berhasil
@@ -200,7 +254,7 @@ $(document).ready(function() {
       /* Act on the event */
       });
 
-</script>
+</script>-->
 
 <script> 
     shortcut.add("f1", function() {
@@ -219,6 +273,38 @@ $(function() {
 });
 </script>
 
+<script type="text/javascript">
+  $("#cari_produk_penjualan").click(function() {
+    var kode_pelanggan = $("#kd_pelanggan").val();
+    $("#alert_berhasil").hide();
+    $("#table_modal_kartu_stok").DataTable().destroy();
+          var dataTable = $('#table_modal_kartu_stok').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_modal_kartu_stok_baru.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_modal_kartu_stok").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class', "pilih");
+              $(nRow).attr('data-kode', aData[0]+"("+aData[1]+")");
+              $(nRow).attr('nama-barang', aData[1]);
+              $(nRow).attr('id-barang', aData[6]);
+
+
+          }
+
+        }); 
+});
+</script>
 
 <!--untuk memasukkan perintah java script-->
 <script type="text/javascript">

@@ -1,16 +1,10 @@
 <?php include 'session_login.php';
-
+//gone stok opname ajax
 //memasukkan file session login, header, navbar, db.php
 include 'header.php';
 include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
-
-
-//menampilkan seluruh data yang ada pada tabel pembelian dalan DB
-$perintah = $db->query("SELECT * FROM stok_opname");
-
-
 
 
  ?>
@@ -126,8 +120,6 @@ tr:nth-child(even){background-color: #f2f2f2}
 <!--membuat link-->
 
 <?php
-include 'db.php';
-
 $pilih_akses_stok_opname = $db->query("SELECT * FROM otoritas_stok_opname WHERE id_otoritas = '$_SESSION[otoritas_id]'");
 $stok_opname = mysqli_fetch_array($pilih_akses_stok_opname);
 
@@ -140,6 +132,9 @@ echo '<a href="form_stok_opname.php"  class="btn btn-info" > <i class="fa fa-plu
 ?>
 <br>
 
+<span id="mbalek" style="display: none;">
+	<button type="submit" name="kembali" id="kembali" class="btn btn-primary" ><i class="fa fa-reply"> </i>Kembali </button>
+</span>
 <button type="submit" name="submit" id="filter_1" class="btn btn-primary" ><i class="fa fa-eye"> </i> Filter Faktur </button>
 <button type="submit" name="submit" id="filter_2" class="btn btn-primary" ><i class="fa fa-eye"> </i> Filter Detail </button>
 
@@ -191,11 +186,44 @@ echo '<a href="form_stok_opname.php"  class="btn btn-info" > <i class="fa fa-plu
 
 <br><br>
 
-
-
+<span id="table_baru">
 <div class="table-responsive">
-<span id="tabel_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_stok_opname" class="table table-bordered">
+		<thead>
+			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
+			<th style='background-color: #4CAF50; color:white'> Tanggal </th>
+			<th style='background-color: #4CAF50; color:white'> Jam </th>
+			<th style='background-color: #4CAF50; color:white'> Status </th>
+			<th style='background-color: #4CAF50; color:white'> Keterangan </th>
+			<th style='background-color: #4CAF50; color:white'> Total Selisih</th>
+			
+			<th style='background-color: #4CAF50; color:white'> User </th>
+			<th style='background-color: #4CAF50; color:white'> Detail </th>
+			<?php 
+
+if ($stok_opname['stok_opname_edit'] > 0) {
+	echo "<th style='background-color: #4CAF50; color:white'> Edit </th>";
+}
+			 ?>
+
+<?php
+if ($stok_opname['stok_opname_hapus'] > 0) {
+
+				echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
+			}
+
+?>
+			
+			
+			
+		</thead>
+	</table>
+</div>
+</span>
+
+<span id="table_faktur" style="display: none;">
+<div class="table-responsive">
+<table id="table_filter_faktur" class="table table-bordered">
 		<thead>
 			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
 			<th style='background-color: #4CAF50; color:white'> Tanggal </th>
@@ -222,84 +250,181 @@ if ($stok_opname['stok_opname_hapus'] > 0) {
 			}
 
 ?>
-			
-			
-			
+						
 		</thead>
-		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-				//menampilkan data
-			echo "<tr class='tr-id-".$data1['id']."'>
-			<td>". $data1['no_faktur'] ."</td>
-			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['jam'] ."</td>
-			<td>". $data1['status'] ."</td>
-			<td>". $data1['keterangan'] ."</td>
-			<td>". rp($data1['total_selisih']) ."</td>
-			
-			<td>". $data1['user'] ."</td>
-
-			<td> <button class='btn btn-info detail' no_faktur='". $data1['no_faktur'] ."' ><span class='glyphicon glyphicon-th-list'></span> Detail </button> </td>";
-
-if ($stok_opname['stok_opname_edit'] > 0) {
-			echo "<td> <a href='proses_edit_stok_opname.php?no_faktur=". $data1['no_faktur']."&tanggal=". $data1['tanggal']."' class='btn btn-success'> <span class='glyphicon glyphicon-edit'></span> Edit </a> </td>";
-}
-
-if ($stok_opname['stok_opname_hapus'] > 0) {
-
-$pilih = $db->query("SELECT no_faktur FROM hpp_masuk WHERE no_faktur = '$data1[no_faktur]' AND sisa != jumlah_kuantitas");
-$row_alert = mysqli_num_rows($pilih);
-
-	
-	if ($row_alert > 0) {
-
-	echo "<td> <button class='btn btn-danger btn-alert' data-id='". $data1['id'] ."' data-faktur='". $data1['no_faktur'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>  </td>";
-	} 
-
-	else {
-
-		echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."'  data-faktur='". $data1['no_faktur'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-	}
-
-
-				
-}
-			
-			
-			echo "</tr>";
-			}
-
-			//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-		</tbody>
-
 	</table>
-</span>
 </div>
+</span>
 
+<span id="table_detail" style="display: none;">
+<div class="table-responsive">
+<table id="table_filter_detail" class="table table-bordered">
+		<thead>
+			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
+			<th style='background-color: #4CAF50; color:white'> Kode Barang </th>
+			<th style='background-color: #4CAF50; color:white'> Nama Barang </th>
+			<th style='background-color: #4CAF50; color:white'> Stok Komputer </th>
+			<th style='background-color: #4CAF50; color:white'> Fisik </th>
+			<th style='background-color: #4CAF50; color:white'> Selisih Fisik </th>
+			<th style='background-color: #4CAF50; color:white'> Hpp </th>
+			<th style='background-color: #4CAF50; color:white'> Selisih Harga </th>
 
+		</thead>
+	</table>
+</div> 
+
+<a href='expor_excel_stok_opname_detail.php' id="export_excel" class='btn btn-warning' role='button'>Download Excel</a>
+</span>
 <br>
 	<button type="submit" id="submit_close" class="glyphicon glyphicon-remove btn btn-danger" style="display:none"></button> 
 </div><!--end of container-->
 		<span id="demo"> </span>
 
-<script>
+<script type="text/javascript">
+	$(document).ready(function(){
+			$('#table_stok_opname').DataTable().destroy();
+			
+          var dataTable = $('#table_stok_opname').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_stok_opname.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_stok_opname").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[10]+'');
+            },
 
-// untk menampilkan datatable atau filter seacrh
-$(document).ready(function(){
-    $('#tableuser').dataTable();
-});
+        });
 
-		$(".detail").click(function(){
+        $("form").submit(function(){
+        return false;
+        });
+		
+		});
+		
+</script>
+
+<script type="text/javascript">
+//FILTER FAKTUR
+	$(document).ready(function(){
+		$(document).on('click','#submit_filter_1',function(e){
+			var sampai_tanggal = $("#sampai_tanggal").val();
+			var dari_tanggal = $("#dari_tanggal").val();
+			if (dari_tanggal == "") {
+				alert("silahkan isi dari tanggal terlebih dahulu.");
+				$("#dari_tanggal").focus();
+			}
+			else if (sampai_tanggal == "") {
+				alert("silakan isi sampai tanggal terlebih dahulu.");
+				$("#sampai_tanggal").focus();
+			}
+			else{
+
+				$("#table_faktur").show();
+				$("#table_detail").hide();
+				$("#table_baru").hide();
+				$('#table_filter_faktur').DataTable().destroy();
+		          var dataTable = $('#table_filter_faktur').DataTable( {
+		          "processing": true,
+		          "serverSide": true,
+		          "ajax":{
+		            url :"datatable_filter_faktur_stok_opname.php", // json datasource
+		            "data": function ( d ) {
+                      d.dari_tanggal = $("#dari_tanggal").val();
+                      d.sampai_tanggal = $("#sampai_tanggal").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+		            type: "post",  // method  , by default get
+		            error: function(){  // error handling
+		              $(".employee-grid-error").html("");
+		              $("#table_filter_faktur").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+		              $("#employee-grid_processing").css("display","none");
+		            }
+		        },
+		            
+		            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+		                $(nRow).attr('class','tr-id-'+aData[10]+'');
+		            },
+
+		        });
+			}// end else
+		});
+		$("form").submit(function(){
+        return false;
+        });
+	});
+	// /FILTER FAKTUR
+</script>
+
+<script type="text/javascript">
+//FILTER DETAIL
+	$(document).ready(function(){
+		$(document).on('click','#submit_filter_2',function(e){
+			var sampai_tanggal = $("#sampai_tanggal2").val();
+			var dari_tanggal = $("#dari_tanggal2").val();
+			if (dari_tanggal == "") {
+				alert("silahkan isi dari tanggal terlebih dahulu.");
+				$("#dari_tanggal").focus();
+			}
+			else if (sampai_tanggal == "") {
+				alert("silakan isi sampai tanggal terlebih dahulu.");
+				$("#sampai_tanggal").focus();
+			}
+			else{
+
+				$("#table_detail").show();
+				$("#table_faktur").hide();
+				$("#table_baru").hide();
+				$('#table_filter_detail').DataTable().destroy();
+		          var dataTable = $('#table_filter_detail').DataTable( {
+		          "processing": true,
+		          "serverSide": true,
+		          "ajax":{
+		            url :"datatable_filter_detail_stok_opname.php", // json datasource
+		            "data": function ( d ) {
+                      d.dari_tanggal = $("#dari_tanggal2").val();
+                      d.sampai_tanggal = $("#sampai_tanggal2").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+		            type: "post",  // method  , by default get
+		            error: function(){  // error handling
+		              $(".employee-grid-error").html("");
+		              $("#table_filter_detail").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+		              $("#employee-grid_processing").css("display","none");
+		            }
+		        },
+		            
+		            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+		                $(nRow).attr('class','tr-id-'+aData[10]+'');
+		            },
+
+		        });
+
+		     $("#export_excel").attr("href", "expor_excel_stok_opname_detail.php?&dari_tanggal="+dari_tanggal+"&sampai_tanggal="+sampai_tanggal+"");
+		  
+		  
+			}// /else
+		});
+		$("form").submit(function(){
+        return false;
+        });
+	});
+	// /FILTER DETAIL
+</script>
+		<!--menampilkan detail penjualan-->
+		<script type="text/javascript">
+		$(document).on('click','.detail',function(e){
 		var no_faktur = $(this).attr('no_faktur');
-		
-		
+				
 		$("#modal_detail").modal('show');
 		
 		$.post('detail_stok_opname.php',{no_faktur:no_faktur},function(info) {
@@ -317,7 +442,7 @@ $(document).ready(function(){
 <script type="text/javascript">
 	
 	//fungsi hapus data 
-		$(".btn-hapus").click(function(){
+		$(document).on('click','.btn-hapus',function(e){
 		var no_faktur = $(this).attr("data-faktur");
 		var id = $(this).attr("data-id");
 		
@@ -395,9 +520,9 @@ $(document).ready(function(){
     });
     </script>
 
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
 //fil FAKTUR
-$("#submit_filter_1").click(function() {
+$(document).on('click','#submit_filter_1',function(e) {
 $.post($("#formtanggal").attr("action"), $("#formtanggal :input").serializeArray(), function(info) { $("#dataabsen").html(info); });
     
 });
@@ -414,11 +539,11 @@ function clearInput(){
 
 
 
-</script>
+</script>-->
 
-<script type="text/javascript">
+<!--<script type="text/javascript">
 //fill DETAIL
-$("#submit_filter_2").click(function() {
+$(document).on('click','#submit_filter_2',function(e) {
 $.post($("#formtanggal").attr("action"), $("#formtanggal :input").serializeArray(), function(info) { $("#dataabsen").html(info); });
     
 });
@@ -435,7 +560,11 @@ function clearInput(){
 
 
 
-</script>
+</script>-->
+
+
+
+
 
 <script type="text/javascript">
 		$(document).ready(function(){
@@ -448,17 +577,36 @@ function clearInput(){
 <script type="text/javascript">
 		$(document).ready(function(){
 				$("#filter_1").click(function(){		
+			$("#mbalek").show();				
 			$("#fil_faktur").show();
 			$("#filter_2").show();
+			$("#table_faktur").show();
+			$("#table_detail").hide();
 			$("#filter_1").hide();	
 			$("#fil_detail").hide();
+			$("#table_baru").hide();
 			});
 
-				$("#filter_2").click(function(){		
-			$("#fil_detail").show();	
+				$("#filter_2").click(function(){
+			$("#mbalek").show();		
+			$("#fil_detail").show();
+			$("#filter_1").show();
+			$("#table_detail").show();
+			$("#table_faktur").hide();	
 			$("#fil_faktur").hide();
 			$("#filter_2").hide();
+			$("#table_baru").hide();
+			});
+
+				$("#kembali").click(function(){
+			$("#mbalek").hide();		
+			$("#fil_detail").hide();
+			$("#table_detail").hide();
+			$("#table_faktur").hide();	
+			$("#fil_faktur").hide();
 			$("#filter_1").show();
+			$("#filter_2").show();
+			$("#table_baru").show();
 			});
 
 	});

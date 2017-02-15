@@ -64,7 +64,7 @@ $lihat = mysqli_fetch_array($pilih_akses_lihat);
 
 
 if ($lihat['penjualan_lihat'] > 0){
-                echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> <i class="fa fa-shopping-cart"></i> Penjualan </a></li>';
+                echo '<li><a href="formpenjualan.php" class="waves-effect"> <i class="fa fa-shopping-cart"></i> Penjualan </a></li>';
 }
 ?>
 
@@ -320,9 +320,15 @@ if ($lihat['akuntansi_lihat'] > 0){
                             <ul>';
 }
 
- if ($lihat['laporan_penjualan_lihat'] > 0){
-                            echo '<li><a href="lap_penjualan.php" class="waves-effect">Lap. Penjualan</a></li>';
+echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> Data Penjualan </a></li>';
+
+ if ($lihat['laporan_penjualan_lihat'] > 0)
+ {
+            echo '<li><a href="lap_penjualan.php" class="waves-effect">Lap. Penjualan</a></li>';
 }
+
+
+
 echo "<li><a href='lap_bucket_size.php' class='waves-effect'>Lap. Backet Size</a></li>";
 
  if ($lihat['laporan_pembelian_lihat'] > 0){
@@ -366,6 +372,11 @@ echo '<li><a href="laporan_perubahan_harga_masal.php" class="waves-effect" style
  if ($lihat['laporan_komisi_faktur_lihat'] > 0){
                             echo '<li><a href="laporan_fee_faktur.php" class="waves-effect">Lap. Komisi / Faktur </a></li>';
 }
+
+echo '<li><a href="loss_customer.php" class="waves-effect" style="font-size: 16px">Loss Customer</a></li>';
+
+echo '<li><a href="loss.item.php" class="waves-effect" style="font-size: 16px">Loss Item</a></li>';
+
 
 if ($lihat['laporan_lihat'] > 0){
                         echo '</ul>

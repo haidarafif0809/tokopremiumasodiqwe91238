@@ -375,7 +375,7 @@ echo '<li><a href="laporan_perubahan_harga_masal.php" class="waves-effect" style
 
 echo '<li><a href="loss_customer.php" class="waves-effect" style="font-size: 16px">Loss Customer</a></li>';
 
-echo '<li><a href="loss.item.php" class="waves-effect" style="font-size: 16px">Loss Item</a></li>';
+echo '<li><a href="loss_item.php" class="waves-effect" style="font-size: 16px">Loss Item</a></li>';
 
 
 if ($lihat['laporan_lihat'] > 0){

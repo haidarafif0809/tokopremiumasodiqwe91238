@@ -7,13 +7,6 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-
-//menampilkan seluruh data yang ada pada tabel pembelian dalan DB
-$perintah = $db->query("SELECT s.nama AS nama_satuan,sa.id,kode_barang,sa.nama_barang,sa.no_faktur,sa.jumlah_awal,sa.harga,sa.satuan,sa.total,sa.tanggal,sa.jam,sa.user FROM stok_awal sa INNER JOIN satuan s ON sa.satuan = s.id ");
-
-
-
-
  ?>
 
 <style>
@@ -96,8 +89,6 @@ tr:nth-child(even){background-color: #f2f2f2}
 <!--membuat link-->
 
 <?php
-include 'db.php';
-
 $pilih_akses_stok_awal = $db->query("SELECT * FROM otoritas_stok_awal WHERE id_otoritas = '$_SESSION[otoritas_id]'");
 $stok_awal = mysqli_fetch_array($pilih_akses_stok_awal);
 
@@ -112,7 +103,7 @@ echo '<a href="form_stok_awal.php"  class="btn btn-info"> <i class="fa fa-plus">
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="tabel_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_stok_awal" class="table table-bordered">
 		<thead>
       <th style='background-color: #4CAF50; color:white'> Kode Barang </th>
 			<th style='background-color: #4CAF50; color:white'> Nama Barang </th>
@@ -135,59 +126,6 @@ if ($stok_awal['stok_awal_hapus'] > 0) {
 			
 			
 		</thead>
-		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-				//menampilkan data
-			echo "<tr class='tr-id-".$data1['id']."'>
-      <td>". $data1['kode_barang'] ."</td>
-			<td>". $data1['nama_barang'] ."</td>";
-
-       $hpp_keluar = $db->query("SELECT * FROM hpp_keluar WHERE no_faktur_hpp_masuk = '$data1[no_faktur]' AND kode_barang = '$data1[kode_barang]'");
-       $row_hpp = mysqli_num_rows($hpp_keluar);
-
-       if ($row_hpp > 0 ) {
-
-        echo "<td class='edit-alert' data-id='".$data1['id']."' data-kode-barang='". $data1['kode_barang'] ."' data-faktur='". $data1['no_faktur'] ."' ><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_awal'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_awal']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-harga='".$data1['harga']."' data-kode='".$data1['kode_barang']."' > </td>";
-
-       }
-
-       else{
-        echo "<td class='edit-jumlah' data-id='".$data1['id']."' ><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_awal'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_awal']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-harga='".$data1['harga']."' data-kode='".$data1['kode_barang']."' > </td>";
-       }
-
-			echo "<td>". $data1['nama_satuan'] ."</td>
-			<td>". rp($data1['harga']) ."</td>
-			<td><span id='text-total-".$data1['id']."'>". rp($data1['total']) ."</span></td>
-			<td>". tanggal($data1['tanggal']) ."</td>
-			<td>". $data1['jam'] ."</td>
-			<td>". $data1['user'] ."</td>";
-
-
-if ($stok_awal['stok_awal_hapus'] > 0) {
-
-        if ($row_hpp > 0 ) {
-          echo "<td>  <button class='btn btn-danger btn-alert' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-nama-barang='". $data1['nama_barang'] ."' data-faktur='". $data1['no_faktur'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-        } 
-
-        else {
-          echo "<td>  <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-nama-barang='". $data1['nama_barang'] ."' data-faktur='". $data1['no_faktur'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-        }
-        
-      }
-			
-
-			echo "</tr>";
-			}
-
-      //Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-		</tbody>
 
 	</table>
 </span>
@@ -195,15 +133,36 @@ mysqli_close($db);
 <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom jumlah jika ingin mengedit.</i></h6>
 </div><!--end of container-->
 
-<script>
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('#table_stok_awal').DataTable().destroy();
+      
+          var dataTable = $('#table_stok_awal').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_stok_awal.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_stok_awal").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[10]+'');
+            },
 
-// untk menampilkan datatable atau filter seacrh
-$(document).ready(function(){
-    $('#tableuser').DataTable();
-});
+        });
 
+        $("form").submit(function(){
+        return false;
+        });
+    
+    });
+    
 </script>
-
 
                               <script type="text/javascript">
                                
@@ -293,7 +252,7 @@ $(document).ready(function(){
                                  
                               <script type="text/javascript">
                                  
-                                 $(".edit-jumlah").dblclick(function(){
+                                 $(document).on('dblclick','.edit-jumlah',function(e){
 
                                     var id = $(this).attr("data-id");
 
@@ -304,7 +263,7 @@ $(document).ready(function(){
                                  });
 
 
-                                 $(".input_jumlah").blur(function(){
+                                 $(document).on('blur','.input_jumlah',function(e){
 
                                     var id = $(this).attr("data-id");
                                     var jumlah_baru = $(this).val();

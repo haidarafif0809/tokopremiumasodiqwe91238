@@ -57,6 +57,11 @@ $no_faktur = $nomor."/IK/".$data_bulan_terakhir."/".$tahun_terakhir;
 
  }
 
+// siapkan "data" query
+    $total = angkadoang($_POST['total']);
+    $user = $_SESSION['user_name'];
+    $keterangan = stringdoang($_POST['keterangan']);
+
   // buat prepared statements
         $stmt = $db->prepare("INSERT INTO item_keluar (no_faktur, total, tanggal, jam, user, keterangan)
 			VALUES (?,?,?,?,?,?)");
@@ -65,11 +70,7 @@ $no_faktur = $nomor."/IK/".$data_bulan_terakhir."/".$tahun_terakhir;
         $stmt->bind_param("sissss", 
         $no_faktur, $total , $tanggal_sekarang, $jam_sekarang, $user, $keterangan);		
 
-  // siapkan "data" query
-    $total = angkadoang($_POST['total']);
-    $user = $_SESSION['user_name'];
-    $keterangan = stringdoang($_POST['keterangan']);
-
+  
   // jalankan query
         $stmt->execute();
 

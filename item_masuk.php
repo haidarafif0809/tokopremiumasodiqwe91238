@@ -1,18 +1,11 @@
 <?php include 'session_login.php';
 
-
 //memasukkan file session login, header, navbar, db.php
 include 'header.php';
 include 'navbar.php';
 include 'sanitasi.php';
 
 include 'db.php';
-
-//menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM item_masuk");
-
-
-
 
  ?>
 
@@ -31,8 +24,6 @@ tr:nth-child(even){background-color: #f2f2f2}
 <!--membuat link-->
 
 <?php
-include 'db.php';
-
 $pilih_akses_item_masuk = $db->query("SELECT * FROM otoritas_item_masuk WHERE id_otoritas = '$_SESSION[otoritas_id]'");
 $item_masuk = mysqli_fetch_array($pilih_akses_item_masuk);
 
@@ -148,7 +139,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="tabel_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_item_masuk" class="table table-bordered">
 		<thead>
 			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
 			<th style='background-color: #4CAF50; color:white'> Tanggal </th>
@@ -178,62 +169,6 @@ if ($item_masuk['item_masuk_hapus'] > 0) {
 			
 			
 		</thead>
-		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-				//menampilkan data
-			echo "<tr class='tr-id-".$data1['id']."'>
-			<td>". $data1['no_faktur'] ."</td>
-			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['jam'] ."</td>
-			<td>". $data1['user'] ."</td>
-			<td>". $data1['user_edit'] ."</td>
-			<td>". $data1['tanggal_edit'] ."</td>
-			<td>". $data1['keterangan'] ."</td>
-			<td>". rp($data1['total']) ."</td>
-
-
-			<td> <button class='btn btn-info detail' no_faktur='". $data1['no_faktur'] ."' ><span class='glyphicon glyphicon-th-list'></span> Detail </button> </td>";
-
-if ($item_masuk['item_masuk_edit'] > 0) {
-			 	echo "<td> <a href='proses_edit_item_masuk.php?no_faktur=". $data1['no_faktur']."' class='btn btn-success'> <span class='glyphicon glyphicon-edit'></span> Edit </a> </td>";
-			 }
-
-
-if ($item_masuk['item_masuk_tambah'] > 0) {
-
-$hpp_keluar = $db->query ("SELECT no_faktur FROM hpp_keluar WHERE no_faktur_hpp_masuk = '$data1[no_faktur]'");
-$row_hpp_keluar = mysqli_num_rows($hpp_keluar);
-
-		
-		if ($row_hpp_keluar > 0 ) 
-		{
-
-			echo"<td> <button class='btn btn-danger btn-alert' data-faktur='". $data1['no_faktur'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-
-		} 
-
-		else
-		{
-
-			echo"<td> <button class='btn btn-danger btn-hapus' data-id='".$data1['id']."' data-item='". $data1['no_faktur'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";			
-		
-		}
-			
-			echo "</tr>";
-			}
-	
-}
-
-//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-		</tbody>
-
 	</table>
 </span>
 </div>
@@ -241,17 +176,41 @@ mysqli_close($db);
 	<button type="submit" id="submit_close" class="glyphicon glyphicon-remove btn btn-danger" style="display:none"></button> 
 		<span id="demo"> </span>
 </div><!--end of container-->
-		
+	
+	<script type="text/javascript">
+	$(document).ready(function(){
+			$('#table_item_masuk').DataTable().destroy();
+			
+          var dataTable = $('#table_item_masuk').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_item_masuk.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_item_masuk").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[9]+'');
+            },
 
-		<!--menampilkan detail penjualan-->
-		<script>
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
 		
-		$(document).ready(function(){
-		$('#tableuser').DataTable();
 		});
 		
-		
-		$(".detail").click(function(){
+</script>
+
+		<!--menampilkan detail penjualan-->
+		<script type="text/javascript">
+		$(document).on('click','.detail',function(e){
 		var no_faktur = $(this).attr('no_faktur');
 		
 		
@@ -271,7 +230,7 @@ mysqli_close($db);
 		<script>
 			
 	//fungsi hapus data 
-		$(".btn-hapus").click(function(){
+		$(document).on('click','.btn-hapus',function(e){
 		var nama_item = $(this).attr("data-item");
 		var id = $(this).attr("data-id");
 		$("#data_faktur").val(nama_item);
@@ -295,9 +254,26 @@ mysqli_close($db);
 
 		
 		$("#modal_hapus").modal('hide');
-		$(".tr-id-"+id).remove();
-		
+		$('#table_item_masuk').DataTable().destroy();
+			
+          var dataTable = $('#table_item_masuk').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_item_masuk.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_item_masuk").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[9]+'');
+            },
 
+        });
 		});
 		
 		});

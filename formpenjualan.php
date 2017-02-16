@@ -1974,10 +1974,6 @@ $("#formtambahproduk").submit(function(){
         var sisa_kredit = total - pembayaran;
 
 
-     $("#total1").val('');
-     $("#pembayaran_penjualan").val('');
-     $("#sisa_pembayaran_penjualan").val('');
-     $("#kredit").val('');
 
 
  
@@ -2013,6 +2009,8 @@ alert(" Kode Gudang Harus Diisi ");
  {
 
 alert("Silakan Bayar Piutang");
+
+
 
  }
                 else if (total ==  0 || total == "") 
@@ -2060,7 +2058,11 @@ alert("Silakan Bayar Piutang");
      $("#cetak_tunai_besar").show('');
           $("#span_tbs").hide();
 
-    
+         $("#total1").val('');
+     $("#pembayaran_penjualan").val('');
+     $("#sisa_pembayaran_penjualan").val('');
+     $("#kredit").val('');
+
        
    });
         

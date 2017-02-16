@@ -2087,12 +2087,7 @@ var biaya_adm =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#bia
        var x = parseInt(jumlah_bayar_lama,10) + parseInt(pembayaran,10);
        $("#zxzx").val(x);
 
-     $("#total1").val('');
-     $("#pembayaran_penjualan").val('');
-     $("#sisa_pembayaran_penjualan").val('');
-     $("#kredit").val('');
-
-     $("#kd_pelanggan").val('');
+  
 
  
  if (sisa_pembayaran < 0)
@@ -2102,6 +2097,11 @@ var biaya_adm =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#bia
 
  }
 
+else if (sisa < 0) 
+ {
+
+alert("Silakan Bayar Piutang");
+ }
 
  else if (kode_pelanggan == "") 
  {
@@ -2113,6 +2113,8 @@ else if (pembayaran == "")
  {
 
 alert("Pembayaran Harus Di Isi");
+
+  $("#pembayaran_penjualan").focus();
 
  }
 
@@ -2128,6 +2130,12 @@ alert("Pembayaran Harus Di Isi");
 
  $.post("proses_bayar_edit_jual.php",{biaya_adm:biaya_adm,total2:total2,kode_gudang:kode_gudang,tanggal:tanggal,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,keterangan:keterangan,jumlah_kredit_baru:jumlah_kredit_baru,x:x,ppn_input:ppn_input},function(info) {
 
+   $("#total1").val('');
+     $("#pembayaran_penjualan").val('');
+     $("#sisa_pembayaran_penjualan").val('');
+     $("#kredit").val('');
+
+     $("#kd_pelanggan").val('');
      
      $("#table-baru").load("tabel-edit-tbs-penjualan.php?no_faktur=<?php echo $nomor_faktur; ?>");
      $("#alert_berhasil").show();
@@ -2210,17 +2218,15 @@ else{
         $("#zxzx").val(x);
         
 
-      $("#total1").val('');
-       $("#pembayaran_penjualan").val('');
-       $("#sisa_pembayaran_penjualan").val('');
-       $("#kredit").val('');
-       $("#tanggal_jt").val('');
+
 
        
       if (sisa_pembayaran == "" )
       {
 
-        alert ("Jumlah Pembayaran Tidak Mencukupi");
+        alert ("Jika Ingin Piutang Isi Jumlah Pembayaran 0");
+        $("#pembayaran_penjualan").focus();
+
       }
 
        else if (kode_pelanggan == "") 
@@ -2233,6 +2239,7 @@ else{
        {
 
         alert ("Tanggal Jatuh Tempo Harus Di Isi");
+        $("#tanggal_jt").focus();
 
        }
 
@@ -2256,7 +2263,11 @@ else{
         $("#tanggal_jt").val('');
         $("#cetak_piutang").show();
         
-        
+        $("#total1").val('');
+       $("#pembayaran_penjualan").val('');
+       $("#sisa_pembayaran_penjualan").val('');
+       $("#kredit").val('');
+       $("#tanggal_jt").val('');
         
         });
 

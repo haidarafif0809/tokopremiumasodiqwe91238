@@ -76,12 +76,12 @@ $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
                 echo "1";
             
             // buat prepared statements
-            $stmt2 = $db->prepare("UPDATE penjualan SET no_faktur = ?, kode_gudang = ?, kode_pelanggan = ?, total = ?, tanggal = ?, jam = ?, user = ?, sales = ?, status = 'Lunas', potongan = ?, tax = ?, sisa = ?, kredit='0', cara_bayar = ?, tunai = ?, status_jual_awal = 'Tunai', ppn = ? WHERE no_faktur = ?");
+            $stmt2 = $db->prepare("UPDATE penjualan SET no_faktur = ?, kode_gudang = ?, kode_pelanggan = ?, total = ?, tanggal = ?, jam = ?, user = ?, sales = ?, status = 'Lunas', potongan = ?, tax = ?, sisa = ?, kredit='0', cara_bayar = ?, tunai = ?, status_jual_awal = 'Tunai', ppn = ?, biaya_admin = ? WHERE no_faktur = ?");
             
             
             // hubungkan "data" dengan prepared statements
-            $stmt2->bind_param("sssissssiiisiss", 
-            $nomor_faktur, $kode_gudang, $kode_pelanggan, $total, $tanggal, $jam_sekarang , $user, $sales, $potongan, $tax, $sisa, $cara_bayar, $pembayaran, $ppn_input, $nomor_faktur);
+            $stmt2->bind_param("sssissssiiisisis", 
+            $nomor_faktur, $kode_gudang, $kode_pelanggan, $total, $tanggal, $jam_sekarang , $user, $sales, $potongan, $tax, $sisa, $cara_bayar, $pembayaran, $ppn_input, $biaya_adm, $nomor_faktur);
 
             
             // siapkan "data" query
@@ -92,6 +92,7 @@ $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
             $potongan = angkadoang($_POST['potongan']);
             $tax = angkadoang($_POST['tax']);
             $ppn_input = stringdoang($_POST['ppn_input']);
+            $biaya_adm = stringdoang($_POST['biaya_adm']);
             $sisa_pembayaran = angkadoang($_POST['sisa_pembayaran']);
             
             $x = angkadoang($_POST['x']);
@@ -206,14 +207,15 @@ if ($potongan != "" || $potongan != 0 ) {
 
             {
             echo "2";
-            $stmt2 = $db->prepare("UPDATE penjualan SET no_faktur = ?,  kode_gudang = ?, kode_pelanggan = ?, total = ?, tanggal = ?, jam = ?, tanggal_jt = ?, user = ?, sales = ?, status = 'Piutang', potongan = ?, tax = ?, sisa = '0', kredit = ?, cara_bayar = ?, tunai = ?, status_jual_awal = 'Kredit', ppn = ? WHERE no_faktur = ?");
+            $stmt2 = $db->prepare("UPDATE penjualan SET no_faktur = ?,  kode_gudang = ?, kode_pelanggan = ?, total = ?, tanggal = ?, jam = ?, tanggal_jt = ?, user = ?, sales = ?, status = 'Piutang', potongan = ?, tax = ?, sisa = '0', kredit = ?, cara_bayar = ?, tunai = ?, status_jual_awal = 'Kredit', ppn = ?, biaya_admin = ? WHERE no_faktur = ?");
             
             
             // hubungkan "data" dengan prepared statements
-            $stmt2->bind_param("sssisssssiiisiss", 
-            $nomor_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal, $jam_sekarang, $tanggal_jt, $user, $sales, $potongan, $tax, $sisa_kredit, $cara_bayar, $pembayaran, $ppn_input, $nomor_faktur);
+            $stmt2->bind_param("sssisssssiiisisis", 
+            $nomor_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal, $jam_sekarang, $tanggal_jt, $user, $sales, $potongan, $tax, $sisa_kredit, $cara_bayar, $pembayaran, $ppn_input, $biaya_adm, $nomor_faktur);
             
             // siapkan "data" query
+            $biaya_adm = stringdoang($_POST['biaya_adm']);
             $nomor_faktur = stringdoang($_POST['no_faktur']);
             $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
             $total = angkadoang($_POST['total']);

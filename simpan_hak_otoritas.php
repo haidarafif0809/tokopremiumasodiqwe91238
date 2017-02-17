@@ -32,6 +32,17 @@ $biaya_admin_tambah = stringdoang(isset($_POST['biaya_admin_tambah']));
 $biaya_admin_edit = stringdoang(isset($_POST['biaya_admin_edit']));
 $biaya_admin_hapus = stringdoang(isset($_POST['biaya_admin_hapus']));
 
+$order_lihat = stringdoang(isset($_POST['order_lihat']));
+$order_tambah = stringdoang(isset($_POST['order_tambah']));
+$order_edit = stringdoang(isset($_POST['order_edit']));
+$order_hapus = stringdoang(isset($_POST['order_hapus']));
+
+
+$tombol_submit_order = stringdoang(isset($_POST['tombol_submit']));
+$tombol_order = stringdoang(isset($_POST['tombol_order']));
+$edit_produk_order = stringdoang(isset($_POST['edit_produk']));
+$hapus_produk_order = stringdoang(isset($_POST['hapus_produk']));
+
 $transaksi_jurnal_manual_lihat = stringdoang(isset($_POST['transaksi_jurnal_manual_lihat']));
 $transaksi_jurnal_manual_tambah = stringdoang(isset($_POST['transaksi_jurnal_manual_tambah']));
 $transaksi_jurnal_manual_edit = stringdoang(isset($_POST['transaksi_jurnal_manual_edit']));
@@ -275,6 +286,26 @@ $update_otoritas_penjualan->bind_param("iiiiiiiiii",
     $penjualan_lihat, $penjualan_tambah, $penjualan_edit, $penjualan_hapus, $retur_lihat, $retur_penjualan_lihat, $retur_penjualan_tambah, $retur_penjualan_edit, $retur_penjualan_hapus, $id);
 
 $update_otoritas_penjualan->execute();
+
+
+// oredr penjualan
+$update_otoritas_order_penjualan = $db->prepare("UPDATE otoritas_order_penjualan SET order_lihat = ?, order_tambah = ?, order_edit = ?, order_hapus = ? WHERE id_otoritas = ? ");
+
+$update_otoritas_order_penjualan->bind_param("iiiii",
+    $order_lihat, $order_tambah, $order_edit, $order_hapus, $id);
+
+$update_otoritas_order_penjualan->execute();
+// order penjualan
+
+
+//form order penjualan
+$update_otoritas_form_order_penjualan = $db->prepare("UPDATE otoritas_form_order_penjualan SET  tombol_submit = ?, tombol_order = ?, edit_produk = ?, hapus_produk = ? WHERE id_otoritas = ? ");
+
+$update_otoritas_form_order_penjualan->bind_param("iiiii",
+    $tombol_submit_order, $tombol_order, $edit_produk_order, $hapus_produk_order , $id);
+
+$update_otoritas_form_order_penjualan->execute();
+//form order penjualan
 
 
 $update_otoritas_stok_awal = $db->prepare("UPDATE otoritas_stok_awal SET stok_awal_lihat = ?, stok_awal_tambah = ?, stok_awal_edit = ?, stok_awal_hapus = ? WHERE id_otoritas = ?");

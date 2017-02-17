@@ -15,10 +15,10 @@ session_start();
  $total = $data['total_penjualan'];
 
 if ($subtotal_tampil != $total) {
-		echo "1";
+		echo 1;
 	}
 	else{
-		echo "2";
+		echo 2;
 	}
 
 //Untuk Memutuskan Koneksi Ke Database

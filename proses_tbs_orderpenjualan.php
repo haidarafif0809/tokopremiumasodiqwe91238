@@ -175,21 +175,34 @@ $jumlah = mysqli_num_rows($cek);
                $data1 = mysqli_fetch_array($perintah);
 
                 //menampilkan data
-                echo "<tr class='tr-kode-". $data1['kode_barang'] ." tr-id-". $data1['id'] ."' data-kode-barang='".$data1['kode_barang']."'>
-                <td>". $data1['kode_barang'] ."</td>
-                <td>". $data1['nama_barang'] ."</td>
-                <td class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>
-                <td>". $data1['nama'] ."</td>
-                <td>". rp($data1['harga']) ."</td>
-                <td><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
-                <td><span id='text-potongan-".$data1['id']."'>". rp($data1['potongan']) ."</span></td>
-                <td><span id='text-tax-".$data1['id']."'>". rp($data1['tax']) ."</span></td>";
+              echo "<tr class='tr-kode-". $data1['kode_barang'] ." tr-id-". $data1['id'] ."' data-kode-barang='".$data1['kode_barang']."'>
+                <td style='font-size:15px'>". $data1['kode_barang'] ."</td>
+                <td style='font-size:15px;'>". $data1['nama_barang'] ."</td>";
+      
+               if ($otoritas_tombol['edit_produk'] > 0) {
 
-                echo "<td style='font-size:15px'> <button class='btn btn-danger btn-hapus-tbs' id='hapus-tbs-".$data1['id']."' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-barang='". $data1['nama_barang'] ."' data-subtotal='". $data1['subtotal'] ."'>Hapus</button> </td> 
+                echo " <td style='font-size:15px' align='right' class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-berstok = '".$data1['berkaitan_dgn_stok']."'  data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>";
+}
+ else{        
+               echo " <td style='font-size:15px' align='right' class='tidak_punya_otoritas' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-berstok = '".$data1['berkaitan_dgn_stok']."'  data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>";
 
-                </tr>";
+ }
 
+                echo "<td style='font-size:15px'>". $data1['nama'] ."</td>
+                <td style='font-size:15px' align='right'>". rp($data1['harga']) ."</td>
+                <td style='font-size:15px' align='right'><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
+                <td style='font-size:15px' align='right'><span id='text-potongan-".$data1['id']."'>". rp($data1['potongan']) ."</span></td>
+                <td style='font-size:15px' align='right'><span id='text-tax-".$data1['id']."'>". rp($data1['tax']) ."</span></td>";
 
+            if ($otoritas_tombol['hapus_produk'] > 0) {
+
+               echo "<td style='font-size:15px'> <button class='btn btn-danger btn-hapus-tbs' id='btn-hapus-".$data1['id']."' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-barang='". $data1['nama_barang'] ."' data-subtotal='". $data1['subtotal'] ."'>Hapus</button> </td>";
+                }
+             else{
+               echo "<td style='font-size:15px; color:red'> Tidak Ada Otoritas </td>";
+             }   
+
+                echo "</tr>";
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

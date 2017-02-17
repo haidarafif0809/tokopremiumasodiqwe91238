@@ -20,8 +20,8 @@ $columns = array(
 	
 	0 => 'kode_barang',
 	1 => 'nama_barang',
-	2 => 'jumlah',
-	3 => 'satuan'
+	2 => 'satuan',
+	3 => 'jumlah'
 
 );
 
@@ -33,23 +33,27 @@ $tes = $db->query("SELECT kode_barang FROM detail_penjualan WHERE
   $kode_now = $out['kode_barang'];
 	
 $sql = "SELECT p.kode_barang, SUM(p.jumlah_barang) AS jumlah, s.nama, p.nama_barang";
-$sql.=" FROM detail_penjualan p INNER JOIN satuan s ON p.satuan = s.id WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_barang != '$kode_now' GROUP BY p.kode_barang";
+$sql.=" FROM detail_penjualan p LEFT JOIN satuan s ON p.satuan = s.id WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_barang != '$kode_now' GROUP BY p.kode_barang";
 
 $query=mysqli_query($conn, $sql) or die("1: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 $sql = "SELECT p.kode_barang,SUM(p.jumlah_barang) AS jumlah,s.nama, p.nama_barang";
-$sql.=" FROM detail_penjualan p INNER JOIN satuan s ON p.satuan = s.id WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_barang != '$kode_now'";
+$sql.=" FROM detail_penjualan p LEFT JOIN satuan s ON p.satuan = s.id WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_barang != '$kode_now'";
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 	$sql.=" AND ( p.kode_barang LIKE '".$requestData['search']['value']."%' "; 
+	$sql.=" OR s.nama LIKE '".$requestData['search']['value']."%'  ";
 	$sql.=" OR p.nama_barang LIKE '".$requestData['search']['value']."%' )  ";
 } 
+
+ $sql.=" GROUP BY p.kode_barang";
+
  $query=mysqli_query($conn, $sql) or die("2: get employees");
  $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
 
- $sql.=" GROUP BY p.kode_barang";
+
 
  $sql.=" ORDER BY p.kode_barang ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."  ";
 
@@ -63,8 +67,8 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	
 	$nestedData[] = $row["kode_barang"];
 	$nestedData[] = $row["nama_barang"];
-	$nestedData[] = rp($row["jumlah"]);	
-	$nestedData[] = $row["nama"];	 
+	$nestedData[] = $row["nama"];	
+	$nestedData[] = rp($row["jumlah"]);	 
 
 	$data[] = $nestedData;
 

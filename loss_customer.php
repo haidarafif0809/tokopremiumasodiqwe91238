@@ -5,7 +5,7 @@ include 'navbar.php';
 include 'db.php';
 include 'sanitasi.php';
 
-$tahun = date('Y');
+/*$tahun = date('Y');
 // hitung bulan sebelumnya
 $bulan = date('m') - 1;
  if ($bulan == 0)
@@ -20,7 +20,7 @@ $tahun_terakhir = substr($tahun, 2);
 $waktu = date('Y-m-d H:i:s');
 
 
-$taked = $db->query("SELECT p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan FROM penjualan p INNER JOIN pelanggan pl ON pl.kode_pelanggan = p.kode_pelanggan WHERE MONTH(p.tanggal) = '$bulan' AND MONTH(p.tanggal) != '$bulan_sekarang' GROUP BY p.kode_pelanggan");
+$taked = $db->query("SELECT p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan FROM penjualan p LEFT JOIN pelanggan pl ON pl.kode_pelanggan = p.kode_pelanggan WHERE MONTH(p.tanggal) = '$bulan' AND MONTH(p.tanggal) != '$bulan_sekarang' GROUP BY p.kode_pelanggan");
 while($out_taked = mysqli_fetch_array($taked))
 {
 
@@ -40,7 +40,7 @@ $tes = $db->query("SELECT * FROM penjualan WHERE MONTH(tanggal) = $bulan GROUP B
 	}
 
 
-}
+}*/
 
 
  ?>
@@ -59,6 +59,7 @@ $tes = $db->query("SELECT * FROM penjualan WHERE MONTH(tanggal) = $bulan GROUP B
 
 		<th style='background-color: #4CAF50; color:white'> Kode Pelanggan </th>
 		<th style='background-color: #4CAF50; color:white'> Nama Pelanggan </th>
+    <th style='background-color: #4CAF50; color:white'> No Telphone </th>
 		<th style='background-color: #4CAF50; color:white'> Total Belanja Bulan Lalu </th>
 
     </thead>
@@ -66,6 +67,9 @@ $tes = $db->query("SELECT * FROM penjualan WHERE MONTH(tanggal) = $bulan GROUP B
 
    </table>
   </div>
+    <a href='cetak_loss_customer.php' type='submit' target="blank" id="btn-print" class='btn btn-success'><i class="fa fa-print"> Print</i></a>
+
+  <a href='download_loss_customer.php' type='submit' target="blank" id="btn-download" class='btn btn-purple'><i class="fa fa-download"> Download Excel</i></a>
  </span>
 </div>
 

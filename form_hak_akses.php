@@ -1667,6 +1667,66 @@ else{
 </div> <!-- / of otoritas daftar_akun -->
 
 
+<div class="form-group col-sm-2"> <!-- start otoritas master BIAYA ADMIN -->
+<label>Biaya Admin</label><br>
+
+<?php 
+
+if ($data_otoritas['biaya_admin_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2525" name="biaya_admin_lihat" checked="">
+    <label for="checkbox2525">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2525" name="biaya_admin_lihat">
+    <label for="checkbox2525">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['biaya_admin_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2626" name="biaya_admin_tambah" checked=""> 
+    <label for="checkbox2626">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2626" name="biaya_admin_tambah"> 
+    <label for="checkbox2626">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['biaya_admin_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2727" name="biaya_admin_edit" checked="">
+    <label for="checkbox2727">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2727" name="biaya_admin_edit">
+    <label for="checkbox2727">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['biaya_admin_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2828" name="biaya_admin_hapus" checked="">
+    <label for="checkbox2828">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2828" name="biaya_admin_hapus">
+    <label for="checkbox2828">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas master BIAYA ADMIN -->
 
 
 <div class="form-group col-sm-2"> <!-- start otoritas pembayaran_hutang -->

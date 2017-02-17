@@ -118,6 +118,7 @@ $session_id = session_id();
 <input type="hidden" name="session_id" id="nomorfaktur" class="form-control" value="<?php echo $session_id; ?>">
 
 <a class="btn btn-primary" href="form_item_keluar.php" id="transaksi_baru" style="display: none"> <i class='fa fa-refresh'> </i> Transaksi Baru</a>
+
   <!--membuat tombol submit bayar & Hutang-->
       <button type="submit" id="pembayaran_item_keluar" class="btn btn-info"><i class='fa fa-send'> </i> Selesai </a> </button>
       
@@ -411,14 +412,13 @@ $(".modal_baru").html(data);
    </script>
 
 
-<script>
-
+<script type="text/javascript">
 
    //perintah javascript yang diambil dari form proses_bayar_beli.php dengan id=form_beli
   $("#pembayaran_item_keluar").click(function(){
 
 
-var total = $("#total_item_masuk").val();
+var total = $("#total_item_keluar").val();
 var keterangan = $("#keterangan").val();
 var session_id = $("#session_id").val();
 
@@ -435,7 +435,20 @@ else
      $("#batal").hide();
      $("#transaksi_baru").show();
 
- $.post($("#form_item_keluar").attr("action"), $("#form_item_keluar :input").serializeArray(), function(info) {
+     $.post("proses_bayar_item_keluar.php",{session_id:session_id,total:total,keterangan:keterangan},function(info) {
+                              
+                              $("#demo").html(info);       
+                              $("#result").load("tabel_item_masuk.php");
+                              $("#alert_berhasil").show();
+                              $("#total_item_keluar").val('');
+                              $("#keterangan").val('');
+                              
+                              
+                              
+                              
+                              });
+
+ /*$.post($("#form_item_keluar").attr("action"), $("#form_item_keluar :input").serializeArray(), function(info) {
 $("#demo").html(info);
      
      $("#alert_berhasil").show();
@@ -448,7 +461,7 @@ $("#demo").html(info);
   
     
        
-   });
+   });*/
 }
 
 // #result didapat dari tag span id=result

@@ -5,7 +5,7 @@ include 'db.php';
 
 /* Database connection end */
 
-$session_id = session_id();
+$no_faktur = stringdoang($_POST['no_faktur']);
 
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
@@ -28,18 +28,18 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql =" SELECT tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
+$sql =" SELECT tp.no_faktur,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
 $sql.=" FROM tbs_penjualan tp LEFT JOIN satuan s ON tp.satuan = s.id";
-$sql.=" WHERE tp.session_id = '$session_id' AND tp.no_faktur IS NULL ";
+$sql.=" WHERE tp.no_faktur = '$no_faktur' ";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql =" SELECT tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
+$sql =" SELECT tp.no_faktur,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
 $sql.=" FROM tbs_penjualan tp LEFT JOIN satuan s ON tp.satuan = s.id";
-$sql.=" WHERE tp.session_id = '$session_id' AND tp.no_faktur IS NULL";
+$sql.=" WHERE tp.no_faktur = '$no_faktur'";
 
     $sql.=" AND (tp.kode_barang LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR tp.nama_barang LIKE '".$requestData['search']['value']."%' ";
@@ -51,7 +51,7 @@ $sql.=" WHERE tp.session_id = '$session_id' AND tp.no_faktur IS NULL";
 $query=mysqli_query($conn, $sql) or die("eror 2");
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
         
-$sql.=" ORDER BY kode_barang ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+$sql.=" ORDER BY tp.kode_barang ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */    
 $query=mysqli_query($conn, $sql) or die("eror 3");
@@ -68,15 +68,14 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
       $nestedData[] = $row["nama"];
 
-
       $nestedData[] = "<p  align='right'>".$row["harga"]."</p>";
-      $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-subtotal-".$row['id']."'> ".$row["subtotal"]." </span> </p>";
+  
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-potongan-".$row['id']."'> ".$row["potongan"]." </span> </p>";
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-tax-".$row['id']."'> ".$row["tax"]." </span> </p>";
 
+    $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-subtotal-".$row['id']."'> ".$row["subtotal"]." </span> </p>";
 
-
-      $nestedData[] = "<button class='btn btn-danger btn-sm btn-hapus-tbs' id='hapus-tbs-". $row['id'] ."' data-id='". $row['id'] ."' data-kode-barang='". $row['kode_barang'] ."' data-barang='". $row['nama_barang'] ."' data-subtotal='". $row['subtotal'] ."'>Hapus</button>";
+      $nestedData[] = "<button class='btn btn-danger btn-sm btn-hapus-tbs' id='hapus-tbs-". $row['id'] ."' data-id='". $row['id'] ."' data-faktur='". $row['no_faktur'] ."' data-kode-barang='". $row['kode_barang'] ."' data-barang='". $row['nama_barang'] ."' data-subtotal='". $row['subtotal'] ."'>Hapus</button>";
 
 
 

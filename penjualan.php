@@ -304,7 +304,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="table-baru">
-<table id="table_penjualan" class="table table-bordered">
+<table id="table_penjualan" class="table table-bordered table-sm">
 		<thead>
 
 		

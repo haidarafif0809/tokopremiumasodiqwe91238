@@ -5,7 +5,7 @@ include 'db.php';
 $id = $_POST['id'];
 
 //menghapus seluruh data yang ada pada tabel tbs penjualan berdasarkan id
-$query = $db->query("DELETE FROM detail_perakitan_parcel WHERE id = '$id'");
+$query = $db->query("DELETE FROM tbs_parcel WHERE id = '$id'");
 
 
 if ($query == TRUE)

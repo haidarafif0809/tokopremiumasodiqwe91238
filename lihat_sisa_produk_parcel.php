@@ -2,30 +2,24 @@
 
  include 'db.php';
 
+ $jumlah_parcel = $_GET['jumlah_parcel'];
  $jumlah_baru = $_GET['jumlah_barang'];
  $kode_barang = $_GET['kode_barang'];
  $id_produk = $_GET['id_produk'];
 
- $queryy = $db->query("SELECT SUM(sisa) AS total_sisa FROM hpp_masuk WHERE kode_barang = '$kode_barang' ");
+ $queryy = $db->query("SELECT SUM(sisa) AS total_sisa, jenis_hpp, jenis_transaksi FROM hpp_masuk WHERE kode_barang = '$kode_barang' ");
  $dataaa = mysqli_fetch_array($queryy);
  $stok = $dataaa['total_sisa'];
 
- $da_produk = $db->query("SELECT nama_barang FROM barang WHERE kode_barang = '$kode_barang' ");
- $am_produk = mysqli_fetch_array($da_produk);
- $nama_produk = $am_produk['nama_barang'];
+ $jumlah_produk_yg_diperlukan = $jumlah_baru * $jumlah_parcel;
+ $hasil = $stok - $jumlah_produk_yg_diperlukan;
 
- $sum_detail_parcel = $db->query("SELECT SUM(jumlah_produk) AS jumlah_produk, id_produk, id_parcel, id FROM detail_perakitan_parcel WHERE id_produk = '$id_produk'");
- $data = mysqli_fetch_array($sum_detail_parcel);
- $jumlah_produk_detail = $data['jumlah_produk'];	
+ $total_parcel = $stok / $jumlah_baru;
+ $total_parcel_yg_bisa_dibuat = round($total_parcel) - 1;
 
- $total_produk = $jumlah_produk_detail + $jumlah_baru;
 
- $hasil = $stok - $total_produk;
- $sisa_produk = $stok - $jumlah_produk_detail;
-
-$data['id_parcel'] = $hasil;
-$data['id_produk'] = $nama_produk;
-$data['id'] = $sisa_produk;
+$data['jenis_hpp'] = $hasil;
+$data['jenis_transaksi'] = $total_parcel_yg_bisa_dibuat;
 
 
 echo json_encode($data);

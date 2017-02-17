@@ -3,9 +3,9 @@
 include 'db.php';
 
 $id_produk = $_POST['id_produk'];
-$id_parcel = $_POST['id_parcel'];
+$session_id = $_POST['session_id'];
 
-$query = $db->query("SELECT * FROM detail_perakitan_parcel WHERE id_produk = '$id_produk' AND id_parcel = '$id_parcel' ");
+$query = $db->query("SELECT * FROM tbs_parcel WHERE id_produk = '$id_produk' AND session_id = '$session_id' ");
 $jumlah = mysqli_num_rows($query);
 
 

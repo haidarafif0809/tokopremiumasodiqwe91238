@@ -21,9 +21,8 @@ include 'db.php';
 
  <h3><b> DATA PARCEL</b></h3><hr>
 <div class="row">
-<button class="btn btn-primary" id="btnParcel" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-shopping-basket" id="tambah_parcel"> </i>
-PARCEL (F1) </button>
 
+<a class="btn btn-primary" type="button" href="detail_perakitan_parcel.php"><i class="fa fa-shopping-basket"></i> PARCEL (F1)</a>
 
 <!--MODAL EDIT -->
 <div id="modal_edit" class="modal fade" role="dialog">
@@ -80,7 +79,7 @@ PARCEL (F1) </button>
 		    <input style="height:15px;" type="text" class="form-control" name="harga_parcel_7" autocomplete="off" id="harga_parcel_edit_7" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 7">
 
 
-		  <input style="height:15px;" type="hidden" class="form-control" name="id_edit" autocomplete="off" id="id_edit" placeholder="LEVEL 7">
+		  <input style="height:15px;" type="hidden" class="form-control" name="id_edit" autocomplete="off" id="id_edit" placeholder="Id Edit">
 
 		</div>
 		</div>
@@ -105,6 +104,44 @@ PARCEL (F1) </button>
   </div>
 </div>
 <!-- END MODAL EDIT  -->
+
+
+  <!-- Tampilan Modal Produk Parcel -->
+  <div id="ModalDetailProdukParcel" class="modal fade" role="dialog">
+    <div class="modal-dialog ">
+      <!-- Isi Modal-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Detail Produk Parcel</h4>
+        </div>
+        <div class="modal-body"> <!--membuat kerangka untuk tempat tabel -->
+
+          <div class="table-responsive">
+            <center>
+              <table id="table_detail_produk_parcel" class="table table-bordered table-sm">
+                <thead> <!-- untuk memberikan nama pada kolom tabel -->
+
+                  <th> Kode Produk </th>
+                  <th> Nama Produk </th>
+                  <th> Jumlah Produk </th>
+                  <th> Satuan Produk</th>
+
+                </thead> <!-- tag penutup tabel -->
+              </table>
+              </center>
+          </div> 
+
+        </div><!-- tag penutup modal body -->
+        <!-- tag pembuka modal footer -->
+        <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div> <!--tag penutup moal footer -->
+      </div>
+
+    </div>
+  </div><!-- END Tampilan Modal Produk Parcel --> <!-- END Tampilan Modal Produk Parcel --> <!-- END Tampilan Modal Produk Parcel --> <!-- END Tampilan Modal Produk Parcel --> 
+
 
 
 <div class="collapse" id="collapseExample">
@@ -161,6 +198,11 @@ PARCEL (F1) </button>
 		    <input style="height:15px;" type="text" class="form-control" name="harga_parcel_7" autocomplete="off" id="harga_parcel_7" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 7">
 		  </div>
 
+		  <div class="col-sm-2">
+		  	<label>Jumlah Parcel</label>
+		    <input style="height:15px;" type="text" class="form-control" name="jumlah_parcel" autocomplete="off" id="jumlah_parcel" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="JUMLAH PARCEL">
+		  </div>
+
 
 		  <div class="col-sm-2">
 		  <label><br><br><br></label>
@@ -188,6 +230,7 @@ PARCEL (F1) </button>
 			<th style='background-color: #4CAF50; color: white'> Harga Parcel 5</th>
 			<th style='background-color: #4CAF50; color: white'> Harga Parcel 6</th>
 			<th style='background-color: #4CAF50; color: white'> Harga Parcel 7</th>
+			<th style='background-color: #4CAF50; color: white'> Jumlah Parcel </th>
 			<th style='background-color: #4CAF50; color: white'> Petugas Input</th>
 			<th style='background-color: #4CAF50; color: white'> Petugas Edit</th>
 			<th style='background-color: #4CAF50; color: white'> Detail Parcel </th>
@@ -199,6 +242,8 @@ PARCEL (F1) </button>
 	</table>
 </span>
 </div>
+
+	<h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom Jumlah Parcel jika ingin mengedit.</i></h6>
 
 </div> <!-- END CONTAINER -->
 
@@ -232,6 +277,7 @@ PARCEL (F1) </button>
     var harga_parcel_5 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_5").val()))));
     var harga_parcel_6 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_6").val()))));
     var harga_parcel_7 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_7").val()))));
+    var jumlah_parcel = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_parcel").val()))));
        
 
  if (kode_parcel == "") {
@@ -248,6 +294,9 @@ PARCEL (F1) </button>
   	alert ("SILAKAN ISI HARGA PARCEL 1");
   	$("#harga_parcel_1").focus();
  }
+ else if (jumlah_parcel == "") {
+  	var jumlah_parcel = 0;
+ }
 
  else
  {
@@ -255,7 +304,7 @@ PARCEL (F1) </button>
 
 	$("#tambah_parcel").click();	
 
- 	$.post("proses_input_parcel.php",{kode_parcel:kode_parcel, nama_parcel:nama_parcel, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7},function(data){
+ 	$.post("proses_input_parcel.php",{kode_parcel:kode_parcel, nama_parcel:nama_parcel, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel},function(data){
      
      $('#tabel_parcel').DataTable().destroy();
      
@@ -270,11 +319,6 @@ PARCEL (F1) </button>
               $("#tabel_parcel").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan !!</th></tr></tbody>');
               $("#employee-grid_processing").css("display","none");
               }
-          },
-             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-
-              $(nRow).attr('class','tr-id-'+aData[13]+'');         
-
           }
         });
 
@@ -288,6 +332,7 @@ PARCEL (F1) </button>
 		$("#harga_parcel_5").val('');
 		$("#harga_parcel_6").val('');
 		$("#harga_parcel_7").val('');
+		$("#jumlah_parcel").val('');
      
      });
 
@@ -335,11 +380,6 @@ $(document).on('click', '.btn-hapus-parcel', function (e) {
                               $("#tabel_parcel").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan !!</th></tr></tbody>');
                               $("#employee-grid_processing").css("display","none");
                               }
-                          },
-                             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-
-                              $(nRow).attr('class','tr-id-'+aData[13]+'');         
-
                           }
                         });
                   });
@@ -351,6 +391,39 @@ $(document).on('click', '.btn-hapus-parcel', function (e) {
 
 </script>
 <!--HAPUS PARCEL-->
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(document).on('click','.btn-detail-parcel',function(){
+
+    	var no_faktur = $(this).attr('data-faktur');
+
+    $("#ModalDetailProdukParcel").modal('show');
+    $("#table_detail_produk_parcel").DataTable().destroy();
+          var dataTable = $('#table_detail_produk_parcel').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"detail_produk_parcel.php", // json datasource
+            "data": function ( d ) {
+                  d.no_faktur = no_faktur;
+                  // d.custom = $('#myInput').val();
+                  // etc
+              },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_detail_produk_parcel").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          }
+
+      }); 
+  });
+  });
+</script>
 
 
 <!--EDIT PARCEL -->
@@ -377,8 +450,7 @@ $(document).on('click', '.btn-edit-parcel', function (e) {
 		$("#harga_parcel_edit_6").val(tandaPemisahTitik(harga_parcel_edit_6));
 		$("#harga_parcel_edit_7").val(tandaPemisahTitik(harga_parcel_edit_7));
 		
-		
-		});
+});
 
 $(document).on('click','#simpan_parcel',function(e){
 	var id_edit = $("#id_edit").val();
@@ -421,11 +493,6 @@ $(document).on('click','#simpan_parcel',function(e){
               $("#tabel_parcel").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan !!</th></tr></tbody>');
               $("#employee-grid_processing").css("display","none");
               }
-          },
-             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-
-              $(nRow).attr('class','tr-id-'+aData[13]+'');         
-
           }
         });
 
@@ -457,8 +524,7 @@ $(document).on('click','#simpan_parcel',function(e){
 <script type="text/javascript">
 $(document).ready(function(){
 
-	  $('#tabel_parcel').DataTable().destroy();
-     
+    
       var dataTable = $('#tabel_parcel').DataTable( {
           "processing": true,
           "serverSide": true,
@@ -473,7 +539,7 @@ $(document).ready(function(){
           },
              "fnCreatedRow": function( nRow, aData, iDataIndex ) {
 
-              $(nRow).attr('class','tr-id-'+aData[13]+'');         
+              $(nRow).attr('class','tr-id-'+aData[15]+'');         
 
           }
         });
@@ -483,7 +549,50 @@ $(document).ready(function(){
 </script>
 <!--- AJAX DATATABLE -->
 
+ <script type="text/javascript">
+                                 
+$(document).on('dblclick','.edit-jumlah',function(e){
 
+  var id = $(this).attr("data-id");
+
+  $("#text-jumlah-"+id+"").hide();
+  $("#input-jumlah-"+id+"").attr("type", "text");
+
+});
+
+
+$(document).on('blur','.input_jumlah',function(e){
+
+  var id_produk = $(this).attr("data-id-produk");
+  var id = $(this).attr("data-id");
+  var kode_barang = $(this).attr("data-kode");
+  var nama_barang = $(this).attr("data-nama-barang");
+  var jumlah_lama = $("#text-jumlah-"+id+"").text();
+  var jumlah_baru = $(this).val();
+  var id_parcel = $("#id_parcel").val();
+
+  if (jumlah_baru == '') {
+  jumlah_baru = 0;
+  }
+          $("#text-jumlah-"+id+"").show();
+          $("#text-jumlah-"+id+"").text(jumlah_baru);
+          $("#input-jumlah-"+id+"").attr("type", "hidden");
+
+          $.post("update_stok_parcel.php",{jumlah_lama:jumlah_lama,id_produk:id_produk,jumlah_baru:jumlah_baru, id_parcel:id_parcel},function(){
+
+          });
+
+
+
+
+
+  $("#kode_barang").trigger('chosen:open');
+
+
+
+});
+
+</script>
 
 
 

@@ -541,7 +541,7 @@ tr:nth-child(even){background-color: #f2f2f2}
                 <span id='tes'></span>            
                 
                 <div class="table-responsive"> <!--tag untuk membuat garis pada tabel-->  
-                <span id="table-baru">  
+                <span id="span_tbs">  
                 <table id="tabel_tbs_penjualan" class="table table-sm">
                 <thead>
                 <th> Kode  </th>
@@ -557,10 +557,10 @@ tr:nth-child(even){background-color: #f2f2f2}
                 </thead>
                 
                 <tbody id="tbody">
-                <?php
+                <!--<?php
                 
                 //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
-                $perintah = $db->query("SELECT tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama,bb.berkaitan_dgn_stok FROM tbs_penjualan tp INNER JOIN satuan s ON tp.satuan = s.id INNER JOIN barang bb ON tp.kode_barang = bb.kode_barang WHERE tp.session_id = '$session_id' AND tp.no_faktur_order IS NULL ");
+               /* $perintah = $db->query("SELECT tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama,bb.berkaitan_dgn_stok FROM tbs_penjualan tp INNER JOIN satuan s ON tp.satuan = s.id INNER JOIN barang bb ON tp.kode_barang = bb.kode_barang WHERE tp.session_id = '$session_id' AND tp.no_faktur_order IS NULL ");
                 
                 //menyimpan data sementara yang ada pada $perintah
                 
@@ -570,7 +570,9 @@ tr:nth-child(even){background-color: #f2f2f2}
                 echo "<tr class='tr-kode-". $data1['kode_barang'] ." tr-id-". $data1['id'] ."' data-kode-barang='".$data1['kode_barang']."'>
                 <td style='font-size:15px'>". $data1['kode_barang'] ."</td>
                 <td style='font-size:15px;'>". $data1['nama_barang'] ."</td>
+
                 <td style='font-size:15px' align='right' class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-berstok = '".$data1['berkaitan_dgn_stok']."'  data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>
+
                 <td style='font-size:15px'>". $data1['nama'] ."</td>
                 <td style='font-size:15px' align='right'>". rp($data1['harga']) ."</td>
                 <td style='font-size:15px' align='right'><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
@@ -582,9 +584,9 @@ tr:nth-child(even){background-color: #f2f2f2}
                 </tr>";
 
 
-                }
+                }*/
 
-                ?>
+                ?>-->
                 </tbody>
                 
                 </table>
@@ -890,6 +892,7 @@ tr:nth-child(even){background-color: #f2f2f2}
           
           
           <!-- memasukan teks pada kolom kode pelanggan, dan nomor faktur penjualan namun disembunyikan -->
+      <input type="hidden" name="tipe_produk" id="tipe_produk" class="form-control" required="" >
 
           
           <input type="hidden" name="kode_pelanggan" id="k_pelanggan" class="form-control" required="" >
@@ -1905,7 +1908,27 @@ $("#kode_barang").focus();
 
      });
 }
+//
+   $('#tabel_tbs_penjualan').DataTable().destroy();
+            var dataTable = $('#tabel_tbs_penjualan').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "info":     false,
+            "language": { "emptyTable":     "My Custom Message On Empty Table" },
+            "ajax":{
+              url :"data_tbs_penjualan.php", // json datasource
+             
+                  type: "post",  // method  , by default get
+              error: function(){  // error handling
+                $(".tbody").html("");
+                $("#tabel_tbs_penjualan").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                $("#tableuser_processing").css("display","none");
+                
+              }
+            }   
 
+      });
+            //
 });
 
 $("#formtambahproduk").submit(function(){
@@ -1928,6 +1951,10 @@ $("#formtambahproduk").submit(function(){
         var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#total1").val() )))); 
         var total2 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#total2").val() )))); 
         var potongan =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#potongan_penjualan").val() ))));
+
+        var biaya_adm =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#biaya_adm").val()))));
+
+        
         var potongan_persen = $("#potongan_persen").val();
         var tax = $("#tax_rp").val();
         var cara_bayar = $("#carabayar1").val();
@@ -1947,10 +1974,6 @@ $("#formtambahproduk").submit(function(){
         var sisa_kredit = total - pembayaran;
 
 
-     $("#total1").val('');
-     $("#pembayaran_penjualan").val('');
-     $("#sisa_pembayaran_penjualan").val('');
-     $("#kredit").val('');
 
 
  
@@ -1987,6 +2010,8 @@ alert(" Kode Gudang Harus Diisi ");
 
 alert("Silakan Bayar Piutang");
 
+
+
  }
                 else if (total ==  0 || total == "") 
         {
@@ -2018,7 +2043,7 @@ alert("Silakan Bayar Piutang");
   else{
 
 //JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
-     $.post("proses_bayar_jual.php",{total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
+     $.post("proses_bayar_jual.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
 
 
      $("#table-baru").html(info);
@@ -2031,7 +2056,13 @@ alert("Silakan Bayar Piutang");
      $("#kredit").val('');
      $("#cetak_tunai").show();
      $("#cetak_tunai_besar").show('');
-    
+          $("#span_tbs").hide();
+
+         $("#total1").val('');
+     $("#pembayaran_penjualan").val('');
+     $("#sisa_pembayaran_penjualan").val('');
+     $("#kredit").val('');
+
        
    });
         
@@ -2082,6 +2113,8 @@ alert("Silakan Bayar Piutang");
         var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#total1").val() )))); 
         var total2 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#total2").val() )))); 
         var potongan =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#potongan_penjualan").val() ))));
+        var biaya_adm =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#biaya_adm").val() ))));
+
         var potongan_persen = $("#potongan_persen").val();
         var tax = $("#tax_rp").val();
         var cara_bayar = $("#carabayar1").val();
@@ -2164,7 +2197,7 @@ alert("Silakan Bayar Piutang");
 
   if (data == "Oke") {
 // POST KE BAYAR LANGSUNG CETAK
-   $.post("proses_bayar_tunai_cetak_langsung.php",{total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
+   $.post("proses_bayar_tunai_cetak_langsung.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
   
       $("#table-baru").html(info);
      var no_fak= info;
@@ -2172,7 +2205,8 @@ alert("Silakan Bayar Piutang");
      $("#pembayaran_penjualan").val('');
      $("#sisa_pembayaran_penjualan").val('');
      $("#kredit").val('');
-    
+              $("#span_tbs").hide();
+
     var win = window.open('cetak_penjualan_tunai.php?no_faktur='+no_fak+'');
      if (win) { 
     
@@ -2236,6 +2270,8 @@ alert("Silakan Bayar Piutang");
         var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#total1").val() )))); 
         var total2 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#total2").val() )))); 
         var potongan =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#potongan_penjualan").val() ))));
+                var biaya_adm =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#biaya_adm").val() ))));
+
         var potongan_persen = $("#potongan_persen").val();
         var tax = $("#tax_rp").val();
         var cara_bayar = $("#carabayar1").val();
@@ -2295,7 +2331,7 @@ alert("Silakan Bayar Piutang");
         $("#transaksi_baru").show();
 
         // POST KE PROSESNYA PIUTANGNYA
-       $.post("proses_bayar_jual.php",{total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
+       $.post("proses_bayar_jual.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
 
             var no_faktur = info;
             $("#cetak_piutang").attr('href', 'cetak_penjualan_piutang.php?no_faktur='+no_faktur+'');
@@ -2310,7 +2346,8 @@ alert("Silakan Bayar Piutang");
             $("#cetak_piutang").show();
             $("#tax").val('');
             
-       
+                 $("#span_tbs").hide();
+
        
        });
 
@@ -2940,6 +2977,8 @@ $(document).ready(function(){
         var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#total1").val() )))); 
         var total2 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#total2").val() )))); 
         var potongan =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#potongan_penjualan").val() ))));
+       var biaya_adm =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#biaya_adm").val() ))));
+
         var potongan_persen = $("#potongan_persen").val();
         var tax = $("#tax_rp").val();
         var cara_bayar = $("#carabayar1").val();
@@ -2983,7 +3022,7 @@ $(document).ready(function(){
         $("#transaksi_baru").show();
         $("#total1").val('');
 
-       $.post("proses_simpan_barang.php",{total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
+       $.post("proses_simpan_barang.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
 
         
             $("#table-baru").html(info);
@@ -3056,9 +3095,21 @@ $(document).ready(function(){
           
         </script>
 
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    $(document).on('click','.edit-jumlah-jual',function(e){
+      var kode_barang = $(this).attr("data-kode-barang-input");
+      var tipe_produk = $('#opt-produk-'+kode_barang).attr("tipe_barang");
+      
+      $("#tipe_produk").val(tipe_produk);
+    });
+  });
+
+</script>
                             <script type="text/javascript">
                                  
-                                 $(".edit-jumlah").dblclick(function(){
+                                  $(document).on('dblclick','.edit-jumlah-jual',function(e){
 
                                     var id = $(this).attr("data-id");
 
@@ -3069,7 +3120,7 @@ $(document).ready(function(){
                                  });
 
 
-                                 $(".input_jumlah").blur(function(){
+                                     $(document).on('blur','.input_jumlah_jual',function(e){
 
                                     var id = $(this).attr("data-id");
                                     var jumlah_baru = $(this).val();
@@ -3093,6 +3144,11 @@ $(document).ready(function(){
 
                                     var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
 
+                                    var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+                                    if(biaya_adm == '')
+                                    {
+                                      biaya_adm = 0;
+                                    }
                                    
 
                                     subtotal_penjualan = subtotal_penjualan - subtotal_lama + subtotal;
@@ -3116,7 +3172,7 @@ $(document).ready(function(){
 
                                     var pajak_faktur = Math.round(tax_fakt);
 
-                                    var sub_akhir = (parseInt(subtotal_penjualan,10) + parseInt(pajak_faktur,10)) - parseInt(potongaaan,10);
+                                    var sub_akhir = (parseInt(subtotal_penjualan,10) + parseInt(biaya_adm,10)) - parseInt(potongaaan,10);
 
 
                       if (ber_stok == 'Jasa'){

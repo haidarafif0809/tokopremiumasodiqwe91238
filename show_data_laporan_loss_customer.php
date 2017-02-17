@@ -22,35 +22,36 @@ $columns = array(
 	
 	0 => 'kode_pelanggan',
 	1 => 'nama_pelanggan',
-	2 => 'jumlah'
+	2 => 'no_telp',
+	3 => 'jumlah'
 
 );
 
 // getting total number records without any search
-$tes = $db->query("SELECT kode_pelanggan FROM penjualan WHERE MONTH(tanggal) = $bulan_sekarang ");
+$tes = $db->query("SELECT kode_pelanggan FROM penjualan WHERE MONTH(tanggal) = '$bulan_sekarang'");
  while($out = mysqli_fetch_array($tes))
  {
   $kode_a = $out['kode_pelanggan'];
 
-$sql = "SELECT p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan";
-$sql.=" FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_pelanggan != '$kode_a'";
-
+$sql = "SELECT p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan,pl.no_telp";
+$sql.=" FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_pelanggan != '$kode_a' GROUP BY p.kode_pelanggan";
 
 $query=mysqli_query($conn, $sql) or die("1: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
-$sql = "SELECT p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan";
+$sql = "SELECT p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan,pl.no_telp";
 $sql.=" FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_pelanggan != '$kode_a'";
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 	$sql.=" AND ( p.kode_pelanggan LIKE '".$requestData['search']['value']."%' "; 
-	$sql.=" OR pl.nama_pelanggan LIKE '".$requestData['search']['value']."%' )  ";
+	$sql.=" OR pl.nama_pelanggan LIKE '".$requestData['search']['value']."%' ) ";
 } 
+ $sql.=" GROUP BY p.kode_pelanggan";
+
  $query=mysqli_query($conn, $sql) or die("2: get employees");
  $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
 
- $sql.=" GROUP BY p.kode_pelanggan";
 
  $sql.=" ORDER BY p.kode_pelanggan ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."  ";
 
@@ -64,6 +65,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	
 	$nestedData[] = $row["kode_pelanggan"];
 	$nestedData[] = $row["nama_pelanggan"];
+	$nestedData[] = $row["no_telp"];
 	$nestedData[] = rp($row["jumlah"]);	 
 
 	$data[] = $nestedData;

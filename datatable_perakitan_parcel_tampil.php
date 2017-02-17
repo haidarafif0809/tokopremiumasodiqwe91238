@@ -28,14 +28,14 @@ $columns = array(
 // getting total number records without any search
 
 
-$sql = "SELECT id, no_faktur, jumlah_parcel, kode_parcel, nama_parcel, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, user_input, user_edit ";
+$sql = "SELECT id, jumlah_parcel, kode_parcel, nama_parcel, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, user_input, user_edit ";
 $sql.=" FROM perakitan_parcel";
 $query=mysqli_query($conn, $sql) or die("Salahnya Disini 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
-$sql = "SELECT id, no_faktur, jumlah_parcel, kode_parcel, nama_parcel, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, user_input, user_edit ";
+$sql = "SELECT id, jumlah_parcel, kode_parcel, nama_parcel, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, user_input, user_edit ";
 $sql.=" FROM perakitan_parcel WHERE 1=1";
 
 
@@ -67,17 +67,8 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
   $nestedData[] = rp($row["harga_parcel_5"]); 
   $nestedData[] = rp($row["harga_parcel_6"]); 
   $nestedData[] = rp($row["harga_parcel_7"]); 
+  $nestedData[] = rp($row["jumlah_parcel"]);
 
-  $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jumlah' data-id='".$row['id']."' data-kode='".$row['kode_parcel']."'> <span id='text-jumlah-".$row['id']."'>".$row["jumlah_parcel"]."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".$row['jumlah_parcel']."' class='input_jumlah' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_parcel']."' data-nama='".$row['nama_parcel']."' data-harga='".$row['harga_parcel']."'> </p>";
-
-  $nestedData[] = $row["user_input"];
-  $nestedData[] = $row["user_edit"];
-
-  $nestedData[] ="<button class='btn btn-detail-parcel btn-warning btn-floating'  data-faktur='". $row['no_faktur'] ."'> <i class='fa fa-list'></i></button>";
-
-  $nestedData[] = "<a href='proses_edit_parcel.php?no_faktur=". $row['no_faktur']."&kode_parcel=". $row['kode_parcel']."&nama_parcel=".$row['nama_parcel']."' class='btn btn-success btn-floating'><i class='fa fa-edit'></i></a>"; 
-
-  $nestedData[] = "<button class='btn btn-hapus-parcel btn-danger btn-floating' data-id='". $row['id']."' data-nama='". $row['nama_parcel']."' > <i class='fa fa-trash'></i> </button>";
   $nestedData[] = $row["id"];
   
   $data[] = $nestedData;

@@ -79,9 +79,14 @@ $pelanggan = mysqli_num_rows($pilih_akses_pelanggan);
 					<select type="text" name="level_harga" id="level_harga" class="form-control" required="" >
 
 					<option value="">--SILAKAN PILIH--</option>
-					<option>Level 1</option>
-					<option>Level 2</option>
-					<option>Level 3</option>
+										
+					  <option value="harga_1">Level 1</option>
+					  <option value="harga_2">Level 2</option>
+					  <option value="harga_3">Level 3</option>
+					  <option value="harga_4">Level 4</option>
+					  <option value="harga_5">Level 5</option>
+					  <option value="harga_6">Level 6</option>
+					  <option value="harga_7">Level 7</option>
 
 
 					</select>
@@ -237,9 +242,14 @@ $pelanggan = mysqli_num_rows($pilih_akses_pelanggan);
 					<select type="text" name="edit_level_harga" id="edit_level_harga" class="form-control" required="" >
 
 					<option value="">--SILAKAN PILIH--</option>
-					<option>Level 1</option>
-					<option>Level 2</option>
-					<option>Level 3</option>
+					<option value="harga_1">Level 1</option>
+					  <option value="harga_2">Level 2</option>
+					  <option value="harga_3">Level 3</option>
+					  <option value="harga_4">Level 4</option>
+					  <option value="harga_5">Level 5</option>
+					  <option value="harga_6">Level 6</option>
+					  <option value="harga_7">Level 7</option>
+
 
 
 					</select>

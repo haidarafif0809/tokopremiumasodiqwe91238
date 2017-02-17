@@ -7,10 +7,21 @@ include 'db.php';
 include 'sanitasi.php';
 
 $session_id = session_id();
+$no_faktur = $_GET['no_faktur'];
+$kode_parcel = $_GET['kode_parcel'];
+$nama_parcel = $_GET['nama_parcel'];
 
 
-              
+$data_parcel = $db->query("SELECT harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, jumlah_parcel, tanggal FROM perakitan_parcel WHERE no_faktur = '$no_faktur' AND kode_parcel = '$kode_parcel'");
+$ambil_parcel = mysqli_fetch_array($data_parcel);
+           
 ?>
+
+<script>
+  $(function() {
+  $( "#tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
+  });
+</script>
 
 <!-- js untuk tombol shortcut -->
  <script src="shortcut.js"></script>
@@ -18,7 +29,7 @@ $session_id = session_id();
 
 <!--membuat tampilan form agar terlihat rapih dalam satu tempat-->
 <div class="container">
-  <h4> FORM DETAIL PARCEL</h4><hr> 
+  <h4> FORM EDIT DETAIL PARCEL : <?php echo $no_faktur; ?></h4><hr> 
 <!--
   <button type="button" class="btn btn-warning" id="cari_parcel" data-toggle="modal" data-target="#modalParcel"> <i class='fa fa-list'> </i> DATA PARCEL (F2)</button>
   -->
@@ -28,27 +39,27 @@ $session_id = session_id();
     <div class="row">
       <div class="col-sm-2">
         <label>Kode Parcel</label>
-        <input type="text" style="height:15px" class="form-control" name="kode_parcel" autocomplete="off" id="kode_parcel" readonly="" placeholder="KODE PARCEL">
+        <input type="text" style="height:15px" class="form-control" name="kode_parcel" autocomplete="off" id="kode_parcel" readonly="" placeholder="KODE PARCEL" value="<?php echo $kode_parcel ?>">
       </div>
 
       <div class="col-sm-2">
         <label>Nama Parcel</label>
-        <input style="height:15px;" type="text" class="form-control" name="nama_parcel" autocomplete="off" id="nama_parcel" placeholder="NAMA PARCEL">
+        <input style="height:15px;" type="text" class="form-control" name="nama_parcel" autocomplete="off" id="nama_parcel" value="<?php echo $nama_parcel ?>" placeholder="NAMA PARCEL">
       </div>
 
       <div class="col-sm-2">
         <label>Harga 1</label>
-        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_1" autocomplete="off" id="harga_parcel_1" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 1">
+        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_1" autocomplete="off" id="harga_parcel_1" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 1" value = '<?php echo $ambil_parcel['harga_parcel'] ?>'>
       </div>
 
       <div class="col-sm-2">
         <label>Harga 2</label>
-        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_2" autocomplete="off" id="harga_parcel_2" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 2">
+        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_2" autocomplete="off" id="harga_parcel_2" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 2" value = '<?php echo $ambil_parcel['harga_parcel_2'] ?>'>
       </div>
 
       <div class="col-sm-2">
         <label>Harga 3</label>
-        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_3" autocomplete="off" id="harga_parcel_3" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 3">
+        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_3" autocomplete="off" id="harga_parcel_3" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 3" value = '<?php echo $ambil_parcel['harga_parcel_3'] ?>'>
       </div>
 
     </div>
@@ -57,27 +68,32 @@ $session_id = session_id();
 
       <div class="col-sm-2">
         <label>Harga 4</label>
-        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_4" autocomplete="off" id="harga_parcel_4" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 4">
+        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_4" autocomplete="off" id="harga_parcel_4" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 4" value = '<?php echo $ambil_parcel['harga_parcel_4'] ?>'>
       </div>
 
       <div class="col-sm-2">
         <label>Harga 5</label>
-        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_5" autocomplete="off" id="harga_parcel_5" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 5">
+        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_5" autocomplete="off" id="harga_parcel_5" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 5" value = '<?php echo $ambil_parcel['harga_parcel_5'] ?>'>
       </div>
 
       <div class="col-sm-2">
         <label>Harga 6</label>
-        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_6" autocomplete="off" id="harga_parcel_6" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 6">
+        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_6" autocomplete="off" id="harga_parcel_6" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 6" value = '<?php echo $ambil_parcel['harga_parcel_6'] ?>'>
       </div>
 
       <div class="col-sm-2">
         <label>Harga 7</label>
-        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_7" autocomplete="off" id="harga_parcel_7" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 7">
+        <input style="height:15px;" type="text" class="form-control" name="harga_parcel_7" autocomplete="off" id="harga_parcel_7" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 7" value = '<?php echo $ambil_parcel['harga_parcel_7'] ?>'>
       </div>
 
       <div class="col-sm-2">
         <label>Jumlah Parcel</label>
-        <input style="height:15px;" type="text" class="form-control" name="jumlah_parcel" autocomplete="off" id="jumlah_parcel" placeholder="JUMLAH PARCEL">
+        <input style="height:15px;" type="text" class="form-control" name="jumlah_parcel" autocomplete="off" id="jumlah_parcel" placeholder="JUMLAH PARCEL" value="<?php echo $ambil_parcel['jumlah_parcel']; ?>">
+      </div>
+
+      <div class="col-sm-2">
+        <label>Tanggal</label>
+        <input style="height:15px;" type="text" class="form-control" name="tanggal" autocomplete="off" id="tanggal" placeholder="JUMLAH PARCEL" value="<?php echo $ambil_parcel['tanggal']; ?>">
       </div>
 
 
@@ -218,6 +234,7 @@ $session_id = session_id();
        
         <input type="hidden" name="id_produk" id="id_produk" class="form-control" required="" >
       <input type="hidden" name="session_id" id="session_id" class="form-control" value="<?php echo $session_id; ?>" required="" >
+      <input type="hidden" name="no_faktur" id="no_faktur" class="form-control" value="<?php echo $no_faktur; ?>" required="" >
       <input type="hidden" name="sisa_produk" id="sisa_produk" class="form-control" required="" >                                   
     </form>
   </div> <!-- END OF ROW --> <!-- END OF ROW --> <!-- END OF ROW --> <!-- END OF ROW --> <!-- END OF ROW --> <!-- END OF ROW -->
@@ -249,7 +266,7 @@ $session_id = session_id();
   <div class="alert alert-success" id="alert_berhasil" style="display:none">
           <strong>Sukses!</strong> Penyimpanan Berhasil
   </div>
-  <button type="submit" style="display: none" id="transaksi_baru" class="btn btn-info"> <i class='fa fa-refresh'> </i>  Transaksi Baru (Ctrl+M)</button>
+  <button type="submit" style="display: none" id="transaksi_baru" class="btn btn-info"> <i class='fa fa-reply'> </i>  Kembali (Ctrl+M)</button>
 
 </div> <!-- END OF CONTAINER --> <!-- END OF CONTAINER --> <!-- END OF CONTAINER --> <!-- END OF CONTAINER --> <!-- END OF CONTAINER --> 
 
@@ -297,9 +314,9 @@ $(document).ready(function(){
             "processing": true,
             "serverSide": true,
             "info":     false,
-            "language": { "emptyTable":     "My Custom Message On Empty Table" },
+            "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
             "ajax":{
-              url :"data_tbs_parcel.php", // json datasource
+              url :"data_tbs_parcel_edit.php", // json datasource
                "data": function ( d ) {
                   d.kode_parcel = $("#kode_parcel").val();
                   // d.custom = $('#myInput').val();
@@ -367,9 +384,9 @@ $(document).on('click', '.pilih-parcel', function (e) {
                     "processing": true,
                     "serverSide": true,
                     "info":     false,
-                    "language": { "emptyTable":     "My Custom Message On Empty Table" },
+                    "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
                     "ajax":{
-                      url :"data_tbs_parcel.php", // json datasource
+                      url :"data_tbs_parcel_edit.php", // json datasource
                        "data": function ( d ) {
                           d.kode_parcel = $("#kode_parcel").val();
                           // d.custom = $('#myInput').val();
@@ -481,9 +498,9 @@ $(document).on('click', '.pilih-parcel', function (e) {
             "processing": true,
             "serverSide": true,
             "info":     false,
-            "language": { "emptyTable":     "My Custom Message On Empty Table" },
+            "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
             "ajax":{
-              url :"data_tbs_parcel.php", // json datasource
+              url :"data_tbs_parcel_edit.php", // json datasource
                "data": function ( d ) {
                   d.kode_parcel = $("#kode_parcel").val();
                   // d.custom = $('#myInput').val();
@@ -563,6 +580,7 @@ $("#submit_produk").click(function(){
   var jumlah_barang = $("#jumlah_barang").val();
   var jumlah_parcel = $("#jumlah_parcel").val();
   var jumlah_parcel = $("#jumlah_parcel").val();
+  var no_faktur = $("#no_faktur").val();
   var nama_parcel = $("#nama_parcel").val();
   var harga_parcel_1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_1").val()))));
 
@@ -600,12 +618,12 @@ if (nama_parcel == "") {
       if (jumlah_produk < 0) {
 
             alert ("Persediaan Produk '"+nama_barang+"' Tidak Mencukupi Untuk Membuat '"+jumlah_parcel+"' Parcel '"+nama_parcel+"', Hanya Cukup Untuk Membuat '"+jumlah_parcel_yg_bisa_dibuat+"' Parcel '"+nama_parcel+"' !");
-            $("#jumlah_parcel").val('');
+            
             $("#jumlah_parcel").focus();
       }
       else{
             
-            $.post("proses_isi_parcel.php",{id_produk:id_produk,kode_parcel:kode_parcel,jumlah_barang:jumlah_barang,session_id:session_id},function(data) {
+            $.post("proses_isi_parcel_edit.php",{id_produk:id_produk,kode_parcel:kode_parcel,jumlah_barang:jumlah_barang,no_faktur:no_faktur},function(data) {
 
               $("#nama_barang").val('');
               $("#kode_barang").val('');
@@ -621,9 +639,9 @@ if (nama_parcel == "") {
                     "processing": true,
                     "serverSide": true,
                     "info":     false,
-                    "language": { "emptyTable":     "My Custom Message On Empty Table" },
+                    "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
                     "ajax":{
-                      url :"data_tbs_parcel.php", // json datasource
+                      url :"data_tbs_parcel_edit.php", // json datasource
                        "data": function ( d ) {
                           d.kode_parcel = $("#kode_parcel").val();
                           // d.custom = $('#myInput').val();
@@ -673,6 +691,8 @@ $("#simpan_produk").click(function(){
     var jumlah_parcel = $("#jumlah_parcel").val();
     var kode_parcel = $("#kode_parcel").val();
     var nama_parcel = $("#nama_parcel").val();
+    var tanggal = $("#tanggal").val();
+    var no_faktur = $("#no_faktur").val();
     var harga_parcel_1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_1").val()))));
     var harga_parcel_2 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_2").val()))));
     var harga_parcel_3 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_3").val()))));
@@ -698,6 +718,8 @@ if (nama_parcel == "") {
    }                       
   else
   {
+
+    
             
             $("#span_tbs").hide();
             $("#simpan_produk").hide();
@@ -705,8 +727,7 @@ if (nama_parcel == "") {
             $("#alert_berhasil").show();
             $("#transaksi_baru").show();
 
-            $.post("proses_simpan_parcel.php",{id_produk:id_produk,jumlah_barang:jumlah_barang,
-            kode_parcel:kode_parcel, nama_parcel:nama_parcel, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel},function(data) {
+            $.post("proses_simpan_parcel_edit.php",{no_faktur:no_faktur,kode_parcel:kode_parcel, nama_parcel:nama_parcel, tanggal:tanggal, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel},function(data) {
 
               $("#nama_barang").val('');
               $("#kode_barang").val('');
@@ -725,16 +746,18 @@ if (nama_parcel == "") {
               $("#jumlah_parcel").val('');
 
 
-            });
+            });        
+ 
+
 
               $('#tabel_tbs_parcel').DataTable().destroy();
               var dataTable = $('#tabel_tbs_parcel').DataTable( {
                     "processing": true,
                     "serverSide": true,
                     "info":     false,
-                    "language": { "emptyTable":     "My Custom Message On Empty Table" },
+                    "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
                     "ajax":{
-                      url :"data_tbs_parcel.php", // json datasource
+                      url :"data_tbs_parcel_edit.php", // json datasource
                        "data": function ( d ) {
                           d.kode_parcel = $("#kode_parcel").val();
                           // d.custom = $('#myInput').val();
@@ -864,8 +887,6 @@ $(document).on('blur','.input_jumlah',function(e){
 
       $("#input-jumlah-"+id+"").val(jumlah_lama);
       $("#text-jumlah-"+id+"").text(jumlah_lama);
-      $("#text-jumlah-"+id+"").show();
-      $("#input-jumlah-"+id+"").attr("type", "hidden");
   }
   else
   {
@@ -886,7 +907,6 @@ $(document).on('blur','.input_jumlah',function(e){
           $("#text-jumlah-"+id+"").text(jumlah_lama);
           $("#text-jumlah-"+id+"").show();
           $("#input-jumlah-"+id+"").attr("type", "hidden");
-          $("#jumlah_parcel").val('');
           $("#jumlah_parcel").focus();
 
       }
@@ -948,9 +968,9 @@ $(document).on('click','.btn-hapus-tbs',function(e){
                     "processing": true,
                     "serverSide": true,
                     "info":     false,
-                    "language": { "emptyTable":     "My Custom Message On Empty Table" },
+                    "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
                     "ajax":{
-                      url :"data_tbs_parcel.php", // json datasource
+                      url :"data_tbs_parcel_edit.php", // json datasource
                        "data": function ( d ) {
                           d.kode_parcel = $("#kode_parcel").val();
                           // d.custom = $('#myInput').val();
@@ -996,16 +1016,6 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
 
 <script type="text/javascript">
-  $(document).ready(function(){    
-    $.get("buat_kode_parcel.php",function(data){
-      $("#kode_parcel").val(data);
-    });
-  });
-</script>
-
-
-
-<script type="text/javascript">
 $(document).ready(function(){
   $("#batal_produk").click(function(){
     var kode_parcel = $("#kode_parcel").val();
@@ -1021,9 +1031,9 @@ $(document).ready(function(){
                     "processing": true,
                     "serverSide": true,
                     "info":     false,
-                    "language": { "emptyTable":     "My Custom Message On Empty Table" },
+                    "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
                     "ajax":{
-                      url :"data_tbs_parcel.php", // json datasource
+                      url :"data_tbs_parcel_edit.php", // json datasource
                        "data": function ( d ) {
                           d.kode_parcel = $("#kode_parcel").val();
                           // d.custom = $('#myInput').val();
@@ -1056,70 +1066,7 @@ $(document).ready(function(){
 
   $(document).ready(function(){
     $(document).on('click','#transaksi_baru',function(e){
-
-        $('#tabel_tbs_parcel').DataTable().destroy();
-          var dataTable = $('#tabel_tbs_parcel').DataTable( {
-                "processing": true,
-                "serverSide": true,
-                "info":     false,
-                "language": { "emptyTable":     "My Custom Message On Empty Table" },
-                "ajax":{
-                  url :"data_tbs_parcel.php", // json datasource
-                   "data": function ( d ) {
-                      d.kode_parcel = $("#kode_parcel").val();
-                      // d.custom = $('#myInput').val();
-                      // etc
-                  },
-                      type: "post",  // method  , by default get
-                  error: function(){  // error handling
-                    $(".tbody").html("");
-                    $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                    $("#tableuser_processing").css("display","none");
-                    
-                  }
-                }   
-
-          });
-
-        $("#table_item_masuk").DataTable().destroy();
-          var dataTable = $('#table_item_masuk').DataTable( {
-          "processing": true,
-          "serverSide": true,
-          "ajax":{
-            url :"modal_produk_parcel.php", // json datasource
-            type: "post",  // method  , by default get
-            error: function(){  // error handling
-              $(".employee-grid-error").html("");
-              $("#table_item_masuk").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-              $("#employee-grid_processing").css("display","none");
-              
-            }
-          },
-
-          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-
-              $(nRow).attr('class', "pilih");
-              $(nRow).attr('data-kode', aData[0]);
-              $(nRow).attr('nama-barang', aData[1]);
-              $(nRow).attr('data-id-produk', aData[8]);
-
-
-          }
-
-      }); 
-
-          $.get("buat_kode_parcel.php",function(data){
-            $("#kode_parcel").val(data);
-          });
-
-            $("#transaksi_baru").hide();
-            $("#alert_berhasil").hide();
-            $("#simpan_produk").show();
-            $("#batal_produk").show(); 
-            $("#kode_barang").trigger("chosen:updated");
-            $("#kode_barang").trigger("chosen:open");
-            
-
+      window.location.href="data_parcel.php";
     });
   });
 

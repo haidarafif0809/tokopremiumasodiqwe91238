@@ -46,25 +46,13 @@ jika tidak maka nomor terakhir ditambah dengan 1
 	echo $no_faktur = $nomor."/PP/".$data_bulan_terakhir."/".$tahun_terakhir;
  }
 
-$q_kode_barang = $db->query("SELECT kode_parcel FROM perakitan_parcel ORDER BY id DESC LIMIT 1");
-$v_kode_barang = mysqli_fetch_array($q_kode_barang);
-$row_kode_barang = mysqli_num_rows($q_kode_barang);
-if ($row_kode_barang = "" || $row_kode_barang = 0) {
-	
-	$kode_produk = "PP1";
-}
-else{
-	$kode_barang_terakhir = $v_kode_barang['kode_parcel'];
-	$angka_barang_terakhir = angkadoang($kode_barang_terakhir);
-	$kode_produk_sekarang = 1 + $angka_barang_terakhir;
-	$kode_produk = "PP".$kode_produk_sekarang."";
-}	
 
 $insert_perakitan_parcel = $db->prepare("INSERT INTO perakitan_parcel (no_faktur, kode_parcel, nama_parcel, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, jumlah_parcel, user_input, tanggal, jam) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 $insert_perakitan_parcel->bind_param("sssiiiiiiiisss",
-$no_faktur, $kode_produk, $nama_parcel, $harga_parcel_1, $harga_parcel_2, $harga_parcel_3, $harga_parcel_4, $harga_parcel_5, $harga_parcel_6, $harga_parcel_7, $jumlah_parcel, $nama_petugas, $tanggal_sekarang, $jam_sekarang);
+$no_faktur, $kode_parcel, $nama_parcel, $harga_parcel_1, $harga_parcel_2, $harga_parcel_3, $harga_parcel_4, $harga_parcel_5, $harga_parcel_6, $harga_parcel_7, $jumlah_parcel, $nama_petugas, $tanggal_sekarang, $jam_sekarang);
 
+$kode_parcel = stringdoang($_POST['kode_parcel']);
 $nama_parcel = stringdoang($_POST['nama_parcel']);
 $harga_parcel_1 = angkadoang($_POST['harga_parcel_1']);
 $harga_parcel_2 = angkadoang($_POST['harga_parcel_2']);
@@ -87,9 +75,9 @@ else {
 }
 
 
-$session_id = stringdoang($_POST['session_id']);
+$kode_parcel = stringdoang($_POST['kode_parcel']);
 
-$query12 = $db->query("SELECT * FROM tbs_parcel WHERE session_id = '$session_id' ");
+$query12 = $db->query("SELECT * FROM tbs_parcel WHERE kode_parcel = '$kode_parcel' ");
 while ($data = mysqli_fetch_array($query12)) {
 	
 	$query2 = "INSERT INTO detail_perakitan_parcel (no_faktur,kode_parcel,id_produk,jumlah_produk,tanggal,jam) VALUES ('$no_faktur','$data[kode_parcel]', '$data[id_produk]', '$data[jumlah_produk]', '$tanggal_sekarang', '$jam_sekarang')";
@@ -103,7 +91,7 @@ while ($data = mysqli_fetch_array($query12)) {
 
 }
 
-$hapus_tbs = $db->query("DELETE FROM tbs_parcel WHERE session_id = '$session_id'");
+$hapus_tbs = $db->query("DELETE FROM tbs_parcel WHERE kode_parcel = '$kode_parcel' ");
 
 
 ?>

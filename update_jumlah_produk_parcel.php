@@ -7,13 +7,13 @@ include 'db.php';
 $jumlah_baru = angkadoang($_POST['jumlah_baru']);
 $jumlah_lama = angkadoang($_POST['jumlah_lama']);
 $id = stringdoang($_POST['id_produk']);
-$id_parcel = $_POST['id_parcel'];
+$kode_parcel = $_POST['kode_parcel'];
 
 
-$query = $db->prepare("UPDATE tbs_parcel SET jumlah_produk = ? WHERE id_produk = ? AND id_parcel = ?");
+$query = $db->prepare("UPDATE tbs_parcel SET jumlah_produk = ? WHERE id_produk = ? AND kode_parcel = ?");
 
 $query->bind_param("iii",
-    $jumlah_baru, $id, $id_parcel);
+    $jumlah_baru, $id, $kode_parcel);
 
 $query->execute();
 

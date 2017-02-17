@@ -75,7 +75,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
   $nestedData[] ="<button class='btn btn-detail-parcel btn-warning btn-floating'  data-faktur='". $row['no_faktur'] ."'> <i class='fa fa-list'></i></button>";
 
-  $nestedData[] = "<button class='btn btn-edit-parcel btn-success btn-floating' data-kode='". $row['kode_parcel'] ."' data-nama='". $row['nama_parcel'] ."' data-harga-1='". $row['harga_parcel'] ."' data-harga-2='". $row['harga_parcel_2'] ."' data-harga-3='". $row['harga_parcel_3'] ."' data-harga-4='". $row['harga_parcel_4'] ."' data-harga-5='". $row['harga_parcel_5'] ."' data-harga-6='". $row['harga_parcel_6'] ."' data-harga-7='". $row['harga_parcel_7'] ."' data-id='". $row['id'] ."' > <i class='fa fa-edit'></i> </button>";
+  $nestedData[] = "<a href='proses_edit_parcel.php?no_faktur=". $row['no_faktur']."&kode_parcel=". $row['kode_parcel']."&nama_parcel=".$row['nama_parcel']."' class='btn btn-success btn-floating'><i class='fa fa-edit'></i></a>"; 
 
   $nestedData[] = "<button class='btn btn-hapus-parcel btn-danger btn-floating' data-id='". $row['id']."' data-nama='". $row['nama_parcel']."' > <i class='fa fa-trash'></i> </button>";
   $nestedData[] = $row["id"];

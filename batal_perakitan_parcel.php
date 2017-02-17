@@ -4,10 +4,10 @@
      include 'sanitasi.php';
     // mengirim data(file) no_faktur, menggunakan metode GET 
 
-    $id_parcel = stringdoang($_GET['id_parcel']);
+    $kode_parcel = stringdoang($_GET['kode_parcel']);
 
     // menghapus data pada tabel tbs_pembelian berdasarkan no_faktur 
-    $query = $db->query("DELETE FROM tbs_parcel WHERE id_parcel = '$id_parcel'");
+    $query = $db->query("DELETE FROM tbs_parcel WHERE kode_parcel = '$kode_parcel'");
 
 
 

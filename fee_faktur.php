@@ -7,9 +7,6 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-//menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM fee_faktur");
-
  ?>
 
  <style>
@@ -28,8 +25,6 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
 <?php
-include 'db.php';
-
 $pilih_akses_fee_faktur = $db->query("SELECT komisi_faktur_tambah FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND komisi_faktur_tambah = '1'");
 $fee_faktur = mysqli_num_rows($pilih_akses_fee_faktur);
 
@@ -131,7 +126,7 @@ echo '<a href="form_fee_faktur_petugas.php"  class="btn btn-info" > <i class="fa
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="tabel_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_fee_faktur" class="table table-bordered">
 		<thead>
 			<th style='background-color: #4CAF50; color: white'> Nama Petugas </th>
 			<th style='background-color: #4CAF50; color: white'> Jumlah Prosentase </th>
@@ -139,7 +134,6 @@ echo '<a href="form_fee_faktur_petugas.php"  class="btn btn-info" > <i class="fa
 			<th style='background-color: #4CAF50; color: white'> User Buat </th>	
 
 <?php
-include 'db.php';
 
 $pilih_akses_fee_faktur_edit = $db->query("SELECT komisi_faktur_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND komisi_faktur_edit = '1'");
 $fee_faktur_edit = mysqli_num_rows($pilih_akses_fee_faktur_edit);
@@ -150,8 +144,6 @@ $fee_faktur_edit = mysqli_num_rows($pilih_akses_fee_faktur_edit);
     ?>
 
 <?php
-include 'db.php';
-
 $pilih_akses_fee_faktur_hapus = $db->query("SELECT komisi_faktur_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND komisi_faktur_hapus = '1'");
 $fee_faktur_hapus = mysqli_num_rows($pilih_akses_fee_faktur_hapus);
 
@@ -160,50 +152,6 @@ $fee_faktur_hapus = mysqli_num_rows($pilih_akses_fee_faktur_hapus);
 			}
       ?>
 		</thead>
-		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-				//menampilkan data
-			echo "<tr>
-			<td>". $data1['nama_petugas'] ."</td>
-			<td>". persen($data1['jumlah_prosentase']) ."</td>
-			<td>". rp($data1['jumlah_uang']) ."</td>
-			<td>". $data1['user_buat'] ."</td>";
-
-
-include 'db.php';
-
-$pilih_akses_fee_faktur_edit = $db->query("SELECT komisi_fakrur_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND komisi_fakrur_edit = '1'");
-$fee_faktur_edit = mysqli_num_rows($pilih_akses_fee_faktur_edit);
-
-    if ($fee_faktur_edit > 0) { 	
-
-			echo "<td> <button class='btn btn-success btn-edit' data-prosentase='". $data1['jumlah_prosentase'] ."' data-nominal='". $data1['jumlah_uang'] ."' data-id='". $data1['id'] ."' > <span class='glyphicon glyphicon-edit'> </span> Edit </button>  </td>";
-}
-
-
-include 'db.php';
-
-$pilih_akses_fee_faktur_hapus = $db->query("SELECT komisi_faktur_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND komisi_faktur_hapus = '1'");
-$fee_faktur_hapus = mysqli_num_rows($pilih_akses_fee_faktur_hapus);
-
-    if ($fee_faktur_hapus > 0) { 
-			echo " <td> <button class='btn btn-danger btn-hapus' data-id='".$data1['id']."' data-petugas='". $data1['nama_petugas'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button></td>
-			
-			</tr>";
-			}
-    }
-
-
-    //Untuk Memutuskan Koneksi Ke Database
-
-mysqli_close($db); 
-		?>
-		</tbody>
 
 	</table>
 
@@ -211,18 +159,41 @@ mysqli_close($db);
 
 </div>
 
-<script>
-		
-	$(document).ready(function(){
-	$('#tableuser').DataTable();
-	});
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('#table_fee_faktur').DataTable().destroy();
+      
+          var dataTable = $('#table_fee_faktur').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_fee_faktur.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_fee_faktur").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[9]+'');
+            },
 
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
+    
+    });
+    
 </script>
 
   <script>
     
   //fungsi hapus data 
-    $(".btn-hapus").click(function(){
+    $(document).on('click','.btn-hapus',function(e){
     var nama_petugas = $(this).attr("data-petugas");
     var id = $(this).attr("data-id");
     $("#data_petugas").val(nama_petugas);
@@ -252,7 +223,7 @@ mysqli_close($db);
 
 
 //fungsi edit data 
-    $(".btn-edit").click(function(){
+    $(document).on('click','.btn-edit',function(e){
     
     $("#modal_edit").modal('show');
     var prosentase = $(this).attr("data-prosentase");
@@ -293,6 +264,37 @@ mysqli_close($db);
 
 
 </script>
+
+<script type="text/javascript">
+                                 
+                                 $(document).on('dblclick', '.edit-uang', function (e) {
+
+                                    var id = $(this).attr("data-id");
+
+                                    $("#text-uang-"+id+"").hide();
+
+                                    $("#input-uang-"+id+"").attr("type", "text");
+
+                                 });
+
+                                 $(document).on('blur', '.input_uang', function (e) {
+
+                                    var id = $(this).attr("data-id");
+
+                                    var input_uang = $(this).val();
+
+
+                                    $.post("update_fee_faktur.php",{id:id, input_uang:input_uang,jenis_edit:"jumlah_uang"},function(data){
+
+                                    $("#text-uang-"+id+"").show();
+                                    $("#text-uang-"+id+"").text(input_uang);
+
+                                    $("#input-uang-"+id+"").attr("type", "hidden");           
+
+                                    });
+                                 });
+
+                             </script>
 
 <script type="text/javascript">
   

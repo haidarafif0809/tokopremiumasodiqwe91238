@@ -6,9 +6,6 @@ include 'header.php';
 include 'navbar.php';
 include 'db.php';
 
-//menampilkan seluruh data yang ada pada tabel jabatan
-$query = $db->query("SELECT * FROM jabatan");
-
  ?>
 
 
@@ -17,8 +14,6 @@ $query = $db->query("SELECT * FROM jabatan");
 <h3><b> DATA JABATAN</b></h3> <hr>
 
 <?php
-include 'db.php';
-
 $pilih_akses_jabatan = $db->query("SELECT jabatan_tambah FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND jabatan_tambah = '1'");
 $jabatan = mysqli_num_rows($pilih_akses_jabatan);
 
@@ -179,77 +174,33 @@ th {
 
 <div class="table-responsive"><!-- membuat agar ada garis pada tabel, disetiap kolom -->
 <span id="table_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_jabatan" class="table table-bordered">
 		<thead> 
 			
-			<th> Nama Jabatan </th>
-			<th> Wewenang </th>
+			<th style='background-color: #4CAF50; color:white'> Nama Jabatan </th>
+			<th style='background-color: #4CAF50; color:white'> Wewenang </th>
 <?php  
-include 'db.php';
-
 $pilih_akses_jabatan_hapus = $db->query("SELECT jabatan_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND jabatan_hapus = '1'");
 $jabatan_hapus = mysqli_num_rows($pilih_akses_jabatan_hapus);
 
 
     if ($jabatan_hapus > 0){
-			echo "<th> Hapus </th>";
+			echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
 		}
 ?>
 
 <?php 
-include 'db.php';
-
 $pilih_akses_jabatan_edit = $db->query("SELECT jabatan_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND jabatan_edit = '1'");
 $jabatan_edit = mysqli_num_rows($pilih_akses_jabatan_edit);
 
 
     if ($jabatan_edit > 0){
-    	echo "<th> Edit </th>";
+    	echo "<th style='background-color: #4CAF50; color:white'> Edit </th>";
     }
  ?>
 			
 			
 		</thead>
-		
-		<tbody>
-		<?php
-
-		// menyimpan data sementara yang ada pada $query
-			while ($data = mysqli_fetch_array($query))
-			{
-				//menampilkan data
-			echo "<tr>
-			
-			<td>". $data['nama'] ."</td>
-			<td>". $data['wewenang'] ."</td>";
-
-include 'db.php';
-
-$pilih_akses_jabatan_hapus = $db->query("SELECT jabatan_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND jabatan_hapus = '1'");
-$jabatan_hapus = mysqli_num_rows($pilih_akses_jabatan_hapus);
-
-
-    if ($jabatan_hapus > 0){
-
-			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-jabatan='". $data['nama'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-		}
-
-include 'db.php';
-
-$pilih_akses_jabatan_edit = $db->query("SELECT jabatan_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND jabatan_edit = '1'");
-$jabatan_edit = mysqli_num_rows($pilih_akses_jabatan_edit);
-
-
-    if ($jabatan_edit > 0){ 
-			echo "<td> <button class='btn btn-info btn-edit' data-jabatan='". $data['nama'] ."' data-id='". $data['id'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button> </td>
-			</tr>";
-			}
-	}
-
-	//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-		</tbody>
 
 	</table>
 </span>
@@ -258,10 +209,8 @@ mysqli_close($db);
 
 
 							
-<script>
+<script type="text/javascript">
     $(document).ready(function(){
-
-
 //fungsi untuk menambahkan data
 		$("#submit_tambah").click(function(){
 		var nama = $("#nama_jabatan").val();
@@ -278,19 +227,39 @@ mysqli_close($db);
 		$.post('prosesjabatan.php',{nama:nama,wewenang:wewenang},function(data){
 
 		if (data != '') {
+			$('#table_jabatan').DataTable().destroy();
+			
+          var dataTable = $('#table_jabatan').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_jabatan.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_jabatan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[4]+'');
+            },
+
+        });
+
 		$("#nama_jabatan").val('');
 		$("#wewenang").val('');
 
 		$(".alert").show('fast');
-		$("#table_baru").load('tabel-jabatan.php');
 		
-		setTimeout(tutupalert, 2000);
+		setTimeout(tutupalert, 200);
 		$(".modal").modal("hide");
 		}
 		
 		
 		});										
-									}
+	}
 
 		function tutupmodal() {
 		
@@ -303,7 +272,7 @@ mysqli_close($db);
 
 	
 //fungsi hapus data 
-		$(".btn-hapus").click(function(){
+		$(document).on('click','.btn-hapus',function(e){
 		var nama = $(this).attr("data-jabatan");
 		var id = $(this).attr("data-id");
 		$("#data_jabatan").val(nama);
@@ -321,7 +290,29 @@ mysqli_close($db);
 		$.post("hapusjabatan.php",{id:id},function(data){
 
 		if (data != "") {
-		$("#table_baru").load('tabel-jabatan.php');
+
+			$('#table_jabatan').DataTable().destroy();
+			
+          var dataTable = $('#table_jabatan').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_jabatan.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_jabatan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[4]+'');
+            },
+
+        });
+
+
 		$("#modal_hapus").modal('hide');
 		
 		}
@@ -333,7 +324,7 @@ mysqli_close($db);
 // end fungsi hapus data
 
 //fungsi edit data 
-		$(".btn-edit").click(function(){
+		$(document).on('click','.btn-edit',function(e){
 		
 		$("#modal_edit").modal('show');
 		var nama = $(this).attr("data-jabatan"); 
@@ -355,8 +346,28 @@ mysqli_close($db);
 
 					$.post("update_jabatan.php",{id:id,nama:nama},function(data){
 		if (data != '') {
+			$('#table_jabatan').DataTable().destroy();
+			
+          var dataTable = $('#table_jabatan').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_jabatan.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_jabatan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[4]+'');
+            },
+
+        });
+
 		$(".alert").show('fast');
-		$("#table_baru").load('tabel-jabatan.php');
 		
 		setTimeout(tutupalert, 2000);
 		$(".modal").modal("hide");
@@ -395,11 +406,35 @@ mysqli_close($db);
 </script>
 
 <script type="text/javascript">
-	
-  $(function () {
-  $(".table").dataTable({ordering :false });
-  });
+// DT AJAX TAMPIL AWAL
+	$(document).ready(function(){
+			$('#table_jabatan').DataTable().destroy();
+			
+          var dataTable = $('#table_jabatan').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_jabatan.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_jabatan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[4]+'');
+            },
 
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
+		
+		});
+		
 </script>
 
 <!-- memasukan file footer.db -->

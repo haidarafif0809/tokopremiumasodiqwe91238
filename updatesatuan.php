@@ -24,7 +24,7 @@ $query->execute();
     }
     else 
     {
-    echo "sukses";
+    echo "1";
     }
 
         //Untuk Memutuskan Koneksi Ke Database

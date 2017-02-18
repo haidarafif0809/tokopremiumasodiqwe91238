@@ -7,9 +7,6 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-//menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM fee_produk");
-
  ?>
 
  <style>
@@ -131,7 +128,7 @@ echo '<a href="form_fee_produk_petugas.php"  class="btn btn-info" > <i class="fa
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="tabel_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_fee_produk" class="table table-bordered">
 		<thead>
 			<th style='background-color: #4CAF50; color: white'> Nama Petugas </th>
 			<th style='background-color: #4CAF50; color: white'> Kode Produk</th>
@@ -162,71 +159,47 @@ $fee_produk_hapus = mysqli_num_rows($pilih_akses_fee_produk_hapus);
 			}
 		?>
 		</thead>
-		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-				//menampilkan data
-			echo "<tr>
-			<td>". $data1['nama_petugas'] ."</td>
-			<td>". $data1['kode_produk'] ."</td>
-			<td>". $data1['nama_produk'] ."</td>
-			<td>". persen($data1['jumlah_prosentase']) ."</td>
-			<td>". rp($data1['jumlah_uang']) ."</td>
-			<td>". $data1['user_buat'] ."</td>";
-
-
-include 'db.php';
-
-$pilih_akses_fee_produk_edit = $db->query("SELECT komisi_produk_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND komisi_produk_edit = '1'");
-$fee_produk_edit = mysqli_num_rows($pilih_akses_fee_produk_edit);
-
-    if ($fee_produk_edit > 0) {
-			echo "<td> <button class='btn btn-success btn-edit' data-prosentase='". $data1['jumlah_prosentase'] ."' data-nominal='". $data1['jumlah_uang'] ."' data-id='". $data1['id'] ."' > <span class='glyphicon glyphicon-edit'> </span> Edit </button> </td>";
-		}
-
-include 'db.php';
-
-$pilih_akses_fee_produk_hapus = $db->query("SELECT komisi_produk_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND komisi_produk_hapus = '1'");
-$fee_produk_hapus = mysqli_num_rows($pilih_akses_fee_produk_hapus);
-
-    if ($fee_produk_hapus > 0) {
-
-			 echo " <td> <button class='btn btn-danger btn-hapus' data-id='".$data1['id']."' data-petugas='". $data1['nama_petugas'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button></td>
-			
-			</tr>";
-			}
-		}
-
-
-		//Untuk Memutuskan Koneksi Ke Database
-
-mysqli_close($db); 
-		?>
-		</tbody>
-
 	</table>
 
 </div>
 
 </div>
 
-<script>
-		
+<script type="text/javascript">
 	$(document).ready(function(){
-	$('#tableuser').DataTable();
-	});
+			$('#table_fee_produk').DataTable().destroy();
+			
+          var dataTable = $('#table_fee_produk').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_fee_produk.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_fee_produk").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[9]+'');
+            },
 
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
+		
+		});
+		
 </script>
-
 
   <script>
     
   //fungsi hapus data 
-    $(".btn-hapus").click(function(){
+    $(document).on('click','.btn-hapus',function(e){
     var nama_petugas = $(this).attr("data-petugas");
     var id = $(this).attr("data-id");
     $("#data_petugas").val(nama_petugas);

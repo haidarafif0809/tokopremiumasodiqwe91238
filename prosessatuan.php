@@ -27,7 +27,7 @@ if (!$perintah)
 }
 else 
 {
-   echo 'sukses';
+   echo '1';
 }
 
 

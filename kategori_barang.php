@@ -7,8 +7,6 @@
 	include 'sanitasi.php';
 	include 'db.php';
 
-	$query = $db->query("SELECT * FROM kategori");
-	
 	?>
 
 <style>
@@ -152,7 +150,7 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 
 <div class="table-responsive"><!-- membuat agar ada garis pada tabel, disetiap kolom -->
 <span id="table_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_kategori_barang" class="table table-bordered">
 		<thead> 
 			
 			<th style="background-color: #4CAF50; color: white"> Nama Kategori </th>
@@ -160,40 +158,6 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 			<th style="background-color: #4CAF50; color: white"> Edit </th>		
 			
 		</thead>
-		
-		<tbody>
-		<?php
-
-		// menyimpan data sementara yang ada pada $query
-	while ($data = mysqli_fetch_array($query))
-	{
-				//menampilkan data
-			echo "<tr>
-			
-			<td>". $data['nama_kategori'] ."</td>";
-
-
-$pilih_akses_otoritas = $db->query("SELECT hak_otoritas_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_hapus = '1'");
-$otoritas = mysqli_num_rows($pilih_akses_otoritas);
-
-    if ($otoritas > 0) {
-echo "<td><button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-kategori='". $data['nama_kategori'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-}
-
-$pilih_akses_otoritas = $db->query("SELECT hak_otoritas_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_edit = '1'");
-$otoritas = mysqli_num_rows($pilih_akses_otoritas);
-
-    if ($otoritas > 0) {
-echo "<td> <button class='btn btn-info btn-edit' data-kategori='". $data['nama_kategori'] ."' data-id='". $data['id'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button> </td>";
-}
-			echo "</tr>";
-		
-	}
-
-//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-		</tbody>
 
 	</table>
 </span>
@@ -201,15 +165,35 @@ mysqli_close($db);
 
 </div>
 
-
 <script type="text/javascript">
-	
-  $(function () {
-  $(".table").dataTable({ordering :false });
-  });
+	$(document).ready(function(){
+			
+          var dataTable = $('#table_kategori_barang').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_kategori_barang.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_kategori_barang").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[3]+'');
+            },
 
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
+		
+		});
+		
 </script>
-
 
 <script>
     $(document).ready(function(){

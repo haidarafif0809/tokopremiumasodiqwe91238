@@ -5,11 +5,6 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-
-$query = $db->query("SELECT * FROM satuan");
-
-
-
  ?>
 
 
@@ -19,8 +14,6 @@ $query = $db->query("SELECT * FROM satuan");
 <h3><b>DATA SATUAN</b></h3> <hr>
 
 <?php 
-include 'db.php';
-
 $pilih_akses_satuan_tambah = $db->query("SELECT satuan_tambah FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND satuan_tambah = '1'");
 $satuan_tambah = mysqli_num_rows($pilih_akses_satuan_tambah);
 
@@ -178,75 +171,33 @@ th {
 
 <div class="table-responsive">
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_satuan" class="table table-bordered">
 		<thead>
-			<th> Satuan </th>
+			<th style='background-color: #4CAF50; color:white'> Satuan </th>
 
 
 <?php 
-include 'db.php';
-
 $pilih_akses_satuan_hapus = $db->query("SELECT satuan_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND satuan_hapus = '1'");
 $satuan_hapus = mysqli_num_rows($pilih_akses_satuan_hapus);
 
 
     if ($satuan_hapus > 0){
-			echo "<th> Hapus </th>";
+			echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
 
 		}
 ?>
 
-<?php 
-include 'db.php';
-
+<?php
 $pilih_akses_satuan_edit = $db->query("SELECT satuan_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND satuan_edit = '1'");
 $satuan_edit = mysqli_num_rows($pilih_akses_satuan_edit);
 
 
     if ($satuan_edit > 0){
-			echo "<th> Edit </th>";
+			echo "<th style='background-color: #4CAF50; color:white'> Edit </th>";
 		}
 ?>
 			
 		</thead>
-		
-		<tbody>
-		<?php
-
-		
-			while ($data = mysqli_fetch_array($query))
-			{
-			echo "<tr class='tr-id-".$data['id']."'>
-			<td>". $data['nama'] ."</td>";
-
-
-include 'db.php';
-
-$pilih_akses_satuan_hapus = $db->query("SELECT satuan_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND satuan_hapus = '1'");
-$satuan_hapus = mysqli_num_rows($pilih_akses_satuan_hapus);
-
-
-    if ($satuan_hapus > 0){
-			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-satuan='". $data['nama'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-		}
-
-include 'db.php';
-
-$pilih_akses_satuan_edit = $db->query("SELECT satuan_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND satuan_edit = '1'");
-$satuan_edit = mysqli_num_rows($pilih_akses_satuan_edit);
-
-
-    if ($satuan_edit > 0){
-			
-
-			echo "<td><button class='btn btn-success btn-edit' data-satuan='". $data['nama'] ."' data-id='". $data['id'] ."' > <span class='glyphicon glyphicon-edit'> </span> Edit </button> </td>
-
-			</tr>";
-		}
-			}
-		?>
-		</tbody>
-
 	</table>
 </span>
 </div>
@@ -329,7 +280,7 @@ $(document).on('click', '#btn_jadi_hapus', function (e) {
 // end fungsi hapus data
 
 //fungsi edit data 
-		$(".btn-edit").click(function(){
+		$(document).on('click', '.btn-edit', function (e) {
 		
 		$("#modal_edit").modal('show');
 		var nama = $(this).attr("data-satuan"); 
@@ -378,14 +329,37 @@ $(document).on('click', '#btn_jadi_hapus', function (e) {
 
 </script>
 
+
 <script type="text/javascript">
-	
-  $(function () {
-  $(".table").dataTable({ordering :false });
-  });
+// AJAX TABLE AWAL TAMPIL
+	$(document).ready(function(){
+			$('#table_satuan').DataTable().destroy();
+			
+          var dataTable = $('#table_satuan').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_satuan.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_satuan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[3]+'');
+            },
 
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
+		
+		});
+		
 </script>
-
-
 <?php include 'footer.php'; ?>
 

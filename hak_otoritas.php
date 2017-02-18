@@ -184,13 +184,11 @@ echo '<button type="button" class="btn btn-info" data-toggle="modal" data-target
 
 <div class="table-responsive"><!-- membuat agar ada garis pada tabel, disetiap kolom -->
 <span id="table_baru">
-		<table id="tableuser" class="table table-bordered">
+		<table id="table_hak_otoritas" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color: white'> ID Otoritas </th>
 
 <?php
-include 'db.php';
-
 $pilih_akses_otoritas_lihat = $db->query("SELECT hak_otoritas_lihat FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_lihat = '1'");
 $otoritas_lihat = mysqli_num_rows($pilih_akses_otoritas_lihat);
 
@@ -200,8 +198,6 @@ $otoritas_lihat = mysqli_num_rows($pilih_akses_otoritas_lihat);
 	?>
 
 <?php
-include 'db.php';
-
 $pilih_akses_otoritas_hapus = $db->query("SELECT hak_otoritas_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_hapus = '1'");
 $otoritas_hapus = mysqli_num_rows($pilih_akses_otoritas_hapus);
 
@@ -211,8 +207,6 @@ $otoritas_hapus = mysqli_num_rows($pilih_akses_otoritas_hapus);
 	?>
 
 <?php
-include 'db.php';
-
 $pilih_akses_otoritas_edit = $db->query("SELECT hak_otoritas_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_edit = '1'");
 $otoritas_edit = mysqli_num_rows($pilih_akses_otoritas_edit);
 
@@ -224,52 +218,6 @@ $otoritas_edit = mysqli_num_rows($pilih_akses_otoritas_edit);
 			
 		</thead>
 		
-		<tbody>
-		<?php
-
-			
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-			echo "<tr>
-			<td>". $data1['nama'] ."</td>";
-
-
-include 'db.php';
-$pilih_akses_otoritas_lihat = $db->query("SELECT hak_otoritas_lihat FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_lihat = '1'");
-$otoritas_lihat = mysqli_num_rows($pilih_akses_otoritas_lihat);
-
-    if ($otoritas_lihat > 0) {		
-
-			echo "<td> <a href='form_hak_akses.php?nama=".$data1['nama']."&id=".$data1['id']."' class='btn btn-primary'> <span class='	glyphicon glyphicon-new-window'> </span> Hak Akses </a> </td>";
-		}
-
-
-include 'db.php';
-
-$pilih_akses_otoritas_hapus = $db->query("SELECT hak_otoritas_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_hapus = '1'");
-$otoritas_hapus = mysqli_num_rows($pilih_akses_otoritas_hapus);
-
-    if ($otoritas_hapus > 0) {
-			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."' data-otoritas='". $data1['nama'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td> ";
-	}
-
-include 'db.php';
-
-$pilih_akses_otoritas_edit = $db->query("SELECT hak_otoritas_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_edit = '1'");
-$otoritas_edit = mysqli_num_rows($pilih_akses_otoritas_edit);
-
-    if ($otoritas_edit > 0) {
-			echo "<td> <button class='btn btn-success btn-edit' data-otoritas='". $data1['nama'] ."' data-id='". $data1['id'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button> </td>
-
-			</tr>";
-			}
-		}
-
-
-		//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-		</tbody>
 
 	</table>
 
@@ -281,18 +229,33 @@ mysqli_close($db);
 </div>
 </div> <!-- tag penutup cantainer -->
 
-<script type="text/javascript">
-	
-  $(document).ready(function() {
-  $(".table").dataTable({ordering :false });
-  });
-
-</script>
-
+<!-- DATATABLE AJAX -->
+    <script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
+      	$('#table_hak_otoritas').DataTable().destroy();
+        var dataTable = $('#table_hak_otoritas').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_hak_otoritas.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_hak_otoritas").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+              $(nRow).attr('class','tr-id-'+aData[4]+'');
+            },
+        });
+      });
+    </script>
+<!-- / DATATABLE AJAX -->
 							
 <script>
     $(document).ready(function(){
-
 
 //fungsi untuk menambahkan data
 		$("#submit_tambah").click(function(){
@@ -304,14 +267,31 @@ mysqli_close($db);
 		else {
 		
 		$.post('proses_otoritas.php',{nama:nama},function(data){
-
+			
 		if (data != '') {
 		$("#nama_otoritas").val('');
+		$('#table_hak_otoritas').DataTable().destroy();
+		var dataTable = $('#table_hak_otoritas').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_hak_otoritas.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_hak_otoritas").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+              $(nRow).attr('class','tr-id-'+aData[4]+'');
+            },
+        });
 
 		$(".alert").show('fast');
-		$("#table_baru").load('tabel-otoritas.php');
-		
-		setTimeout(tutupalert, 2000);
+		//window.location.href = 'hak_otoritas.php';
+		setTimeout(tutupalert, 100);
 		$(".modal").modal("hide");
 		}
 		
@@ -328,7 +308,7 @@ mysqli_close($db);
 
 	
 //fungsi hapus data 
-		$(".btn-hapus").click(function(){
+		$(document).on('click','.btn-hapus',function(e){
 		var nama = $(this).attr("data-otoritas");
 		var id = $(this).attr("data-id");
 		$("#data_otoritas").val(nama);
@@ -346,8 +326,24 @@ mysqli_close($db);
 		$.post("hapus_otoritas.php",{id:id},function(data){
 
 		if (data != "") {
-		$("#table_baru").load('tabel-otoritas.php');
-		$("#modal_hapus").modal('hide');
+			$('#table_hak_otoritas').DataTable().destroy();
+var dataTable = $('#table_hak_otoritas').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_hak_otoritas.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_hak_otoritas").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+              $(nRow).attr('class','tr-id-'+aData[4]+'');
+            },
+        });		$("#modal_hapus").modal('hide');
 		
 		}
 
@@ -358,7 +354,7 @@ mysqli_close($db);
 // end fungsi hapus data
 
 //fungsi edit data 
-		$(".btn-edit").click(function(){
+		$(document).on('click','.btn-edit',function(e){
 		
 		$("#modal_edit").modal('show');
 		var nama = $(this).attr("data-otoritas"); 
@@ -381,8 +377,24 @@ mysqli_close($db);
 		$.post("update_otoritas.php",{id:id,nama:nama},function(data){
 		if (data != '') {
 		$(".alert").show('fast');
-		$("#table_baru").load('tabel-otoritas.php');
-		
+		$('#table_hak_otoritas').DataTable().destroy();
+var dataTable = $('#table_hak_otoritas').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_hak_otoritas.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_hak_otoritas").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+              $(nRow).attr('class','tr-id-'+aData[4]+'');
+            },
+        });		
 		setTimeout(tutupalert, 2000);
 		$(".modal").modal("hide");
 		}
@@ -462,7 +474,7 @@ mysqli_close($db);
 
 		<script type="text/javascript">
 		
-		$(".btn-akses").click(function(){
+		$(document).on('click','.btn-akses',function(e){
 		var nama = $(this).attr('data-otoritas');
 		
 		

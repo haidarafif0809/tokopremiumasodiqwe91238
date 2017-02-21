@@ -24,7 +24,7 @@
 
 
 <!-- Modal Tampilkan Produk yang promo -->
-<div id="modal_produk_promo" class="modal" role="dialog">
+<div id="modal_produk_promo" class="modal modal-lg" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->

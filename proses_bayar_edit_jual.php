@@ -32,7 +32,7 @@ $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
             $select_hpp_keluar = $db->query("SELECT * FROM hpp_keluar WHERE no_faktur = '$nomor_faktur' AND kode_barang = '$data[kode_barang]' AND sisa_barang != jumlah_kuantitas ");
             $row_hpp_keluar = mysqli_num_rows($select_hpp_keluar);
 
-            if ($row_hpp_keluar == 0) {
+            if ($row_hpp_keluar == 0 || $row_hpp_keluar == '') {
 
                 $delete_detail_penjualan = $db->query("DELETE FROM detail_penjualan WHERE no_faktur = '$nomor_faktur' AND kode_barang = '$data[kode_barang]'");
             
@@ -117,7 +117,7 @@ $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
             $stmt2->execute();    
 
 
-$select_setting_akun = $db->query("SELECT * FROM setting_akun");
+/*$select_setting_akun = $db->query("SELECT * FROM setting_akun");
 $ambil_setting = mysqli_fetch_array($select_setting_akun);
 
 $select = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE no_faktur = '$nomor_faktur'");
@@ -196,7 +196,7 @@ if ($potongan != "" || $potongan != 0 ) {
 //POTONGAN
         $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Penjualan Tunai - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[potongan_jual]', '$potongan', '0', 'Penjualan', '$nomor_faktur','1', '$user')");
 }
-
+*/
             
               
  }
@@ -240,7 +240,7 @@ if ($potongan != "" || $potongan != 0 ) {
 
 
               
-$select_setting_akun = $db->query("SELECT * FROM setting_akun");
+/*$select_setting_akun = $db->query("SELECT * FROM setting_akun");
 $ambil_setting = mysqli_fetch_array($select_setting_akun);
 
 $select = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE no_faktur = '$nomor_faktur'");
@@ -321,7 +321,7 @@ if ($pajak != "" || $pajak != 0) {
 if ($potongan != "" || $potongan != 0 ) {
 //POTONGAN
         $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Penjualan Tunai - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[potongan_jual]', '$potongan', '0', 'Penjualan', '$nomor_faktur','1', '$user')");
-}
+}*/
 
 
    

@@ -51,7 +51,8 @@ mysqli_close($db);
  <table>
   <tbody>
       <tr><td width="50%">Diskon</td> <td> :</td> <td><?php echo rp($data0['potongan']);?> </tr>
-      <tr><td  width="50%">Pajak</td> <td> :</td> <td> <?php echo rp($data0['tax']);?> </td></tr>
+      <tr><td  width="50%">Biaya Admin</td> <td> :</td> <td> <?php echo rp($data0['biaya_admin']);?> </td></tr>
+      <!--<tr><td  width="50%">Pajak</td> <td> :</td> <td> <?php echo rp($data0['tax']);?> </td></tr>-->
       <tr><td  width="50%">Total Item</td> <td> :</td> <td> <?php echo $total_item; ?> </td></tr>
       <tr><td width="50%">Total Penjualan</td> <td> :</td> <td><?php echo rp($data0['total']); ?> </tr>
       <tr><td  width="50%">Tunai</td> <td> :</td> <td> <?php echo rp($data0['tunai']); ?> </td></tr>
@@ -61,9 +62,8 @@ mysqli_close($db);
   </tbody>
 </table>
     ===================<br>
-    ===================<br>
     Tanggal : <?php echo tanggal($data0['tanggal']);?><br>
-    ===================<br><br>
+    ===================<br>
     Terima Kasih<br>
     Selamat Datang Kembali<br>
     Telp. <?php echo $data1['no_telp']; ?><br>

@@ -13,11 +13,10 @@ $status = $_GET['status'];
  ?>
 
 
-
-
 <div class="container"><!--start of container-->
 
-
+<!--hidden untuk no faktur buat kirim ke button detail-->
+    <input type="hidden" name="no_faktur_detail" class="form-control " id="no_faktur_detail" placeholder="no_faktur  "/>
 
 <!--MODAL VOID -->
 <div id="modal_void" class="modal fade" role="dialog">
@@ -53,7 +52,7 @@ $status = $_GET['status'];
 			<button type="submit" id="batal_penjualan" class="btn btn-danger">Batal / Void</button>
     
    </div>
-    
+
    
   </form>
 
@@ -187,19 +186,38 @@ $status = $_GET['status'];
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Detail Penjualan</h4>
+        <h4 class="modal-title"><center><h4><b>Detail Penjualan</b></h4></center></h4>
       </div>
 
       <div class="modal-body">
       <div class="table-responsive">
       <span id="modal-detail"> </span>
+
+       
+  <table id="table_modal_detail" class="table table-bordered table-sm">
+  <thead> <!-- untuk memberikan nama pada kolom tabel -->
+
+          <th> No Faktur </th>
+          <th> Kode Barang </th>
+          <th> Nama Barang </th>
+          <th> Jumlah Barang </th>
+          <th> Satuan </th>
+          <th> Harga </th>
+          <th> Subtotal </th>
+          <th> Potongan </th>
+          <th> Tax </th>
+
+  </thead> <!-- tag penutup tabel -->
+  </table>
+
+
       </div>
 
      </div>
 
       <div class="modal-footer">
         
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+  <center><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></center>
       </div>
     </div>
 
@@ -399,24 +417,7 @@ $penjualan_hapus = mysqli_num_rows($pilih_akses_penjualan_hapus);
     </script>
 <!--/DATA TABLE MENGGUNAKAN AJAX-->
 
-<!--menampilkan detail penjualan-->
-<script type="text/javascript">
-    $(document).on('click', '.detail', function (e){
-		var no_faktur = $(this).attr('no_faktur');
-		
-		
-		$("#modal_detail").modal('show');
-		
-		$.post('proses_detail_penjualan.php',{no_faktur:no_faktur},function(info) {
-		
-		$("#modal-detail").html(info);
-		
-		
-		});
-		
-		});
-		
-		</script>
+
 
 
 		<script type="text/javascript">
@@ -640,6 +641,66 @@ $("#login").click(function(){
 </script>
 
 <!--/Pagination teal-->
+
+
+
+<!--Start Ajax Modal Cari-->
+<script type="text/javascript" language="javascript" >
+   $(document).ready(function() {
+    $(document).on('click', '.detail', function (e) {
+    $("#modal_detail").modal('show');
+
+    var no_faktur = $(this).attr("no_faktur");
+    $("#no_faktur_detail").val(no_faktur);
+      var no_faktur_detail = $("#no_faktur_detail").val();
+            $('#table_modal_detail').DataTable().destroy();
+
+        var dataTable = $('#table_modal_detail').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"modal_detail_penjualan.php", // json datasource
+             "data": function ( d ) {
+                  d.no_faktur = $("#no_faktur_detail").val();
+                  // d.custom = $('#myInput').val();
+                  // etc
+              },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_modal_detail").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+
+         
+
+        });  
+  
+     }); 
+  });
+ </script>
+<!--Start Ajax Modal Cari-->
+<!--menampilkan detail penjualan-->
+
+<!--<script type="text/javascript">
+    $(document).on('click', '.detail', function (e){
+    var no_faktur = $(this).attr('no_faktur');
+    
+    
+    $("#modal_detail").modal('show');
+    
+    $.post('proses_detail_penjualan.php',{no_faktur:no_faktur},function(info) {
+    
+    $("#modal-detail").html(info);
+    
+    
+    });
+    
+    });
+    
+    </script>-->
 
 <?php 
 include 'footer.php';

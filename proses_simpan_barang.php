@@ -12,6 +12,7 @@ $bulan_sekarang = date('m');
 $tanggal_sekarang = date('Y-m-d');
 $jam_sekarang = date('H:i:s');
 $tahun_terakhir = substr($tahun_sekarang, 2);
+$no_jurnal = no_jurnal();
 
 
 try {
@@ -144,15 +145,15 @@ $nomor = 1 + $ambil_nomor ;
 
 
     
-              
-              
-              
-              
-              $stmt = $db->prepare("INSERT INTO penjualan (no_faktur, kode_gudang, kode_pelanggan, total, tanggal, tanggal_jt, jam, user, sales, status, potongan, tax, kredit, nilai_kredit, cara_bayar, tunai, status_jual_awal, keterangan, ppn,biaya_admin) VALUES (?,?,?,?,?,?,?,?,?,'Simpan Sementara',?,?,?,?,?,?,'Kredit',?,?,?)");
+        $ket_jurnal = "Penjualan "." Simpan Sementara ".$ambil_kode_pelanggan['nama_pelanggan']." ";
+ 
+              $stmt = $db->prepare("INSERT INTO penjualan (no_faktur, kode_gudang, kode_pelanggan, total, tanggal, tanggal_jt, jam, user, sales, status, potongan, tax, kredit, nilai_kredit, cara_bayar, tunai, status_jual_awal, keterangan, ppn,biaya_admin,no_faktur_jurnal,keterangan_jurnal) VALUES (?,?,?,?,?,?,?,?,?,'Simpan Sementara',?,?,?,?,?,?,'Kredit',?,?,?,?,?)");
               
 
-              $stmt->bind_param("sssisssssiiiisissi",
-              $no_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal_sekarang, $tanggal_jt, $jam_sekarang, $user, $sales, $potongan, $tax, $sisa_kredit, $sisa_kredit, $cara_bayar, $pembayaran, $keterangan, $ppn_input, $biaya_adm);
+              $stmt->bind_param("sssisssssiiiisississ",
+              $no_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal_sekarang, $tanggal_jt,
+              $jam_sekarang, $user, $sales, $potongan, $tax, $sisa_kredit, $sisa_kredit,
+              $cara_bayar, $pembayaran, $keterangan, $ppn_input, $biaya_adm,$no_jurnal,$ket_jurnal);
               
               $biaya_adm = stringdoang($_POST['biaya_adm']);
               $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
@@ -178,9 +179,6 @@ $nomor = 1 + $ambil_nomor ;
               // jalankan query
               $stmt->execute();
               
-              
-     
-
 
 $select_setting_akun = $db->query("SELECT * FROM setting_akun");
 $ambil_setting = mysqli_fetch_array($select_setting_akun);

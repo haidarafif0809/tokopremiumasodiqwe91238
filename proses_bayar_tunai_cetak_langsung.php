@@ -11,6 +11,7 @@ $bulan_sekarang = date('m');
 $tanggal_sekarang = date('Y-m-d');
 $jam_sekarang = date('H:i:s');
 $tahun_terakhir = substr($tahun_sekarang, 2);
+$no_jurnal = no_jurnal();
 
 
 try {
@@ -156,12 +157,15 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
               if ($sisa_kredit == 0 ) 
 
             {
-              
-              $stmt = $db->prepare("INSERT INTO penjualan (no_faktur, kode_gudang, kode_pelanggan, total, tanggal, jam, user, sales, status, potongan, tax, sisa, cara_bayar, tunai, status_jual_awal, keterangan, ppn,biaya_admin) VALUES (?,?,?,?,?,?,?,?,'Lunas',?,?,?,?,?,'Tunai',?,?,?)");
+              $ket_jurnal = "Penjualan "." Lunas ".$ambil_kode_pelanggan['nama_pelanggan']." ";
+
+              $stmt = $db->prepare("INSERT INTO penjualan (no_faktur, kode_gudang, kode_pelanggan, total, tanggal, jam, user, sales, status, potongan, tax, sisa, cara_bayar, tunai, status_jual_awal, keterangan, ppn,biaya_admin,no_faktur_jurnal,keterangan_jurnal) VALUES (?,?,?,?,?,?,?,?,'Lunas',?,?,?,?,?,'Tunai',?,?,?,?,?)");
               
     // hubungkan "data" dengan prepared statements
-              $stmt->bind_param("sssissssiiisissi",
-              $no_faktur, $kode_gudang, $kode_pelanggan, $total, $tanggal_sekarang, $jam_sekarang, $user, $sales, $potongan, $tax, $sisa, $cara_bayar, $pembayaran, $keterangan, $ppn_input,$biaya_adm);
+              $stmt->bind_param("sssissssiiisississ",
+              $no_faktur, $kode_gudang, $kode_pelanggan, $total, $tanggal_sekarang, $jam_sekarang,
+              $user, $sales, $potongan, $tax, $sisa, $cara_bayar, $pembayaran, $keterangan,
+              $ppn_input,$biaya_adm,$no_jurnal,$ket_jurnal);
               
               $biaya_adm = stringdoang($_POST['biaya_adm']);
               $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
@@ -293,13 +297,14 @@ if ($potongan != "" || $potongan != 0 ) {
             {
               
               
+              $ket_jurnal = "Penjualan "." Piutang ".$ambil_kode_pelanggan['nama_pelanggan']." ";
+
               
-              
-              $stmt = $db->prepare("INSERT INTO penjualan (no_faktur, kode_gudang, kode_pelanggan, total, tanggal, tanggal_jt, jam, user, sales, status, potongan, tax, kredit, nilai_kredit, cara_bayar, tunai, status_jual_awal, keterangan, ppn,biaya_admin) VALUES (?,?,?,?,?,?,?,?,?,'Piutang',?,?,?,?,?,?,'Kredit',?,?,?)");
+              $stmt = $db->prepare("INSERT INTO penjualan (no_faktur, kode_gudang, kode_pelanggan, total, tanggal, tanggal_jt, jam, user, sales, status, potongan, tax, kredit, nilai_kredit, cara_bayar, tunai, status_jual_awal, keterangan, ppn,biaya_admin,no_faktur_jurnal,keterangan_jurnal) VALUES (?,?,?,?,?,?,?,?,?,'Piutang',?,?,?,?,?,?,'Kredit',?,?,?,?,?)");
               
 
-              $stmt->bind_param("sssisssssiiiisissi",
-              $no_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal_sekarang, $tanggal_jt, $jam_sekarang, $user, $sales, $potongan, $tax, $sisa_kredit, $sisa_kredit, $cara_bayar, $pembayaran, $keterangan, $ppn_input,$biaya_adm);
+              $stmt->bind_param("sssisssssiiiisississ",
+              $no_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal_sekarang, $tanggal_jt, $jam_sekarang, $user, $sales, $potongan, $tax, $sisa_kredit, $sisa_kredit, $cara_bayar, $pembayaran, $keterangan, $ppn_input,$biaya_adm,$no_jurnal,$ket_jurnal);
               
               $biaya_adm = stringdoang($_POST['biaya_adm']);
               $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);

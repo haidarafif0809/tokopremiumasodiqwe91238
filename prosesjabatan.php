@@ -26,7 +26,7 @@ if (!$perintah)
 }
 else 
 {
-   echo "sukses";
+   echo "1";
 }
 
 //Untuk Memutuskan Koneksi Ke Database

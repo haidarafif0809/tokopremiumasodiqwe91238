@@ -5,13 +5,7 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-
-$perintah = $db->query("SELECT * FROM user");
-
-
-
  ?>
-
 
 <style>
 
@@ -55,40 +49,40 @@ echo '<button type="button" class="btn btn-info" data-toggle="modal" data-target
      	 </div>
      	 					<div class="modal-body">
         
-						<!--form--><form role="form" action="prosesuser.php" method="post">
+						<!--form--><form role="form" method="post">
 					<div class="form-group">
 					<label>Username </label><br>
-					<input type="text" name="username" id="user" class="form-control" autocomplete="off" required="" >
+					<input type="text" name="username" id="user" class="form-control" autocomplete="off">
 					</div>
 
 					<div class="form-group">
 					<label> Password </label><br>
-					<input type="text" name="password" id="password" class="form-control" required="" >
+					<input type="text" name="password" id="password" class="form-control"  autocomplete="off">
 					</div>
 
 					<div class="form-group">
 					<label>Nama Lengkap </label><br>
-					<input type="text" name="nama" id="nama" class="form-control" required="" >
+					<input type="text" name="nama" id="nama" class="form-control" autocomplete="off">
 					</div>
 
 					<div class="form-group">
 					<label>Alamat </label><br>
-					<textarea name="alamat" id="alamat" class="form-control" required=""></textarea> 
+					<textarea name="alamat" id="alamat" class="form-control" required="" autocomplete="off"></textarea> 
 					</div>
 
 					<div class="form-group">
 					<label> Jabatan </label><br>
 					
-					<select type="text" name="jabatan" id="jabatan" class="form-control" required="" >
+					<select type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off">
 					<option value="">Silahkan Pilih</option>
     <?php 
 
     
-    $query = $db->query("SELECT * FROM jabatan ");
+    $query = $db->query("SELECT * FROM jabatan ORDER BY id ASC ");
     while($data = mysqli_fetch_array($query))
     {
     
-    echo "<option>".$data['nama'] ."</option>";
+    echo "<option value=".$data['id'].">".$data['nama'] ."</option>";
     }
     
     
@@ -101,16 +95,15 @@ echo '<button type="button" class="btn btn-info" data-toggle="modal" data-target
 
 					<div class="form-group">
 					<label>Otoritas</label><br>
-					<select type="text" name="otoritas" id="otoritas" class="form-control" required="" >
+					<select type="text" name="otoritas" id="otoritas" class="form-control" autocomplete="off">
 					<option value="">Silahkan Pilih</option>
-<?php 
-
-$ambil_otoritas = $db->query("SELECT * FROM hak_otoritas");
+<?php
+$ambil_otoritas = $db->query("SELECT * FROM hak_otoritas ORDER BY id ASC");
 
     while($data_otoritas = mysqli_fetch_array($ambil_otoritas))
     {
     
-    echo "<option>".$data_otoritas['nama'] ."</option>";
+    echo "<option value=". $data_otoritas['id'] .">".$data_otoritas['nama'] ."</option>";
 
     }
 
@@ -120,7 +113,7 @@ $ambil_otoritas = $db->query("SELECT * FROM hak_otoritas");
 
 					<div class="form-group">
 					<label> Status </label><br>
-					<select type="text" name="status" id="status" class="form-control" required="" >
+					<select type="text" name="status" id="status" class="form-control" autocomplete="off">
 					<option>aktif</option>
 					<option>tidak aktif</option>
 					</select>
@@ -128,7 +121,7 @@ $ambil_otoritas = $db->query("SELECT * FROM hak_otoritas");
 
 					<div class="form-group">
 					<label> Status Sales</label><br>
-					<select type="text" name="status_sales" id="status_sales" class="form-control" required="" >
+					<select type="text" name="status_sales" id="status_sales" class="form-control" autocomplete="off">
 					<option value="">--Silakan Pilih--</option>
 					<option value="Iya">Iya</option>
 					<option value="Tidak">Tidak</option>
@@ -136,7 +129,7 @@ $ambil_otoritas = $db->query("SELECT * FROM hak_otoritas");
 					</div>
 
 					
-					<button type="submit" class="btn btn-info"><span class='glyphicon glyphicon-plus'> </span>Tambah</button>
+					<button type="submit" id="submit_tambah" class="btn btn-info"><span class='glyphicon glyphicon-plus'> </span>Tambah</button>
 					</form>
 							</div>
 
@@ -236,21 +229,9 @@ $ambil_otoritas = $db->query("SELECT * FROM hak_otoritas");
 
 <div class="table-responsive">
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_user" class="table table-bordered">
 		<thead>
-
-			<th style='background-color: #4CAF50; color: white'> Reset Password </th>
-			<th style='background-color: #4CAF50; color: white'> Username </th>
-			<th style='background-color: #4CAF50; color: white'> Password </th>
-			<th style='background-color: #4CAF50; color: white'> Nama Lengkap </th>
-			<th style='background-color: #4CAF50; color: white'> Alamat </th>
-			<th style='background-color: #4CAF50; color: white'> Jabatan </th>
-			<th style='background-color: #4CAF50; color: white'> Otoritas </th>
-			<th style='background-color: #4CAF50; color: white'> Status </th>
-			<th style='background-color: #4CAF50; color: white'> Status Sales </th>
-<?php 
-include 'db.php';
-
+		<?php 
 $pilih_akses_user_hapus = $db->query("SELECT user_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND user_hapus = '1'");
 $user_hapus = mysqli_num_rows($pilih_akses_user_hapus);
 
@@ -263,8 +244,6 @@ $user_hapus = mysqli_num_rows($pilih_akses_user_hapus);
 ?>
 
 <?php 
-include 'db.php';
-
 $pilih_akses_user_edit = $db->query("SELECT user_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND user_edit = '1'");
 $user_edit= mysqli_num_rows($pilih_akses_user_edit);
 
@@ -272,83 +251,160 @@ $user_edit= mysqli_num_rows($pilih_akses_user_edit);
     if ($user_edit > 0){
 			echo "<th style='background-color: #4CAF50; color: white'> Edit </th>";
 		}
-	?>
-			
+?>
+
+			<th style='background-color: #4CAF50; color: white'> Reset Password </th>
+			<th style='background-color: #4CAF50; color: white'> Username </th>
+			<th style='background-color: #4CAF50; color: white'> Password </th>
+			<th style='background-color: #4CAF50; color: white'> Nama Lengkap </th>
+			<th style='background-color: #4CAF50; color: white'> Alamat </th>
+			<th style='background-color: #4CAF50; color: white'> Jabatan </th>
+			<th style='background-color: #4CAF50; color: white'> Otoritas </th>
+			<th style='background-color: #4CAF50; color: white'> Status </th>
+			<th style='background-color: #4CAF50; color: white'> Status Sales </th>			
 			
 		</thead>
-		
-		<tbody>
-		<?php
-
-		
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-			echo "<tr class='tr-id-".$data1['id']."'>
-			<td> <button class='btn btn-warning btn-reset' data-reset-id='". $data1['id'] ."' data-reset-user='". $data1['username'] ."'><span class='glyphicon glyphicon-refresh'> </span> Reset Password </button> </td>
-			<td>". $data1['username'] ."</td>
-			<td>". $data1['password'] ."</td>
-			<td>". $data1['nama'] ."</td>
-			<td>". $data1['alamat'] ."</td>
-			<td>". $data1['jabatan'] ."</td>
-			<td>". $data1['otoritas'] ."</td>
-			<td>". $data1['status'] ."</td>";
-
-      if ($data1['status_sales'] == "Iya") {
-        
-        echo "<td> <i class='fa fa-check'> </i> </td>";
-      }
-      else{
-         echo "<td> <i class='fa fa-close'> </i> </td>";
-      }
-
-
-include 'db.php';
-
-$pilih_akses_user_hapus = $db->query("SELECT user_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND user_hapus = '1'");
-$user_hapus = mysqli_num_rows($pilih_akses_user_hapus);
-
-
-    if ($user_hapus > 0){
-			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."' data-user='". $data1['username'] ."'><span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-
-		}
-
-include 'db.php';
-
-$pilih_akses_user_edit = $db->query("SELECT user_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND user_edit = '1'");
-$user_edit = mysqli_num_rows($pilih_akses_user_edit);
-
-
-    if ($user_edit > 0){
-
-			echo "<td> <a href='edituser.php?id=". $data1['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit </a> </td> 
-			
-			</tr>";
-			}
-		}
-
-	//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-		</tbody>
-
 	</table>
 </span>
 </div>
 </div>
 
-<script>
 
-$(document).ready(function(){
-    $('.table').DataTable();
-});
+<script type="text/javascript">
+//fungsi untuk menambahkan data
 
+		$("#submit_tambah").click(function(){
+		var user = $("#user").val();
+		var password = $("#password").val();
+		var nama = $("#nama").val();
+		var alamat = $("#alamat").val();
+		var jabatan = $("#jabatan").val();
+		var otoritas = $("#otoritas").val();
+		var status = $("#status").val();
+		var status_sales = $("#status_sales").val();
+
+		
+		if (user == "") {
+
+			alert("Silakan Isi Kolom Username");
+			$("#user").focus();
+		}
+		
+		else if(password == ""){
+			alert("Silakan Isi Kolom Password");
+			$("#password").focus();
+		}
+		else if(nama == ""){
+			alert("Silakan Isi Kolom Nama");
+			$("#nama").focus();
+		}
+		else if(alamat == ""){
+			alert("Silakan Isi Kolom Alamat");
+			$("#alamat").focus();
+		} 
+		else if (jabatan == "") {
+			alert("Silakan Isi Kolom Jabatan");
+			$("#jabatan").focus();
+		}
+		else if(otoritas == ""){
+			alert("Silakan Isi Kolom Otoritas");
+			$("#otoritas").focus();
+		}
+		else if(status == ""){
+			alert("Silakan Isi Kolom Status");
+			$("#status").focus();
+		}
+		else if(status_sales == ""){
+			alert("Silakan Isi Kolom Status Sales");
+			$("#status_sales").focus();
+		}
+		else{
+
+		$.post('prosesuser.php',{user:user,
+		password:password,
+		nama:nama,
+		alamat:alamat,
+		jabatan:jabatan,
+		otoritas:otoritas,
+		status:status,
+		status_sales:status_sales},function(data){
+
+		if (data != '') {
+			$('#table_user').DataTable().destroy();
+			
+          var dataTable = $('#table_user').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_user.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_user").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[11]+'');
+            },
+
+        });
+		$("#user").val('');
+	$("#password").val('');
+	$("#nama").val('');
+	$("#alamat").val('');
+	$("#jabatan").val('');
+	$("#otoritas").val('');
+	$("#status").val('');
+	$("#status_sales").val('');
+	$(".modal").modal("hide");
+
+	}// /if
+		function tutupmodal() {
+		}
+		});
+		
+		}// /else
+		
+		});
+		$("form").submit(function(){
+        return false;
+        });
+</script>
+<script type="text/javascript">
+// DT AJAX TAMPIL AWAL
+	$(document).ready(function(){
+			$('#table_user').DataTable().destroy();
+			
+          var dataTable = $('#table_user').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_user.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_user").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[11]+'');
+            },
+
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
+		
+		});
+		
 </script>
 
-
-
-        <script type="text/javascript">
-			
+<script type="text/javascript">
 //fungsi hapus data 
 $(document).on('click', '.btn-hapus', function (e) {
 		var username = $(this).attr("data-user");
@@ -365,10 +421,30 @@ $(document).on('click', '#btn_jadi_hapus', function (e) {
 		
 		var id = $("#id_hapus").val();
 		$.post("hapususer.php",{id:id},function(data){
+
 		if (data != "") {
 		
 		$("#modal_hapus").modal('hide');
-		$(".tr-id-"+id+"").remove();
+		$('#table_user').DataTable().destroy();
+			
+          var dataTable = $('#table_user').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_user.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_user").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[11]+'');
+            },
+
+        });
 		}
 
 		
@@ -381,7 +457,7 @@ $(document).on('click', '#btn_jadi_hapus', function (e) {
 
 		<script>
 //fungsi reset password data 
-		$(".btn-reset").click(function(){
+		$(document).on('click', '.btn-reset', function (e) {
 		var reset_user_name = $(this).attr("data-reset-user");
 		var reset_id = $(this).attr("data-reset-id");
 		$("#reset_user_name").val(reset_user_name);
@@ -402,7 +478,26 @@ $(document).on('click', '#btn_jadi_hapus', function (e) {
 		var id = $("#reset_id_hapus").val();
 		$.post("reset_password.php",{id:id},function(data){
 		if (data != "") {
-		$("#table-baru").load('tabel-user.php');
+		$('#table_user').DataTable().destroy();
+			
+          var dataTable = $('#table_user').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_user.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_user").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[11]+'');
+            },
+
+        });
 		$(".alert-success").show();
 		$("#modal_reset").modal('hide');
 		
@@ -423,6 +518,8 @@ $(document).on('click', '#btn_jadi_hapus', function (e) {
 <script type="text/javascript">
 
                $(document).ready(function(){
+
+               	// BLUR USER
                $("#user").blur(function(){
                var user = $("#user").val();
 
@@ -439,6 +536,25 @@ $(document).on('click', '#btn_jadi_hapus', function (e) {
               });
                 
                });
+
+               // MOUSELEAVE USER
+               $("#user").mouseleave(function(){
+               var user = $("#user").val();
+
+              $.post('cek_user.php',{user:$(this).val()}, function(data){
+                
+                if(data == 1){
+
+                    alert ("Username Sudah Ada");
+                    $("#user").val('');
+                }
+                else {
+                    
+                }
+              });
+                
+               });
+
                });
 
 </script>                    

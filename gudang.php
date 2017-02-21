@@ -164,15 +164,12 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 
 <div class="table-responsive">
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="table_gudang" class="table table-bordered">
 		<thead>
 			<th style="background-color: #4CAF50; color: white"> Kode Gudang </th>
 			<th style="background-color: #4CAF50; color: white"> Nama Gudang </th>
 
 <?php
-
-include 'db.php';
-
 $pilih_akses_otoritas = $db->query("SELECT gudang_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND gudang_hapus = '1'");
 $otoritas = mysqli_num_rows($pilih_akses_otoritas);
 
@@ -181,34 +178,6 @@ echo '<th style="background-color: #4CAF50; color: white"> Hapus </th>';
 }
 ?>
 		</thead>
-		
-		<tbody>
-		<?php
-
-		
-			while ($data = mysqli_fetch_array($query))
-			{
-			echo "<tr class='tr-id-". $data['id'] ."'>
-			<td>". $data['kode_gudang'] ."</td>
-			<td class='edit-nama' data-id='".$data['id']."'><span id='text-nama-".$data['id']."'>". $data['nama_gudang'] ."</span> <input type='hidden' id='input-nama-".$data['id']."' value='".$data['nama_gudang']."' class='input_nama' data-id='".$data['id']."' autofocus='' > </td>";
-
-$pilih_akses_otoritas = $db->query("SELECT gudang_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND gudang_hapus = '1'");
-$otoritas = mysqli_num_rows($pilih_akses_otoritas);
-
-    if ($otoritas > 0) {
-echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-gudang='". $data['kode_gudang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-}			
-
-			echo "</tr>";
-		
-			}
-
-//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-			
-		?>
-		</tbody>
-
 	</table>
 </span>
 </div>
@@ -243,8 +212,27 @@ mysqli_close($db);
 		if (data != '') {
 		$("#kode_gudang").val('');
 		$("#nama_gudang").val('');
-		$("#table-baru").load('tabel-gudang.php');
 		$("#myModal").modal("hide");
+		$('#table_gudang').DataTable().destroy();
+		var dataTable = $('#table_gudang').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_gudang.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_gudang").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[3]+'');
+            },
+        });
+
 		}
 		
 		
@@ -272,9 +260,25 @@ mysqli_close($db);
 
 		
 
-		$(".tr-id-"+id+"").remove();
-		
-		
+		$('#table_gudang').DataTable().destroy();
+		var dataTable = $('#table_gudang').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_gudang.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_gudang").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[3]+'');
+            },
+        });
 		
 		});
 		
@@ -293,7 +297,7 @@ mysqli_close($db);
 
                              <script type="text/javascript">
                                  
-                                 $(".edit-nama").dblclick(function(){
+                                 $(document).on('dblclick', '.edit-nama', function (e) {
 
                                     var id = $(this).attr("data-id");
 
@@ -303,7 +307,7 @@ mysqli_close($db);
 
                                  });
 
-                                 $(".input_nama").blur(function(){
+                                 $(document).on('blur', '.input_nama', function (e) {
 
                                     var id = $(this).attr("data-id");
 
@@ -322,13 +326,36 @@ mysqli_close($db);
 
                              </script>
 
-<script type="text/javascript">
-	
-  $(function () {
-  $(".table").dataTable({ordering :false });
-  });
+<!--DATA TABLE MENGGUNAKAN AJAX-->
+<script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
 
-</script>
+          var dataTable = $('#table_gudang').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_gudang.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_gudang").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[3]+'');
+            },
+        });
+
+        $("#form").submit(function(){
+        return false;
+        });
+        
+
+      } );
+    </script>
 
 
 <?php include 'footer.php'; ?>

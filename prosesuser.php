@@ -8,7 +8,7 @@
     $perintah->bind_param("ssssssss",
         $username, $password, $nama, $alamat, $jabatan, $otoritas, $status, $status_sales);
         
-        $username = stringdoang($_POST['username']);
+        $username = stringdoang($_POST['user']);
         $password = enkripsi($_POST['password']);
         $nama = stringdoang($_POST['nama']);
         $alamat = stringdoang($_POST['alamat']);
@@ -26,7 +26,7 @@
     }
     else 
     {
-    echo '<META HTTP-EQUIV="Refresh" Content="0; URL=user.php">';
+    echo '1';
     }
 
 //Untuk Memutuskan Koneksi Ke Database

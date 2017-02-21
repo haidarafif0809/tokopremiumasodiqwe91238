@@ -60,136 +60,136 @@ echo '<a href="form_tambah_daftar_akun.php" class="btn btn-info"><i class="fa fa
        <ul class='nav nav-tabs md-pills pills-ins' role='tablist'>
        <?php if ($kategori == 'semua'): ?>
 
-		<li  class ='nav-item'><a class  ='nav-link active' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
+    <li  class ='nav-item'><a class  ='nav-link active' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Modal' >  Modal </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan' >  Pendapatan </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=HPP' >  HPP </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
-       	
+        
        <?php endif ?>
 
 
        <?php if ($kategori == 'Aktiva'): ?>
 
-		<li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
-		<li class='nav-item'><a class='nav-link active' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
+    <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
+    <li class='nav-item'><a class='nav-link active' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Modal' >  Modal </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan' >  Pendapatan </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=HPP' >  HPP </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
-       	
+        
        <?php endif ?>
 
 
        <?php if ($kategori == 'Kewajiban'): ?>
 
-		<li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
-		<li class='nav-item'><a class='nav-link active' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
+    <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
+    <li class='nav-item'><a class='nav-link active' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Modal' >  Modal </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan' >  Pendapatan </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=HPP' >  HPP </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
-       	
+        
        <?php endif ?>
 
 
        <?php if ($kategori == 'Modal'): ?>
 
-		<li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
+    <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
         <li class='nav-item'><a class='nav-link active' href='daftar_akun.php?kategori=Modal' >  Modal </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan' >  Pendapatan </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=HPP' >  HPP </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
-       	
+        
        <?php endif ?>
 
 
        <?php if ($kategori == 'Pendapatan'): ?>
 
-		<li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
+    <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Modal' >  Modal </a></li>
         <li class='nav-item'><a class='nav-link active' href='daftar_akun.php?kategori=Pendapatan' >  Pendapatan </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=HPP' >  HPP </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
-       	
+        
        <?php endif ?>
 
 
        <?php if ($kategori == 'HPP'): ?>
 
-		<li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
+    <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Modal' >  Modal </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan' >  Pendapatan </a></li>
         <li class='nav-item'><a class='nav-link active' href='daftar_akun.php?kategori=HPP' >  HPP </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
-       	
+        
        <?php endif ?>
 
 
        <?php if ($kategori == 'Biaya'): ?>
 
-		<li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
+    <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Modal' >  Modal </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan' >  Pendapatan </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=HPP' >  HPP </a></li>
         <li class='nav-item'><a class='nav-link active' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
-       	
+        
        <?php endif ?>
 
 
        <?php if ($kategori == 'Pendapatan Lain'): ?>
 
-		<li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
+    <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Modal' >  Modal </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan' >  Pendapatan </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=HPP' >  HPP </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link active' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
-       	
+        
        <?php endif ?>
 
 
        <?php if ($kategori == 'Biaya Lain'): ?>
 
-		<li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
-		<li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
+    <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=semua'> Semua  </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
+    <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Modal' >  Modal </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan' >  Pendapatan </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=HPP' >  HPP </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link active' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
-       	
+        
        <?php endif ?>
 
          </ul>
@@ -241,15 +241,15 @@ echo '<a href="form_tambah_daftar_akun.php" class="btn btn-info"><i class="fa fa
 <div class="table-responsive">
 <span id="table-baru">
 <table id="tableuser" class="table table-bordered">
-		<thead>
-			<th style="background-color: #4CAF50; color:white"> Kode Akun </th>
-			<th style="background-color: #4CAF50; color:white"> Nama Akun </th>
-			<th style="background-color: #4CAF50; color:white"> Group Akun </th>
-			<th style="background-color: #4CAF50; color:white"> Kategori Akun</th>
-			<th style="background-color: #4CAF50; color:white"> Tipe Akun </th>
-			<th style="background-color: #4CAF50; color:white"> User Buat</th>
-			<th style="background-color: #4CAF50; color:white"> User Edit </th>
-			<th style="background-color: #4CAF50; color:white"> Waktu </th>
+    <thead>
+      <th style="background-color: #4CAF50; color:white"> Kode Akun </th>
+      <th style="background-color: #4CAF50; color:white"> Nama Akun </th>
+      <th style="background-color: #4CAF50; color:white"> Group Akun </th>
+      <th style="background-color: #4CAF50; color:white"> Kategori Akun</th>
+      <th style="background-color: #4CAF50; color:white"> Tipe Akun </th>
+      <th style="background-color: #4CAF50; color:white"> User Buat</th>
+      <th style="background-color: #4CAF50; color:white"> User Edit </th>
+      <th style="background-color: #4CAF50; color:white"> Waktu </th>
 
 <?php 
 include 'db.php';
@@ -259,108 +259,108 @@ $satuan_hapus = mysqli_num_rows($pilih_akses_satuan_hapus);
 
 
     if ($satuan_hapus > 0){
-			echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
+      echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
 
-		}
+    }
 ?>
 
-			
-		</thead>
-		
-		<tbody>
-		<?php
+      
+    </thead>
+    
+    <tbody>
+    <?php
 
-		
-			while ($data = mysqli_fetch_array($perintah))
-			{
-				$query2 = $db->query("SELECT kode_grup_akun FROM grup_akun");
-				$data1 = mysqli_fetch_array($query2);
+    
+      while ($data = mysqli_fetch_array($perintah))
+      {
+        $query2 = $db->query("SELECT kode_grup_akun FROM grup_akun");
+        $data1 = mysqli_fetch_array($query2);
 
-			echo "<tr class='tr-id-". $data['id'] ."'>
-			<td>". $data['kode_daftar_akun'] ."</td>
+      echo "<tr class='tr-id-". $data['id'] ."'>
+      <td>". $data['kode_daftar_akun'] ."</td>
 
-			<td class='edit-nama' data-id='".$data['id']."'><span id='text-nama-". $data['id'] ."'>". $data['nama_daftar_akun'] ."</span>
-			<input type='hidden' id='input-nama-".$data['id']."' value='".$data['nama_daftar_akun']."' class='input_nama' data-id='".$data['id']."' autofocus=''></td>
+      <td class='edit-nama' data-id='".$data['id']."'><span id='text-nama-". $data['id'] ."'>". $data['nama_daftar_akun'] ."</span>
+      <input type='hidden' id='input-nama-".$data['id']."' value='".$data['nama_daftar_akun']."' class='input_nama' data-id='".$data['id']."' autofocus=''></td>
 
-			<td class='edit-parent' data-id='".$data['id']."'><span id='text-parent-".$data['id']."'>". $data['grup_akun'] ."</span>
-			<select style='display:none' id='select-parent-".$data['id']."' value='".$data['grup_akun']."' class='select-parent' data-id='".$data['id']."' autofocus=''>";
+      <td class='edit-parent' data-id='".$data['id']."'><span id='text-parent-".$data['id']."'>". $data['grup_akun'] ."</span>
+      <select style='display:none' id='select-parent-".$data['id']."' value='".$data['grup_akun']."' class='select-parent' data-id='".$data['id']."' autofocus=''>";
 
-			echo '<option value="'. $data1['kode_grup_akun'] .'">'. $data1['kode_grup_akun'] .'</option>';
-			
-			
-			
-			while($data2 = mysqli_fetch_array($query2))
-			{
-			
-			echo ' <option>'.$data2["kode_grup_akun"] .'</option>';
-			}
-			
-			
-			echo  '</select>
-			</td>';
+      echo '<option value="'. $data1['kode_grup_akun'] .'">'. $data1['kode_grup_akun'] .'</option>';
+      
+      
+      
+      while($data2 = mysqli_fetch_array($query2))
+      {
+      
+      echo ' <option>'.$data2["kode_grup_akun"] .'</option>';
+      }
+      
+      
+      echo  '</select>
+      </td>';
 
-			echo"
-			<td class='edit-kategori' data-id='".$data['id']."'><span id='text-kategori-".$data['id']."'>". $data['kategori_akun'] ."</span>
-			<select style='display:none' id='select-kategori-".$data['id']."' value='".$data['kategori_akun']."' class='select-kategori' data-id='".$data['id']."' autofocus=''>";
+      echo"
+      <td class='edit-kategori' data-id='".$data['id']."'><span id='text-kategori-".$data['id']."'>". $data['kategori_akun'] ."</span>
+      <select style='display:none' id='select-kategori-".$data['id']."' value='".$data['kategori_akun']."' class='select-kategori' data-id='".$data['id']."' autofocus=''>";
 
-			echo '<option value="'. $data['kategori_akun'] .'"> '. $data['kategori_akun'] .'</option> 
-			
-					<option value="Aktiva">Aktiva</option>	
-					<option value="Kewajiban">Kewajiban</option>	
-					<option value="Modal">Modal</option>	
-					<option value="Pendapatan">Pendapatan</option>	
-					<option value="HPP">HPP</option>	
-					<option value="Biaya">Biaya</option>
-					<option value="Pendapatan Lain">Pendapatan Lain</option>	
-					<option value="Biaya Lain">Biaya Lain</option>	
-					</select>
-			</td>';
+      echo '<option value="'. $data['kategori_akun'] .'"> '. $data['kategori_akun'] .'</option> 
+      
+          <option value="Aktiva">Aktiva</option>  
+          <option value="Kewajiban">Kewajiban</option>  
+          <option value="Modal">Modal</option>  
+          <option value="Pendapatan">Pendapatan</option>  
+          <option value="HPP">HPP</option>  
+          <option value="Biaya">Biaya</option>
+          <option value="Pendapatan Lain">Pendapatan Lain</option>  
+          <option value="Biaya Lain">Biaya Lain</option>  
+          </select>
+      </td>';
 
-			echo"
-			<td class='edit-tipe' data-id='".$data['id']."'><span id='text-tipe-".$data['id']."'>". $data['tipe_akun'] ."</span>
-			<select style='display:none' id='select-tipe-".$data['id']."' value='".$data['tipe_akun']."' class='select-tipe' data-id='".$data['id']."' autofocus=''>";
+      echo"
+      <td class='edit-tipe' data-id='".$data['id']."'><span id='text-tipe-".$data['id']."'>". $data['tipe_akun'] ."</span>
+      <select style='display:none' id='select-tipe-".$data['id']."' value='".$data['tipe_akun']."' class='select-tipe' data-id='".$data['id']."' autofocus=''>";
 
-			echo '<option value="'.$data['tipe_akun'].'"> '. $data['tipe_akun'] .'</option>
+      echo '<option value="'.$data['tipe_akun'].'"> '. $data['tipe_akun'] .'</option>
 
-					<option>Akun Header</option>	
-					<option>Kas & Bank</option>	
-					<option>Piutang Dagang</option>	
-					<option>Piutang Non Dagang</option>	
-					<option>Persediaan</option>	
-					<option>Investasi Portofolio</option>	
-					<option>Pajak Dibayar Dimuka</option>	
-					<option>Beban Bayar Dimuka</option>	
-					<option>Aktiva Tetap</option>	
-					<option>Akumulasi Penyusutan</option>	
-					<option>Hutang Dagang</option>	
-					<option>Pendapatan Diterima Dimuka</option>	
-					<option>Beban YMH Dibayar</option>	
-					<option>Hutang Pajak</option>	
-					<option>Hutang Bank Jangka Pendek</option>	
-					<option>Hutang Bukan Bank Jangka Pendek</option>	
-					<option>Hutang Non Dagang</option>	
-					<option>Ekuitas</option>
-					<option>Pendapatan Penjualan</option>		
-					<option>Pendapatan Diluar Usaha</option>	
-					<option>Harga Pokok Penjualan</option>	
-					<option>Beban Administrasi dan Umum</option>
-					<option>Beban Penjualan</option>
-					<option>Beban Pemansaran</option>
-					<option>Beban Operasional</option>
-					<option>Beban Diluar Usaha</option>
-					<option>Bunga Pinjaman</option>
-					<option>Hutang Bank Jangka Panjang</option>
-					<option>Hutang Bukan Bank Jangka Panjang</option>
-					<option>Deviden</option>
-					<option>Beban Pajak Penghasilan</option>
+          <option>Akun Header</option>  
+          <option>Kas & Bank</option> 
+          <option>Piutang Dagang</option> 
+          <option>Piutang Non Dagang</option> 
+          <option>Persediaan</option> 
+          <option>Investasi Portofolio</option> 
+          <option>Pajak Dibayar Dimuka</option> 
+          <option>Beban Bayar Dimuka</option> 
+          <option>Aktiva Tetap</option> 
+          <option>Akumulasi Penyusutan</option> 
+          <option>Hutang Dagang</option>  
+          <option>Pendapatan Diterima Dimuka</option> 
+          <option>Beban YMH Dibayar</option>  
+          <option>Hutang Pajak</option> 
+          <option>Hutang Bank Jangka Pendek</option>  
+          <option>Hutang Bukan Bank Jangka Pendek</option>  
+          <option>Hutang Non Dagang</option>  
+          <option>Ekuitas</option>
+          <option>Pendapatan Penjualan</option>   
+          <option>Pendapatan Diluar Usaha</option>  
+          <option>Harga Pokok Penjualan</option>  
+          <option>Beban Administrasi dan Umum</option>
+          <option>Beban Penjualan</option>
+          <option>Beban Pemansaran</option>
+          <option>Beban Operasional</option>
+          <option>Beban Diluar Usaha</option>
+          <option>Bunga Pinjaman</option>
+          <option>Hutang Bank Jangka Panjang</option>
+          <option>Hutang Bukan Bank Jangka Panjang</option>
+          <option>Deviden</option>
+          <option>Beban Pajak Penghasilan</option>
 
-			</select>
-			</td>';
+      </select>
+      </td>';
 
-			echo"
-			<td>". $data['user_buat'] ."</td>
-			<td>". $data['user_edit'] ."</td>
-			<td>". $data['waktu'] ."</td>";
+      echo"
+      <td>". $data['user_buat'] ."</td>
+      <td>". $data['user_edit'] ."</td>
+      <td>". $data['waktu'] ."</td>";
 
 
 include 'db.php';
@@ -370,68 +370,68 @@ $satuan_hapus = mysqli_num_rows($pilih_akses_satuan_hapus);
 
 
     if ($satuan_hapus > 0){
-			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-akun='". $data['nama_daftar_akun'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>
+      echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-akun='". $data['nama_daftar_akun'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>
 
-			</tr>";
-		}
+      </tr>";
+    }
 
-			}
+      }
 
 //Untuk Memutuskan Koneksi Ke Database
 
 mysqli_close($db); 
-			
-		?>
-		</tbody>
+      
+    ?>
+    </tbody>
 
-	</table>
+  </table>
 </span>
 </div>
 
 </div>
 
 
-		<script>
-		
-		$(document).ready(function(){
-		$('#tableuser').DataTable(
-			{"ordering": false});
-		});
-		</script>
+    <script>
+    
+    $(document).ready(function(){
+    $('#tableuser').DataTable(
+      {"ordering": false});
+    });
+    </script>
 
 <script type="text/javascript">
     $(document).ready(function(){
-	//fungsi hapus data 
-		$(".btn-hapus").click(function(){
-		var nama_group = $(this).attr("data-akun");
-		var id = $(this).attr("data-id");
-		$("#nama_group").val(nama_group);
-		$("#id_hapus").val(id);
-		$("#modal_hapus").modal('show');
-		
-		
-		});
+  //fungsi hapus data 
+    $(".btn-hapus").click(function(){
+    var nama_group = $(this).attr("data-akun");
+    var id = $(this).attr("data-id");
+    $("#nama_group").val(nama_group);
+    $("#id_hapus").val(id);
+    $("#modal_hapus").modal('show');
+    
+    
+    });
 
 
-		$("#btn_jadi_hapus").click(function(){
-		
-		var id = $("#id_hapus").val();
-		$.post("hapus_daftar_akun.php",{id:id},function(data){
-		if (data != "") {
-		
-		$(".tr-id-"+id+"").remove();
-		$("#modal_hapus").modal('hide');
-		
-		}
+    $("#btn_jadi_hapus").click(function(){
+    
+    var id = $("#id_hapus").val();
+    $.post("hapus_daftar_akun.php",{id:id},function(data){
+    if (data != "") {
+    
+    $(".tr-id-"+id+"").remove();
+    $("#modal_hapus").modal('hide');
+    
+    }
 
-		
-		});
-		
-		});
-		});
+    
+    });
+    
+    });
+    });
 
 
-	$("form").submit(function(){
+  $("form").submit(function(){
     return false;
     
     });

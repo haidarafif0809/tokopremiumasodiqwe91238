@@ -86,7 +86,7 @@ while( $row=mysqli_fetch_array($query) ) {
     $nestedData[] = $row["nama"];
     $nestedData[] = $row["kategori"];
     $nestedData[] = $row["suplier"];
-    $nestedData[] = $row["nama"];
+    $nestedData[] = $row["satuan"];
     $nestedData[] = $row["over_stok"];
     $nestedData[] = $row["id"];
     

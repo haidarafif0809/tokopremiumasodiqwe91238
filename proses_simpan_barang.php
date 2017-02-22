@@ -98,7 +98,7 @@ $nomor = 1 + $ambil_nomor ;
 
 
               
-    $query0 = $db->query("SELECT * FROM tbs_fee_produk WHERE nama_petugas = '$sales' AND no_faktur = '$no_faktur' ");
+    $query0 = $db->query("SELECT * FROM tbs_fee_produk WHERE nama_petugas = '$sales' AND session_id = '$session_id' ");
    while  ($cek0 = mysqli_fetch_array($query0)){
 
 
@@ -181,7 +181,7 @@ $nomor = 1 + $ambil_nomor ;
               
      
 
-
+/*
 $select_setting_akun = $db->query("SELECT * FROM setting_akun");
 $ambil_setting = mysqli_fetch_array($select_setting_akun);
 
@@ -266,7 +266,7 @@ if ($potongan != "" || $potongan != 0 ) {
 //POTONGAN
         $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Penjualan Piutang - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[potongan_jual]', '$potongan', '0', 'Penjualan', '$no_faktur','1', '$user')");
 }
-
+*/
 
    
 

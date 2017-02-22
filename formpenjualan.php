@@ -3081,7 +3081,7 @@ $(document).ready(function(){
             $("#tax").val('');
             $("#kd_pelanggan").chosen("destroy");
             $("#kd_pelanggan").val('');
-
+$("#span_tbs").hide();
        
        
        });

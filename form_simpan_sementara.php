@@ -1810,7 +1810,7 @@ $("#form_barcode").submit(function(){
    //SCRIPT START PROSES SUBMIT PRODUK
   $("#submit_produk").click(function(){
 
-    var no_faktur = $("#nomor_faktur_penjualan").val();
+    var no_faktur = $("#no_faktur").val();
     var kode_pelanggan = $("#kd_pelanggan").val();
     var kode_barang = $("#kode_barang").val();
     var n = kode_barang.indexOf("(");
@@ -1987,7 +1987,7 @@ $("#kode_barang").focus();
       $("#tax_rp").val(Math.round(hasil_tax));
 
 // POST KE PROSES TBSNYA JIKA JASA
- $.post("prosestbspenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+ $.post("proses_tbs_simpan_sementara.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
      
   
 
@@ -2027,7 +2027,7 @@ $("#kode_barang").focus();
     $("#kode_barang").focus();
 
 // POST KE TBS ALL PRODUK
-    $.post("prosestbspenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+    $.post("proses_tbs_simpan_sementara.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
      
      $("#level_harga").attr("disabled", true);
       $("#ppn").attr("disabled", true);
@@ -2049,14 +2049,19 @@ $("#kode_barang").focus();
      });
     // show ajax tbs
    $('#tabel_tbs_penjualan').DataTable().destroy();
+            var no_faktur = $("#no_faktur").val();
             var dataTable = $('#tabel_tbs_penjualan').DataTable( {
             "processing": true,
             "serverSide": true,
             "info":     false,
             "language": { "emptyTable":     "My Custom Message On Empty Table" },
             "ajax":{
-              url :"data_tbs_penjualan.php", // json datasource
-             
+              url :"data_tbs_penjualan_simpan.php", // json datasource
+              "data": function ( d ) {
+                      d.no_faktur = $("#no_faktur").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
                   type: "post",  // method  , by default get
               error: function(){  // error handling
                 $(".tbody").html("");
@@ -2900,26 +2905,30 @@ if (pesan_alert == true) {
           
           $('#tabel_tbs_penjualan').DataTable().destroy();
 
-                        var dataTable = $('#tabel_tbs_penjualan').DataTable( {
-                          "processing": true,
-                          "serverSide": true,
-                          "ajax":{
-                            url :"data_tbs_penjualan.php", // json datasource
-                           
-                             
-                              type: "post",  // method  , by default get
-                            error: function(){  // error handling
-                              $(".employee-grid-error").html("");
-                              $("#tabel_tbs_penjualan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-                              $("#employee-grid_processing").css("display","none");
-                              }
-                          },
-                             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+             var no_faktur = $("#no_faktur").val();
 
-                              $(nRow).attr('class','tr-id-'+aData[11]+'');         
+            var dataTable = $('#tabel_tbs_penjualan').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "info":     false,
+            "language": { "emptyTable":     "My Custom Message On Empty Table" },
+            "ajax":{
+              url :"data_tbs_penjualan_simpan.php", // json datasource
+              "data": function ( d ) {
+                      d.no_faktur = $("#no_faktur").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+                  type: "post",  // method  , by default get
+              error: function(){  // error handling
+                $(".tbody").html("");
+                $("#tabel_tbs_penjualan").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                $("#tableuser_processing").css("display","none");
+                
+              }
+            }   
 
-                          }
-                        });
+      });
 
             if (total_akhir1 == 0) {
               

@@ -12,12 +12,8 @@ include 'sanitasi.php';
  $nama_gudang = $_GET['nama_gudang'];
  $kode_gudang = $_GET['kode_gudang'];
 
-
-
     $select_pel = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$kode_pelanggan'");
     $nma_pelanggan = mysqli_fetch_array($select_pel);
-
-
 
     $perintah = $db->query("SELECT tanggal FROM penjualan WHERE no_faktur = '$nomor_faktur'");
     $ambil_tanggal = mysqli_fetch_array($perintah);
@@ -84,7 +80,7 @@ include 'sanitasi.php';
   </script>
 
 <!--untuk membuat agar tampilan form terlihat rapih dalam satu tempat -->
- <div class="container">
+ <div style="padding-left: 5%; padding-right: 5%">
 
 
   <!--membuat teks dengan ukuran h3-->      
@@ -102,7 +98,7 @@ include 'sanitasi.php';
 
 <div class="row">
 
-<div class="form-group col-sm-3">
+<div class="form-group col-sm-4">
   <label> Kode Pelanggan </label>
   <select type="text" name="kode_pelanggan" id="kd_pelanggan" class="form-control chosen"  required="" autofocus="">
   <option value="<?php echo $kode_pelanggan; ?>"><?php echo $kode_pelanggan; ?> - <?php echo $nma_pelanggan['nama_pelanggan']; ?></option>
@@ -124,61 +120,9 @@ include 'sanitasi.php';
   </select>
 </div>
 
-<div class="form-group col-sm-3">
-    <label> Nomor Faktur </label>
-    <input type="text"  style="height:15px;font-size:15px" name="no_faktur" id="nomor_faktur_penjualan" class="form-control" readonly="" value="<?php echo $nomor_faktur; ?>" required="" >
-</div>
-
-
-<div class="form-group  col-sm-3">
-      <label> Tanggal </label>
-      <input type="text" style="height:15px;font-size:15px" name="tanggal" id="tanggal"  value="<?php echo $ambil_tanggal['tanggal']; ?>" class="form-control tanggal" autocomplete="off" >
-</div>
-
-
-<div class="form-group col-sm-3">
-  <label> Level Harga </label><br>
-  <select type="text" name="level_harga" id="level_harga" class="form-control" required="" >
-  <option value="harga_1">Level 1</option>
-  <option value="harga_2">Level 2</option>
-  <option value="harga_3">Level 3</option>
-  <option value="harga_4">Level 4</option>
-  <option value="harga_5">Level 5</option>
-  <option value="harga_6">Level 6</option>
-  <option value="harga_7">Level 7</option>
-  </select>
-</div>
-
-</div><!--end div row data informasi pelanggan -->
-
-
-<div class="row">
-
-
-<div class="form-group  col-sm-3">
-    <label>Sales</label>
-      <select name="sales" id="sales" class="form-control" required="">
-  <?php 
-    
-    //untuk menampilkan semua data pada tabel pelanggan dalam DB
-    $query01 = $db->query("SELECT id,nama FROM user WHERE status_sales = 'Iya'");
-
-    //untuk menyimpan data sementara yang ada pada $query
-    while($data01 = mysqli_fetch_array($query01))
-    {
-    
-    echo "<option value='".$data01['id'] ."'>".$data01['nama'] ."</option>";
-    }
-    
-    
-    ?>
-  </select>
-</div>
-
-
-<div class="form-group  col-sm-3">
+<div class="form-group  col-sm-2">
     <label> Gudang </label><br>
-       <select name="kode_gudang" id="kode_gudang" class="form-control" required="" >
+       <select name="kode_gudang" id="kode_gudang" class="form-control chosen" required="" >
           <option value=<?php echo $kode_gudang; ?>><?php echo $nama_gudang; ?></option>
           <?php 
           
@@ -197,9 +141,42 @@ include 'sanitasi.php';
     </select>
 </div>
 
+<div class="form-group  col-sm-2">
+    <label>Sales</label>
+      <select name="sales" id="sales" class="form-control chosen" required="">
+  <?php 
+    
+    //untuk menampilkan semua data pada tabel pelanggan dalam DB
+    $query01 = $db->query("SELECT id,nama FROM user WHERE status_sales = 'Iya'");
+
+    //untuk menyimpan data sementara yang ada pada $query
+    while($data01 = mysqli_fetch_array($query01))
+    {
+    
+    echo "<option value='".$data01['id'] ."'>".$data01['nama'] ."</option>";
+    }
+    
+    
+    ?>
+  </select>
+</div>
+
+<div class="form-group col-sm-2">
+  <label> Level Harga </label><br>
+  <select type="text" name="level_harga" id="level_harga" class="form-control" required="" >
+  <option value="harga_1">Level 1</option>
+  <option value="harga_2">Level 2</option>
+  <option value="harga_3">Level 3</option>
+  <option value="harga_4">Level 4</option>
+  <option value="harga_5">Level 5</option>
+  <option value="harga_6">Level 6</option>
+  <option value="harga_7">Level 7</option>
+  </select>
+</div>
 
 
-<div class="form-group  col-sm-3">
+
+<div class="form-group  col-sm-2">
       <label>PPN</label>
           <select name="ppn" id="ppn" class="form-control">
             <option value="<?php echo $ppn; ?>"><?php echo $ppn; ?></option>  
@@ -208,6 +185,26 @@ include 'sanitasi.php';
             <option value="Non">Non</option>          
         </select>
 </div>
+
+</div><!--end div row data informasi pelanggan -->
+
+
+<div class="row">
+
+
+
+<div class="form-group col-sm-2">
+    <label> Nomor Faktur </label>
+    <input type="text"  style="height:15px;font-size:15px" name="no_faktur" id="nomor_faktur_penjualan" class="form-control" readonly="" value="<?php echo $nomor_faktur; ?>" required="" >
+</div>
+
+
+<div class="form-group  col-sm-2">
+      <label> Tanggal </label>
+      <input type="text" style="height:15px;font-size:15px" name="tanggal" id="tanggal"  value="<?php echo $ambil_tanggal['tanggal']; ?>" class="form-control tanggal" autocomplete="off" >
+</div>
+
+
 
 
 
@@ -941,7 +938,7 @@ if ($_SESSION['otoritas'] == 'Pimpinan') {
           
 <div class="row">
     <div class="col-sm-3">
-    <a href="penjualan.php?status=semua" id="transaksi_baru" class="btn btn-primary"  style="display: none;">Transaksi Baru</a>
+    <a href="penjualan.php?status=semua" id="transaksi_baru" class="btn btn-primary"  style="display: none;">Kembali Ke Laporan</a>
     </div>
     
     <div class="col-sm-3">
@@ -1994,13 +1991,6 @@ var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total
      });
 }
     
-
-      
-  });
-
-  $("#formtambahproduk").submit(function(){
-    return false;
-
 //
      $('#tabel_tbs_penjualan').DataTable().destroy();
 
@@ -2029,6 +2019,13 @@ var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total
                           }
                         });
      //
+      
+  });
+
+  $("#formtambahproduk").submit(function(){
+    return false;
+
+
 });
 </script>
 
@@ -2148,6 +2145,8 @@ alert("Pembayaran Harus Di Isi");
      $("#cetak_tunai").show();
      $("#cetak_tunai_besar").show();
        
+
+     $("#span_tbs").hide();
    });
 
   }
@@ -2262,7 +2261,8 @@ else{
         $("#potongan_persen").val('');
         $("#tanggal_jt").val('');
         $("#cetak_piutang").show();
-        
+             $("#span_tbs").hide();
+
         $("#total1").val('');
        $("#pembayaran_penjualan").val('');
        $("#sisa_pembayaran_penjualan").val('');
@@ -3170,6 +3170,10 @@ $(document).on('click','.btn-hapus-tbs',function(e){
       tax_faktur = 0;
     };
 
+var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+  if (biaya_adm == '') {
+      biaya_adm = 0;
+    };
     var subtotal_tbs = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
     
     var pot_fakt_per = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
@@ -3191,7 +3195,7 @@ $(document).on('click','.btn-hapus-tbs',function(e){
       var hitung_tax = parseInt(total_akhir1,10) - parseInt(pot_fakt_rp,10);
       var tax_bener = parseInt(hitung_tax,10) * parseInt(tax_faktur,10) / 100;
 
-      var total_akhir = parseInt(total_akhir1,10) - parseInt(pot_fakt_rp,10) + parseInt(Math.round(tax_bener,10));
+      var total_akhir = parseInt(total_akhir1,10) - parseInt(pot_fakt_rp,10) + parseInt(biaya_adm,10);/*+ parseInt(Math.round(tax_bener,10));*/
 
 
     }
@@ -3208,7 +3212,8 @@ $(document).on('click','.btn-hapus-tbs',function(e){
       var hitung_tax = parseInt(total_akhir1,10) - parseInt(potongaaan,10);
       var tax_bener = parseInt(hitung_tax,10) * parseInt(tax_faktur,10) / 100;
 
-     var total_akhir = parseInt(total_akhir1,10) - parseInt(potongaaan,10) + parseInt(Math.round(tax_bener,10));
+     var total_akhir = parseInt(total_akhir1,10) - parseInt(potongaaan,10) + parseInt(biaya_adm,10);
+     /*+ parseInt(Math.round(tax_bener,10));*/
 
     }
      else if(pot_fakt_rp != 0 && pot_fakt_rp != 0)
@@ -3223,7 +3228,8 @@ $(document).on('click','.btn-hapus-tbs',function(e){
       var hitung_tax = parseInt(total_akhir1,10) - parseInt(potongaaan,10);
       var tax_bener = parseInt(hitung_tax,10) * parseInt(tax_faktur,10) / 100;
 
-      var total_akhir = parseInt(total_akhir1,10) - parseInt(potongaaan,10) + parseInt(Math.round(tax_bener,10));
+    var total_akhir = parseInt(total_akhir1,10) - parseInt(potongaaan,10) + parseInt(biaya_adm,10);
+      /*+ parseInt(Math.round(tax_bener,10));*/
 
     
     }

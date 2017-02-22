@@ -4,14 +4,52 @@ include 'header.php';
 include 'navbar.php';
 include 'db.php';
 include 'sanitasi.php';
- 
-// menampilkan seluruh data yang ada pada tabel penjualan yang terdapt pada DB
- $perintah = $db->query("SELECT * FROM penjualan");
 
 
 $session_id = session_id();
 
  ?>
+
+<!--tampilan modal-->
+
+
+<div id="modal_simpan" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+    <!-- isi modal-->
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><center><h3><b>Data Penjualan Simpan</b></h3></center></h4>
+      </div>
+      <div class="modal-body">
+
+  <div class="table-responsive">
+  <table id="table_simpan" class="table table-bordered table-sm">
+  <thead> <!-- untuk memberikan nama pada kolom tabel -->
+
+            <th> Kode Pelanggan </th>
+            <th> Nama Pelanggan </th>
+            <th> No Faktur </th>
+            <th> Total </th>
+            <th> Diskon</th>
+            <th> Biaya Admin</th>
+            <th> Tanggal</th>
+            <th> Jam</th>
+
+  </thead> <!-- tag penutup tabel -->
+  </table>
+  </div>
+
+ 
+</div> <!-- tag penutup modal-body-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- end of modal data barang  -->
 
 <!-- Modal Untuk Confirm PESAN alert-->
 <div id="modal_promo_alert" class="modal fade" role="dialog">
@@ -59,7 +97,7 @@ $session_id = session_id();
 
 <!--untuk membuat agar tampilan form terlihat rapih dalam satu tempat -->
  <div style="padding-left: 5%; padding-right: 5%">
-  <h3> FORM PENJUALAN </h3>
+  <h3> DATA SIMPAN SEMENTARA </h3>
 <div class="row">
 
 <div class="col-sm-8">
@@ -76,35 +114,13 @@ $session_id = session_id();
 
 <div class="row">
 
-<div class="col-sm-4">
-    <label> Kode Pelanggan </label><br>
-  <select name="kode_pelanggan" id="kd_pelanggan" class="form-control chosen" required="" autofocus="">
- 
-          
-  <?php 
-    
-    //untuk menampilkan semua data pada tabel pelanggan dalam DB
-    $query = $db->query("SELECT * FROM pelanggan");
+<div class="col-sm-2">
+<button type="button" id="cari_save_konsumen" class="btn btn-purple " data-toggle="modal" data-target="#modal_simpan"><i class='fa  fa-search'></i> Data Simpan (CTRL+F1)  </button> 
+</div>
 
-    //untuk menyimpan data sementara yang ada pada $query
-    while($data = mysqli_fetch_array($query))
-    {
-            if ($data['default_pelanggan'] == '1') {
-
-    echo "<option selected value='".$data['kode_pelanggan'] ."' class='opt-pelanggan-".$data['kode_pelanggan']."' data-level='".$data['level_harga'] ."'>".$data['kode_pelanggan'] ." - ".$data['nama_pelanggan'] ."</option>";
-              
-            }
-
-            else{
-
-    echo "<option value='".$data['kode_pelanggan'] ."' class='opt-pelanggan-".$data['kode_pelanggan']."' data-level='".$data['level_harga'] ."'>".$data['kode_pelanggan'] ." - ".$data['nama_pelanggan'] ."</option>";
-
-            }
-    }
-    
-    
-    ?>
-    </select>
+<div class="col-sm-2">
+<label> No Faktur </label>
+ <input type="text" name="no_faktur" id="no_faktur" class="form-control" readonly="">
 </div>
     
 
@@ -204,20 +220,6 @@ $session_id = session_id();
 
 <button type="button" id="daftar_order" class="btn btn-success" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
 
-<?php 
-$hud = $db->query("SELECT setting_tampil FROM setting_antrian");
-$my = mysqli_fetch_array($hud);
-
-if ($my['setting_tampil'] == 'Tampil')
-{
-?>
-
-
-
-<button class="btn btn-purple" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
-Antrian  </button>
-
-
 
 
 <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
@@ -271,9 +273,6 @@ tr:nth-child(even){background-color: #f2f2f2}
 </tbody>
  </table>
 </div>
-<?php
-}
-?> 
 
 
 
@@ -1337,8 +1336,112 @@ $(document).ready(function(){
  </script>
 <!--Start Ajax Modal Cari-->
 
+<!--Start Ajax Modal Cari Data Simpan Sementara-->
+<script type="text/javascript" language="javascript" >
+   $(document).ready(function() {
+        var dataTable = $('#table_simpan').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"data_modal_simpan_sementara.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_simpan").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
 
-<!--START INPUT DARI MODAL CARI-->
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class', "pilih_simpan");
+              $(nRow).attr('data-faktur', aData[2]);
+              $(nRow).attr('data-potongan', aData[4]);
+              $(nRow).attr('data-admin', aData[5]);
+              $(nRow).attr('id-penjualan', aData[8]);
+
+          }
+
+        });    
+     
+  });
+ </script>
+<!--Start Ajax Modal Cari Data Simpan Sementara-->
+
+
+<!--START INPUT DARI MODAL PELANGGAN YANG SIMPAN-->
+<script type="text/javascript">
+//AMBIL DAN INPUT KE FORM DARI CARI BARANG
+$(document).on('click', '.pilih_simpan', function (e) {
+
+  document.getElementById("no_faktur").value = $(this).attr('data-faktur');
+    document.getElementById("potongan_penjualan").value = $(this).attr('data-potongan');
+  document.getElementById("biaya_adm").value = $(this).attr('data-admin');
+
+  var no_faktur = $(this).attr('data-faktur');
+
+//POST UNTUK AMBIL BARANG DARI DETAIL MASUKIN KE TBS
+	$.post('proses_simpan_ambil_barang.php',{no_faktur:no_faktur},function(info) {
+		
+  $('#modal_simpan').modal('hide'); 
+  $("#pembayaran_penjualan").focus();
+
+/// 	              
+// START DATATABLE AJAX START TBS PENJUALAN
+      $('#tabel_tbs_penjualan').DataTable().destroy();
+             var no_faktur = $("#no_faktur").val();
+
+            var dataTable = $('#tabel_tbs_penjualan').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "info":     false,
+            "language": { "emptyTable":     "My Custom Message On Empty Table" },
+            "ajax":{
+              url :"data_tbs_penjualan_simpan.php", // json datasource
+              "data": function ( d ) {
+                      d.no_faktur = $("#no_faktur").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+                  type: "post",  // method  , by default get
+              error: function(){  // error handling
+                $(".tbody").html("");
+                $("#tabel_tbs_penjualan").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                $("#tableuser_processing").css("display","none");
+                
+              }
+            }   
+
+      });
+        
+        $("#span_tbs").show();
+        $("#btnRujukLab").show();
+// END DATATABLE AJAX END DATATABLE AJAX TBS PENJUALAN
+
+ var no_faktur = $("#no_faktur").val();
+
+	$.post('cek_total_data_simpan.php',{no_faktur:no_faktur},function(data) {
+		//input subtotalnya
+        $("#total2").val(tandaPemisahTitik(data));
+
+        //input total akhirnya
+    var biaya_admin = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+    var diskon = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
+    var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+
+        var hasil = parseInt(subtotal,10) + parseInt(biaya_admin,10) - parseInt(diskon,10);
+       
+                $("#total1").val(tandaPemisahTitik(hasil));
+
+    });
+///
+});
+});
+</script>
+<!--ENDING MODAL PELANGGAN YANG SIMPAN-->
+
+<!--START INPUT DARI MODAL CARI PRODUK-->
 <script type="text/javascript">
 //AMBIL DAN INPUT KE FORM DARI CARI BARANG
 $(document).on('click', '.pilih', function (e) {
@@ -2994,19 +3097,6 @@ function myFunction(event) {
   }
 </script>
 
-<script type="text/javascript">
-$(document).ready(function(){
-
-  var session_id = $("#session_id").val();
-
-    $.get("cek_total_seluruh.php",
-        function(data){
-        $("#total2").val(tandaPemisahTitik(data));
-        $("#total1").val(tandaPemisahTitik(data));
-    });
-
-});
-</script>
 
 
      <script>
@@ -3352,6 +3442,12 @@ $(document).ready(function(){
 
     }); 
 
+shortcut.add("ctrl+f1", function() {
+        // Do something
+
+        $("#cari_save_konsumen").click();
+
+    }); 
     shortcut.add("f6", function() {
         // Do something
 
@@ -3561,38 +3657,7 @@ $(document).ready(function(){
 });
 </script>
 
- <script type="text/javascript">
-   $(document).on('ready', function (e) {                
-// START DATATABLE AJAX START TBS PENJUALAN
-      $('#tabel_tbs_penjualan').DataTable().destroy();
-            var dataTable = $('#tabel_tbs_penjualan').DataTable( {
-            "processing": true,
-            "serverSide": true,
-            "info":     false,
-            "language": { "emptyTable":     "My Custom Message On Empty Table" },
-            "ajax":{
-              url :"data_tbs_penjualan.php", // json datasource
-             
-                  type: "post",  // method  , by default get
-              error: function(){  // error handling
-                $(".tbody").html("");
-                $("#tabel_tbs_penjualan").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                $("#tableuser_processing").css("display","none");
-                
-              }
-            }   
-
-      });
-        
-        $("#span_tbs").show()
-        $("#btnRujukLab").show()
-        $('#pembayaran_penjualan').val('');
-        $('#potongan_penjualan').val('');
-        $('#potongan_persen').val('');
-
-// END DATATABLE AJAX END DATATABLE AJAX TBS PENJUALAN
-});
- </script>
+ 
 
 <!--START TWO (2) SCRIPT UNTUK ALERT STAY/LEAVE PAGE-->
 <script type="text/javascript">

@@ -1417,8 +1417,9 @@ $(document).on('click', '.pilih_simpan', function (e) {
         
         $("#span_tbs").show();
         $("#btnRujukLab").show();
-// END DATATABLE AJAX END DATATABLE AJAX TBS PENJUALAN
+// END DATATABLE AJAX END DATATABLE AJAX TBS PENJUALAN\
 
+//STARTED Cek total untuk masukin ke form
  var no_faktur = $("#no_faktur").val();
 
 	$.post('cek_total_data_simpan.php',{no_faktur:no_faktur},function(data) {
@@ -1426,16 +1427,21 @@ $(document).on('click', '.pilih_simpan', function (e) {
         $("#total2").val(tandaPemisahTitik(data));
 
         //input total akhirnya
-    var biaya_admin = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
-    var diskon = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
-    var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+var biaya_admin = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+var diskon = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
+var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
 
-        var hasil = parseInt(subtotal,10) + parseInt(biaya_admin,10) - parseInt(diskon,10);
+var admin_persen = parseInt(biaya_admin,10) / parseInt(subtotal,10) * 100;
+var diskon_persen = parseInt(diskon,10) / parseInt(subtotal,10) * 100;
+
+var hasil = parseInt(subtotal,10) + parseInt(biaya_admin,10) - parseInt(diskon,10);
        
                 $("#total1").val(tandaPemisahTitik(hasil));
-
+				$("#biaya_admin_persen").val(Math.round(admin_persen));
+				$("#potongan_persen").val(Math.round(diskon_persen));
     });
-///
+//Ending Cek total untuk masukin ke form
+
 });
 });
 </script>

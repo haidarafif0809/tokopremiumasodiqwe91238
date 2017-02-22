@@ -56,7 +56,7 @@ while( $row=mysqli_fetch_array($query) ) {
 
     $nestedData=array(); 
 
-          $bb = $db->query("SELECT b.nama_barang, s.nama AS nama_satuan FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kode_barang = '$row[kode_barang]' ");
+            $bb = $db->query("SELECT b.nama_barang, s.nama AS nama_satuan FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kode_barang = '$row[kode_barang]' ");
             $data_barang = mysqli_fetch_array($bb);
    
             $zxc = $db->query("SELECT SUM(jumlah_barang) AS jumlah_periode FROM detail_penjualan  WHERE kode_barang = '$row[kode_barang]' AND tanggal >= '$dari_tgl' AND tanggal <= '$sampai_tgl' ");

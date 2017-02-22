@@ -10,7 +10,7 @@
     $nama = $_GET['nama'];
     $id = $_GET['id'];
 
-    $otoritas_akses = $db->query("SELECT * FROM hak_otoritas ho INNER JOIN otoritas_penjualan open ON ho.id = open.id_otoritas INNER JOIN otoritas_pembelian opem ON ho.id = opem.id_otoritas INNER JOIN otoritas_master_data omd ON ho.id = omd.id_otoritas INNER JOIN otoritas_pembayaran opemb ON ho.id = opemb.id_otoritas INNER JOIN otoritas_transaksi_kas otk ON ho.id = otk.id_otoritas INNER JOIN otoritas_kas_keluar okk ON ho.id = okk.id_otoritas INNER JOIN otoritas_kas_masuk okm ON ho.id = okm.id_otoritas INNER JOIN otoritas_kas_mutasi okmut ON ho.id = okmut.id_otoritas INNER JOIN otoritas_persediaan operse ON ho.id = operse.id_otoritas INNER JOIN otoritas_stok_opname oso ON ho.id = oso.id_otoritas INNER JOIN otoritas_stok_awal osa ON ho.id = osa.id_otoritas INNER JOIN otoritas_item_masuk oim ON ho.id = oim.id_otoritas INNER JOIN otoritas_item_keluar oik ON ho.id = oik.id_otoritas INNER JOIN otoritas_kas ok ON ho.id = ok.id_otoritas INNER JOIN otoritas_laporan ol ON ho.id = ol.id_otoritas INNER JOIN otoritas_form_order_penjualan ofop ON ho.id = ofop.id_otoritas INNER JOIN otoritas_order_penjualan oop ON ho.id = oop.id_otoritas WHERE ho.id = '$id'");
+    $otoritas_akses = $db->query("SELECT * FROM hak_otoritas ho LEFT JOIN otoritas_penjualan open ON ho.id = open.id_otoritas LEFT JOIN otoritas_pembelian opem ON ho.id = opem.id_otoritas LEFT JOIN otoritas_master_data omd ON ho.id = omd.id_otoritas LEFT JOIN otoritas_pembayaran opemb ON ho.id = opemb.id_otoritas LEFT JOIN otoritas_transaksi_kas otk ON ho.id = otk.id_otoritas LEFT JOIN otoritas_kas_keluar okk ON ho.id = okk.id_otoritas LEFT JOIN otoritas_kas_masuk okm ON ho.id = okm.id_otoritas LEFT JOIN otoritas_kas_mutasi okmut ON ho.id = okmut.id_otoritas LEFT JOIN otoritas_persediaan operse ON ho.id = operse.id_otoritas LEFT JOIN otoritas_stok_opname oso ON ho.id = oso.id_otoritas LEFT JOIN otoritas_stok_awal osa ON ho.id = osa.id_otoritas LEFT JOIN otoritas_item_masuk oim ON ho.id = oim.id_otoritas LEFT JOIN otoritas_item_keluar oik ON ho.id = oik.id_otoritas LEFT JOIN otoritas_kas ok ON ho.id = ok.id_otoritas LEFT JOIN otoritas_laporan ol ON ho.id = ol.id_otoritas LEFT JOIN otoritas_form_order_penjualan ofop ON ho.id = ofop.id_otoritas LEFT JOIN otoritas_order_penjualan oop ON ho.id = oop.id_otoritas LEFT JOIN otoritas_setting os ON ho.id = os.id_otoritas LEFT JOIN otoritas_target_penjualan otp ON ho.id = otp.id_otoritas WHERE ho.id = '$id'");
     $data_otoritas = mysqli_fetch_array($otoritas_akses);
 
 
@@ -76,10 +76,25 @@ else{
 }
 
  ?>
-
-
 </div> <!-- / of otoritas set_akun -->
 
+<div class="form-group col-sm-2"> <!-- / of otoritas menu setting -->
+<label>Menu Setting</label><br>
+
+<?php 
+
+if ($data_otoritas['setting_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox20102" name="setting_lihat" checked=""> 
+    <label for="checkbox20102">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox20102" name="setting_lihat">
+    <label for="checkbox20102">Lihat</label> <br>';  
+}
+
+ ?>
+</div> <!-- / of otoritas menu setting -->
 
 <div class="form-group col-sm-2"> <!-- start otoritas pembayaran -->
 <label>Menu Pembayaran</label><br>
@@ -1854,6 +1869,8 @@ else{
 </div> <!-- / of otoritas master BIAYA ADMIN -->
 
 
+
+
 <div class="form-group col-sm-2"> <!-- start otoritas pembayaran_hutang -->
 <label>Pembayaran Hutang</label><br>
 
@@ -2523,7 +2540,214 @@ else{
 
 
 <div class="form-group col-sm-12">
-    
+  
+<div class="form-group col-sm-2"> <!-- start otoritas pembayaran_hutang -->
+<label>Program Promo</label><br>
+<?php 
+if ($data_otoritas['program_promo_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1818" name="program_promo_lihat" checked="">
+    <label for="checkbox1818">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1818" name="program_promo_lihat">
+    <label for="checkbox1818">Lihat</label> <br>';  
+}
+?>
+
+<?php 
+if ($data_otoritas['program_promo_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox18181" name="program_promo_tambah" checked="">
+    <label for="checkbox18181">Tambah</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox18181" name="program_promo_tambah">
+    <label for="checkbox18181">Tambah</label> <br>';  
+}
+?>
+
+<?php 
+if ($data_otoritas['program_promo_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox18182" name="program_promo_edit" checked="">
+    <label for="checkbox18182">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox18182" name="program_promo_edit">
+    <label for="checkbox18182">Edit</label> <br>';  
+}
+?>
+
+<?php 
+if ($data_otoritas['program_promo_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox18183" name="program_promo_hapus" checked="">
+    <label for="checkbox18183">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox18183" name="program_promo_hapus">
+    <label for="checkbox18183">Hapus</label> <br>';  
+}
+?>
+</div>
+
+<div class="form-group col-sm-2"> <!-- start otoritas pembayaran_hutang -->
+<label>Produk Promo</label><br>
+<?php 
+if ($data_otoritas['produk_promo_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox181818" name="produk_promo_tambah" checked="">
+    <label for="checkbox181818">Tambah</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox181818" name="produk_promo_tambah">
+    <label for="checkbox181818">Tambah</label> <br>';  
+}
+?>
+
+<?php 
+if ($data_otoritas['produk_promo_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1818181" name="produk_promo_edit" checked="">
+    <label for="checkbox1818181">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1818181" name="produk_promo_edit">
+    <label for="checkbox1818181">Edit</label> <br>';  
+}
+?>
+
+<?php 
+if ($data_otoritas['produk_promo_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1818182" name="produk_promo_hapus" checked="">
+    <label for="checkbox1818182">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1818182" name="produk_promo_hapus">
+    <label for="checkbox1818182">Hapus</label> <br>';  
+}
+?>
+</div>
+
+<div class="form-group col-sm-2"> <!-- start otoritas pembayaran_hutang -->
+<label>Program Promo Free</label><br>
+<?php 
+if ($data_otoritas['program_promo_free_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox181899" name="program_promo_free_tambah" checked="">
+    <label for="checkbox181899">Tambah</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox181899" name="program_promo_free_tambah">
+    <label for="checkbox181899">Tambah</label> <br>';  
+}
+?>
+
+<?php 
+if ($data_otoritas['program_promo_free_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1818991" name="program_promo_free_edit" checked="">
+    <label for="checkbox1818991">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1818991" name="program_promo_free_edit">
+    <label for="checkbox1818991">Edit</label> <br>';  
+}
+?>
+
+<?php 
+if ($data_otoritas['program_promo_free_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1818992" name="program_promo_free_hapus" checked="">
+    <label for="checkbox1818992">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1818992" name="program_promo_free_hapus">
+    <label for="checkbox1818992">Hapus</label> <br>';  
+}
+?>
+</div>
+
+<div class="form-group col-sm-2"> <!-- start otoritas pembayaran_hutang -->
+<label>Program Promo Disc </label><br>
+<?php 
+if ($data_otoritas['program_promo_disc_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox18189" name="program_promo_disc_tambah" checked="">
+    <label for="checkbox18189">Tambah</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox18189" name="program_promo_disc_tambah">
+    <label for="checkbox18189">Tambah</label> <br>';  
+}
+?>
+
+<?php 
+if ($data_otoritas['program_promo_disc_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox181891" name="program_promo_disc_edit" checked="">
+    <label for="checkbox181891">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox181891" name="program_promo_disc_edit">
+    <label for="checkbox181891">Edit</label> <br>';  
+}
+?>
+
+<?php 
+if ($data_otoritas['program_promo_disc_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox181892" name="program_promo_disc_hapus" checked="">
+    <label for="checkbox181892">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox181892" name="program_promo_disc_hapus">
+    <label for="checkbox181892">Hapus</label> <br>';  
+}
+?>
+</div>
+
+<div class="form-group col-sm-2"> <!-- start otoritas pembayaran_hutang -->
+<label>Target Penjualan</label><br>
+<?php 
+if ($data_otoritas['target_jual_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox199603" name="target_jual_lihat" checked="">
+    <label for="checkbox199603">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox199603" name="target_jual_lihat">
+    <label for="checkbox199603">Edit</label> <br>';  
+}
+?>
+
+<?php 
+if ($data_otoritas['target_jual_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1996030" name="target_jual_edit" checked="">
+    <label for="checkbox1996030">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1996030" name="target_jual_edit">
+    <label for="checkbox1996030">Hapus</label> <br>';  
+}
+?>
+
+<?php 
+if ($data_otoritas['target_jual_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox19960302" name="target_jual_hapus" checked="">
+    <label for="checkbox19960302">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox19960302" name="target_jual_hapus">
+    <label for="checkbox19960302">Hapus</label> <br>';  
+}
+?>
+</div>
+  
 </div>
 
 

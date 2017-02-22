@@ -8,6 +8,9 @@ include 'sanitasi.php';
 include 'db.php';
 
 
+$pilih_akses = $db->query("SELECT program_promo_tambah, program_promo_edit, program_promo_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$program_promo = mysqli_fetch_array($pilih_akses);
+
 
  ?>
 
@@ -22,7 +25,11 @@ include 'db.php';
 
 <button style="display: none;" class="btn btn-primary" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Klik untuk kembali ke sebelumnya.'><i class="fa fa-reply"></i> <u>K</u>embali</button>
 
-<button type="submit" id="tambah_program_promo" class="btn btn-success" style="background-color:#0277bd"><i class="fa fa-plus"> </i> Tambah</button>
+<?php 
+  if ($program_promo['program_promo_tambah'] > 0) {
+    echo '<button type="submit" id="tambah_program_promo" class="btn btn-success" style="background-color:#0277bd"><i class="fa fa-plus"> </i> Tambah</button>';
+  }
+ ?>
 <span id="tambh_program_promo" style="display: none;"><!--span untuk TAMBAH-->
           <form class="form-inline" role="form" id="formprogram">
           <div class="row armun"><!--div class="row armun"-->
@@ -146,8 +153,16 @@ include 'db.php';
       <th style="background-color: #4CAF50; color: white;"> Jenis Bonus </th>
       <th style="background-color: #4CAF50; color: white;"> Detail Program</th>
       <th style="background-color: #4CAF50; color: white;"> Detail Bonus </th>
-      <th style="background-color: #4CAF50; color: white;"> Edit </th>
-      <th style="background-color: #4CAF50; color: white;"> hapus </th>
+      <?php 
+      if ($program_promo['program_promo_edit'] > 0) {
+        echo '<th style="background-color: #4CAF50; color: white;"> Edit </th>';
+      }
+
+     if ($program_promo['program_promo_hapus'] > 0) {
+        echo '<th style="background-color: #4CAF50; color: white;"> hapus </th>';
+      }
+      ?>
+      
     </thead>
   </table>
 </div> <!--/ responsive-->

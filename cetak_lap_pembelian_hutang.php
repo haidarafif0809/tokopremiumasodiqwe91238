@@ -84,7 +84,7 @@ $data001 = mysqli_fetch_array($perintah);
 <br>
 <div class="container">
 
-<table id="tableuser" class="table table-bordered table-sm">
+<table id="tableuser" class="table table-bordered">
         <thead>
 
            <th> Nomor Faktur </th>

@@ -214,7 +214,11 @@ $pembelian_hapus = mysqli_num_rows($pilih_akses_pembelian_hapus);
           "serverSide": true,
           "ajax":{
             url :"datatable_pembelian.php", // json datasource
-            
+            "data": function ( d ) {
+                      d.status = $("#status").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
             type: "post",  // method  , by default get
             error: function(){  // error handling
               $(".employee-grid-error").html("");
@@ -281,33 +285,15 @@ $pembelian_hapus = mysqli_num_rows($pilih_akses_pembelian_hapus);
 						var id = $(this).attr("data-id");
 						var no_faktur = $("#faktur_hapus").val();
 
-            $("#modal_hapus").modal("hide");
-            $(".tr-id-"+id).remove();
-
 						$.post("hapus_data_pembelian.php", {id:id, no_faktur:no_faktur}, function(data){
+						if (data == 'sukses') {
+						
+						$("#modal_hapus").modal("hide");
+						$(".tr-id-"+id).remove();
+						
+						}
 						
 						});
-
-            $('#table_pembelian').DataTable().destroy();
-            var status = $("#status").val();
-            var dataTable = $('#table_pembelian').DataTable( {
-              "processing": true,
-              "serverSide": true,
-              "ajax":{
-                url :"datatable_pembelian.php", // json datasource
-                
-                type: "post",  // method  , by default get
-                error: function(){  // error handling
-                  $(".employee-grid-error").html("");
-                  $("#table_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-                  $("#employee-grid_processing").css("display","none");
-                }
-            },
-                
-                "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                    $(nRow).attr('class','tr-id-'+aData[18]+'');
-                },
-            });
 						
 						
 						});

@@ -829,6 +829,7 @@ echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> Data Penjua
 
 
 echo "<li><a href='lap_bucket_size.php' class='waves-effect'>Lap. Backet Size</a></li>";
+echo "<li><a href='order_target_penjualan.php' class='waves-effect'>Target Penjualan</a></li>";
 
  if ($lihat['laporan_pembelian_lihat'] > 0){
                             echo '<li><a href="lap_pembelian.php" class="waves-effect">Lap. Pembelian</a></li>';

@@ -65,7 +65,7 @@ $lihat = mysqli_fetch_array($pilih_akses_lihat);
 if ($lihat['penjualan_lihat'] > 0){
                 echo '<li><a href="formpenjualan.php" class="waves-effect"> <i class="fa fa-shopping-cart"></i> Penjualan </a></li>';
 
-
+                 echo '<li><a href="form_simpan_sementara.php" class="waves-effect"> <i class="fa fa-shopping-cart"></i>Simpan Penjualan </a></li>';
 }
 
 if ($lihat['order_lihat'] > 0){

@@ -11,6 +11,9 @@ $id = stringdoang($_GET['id']);
 $nama_program = stringdoang($_GET['nama']);
 $kode_program = stringdoang($_GET['kode']);
 
+
+      $pilih_akses = $db->query("SELECT produk_promo_tambah, produk_promo_edit, produk_promo_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+      $produk_promo = mysqli_fetch_array($pilih_akses);
  ?>
 
 <div class="container">
@@ -25,7 +28,10 @@ $kode_program = stringdoang($_GET['kode']);
 
 <a href="program_promo.php" class="btn btn-primary" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Klik untuk kembali ke utama.'><i class="fa fa-reply"></i> <u>K</u>embali</a>
 
-<button type="submit" id="tambah_produk_promo" class="btn btn-success" style="background-color:#0277bd"><i class="fa fa-plus"> </i> Tambah</button>
+<?php 
+if ($produk_promo['produk_promo_tambah'] > 0) {
+   echo '<button type="submit" id="tambah_produk_promo" class="btn btn-success" style="background-color:#0277bd"><i class="fa fa-plus"> </i> Tambah</button>';
+ } ?>
 <span id="tambh_produk_promo" style="display: none;"><!--span untuk TAMBAH-->
           <form class="form-inline" role="form" id="formproduk">
           <div class="row armun"><!--div class="row armun"-->
@@ -121,8 +127,14 @@ $kode_program = stringdoang($_GET['kode']);
     <thead>
       <th style="background-color: #4CAF50; color: white;"> Nama Produk</th>
       <th style="background-color: #4CAF50; color: white;"> Nama Program </th>
-      <th style="background-color: #4CAF50; color: white;"> Edit </th>
-      <th style="background-color: #4CAF50; color: white;"> hapus </th>
+      <?php 
+      if ($produk_promo['produk_promo_edit'] > 0) {
+        echo "<th style='background-color: #4CAF50; color: white;'> Edit </th>";
+      }
+     if ($produk_promo['produk_promo_hapus'] > 0) {
+        echo "<th style='background-color: #4CAF50; color: white;'> hapus </th>";
+      }
+      ?>
     </thead>
   </table>
   </div> <!--/ responsive-->

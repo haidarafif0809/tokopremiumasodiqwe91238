@@ -15,27 +15,35 @@ $id_produk =  stringdoang($_POST['id_produk']);
 $hasil = $jumlah_barang * $data['konversi'];
 
 
-$query = $db->query("SELECT harga_jual, harga_jual2, harga_jual3 FROM barang WHERE kode_barang = '$kode_barang'");
+$query = $db->query("SELECT harga_jual,harga_jual2,harga_jual3,harga_jual4,harga_jual5,harga_jual6,harga_jual7 FROM barang WHERE kode_barang = '$kode_barang'");
 $data_harga = mysqli_fetch_array($query);
 
-if ($level_harga == 'Level 1') {
+if ($level_harga == 'harga_1') {
 	 $harga = $data_harga['harga_jual'];
 }
-elseif ($level_harga == 'Level 2') {
+elseif ($level_harga == 'harga_2') {
 	 $harga = $data_harga['harga_jual2'];
 }
-elseif ($level_harga == 'Level 3') {
+elseif ($level_harga == 'harga_3') {
 	 $harga = $data_harga['harga_jual3'];
 }
+elseif ($level_harga == 'harga_4') {
+	 $harga = $data_harga['harga_jual4'];
+}
+elseif ($level_harga == 'harga_5') {
+	 $harga = $data_harga['harga_jual6'];
+}
+elseif ($level_harga == 'harga_6') {
+	 $harga = $data_harga['harga_jual6'];
+}
+elseif ($level_harga == 'harga_7') {
+	 $harga = $data_harga['harga_jual7'];
+}
 
-if ($data['konversi'] == '') {
 
 echo $harga * $jumlah_barang;
 
-}
-else{
-echo $harga * $hasil;
-}
+
 
 
         //Untuk Memutuskan Koneksi Ke Database

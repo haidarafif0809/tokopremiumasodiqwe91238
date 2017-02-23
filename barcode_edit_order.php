@@ -50,6 +50,10 @@ if($c->isCached($kode_barang)) {
     $harga_jual1 = angkadoang($result['harga_jual']);
     $harga_jual2 = angkadoang($result['harga_jual2']);
     $harga_jual3 = angkadoang($result['harga_jual3']);
+    $harga_jual4 = angkadoang($result['harga_jual4']);
+    $harga_jual5 = angkadoang($result['harga_jual5']);
+    $harga_jual6 = angkadoang($result['harga_jual6']);
+    $harga_jual7 = angkadoang($result['harga_jual7']);
     $jumlah_barang = angkadoang(1);
     $satuan = stringdoang($result['satuan']);
 }
@@ -64,6 +68,10 @@ while ($data = $query->fetch_array()) {
       'harga_jual' => $data['harga_jual'],
       'harga_jual2' => $data['harga_jual2'],
       'harga_jual3' => $data['harga_jual3'],
+      'harga_jual4' => $data['harga_jual4'],
+      'harga_jual5' => $data['harga_jual5'],
+      'harga_jual6' => $data['harga_jual6'],
+      'harga_jual7' => $data['harga_jual7'],
       'satuan' => $data['satuan'],
       'kategori' => $data['kategori'],
       'gudang' => $data['gudang'],
@@ -85,6 +93,10 @@ while ($data = $query->fetch_array()) {
     $harga_jual1 = angkadoang($result['harga_jual']);
     $harga_jual2 = angkadoang($result['harga_jual2']);
     $harga_jual3 = angkadoang($result['harga_jual3']);
+    $harga_jual4 = angkadoang($result['harga_jual4']);
+    $harga_jual5 = angkadoang($result['harga_jual5']);
+    $harga_jual6 = angkadoang($result['harga_jual6']);
+    $harga_jual7 = angkadoang($result['harga_jual7']);
     $jumlah_barang = angkadoang(1);
     
     $satuan = stringdoang($result['satuan']);
@@ -101,6 +113,22 @@ else if ($level_harga == 'Level 2')
 else if ($level_harga == 'Level 3')
 {
   $harga = $harga_jual3;
+}
+else if ($level_harga == 'harga_4')
+{
+  $harga = $harga_jual4;
+}
+else if ($level_harga == 'harga_5')
+{
+  $harga = $harga_jual5;
+}
+else if ($level_harga == 'harga_6')
+{
+  $harga = $harga_jual6;
+}
+else if ($level_harga == 'harga_7')
+{
+  $harga = $harga_jual7;
 }
 
 $stok_barang = $ambil_sisa['jumlah_barang'] - $jumlah_barang;

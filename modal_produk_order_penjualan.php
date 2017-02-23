@@ -50,7 +50,7 @@ $sql = "SELECT s.nama,b.kode_barang,b.tipe_barang,b.nama_barang,b.harga_beli,b.h
 $sql.=" FROM barang b LEFT JOIN satuan s ON b.satuan = s.id ";
 $sql.=" WHERE 1=1";
 
-    $sql.="AND ( b.kode_barang LIKE '".$requestData['search']['value']."%'";  
+    $sql.=" AND ( b.kode_barang LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR b.nama_barang LIKE '".$requestData['search']['value']."%' ";
     $sql.=" OR b.berkaitan_dgn_stok LIKE '".$requestData['search']['value']."%'";   
     $sql.=" OR b.satuan LIKE '".$requestData['search']['value']."%' ";
@@ -60,7 +60,6 @@ $sql.=" WHERE 1=1";
     $sql.=" OR b.tipe_barang LIKE '".$requestData['search']['value']."%' )";
 
 }
-
 $query=mysqli_query($conn, $sql) or die("eror 2");
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
         
@@ -81,7 +80,7 @@ while( $row=mysqli_fetch_array($query) ) {
    
 
 
-            $stok_barang =  $ambil_sisa['jumlah_barang'];   ;
+            $stok_barang =  $ambil_sisa['jumlah_barang'];
 
             $harga1 = $row['harga_jual'];
             if ($harga1 == '') {

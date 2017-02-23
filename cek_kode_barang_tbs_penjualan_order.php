@@ -11,7 +11,7 @@ $jumlah = mysqli_num_rows($query);
 
 if ($jumlah > 0){
 
-  echo "1";
+  echo 1;
 }
 else {
 

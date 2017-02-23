@@ -2079,7 +2079,6 @@ alert("Silakan Bayar Piutang");
      $.post("proses_bayar_jual.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
 
 
-     $("#table-baru").html(info);
      var no_faktur = info;
      $("#cetak_tunai").attr('href', 'cetak_penjualan_tunai.php?no_faktur='+no_faktur+'');
      $("#cetak_tunai_besar").attr('href', 'cetak_penjualan_tunai_besar.php?no_faktur='+no_faktur+'');
@@ -2092,9 +2091,9 @@ alert("Silakan Bayar Piutang");
     $("#span_tbs").hide();
 
 
-     $("#kd_pelanggan").val('');
+$("#kd_pelanggan").val('');
 $("#kd_pelanggan").trigger("chosen:open");
-          $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});    
+$(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});    
 
     $("#total1").val('');
      $("#pembayaran_penjualan").val('');
@@ -2237,15 +2236,15 @@ alert("Silakan Bayar Piutang");
 // POST KE BAYAR LANGSUNG CETAK
    $.post("proses_bayar_tunai_cetak_langsung.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
   
-      $("#table-baru").html(info);
      var no_fak= info;
      $("#alert_berhasil").show();
      $("#pembayaran_penjualan").val('');
      $("#sisa_pembayaran_penjualan").val('');
      $("#kredit").val('');
               $("#span_tbs").hide();
-              $("#kd_pelanggan").chosen("destroy");
-            $("#kd_pelanggan").val('');
+      $("#kd_pelanggan").val('');
+      $("#kd_pelanggan").trigger("chosen:open");
+      $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"}); 
 
     var win = window.open('cetak_penjualan_tunai.php?no_faktur='+no_fak+'');
      if (win) { 
@@ -2327,11 +2326,7 @@ alert("Silakan Bayar Piutang");
 
        var sisa_kredit = total - pembayaran;
 
-      $("#total1").val('');
-       $("#pembayaran_penjualan").val('');
-       $("#sisa_pembayaran_penjualan").val('');
-       $("#kredit").val('');
-       $("#tanggal_jt").val('');
+    
        
       if (sisa_pembayaran == "" )
       {
@@ -2375,7 +2370,6 @@ alert("Silakan Bayar Piutang");
 
             var no_faktur = info;
             $("#cetak_piutang").attr('href', 'cetak_penjualan_piutang.php?no_faktur='+no_faktur+'');
-            $("#table-baru").html(info);
             $("#alert_berhasil").show();
             $("#pembayaran_penjualan").val('');
             $("#sisa_pembayaran_penjualan").val('');
@@ -2386,8 +2380,9 @@ alert("Silakan Bayar Piutang");
             $("#cetak_piutang").show();
             $("#tax").val('');
 
-          $("#kd_pelanggan").chosen("destroy");
-            $("#kd_pelanggan").val('');
+          $("#kd_pelanggan").val('');
+          $("#kd_pelanggan").trigger("chosen:open");
+          $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"}); 
              
 
                  $("#span_tbs").hide();
@@ -3079,9 +3074,10 @@ $(document).ready(function(){
             $("#potongan_persen").val('');
             $("#tanggal_jt").val('');
             $("#tax").val('');
-            $("#kd_pelanggan").chosen("destroy");
             $("#kd_pelanggan").val('');
-$("#span_tbs").hide();
+            $("#kd_pelanggan").trigger("chosen:open");
+            $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"}); 
+            $("#span_tbs").hide();
        
        
        });

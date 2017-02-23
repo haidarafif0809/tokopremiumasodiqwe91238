@@ -9,7 +9,7 @@
     $harga = angkadoang($_POST['harga']);
     $jumlah_barang = angkadoang($_POST['jumlah_barang']);
     $nama_barang = stringdoang($_POST['nama_barang']);
-    $sales = stringdoang($_POST['sales']);
+    echo $sales = stringdoang($_POST['sales']);
     $user = $_SESSION['nama'];
     $potongan = stringdoang($_POST['potongan']);
     $a = $harga * $jumlah_barang;$tahun_sekarang = date('Y');
@@ -57,7 +57,7 @@
 
     if ($prosentase != 0){
       
-      $query90 = $db->query("SELECT * FROM tbs_penjualan WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
+      $query90 = $db->query("SELECT * FROM tbs_penjualan WHERE no_faktur = '$no_faktur' AND kode_barang = '$kode_barang'");
       $cek01 = mysqli_num_rows($query90);
 
       $cek90 = mysqli_fetch_array($query90);
@@ -71,7 +71,7 @@
       $komisi = $fee_prosentase_produk;
 
       if ($cek01 > 0) {
-        $query91 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi' WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
+        $query91 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi' WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang' AND no_faktur = '$no_faktur'");
       }
 
       else
@@ -81,8 +81,9 @@
           
           $fee_prosentase_produk = $prosentase * $subtotal_prosentase / 100;
 
-          $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam) VALUES ('$sales', '$session_id', '$kode_barang',
-            '$nama_barang', '$fee_prosentase_produk', '$tanggal_sekarang', '$jam_sekarang')");
+          $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam, no_faktur) VALUES ('$sales', '$session_id',
+            '$kode_barang','$nama_barang', '$fee_prosentase_produk', '$tanggal_sekarang',
+            '$jam_sekarang','$no_faktur')");
 
       }
       
@@ -94,7 +95,7 @@
 
     elseif ($nominal != 0) {
 
-      $query900 = $db->query("SELECT * FROM tbs_penjualan WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
+      $query900 = $db->query("SELECT * FROM tbs_penjualan WHERE no_faktur = '$no_faktur' AND kode_barang = '$kode_barang'");
       $cek011 = mysqli_num_rows($query900);
 
       $cek900 = mysqli_fetch_array($query900);
@@ -107,7 +108,7 @@
 
       if ($cek011 > 0) {
 
-        $query911 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi0' WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
+        $query911 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi0' WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang' AND no_faktur = '$no_faktur'");
       }
 
       else
@@ -115,8 +116,11 @@
 
       $fee_nominal_produk = $nominal * $jumlah_barang;
 
-      $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam) VALUES ('$sales', '$session_id', '$kode_barang', '$nama_barang', '$fee_nominal_produk', '$tanggal_sekarang', '$jam_sekarang')");
+      $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam, no_faktur) VALUES ('$sales','$session_id',
+        '$kode_barang', '$nama_barang', '$fee_nominal_produk', '$tanggal_sekarang',
+        '$jam_sekarang','$no_faktur')");
       }
+
 
     }
 
@@ -128,22 +132,22 @@
 
 
 
-$cek = $db->query("SELECT * FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
+$cek = $db->query("SELECT * FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur'");
 
 $jumlah = mysqli_num_rows($cek);
 
   
-$cek = $db->query("SELECT * FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
+$cek = $db->query("SELECT * FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur'");
 
 $jumlah = mysqli_num_rows($cek);
     
     if ($jumlah > 0)
     {
         # code...
-        $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND session_id = ? ");
+        $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND no_faktur = ? ");
 
         $query1->bind_param("iisss",
-            $jumlah_barang, $subtotal, $potongan_tampil, $kode_barang, $session_id);
+            $jumlah_barang, $subtotal, $potongan_tampil, $kode_barang, $no_faktur);
 
             
             $jumlah_barang = angkadoang($_POST['jumlah_barang']);
@@ -159,12 +163,12 @@ $jumlah = mysqli_num_rows($cek);
     }
     else
     {
-            $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax,tanggal,jam) VALUES (?,?,
-            ?,?,?,?,?,?,?,?,?)");
+            $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax,tanggal,jam,no_faktur) VALUES (?,?,
+            ?,?,?,?,?,?,?,?,?,?)");
             
             
-            $perintah->bind_param("sssisiiisss",
-            $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotal, $potongan_tampil, $tax_persen,$tanggal_sekarang,$jam_sekarang);
+            $perintah->bind_param("sssisiiissss",
+            $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotal, $potongan_tampil, $tax_persen,$tanggal_sekarang,$jam_sekarang,$no_faktur);
             
             
             $kode_barang = stringdoang($_POST['kode_barang']);
@@ -189,7 +193,7 @@ $jumlah = mysqli_num_rows($cek);
 
     <?php
   //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
-                $perintah = $db->query("SELECT tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama FROM tbs_penjualan tp INNER JOIN satuan s ON tp.satuan = s.id WHERE tp.session_id = '$session_id' AND tp.kode_barang = '$kode_barang' AND tp.no_faktur_order IS NULL ");
+                $perintah = $db->query("SELECT tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama FROM tbs_penjualan tp INNER JOIN satuan s ON tp.satuan = s.id WHERE tp.no_faktur = '$no_faktur' AND tp.kode_barang = '$kode_barang' AND tp.no_faktur_order IS NULL ");
                 
                 //menyimpan data sementara yang ada pada $perintah
                 

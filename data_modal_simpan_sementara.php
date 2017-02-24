@@ -40,7 +40,7 @@ $sql = "SELECT p.potongan,p.biaya_admin,p.id,p.kode_pelanggan,p.no_faktur,p.tota
 $sql.=" FROM penjualan p LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan ";
 $sql.=" WHERE p.status = 'Simpan Sementara'";
 
-    $sql.=" p.kode_pelanggan LIKE '".$requestData['search']['value']."%'";  
+    $sql.=" AND (p.kode_pelanggan LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR p.no_faktur LIKE '".$requestData['search']['value']."%' ";
     $sql.=" OR p.total LIKE '".$requestData['search']['value']."%'";   
     $sql.=" OR p.tanggal LIKE '".$requestData['search']['value']."%' ";

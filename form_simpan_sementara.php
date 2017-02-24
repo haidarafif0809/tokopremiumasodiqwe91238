@@ -44,7 +44,7 @@ $session_id = session_id();
  
 </div> <!-- tag penutup modal-body-->
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  <center><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></center>
       </div>
     </div>
 
@@ -112,23 +112,23 @@ $session_id = session_id();
         <input type="hidden" name="session_id" id="session_id" class="form-control" value="<?php echo session_id(); ?>" readonly="">
         </div>
 
-<button type="button" id="cari_save_konsumen" class="btn btn-purple " data-toggle="modal" data-target="#modal_simpan"><i class='fa  fa-search'></i> Data Simpan(CTRL+F1)  </button> 
+
 <div class="row">
 
 <div class="col-sm-2">
 <label> Pelanggan </label>
-<input type="text" name="nama_pelanggan" id="nama_pelanggan" class="form-control" readonly="">
+<input type="text" style="font-size:13px; height:15px" name="nama_pelanggan" id="nama_pelanggan" class="form-control" readonly="">
 <input type="hidden" name="kd_pelanggan" id="kd_pelanggan" class="form-control" readonly="">
 </div>
 
 <div class="col-sm-2">
 <label> No Faktur </label>
- <input type="text" name="no_faktur" id="no_faktur" class="form-control" readonly="">
+ <input style="font-size:13px; height:15px" type="text" name="no_faktur" id="no_faktur" class="form-control" readonly="">
 </div>
     
 
 <div class="col-sm-2">
-          <label class="gg" > Gudang </label><br><br>
+          <label class="gg" > Gudang </label><br>
           
           <select style="font-size:13px; height:35px" name="kode_gudang" id="kode_gudang" class="form-control chosen" required="" >
           <?php 
@@ -160,7 +160,7 @@ $session_id = session_id();
 </div>
 
 <div class="col-sm-2">
-<label class="gg" >Sales</label><br><br>
+<label class="gg" >Sales</label><br>
 <select style="font-size:13px; height:35px" name="sales" id="sales" class="form-control chosen" required="">
 
   <?php 
@@ -217,6 +217,8 @@ $session_id = session_id();
   
 
   <form class="form-inline" method="post ">
+
+<button type="button" id="cari_save_konsumen" class="btn btn-purple " data-toggle="modal" data-target="#modal_simpan"><i class='fa  fa-search'></i> Data Simpan(CTRL+F1)  </button> 
 
 <button type="button" id="cari_produk_penjualan" class="btn btn-info " data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
 
@@ -2259,7 +2261,7 @@ $("#kd_pelanggan").trigger("chosen:open");
   $("#cetak_langsung").click(function(){
 
         var session_id = $("#session_id").val();
-        var no_faktur = $("#nomor_faktur_penjualan").val();
+        var no_faktur = $("#no_faktur").val();
         var sisa_pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#sisa_pembayaran_penjualan").val() ))));
         var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#kredit").val() )))); 
         var kode_pelanggan = $("#kd_pelanggan").val();
@@ -2347,29 +2349,31 @@ alert("Silakan Bayar Piutang");
   $("#piutang").hide();
   $("#transaksi_baru").show();
 
- $.post("cek_subtotal_penjualan.php",{total2:total2,session_id:session_id},function(data) {
+ $.post("cek_subtotal_simpan_sementara.php",{total2:total2,session_id:session_id},function(data) {
 
-  if (data == "Oke") {
+  if (data == "1") {
 // POST KE BAYAR LANGSUNG CETAK
-   $.post("proses_bayar_tunai_cetak_langsung.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
+   $.post("proses_bayar_simpan_penjualan.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
   
-      $("#table-baru").html(info);
+      //$("#table-baru").html(info);
      var no_fak= info;
      $("#alert_berhasil").show();
      $("#pembayaran_penjualan").val('');
      $("#sisa_pembayaran_penjualan").val('');
      $("#kredit").val('');
-              $("#span_tbs").hide();
-              $("#kd_pelanggan").chosen("destroy");
-            $("#kd_pelanggan").val('');
+      $("#span_tbs").hide();
+      $("#kd_pelanggan").chosen("destroy");
+      $("#kd_pelanggan").val('');
 
-    var win = window.open('cetak_penjualan_tunai.php?no_faktur='+no_fak+'');
-     if (win) { 
-    
+  var win = window.open('cetak_penjualan_tunai.php?no_faktur='+no_fak+'');
+  if (win)
+  {   
     win.focus(); 
-  } else { 
-    
-    alert('Mohon Izinkan PopUps Pada Website Ini !'); }    
+  }
+  else
+  {    
+    alert('Mohon Izinkan PopUps Pada Website Ini !');
+  }    
     
        
    });
@@ -2418,7 +2422,7 @@ alert("Silakan Bayar Piutang");
        $("#piutang").click(function(){
        
         var session_id = $("#session_id").val();
-        var no_faktur = $("#nomor_faktur_penjualan").val();
+        var no_faktur = $("#no_faktur").val();
         var sisa_pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#sisa_pembayaran_penjualan").val() ))));
         var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#kredit").val() )))); 
         var kode_pelanggan = $("#kd_pelanggan").val();
@@ -2442,19 +2446,11 @@ alert("Silakan Bayar Piutang");
        var sisa =  pembayaran - total; 
 
        var sisa_kredit = total - pembayaran;
-
-      $("#total1").val('');
-       $("#pembayaran_penjualan").val('');
-       $("#sisa_pembayaran_penjualan").val('');
-       $("#kredit").val('');
-       $("#tanggal_jt").val('');
        
-      if (sisa_pembayaran == "" )
+      if (sisa_pembayaran == "")
       {
-
         alert ("Jumlah Pembayaran Tidak Mencukupi");
       }
-
        else if (kode_pelanggan == "") 
        {
        
@@ -2518,12 +2514,10 @@ alert("Silakan Bayar Piutang");
 
        
        });
-
-       }
-       }  
-       //mengambil no_faktur pembelian agar berurutan
-
-       });
+    }
+ });
+}
+});
  $("form").submit(function(){
        return false;
        });

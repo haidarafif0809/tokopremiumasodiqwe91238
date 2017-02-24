@@ -201,8 +201,6 @@ if ($potongan != "" || $potongan != 0 ) {
               
  }
 
-            
-
             else if ($sisa_kredit != 0 ) 
 
             {
@@ -214,7 +212,9 @@ if ($potongan != "" || $potongan != 0 ) {
             
             // hubungkan "data" dengan prepared statements
             $stmt2->bind_param("sssisssssiiisisiss", 
-            $nomor_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal, $jam_sekarang, $tanggal_jt, $user, $sales, $potongan, $tax, $sisa_kredit, $cara_bayar, $pembayaran, $ppn_input, $biaya_adm, $nomor_faktur, $ket_jurnal);
+            $nomor_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal, $jam_sekarang,
+            $tanggal_jt, $user, $sales, $potongan, $tax, $sisa_kredit, $cara_bayar, $pembayaran,
+            $ppn_input, $biaya_adm, $ket_jurnal, $nomor_faktur);
             
             // siapkan "data" query
             $biaya_adm = stringdoang($_POST['biaya_adm']);

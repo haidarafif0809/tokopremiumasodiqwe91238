@@ -1716,7 +1716,7 @@ $("#form_barcode").submit(function(){
    if (harga == ''){
       harga = 0;
     }
-
+  
   var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
     if (potongan == '')
     {
@@ -1759,9 +1759,23 @@ var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biay
         pot_fakt_rp = 0;
       }
 
+  //PPN
+  if (ppn == 'Exclude') {
   
-    var total = parseInt(jumlah_barang,10) * parseInt(harga,10) - parseInt(potongan,10);
+         var total1 = parseInt(jumlah_barang,10) * parseInt(harga,10) - parseInt(potongan,10);
 
+         var total_tax_exclude = parseInt(total1,10) * parseInt(tax,10) / 100;
+
+         
+          var total = parseInt(total1,10) + parseInt(Math.round(total_tax_exclude,10));
+
+    }
+    else
+    {
+        var total = parseInt(jumlah_barang,10) * parseInt(harga,10) - parseInt(potongan,10);
+    }
+  //PPN
+   
 
     var total_akhir1 = parseInt(subtotal,10) + parseInt(total,10);
 
@@ -1878,7 +1892,7 @@ $("#kode_barang").focus();
       $("#tax_rp").val(Math.round(hasil_tax));
 
 // POST KE PROSES TBSNYA JIKA JASA
- $.post("prosestbspenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+ $.post("prosestbspenjualan.php",{ppn:ppn,no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
      
   
 
@@ -1887,8 +1901,11 @@ $("#kode_barang").focus();
      $("#kd_pelanggan").attr("disabled", true);
 
      $("#tbody").prepend(data);
-            $("#kode_barang").val('');
-            $("#kode_barang").trigger("chosen:open");
+
+      $("#kode_barang").val('');
+      $("#kode_barang").val('').trigger("chosen:updated");
+
+      $("#kode_barang").trigger("chosen:open");
 
      $("#nama_barang").val('');
       $("#harga_produk").val('');
@@ -1918,7 +1935,7 @@ $("#kode_barang").focus();
     $("#kode_barang").focus();
 
 // POST KE TBS ALL PRODUK
-    $.post("prosestbspenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+    $.post("prosestbspenjualan.php",{ppn:ppn,no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
      
      $("#level_harga").attr("disabled", true);
       $("#ppn").attr("disabled", true);
@@ -3175,16 +3192,59 @@ $(document).ready(function(){
 
                                     var subtotal_lama = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-subtotal-"+id+"").text()))));
                                     var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-potongan-"+id+"").text()))));
+                                    var tax_tbs = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-tax-"+id+"").text()))));
                                     var tax_fak = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
+
                                     if (tax_fak == '')
                                     {
                                       tax_fak = 0;
                                     }
 
                                     var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-tax-"+id+"").text()))));
-                                   
-                                    var subtotal = harga * jumlah_baru - potongan;
+                                    var ppn = $("#ppn").val();
 
+    //////////////////////PPN
+              if (ppn == 'Exclude') {
+
+                                   var subtotal1 = harga * jumlah_baru - potongan;
+
+                                    var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+
+                                    var subtotal_ex = parseInt(subtotal_lama,10) - parseInt(tax,10);
+
+                                    var cari_tax = (parseInt(tax,10) * 100) / parseInt(subtotal_ex,10);
+
+
+                                    var cari_tax1 = parseInt(subtotal1,10) * parseInt(cari_tax,10) / 100;
+
+                                    var jumlah_tax = Math.round(cari_tax1);
+
+                                    var subtotal = parseInt(subtotal1,10) + parseInt(jumlah_tax,10);
+
+                                     var subtotal_penjualan = subtotal_penjualan - subtotal_lama + subtotal;
+                                    }
+                                    else
+                                    {
+
+                                   var subtotal1 = harga * jumlah_baru - potongan;
+
+                                    var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+
+                                      var cari_tax = parseInt(subtotal_lama,10) - parseInt(tax,10);
+                                    var cari_tax1 = parseInt(subtotal_lama,10) / parseInt(cari_tax,10);
+
+                                    var tax_ex = cari_tax1.toFixed(2);
+
+                                    var subtotal = subtotal1;
+                                    var tax_ex1 = parseInt(subtotal,10) / tax_ex;
+                                    var tax_ex2 = parseInt(subtotal,10) - parseInt(Math.round(tax_ex1));
+                                    var jumlah_tax = Math.round(tax_ex2);
+                                    
+
+                    var subtotal_penjualan = subtotal_penjualan - subtotal_lama + subtotal;
+
+                                    }
+    ////////////////////////PPN
                                     var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
 
                                     var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
@@ -3206,9 +3266,7 @@ $(document).ready(function(){
                                     potongaaan = subtotal_penjualan * potongan_persen / 100;
                                     $("#potongan_penjualan").val(potongaaan);
                                     
-                                    var tax_tbs = tax / subtotal_lama * 100;
-                                    var jumlah_tax = Math.round(tax_tbs) * subtotal / 100;
-
+                                  
                                     var sub_total = parseInt(subtotal_penjualan,10) - parseInt(potongaaan,10);
 
                                     var tax_fakt = parseInt(tax_fak,10) * parseInt(sub_total,10) / 100;
@@ -3232,10 +3290,8 @@ $(document).ready(function(){
 
                       $.post("update_pesanan_barang.php",{jumlah_lama:jumlah_lama,tax:tax,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,potongan:potongan,harga:harga,jumlah_tax:jumlah_tax,subtotal:subtotal},function(info){
 
-
-                                   
-
-                                    });        
+                        
+                        });        
                             }
 
                           else{
@@ -3288,7 +3344,62 @@ $(document).ready(function(){
 
                              </script>
 
+
 <script type="text/javascript">
+    $(document).ready(function(){
+
+
+      /*$("#tax").attr("disabled", true);*/
+
+    // cek ppn exclude 
+    var session_id = $("#session_id").val();
+    $.get("cek_ppn_ex_jual.php",{session_id:session_id},function(data){
+      if (data == 1) {
+          $("#ppn").val('Exclude');
+     $("#ppn").attr("disabled", true);
+     $("#tax1").attr("disabled", false);
+      }
+      else if(data == 2){
+
+      $("#ppn").val('Include');
+     $("#ppn").attr("disabled", true);
+       $("#tax1").attr("disabled", false);
+      }
+      else
+      {
+
+     $("#ppn").val('Non');
+     $("#tax1").attr("disabled", true);
+
+      }
+
+    });
+
+
+    $("#ppn").change(function(){
+
+    var ppn = $("#ppn").val();
+    $("#ppn_input").val(ppn);
+
+  if (ppn == "Include"){
+
+      $("#tax1").attr("disabled", false);
+
+  }
+
+  else if (ppn == "Exclude") {
+    $("#tax1").attr("disabled", false);
+  }
+  else{
+
+    $("#tax1").attr("disabled", true);
+  }
+
+
+  });
+  });
+</script>
+<!--PPN LAMA<script type="text/javascript">
     $(document).ready(function(){
 
       $("#tax").attr("disabled", true);
@@ -3318,7 +3429,7 @@ $(document).ready(function(){
 
   });
   });
-</script>
+</script>PPN LAMA-->
 
 <script type="text/javascript">
 $(document).ready(function(){

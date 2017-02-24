@@ -14,6 +14,7 @@ $harga = angkadoang($_POST['harga']);
 $jumlah_tax = angkadoang($_POST['jumlah_tax']);
 $subtotal = angkadoang($_POST['subtotal']);
 
+$hasil_sub = $subtotal + $jumlah_tax;
 
 $user = $_SESSION['nama'];
 $id = stringdoang($_POST['id']);
@@ -28,7 +29,7 @@ $query = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = ?, subtotal = ?,
 
 
 $query->bind_param("iiii",
-    $jumlah_baru, $subtotal, $jumlah_tax, $id);
+    $jumlah_baru, $hasil_sub, $jumlah_tax, $id);
 
 $query->execute();
 

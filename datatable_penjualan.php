@@ -175,7 +175,7 @@ else{
 			$nestedData[] = $row["nama_gudang"];
 			
 
-if ($row['status'] == 'Simpan Sementara') {
+/*if ($row['status'] == 'Simpan Sementara') {
 	$nestedData[] = "<a href='proses_pesanan_barang.php?no_faktur=".$row['no_faktur']."&kode_pelanggan=".$row['kode_pelanggan']."&nama_pelanggan=".$row['nama_pelanggan']."&nama_gudang=".$row['nama_gudang']."&kode_gudang=".$row['kode_gudang']."' class='btn btn-primary'>Bayar</a>";
 }
 
@@ -183,7 +183,7 @@ else{
 
 	$nestedData[] = "";
 	
-}
+}*/
 			$nestedData[] = $row["kode_pelanggan"] ." - ". $row["nama_pelanggan"];
 			$nestedData[] = rp($row["total"]);
 			$nestedData[] = $row["tanggal"];

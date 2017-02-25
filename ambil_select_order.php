@@ -10,7 +10,7 @@ $session_id = session_id();
           <?php 
           
           // menampilkan seluruh data yang ada pada tabel suplier
-          $query = $db->query("SELECT no_faktur_order FROM tbs_penjualan WHERE session_id = '$session_id' AND no_faktur_order != ''");
+          $query = $db->query("SELECT no_faktur_order FROM tbs_penjualan WHERE session_id = '$session_id' AND no_faktur_order IS NOT NULL ");
           
           // menyimpan data sementara yang ada pada $query
           while($data = mysqli_fetch_array($query))
@@ -37,12 +37,15 @@ $(document).ready(function(){
 
  var hapus_order = $("#hapus_order").val();
 
-
+//cek subtotal saat dihapus 
   $.post("cek_hapus_order.php",
         {hapus_order:hapus_order},function(data){
 
           $("#total_perorder").val(data);
         });
+//cek subtotal saat dihapus 
+
+
 
   //end cek level harga
   $("#hapus_order").change(function(){

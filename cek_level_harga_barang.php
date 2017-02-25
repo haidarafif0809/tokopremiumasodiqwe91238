@@ -31,7 +31,7 @@ elseif ($level_harga == 'harga_4') {
 	 $harga = $data_harga['harga_jual4'];
 }
 elseif ($level_harga == 'harga_5') {
-	 $harga = $data_harga['harga_jual6'];
+	 $harga = $data_harga['harga_jual5'];
 }
 elseif ($level_harga == 'harga_6') {
 	 $harga = $data_harga['harga_jual6'];
@@ -41,9 +41,7 @@ elseif ($level_harga == 'harga_7') {
 }
 
 
-echo $harga * $jumlah_barang;
-
-
+echo ($harga * $jumlah_barang);
 
 
         //Untuk Memutuskan Koneksi Ke Database

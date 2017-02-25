@@ -708,15 +708,22 @@ $(document).ready(function(){
   var satuan_konversi = $("#satuan_konversi").val();
   var jumlah_barang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_barang").val()))));
   var id_produk = $("#id_produk").val();
+if (jumlah_barang == '')
+{
+    alert("Jumlah Barang Harus Terisi");
+    $("#jumlah_barang").focus();
 
-
+}
+else
+{
   $.post("cek_level_harga_barang.php",
         {level_harga:level_harga, kode_barang:kode_barang,jumlah_barang:jumlah_barang,id_produk:id_produk,satuan_konversi:satuan_konversi},function(data){
 
           $("#harga_produk").val(data);
           $("#harga_baru").val(data);
+           $("#harga_lama").val(data);
         });
-
+}
 
 
     });
@@ -1210,6 +1217,31 @@ $("#transaksi_baru").show();
             $("#alert_berhasil").hide();
             $("#cetak_tunai").hide();
             $("#kode_barang").trigger("chosen:open");
+
+$('#tabel_tbs_order').DataTable().destroy();
+    var dataTable = $('#tabel_tbs_order').DataTable( {
+      "processing": true,
+      "serverSide": true,
+      "ajax":{
+        url :"data_tbs_order_penjualan.php", // json datasource
+        "data": function ( d ) {
+          d.session_id = $("#session_id").val();
+          // d.custom = $('#myInput').val();
+          // etc
+        },
+         
+         type: "post",  // method  , by default get
+         error: function(){  // error handling
+           $(".employee-grid-error").html("");
+           $("#tabel_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+           $("#employee-grid_processing").css("display","none");
+           }
+      },
+        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+           $(nRow).attr('class','tr-id-'+aData[9]+'');
+         }
+    });
+
 
 
             function getPathFromUrl(url) {

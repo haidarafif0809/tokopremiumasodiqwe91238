@@ -1737,7 +1737,7 @@ $(document).ready(function(){
 
 
 
-                                 $(document).on('blur','.input_jumlah',function(e){
+                                 $(document).on('blur','.input-jumlah',function(e){
 
                                     var id = $(this).attr("data-id");
                                     var jumlah_baru = $(this).val();

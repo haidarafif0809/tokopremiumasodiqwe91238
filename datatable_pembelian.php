@@ -110,7 +110,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 						if ($row['status'] == 'Lunas') {
 
-						$nestedData[] = "<a href='cetak_lap_pembelian_tunai.php?no_faktur=".$row['no_faktur']."&suplier=".$row['nama']."' id='cetak_tunai' class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print' > </span> Cetak Tunai </a>";
+						$nestedData[] = "<a href='cetak_lap_pembelian_tunai.php?no_faktur=".$row['no_faktur']."&suplier=".$row['nama']."' id='cetak_tunai' class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print' > </span> Cetak </a>";
 			}
 
 			else{
@@ -121,7 +121,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 						
 			if ($row['status'] == 'Hutang'){
-				$nestedData[] = "<a href='cetak_lap_pembelian_hutang.php?no_faktur=".$row['no_faktur']."&suplier=".$row['nama']."' id='cetak_piutang' class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print' > </span> Cetak Hutang </a>";
+				$nestedData[] = "<a href='cetak_lap_pembelian_hutang.php?no_faktur=".$row['no_faktur']."&suplier=".$row['nama']."' id='cetak_piutang' class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print' > </span> Cetak </a>";
 			}
 
 			else {

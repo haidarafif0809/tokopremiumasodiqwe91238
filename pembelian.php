@@ -80,53 +80,58 @@ include 'db.php';
   </div>
 </div><!-- end of modal hapus data  -->
 
-<div id="modal_detail" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <!-- Tampilan Modal Produk Parcel -->
+  <div id="ModalDetailProdukPembelian" class="modal fade" role="dialog">
+    <div class="modal-dialog ">
+      <!-- Isi Modal-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Detail Produk Pembelian</h4>
+        </div>
+        <div class="modal-body"> <!--membuat kerangka untuk tempat tabel -->
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Detail Pembelian</h4>
+          <div class="table-responsive">
+            <center>
+              <table id="table_detail_produk_pembelian" class="table table-bordered table-sm">
+                <thead> <!-- untuk memberikan nama pada kolom tabel -->
+
+                  <th> Nomor Faktur </th>
+                  <th> Kode Barang </th>
+                  <th> Nama Barang </th>
+                  <th> Jumlah Barang </th>
+                  <th> Satuan </th>
+                  <th> Harga </th>
+                  <th> Potongan </th>
+                  <th> Subtotal </th>
+                  <th> Tax </th>
+                  <th> Sisa Barang </th>
+
+                </thead> <!-- tag penutup tabel -->
+              </table>
+              </center>
+          </div> 
+
+        </div><!-- tag penutup modal body -->
+        <!-- tag pembuka modal footer -->
+        <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div> <!--tag penutup moal footer -->
       </div>
 
-      <div class="modal-body">
-      <div class="table-responsive">
-      <span id="modal-detail"> </span>
-      </div>
-
-     </div>
-
-      <div class="modal-footer">
-        
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
     </div>
-
-  </div>
-</div>
+  </div><!-- END Tampilan Modal Produk Parcel --> <!-- END Tampilan Modal Produk Parcel --> <!-- END Tampilan Modal Produk Parcel --> <!-- END Tampilan Modal Produk Parcel --> 
 
 <h3>DATA PEMBELIAN</h3>
 <hr>
 
 
 <style>
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
 
-th, td {
-    text-align: left;
-    padding: 8px;
-}
 
 tr:nth-child(even){background-color: #f2f2f2}
 
-th {
-    background-color: #4CAF50;
-    color: white;
-}
+
 </style>
 
 <?php 
@@ -241,24 +246,41 @@ $pembelian_hapus = mysqli_num_rows($pilih_akses_pembelian_hapus);
     </script>
 <!--/DATA TABLE MENGGUNAKAN AJAX-->
 
-<!--menampilkan detail penjualan-->
-		<script type="text/javascript">
-		
-		$(document).on('click','.detail',function(e){
-		var no_faktur = $(this).attr('no_faktur');
-		
-		
-		$("#modal_detail").modal('show');
-		
-		$.post('proses_detail_pembelian.php',{no_faktur:no_faktur},function(info) {
-		$("#modal-detail").html(info);
-		
-		
-		});
-		
-		});
-		
-		</script>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(document).on('click','.detail',function(){
+
+      var no_faktur = $(this).attr('no_faktur');
+
+    $("#ModalDetailProdukPembelian").modal('show');
+    $("#table_detail_produk_pembelian").DataTable().destroy();
+          var dataTable = $('#table_detail_produk_pembelian').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"proses_detail_pembelian.php", // json datasource
+            "data": function ( d ) {
+                  d.no_faktur = no_faktur;
+                  // d.custom = $('#myInput').val();
+                  // etc
+              },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_detail_produk_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          }
+
+      }); 
+  });
+  });
+</script>
+
+
 		
 		
 		

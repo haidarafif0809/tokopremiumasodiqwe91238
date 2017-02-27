@@ -903,7 +903,7 @@ tr:nth-child(even){background-color: #f2f2f2}
           <input type="hidden" name="kode_pelanggan" id="k_pelanggan" class="form-control" required="" >
           <input type="hidden" name="ppn_input" id="ppn_input" value="Include" class="form-control" placeholder="ppn input">  
       
-          <input type="text" name="data_ppn" id="data_ppn"  class="form-control" placeholder="Data PPN">  
+          <input type="hidden" name="data_ppn" id="data_ppn"  class="form-control" placeholder="Data PPN">  
 
           <div class="row">
  
@@ -2151,6 +2151,7 @@ $("#formtambahproduk").submit(function(){
 
         var session_id = $("#session_id").val();
         var no_faktur = $("#no_faktur").val();
+
         var sisa_pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#sisa_pembayaran_penjualan").val() ))));
         var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#kredit").val() )))); 
         var kode_pelanggan = $("#kd_pelanggan").val();
@@ -2253,7 +2254,7 @@ alert("Silakan Bayar Piutang");
      $.post("proses_bayar_simpan_penjualan.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
 
 
-     $("#table-baru").html(info);
+     
      var no_faktur = info;
      $("#cetak_tunai").attr('href', 'cetak_penjualan_tunai.php?no_faktur='+no_faktur+'');
      $("#cetak_tunai_besar").attr('href', 'cetak_penjualan_tunai_besar.php?no_faktur='+no_faktur+'');
@@ -2266,9 +2267,8 @@ alert("Silakan Bayar Piutang");
     $("#span_tbs").hide();
 
 
-     $("#kd_pelanggan").val('');
-$("#kd_pelanggan").trigger("chosen:open");
-          $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});    
+     $("#nama_pelanggan").val(''); 
+     $("#kd_pelanggan").val(''); 
 
     $("#total1").val('');
      $("#pembayaran_penjualan").val('');
@@ -2405,9 +2405,15 @@ alert("Silakan Bayar Piutang");
   $("#piutang").hide();
   $("#transaksi_baru").show();
 
- $.post("cek_subtotal_simpan_sementara.php",{total2:total2,session_id:session_id},function(data) {
+ $.post("cek_subtotal_simpan_sementara.php",{total2:total2,no_faktur:no_faktur},function(data) {
 
   if (data == "1") {
+
+
+    alert("Maaf Subtotal Penjualan Tidak Sesuai, Silakan Tunggu Sebentar!");       
+        window.location.href="form_simpan_sementara.php";
+  }
+  else{
 // POST KE BAYAR LANGSUNG CETAK
    $.post("proses_bayar_simpan_penjualan.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
   
@@ -2418,8 +2424,8 @@ alert("Silakan Bayar Piutang");
      $("#sisa_pembayaran_penjualan").val('');
      $("#kredit").val('');
       $("#span_tbs").hide();
-      $("#kd_pelanggan").chosen("destroy");
       $("#kd_pelanggan").val('');
+     $("#nama_pelanggan").val(''); 
 
   var win = window.open('cetak_penjualan_tunai.php?no_faktur='+no_fak+'');
   if (win)
@@ -2436,10 +2442,7 @@ alert("Silakan Bayar Piutang");
   
 
   }
-  else{
-    alert("Maaf Subtotal Penjualan Tidak Sesuai, Silakan Tunggu Sebentar!");       
-        window.location.href="form_simpan_sementara.php";
-  }
+  
 
  });
 
@@ -2561,10 +2564,10 @@ alert("Silakan Bayar Piutang");
             $("#tanggal_jt").val('');
             $("#cetak_piutang").show();
             $("#tax").val('');
+               $("#nama_pelanggan").val(''); 
 
-          
             $("#kd_pelanggan").val('');
-             
+              $("#no_faktur").val('');
 
                  $("#span_tbs").hide();
 
@@ -4053,6 +4056,9 @@ var dataTable = $('#tabel_tbs_penjualan').DataTable( {
             $("#tanggal_jt").val('');
             $("#total2").val('');
             $("#total1").val('');
+
+            $("#kd_pelanggan").val('');
+            $("#no_faktur").val('');
 
             $("#biaya_admin_select").val('0');
             $("#biaya_admin_select").trigger("chosen:updated");

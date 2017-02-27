@@ -4,14 +4,14 @@
     include 'db.php';
 
 echo $nomor_faktur = stringdoang($_POST['no_faktur']);
-    
+$sales = stringdoang($_POST['sales']);
 $tahun_sekarang = date('Y');
 $bulan_sekarang = date('m');
 $tanggal = date('Y-m-d');
 $jam_sekarang = date('H:i:sa');
 $tahun_terakhir = substr($tahun_sekarang, 2);
 $waktu = $tanggal." ".$jam_sekarang;
-$sisa_kredit = angkadoang($_POST['sisa_kredit']);
+$sisa_kredit = angkadoang($_POST['sisa']);
 
 
 $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
@@ -19,9 +19,47 @@ $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
 $select_kode_pelanggan = $db->query("SELECT id,nama_pelanggan FROM pelanggan WHERE id = '$kode_pelanggan'");
 $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
             
-            $sisa = angkadoang($_POST['sisa']);
+$sisa = angkadoang($_POST['sisa']);
+
+//Proses Fee
+ $perintah0 = $db->query("SELECT * FROM fee_faktur WHERE nama_petugas = '$sales'  ");
+    $cek = mysqli_fetch_array($perintah0);
+    $nominal = $cek['jumlah_uang'];
+    $prosentase = $cek['jumlah_prosentase'];
+
+    if ($nominal != 0) {
+      
+      $perintah01 = $db->query("INSERT INTO laporan_fee_faktur (nama_petugas, no_faktur, jumlah_fee, tanggal, jam, status_bayar) VALUES ('$cek[nama_petugas]',
+        '$nomor_faktur', '$nominal', '$tanggal', '$jam_sekarang', '')");
+
+    }
+
+    elseif ($prosentase != 0) {
 
 
+     
+      $fee_prosentase = $prosentase * $total / 100;
+      
+      $perintah01 = $db->query("INSERT INTO laporan_fee_faktur (nama_petugas, no_faktur, jumlah_fee, tanggal, jam) VALUES ('$cek[nama_petugas]', '$nomor_faktur',
+        '$fee_prosentase', '$tanggal', '$jam_sekarang')");
+      
+    }
+
+
+
+//proses fee per produk
+$dell_fe = $db->query("DELETE  FROM laporan_fee_produk WHERE no_faktur = '$nomor_faktur'");
+
+    $query0 = $db->query("SELECT * FROM tbs_fee_produk WHERE nama_petugas = '$sales' AND no_faktur = '$nomor_faktur' ");
+   while  ($cek0 = mysqli_fetch_array($query0)){
+
+
+
+          $query10 = $db->query("INSERT INTO laporan_fee_produk (nama_petugas, no_faktur, kode_produk, nama_produk, jumlah_fee, tanggal, jam) VALUES ('$cek0[nama_petugas]', '$nomor_faktur', '$cek0[kode_produk]', '$cek0[nama_produk]', '$cek0[jumlah_fee]', '$cek0[tanggal]', '$cek0[jam]')");
+
+
+    }
+// End Proses Fee
 
             $query12 = $db->query("SELECT * FROM tbs_penjualan WHERE no_faktur = '$nomor_faktur' ");
             while ($data = mysqli_fetch_array($query12))
@@ -205,16 +243,17 @@ if ($potongan != "" || $potongan != 0 ) {
 
             {
 
-            $ket_jurnal = "Penjualan "." Piutang ".$ambil_kode_pelanggan['nama_pelanggan']." ";
-
-            $stmt2 = $db->prepare("UPDATE penjualan SET no_faktur = ?,  kode_gudang = ?, kode_pelanggan = ?, total = ?, tanggal = ?, jam = ?, tanggal_jt = ?, user = ?, sales = ?, status = 'Piutang', potongan = ?, tax = ?, sisa = '0', kredit = ?, cara_bayar = ?, tunai = ?, status_jual_awal = 'Kredit', ppn = ?, biaya_admin = ?, keterangan_jurnal = ? WHERE no_faktur = ?");
+        $ket_jurnal = "Penjualan "." Piutang ".$ambil_kode_pelanggan['nama_pelanggan']." ";
+           
+            $stmt2 = $db->prepare("UPDATE penjualan SET  kode_gudang = ?, kode_pelanggan = ?, total = ?, tanggal = ?, jam = ?, tanggal_jt = ?, user = ?, sales = ?, status = 'Piutang', potongan = ?, tax = ?, kredit = ?, cara_bayar = ?, tunai = ?, status_jual_awal = 'Kredit', ppn = ?, biaya_admin = ?, keterangan_jurnal = ?,nilai_kredit = ?, sisa = '0' WHERE no_faktur = ?");
             
             
             // hubungkan "data" dengan prepared statements
-            $stmt2->bind_param("sssisssssiiisisiss", 
-            $nomor_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal, $jam_sekarang,
-            $tanggal_jt, $user, $sales, $potongan, $tax, $sisa_kredit, $cara_bayar, $pembayaran,
-            $ppn_input, $biaya_adm, $ket_jurnal, $nomor_faktur);
+            $stmt2->bind_param("ssisssssiiisisisss", 
+            $kode_gudang, $kode_pelanggan, $total , $tanggal, $jam_sekarang,
+            $tanggal_jt, $user, $sales, $potongan, $tax, $sisa_kredit, $cara_bayar,
+            $pembayaran,$ppn_input, $biaya_adm, $ket_jurnal, $sisa_kredit,
+            $nomor_faktur);
             
             // siapkan "data" query
             $biaya_adm = stringdoang($_POST['biaya_adm']);
@@ -386,6 +425,7 @@ else
     
             
             $perintah2 = $db->query("DELETE FROM tbs_penjualan WHERE no_faktur = '$nomor_faktur'");
+    $query30 = $db->query("DELETE  FROM tbs_fee_produk WHERE no_faktur = '$nomor_faktur'");
 
 
 

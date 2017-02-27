@@ -1,7 +1,7 @@
-<?php
+<?php session_start();
+
 include 'db.php';
 include 'sanitasi.php';
-session_start();
 
 $session_id = session_id();
 
@@ -53,6 +53,11 @@ if($c->isCached($kode_barang)) {
     $harga_jual1 = angkadoang($result['harga_jual']);
     $harga_jual2 = angkadoang($result['harga_jual2']);
     $harga_jual3 = angkadoang($result['harga_jual3']);
+    $harga_jual4 = angkadoang($result['harga_jual4']);
+    $harga_jual5 = angkadoang($result['harga_jual5']);
+    $harga_jual6 = angkadoang($result['harga_jual6']);
+    $harga_jual7 = angkadoang($result['harga_jual7']);
+
     $jumlah_barang = angkadoang(1);
     $satuan = stringdoang($result['satuan']);
 }
@@ -67,6 +72,10 @@ while ($data = $query->fetch_array()) {
       'harga_jual' => $data['harga_jual'],
       'harga_jual2' => $data['harga_jual2'],
       'harga_jual3' => $data['harga_jual3'],
+      'harga_jual4' => $data['harga_jual4'],
+      'harga_jual5' => $data['harga_jual5'],
+      'harga_jual6' => $data['harga_jual6'],
+      'harga_jual7' => $data['harga_jual7'],
       'satuan' => $data['satuan'],
       'kategori' => $data['kategori'],
       'gudang' => $data['gudang'],
@@ -88,22 +97,42 @@ while ($data = $query->fetch_array()) {
     $harga_jual1 = angkadoang($result['harga_jual']);
     $harga_jual2 = angkadoang($result['harga_jual2']);
     $harga_jual3 = angkadoang($result['harga_jual3']);
+    $harga_jual4 = angkadoang($result['harga_jual4']);
+    $harga_jual5 = angkadoang($result['harga_jual5']);
+    $harga_jual6 = angkadoang($result['harga_jual6']);
+    $harga_jual7 = angkadoang($result['harga_jual7']);
     $jumlah_barang = angkadoang(1);
     
     $satuan = stringdoang($result['satuan']);
 }
 
-if ($level_harga == 'Level 1')
+if ($level_harga == 'harga_1')
 {
   $harga = $harga_jual1;
 }
-else if ($level_harga == 'Level 2')
+else if ($level_harga == 'harga_2')
 {
   $harga = $harga_jual2;
 }
-else if ($level_harga == 'Level 3')
+else if ($level_harga == 'harga_3')
 {
   $harga = $harga_jual3;
+}
+else if ($level_harga == 'harga_4')
+{
+  $harga = $harga_jual4;
+}
+else if ($level_harga == 'harga_5')
+{
+  $harga = $harga_jual5;
+}
+else if ($level_harga == 'harga_6')
+{
+  $harga = $harga_jual6;
+}
+else if ($level_harga == 'harga_7')
+{
+  $harga = $harga_jual7;
 }
 
 $stok_barang = $ambil_sisa['jumlah_barang'] - $jumlah_barang;
@@ -369,17 +398,32 @@ $jumlah = mysqli_num_rows($cek);
                 //menampilkan data
                 echo "<tr class='tr-kode-". $data1['kode_barang'] ." tr-id-". $data1['id'] ."' data-kode-barang='".$data1['kode_barang']."'>
                 <td style='font-size:15px'>". $data1['kode_barang'] ."</td>
-                <td style='font-size:15px;'>". $data1['nama_barang'] ."</td>
-                <td style='font-size:15px' align='right' class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>
-                <td style='font-size:15px'>". $data1['nama'] ."</td>
+                <td style='font-size:15px;'>". $data1['nama_barang'] ."</td>";
+                  if ($otoritas_tombol['edit_produk'] != 0) {
+
+               echo "<td style='font-size:15px' align='right' class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>";
+               }
+       else{  
+          echo " <td style='font-size:15px' align='right' class='tidak_punya_otoritas' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-berstok = '".$data1['berkaitan_dgn_stok']."'  data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>";
+
+             }
+                echo "<td style='font-size:15px'>". $data1['nama'] ."</td>
                 <td style='font-size:15px' align='right'>". rp($data1['harga']) ."</td>
                 <td style='font-size:15px' align='right'><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
                 <td style='font-size:15px' align='right'><span id='text-potongan-".$data1['id']."'>". rp($data1['potongan']) ."</span></td>
                 <td style='font-size:15px' align='right'><span id='text-tax-".$data1['id']."'>". rp($data1['tax']) ."</span></td>";
 
-               echo "<td style='font-size:15px'> <button class='btn btn-danger btn-hapus-tbs' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-barang='". $data1['nama_barang'] ."' data-subtotal='". $data1['subtotal'] ."'>Hapus</button> </td> 
+        if ($otoritas_tombol['hapus_produk'] > 0) {
 
-                </tr>";
+               echo "<td style='font-size:15px'> <button class='btn btn-danger btn-hapus-tbs' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-barang='". $data1['nama_barang'] ."' data-subtotal='". $data1['subtotal'] ."'>Hapus</button> </td>";
+             }
+             else{
+
+               echo "<td style='font-size:15px; color:red'> Tidak Ada Otoritas </td>";
+
+             }
+
+                echo "</tr>";
 
               }
 //Untuk Memutuskan Koneksi Ke Database

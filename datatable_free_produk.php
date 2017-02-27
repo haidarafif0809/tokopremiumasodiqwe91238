@@ -51,15 +51,8 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	 if ($produk_promo['program_promo_free_edit'] > 0) {
         $nestedData[] = "<button data-id='".$row['id']."' data-nama_produk='".$row['nama_barang']."' data-id_produk='".$row['id_barang']."' data-kode_program='".$row['napro'] ."' data-id_program='".$row['id_program']."' data-qty='".$row['qty']."' class='btn btn-warning edit'><span class='fa fa-edit'></span> Edit </button>";
       }
-      else{
-        $nestedData[] = "You can't edited";
-      }
-
      if ($produk_promo['program_promo_free_hapus'] > 0) {
         $nestedData[] = "<td><button data-id='".$row['id']."' data-nama_produk='".$row['nama_barang']."' data-nama_program='".$row['napro']."' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'></span> Hapus </button></td>";
-      }
-      else{
-        $nestedData[] = "You can't deleted";
       }
       $nestedData[] = $row["id"];
 	$data[] = $nestedData;

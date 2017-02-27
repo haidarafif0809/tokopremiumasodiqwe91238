@@ -5,6 +5,11 @@
     $session_id = session_id();
     //mengirim data sesuai dengan variabel denagn metode POST 
 
+$pilih_akses_tombol = $db->query("SELECT * FROM otoritas_form_order_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]' ");
+$otoritas_tombol = mysqli_fetch_array($pilih_akses_tombol);
+
+
+
     $kode_barang = stringdoang($_POST['kode_barang']);
     $harga = angkadoang($_POST['harga']);
     $jumlah_barang = angkadoang($_POST['jumlah_barang']);
@@ -196,7 +201,7 @@ $jumlah = mysqli_num_rows($cek);
 
             if ($otoritas_tombol['hapus_produk'] > 0) {
 
-               echo "<td style='font-size:15px'> <button class='btn btn-danger btn-hapus-tbs' id='btn-hapus-".$data1['id']."' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-barang='". $data1['nama_barang'] ."' data-subtotal='". $data1['subtotal'] ."'>Hapus</button> </td>";
+               echo "<td style='font-size:15px'> <button class='btn btn-danger btn-hapus-tbs btn-sm' id='btn-hapus-".$data1['id']."' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-barang='". $data1['nama_barang'] ."' data-subtotal='". $data1['subtotal'] ."'>Hapus</button> </td>";
                 }
              else{
                echo "<td style='font-size:15px; color:red'> Tidak Ada Otoritas </td>";

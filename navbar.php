@@ -322,6 +322,12 @@ if ($lihat['akuntansi_lihat'] > 0){
 
 echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> Data Penjualan </a></li>';
 
+if ($lihat['order_lihat'] > 0){
+
+echo '<li><a href="order_penjualan.php" class="waves-effect">Data Order Penjualan </a></li>';
+
+}
+
  if ($lihat['laporan_penjualan_lihat'] > 0)
  {
             echo '<li><a href="lap_penjualan.php" class="waves-effect">Lap. Penjualan</a></li>';

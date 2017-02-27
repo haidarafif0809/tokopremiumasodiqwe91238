@@ -40,7 +40,7 @@ $sql = "SELECT p.potongan,p.biaya_admin,p.id,p.kode_pelanggan,p.no_faktur,p.tota
 $sql.=" FROM penjualan p LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan ";
 $sql.=" WHERE p.status = 'Simpan Sementara'";
 
-    $sql.=" p.kode_pelanggan LIKE '".$requestData['search']['value']."%'";  
+    $sql.=" AND (p.kode_pelanggan LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR p.no_faktur LIKE '".$requestData['search']['value']."%' ";
     $sql.=" OR p.total LIKE '".$requestData['search']['value']."%'";   
     $sql.=" OR p.tanggal LIKE '".$requestData['search']['value']."%' ";
@@ -71,9 +71,9 @@ while( $row=mysqli_fetch_array($query) ) {
     $nestedData[] = $row["kode_pelanggan"];
     $nestedData[] = $row["nama_pelanggan"];
     $nestedData[] = $row["no_faktur"];
-    $nestedData[] = $row["total"];
-    $nestedData[] = $row["potongan"];
-    $nestedData[] = $row["biaya_admin"];
+    $nestedData[] = rp($row["total"]);
+    $nestedData[] = rp($row["potongan"]);
+    $nestedData[] = rp($row["biaya_admin"]);
     $nestedData[] = $row["tanggal"];
     $nestedData[] = $row["jam"];
     $nestedData[] = $row["id"];

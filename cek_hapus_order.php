@@ -9,10 +9,6 @@ $session_id = session_id();
 $hapus_order = stringdoang($_POST['hapus_order']);
 
 
-// mengirim data no faktur menggunakan metode POST
-
-
-
 // menampilakn hasil penjumlah subtotal ALIAS total penjualan dari tabel tbs_penjualan berdasarkan data no faktur
  $query = $db->query("SELECT SUM(total) AS total_penjualan FROM penjualan_order WHERE no_faktur_order = '$hapus_order'");
  

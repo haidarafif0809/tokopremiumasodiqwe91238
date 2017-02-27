@@ -388,8 +388,7 @@ $session_id = session_id();
                 <span id='tes'></span>            
                 
                 <div class="table-responsive"> <!--tag untuk membuat garis pada tabel-->  
-                <span id="table-baru">  
-                <table id="tableuser" class="table table-sm">
+                <table id="tabel_tbs_order" class="table table-sm">
                 <thead>
                 <th> Kode  </th>
                 <th style="width:1000%"> Nama </th>
@@ -403,54 +402,7 @@ $session_id = session_id();
                 
                 </thead>
                 
-                <tbody id="tbody">
-                <?php
-                
-                //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
-                $perintah = $db->query("SELECT tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama,bb.berkaitan_dgn_stok FROM tbs_penjualan_order tp INNER JOIN satuan s ON tp.satuan = s.id INNER JOIN barang bb ON tp.kode_barang = bb.kode_barang WHERE tp.session_id = '$session_id'");
-                
-                //menyimpan data sementara yang ada pada $perintah
-                
-                while ($data1 = mysqli_fetch_array($perintah))
-                {
-                //menampilkan data
-                echo "<tr class='tr-kode-". $data1['kode_barang'] ." tr-id-". $data1['id'] ."' data-kode-barang='".$data1['kode_barang']."'>
-                <td style='font-size:15px'>". $data1['kode_barang'] ."</td>
-                <td style='font-size:15px;'>". $data1['nama_barang'] ."</td>";
-      
-               if ($otoritas_tombol['edit_produk'] > 0) {
-
-                echo " <td style='font-size:15px' align='right' class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-berstok = '".$data1['berkaitan_dgn_stok']."'  data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>";
-}
- else{        
-               echo " <td style='font-size:15px' align='right' class='tidak_punya_otoritas' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-berstok = '".$data1['berkaitan_dgn_stok']."'  data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>";
-
- }
-
-                echo "<td style='font-size:15px'>". $data1['nama'] ."</td>
-                <td style='font-size:15px' align='right'>". rp($data1['harga']) ."</td>
-                <td style='font-size:15px' align='right'><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
-                <td style='font-size:15px' align='right'><span id='text-potongan-".$data1['id']."'>". rp($data1['potongan']) ."</span></td>
-                <td style='font-size:15px' align='right'><span id='text-tax-".$data1['id']."'>". rp($data1['tax']) ."</span></td>";
-
-            if ($otoritas_tombol['hapus_produk'] > 0) {
-
-               echo "<td style='font-size:15px'> <button class='btn btn-danger btn-hapus-tbs' id='btn-hapus-".$data1['id']."' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-barang='". $data1['nama_barang'] ."' data-subtotal='". $data1['subtotal'] ."'>Hapus</button> </td>";
-                }
-             else{
-               echo "<td style='font-size:15px; color:red'> Tidak Ada Otoritas </td>";
-             }   
-
-                echo "</tr>";
-
-
-                }
-
-                ?>
-                </tbody>
-                
                 </table>
-                </span>
                 </div>
                 <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom jumlah barang jika ingin mengedit.</i></h6>
                 <h6 style="text-align: left ;"><i><b> * Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</b></i></h6>
@@ -504,8 +456,12 @@ $session_id = session_id();
           <input type="hidden" name="kode_pelanggan" id="k_pelanggan" class="form-control" required="" >
           <input type="hidden" name="ppn_input" id="ppn_input" value="Include" class="form-control" placeholder="ppn input">  
       
+<?php if ($otoritas_tombol['tombol_order'] > 0):?>  
 
           <button type="submit" id="order" class="btn btn-primary" style="font-size:15px">  Order (F10)</button>
+
+<?php endif; ?>
+
           <a href='cetak_penjualan_tunai.php' id="cetak_tunai" style="display: none;" class="btn btn-primary" target="blank"> Cetak Order  </a>
 
 
@@ -553,6 +509,33 @@ $session_id = session_id();
   });
 </script>
     
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    var dataTable = $('#tabel_tbs_order').DataTable( {
+      "processing": true,
+      "serverSide": true,
+      "ajax":{
+        url :"data_tbs_order_penjualan.php", // json datasource
+        "data": function ( d ) {
+          d.session_id = $("#session_id").val();
+          // d.custom = $('#myInput').val();
+          // etc
+        },
+         
+         type: "post",  // method  , by default get
+         error: function(){  // error handling
+           $(".employee-grid-error").html("");
+           $("#tabel_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+           $("#employee-grid_processing").css("display","none");
+           }
+      },
+        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+           $(nRow).attr('class','tr-id-'+aData[9]+'');
+         }
+    });
+  });
+</script>
 
 
 <script>
@@ -725,14 +708,20 @@ $(document).ready(function(){
   var satuan_konversi = $("#satuan_konversi").val();
   var jumlah_barang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_barang").val()))));
   var id_produk = $("#id_produk").val();
+if (jumlah_barang == '')
+{
+    alert("Jumlah Barang Harus Terisi");
+    $("#jumlah_barang").focus();
 
-if (kode_barang != '')
+}
+else
 {
   $.post("cek_level_harga_barang.php",
         {level_harga:level_harga, kode_barang:kode_barang,jumlah_barang:jumlah_barang,id_produk:id_produk,satuan_konversi:satuan_konversi},function(data){
 
           $("#harga_produk").val(data);
           $("#harga_baru").val(data);
+           $("#harga_lama").val(data);
         });
 }
 
@@ -787,7 +776,7 @@ if (kode_barang != '')
         {jumlah_barang:jumlah_barang,satuan_konversi:satuan_konversi,kode_barang:kode_barang,
         id_produk:id_produk},function(data){
 
-          if (data < 0) {
+          if (data < 0 ) {
             alert("Jumlah Melebihi Stok");
             $("#jumlah_barang").val('');
           $("#satuan_konversi").val(prev);
@@ -881,10 +870,7 @@ $(document).ready(function(){
     var level_harga = $("#level_harga").val();
     var sales = $("#sales").val();
 
-   $("#jumlah_barang").val('');
-   $("#kode_barcode").val('');
-   $("#potongan1").val('');
-   $("#tax1").val('');
+
 
 $.get("cek_barang.php",{kode_barang:kode_barang},function(data){
 if (data != 1) {
@@ -945,9 +931,34 @@ $.post("lihat_promo_alert.php",{id:json.id},function(info){
 
 });
 
+    $('#tabel_tbs_order').DataTable().destroy();
+    var dataTable = $('#tabel_tbs_order').DataTable( {
+      "processing": true,
+      "serverSide": true,
+      "ajax":{
+        url :"data_tbs_order_penjualan.php", // json datasource
+        "data": function ( d ) {
+          d.session_id = $("#session_id").val();
+          // d.custom = $('#myInput').val();
+          // etc
+        },
+         
+         type: "post",  // method  , by default get
+         error: function(){  // error handling
+           $(".employee-grid-error").html("");
+           $("#tabel_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+           $("#employee-grid_processing").css("display","none");
+           }
+      },
+        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+           $(nRow).attr('class','tr-id-'+aData[9]+'');
+         }
+    });
 
+
+  });
      
-     });
+
      
      $("#form_barcode").submit(function(){
     return false;
@@ -1069,6 +1080,31 @@ $.post("lihat_promo_alert.php",{id:json.id},function(info){
      
      });
 }
+
+
+$('#tabel_tbs_order').DataTable().destroy();
+    var dataTable = $('#tabel_tbs_order').DataTable( {
+      "processing": true,
+      "serverSide": true,
+      "ajax":{
+        url :"data_tbs_order_penjualan.php", // json datasource
+        "data": function ( d ) {
+          d.session_id = $("#session_id").val();
+          // d.custom = $('#myInput').val();
+          // etc
+        },
+         
+         type: "post",  // method  , by default get
+         error: function(){  // error handling
+           $(".employee-grid-error").html("");
+           $("#tabel_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+           $("#employee-grid_processing").css("display","none");
+           }
+      },
+        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+           $(nRow).attr('class','tr-id-'+aData[9]+'');
+         }
+    });
     
 });
 
@@ -1182,6 +1218,31 @@ $("#transaksi_baru").show();
             $("#cetak_tunai").hide();
             $("#kode_barang").trigger("chosen:open");
 
+$('#tabel_tbs_order').DataTable().destroy();
+    var dataTable = $('#tabel_tbs_order').DataTable( {
+      "processing": true,
+      "serverSide": true,
+      "ajax":{
+        url :"data_tbs_order_penjualan.php", // json datasource
+        "data": function ( d ) {
+          d.session_id = $("#session_id").val();
+          // d.custom = $('#myInput').val();
+          // etc
+        },
+         
+         type: "post",  // method  , by default get
+         error: function(){  // error handling
+           $(".employee-grid-error").html("");
+           $("#tabel_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+           $("#employee-grid_processing").css("display","none");
+           }
+      },
+        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+           $(nRow).attr('class','tr-id-'+aData[9]+'');
+         }
+    });
+
+
 
             function getPathFromUrl(url) {
               return url.split("?")[0];
@@ -1207,6 +1268,7 @@ $("#transaksi_baru").show();
   if(data == 1){
     alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
     $("#kode_barang").val('');
+        $("#kode_barang").trigger('chosen:updated');
     $("#nama_barang").val('');
    }//penutup if
 
@@ -1250,12 +1312,22 @@ $("#cari_produk_penjualan").click(function(){
 
 
 
-if (stok < 0 && ber_stok == 'Barang')
+if (stok < 0 )
 
-    { 
-       alert("Jumlah Melebihi Stok! ");
+  {
+
+       if (ber_stok == 'Jasa') {
+       
+       }
+       
+       else{
+       alert ("Jumlah Melebihi Stok!");
        $("#jumlah_barang").val('');
+       }
+
+
     }
+
 
     else if( limit_stok > stok  )
     {
@@ -1311,6 +1383,33 @@ $(document).on('click','.btn-hapus-tbs',function(e){
     
     }
     });
+
+
+$('#tabel_tbs_order').DataTable().destroy();
+    var dataTable = $('#tabel_tbs_order').DataTable( {
+      "processing": true,
+      "serverSide": true,
+      "ajax":{
+        url :"data_tbs_order_penjualan.php", // json datasource
+        "data": function ( d ) {
+          d.session_id = $("#session_id").val();
+          // d.custom = $('#myInput').val();
+          // etc
+        },
+         
+         type: "post",  // method  , by default get
+         error: function(){  // error handling
+           $(".employee-grid-error").html("");
+           $("#tabel_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+           $("#employee-grid_processing").css("display","none");
+           }
+      },
+        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+           $(nRow).attr('class','tr-id-'+aData[9]+'');
+         }
+    });
+
+
 
 });
                   $('form').submit(function(){
@@ -1623,7 +1722,7 @@ $(document).ready(function(){
 
                             <script type="text/javascript">
                                  
-                                 $(".edit-jumlah").dblclick(function(){
+                                 $(document).on('dblclick','.edit-jumlah',function(e){
 
                                     var id = $(this).attr("data-id");
 
@@ -1634,7 +1733,7 @@ $(document).ready(function(){
                                  });
 
 
-                                 $(".input_jumlah").blur(function(){
+                                 $(document).on('blur','.input_jumlah',function(e){
 
                                     var id = $(this).attr("data-id");
                                     var jumlah_baru = $(this).val();

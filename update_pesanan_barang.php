@@ -1,10 +1,7 @@
 <?php session_start();
 
-
 include 'sanitasi.php';
 include 'db.php';
-
-
 
 $kode_barang = stringdoang($_POST['kode_barang']);
 $jumlah_baru = angkadoang($_POST['jumlah_baru']);

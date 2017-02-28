@@ -14,7 +14,7 @@ $pelanggan = angkadoang($_POST['pelanggan']);
 
     echo$total_poin = $masuk['total_poin'] - $keluar['total_poin'];
 
-
+mysqli_close($db);   
  ?>
 
   

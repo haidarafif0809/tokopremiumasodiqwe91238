@@ -5,7 +5,8 @@
  include 'db.php';
  include 'sanitasi.php';
 
- 
+     $user = $_SESSION['nama'];
+
  
  $query = $db->query("SELECT * FROM kas_masuk ");
  
@@ -127,79 +128,30 @@
 <form action="proses_tbs_kas_masuk.php" role="form" method="post" id="formtambahproduk">
 <div class="row">
 
-					<div class="form-group col-sm-6">
+					<div class="form-group col-sm-4">
 					<label> Tanggal </label><br>
-					<input type="text" name="tanggal" id="tanggal1" placeholder="Tanggal" value="<?php echo date("Y-m-d"); ?>" class="form-control" required="" >
+					<input type="text" name="tanggal" id="tanggal1" placeholder="Tanggal" value="<?php echo date("Y-m-d"); ?>" autocomplete="off" class="form-control" required="" >
 					</div>
 
-					<div class="form-group col-sm-6">
+					<div class="form-group col-sm-4">
+          <label> Petugas </label>
+
+          <input type="text" name="petugas" id="petugas" class="form-control" readonly="" value="<?php echo $user; ?>" autocomplete="off" required="" >
+
 					<input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
 
 					</div>
 
-
-          <div class="form-group col-sm-6" id="col_sm_6">
-          <label> Jumlah Total </label><br>
-          <input type="text" name="jumlah" id="jumlahtotal" readonly="" placeholder="Jumlah Total" class="form-control">
-          </div>
-
-</div> <!-- tag penutup div row -->
-
-<div class="row">
-
- <?php if ($data_tbs > 0): ?>
-            
-            <div class="form-group col-sm-6">
-            <label> Ke Akun </label><br>
-            <select type="text" name="ke_akun" id="keakun" class="form-control" disabled="true">
-            <option value="<?php echo $data_tbs1['ke_akun']; ?>"><?php echo $data_tbs1['nama_daftar_akun']; ?></option>
-            
-            <?php 
-            
-            
-            $query = $db->query("SELECT * FROM daftar_akun WHERE tipe_akun = 'Kas & Bank' ");
-            while($data = mysqli_fetch_array($query))
-            {
-            
-            echo "<option value='".$data['kode_daftar_akun'] ."'>".$data['nama_daftar_akun'] ."</option>";
-            }
-            
-            
-            ?>
-            </select>
-            </div>
-
-<?php else: ?>
-					<div class="form-group col-sm-6">
-					<label> Ke Akun </label><br>
-					<select type="text" name="ke_akun" id="keakun" class="form-control" >
-					<option value="">--SILAHKAN PILIH--</option>
-
-					 <?php 
-
-    
-    $query = $db->query("SELECT * FROM daftar_akun WHERE tipe_akun = 'Kas & Bank' ");
-    while($data = mysqli_fetch_array($query))
-    {
-    
-    echo "<option value='".$data['kode_daftar_akun'] ."'>".$data['nama_daftar_akun'] ."</option>";
-    }
-    
-    
-    ?>
-   					</select>
-   					</div>
-
-<?php endif ?>   
-
-          <div class="form-group col-sm-6">
-          <label> Keterangan </label><br>
+           <div class="form-group col-sm-4">
+          <label> Keterangan </label>
           <input type="text" name="keterangan" autocomplete="off" id="keterangan" placeholder="Keterangan" class="form-control">
           </div>
 
+        
 
+</div> <!-- tag penutup div row -->
 
-</div> 
+<div class="card card-block">
 <div class="row">
 
 					<div class="form-group col-sm-3">
@@ -222,6 +174,55 @@
    					</select>
 					</div>
 
+
+          <?php if ($data_tbs > 0): ?>
+            
+            <div class="form-group col-sm-3">
+            <label> Ke Akun </label><br>
+            <select type="text" name="ke_akun" id="keakun" class="form-control" disabled="true">
+            <option value="<?php echo $data_tbs1['ke_akun']; ?>"><?php echo $data_tbs1['nama_daftar_akun']; ?></option>
+            
+            <?php 
+            
+            
+            $query = $db->query("SELECT * FROM daftar_akun WHERE tipe_akun = 'Kas & Bank' ");
+            while($data = mysqli_fetch_array($query))
+            {
+            
+            echo "<option value='".$data['kode_daftar_akun'] ."'>".$data['nama_daftar_akun'] ."</option>";
+            }
+            
+            
+            ?>
+            </select>
+            </div>
+
+<?php else: ?>
+          <div class="form-group col-sm-3">
+          <label> Ke Akun </label><br>
+          <select type="text" name="ke_akun" id="keakun" class="form-control" >
+          <option value="">--SILAHKAN PILIH--</option>
+
+           <?php 
+
+    
+    $query = $db->query("SELECT * FROM daftar_akun WHERE tipe_akun = 'Kas & Bank' ");
+    while($data = mysqli_fetch_array($query))
+    {
+    
+    echo "<option value='".$data['kode_daftar_akun'] ."'>".$data['nama_daftar_akun'] ."</option>";
+    }
+    
+    
+    ?>
+            </select>
+            </div>
+
+<?php endif ?>   
+
+
+
+
 					<div class="form-group col-sm-3">
 					<label> Jumlah </label><br>
 					<input type="text" name="jumlah" id="jumlah" autocomplete="off" placeholder="Jumlah" class="form-control" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" style="height: 20px" >
@@ -237,7 +238,7 @@
 					
 					
 </div> <!-- tag penutup div row-->
-
+</div>
 
 </form>
 
@@ -319,10 +320,15 @@ mysqli_close($db);
 
   </table>
   </div>
-        </span>
-
+ </span>
+        <br><br>
+         <div class="form-group col-sm-4" id="col_sm_6">
+          <label> <b>Jumlah Total</b> </label><br>
+          <input style="height: 25px; width:90%; font-size:20px;" type="text" name="jumlah" id="jumlahtotal" readonly="" placeholder="Jumlah Total" class="form-control">
+          </div>
 <br>
- <button type="submit" id="submit_kas_masuk" class="btn btn-info"> <i class='fa fa-send'></i> Submit </a> </button>
+ <button type="submit" id="submit_kas_masuk" class="btn btn-info"> <i class='fa fa-send'>
+ </i> Submit </a> </button>
 
 </div> <!-- tag penutup div container -->
 
@@ -686,7 +692,6 @@ $("#alert_berhasil").hide();
                                     $("#text-jumlah-"+id+"").show();
                                     $("#text-jumlah-"+id+"").text(tandaPemisahTitik(input_jumlah));
                                     $("#jumlahtotal").val(tandaPemisahTitik(subtotal));
-                                    $("#jumlah").val(tandaPemisahTitik(subtotal));
                                     $("#input-jumlah-"+id+"").attr("type", "hidden");           
                                     
                                     });

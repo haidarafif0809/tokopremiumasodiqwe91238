@@ -5,7 +5,8 @@
  include 'sanitasi.php';
   include 'db.php';
  
- 
+      $user = $_SESSION['nama'];
+
  $query = $db->query("SELECT * FROM kas_keluar");
  
  $session_id = session_id();
@@ -127,28 +128,37 @@
 <form action="proses_tbs_kas_keluar.php" role="form" method="post" id="formtambahproduk">
 <div class="row">
 
-					<div class="form-group col-sm-6">
+					<div class="form-group col-sm-4">
 					<label> Tanggal </label><br>
-					<input type="text" name="tanggal" id="tanggal1" placeholder="Tanggal" value="<?php echo date("Y-m-d"); ?>" class="form-control" required="" >
+					<input type="text" name="tanggal" id="tanggal1" placeholder="Tanggal" value="<?php echo date("Y-m-d"); ?>" autocomplete="off" class="form-control" required="" >
 					</div>
 
-					<div class="form-group col-sm-6">
+					<div class="form-group col-sm-4">
+          <label> Petugas </label>
+
+          <input type="text" name="petugas" id="petugas" class="form-control" readonly="" value="<?php echo $user; ?>" autocomplete="off" required="" >
           <input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
 
 					</div>
 
-          <div class="form-group col-sm-6" id="col_sm_6">
-          <label> Jumlah Total </label><br>
-          <input type="text" name="jumlah" id="jumlahtotal" readonly="" placeholder="Jumlah Total" class="form-control">
+          <div class="form-group col-sm-4">
+          <label> Keterangan </label><br>
+          <input type="text" name="keterangan" id="keterangan" autocomplete="off" placeholder="Keterangan" class="form-control">
           </div>
+
+         
 
 </div> <!-- tag penutup div row -->
 
+
+
+<div class="card card-block">
+
 <div class="row">
 
- <?php if ($data_tbs > 0): ?>
+<?php if ($data_tbs > 0): ?>
     
-          <div class="form-group col-sm-6">
+          <div class="form-group col-sm-3">
           <label> Dari Akun </label><br>
           <select type="text" name="dari_akun" id="dariakun" class="form-control" disabled="true">
           <option value="<?php echo $data_tbs1['dari_akun']; ?>"><?php echo $data_tbs1['nama_daftar_akun']; ?></option>
@@ -171,10 +181,10 @@
 <?php else: ?>
 
 
-					<div class="form-group col-sm-6">
-					<label> Dari Akun </label><br>
-					<select type="text" name="dari_akun" id="dariakun" class="form-control">
-					<option value="">--SILAHKAN PILIH--</option>
+          <div class="form-group col-sm-3">
+          <label> Dari Akun </label><br>
+          <select type="text" name="dari_akun" id="dariakun" class="form-control">
+          <option value="">--SILAHKAN PILIH--</option>
 
              <?php 
              
@@ -189,20 +199,8 @@
              
              ?>
             </select>
-   					</div>
-<?php endif ?>         
-
-          <div class="form-group col-sm-6">
-          <label> Keterangan </label><br>
-          <input type="text" name="keterangan" id="keterangan" autocomplete="off" placeholder="Keterangan" class="form-control">
-          </div>
-
-
-
-</div> 
-
-
-<div class="row">
+            </div>
+<?php endif ?>   
 
 					<div class="form-group col-sm-3">
 					<label> Ke Akun </label><br>
@@ -226,7 +224,7 @@
 
 					<div class="form-group col-sm-3">
 					<label> Jumlah </label><br>
-					<input type="text" name="jumlah" id="jumlah" autocomplete="off" placeholder="Jumlah" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" class="form-control"  >
+					<input class="form-control" type="text" name="jumlah" id="jumlah" autocomplete="off" placeholder="Jumlah" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);"   >
 					</div>
 
 
@@ -239,7 +237,7 @@
 					
 					
 </div> <!-- tag penutup div row-->
-  
+  </div>
 </form>
 
 <form action="proses_kas_keluar.php" id="form_submit" method="POST"><!--tag pembuka form-->
@@ -253,7 +251,7 @@
 
       
   <!--membuat tombol submit bayar & Hutang-->
-      <button type="submit" id="submit_kas_keluar" class="btn btn-info"> <i class='fa fa-send'> </i> Submit </a> </button>
+   
      <a class="btn btn-info" href="form_kas_keluar.php" id="transaksi_baru" style="display: none"> <i class="fa fa-refresh"></i> Transaksi Baru</a>
 
           </form><!--tag penutup form-->
@@ -321,8 +319,13 @@ mysqli_close($db);
   </table>
   </div>
         </span>
-
-
+<br><br>
+ <div class="form-group col-sm-3" id="col_sm_6">
+          <label> <b>Jumlah Total </b></label><br>
+          <input style="height: 25px; width:90%; font-size:20px;" type="text" name="jumlah" id="jumlahtotal" readonly="" placeholder="Jumlah Total" class="form-control">
+          </div>
+<br>  
+             <button type="submit" id="submit_kas_keluar" class="btn btn-info"> <i class='fa fa-send'> </i> Submit </a> </button>
 </div> <!-- tag penutup div container -->
 
 
@@ -694,12 +697,12 @@ alert("Nama Akun Tidak Boleh Sama");
                                     
                                     $.post("update_tbs_kas_keluar.php",{id:id, input_jumlah:input_jumlah,jenis_edit:"jumlah"},function(data){
                                     
-                                    $("#input-jumlah-"+id).attr("data-jumlah", input_jumlah);
+                                  $("#input-jumlah-"+id).attr("data-jumlah", input_jumlah);
                                     $("#btn-hapus-"+id).attr("data-jumlah", input_jumlah);
                                     $("#text-jumlah-"+id+"").show();
                                     $("#text-jumlah-"+id+"").text(tandaPemisahTitik(input_jumlah));
+
                                     $("#jumlahtotal").val(tandaPemisahTitik(subtotal));
-                                    $("#jumlah").val(tandaPemisahTitik(subtotal));
                                     $("#input-jumlah-"+id+"").attr("type", "hidden");           
                                     
                                     });
@@ -711,7 +714,4 @@ alert("Nama Akun Tidak Boleh Sama");
                                     </script>
 
 
-<?php 
-include 'footer.php';
- ?>
-
+<?php include 'footer.php'; ?>

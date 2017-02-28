@@ -65,6 +65,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 			$nestedData[] = $row['jam'];
 			$nestedData[] = $row['user'];
 			
+				$nestedData[] = "<a href='cetak_kas_keluar.php?no_faktur=".$row['no_faktur']."' target='blank' class='btn btn-primary' data-target='blank'> <i class='fa fa-print'></i>  </a>";
 
 			$nestedData[] ="<button class=' btn btn-info detail' no_faktur='". $row['no_faktur'] ."'> <span class='glyphicon glyphicon-th-list'></span> Detail </button>";
 

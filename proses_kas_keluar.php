@@ -28,7 +28,7 @@ if ($cek_jumlah_bulan == 1) {
  }
 //ambil bulan dari tanggal penjualan terakhir
 
- $bulan_terakhir = $db->query("SELECT MONTH(tanggal) as bulan FROM kas_keluar ORDER BY id DESC LIMIT 1");
+ $bulan_terakhir = $db->query("SELECT MONTH(waktu_input) as bulan FROM kas_keluar ORDER BY id DESC LIMIT 1");
  $v_bulan_terakhir = mysqli_fetch_array($bulan_terakhir);
 
 //ambil nomor  dari penjualan terakhir
@@ -70,7 +70,7 @@ $no_faktur = $nomor."/KK/".$data_bulan_terakhir."/".$tahun_terakhir;
         $dari_akun = stringdoang($_POST['dari_akun']);
         $tanggal = stringdoang($_POST['tanggal']);
         $jumlah = angkadoang($_POST['jumlah']);
-        $user = $_SESSION['user_name'];
+        $user = $_SESSION['nama'];
 
 // jalankan query
         $stmt->execute();

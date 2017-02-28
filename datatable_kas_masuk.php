@@ -55,6 +55,8 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 			$pilih_akses_kas_masuk = $db->query("SELECT * FROM otoritas_kas_masuk WHERE id_otoritas = '$_SESSION[otoritas_id]'");
 		$kas_masuk = mysqli_fetch_array($pilih_akses_kas_masuk);
 
+		
+
 			//menampilkan data
 			$nestedData[] = $row['no_faktur'];			
 			$nestedData[] = $row['nama_daftar_akun'];
@@ -63,7 +65,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 			$nestedData[] = $row['jam'];
 			$nestedData[] = $row['user'];
 			
-
+			$nestedData[] = "<a href='cetak_kas_masuk.php?no_faktur=".$row['no_faktur']."' target='blank' class='btn btn-primary' data-target='blank'> <i class='fa fa-print'></i>  </a>";
 
 			$nestedData[] = "<button class=' btn btn-info detail' no_faktur='". $row['no_faktur'] ."'> <span class='glyphicon glyphicon-th-list'></span> Detail </button> </td>";
 

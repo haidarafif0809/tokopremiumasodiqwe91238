@@ -4082,7 +4082,7 @@ $("#kd_pelanggan").trigger("chosen:open");
             $("#level_harga").val('harga_1');
             $("#keterangan").val('');
             $("#penjualan").show();
-            $("#cetak_langsung").show();
+            $("#cetak_langsung").hide();
             $("#simpan_sementara").show();
             $("#piutang").show();
             $("#batal_penjualan").show(); 

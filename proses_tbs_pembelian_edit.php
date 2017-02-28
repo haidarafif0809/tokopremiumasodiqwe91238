@@ -2,24 +2,20 @@
     // memasukan file yang ada pada db.php
     include 'db.php';
     include 'sanitasi.php';
-
-    $session_id = $_POST['session_id'];
-
     // mengirim data sesuai variabel yang ada dengan menggunakan metode POST
+    $no_faktur = stringdoang($_POST['no_faktur']);
     $kode_barang = stringdoang($_POST['kode_barang']);
     $nama_barang = stringdoang($_POST['nama_barang']);
-    $jumlah_barang = angkadoang($_POST['jumlah_barang']);
-    $satuan = stringdoang($_POST['satuan']);
+    $jumlah_barang = $_POST['jumlah_barang'];
+    $satuan = $_POST['satuan'];
     $harga = angkadoang($_POST['harga']);
     $harga_baru = angkadoang($_POST['harga_baru']);
-    $pajak = stringdoang($_POST['tax']);
+    $potongan = stringdoang($_POST['potongan']);
+    $pajak = angkadoang($_POST['tax']);
     $ppn = stringdoang($_POST['ppn']);
 
-    $potongan = stringdoang($_POST['potongan']);
 
-
-
-  if ( $harga != $harga_baru) {
+    if ( $harga != $harga_baru) {
           $query00 = $db->query("UPDATE barang SET harga_beli = '$harga_baru' WHERE kode_barang = '$kode_barang'");
           $harga_beli = $harga_baru;
     }
@@ -79,28 +75,17 @@
         $subtotaljadi = $harga_beli * $jumlah_barang - $potongan_jadi; 
       }
 
-  
-        $perintah = $db->prepare("INSERT INTO tbs_pembelian (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax) VALUES (?,?,?,?,?,?,?,?,?)");
-
-        $perintah->bind_param("sssisiisi",
-          $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga_beli, $subtotaljadi, $potongan_tampil, $tax_persen);
-          
-          $kode_barang = stringdoang($_POST['kode_barang']);
-          $nama_barang = stringdoang($_POST['nama_barang']);
-          $jumlah_barang = angkadoang($_POST['jumlah_barang']);
-          $satuan = stringdoang($_POST['satuan']);
-
-        $perintah->execute();
-
-        if (!$perintah) 
+        
+        $perintah = "INSERT INTO tbs_pembelian (no_faktur,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax)VALUES ('$no_faktur','$kode_barang','$nama_barang','$jumlah_barang','$satuan','$harga_beli','$subtotaljadi','$potongan','$tax_persen')";
+        
+        if ($db->query($perintah) === TRUE)
         {
-         die('Query Error : '.$db->errno.
-         ' - '.$db->error);
         }
-        else 
+        else
         {
-           
+            echo "Error: " . $perintah . "<br>" . $db->error;
         }
-//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db); 
+
+    
+
 ?>

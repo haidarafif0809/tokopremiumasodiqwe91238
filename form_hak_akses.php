@@ -488,6 +488,23 @@ else{
  </div>
 
 
+ <div class="form-group col-sm-2"> <!-- start otoritas timbangan -->
+    <label>Peringatan Jatuh Tempo Hutang</label><br>
+<?php 
+if ($data_otoritas['peringatan_jatuh_tempo_hutang'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="peringatan_jatuh_tempo_hutang" name="peringatan_jatuh_tempo_hutang" checked=""> 
+    <label for="peringatan_jatuh_tempo_hutang">Lihat </label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="peringatan_jatuh_tempo_hutang" name="peringatan_jatuh_tempo_hutang"> 
+    <label for="peringatan_jatuh_tempo_hutang">Lihat </label><br>';  
+}
+
+?>
+</div>
+
+
 <div class="form-group col-sm-12"></div>
 
 <div class="form-group col-sm-2"> <!-- start otoritas penjualan -->

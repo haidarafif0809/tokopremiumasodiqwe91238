@@ -67,15 +67,15 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 			
 			$nestedData[] = "<a href='cetak_kas_masuk.php?no_faktur=".$row['no_faktur']."' target='blank' class='btn btn-primary' data-target='blank'> <i class='fa fa-print'></i>  </a>";
 
-			$nestedData[] = "<button class=' btn btn-info detail' no_faktur='". $row['no_faktur'] ."'> <i class='fa fa-list'></i> </button> </td>";
+			$nestedData[] = "<button class=' btn btn-info detail' no_faktur='". $row['no_faktur'] ."'> <i class='fa fa-list'></i> </button> ";
 
 if ($kas_masuk['kas_masuk_edit'] > 0) {
 
-			$nestedData[] = "<a href='proses_edit_data_kas_masuk.php?no_faktur=". $row['no_faktur']."&nama_daftar_akun=". $row['nama_daftar_akun']."' class='btn btn-success'> <i class='fa fa-edit'></i> </a> </td>";
+			$nestedData[] = "<a href='proses_edit_data_kas_masuk.php?no_faktur=". $row['no_faktur']."&nama_daftar_akun=". $row['nama_daftar_akun']."' class='btn btn-success'> <i class='fa fa-edit'></i> </a> ";
 		}
 
 if ($kas_masuk['kas_masuk_hapus'] > 0) {
-			$nestedData[] = "<button class=' btn btn-danger btn-hapus' data-id='". $row['id'] ."' no-faktur='". $row['no_faktur'] ."'> <i class='fa fa-trash'></i> </button> </td>";
+			$nestedData[] = "<button class=' btn btn-danger btn-hapus' data-id='". $row['id'] ."' no-faktur='". $row['no_faktur'] ."'> <i class='fa fa-trash'></i> </button>";
 		}
 				$nestedData[] = $row["id"];
 				$data[] = $nestedData;

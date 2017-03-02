@@ -110,7 +110,7 @@ tr:nth-child(even){background-color: #f2f2f2}
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Detail Kas Masuk </h4>
+      <center> <h4 class="modal-title"><b>Detail Kas Masuk</b> </h4></center> 
       </div>
 
       <div class="modal-body">
@@ -124,7 +124,7 @@ tr:nth-child(even){background-color: #f2f2f2}
           <th> No Faktur </th>
           <th> Dari Akun </th>
           <th> Ke Akun </th>
-          <th> Jumlah Barang </th>
+          <th> Jumlah </th>
           <th> Tanggal </th>
           <th> Jam </th>
           <th> Keterangan </th>
@@ -140,7 +140,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
       <div class="modal-footer">
         
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+       <center><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></center> 
       </div>
     </div>
 

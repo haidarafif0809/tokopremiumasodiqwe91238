@@ -3,27 +3,24 @@ include 'sanitasi.php';
 include 'db.php';
 
 
-
 $no_faktur = stringdoang($_POST['no_faktur']);
 
-$tahun_sekarang = date('Y');
-$bulan_sekarang = date('m');
-$tanggal_sekarang = date('Y-m-d');
-$jam_sekarang = date('H:i:sa');
-$tahun_terakhir = substr($tahun_sekarang, 2);
-$tanggal = stringdoang($_POST['tanggal']);
-    $user = $_SESSION['user_name'];
 
+$tanggal_sekarang = date('Y-m-d');
+$jam_sekarang = date('H:i:s');
+$tanggal = stringdoang($_POST['tanggal']);
+$user = $_SESSION['nama'];
+$waktu = date('Y-m-d H:i:s');
 
 
 $hapus_jurnal = $db->query("DELETE FROM jurnal_trans WHERE no_faktur = '$no_faktur'");
 
 
 
-$query = $db->prepare("UPDATE kas_mutasi SET keterangan = ?, jumlah = ?, tanggal = ?, jam = ? WHERE id = ?");
+$query = $db->prepare("UPDATE kas_mutasi SET keterangan = ?, jumlah = ?, tanggal = ?, jam = ?,user_edit = ?, waktu_edit = ? WHERE id = ?");
 
-$query->bind_param("sissi",
-	$keterangan, $jumlah_baru, $tanggal, $jam_sekarang, $id);
+$query->bind_param("sissssi",
+	$keterangan, $jumlah_baru, $tanggal, $jam_sekarang,$user,$waktu, $id);
 
 $id = stringdoang($_POST['id']);
 $keterangan = stringdoang($_POST['keterangan']);

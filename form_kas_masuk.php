@@ -1,11 +1,11 @@
-]<?php include 'session_login.php';
+<?php include 'session_login.php';
 
  include 'header.php';
  include 'navbar.php';
  include 'db.php';
  include 'sanitasi.php';
 
-     $user = $_SESSION['nama'];
+  $user = $_SESSION['nama'];
 
  
  $query = $db->query("SELECT * FROM kas_masuk ");
@@ -435,6 +435,28 @@ else {
      
        
    });
+
+  // show ajax tbs
+   $('#tabel_tbs_penjualan').DataTable().destroy();
+            var dataTable = $('#tabel_tbs_penjualan').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "info":     false,
+            "language": { "emptyTable":     "My Custom Message On Empty Table" },
+            "ajax":{
+              url :"data_tbs_penjualan.php", // json datasource
+             
+                  type: "post",  // method  , by default get
+              error: function(){  // error handling
+                $(".tbody").html("");
+                $("#tabel_tbs_penjualan").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                $("#tableuser_processing").css("display","none");
+                
+              }
+            }   
+
+      });
+//end show ajax tbs
 }
 
 

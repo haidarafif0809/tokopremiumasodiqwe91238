@@ -5,8 +5,6 @@ include 'db.php';
 //mengirimkan $id menggunakan metode GET
 $id = $_POST['id'];
 
-
-
 //menghapus seluruh data yang ada pada tabel tbs penjualan berdasarkan id
 $query = $db->query("DELETE FROM tbs_kas_masuk WHERE id = '$id'");
 
@@ -14,7 +12,7 @@ $query = $db->query("DELETE FROM tbs_kas_masuk WHERE id = '$id'");
 if ($query == TRUE)
 {
 	
-	echo "sukses";
+	echo "1";
 	
 }
 else

@@ -131,6 +131,11 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
 
                     <form enctype="multipart/form-data" role="form" action="prosesbarang.php" method="post">
 
+                         <div class="form-group">
+                            <label>Kode Barang </label>
+                            <br>
+                            <input type="text" placeholder="Kode Barang" name="kode_barang" id="kode_barang" class="form-control" autocomplete="off" required="">
+                        </div>
 
 
                         <div class="form-group">
@@ -165,28 +170,15 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             </div>
 
 
-                            <div class="form-group">
-                            <label for="sel1">Jenis Obat</label>
-                            <select class="form-control" id="jenis_obat" name="jenis_obat" autocomplete="off">
-                            <option value="">Silakan Pilih</option>
-                            <?php
-                            $query = $db->query("SELECT * FROM jenis");       
-                            while ( $data = mysqli_fetch_array($query)) {
-                            echo "<option value='".$data['nama']."'>".$data['nama']."</option>";
-                            }
-                            ?>
-                            </select>
-                            </div>
-
 
                                     <div class="form-group">
-                                    <label> Kategori Obat </label>
+                                    <label> Kategori Produk </label>
                                     <br>
                                     <select type="text" name="kategori_obat" id="kategori_obat" class="form-control" required="">
                                     <option value=""> -- SILAHKAN PILIH -- </option>
                                     <?php 
                                     
-                                    $ambil_kategori = $db->query("SELECT * FROM kategori");
+                                    $ambil_kategori = $db->query("SELECT nama_kategori FROM kategori");
                                     
                                     while($data_kategori = mysqli_fetch_array($ambil_kategori))
                                     {
@@ -198,20 +190,6 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                                     ?>
                                     </select>
                                     </div>
-
-                            <div class="form-group">
-                            <label> Golongan Obat </label>
-                            <br>
-                            <select type="text" id="golongan_obat" name="golongan_obat" class="form-control">
-                            <option value=""> -- SILAHKAN PILIH -- </option>
-                            <option value="Obat Keras"> Obat Keras </option>
-                            <option value="Obat Bebas"> Obat Bebas </option>
-                            <option value="Obat Bebas"> Obat Bebas Terbatas </option>
-                            <option value="Obat Psikotropika"> Obat Psikotropika </option>
-                            <option value="Narkotika"> Narkotika </option>
-                            </select>
-                            </div>
-
 
 
                         <div class="form-group">
@@ -266,7 +244,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             include 'db.php';
                             
                             // menampilkan seluruh data yang ada di tabel satuan
-                            $query = $db->query("SELECT * FROM satuan ");
+                            $query = $db->query("SELECT id,nama FROM satuan ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
@@ -294,7 +272,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             include 'db.php';
                             
                             // menampilkan seluruh data yang ada di tabel satuan
-                            $query = $db->query("SELECT * FROM gudang ");
+                            $query = $db->query("SELECT kode_gudang,nama_gudang FROM gudang ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
@@ -333,7 +311,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             include 'db.php';
                             
                             // menampilkan data yang ada pada tabel suplier
-                            $query = $db->query("SELECT * FROM suplier ");
+                            $query = $db->query("SELECT nama FROM suplier ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
@@ -811,8 +789,33 @@ else if (harga_jual7 < harga_beli)
                                     var id = $(this).attr("data-id");
 
                                     var input_beli = $(this).val();
+                                    var input_bei_lama = $("#text-beli-"+id+"").text();
+                                    var ber_stok = $(this).attr("data-berstok");
+                                    var input_jual = $(this).attr("data-jual-1");
+                                   
 
+                                    if (input_jual < input_beli )
+                                    {
+                                        alert("Harga Beli lebih Besar dari Harga Jual 1");
+                                    
+                                    $("#input-beli-"+id+"").val(input_bei_lama);
+                                    $("#text-beli-"+id+"").text(input_bei_lama);
+                                    $("#text-beli-"+id+"").show();
+                                    $("#input-beli-"+id+"").attr("type", "hidden");
 
+                                    }
+                                    else if (ber_stok == 'Jasa')
+                                    {
+                                        alert("Tipe Barang Jasa Tidak Bisa Edit Harga Beli");
+                                        $("#input-beli-"+id+"").val(input_bei_lama);
+                                    $("#text-beli-"+id+"").text(input_bei_lama);
+                                    $("#text-beli-"+id+"").show();
+                                    $("#input-beli-"+id+"").attr("type", "hidden");
+                                    }
+                                    
+                                    else
+                                    {
+                                        // update barang 
                                     $.post("update_barang.php",{id:id, input_beli:input_beli,jenis_edit:"harga_beli"},function(data){
 
                                     $("#text-beli-"+id+"").show();
@@ -821,6 +824,8 @@ else if (harga_jual7 < harga_beli)
                                     $("#input-beli-"+id+"").attr("type", "hidden");           
 
                                     });
+                                    }// else update barang
+
                                  });
 
                              </script>
@@ -845,7 +850,22 @@ else if (harga_jual7 < harga_beli)
 
                                     var input_jual = $(this).val();
 
+                                    var input_beli = $(this).attr("data-beli");
+                                    
+                                    var input_jual_lama = $("#text-jual-"+id+"").text();
 
+                                    if (input_jual < input_beli )
+                                    {
+                                        alert("Harga Jual 1 lebih Kecil dari Harga Beli ");
+                                    
+                                    $("#input-jual-"+id+"").val(input_jual_lama);
+                                    $("#text-jual-"+id+"").text(input_jual_lama);
+                                    $("#text-jual-"+id+"").show();
+                                    $("#input-jual-"+id+"").attr("type", "hidden");
+
+                                    }
+                                    else
+                                    {
                                     $.post("update_barang.php",{id:id, input_jual:input_jual,jenis_edit:"harga_jual"},function(data){
 
                                     $("#text-jual-"+id+"").show();
@@ -854,6 +874,7 @@ else if (harga_jual7 < harga_beli)
                                     $("#input-jual-"+id+"").attr("type", "hidden");           
 
                                     });
+                                     }// end else update barang
                                  });
 
                              </script>
@@ -875,9 +896,24 @@ else if (harga_jual7 < harga_beli)
                                     var id = $(this).attr("data-id-2");
 
                                     var input_jual_2 = $(this).val();
+                                    var input_beli = $(this).attr("data-beli");
+
+                                    var input_jual_lama = $("#text-jual-2-"+id+"").text();
 
 
-                                    $.post("update_barang.php",{id:id, input_jual_2:input_jual_2,jenis_edit_2:"harga_jual_2"},function(data){
+                                    if (input_jual_2 < input_beli )
+                                    {
+                                        alert("Harga Jual 2 lebih Kecil dari Harga Beli ");
+                                        $("#input-jual-2-"+id+"").val(input_jual_lama);
+                                    $("#text-jual-2-"+id+"").text(input_jual_lama);
+                                    $("#text-jual-2-"+id+"").show();
+                                    $("#input-jual-2-"+id+"").attr("type", "hidden");
+
+                                    }
+                                    else
+                                    {
+
+                                    $.post("update_barang.php",{id:id, input_jual_2:input_jual_2,jenis_edit:"harga_jual_2"},function(data){
 
                                     $("#text-jual-2-"+id+"").show();
                                     $("#text-jual-2-"+id+"").text(input_jual_2);
@@ -885,6 +921,7 @@ else if (harga_jual7 < harga_beli)
                                     $("#input-jual-2-"+id+"").attr("type", "hidden");           
 
                                     });
+                                    }// end else update barang
                                  });
 
                              </script>
@@ -907,8 +944,23 @@ else if (harga_jual7 < harga_beli)
 
                                     var input_jual_3 = $(this).val();
 
+                                    var input_beli = $(this).attr("data-beli");
 
-                                    $.post("update_barang.php",{id:id, input_jual_3:input_jual_3,jenis_edit_3:"harga_jual_3"},function(data){
+                                    var input_jual_lama = $("#text-jual-3-"+id+"").text();
+
+                                    if (input_jual_3 < input_beli )
+                                    {
+                                        alert("Harga Jual 3 lebih Kecil dari Harga Beli ");
+                                        $("#input-jual-3-"+id+"").val(input_jual_lama);
+                                    $("#text-jual-3-"+id+"").text(input_jual_lama);
+                                    $("#text-jual-3-"+id+"").show();
+                                    $("#input-jual-3-"+id+"").attr("type", "hidden");
+
+                                    }
+                                    else
+                                    {
+
+                                    $.post("update_barang.php",{id:id, input_jual_3:input_jual_3,jenis_edit:"harga_jual_3"},function(data){
 
                                     $("#text-jual-3-"+id+"").show();
                                     $("#text-jual-3-"+id+"").text(input_jual_3);
@@ -916,6 +968,9 @@ else if (harga_jual7 < harga_beli)
                                     $("#input-jual-3-"+id+"").attr("type", "hidden");           
 
                                     });
+
+                                    }// else update barang
+
                                  });
 
                              </script>
@@ -937,9 +992,23 @@ else if (harga_jual7 < harga_beli)
                                     var id = $(this).attr("data-id-4");
 
                                     var input_jual_4 = $(this).val();
+                                    var input_beli = $(this).attr("data-beli");
+                                    var input_jual_lama = $("#text-jual-4-"+id+"").text();
 
 
-                                    $.post("update_barang.php",{id:id, input_jual_4:input_jual_4,jenis_edit_4:"harga_jual_4"},function(data){
+                                    if (input_jual_4 < input_beli )
+                                    {
+                                        alert("Harga Jual 4 lebih Kecil dari Harga Beli ");
+                                         $("#input-jual-4-"+id+"").val(input_jual_lama);
+                                    $("#text-jual-4-"+id+"").text(input_jual_lama);
+                                    $("#text-jual-4-"+id+"").show();
+                                    $("#input-jual-4-"+id+"").attr("type", "hidden");
+
+                                    }
+                                    else
+                                    {
+
+                                    $.post("update_barang.php",{id:id, input_jual_4:input_jual_4,jenis_edit:"harga_jual_4"},function(data){
 
                                     $("#text-jual-4-"+id+"").show();
                                     $("#text-jual-4-"+id+"").text(input_jual_4);
@@ -947,6 +1016,7 @@ else if (harga_jual7 < harga_beli)
                                     $("#input-jual-4-"+id+"").attr("type", "hidden");           
 
                                     });
+                                    }//else udpate barang
                                  });
                              </script>
 
@@ -967,9 +1037,22 @@ else if (harga_jual7 < harga_beli)
                                     var id = $(this).attr("data-id-5");
 
                                     var input_jual_5 = $(this).val();
+                                    var input_beli = $(this).attr("data-beli");
+                                    var input_jual_lama = $("#text-jual-5-"+id+"").text();
 
+                                    if (input_jual_5 < input_beli )
+                                    {
+                                        alert("Harga Jual 5 lebih Kecil dari Harga Beli ");
+                                         $("#input-jual-5-"+id+"").val(input_jual_lama);
+                                    $("#text-jual-5-"+id+"").text(input_jual_lama);
+                                    $("#text-jual-5-"+id+"").show();
+                                    $("#input-jual-5-"+id+"").attr("type", "hidden");
 
-                                    $.post("update_barang.php",{id:id, input_jual_5:input_jual_5,jenis_edit_5:"harga_jual_5"},function(data){
+                                    }
+                                    else
+                                    {
+
+                                    $.post("update_barang.php",{id:id, input_jual_5:input_jual_5,jenis_edit:"harga_jual_5"},function(data){
 
                                     $("#text-jual-5-"+id+"").show();
                                     $("#text-jual-5-"+id+"").text(input_jual_5);
@@ -977,6 +1060,7 @@ else if (harga_jual7 < harga_beli)
                                     $("#input-jual-5-"+id+"").attr("type", "hidden");           
 
                                     });
+                                    }//else update barang
                                  });
                              </script>
 
@@ -997,9 +1081,22 @@ else if (harga_jual7 < harga_beli)
                                     var id = $(this).attr("data-id-6");
 
                                     var input_jual_6 = $(this).val();
+                                    var input_beli = $(this).attr("data-beli");
+                                    var input_jual_lama = $("#text-jual-6-"+id+"").text();
 
+                                    if (input_jual_6 < input_beli )
+                                    {
+                                        alert("Harga Jual 6 lebih Kecil dari Harga Beli ");
+                                         $("#input-jual-6-"+id+"").val(input_jual_lama);
+                                    $("#text-jual-6-"+id+"").text(input_jual_lama);
+                                    $("#text-jual-6-"+id+"").show();
+                                    $("#input-jual-6-"+id+"").attr("type", "hidden");
 
-                                    $.post("update_barang.php",{id:id, input_jual_6:input_jual_6,jenis_edit_6:"harga_jual_6"},function(data){
+                                    }
+                                    else
+                                    {
+
+                                    $.post("update_barang.php",{id:id, input_jual_6:input_jual_6,jenis_edit:"harga_jual_6"},function(data){
 
                                     $("#text-jual-6-"+id+"").show();
                                     $("#text-jual-6-"+id+"").text(input_jual_6);
@@ -1007,6 +1104,7 @@ else if (harga_jual7 < harga_beli)
                                     $("#input-jual-6-"+id+"").attr("type", "hidden");           
 
                                     });
+                                    }// else update barang   
                                  });
                              </script>
 
@@ -1027,9 +1125,22 @@ else if (harga_jual7 < harga_beli)
                                     var id = $(this).attr("data-id-7");
 
                                     var input_jual_7 = $(this).val();
+                                    var input_beli = $(this).attr("data-beli");
+                                    var input_jual_lama = $("#text-jual-7-"+id+"").text();
 
+                                    if (input_jual_7 < input_beli )
+                                    {
+                                        alert("Harga Jual 7 lebih Kecil dari Harga Beli ");
+                                         $("#input-jual-7-"+id+"").val(input_jual_lama);
+                                    $("#text-jual-7-"+id+"").text(input_jual_lama);
+                                    $("#text-jual-7-"+id+"").show();
+                                    $("#input-jual-7-"+id+"").attr("type", "hidden");
 
-                                    $.post("update_barang.php",{id:id, input_jual_7:input_jual_7,jenis_edit_7:"harga_jual_7"},function(data){
+                                    }
+                                    else
+                                    {
+
+                                    $.post("update_barang.php",{id:id, input_jual_7:input_jual_7,jenis_edit:"harga_jual_7"},function(data){
 
                                     $("#text-jual-7-"+id+"").show();
                                     $("#text-jual-7-"+id+"").text(input_jual_7);
@@ -1037,6 +1148,7 @@ else if (harga_jual7 < harga_beli)
                                     $("#input-jual-7-"+id+"").attr("type", "hidden");           
 
                                     });
+                                    }//else update barang
                                  });
                              </script>
 
@@ -1060,7 +1172,7 @@ else if (harga_jual7 < harga_beli)
                                     var select_kategori = $(this).val();
 
 
-                                    $.post("update_barang.php",{id:id, select_kategori:select_kategori,jenis_select:"kategori"},function(data){
+                                    $.post("update_barang.php",{id:id, select_kategori:select_kategori,jenis_edit:"kategori"},function(data){
 
                                     $("#text-kategori-"+id+"").show();
                                     $("#text-kategori-"+id+"").text(select_kategori);
@@ -1092,7 +1204,7 @@ else if (harga_jual7 < harga_beli)
                                     var select_gudang = $(this).val();
                                     var nama_gudang = $(this).attr('');
 
-                                    $.post("update_barang.php",{id:id, select_gudang:select_gudang,jenis_select:"gudang"},function(data){
+                                    $.post("update_barang.php",{id:id, select_gudang:select_gudang,jenis_edit:"gudang"},function(data){
 
                                     $("#text-gudang-"+id+"").show();
                                     $("#text-gudang-"+id+"").text(select_gudang);
@@ -1125,7 +1237,7 @@ else if (harga_jual7 < harga_beli)
                                     var select_satuan = $(this).val();
 
 
-                                    $.post("update_barang.php",{id:id, select_satuan:select_satuan,jenis_select:"satuan"},function(data){
+                                    $.post("update_barang.php",{id:id, select_satuan:select_satuan,jenis_edit:"satuan"},function(data){
 
                                     $("#text-satuan-"+id+"").show();
                                     $("#text-satuan-"+id+"").text(select_satuan);
@@ -1158,7 +1270,7 @@ else if (harga_jual7 < harga_beli)
                                     var select_status = $(this).val();
 
 
-                                    $.post("update_barang.php",{id:id, select_status:select_status,jenis_select:"status"},function(data){
+                                    $.post("update_barang.php",{id:id, select_status:select_status,jenis_edit:"status"},function(data){
 
                                     $("#text-status-"+id+"").show();
                                     $("#text-status-"+id+"").text(select_status);
@@ -1190,7 +1302,7 @@ else if (harga_jual7 < harga_beli)
                                     var select_berstok = $(this).val();
 
 
-                                    $.post("update_barang.php",{id:id, select_berstok:select_berstok,jenis_select:"berkaitan_dgn_stok"},function(data){
+                                    $.post("update_barang.php",{id:id, select_berstok:select_berstok,jenis_edit:"berkaitan_dgn_stok"},function(data){
 
                                     $("#text-berstok-"+id+"").show();
                                     $("#text-berstok-"+id+"").text(select_berstok);
@@ -1223,7 +1335,7 @@ else if (harga_jual7 < harga_beli)
                                     var select_suplier = $(this).val();
 
 
-                                    $.post("update_barang.php",{id:id, select_suplier:select_suplier,jenis_select:"suplier"},function(data){
+                                    $.post("update_barang.php",{id:id, select_suplier:select_suplier,jenis_edit:"suplier"},function(data){
 
                                     $("#text-suplier-"+id+"").show();
                                     $("#text-suplier-"+id+"").text(select_suplier);
@@ -1254,7 +1366,7 @@ else if (harga_jual7 < harga_beli)
                                     var input_limit = $(this).val();
 
 
-                                    $.post("update_barang.php",{id:id, input_limit:input_limit,jenis_limit:"limit_stok"},function(data){
+                                    $.post("update_barang.php",{id:id, input_limit:input_limit,jenis_edit:"limit_stok"},function(data){
 
                                     $("#text-limit-"+id+"").show();
                                     $("#text-limit-"+id+"").text(input_limit);
@@ -1284,7 +1396,7 @@ else if (harga_jual7 < harga_beli)
                                     var input_over = $(this).val();
 
 
-                                    $.post("update_barang.php",{id:id, input_over:input_over,jenis_over:"over_stok"},function(data){
+                                    $.post("update_barang.php",{id:id, input_over:input_over,jenis_edit:"over_stok"},function(data){
 
                                     $("#text-over-"+id+"").show();
                                     $("#text-over-"+id+"").text(input_over);

@@ -802,7 +802,7 @@ tr:nth-child(even){background-color: #f2f2f2}
         <div class="col-sm-6">
 
            <label style="font-size:15px"> <b> Total Akhir </b></label><br>
-           <b><input type="text" name="total" id="total1" class="form-control" style="height: 25px; width:90%; font-size:20px;" placeholder="Total" readonly="" ></b>
+          <b><input type="text" name="total" id="total1" class="form-control" style="height: 25px; width:90%; font-size:20px;" placeholder="Total" readonly="" ></b>
           
         </div>
  
@@ -4082,7 +4082,7 @@ $("#kd_pelanggan").trigger("chosen:open");
             $("#level_harga").val('harga_1');
             $("#keterangan").val('');
             $("#penjualan").show();
-            $("#cetak_langsung").show();
+            $("#cetak_langsung").hide();
             $("#simpan_sementara").show();
             $("#piutang").show();
             $("#batal_penjualan").show(); 

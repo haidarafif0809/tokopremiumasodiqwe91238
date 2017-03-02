@@ -21,7 +21,7 @@ $waktu = date('Y-m-d H:i:sa');
     $ke_akun = stringdoang($_POST['ke_akun']);
     $tanggal = stringdoang($_POST['tanggal']);
     $jumlah = angkadoang($_POST['jumlah']);
-    $user = $_SESSION['user_name'];
+    $user = $_SESSION['nama'];
 
     $perintah->execute();
 

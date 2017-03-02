@@ -151,6 +151,7 @@ echo '<a href="form_kas_keluar.php"  class="btn btn-info"><i class="fa fa-plus">
 			<th style='background-color: #4CAF50; color:white'> Tanggal </th>
 			<th style='background-color: #4CAF50; color:white'> Jam </th>
 			<th style='background-color: #4CAF50; color:white'> User </th>
+			<th style='background-color: #4CAF50; color:white'> Cetak </th>
 			<th style='background-color: #4CAF50; color:white'> Detail </th>
 
 <?php
@@ -198,7 +199,7 @@ if ($kas_keluar['kas_keluar_hapus'] > 0) {
         },
             
             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                $(nRow).attr('class','tr-id-'+aData[9]+'');
+                $(nRow).attr('class','tr-id-'+aData[10]+'');
             },
 
         });

@@ -29,7 +29,7 @@ $waktu = $tanggal." ".$jam_sekarang;
         $dari_akun = stringdoang($_POST['dari_akun']);
         $ke_akun = stringdoang($_POST['ke_akun']);
         $jumlah = angkadoang($_POST['jumlah']);
-        $user = $_SESSION['user_name'];
+        $user = $_SESSION['nama'];
 
 // jalankan query
         $stmt->execute();

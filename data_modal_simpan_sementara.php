@@ -21,13 +21,15 @@ $columns = array(
     5=>'biaya_admin',
     6=>'tanggal',
     7=>'jam',
-    8=>'id'
+    8=>'ppn',
+    9=>'level_harga',
+    10=>'id'
 
 
 );
 
 // getting total number records without any search
-$sql = "SELECT p.potongan,p.biaya_admin,p.id,p.kode_pelanggan,p.no_faktur,p.total,p.tanggal,p.jam,pl.nama_pelanggan";
+$sql = "SELECT p.ppn,p.potongan,p.biaya_admin,p.id,p.kode_pelanggan,p.no_faktur,p.total,p.tanggal,p.jam,pl.nama_pelanggan,pl.level_harga";
 $sql.=" FROM penjualan p LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan ";
 $sql.=" WHERE p.status = 'Simpan Sementara'";
 
@@ -36,7 +38,7 @@ $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql = "SELECT p.potongan,p.biaya_admin,p.id,p.kode_pelanggan,p.no_faktur,p.total,p.tanggal,p.jam,pl.nama_pelanggan";
+$sql = "SELECT p.ppn,p.potongan,p.biaya_admin,p.id,p.kode_pelanggan,p.no_faktur,p.total,p.tanggal,p.jam,pl.nama_pelanggan,pl.level_harga";
 $sql.=" FROM penjualan p LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan ";
 $sql.=" WHERE p.status = 'Simpan Sementara'";
 
@@ -76,6 +78,9 @@ while( $row=mysqli_fetch_array($query) ) {
     $nestedData[] = rp($row["biaya_admin"]);
     $nestedData[] = $row["tanggal"];
     $nestedData[] = $row["jam"];
+
+    $nestedData[] = $row["ppn"];
+    $nestedData[] = $row["level_harga"];
     $nestedData[] = $row["id"];
     
     $data[] = $nestedData;

@@ -17,7 +17,7 @@
     $tanggal_sekarang = date('Y-m-d');
     $jam_sekarang = date('H:i:s');
     $tahun_terakhir = substr($tahun_sekarang, 2);
-
+    $ppn = stringdoang($_POST['ppn']);
 
     if ($potongan == '') {
       $potongan_jadi = 0;
@@ -39,14 +39,50 @@
 
 
     $tax = stringdoang($_POST['tax']);
-    $satu = 1;
-    $x = $a - $potongan_tampil;
+    $subtotal = $harga * $jumlah_barang;
+if ($ppn == 'Exclude') {
+             $a = $harga * $jumlah_barang;
 
-    $hasil_tax = $satu + ($tax / 100);
+              
+              $x = $a - $potongan_tampil;
 
-    $hasil_tax2 = $x / $hasil_tax;
+              $hasil_tax = $x * ($tax / 100);
 
-    $tax_persen = $x - $hasil_tax2;
+              $tax_persen = round($hasil_tax);
+            }
+            else{
+                        $a = $harga * $jumlah_barang;
+
+              $satu = 1;
+
+              $x = $a - $potongan_tampil;
+
+              $hasil_tax = $satu + ($tax / 100);
+
+              $hasil_tax2 = $x / $hasil_tax;
+
+              $tax_persen1 = $x - round($hasil_tax2);
+
+              $tax_persen = round($tax_persen1);
+            }
+
+
+
+    if ($ppn == 'Exclude') {
+  # code...
+
+              $abc = $subtotal - $potongan_tampil;
+
+              $hasil_tax411 = $abc * ($tax / 100);
+
+              $subtotaljadi = $harga * $jumlah_barang - $potongan_tampil + round($hasil_tax411); 
+
+}
+else
+{
+  $subtotaljadi = $harga * $jumlah_barang - $potongan_tampil; 
+}
+//PPN END
 
     $query9 = $db->query("SELECT * FROM fee_produk WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
     $cek9 = mysqli_fetch_array($query9);
@@ -168,7 +204,9 @@ $jumlah = mysqli_num_rows($cek);
             
             
             $perintah->bind_param("sssisiiissss",
-            $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotal, $potongan_tampil, $tax_persen,$tanggal_sekarang,$jam_sekarang,$no_faktur);
+            $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga,
+            $subtotaljadi, $potongan_tampil, $tax_persen,$tanggal_sekarang,$jam_sekarang,
+            $no_faktur);
             
             
             $kode_barang = stringdoang($_POST['kode_barang']);

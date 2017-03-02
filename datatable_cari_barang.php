@@ -213,25 +213,25 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData[] = $row["kode_barang"];
 	$nestedData[] = $row["nama_barang"];
 
-	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-beli' data-id='".$row['id']."'> <span id='text-beli-".$row['id']."'>".rp($row["harga_beli"])."</span> <input type='hidden' id='input-beli-".$row['id']."' value='".$row['harga_beli']."' class='input_beli' data-id='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''> </p>";
+	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-beli' data-id='".$row['id']."'> <span id='text-beli-".$row['id']."'>".rp($row["harga_beli"])."</span> <input type='hidden' id='input-beli-".$row['id']."' value='".$row['harga_beli']."' class='input_beli' data-jual-1='".$row['harga_jual']."'  data-berstok='".$row['berkaitan_dgn_stok']."'  data-id='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''> </p>";
 
 
 
 
 	$nestedData[] = persen($f);
 
-	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual' data-id='".$row['id']."'> <span id='text-jual-".$row['id']."'>".rp($row["harga_jual"])."</span> <input type='hidden' id='input-jual-".$row['id']."' value='".$row['harga_jual']."' class='input_jual' data-id='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''> </p>";
+	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual' data-id='".$row['id']."'> <span id='text-jual-".$row['id']."'>".rp($row["harga_jual"])."</span> <input type='hidden' id='input-jual-".$row['id']."' value='".$row['harga_jual']."' class='input_jual' data-beli='".$row['harga_beli']."' data-id='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''> </p>";
 
-	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-2' data-id-2='".$row['id']."'><span id='text-jual-2-".$row['id']."'>". rp($row['harga_jual2']) ."</span> <input type='hidden' id='input-jual-2-".$row['id']."' value='".$row['harga_jual2']."' class='input_jual_2' data-id-2='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
+	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-2' data-id-2='".$row['id']."'><span id='text-jual-2-".$row['id']."'>". rp($row['harga_jual2']) ."</span> <input type='hidden' id='input-jual-2-".$row['id']."' value='".$row['harga_jual2']."' class='input_jual_2' data-beli='".$row['harga_beli']."' data-id-2='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
 
-     $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-3' data-id-3='".$row['id']."'><span id='text-jual-3-".$row['id']."'>". rp($row['harga_jual3']) ."</span> <input type='hidden' id='input-jual-3-".$row['id']."' value='".$row['harga_jual3']."' class='input_jual_3' data-id-3='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
+     $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-3' data-id-3='".$row['id']."'><span id='text-jual-3-".$row['id']."'>". rp($row['harga_jual3']) ."</span> <input type='hidden' id='input-jual-3-".$row['id']."' value='".$row['harga_jual3']."' class='input_jual_3'  data-beli='".$row['harga_beli']."' data-id-3='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
 	
-	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-4' data-id-4='".$row['id']."'><span id='text-jual-4-".$row['id']."'>". rp($row['harga_jual4']) ."</span> <input type='hidden' id='input-jual-4-".$row['id']."' value='".$row['harga_jual4']."' class='input_jual_4' data-id-4='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
-	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-5' data-id-5='".$row['id']."'><span id='text-jual-5-".$row['id']."'>". rp($row['harga_jual5']) ."</span> <input type='hidden' id='input-jual-5-".$row['id']."' value='".$row['harga_jual5']."' class='input_jual_5' data-id-5='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
+	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-4' data-id-4='".$row['id']."'><span id='text-jual-4-".$row['id']."'>". rp($row['harga_jual4']) ."</span> <input type='hidden' id='input-jual-4-".$row['id']."' value='".$row['harga_jual4']."' class='input_jual_4' data-beli='".$row['harga_beli']."' data-id-4='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
+	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-5' data-id-5='".$row['id']."'><span id='text-jual-5-".$row['id']."'>". rp($row['harga_jual5']) ."</span> <input type='hidden' id='input-jual-5-".$row['id']."' value='".$row['harga_jual5']."' class='input_jual_5' data-beli='".$row['harga_beli']."' data-id-5='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
 
-	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-6' data-id-6='".$row['id']."'><span id='text-jual-6-".$row['id']."'>". rp($row['harga_jual6']) ."</span> <input type='hidden' id='input-jual-6-".$row['id']."' value='".$row['harga_jual6']."' class='input_jual_6' data-id-6='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
+	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-6' data-id-6='".$row['id']."'><span id='text-jual-6-".$row['id']."'>". rp($row['harga_jual6']) ."</span> <input type='hidden' id='input-jual-6-".$row['id']."' value='".$row['harga_jual6']."' class='input_jual_6' data-beli='".$row['harga_beli']."' data-id-6='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
 
-	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-7' data-id-7='".$row['id']."'><span id='text-jual-7-".$row['id']."'>". rp($row['harga_jual7']) ."</span> <input type='hidden' id='input-jual-7-".$row['id']."' value='".$row['harga_jual7']."' class='input_jual_7' data-id-7='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
+	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual-7' data-id-7='".$row['id']."'><span id='text-jual-7-".$row['id']."'>". rp($row['harga_jual7']) ."</span> <input type='hidden' id='input-jual-7-".$row['id']."' value='".$row['harga_jual7']."' class='input_jual_7' data-beli='".$row['harga_beli']."' data-id-7='".$row['id']."' data-kode='".$row['kode_barang']."' autofocus=''></p>";
 
 	$nestedData[] = $total_hpp;
 

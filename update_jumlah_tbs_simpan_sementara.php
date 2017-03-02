@@ -12,7 +12,6 @@ $jumlah_tax = angkadoang($_POST['jumlah_tax']);
 $subtotal = angkadoang($_POST['subtotal']);
 $petugas_sales = angkadoang($_POST['user_fee']);
 
-
 $user = $_SESSION['nama'];
 $id = stringdoang($_POST['id']);
 

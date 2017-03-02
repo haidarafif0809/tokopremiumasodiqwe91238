@@ -311,11 +311,13 @@ $session_id = session_id();
 
 
 <div class="row">
-  <div class="col-sm-4">
+  <div class="col-sm-6">
       <label><b> Subtotal </b></label><br>
       <b> <input style="height: 20px;" type="text" name="total" id="total_retur_pembelian1" class="form-control" placeholder="Subtotal" readonly="" > </b>
   </div>
+</div>
 
+<div class="row">
   <div class="col-sm-4">
       <label><b> Potongan (Rp) </b></label><br>
       <input style="height: 20px" type="text" name="potongan" id="potongan_pembelian" class="form-control" data-diskon="" placeholder="Potongan" autocomplete="off">
@@ -328,14 +330,15 @@ $session_id = session_id();
   </div>
 
 
-</div>
-           
-<div class="row">
-
   <div class="col-sm-4">
       <label><b> Tax (%) </b></label><br>
       <input style="height: 20px" type="text" name="tax" id="tax" class="form-control" placeholder="Tax" data-pajak="" autocomplete="off">
   </div>
+
+</div>
+           
+<div class="row">
+
 
     <div class="col-sm-6">
       <label><b> Total Akhir </b></label><br>

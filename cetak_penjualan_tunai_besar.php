@@ -128,7 +128,7 @@ include 'db.php';
 
 </style>
 
-<table id="tableuser" class="table1">
+<table id="tableuser" class="table table-bordered table-sm">
         <thead>
             <th class="table1" style="width: 3%"> <center> No. </center> </th>
             <th class="table1" style="width: 50%"> <center> Nama Barang </center> </th>

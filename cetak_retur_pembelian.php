@@ -139,6 +139,11 @@ mysqli_close($db);
 <table>
   <tbody>
     <tr><td>Subtotal</td> <td>:&nbsp;</td><td><?php echo rp($j_subtotal); ?></td></tr>
+    
+    <?php if ($data0['potongan_hutang'] != "" OR $data0['potongan_hutang'] != 0): ?>
+      <tr><td>Potong Hutang</td> <td>:&nbsp;</td><td><?php echo rp($data0['potongan_hutang']); ?></td></tr>
+    <?php endif ?>   
+
     <tr><td>Total Akhir</td> <td>:&nbsp;</td><td><?php echo rp($data0['total']); ?></td></tr>
     <tr><td>Tunai</td> <td>:&nbsp;</td><td><?php echo rp($data0['tunai']); ?></td></tr>
     <tr><td>Kembalian</td> <td>:&nbsp;</td><td><?php echo rp($data0['sisa']); ?></td></tr>

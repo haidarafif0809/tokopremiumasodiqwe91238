@@ -2,6 +2,7 @@
 
 include 'db.php';
 
+$session_id = session_id();
 $id_produk = $_POST['id_produk'];
 $kode_parcel = $_POST['kode_parcel'];
 

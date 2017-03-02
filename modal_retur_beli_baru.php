@@ -37,7 +37,7 @@ $columns = array(
 $sql = "SELECT b.id AS id_produk,b.satuan AS satuan_dasar, s.nama AS satuan_beli, b.harga_beli, ss.nama AS satuan_asli, dp.no_faktur, dp.tanggal, dp.kode_barang, dp.nama_barang, dp.jumlah_barang, dp.satuan, dp.harga, dp.subtotal, dp.potongan, dp.tax, dp.status, p.suplier, hm.harga_unit, IFNULL(SUM(hpm.sisa),0) + IFNULL(hm.sisa,0) AS sisa, dp.satuan, dp.asal_satuan ";
 $sql.=" FROM detail_pembelian dp LEFT JOIN pembelian p ON dp.no_faktur = p.no_faktur LEFT JOIN hpp_masuk hm ON dp.no_faktur = hm.no_faktur AND dp.kode_barang = hm.kode_barang LEFT JOIN hpp_masuk hpm ON dp.no_faktur = hpm.no_faktur_hpp_masuk AND dp.kode_barang = hpm.kode_barang INNER JOIN satuan s ON dp.satuan = s.id INNER JOIN satuan ss ON dp.asal_satuan = ss.id INNER JOIN barang b ON dp.kode_barang = b.kode_barang ";
 $sql.=" WHERE (hpm.sisa > 0 OR hm.sisa > 0) ";
-$sql.=" AND p.suplier = '$nama_suplier' GROUP BY dp.no_faktur, dp.kode_barang";
+$sql.=" AND p.suplier = '$nama_suplier' GROUP BY  dp.kode_barang";
 $sql.=" ";
 
 $query = mysqli_query($conn, $sql) or die("Salahnya Ada Disini 1");
@@ -55,7 +55,7 @@ $sql.=" AND p.suplier = '$nama_suplier' ";
 
   $sql.=" OR dp.nama_barang LIKE '".$requestData['search']['value']."%')";
 
-  $sql.=" GROUP BY dp.no_faktur, dp.kode_barang ";
+  $sql.=" GROUP BY  dp.kode_barang ";
 
 
 }
@@ -98,15 +98,7 @@ $data_sum_sisa = mysqli_fetch_array($sum_sisa);
    
     $nestedData[] = $row["kode_barang"];
     $nestedData[] = $row["nama_barang"];
-
-    if ($sisa == 0) {
-    $konversi_data = $row['sisa'] / $data_konversi['konversi'];
-    $nestedData[] = "$konversi_data";
-    }
-    else
-    {
-    $nestedData[] = $row["jumlah_barang"];
-    }   
+ 
   
     $nestedData[] = $row["satuan_beli"];
 
@@ -132,6 +124,15 @@ $data_sum_sisa = mysqli_fetch_array($sum_sisa);
     $nestedData[] = $row["no_faktur"];
     $nestedData[] = $row["satuan_dasar"];
     $nestedData[] = $row["harga"];
+    
+    if ($sisa == 0) {
+    $konversi_data = $row['sisa'] / $data_konversi['konversi'];
+    $nestedData[] = "$konversi_data";
+    }
+    else
+    {
+    $nestedData[] = $row["jumlah_barang"];
+    }  
 
   
   $data[] = $nestedData;

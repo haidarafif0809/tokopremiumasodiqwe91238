@@ -4,6 +4,7 @@
 include 'sanitasi.php';
 include 'db.php';
 
+$session_id = session_id();
 $tahun_sekarang = date('Y');
 $bulan_sekarang = date('m');
 $tanggal_sekarang = date('Y-m-d');
@@ -77,7 +78,7 @@ else {
 
 $kode_parcel = stringdoang($_POST['kode_parcel']);
 
-$query12 = $db->query("SELECT * FROM tbs_parcel WHERE kode_parcel = '$kode_parcel' ");
+$query12 = $db->query("SELECT * FROM tbs_parcel WHERE kode_parcel = '$kode_parcel' AND session_id = '$session_id' ");
 while ($data = mysqli_fetch_array($query12)) {
 	
 	$query2 = "INSERT INTO detail_perakitan_parcel (no_faktur,kode_parcel,id_produk,jumlah_produk,tanggal,jam) VALUES ('$no_faktur','$data[kode_parcel]', '$data[id_produk]', '$data[jumlah_produk]', '$tanggal_sekarang', '$jam_sekarang')";

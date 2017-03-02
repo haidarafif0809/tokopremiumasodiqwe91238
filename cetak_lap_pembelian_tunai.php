@@ -83,7 +83,7 @@ $suplier = $_GET['suplier'];
 <br>
 <div class="container">
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
         <thead>
 
            <th> Nomor Faktur </th>

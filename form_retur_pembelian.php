@@ -173,7 +173,6 @@ $session_id = session_id();
       <thead>
         <th> Kode Barang </th>
         <th> Nama Barang </th>
-        <th> Jumlah Beli </th>
         <th> Satuan </th>
         <th> Harga Barang  </th>
         <th> Subtotal </th>
@@ -1792,15 +1791,15 @@ $(document).ready(function() {
               $(nRow).attr('class', "pilih");
               $(nRow).attr('data-kode',  aData[0]);
               $(nRow).attr('nama-barang', aData[1]);
-              $(nRow).attr('satuan', aData[13]);
-              $(nRow).attr('no_faktur', aData[15]);
-              $(nRow).attr('harga', aData[4]);
-              $(nRow).attr('jumlah-barang', aData[2]);
-              $(nRow).attr('sisa', aData[14]);
-              $(nRow).attr('id_produk', aData[12]);
-              $(nRow).attr('harga_pcs', aData[17]);
-              $(nRow).attr('satuan_pcs', aData[16]);
-              $(nRow).attr('satuan_beli', aData[13]);
+              $(nRow).attr('satuan', aData[12]);
+              $(nRow).attr('no_faktur', aData[14]);
+              $(nRow).attr('harga', aData[3]);
+              $(nRow).attr('jumlah-barang', aData[17]);
+              $(nRow).attr('sisa', aData[13]);
+              $(nRow).attr('id_produk', aData[11]);
+              $(nRow).attr('harga_pcs', aData[16]);
+              $(nRow).attr('satuan_pcs', aData[15]);
+              $(nRow).attr('satuan_beli', aData[12]);
           }
 
         });    

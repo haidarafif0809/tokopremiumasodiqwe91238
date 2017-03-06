@@ -612,8 +612,6 @@ $(document).ready(function(){
   document.getElementById("limit_stok").value = $(this).attr('limit_stok');
   document.getElementById("satuan_produk").value = $(this).attr('satuan');
   document.getElementById("ber_stok").value = $(this).attr('ber-stok');
-  document.getElementById("harga_lama").value = $(this).attr('harga');
-  document.getElementById("harga_baru").value = $(this).attr('harga');
   document.getElementById("satuan_konversi").value = $(this).attr('satuan');
   document.getElementById("id_produk").value = $(this).attr('id-barang');
 
@@ -629,43 +627,43 @@ var harga_level_5 = $(this).attr('harga_level_5');
 var harga_level_6 = $(this).attr('harga_level_6');  
 var harga_level_7 = $(this).attr('harga_level_7');
 
-if (level_harga == "Level 1") {
+if (level_harga == "harga_1") {
   $("#harga_produk").val(harga_level_1);
   $("#harga_lama").val(harga_level_1);
   $("#harga_baru").val(harga_level_1);
 }
 
-else if (level_harga == "Level 2") {
+else if (level_harga == "harga_2") {
   $("#harga_produk").val(harga_level_2);
   $("#harga_baru").val(harga_level_2);
   $("#harga_lama").val(harga_level_2);
 }
 
-else if (level_harga == "Level 3") {
+else if (level_harga == "harga_3") {
   $("#harga_produk").val(harga_level_3);
   $("#harga_lama").val(harga_level_3);
   $("#harga_baru").val(harga_level_3);
 }
 
-else if (level_harga == "Level 4") {
+else if (level_harga == "harga_4") {
   $("#harga_produk").val(harga_level_4);
   $("#harga_lama").val(harga_level_4);
   $("#harga_baru").val(harga_level_4);
 }
 
-else if (level_harga == "Level 5") {
+else if (level_harga == "harga_5") {
   $("#harga_produk").val(harga_level_5);
   $("#harga_lama").val(harga_level_5);
   $("#harga_baru").val(harga_level_5);
 }
 
-else if (level_harga == "Level 6") {
+else if (level_harga == "harga_6") {
   $("#harga_produk").val(harga_level_6);
   $("#harga_lama").val(harga_level_6);
   $("#harga_baru").val(harga_level_6);
 }
 
-else if (level_harga == "Level 7") {
+else if (level_harga == "harga_7") {
   $("#harga_produk").val(harga_level_7);
   $("#harga_lama").val(harga_level_7);
   $("#harga_baru").val(harga_level_7);
@@ -712,6 +710,7 @@ if (jumlah_barang == '')
 {
     alert("Jumlah Barang Harus Terisi");
     $("#jumlah_barang").focus();
+    $("#level_harga").val('harga_1');
 
 }
 else
@@ -979,6 +978,7 @@ $.post("lihat_promo_alert.php",{id:json.id},function(info){
     var level_harga = $("#level_harga").val();
     var harga = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_produk").val()))));
 
+
     var potongan = $("#potongan1").val();
     if (potongan == '') 
           {
@@ -993,8 +993,14 @@ $.post("lihat_promo_alert.php",{id:json.id},function(info){
     var ppn = $("#ppn").val();
     var stok = parseInt(jumlahbarang,10) - parseInt(jumlah_barang,10);
 
-    var subtotal = parseInt(jumlah_barang, 10) *  parseInt(harga, 10) - parseInt(potongan, 10);
-   var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+    if (harga == 0) {
+      var subtotal = 0;
+    }
+    else{
+      var subtotal = parseInt(jumlah_barang, 10) *  parseInt(harga, 10) - parseInt(potongan, 10);
+    }
+    
+    var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
           if (total == '') 
           {
           total = 0;
@@ -1023,35 +1029,72 @@ $.post("lihat_promo_alert.php",{id:json.id},function(info){
          $("#kd_pelanggan").focus();
 
   }
+  
   else if (ber_stok == 'Jasa' ){
 
+if (harga == 0) {
+    var pesan_alert = confirm("Harga Produk '"+nama_barang+"' Bernilai 0. Anda Yakin Ingin Melanjutkan ?");
 
-    $("#total2").val(tandaPemisahTitik(total_akhir));
+    if (pesan_alert == true) {
+           $("#total2").val(tandaPemisahTitik(total_akhir));
 
- $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
-     
-  
+          $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+         
+      
 
-     $("#ppn").attr("disabled", true);
-     $("#tbody").prepend(data);
-     $("#kode_barang").val('');
-     $("#kode_barang").trigger('chosen:updated');
-    $("#kode_barang").trigger('chosen:open');
-     $("#nama_barang").val('');
-      $("#harga_produk").val('');
-     $("#ber_stok").val('');
-     $("#jumlah_barang").val('');
-     $("#potongan1").val('');
-     $("#tax1").val('');
-
-
-     
-     
-     });
+          $("#ppn").attr("disabled", true);
+          $("#tbody").prepend(data);
+          $("#kode_barang").val('');
+          $("#kode_barang").trigger('chosen:updated');
+          $("#kode_barang").trigger('chosen:open');
+          $("#nama_barang").val('');
+          $("#harga_produk").val('');
+          $("#ber_stok").val('');
+          $("#jumlah_barang").val('');
+          $("#potongan1").val('');
+          $("#tax1").val('');
 
 
-  
-  } 
+         
+         
+         });
+
+    }
+    else{
+
+          $("#kode_barang").val('');
+     $("#kode_barang").trigger('chosen:open');  
+
+    }
+
+} // END IF HARGA + 0
+
+else{
+             $("#total2").val(tandaPemisahTitik(total_akhir));
+
+          $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+         
+      
+
+          $("#ppn").attr("disabled", true);
+          $("#tbody").prepend(data);
+          $("#kode_barang").val('');
+          $("#kode_barang").trigger('chosen:updated');
+          $("#kode_barang").trigger('chosen:open');
+          $("#nama_barang").val('');
+          $("#harga_produk").val('');
+          $("#ber_stok").val('');
+          $("#jumlah_barang").val('');
+          $("#potongan1").val('');
+          $("#tax1").val('');
+
+
+         
+         
+         });
+}
+
+} 
   else if (stok < 0) {
 
     alert ("Jumlah Melebihi Stok Barang !");
@@ -1059,6 +1102,11 @@ $.post("lihat_promo_alert.php",{id:json.id},function(info){
   }
 
   else{
+
+    if (harga == 0) {
+    var pesan_alert = confirm("Harga Produk '"+nama_barang+"' Bernilai 0. Anda Yakin Ingin Melanjutkan ?");
+
+    if (pesan_alert == true) {
         $("#total2").val(tandaPemisahTitik(total_akhir));
 
     $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
@@ -1079,6 +1127,37 @@ $.post("lihat_promo_alert.php",{id:json.id},function(info){
 
      
      });
+
+  }
+  else{
+     $("#kode_barang").val('');
+     $("#kode_barang").trigger('chosen:open');  
+  }
+
+}// END IF HARGA + 0
+
+
+else{
+      $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+     
+
+      $("#ppn").attr("disabled", true);
+     $("#tbody").prepend(data);
+
+     $("#kode_barang").val('');
+     $("#kode_barang").trigger('chosen:open');     
+     $("#nama_barang").val('');
+     $("#harga_produk").val('');
+     $("#ber_stok").val('');
+     $("#jumlah_barang").val('');
+     $("#potongan1").val('');
+     $("#tax1").val('');
+
+
+     
+     });
+
+}
 }
 
 

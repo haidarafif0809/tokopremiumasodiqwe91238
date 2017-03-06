@@ -105,10 +105,10 @@ $ambil_setting = mysqli_fetch_array($select_setting_akun);
 
 
   //PERSEDIAAN    
-        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Persediaan -', '$ambil_setting[persediaan]', '$subtotal_tbs', '0', 'Item Masuk', '$no_faktur','1', '$user')");
+        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Item Masuk - $keterangan', '$ambil_setting[persediaan]', '$subtotal_tbs', '0', 'Item Masuk', '$no_faktur','1', '$user')");
 
   //ITEM MASUK    
-        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Item Masuk -', '$ambil_setting[item_masuk]', '0', '$subtotal_tbs', 'Item Masuk', '$no_faktur','1', '$user')");
+        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Item Masuk - $keterangan', '$ambil_setting[item_masuk]', '0', '$subtotal_tbs', 'Item Masuk', '$no_faktur','1', '$user')");
 
 //</>END JURNAL TRANSAKSI
 

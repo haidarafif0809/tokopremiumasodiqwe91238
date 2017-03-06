@@ -9,10 +9,10 @@ $no_faktur = stringdoang($_POST['no_faktur']);
 
 $tahun_sekarang = date('Y');
 $bulan_sekarang = date('m');
-$tanggal_sekarang = date('Y-m-d');
-$jam_sekarang = date('H:i:sa');
+$jam_sekarang = date('H:i:s');
 $tahun_terakhir = substr($tahun_sekarang, 2);
-$waktu = date('Y-m-d H:i:sa');
+$tanggal = stringdoang($_POST['tanggal']);
+$waktu = $tanggal." ".$jam_sekarang;
 
 
 $delete_detail_item_masuk = $db->query("DELETE FROM detail_item_masuk WHERE no_faktur = '$no_faktur' ");
@@ -23,7 +23,7 @@ $delete_detail_item_masuk = $db->query("DELETE FROM detail_item_masuk WHERE no_f
 
   // hubungkan "data" dengan prepared statements
         $stmt->bind_param("ssisssss", 
-        $no_faktur, $tanggal, $total, $tanggal_sekarang, $jam_sekarang, $user_edit, $keterangan, $no_faktur);
+        $no_faktur, $tanggal, $total, $tanggal, $jam_sekarang, $user_edit, $keterangan, $no_faktur);
 
   // siapkan "data" query
     $no_faktur = stringdoang($_POST['no_faktur']);
@@ -31,8 +31,7 @@ $delete_detail_item_masuk = $db->query("DELETE FROM detail_item_masuk WHERE no_f
     $user_edit = $_SESSION['user_name'];
     $keterangan = stringdoang($_POST['keterangan']);
     $tanggal = stringdoang($_POST['tanggal']);
-    $tanggal_sekarang = date('Y-m-d');
-    $jam_sekarang = date('H:i:sa');
+    $jam_sekarang = date('H:i:s');
 
   // jalankan query
         $stmt->execute();
@@ -47,11 +46,11 @@ $delete_detail_item_masuk = $db->query("DELETE FROM detail_item_masuk WHERE no_f
             VALUES ('$data[no_faktur]','$tanggal','$data[kode_barang]','$data[nama_barang]','$data[jumlah]','$data[satuan]','$data[harga]','$data[subtotal]','$jam_sekarang','$waktu')";
                 if ($db->query($query2) === TRUE) 
                 {
-                       } 
+                } 
                        
-                       else {
-                       echo "Error: " . $query2 . "<br>" . $db->error;
-                       }
+                else {
+                    echo "Error: " . $query2 . "<br>" . $db->error;
+                }
             
    
         
@@ -69,10 +68,10 @@ $ambil_setting = mysqli_fetch_array($select_setting_akun);
 
 
   //PERSEDIAAN    
-        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat, user_edit) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Persediaan -', '$ambil_setting[persediaan]', '$subtotal_tbs', '0', 'Item Masuk', '$no_faktur','1', '$user_edit', '$user_edit')");
+        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat, user_edit) VALUES ('".no_jurnal()."', '$tanggal $jam_sekarang', 'Item Masuk - $keterangan', '$ambil_setting[persediaan]', '$subtotal_tbs', '0', 'Item Masuk', '$no_faktur','1', '$user_edit', '$user_edit')");
 
   //ITEM MASUK    
-        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat, user_edit) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Item Masuk -', '$ambil_setting[item_masuk]', '0', '$subtotal_tbs', 'Item Masuk', '$no_faktur','1', '$user_edit', '$user_edit')");
+        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat, user_edit) VALUES ('".no_jurnal()."', '$tanggal $jam_sekarang', 'Item Masuk - $keterangan', '$ambil_setting[item_masuk]', '0', '$subtotal_tbs', 'Item Masuk', '$no_faktur','1', '$user_edit', '$user_edit')");
 
 //</>END JURNAL TRANSAKSI
 

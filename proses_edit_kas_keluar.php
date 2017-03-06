@@ -3,51 +3,34 @@
     include 'sanitasi.php';
     include 'db.php';
 
-
     $no_faktur = stringdoang($_POST['no_faktur']);
 
-$tahun_sekarang = date('Y');
-$bulan_sekarang = date('m');
-$tanggal_sekarang = date('Y-m-d');
-$jam_sekarang = date('H:i:sa');
-$tahun_terakhir = substr($tahun_sekarang, 2);
-$waktu = date('Y-m-d H:i:sa');
+$jam_sekarang = date('H:i:s');
+$waktu = date('Y-m-d H:i:s');
 
 $query5 = $db->query("DELETE FROM detail_kas_keluar WHERE no_faktur = '$no_faktur'");  
+$hapus_jurnal = $db->query("DELETE FROM jurnal_trans WHERE no_faktur = '$no_faktur'");
 
 // buat prepared statements
-    $stmt = $db->prepare("UPDATE kas_keluar SET no_faktur = ?, dari_akun = ?, jumlah = ?, tanggal = ?, jam = ?, user = ? WHERE no_faktur = ?");
+    $stmt = $db->prepare("UPDATE kas_keluar SET no_faktur = ?, dari_akun = ?, jumlah = ?, tanggal = ?, jam = ?, user_edit = ?, waktu_edit = ? WHERE no_faktur = ?");
 
 // hubungkan "data" dengan prepared statements
-        $stmt->bind_param("ssissss", 
-        $no_faktur, $dari_akun, $jumlah, $tanggal,  $jam_sekarang, $user, $no_faktur);
+    $stmt->bind_param("ssisssss", 
+    $no_faktur, $dari_akun, $jumlah, $tanggal,  $jam_sekarang, $user, $waktu, $no_faktur);
 
 // siapkan "data" query
         $no_faktur = stringdoang($_POST['no_faktur']);
         $tanggal = stringdoang($_POST['tanggal']);
         $dari_akun = stringdoang($_POST['dari_akun']);
         $jumlah = angkadoang($_POST['jumlah']);
-        $user = $_SESSION['user_name'];
-
+        $user = $_SESSION['nama'];
         $no_faktur = stringdoang($_POST['no_faktur']);
 
 // jalankan query
         $stmt->execute();
 
 
-// buat prepared statements    
-    $stmt1 = $db->prepare("UPDATE kas SET jumlah = jumlah - ? WHERE nama = ? ");
 
-// hubungkan "data" dengan prepared statements
-        $stmt1->bind_param("is", 
-        $jumlah , $dari_akun);        
-
-  // siapkan "data" query
-        $dari_akun = stringdoang($_POST['dari_akun']);
-        $jumlah = angkadoang($_POST['jumlah']);
-
- // jalankan query
-        $stmt1->execute();
 
 
 if (!$stmt) {

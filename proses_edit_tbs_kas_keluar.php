@@ -5,24 +5,22 @@
     include 'db.php';
 
 
-    //mengirim data sesuai dengan variabel denagn metode POST 
-
-
-
 // buat prepared statements
-    $stmt = $db->prepare("INSERT INTO tbs_kas_keluar (no_faktur,keterangan,dari_akun,ke_akun,jumlah,tanggal,jam,user) VALUES (?,?,?,?,?,now(),now(),?)");
+    $stmt = $db->prepare("INSERT INTO tbs_kas_keluar (no_faktur,keterangan,dari_akun,ke_akun,jumlah,tanggal,jam,user) VALUES (?,?,?,?,?,?,?,?)");
 
 // hubungkan "data" dengan prepared statements
-        $stmt->bind_param("ssssis", 
-        $no_faktur, $keterangan, $dari_akun, $ke_akun, $jumlah, $user);        
-        
+    $stmt->bind_param("ssssisss", 
+    $no_faktur, $keterangan, $dari_akun, $ke_akun, $jumlah, $tanggal, $jam_sekarang,$user);
+
 // siapkan "data" query
         $no_faktur = stringdoang($_POST['no_faktur']);
         $keterangan = stringdoang($_POST['keterangan']);
         $dari_akun = stringdoang($_POST['dari_akun']);
         $ke_akun = stringdoang($_POST['ke_akun']);
         $jumlah = angkadoang($_POST['jumlah']);
-        $user = $_SESSION['user_name'];
+        $tanggal = angkadoang($_POST['tanggal']);
+        $jam_sekarang = date('H:i:s');
+        $user = $_SESSION['nama'];
 
 // jalankan query
         $stmt->execute();

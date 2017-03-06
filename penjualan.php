@@ -646,7 +646,7 @@ $("#login").click(function(){
 
 
 
-<!--Start Ajax Modal Cari-->
+<!--Start Ajax Modal DETAIL-->
 <script type="text/javascript" language="javascript" >
    $(document).ready(function() {
     $(document).on('click', '.detail', function (e) {
@@ -683,6 +683,8 @@ $("#login").click(function(){
      }); 
   });
  </script>
+<!--Ending Ajax Modal Detail-->
+
 <!--Start Ajax Modal Cari-->
 <!--menampilkan detail penjualan-->
 

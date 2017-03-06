@@ -5,19 +5,20 @@
     include 'db.php';
 
 
-    
-   
-        $perintah = $db->prepare("INSERT INTO tbs_kas_masuk (no_faktur,keterangan,dari_akun,ke_akun, jumlah,tanggal,jam,user) VALUES (?,?,?,?,?,now(),now(),?)");
+        $perintah = $db->prepare("INSERT INTO tbs_kas_masuk (no_faktur,keterangan,dari_akun,ke_akun, jumlah,tanggal,jam,user) VALUES (?,?,?,?,?,?,?,?)");
 
-        $perintah->bind_param("ssssis",
-          $no_faktur, $keterangan, $dari_akun, $ke_akun, $jumlah, $user);
+        $perintah->bind_param("ssssisss",
+          $no_faktur, $keterangan, $dari_akun, $ke_akun, $jumlah, $tanggal,
+          $jam_sekarang, $user);
         
         $no_faktur = stringdoang($_POST['no_faktur']);
         $keterangan = stringdoang($_POST['keterangan']);
         $dari_akun = stringdoang($_POST['dari_akun']);
         $ke_akun = stringdoang($_POST['ke_akun']);
         $jumlah = angkadoang($_POST['jumlah']);
-        $user = $_SESSION['user_name'];
+        $tanggal = stringdoang($_POST['tanggal']);
+        $jam_sekarang = date('H:i:s');
+        $user = $_SESSION['nama'];
 
         $perintah->execute();
         

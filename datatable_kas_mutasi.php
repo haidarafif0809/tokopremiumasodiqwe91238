@@ -57,7 +57,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$data1 = mysqli_fetch_array($perintah10);
 
 
-	$nestedData[] = "<a href='cetak_kas_mutasi.php?id=".$row['id']."' target='blank' class='btn btn-primary' data-target='blank'> <i class='fa fa-print'></i> Cetak </a>";
+	$nestedData[] = "<a href='cetak_kas_mutasi.php?id=".$row['id']."' target='blank' class='btn btn-primary' data-target='blank'> <i class='fa fa-print'></i>  </a>";
 
 	$nestedData[] = $row["no_faktur"];
 	$nestedData[] = $row["keterangan"];
@@ -73,13 +73,13 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	if ($kas_mutasi['kas_mutasi_hapus'] > 0) {
 
 		
-			$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-faktur='". $row['no_faktur'] ."'> <i class='fa fa-trash'></i> Hapus </button>";
+			$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-faktur='". $row['no_faktur'] ."'> <i class='fa fa-trash'></i>  </button>";
 		}
 
 
 if ($kas_mutasi['kas_mutasi_edit'] > 0) {
 
-			$nestedData[] = "<button class='btn btn-info btn-edit' data-jumlah='". $row['jumlah'] ."' data-ket='". $row['keterangan'] ."' data-id='". $row['id'] ."' data-dari-akun='". $row['dari_akun'] ."' data-ke-akun='". $row['ke_akun'] ."' data-jumlah='". $row['jumlah'] ."' data-tanggal='". $row['tanggal'] ."' data-faktur='". $row['no_faktur'] ."'> <i class='fa fa-edit'></i> Edit </button>";
+			$nestedData[] = "<button class='btn btn-info btn-edit' data-jumlah='". $row['jumlah'] ."' data-ket='". $row['keterangan'] ."' data-id='". $row['id'] ."' data-dari-akun='". $row['dari_akun'] ."' data-ke-akun='". $row['ke_akun'] ."' data-jumlah='". $row['jumlah'] ."' data-tanggal='". $row['tanggal'] ."' data-faktur='". $row['no_faktur'] ."'> <i class='fa fa-edit'></i>  </button>";
 			}
 		else{
 			$nestedData[] = "you can't be edited.";

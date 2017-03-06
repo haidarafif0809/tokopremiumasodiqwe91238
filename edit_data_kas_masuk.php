@@ -5,10 +5,14 @@
  include 'db.php';
  include 'sanitasi.php';
 
+$user = $_SESSION['nama'];
+
 $no_faktur = $_GET['no_faktur']; 
 $nama_daftar_akun = $_GET['nama_daftar_akun']; 
  
-$query = $db->query("SELECT * FROM kas_masuk ");
+$query_induk = $db->query("SELECT tanggal FROM kas_masuk WHERE no_faktur = '$no_faktur'");
+$get_data = mysqli_fetch_array($query_induk);
+$tanggal = $get_data['tanggal'];
 
 $query0 = $db->query("SELECT km.id, km.dari_akun, da.nama_daftar_akun FROM detail_kas_masuk km INNER JOIN daftar_akun da ON km.dari_akun = da.kode_daftar_akun");
 $ambil = mysqli_fetch_array($query0);
@@ -131,24 +135,57 @@ $ambil1 = mysqli_fetch_array($query10);
 <form action="proses_edit_tbs_kas_masuk.php" role="form" method="post" id="formtambahproduk">
 <div class="row">
 
-					<div class="form-group col-sm-6">
+					<div class="form-group col-sm-3">
 					<label> Tanggal </label><br>
-					<input type="text" name="tanggal" id="tanggal1" placeholder="Tanggal" value="<?php echo date("Y/m/d"); ?>" class="form-control" required="" >
+					<input type="text" name="tanggal" id="tanggal1" placeholder="Tanggal" value="<?php echo $tanggal; ?>" class="form-control" autocomplete="off" required="" >
 					</div>
 
-					<div class="form-group col-sm-6">
+          <div class="form-group col-sm-3">
+          <label> Petugas </label>
+          <input type="text" name="petugas" id="petugas" class="form-control" readonly="" value="<?php echo $user; ?>" autocomplete="off" required="" >
+
+          </div>
+
+					<div class="form-group col-sm-3">
 					<label> Nomor Faktur </label><br>
 					<input type="text" name="no_faktur" id="nomorfaktur1" placeholder="Nomor Faktur" class="form-control" readonly="" value="<?php echo $no_faktur; ?>" required="" >
 
 					</div>
 
+
+          <div class="form-group col-sm-3">
+          <label> Keterangan </label><br>
+          <input type="text" name="keterangan" autocomplete="off" id="keterangan" placeholder="Keterangan" class="form-control">
+          </div>
+
 </div> <!-- tag penutup div row -->
 
+<div class="card card-block">
 <div class="row">
+
+  <div class="form-group col-sm-3">
+          <label> Dari Akun </label><br>
+          <select type="text" name="dari_akun" id="dariakun" class="form-control" required="" >
+          <option value="">--SILAKAN PILIH--</option>
+
+           <?php 
+
+    
+    $query = $db->query("SELECT * FROM daftar_akun ");
+    while($data = mysqli_fetch_array($query))
+    {
+    
+    echo "<option value='".$data['kode_daftar_akun'] ."'>".$data['nama_daftar_akun'] ."</option>";
+    }
+    
+    
+    ?>  
+    </select>
+          </div>
 
 <?php if ($data_tbs > 0): ?>
 
-					<div class="form-group col-sm-6">
+					<div class="form-group col-sm-3">
 					<label> Ke Akun </label><br>
 					<select type="text" name="ke_akun" id="keakun" class="form-control" required="" disabled="true">
 					<option value="<?php echo $ambil1['ke_akun']; ?>"><?php echo $nama_daftar_akun; ?></option>
@@ -170,7 +207,7 @@ $ambil1 = mysqli_fetch_array($query10);
 
 <?php else: ?>
 
-<div class="form-group col-sm-6">
+<div class="form-group col-sm-3">
           <label> Ke Akun </label><br>
           <select type="text" name="ke_akun" id="keakun" class="form-control" required="">
           <option value="">--SILAKAN PILIH--</option>
@@ -191,55 +228,20 @@ $ambil1 = mysqli_fetch_array($query10);
             </div>
 
 <?php endif ?> 
+  
+        <div class="form-group col-sm-3">
+          <label> Jumlah </label><br>
+          <input type="text" name="jumlah" id="jumlah" autocomplete="off" placeholder="Jumlah" class="form-control" required="" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
+          </div>
 
-   					<div class="form-group col-sm-6" id="col_sm_6">
-					<label> Jumlah Total </label><br>
-					<input type="text" name="jumlah" id="jumlahtotal" readonly="" placeholder="Jumlah Total" class="form-control">
-					</div>
-
-
-</div> 
-<div class="row">
-
-					<div class="form-group col-sm-3">
-					<label> Dari Akun </label><br>
-					<select type="text" name="dari_akun" id="dariakun" class="form-control" required="" >
-					<option value="">--SILAKAN PILIH--</option>
-
-           <?php 
-
-    
-    $query = $db->query("SELECT * FROM daftar_akun ");
-    while($data = mysqli_fetch_array($query))
-    {
-    
-    echo "<option value='".$data['kode_daftar_akun'] ."'>".$data['nama_daftar_akun'] ."</option>";
-    }
-    
-    
-    ?>	
-    </select>
-					</div>
-
-					<div class="form-group col-sm-3">
-					<label> Jumlah </label><br>
-					<input type="text" name="jumlah" id="jumlah" autocomplete="off" placeholder="Jumlah" class="form-control" required="" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
-					</div>
-
-					<div class="form-group col-sm-3">
-					<label> Keterangan </label><br>
-					<input type="text" name="keterangan" autocomplete="off" id="keterangan" placeholder="Keterangan" class="form-control">
-					</div>
-
-					
-					<div class="form-group col-sm-3">
+   				
+          <div class="form-group col-sm-3">
           <label><br><br><br></label>
           <button type="submit" id="submit_produk" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah </button>
           </div>
-					
-					
-</div> <!-- tag penutup div row-->
 
+</div> 
+</div>
 
 
 </form>
@@ -254,8 +256,7 @@ $ambil1 = mysqli_fetch_array($query10);
 </style>
 
       
-  <!--membuat tombol submit bayar & Hutang-->
-      <button type="submit" id="submit_kas_masuk" class="btn btn-info"> <span class='glyphicon glyphicon-ok-sign'></span> Submit </a> </button>
+  
 
       <a class="btn btn-info" href="form_kas_masuk.php" id="transaksi_baru" style="display: none"> <span class="glyphicon glyphicon-repeat"></span> Transaksi Baru</a>
      
@@ -326,8 +327,13 @@ mysqli_close($db);
   </div>
         </span>
 
-
-
+<br><br>
+  <div class="form-group col-sm-3" id="col_sm_6">
+          <label> <b>Jumlah Total</b> </label><br>
+          <input style="height: 25px; width:90%; font-size:20px;" type="text" name="jumlah" id="jumlahtotal" readonly="" placeholder="Jumlah Total" class="form-control">
+          </div>
+<!--membuat tombol submit bayar & Hutang--><br>
+      <button type="submit" id="submit_kas_masuk" class="btn btn-info"> <span class='glyphicon glyphicon-ok-sign'></span> Submit </a> </button>
 </div> <!-- tag penutup div container -->
 
 
@@ -616,7 +622,7 @@ $("#alert_berhasil").hide();
                                   
                                   $.post("hapus_edit_tbs_kas_masuk.php",{id:id},function(data){
 
-                                   if (data != '') {
+                                   if (data == 1) {
                                   $(".tr-id-"+id+"").remove();
                                   }
 
@@ -702,4 +708,3 @@ $("#alert_berhasil").hide();
 <?php 
 include 'footer.php';
  ?>
-

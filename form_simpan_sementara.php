@@ -68,7 +68,7 @@ $session_id = session_id();
     </div>
     <div class="modal-footer">
         
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Closed</button>
+        <button type="button" class="btn btn-danger" id="closed_alert_promo" data-dismiss="modal">Closed (Ctrl + G)</button>
     </div>
     </div>
   </div>
@@ -135,7 +135,7 @@ $session_id = session_id();
           <?php 
           
           // menampilkan seluruh data yang ada pada tabel suplier
-          $query = $db->query("SELECT * FROM gudang");
+          $query = $db->query("SELECT kode_gudang,nama_gudang FROM gudang");
           
           // menyimpan data sementara yang ada pada $query
           while($data = mysqli_fetch_array($query))
@@ -649,8 +649,7 @@ tr:nth-child(even){background-color: #f2f2f2}
   <h5><b>Data Order</b></h5> 
     <div class="table-responsive"> <!--tag untuk membuat garis pada tabel-->
  
-                <span id="order_data">  
-                <table id="tableuser" class="table table-sm">
+                <table id="table_tbs_order" class="table table-sm" align="center">
                 <thead>
                <th style="width:500%"> No Faktur Order  </th>
                 <th> Kode  </th>
@@ -661,41 +660,8 @@ tr:nth-child(even){background-color: #f2f2f2}
                 <th> Subtotal </th>
                 <th> Potongan </th>
                 <th> Pajak </th>
-                </thead>
-                
-                <tbody >
-                <?php
-                
-                //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
-                $perintah = $db->query("SELECT tp.no_faktur_order,tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama,bb.berkaitan_dgn_stok FROM tbs_penjualan tp LEFT JOIN satuan s ON tp.satuan = s.id LEFT JOIN barang bb ON tp.kode_barang = bb.kode_barang WHERE tp.session_id = '$session_id' AND tp.no_faktur_order != '' ORDER BY no_faktur_order ASC ");
-                
-                //menyimpan data sementara yang ada pada $perintah
-                
-                while ($data1 = mysqli_fetch_array($perintah))
-                {
-                //menampilkan data
-                echo "<tr class='tr-kode-". $data1['kode_barang'] ." tr-id-". $data1['id'] ."' data-kode-barang='".$data1['kode_barang']."'>
-                <td style='font-size:15px'>". $data1['no_faktur_order'] ."</td>
-                <td style='font-size:15px'>". $data1['kode_barang'] ."</td>
-                <td style='font-size:15px;'>". $data1['nama_barang'] ."</td>
-                <td style='font-size:15px' align='right' class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-berstok = '".$data1['berkaitan_dgn_stok']."'  data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>
-                <td style='font-size:15px'>". $data1['nama'] ."</td>
-                <td style='font-size:15px' align='right'>". rp($data1['harga']) ."</td>
-                <td style='font-size:15px' align='right'><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
-                <td style='font-size:15px' align='right'><span id='text-potongan-".$data1['id']."'>". rp($data1['potongan']) ."</span></td>
-                <td style='font-size:15px' align='right'><span id='text-tax-".$data1['id']."'>". rp($data1['tax']) ."</span></td>";
-
-               echo "
-                </tr>";
-
-
-                }
-
-                ?>
-                </tbody>
-                
+                </thead> 
                 </table>
-                </span>
                 </div>  
 </div>
 </div>
@@ -1399,6 +1365,8 @@ $(document).on('click', '.pilih_simpan', function (e) {
 /// 	              
 // START DATATABLE AJAX START TBS PENJUALAN
       $('#tabel_tbs_penjualan').DataTable().destroy();
+      $('#table_tbs_order').DataTable().destroy();
+
              var no_faktur = $("#no_faktur").val();
 
             var dataTable = $('#tabel_tbs_penjualan').DataTable( {
@@ -1423,6 +1391,30 @@ $(document).on('click', '.pilih_simpan', function (e) {
             }   
 
       });
+
+// ambil datatable order yang terbaru
+            $('#table_tbs_order').DataTable().destroy();
+
+          var dataTable = $('#table_tbs_order').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_order.php", // json datasource
+            "data": function ( d ) {
+                      d.no_faktur = $("#no_faktur").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+        });
+// ambil datatable order yang terbaru
+      
         
         $("#span_tbs").show();
         $("#btnRujukLab").show();
@@ -2133,6 +2125,31 @@ $("#kode_barang").focus();
 
       });
 //end show ajax tbs
+
+
+// ambil datatable order yang terbaru
+            $('#table_tbs_order').DataTable().destroy();
+
+          var dataTable = $('#table_tbs_order').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_order.php", // json datasource
+            "data": function ( d ) {
+                      d.no_faktur = $("#no_faktur").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+        });
+// ambil datatable order yang terbaru
+
 
 }
 
@@ -2993,6 +3010,30 @@ if (pesan_alert == true) {
 
       });
 
+ // ambil datatable order yang terbaru
+            $('#table_tbs_order').DataTable().destroy();
+
+          var dataTable = $('#table_tbs_order').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_order.php", // json datasource
+            "data": function ( d ) {
+                      d.no_faktur = $("#no_faktur").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+        });
+// ambil datatable order yang terbaru
+
+
             if (total_akhir1 == 0) {
               
             $("#potongan_persen").val('0');
@@ -3622,6 +3663,12 @@ shortcut.add("ctrl+f1", function() {
 
     }); 
 
+        shortcut.add("ctrl+g", function() {
+        // Do something
+
+        $("#closed_alert_promo").click();
+
+    }); 
     
     shortcut.add("ctrl+b", function() {
         // Do something
@@ -3670,6 +3717,18 @@ shortcut.add("ctrl+f1", function() {
     var id_barang = $('#opt-produk-'+kode_barang).attr("id-barang");
     var level_harga = $("#level_harga").val();
 
+$.post("lihat_promo_alert.php",{id:id_barang},function(data){
+
+    if (data == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(data);
+    }
+
+});
 
    if (level_harga == "harga_1") {
 
@@ -4003,6 +4062,29 @@ var dataTable = $('#tabel_tbs_penjualan').DataTable( {
             }   
 
       });
+
+// ambil datatable order yang terbaru
+            $('#table_tbs_order').DataTable().destroy();
+
+          var dataTable = $('#table_tbs_order').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_order.php", // json datasource
+            "data": function ( d ) {
+                      d.no_faktur = $("#no_faktur").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+        });
+// ambil datatable order yang terbaru
 
 // Table Modal Cari Produk Di Perbarui
        $('#tabel_cari').DataTable().destroy();

@@ -50,7 +50,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
      
       
       $nestedData[] = $row['nama_barang'];
-       $nestedData[] =  "<button class='btn btn-success detaili' data-id='".$row['id_promo_alert']."'><span class='fa fa-list'></span> Lihat Pesan </button>";
+       $nestedData[] =  "<button class='btn btn-success detaili  btn-sm' data-id='".$row['id_promo_alert']."'><span class='fa fa-list'></span> Lihat Pesan </button>";
       if ($row['status'] == "1")
       {
       $nestedData[] =  "Aktif";
@@ -59,8 +59,8 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
       {
       $nestedData[] = "Tidak Aktif";
       }
-    $nestedData[] =  "<button data-id='". $row['id_promo_alert'] ."' class='btn btn-danger btn-hapus'> <span class='fa fa-trash'></span> Hapus </button>";
-     $nestedData[] =  "<a href='edit_promo_alert.php?id=". $row['id_promo_alert']."' class='btn btn-warning'><span class='fa fa-edit'></span> Edit </a>";
+    $nestedData[] =  "<button data-id='". $row['id_promo_alert'] ."' class='btn btn-danger btn-hapus  btn-sm'> <span class='fa fa-trash'></span> Hapus </button>";
+     $nestedData[] =  "<a href='edit_promo_alert.php?id=". $row['id_promo_alert']."' class='btn btn-warning btn-sm'><span class='fa fa-edit'></span> Edit </a>";
 
      $nestedData[] = $row['id_promo_alert'];
 

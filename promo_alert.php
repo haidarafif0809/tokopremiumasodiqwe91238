@@ -133,7 +133,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <div class="table-responsive">
 <span id="table_baru">
-<table id="table_promo_alert" class="table table-bordered">
+<table id="table_promo_alert" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color: white'> Nama Produk</th>
 			<th style='background-color: #4CAF50; color: white'> Pesan Alert</th>

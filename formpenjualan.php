@@ -29,7 +29,7 @@ $session_id = session_id();
     </div>
     <div class="modal-footer">
         
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Closed</button>
+        <button type="button" class="btn btn-danger" id="closed_alert_promo" data-dismiss="modal">Closed (Ctrl+G)</button>
     </div>
     </div>
   </div>
@@ -449,7 +449,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 <form id="form_barcode" class="form-inline">
   <br>
     <div class="form-group">
-        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" placeholder="Kode Barcode">
+        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" placeholder="Kode Barcode" autocomplete="off">
     </div>
         
     <button type="submit" id="submit_barcode" class="btn btn-primary" style="font-size:15px" ><i class="fa fa-barcode"></i> Submit Barcode</button>
@@ -983,7 +983,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 <script>
 //untuk form awal langsung ke kode barang focus
 $(document).ready(function(){
-    $("#kode_barang").focus();
+    $("#kode_barang").trigger('chosen:open');
 
 });
 
@@ -1971,7 +1971,7 @@ var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biay
   }
   else if (ber_stok == 'Jasa' ){
 
-$("#kode_barang").focus();
+$("#kode_barang").trigger('chosen:open');
 
       $("#potongan_persen").val(Math.round(pot_fakt_per));
       $("#total1").val(tandaPemisahTitik(total_akhir));
@@ -2020,7 +2020,7 @@ $("#kode_barang").focus();
       $("#total2").val(tandaPemisahTitik(total_akhir1));
       $("#tax_rp").val(Math.round(hasil_tax));
 
-    $("#kode_barang").focus();
+    $("#kode_barang").trigger('chosen:open');
 
 // POST KE TBS ALL PRODUK
     $.post("prosestbspenjualan.php",{ppn:ppn,no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
@@ -3429,7 +3429,7 @@ $(document).ready(function(){
 
                             }
        
-                                    $("#kode_barang").focus();
+                                    $("#kode_barang").trigger('chosen:open');
                                     
 
                                  });
@@ -3539,7 +3539,7 @@ $(document).ready(function(){
     shortcut.add("f2", function() {
         // Do something
 
-        $("#kode_barang").focus();
+        $("#kode_barang").trigger('chosen:open');
 
     });
 
@@ -3605,7 +3605,13 @@ $(document).ready(function(){
 
     }); 
 
-    
+        shortcut.add("ctrl+g", function() {
+        // Do something
+
+        $("#closed_alert_promo").click();
+
+    }); 
+
     shortcut.add("ctrl+b", function() {
         // Do something
 
@@ -3652,6 +3658,20 @@ $(document).ready(function(){
     var tipe_produk = $('#opt-produk-'+kode_barang).attr("tipe_barang");
     var id_barang = $('#opt-produk-'+kode_barang).attr("id-barang");
     var level_harga = $("#level_harga").val();
+
+
+$.post("lihat_promo_alert.php",{id:id_barang},function(data){
+
+    if (data == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(data);
+    }
+
+});
 
 
    if (level_harga == "harga_1") {

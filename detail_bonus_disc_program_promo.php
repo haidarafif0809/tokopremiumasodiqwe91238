@@ -20,6 +20,10 @@ $kode_program = stringdoang($_GET['kode']);
 
 <a href="program_promo.php" class="btn btn-primary" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Klik untuk kembali ke utama.'><i class="fa fa-reply"></i> <u>K</u>embali</a>
 
+<!--input untuk masuk ke data table-->
+<input type="hidden" name="id_nya" id="id_nya" autocomplete="off" class="form-control" readonly="" value="<?php echo $id; ?>" style="height: 5%; width: 95%;">
+<!--input untuk masuk ke data table-->
+
 <button type="submit" id="tambah_disc_produk" class="btn btn-success" style="background-color:#0277bd"><i class="fa fa-plus"> </i> Tambah</button>
 <span id="tambh_disc_produk" style="display: none;"><!--span untuk tambah free produk-->
           <form class="form-inline" role="form" id="formdiscproduk">
@@ -276,6 +280,11 @@ $kode_program = stringdoang($_GET['kode']);
                     "serverSide": true,
                     "ajax":{
                       url :"datatable_disc_produk.php", // json datasource
+                      "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                        },
                       type: "post",  // method  , by default get
                       error: function(){  // error handling
                         $(".tbody").html("");
@@ -375,6 +384,11 @@ $(document).on('click', '.edit', function (e) {
                     "serverSide": true,
                     "ajax":{
                       url :"datatable_disc_produk.php", // json datasource
+                      "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                        },
                       type: "post",  // method  , by default get
                       error: function(){  // error handling
                         $(".tbody").html("");
@@ -484,6 +498,11 @@ $(document).on('click', '.delete', function (e) {
           "serverSide": true,
           "ajax":{
             url :"datatable_disc_produk.php", // json datasource
+            "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                        },
             type: "post",  // method  , by default get
             error: function(){  // error handling
               $(".tbody").html("");
@@ -516,7 +535,11 @@ $(document).on('click', '.delete', function (e) {
           "serverSide": true,
           "ajax":{
             url :"datatable_disc_produk.php", // json datasource
-           
+           "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                        },
             type: "post",  // method  , by default get
             error: function(){  // error handling
               $(".employee-grid-error").html("");

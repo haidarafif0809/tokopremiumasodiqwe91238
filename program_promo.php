@@ -70,7 +70,7 @@ $program_promo = mysqli_fetch_array($pilih_akses);
           <div class="row armun"><!--div class="row armun"-->
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
               <div class="form-group"> 
-                <input type="text" name="kode_program_edit" id="kode_program_edit" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;"  placeholder="Kode Program">
+                <input type="text" name="kode_program_edit" id="kode_program_edit" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;" readonly="" placeholder="Kode Program">
               </div>
             </div><!--div class="col-sm-2 armun"-->
 
@@ -93,7 +93,7 @@ $program_promo = mysqli_fetch_array($pilih_akses);
                   <option value="Disc Produk">Disc Produk</option>
                 </select>
 
-                <input type="text" name="id_edit" id="id_edit" autocomplete="off" class="form-control" style="height: 5%; width: 95%;" placeholder="id">
+                <input type="hidden" name="id_edit" id="id_edit" autocomplete="off" class="form-control" style="height: 5%; width: 95%;" placeholder="id">
             </div><!--div class="col-sm-2 armun"-->
           </div><!--/div class="row armun"-->
    
@@ -183,7 +183,9 @@ $program_promo = mysqli_fetch_array($pilih_akses);
 </script>
 
 <script type="text/javascript">
+//pencegah kode program yang sama saat tambah
         $(document).ready(function(){
+      // kode produk blur
         $("#kode_program").blur(function(){
 
           var kode_program = $('#kode_program').val();          
@@ -191,32 +193,36 @@ $program_promo = mysqli_fetch_array($pilih_akses);
                 $.post('cek_kode_program_promo.php',{kode_program:kode_program}, function(data){
             
               if(data == 1){
-              alert("Sudah Kode Promo Sudah Ada, Silakan Gunakan Kode Yang lain !");
-              $("#kode_program_edit").val('');
-              $("#id_edit").val('');
+              alert("Kode Promo Sudah Ada, Silakan Gunakan Kode Yang lain !");
+              $("#kode_program").val('');
+              $("#kode_program").focus();
               }//penutup if
               
               });////penutup function(data)
 
-        });
+        }); //end kkode produk blur
 
-        $("#nama_program").blur(function(){
+        // kode produk mouseleave 
+        $("#kode_program").mouseleave(function(){
 
-          var nama_program = $('#nama_program').val();          
+          var kode_program = $('#kode_program').val();          
 
-                $.post('cek_kode_program_promo.php',{nama_program:nama_program}, function(data){
+                $.post('cek_kode_program_promo.php',{kode_program:kode_program}, function(data){
             
-              if(data == 3){
-              alert("Sudah Nama Promo Sudah Ada, Silakan Gunakan Nama Yang lain !");
-              $("#nama_program").val('');
+              if(data == 1){
+              alert("Kode Promo Sudah Ada, Silakan Gunakan Kode Yang lain !");
+              $("#kode_program").val('');
+              $("#kode_program").focus();
               }//penutup if
               
               });////penutup function(data)
 
-        });
+        });//end kodeproduk mouseleave
 
         });     
 </script>
+
+
 
 <script type="text/javascript">
 // MENAMPILKAN FORM
@@ -318,6 +324,28 @@ $program_promo = mysqli_fetch_array($pilih_akses);
     });
     });
 </script>
+
+<!--script type="text/javascript">
+//pencegah kode program yang sama  saat edit
+        $(document).ready(function(){
+        $("#kode_program_edit").blur(function(){
+
+          var kode_program = $('#kode_program_edit').val();          
+
+                $.post('cek_kode_program_promo.php',{kode_program:kode_program}, function(data){
+            
+              if(data == 1){
+              alert("Kode Promo Sudah Ada, Silakan Gunakan Kode Yang lain !");
+              $("#kode_program_edit").focus();
+              $("#id_edit").val('');
+              }//penutup if
+              
+              });////penutup function(data)
+
+        });
+
+        });     
+</script-->
 
 <script type="text/javascript">
 // MENAMPILKAN FORM EDIT

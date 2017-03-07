@@ -70,9 +70,9 @@ $nomor = 1 + $ambil_nomor ;
     $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
     $no_jurnal = no_jurnal();
     
-    $select_kode_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$kode_pelanggan'");
+    $select_kode_pelanggan = $db->query("SELECT id,nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$kode_pelanggan'");
     $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
-
+    $id_pelanggan = $ambil_kode_pelanggan['id'];
     
     $perintah0 = $db->query("SELECT * FROM fee_faktur WHERE nama_petugas = '$sales'");
     $cek = mysqli_fetch_array($perintah0);
@@ -153,7 +153,7 @@ $nomor = 1 + $ambil_nomor ;
               
 
               $stmt->bind_param("sssisssssiiiisississ",
-              $no_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal_sekarang, $tanggal_jt, $jam_sekarang, $user, $sales, $potongan, $tax, $sisa_kredit, $sisa_kredit, $cara_bayar, $pembayaran, $keterangan, $ppn_input, $biaya_adm,$no_jurnal,$ket_jurnal);
+              $no_faktur, $kode_gudang, $id_pelanggan, $total , $tanggal_sekarang, $tanggal_jt, $jam_sekarang, $user, $sales, $potongan, $tax, $sisa_kredit, $sisa_kredit, $cara_bayar, $pembayaran, $keterangan, $ppn_input, $biaya_adm,$no_jurnal,$ket_jurnal);
               
               $biaya_adm = stringdoang($_POST['biaya_adm']);
               $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);

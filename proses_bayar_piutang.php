@@ -58,16 +58,20 @@
     
     }
 
+        $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
+$select_id = $db->query("SELECT id FROM pelanggan WHERE id = '$kode_pelanggan'");
+$out_id = mysqli_fetch_array($select_id);
+$id_pelanggan = $out_id['id'];
 
         // buat prepared statements
         $stmt = $db->prepare("INSERT INTO pembayaran_piutang (no_faktur_pembayaran, tanggal, jam, nama_suplier,keterangan, total, user_buat, dari_kas) VALUES (?,?,?,?,?,?,?,?)");
         
         // hubungkan "data" dengan prepared statements
         $stmt->bind_param("sssssiss", 
-        $no_faktur_pembayaran, $tanggal_sekarang, $jam_sekarang, $kode_pelanggan , $keterangan, $total_bayar, $user_buat, $cara_bayar);        
+        $no_faktur_pembayaran, $tanggal_sekarang, $jam_sekarang,
+        $id_pelanggan , $keterangan, $total_bayar, $user_buat, $cara_bayar);        
         
         // siapkan "data" query
-        $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
         $keterangan = stringdoang($_POST['keterangan']);
         $total_bayar = angkadoang($_POST['total_bayar']);
         $user_buat = $_SESSION['user_name'];
@@ -101,9 +105,10 @@
         $user_buat = $_SESSION['user_name'];
         $cara_bayar = stringdoang($_POST['cara_bayar']);
 
-    $select_kode_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$kode_pelanggan'");
+$select_kode_pelanggan = $db->query("SELECT kode_pelanggan,nama_pelanggan FROM pelanggan WHERE id = '$id_pelanggan'");
     $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
-
+    $kode_pelanggan = $ambil_kode_pelanggan['kode_pelanggan'];
+    
     $select_setting_akun = $db->query("SELECT * FROM setting_akun");
     $ambil_setting = mysqli_fetch_array($select_setting_akun);
 

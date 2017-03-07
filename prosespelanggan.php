@@ -8,13 +8,12 @@
 
 
 
-    $perintah = $db->prepare("INSERT INTO pelanggan (id, kode_pelanggan, nama_pelanggan, no_telp, e_mail, tgl_lahir, wilayah, level_harga) VALUES (?,?,?,?,?,?,?,?)");
+    $perintah = $db->prepare("INSERT INTO pelanggan (kode_pelanggan,no_ktp, nama_pelanggan, no_telp, e_mail, tgl_lahir, wilayah, level_harga) VALUES (?,?,?,?,?,?,?,?)");
 
-    $perintah->bind_param("ssssssss",
-        $id, $kode_pelanggan, $nama_pelanggan, $no_telp, $e_mail, $tgl_lahir, $wilayah, $level_harga);
+    $perintah->bind_param("ssssssss", $kode_pelanggan, $no_ktp, $nama_pelanggan, $no_telp, $e_mail, $tgl_lahir, $wilayah, $level_harga);
         
-        $id = stringdoang($_POST['id']);
         $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
+        $no_ktp = stringdoang($_POST['no_ktp']);
         $nama_pelanggan = stringdoang($_POST['nama_pelanggan']);
         $level_harga = stringdoang($_POST['level_harga']);
         $tgl_lahir = stringdoang($_POST['tgl_lahir']);

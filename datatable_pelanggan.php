@@ -48,6 +48,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
     	//menampilkan data
 			$nestedData[] = $row['kode_pelanggan'];
+			$nestedData[] = $row['no_ktp'];
 			$nestedData[] = $row['nama_pelanggan'];
 			$nestedData[] = $row['level_harga'];
 			$nestedData[] = tanggal($row['tgl_lahir']);
@@ -77,7 +78,7 @@ $pelanggan_edit = mysqli_num_rows($pilih_akses_pelanggan_edit);
 
 
     if ($pelanggan_edit > 0){
-			$nestedData[] = "<button class='btn btn-info btn-edit' data-pelanggan='". $row['nama_pelanggan'] ."' data-kode='". $row['kode_pelanggan'] ."' data-tanggal='". $row['tgl_lahir'] ."' data-nomor='". $row['no_telp'] ."' data-email='". $row['e_mail'] ."' data-wilayah='". $row['wilayah'] ."' data-level-harga='". $row['level_harga'] ."' data-id='". $row['id'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button>";
+			$nestedData[] = "<button class='btn btn-info btn-edit' data-pelanggan='". $row['nama_pelanggan'] ."' data-kode='". $row['kode_pelanggan'] ."' data-tanggal='". $row['tgl_lahir'] ."' data-nomor='". $row['no_telp'] ."' data-email='". $row['e_mail'] ."' data-wilayah='". $row['wilayah'] ."' data-level-harga='". $row['level_harga'] ."' data-id='". $row['id'] ."' data-ktp='". $row['no_ktp'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button>";
 		}
 				$nestedData[] = $row["id"];
 				$data[] = $nestedData;

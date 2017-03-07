@@ -5,6 +5,7 @@ include 'db.php';
 
 $id = stringdoang($_POST['id']);
 $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
+$no_ktp = stringdoang($_POST['no_ktp']);
 $nama_pelanggan = stringdoang($_POST['nama_pelanggan']);
 $level_harga = stringdoang($_POST['level_harga']);
 $tgl_lahir = stringdoang($_POST['tgl_lahir']);
@@ -14,10 +15,10 @@ $wilayah = stringdoang($_POST['wilayah']);
 
 
 
-$query = $db->prepare("UPDATE pelanggan SET kode_pelanggan = ?, nama_pelanggan = ?, no_telp = ?, e_mail = ?, tgl_lahir = ?, wilayah = ? , level_harga = ? WHERE id = ?");
+$query = $db->prepare("UPDATE pelanggan SET no_ktp = ?, kode_pelanggan = ?, nama_pelanggan = ?, no_telp = ?, e_mail = ?, tgl_lahir = ?, wilayah = ? , level_harga = ? WHERE id = ?");
 
-$query->bind_param("ssssssss",
-	$kode_pelanggan, $nama_pelanggan, $no_telp, $e_mail, $tgl_lahir, $wilayah, $level_harga, $id);
+$query->bind_param("sssssssss",$no_ktp, $kode_pelanggan, $nama_pelanggan, $no_telp,
+     $e_mail, $tgl_lahir, $wilayah, $level_harga, $id);
 
 $query->execute();
 

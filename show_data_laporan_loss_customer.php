@@ -34,14 +34,14 @@ $tes = $db->query("SELECT kode_pelanggan FROM penjualan WHERE MONTH(tanggal) = '
   $kode_a = $out['kode_pelanggan'];
 
 $sql = "SELECT p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan,pl.no_telp";
-$sql.=" FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_pelanggan != '$kode_a' GROUP BY p.kode_pelanggan";
+$sql.=" FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_pelanggan != '$kode_a' GROUP BY p.kode_pelanggan";
 
 $query=mysqli_query($conn, $sql) or die("1: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 $sql = "SELECT p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan,pl.no_telp";
-$sql.=" FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_pelanggan != '$kode_a'";
+$sql.=" FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_pelanggan != '$kode_a'";
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 	$sql.=" AND ( p.kode_pelanggan LIKE '".$requestData['search']['value']."%' "; 

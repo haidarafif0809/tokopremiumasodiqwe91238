@@ -36,7 +36,9 @@ $data_konversi = mysqli_fetch_array($konversi);
 $jumlah_produk = $data['jumlah_barang'] / $data_konversi['konversi'];
 $harga = $data['harga'] * $data['jumlah_barang'];
 
-$perintah1 = $db->query("INSERT INTO tbs_penjualan (no_faktur, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax, hpp) VALUES ( '$data[no_faktur]', '$data[kode_barang]', '$data[nama_barang]', '$jumlah_produk', '$data[satuan]', '$harga', '$data[subtotal]', '$data[potongan]', '$data[tax]', '$data[hpp]')");
+$perintah1 = $db->query("INSERT INTO tbs_penjualan (no_faktur, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax, hpp) VALUES ( '$data[no_faktur]', '$data[kode_barang]', '$data[nama_barang]',
+	'$jumlah_produk', '$data[satuan]', '$harga', '$data[subtotal]',
+	'$data[potongan]', '$data[tax]', '$data[hpp]')");
 
 }
 
@@ -50,5 +52,3 @@ $perintah1 = $db->query("INSERT INTO tbs_penjualan (no_faktur, kode_barang, nama
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   
  ?>
-
-

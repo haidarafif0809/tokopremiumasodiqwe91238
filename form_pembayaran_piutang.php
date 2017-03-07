@@ -140,7 +140,7 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
           while($data = mysqli_fetch_array($query))
           {
           
-          echo "<option value='".$data['kode_pelanggan'] ."'> ".$data['kode_pelanggan'] ." - ".$data['nama_pelanggan'] ." </option>";
+          echo "<option value='".$data['id'] ."'> ".$data['kode_pelanggan'] ." - ".$data['nama_pelanggan'] ." </option>";
           }
           
           

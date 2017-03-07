@@ -41,7 +41,9 @@ $bulan_sekarang = date('m');
 
             $kode_a = $get_data['kode_pelanggan'];
 
-          $select_data = $db->query("SELECT p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan,pl.no_telp FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_pelanggan != '$kode_a' GROUP BY p.kode_pelanggan");
+            }
+            
+          $select_data = $db->query("SELECT p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan,pl.no_telp FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_pelanggan != '$kode_a' GROUP BY p.kode_pelanggan");
 
             while ($out = mysqli_fetch_array($select_data))
             {
@@ -54,7 +56,7 @@ $bulan_sekarang = date('m');
             <tr>";
 
             }
-          }     
+             
                     //Untuk Memutuskan Koneksi Ke Database
                     
                     mysqli_close($db); 

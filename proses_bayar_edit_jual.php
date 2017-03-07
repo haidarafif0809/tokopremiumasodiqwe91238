@@ -8,17 +8,19 @@
 $tahun_sekarang = date('Y');
 $bulan_sekarang = date('m');
 $tanggal_sekarang = date('Y-m-d');
-$jam_sekarang = date('H:i:sa');
+$jam_sekarang = date('H:i:s');
 $tahun_terakhir = substr($tahun_sekarang, 2);
 $tanggal = stringdoang($_POST['tanggal']);
 $waktu = $tanggal." ".$jam_sekarang;
 
+$id_pelanggan = stringdoang($_POST['real_id']);
 
-$kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
+$kode_send = stringdoang($_POST['kode_pelanggan']);
 
-$select_kode_pelanggan = $db->query("SELECT id,nama_pelanggan FROM pelanggan WHERE id = '$kode_pelanggan'");
+$select_kode_pelanggan = $db->query("SELECT kode_pelanggan,nama_pelanggan FROM pelanggan WHERE id = '$id_pelanggan'");
 $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
-            
+ $kode_pelanggan = $ambil_kode_pelanggan['kode_pelanggan'];
+
             $sisa = angkadoang($_POST['sisa']);
             $sisa_kredit = angkadoang($_POST['jumlah_kredit_baru']);
 
@@ -81,12 +83,12 @@ $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
             
             // hubungkan "data" dengan prepared statements
             $stmt2->bind_param("sssissssiiisisis", 
-            $nomor_faktur, $kode_gudang, $kode_pelanggan, $total, $tanggal, $jam_sekarang , $user, $sales, $potongan, $tax, $sisa, $cara_bayar, $pembayaran, $ppn_input, $biaya_adm, $nomor_faktur);
+            $nomor_faktur, $kode_gudang, $id_pelanggan, $total, $tanggal, $jam_sekarang , $user, $sales, $potongan, $tax, $sisa, $cara_bayar, $pembayaran, $ppn_input, $biaya_adm, $nomor_faktur);
 
             
             // siapkan "data" query
             $nomor_faktur = stringdoang($_POST['no_faktur']);
-            $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
+            
             $total = angkadoang($_POST['total']);
             $total2 = angkadoang($_POST['total2']);
             $potongan = angkadoang($_POST['potongan']);
@@ -212,12 +214,12 @@ if ($potongan != "" || $potongan != 0 ) {
             
             // hubungkan "data" dengan prepared statements
             $stmt2->bind_param("sssisssssiiisisis", 
-            $nomor_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal, $jam_sekarang, $tanggal_jt, $user, $sales, $potongan, $tax, $sisa_kredit, $cara_bayar, $pembayaran, $ppn_input, $biaya_adm, $nomor_faktur);
+            $nomor_faktur, $kode_gudang, $id_pelanggan, $total , $tanggal, $jam_sekarang, $tanggal_jt, $user, $sales, $potongan, $tax, $sisa_kredit, $cara_bayar, $pembayaran, $ppn_input, $biaya_adm, $nomor_faktur);
             
             // siapkan "data" query
             $biaya_adm = stringdoang($_POST['biaya_adm']);
             $nomor_faktur = stringdoang($_POST['no_faktur']);
-            $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
+            
             $total = angkadoang($_POST['total']);
             $total2 = angkadoang($_POST['total2']);
             $potongan = angkadoang($_POST['potongan']);

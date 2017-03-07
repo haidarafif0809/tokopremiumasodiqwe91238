@@ -30,14 +30,14 @@ $columns = array(
 
 // getting total number records without any search
 $sql ="SELECT pel.kode_pelanggan,pel.nama_pelanggan,dp.id,dp.tanggal,dp.no_faktur,dp.kode_pelanggan,dp.total,dp.jam,dp.user,dp.status,dp.potongan,dp.tax,dp.tunai,dp.kredit ";
-$sql.="FROM penjualan dp INNER JOIN pelanggan pel ON dp.kode_pelanggan = pel.kode_pelanggan WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal' AND dp.kredit != 0 ";
+$sql.="FROM penjualan dp INNER JOIN pelanggan pel ON dp.kode_pelanggan = pel.id WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal' AND dp.kredit != 0 ";
 $query=mysqli_query($conn, $sql) or die("datatable_lap_pembelian.php: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
 $sql ="SELECT pel.kode_pelanggan,pel.nama_pelanggan,dp.id,dp.tanggal,dp.no_faktur,dp.kode_pelanggan,dp.total,dp.jam,dp.user,dp.status,dp.potongan,dp.tax,dp.tunai,dp.kredit ";
-$sql.="FROM penjualan dp INNER JOIN pelanggan pel ON dp.kode_pelanggan = pel.kode_pelanggan WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal' AND dp.kredit != 0 AND 1=1";
+$sql.="FROM penjualan dp INNER JOIN pelanggan pel ON dp.kode_pelanggan = pel.id WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal' AND dp.kredit != 0 AND 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
 	$sql.=" AND ( dp.no_faktur LIKE '".$requestData['search']['value']."%' ";

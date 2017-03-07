@@ -11,7 +11,7 @@ $sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
     $data1 = mysqli_fetch_array($query1);
 
 //menampilkan seluruh data yang ada pada tabel pembayaran_piutang
-$perintah = $db->query("SELECT p.nama_pelanggan,pp.nama_suplier,pp.no_faktur_pembayaran,pp.tanggal,pp.dari_kas,pp.total FROM pembayaran_piutang pp LEFT JOIN pelanggan p ON pp.nama_suplier = p.kode_pelanggan WHERE pp.tanggal >= '$dari_tanggal' AND pp.tanggal <= '$sampai_tanggal'");
+$perintah = $db->query("SELECT p.nama_pelanggan,pp.nama_suplier,pp.no_faktur_pembayaran,pp.tanggal,pp.dari_kas,pp.total FROM pembayaran_piutang pp LEFT JOIN pelanggan p ON pp.nama_suplier = p.id WHERE pp.tanggal >= '$dari_tanggal' AND pp.tanggal <= '$sampai_tanggal'");
 
 
 //menampilkan seluruh data yang ada pada tabel pembayaran_piutang

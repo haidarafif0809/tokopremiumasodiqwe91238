@@ -15,7 +15,8 @@ $columns = array(
 	3 => 'hpp',
 	4 => 'harga_lama',
 	5 => 'harga_baru',
-	6 => 'pembulatan'
+	6 => 'pembulatan',
+	7 => 'hapus'
 
 );
 
@@ -49,7 +50,10 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData[] = rp($row["hpp"]);
 	$nestedData[] = rp($row["harga_lama"]);	  
 	$nestedData[] = rp($row["harga_baru"]);	
-	$nestedData[] = rp($row["pembulatan"]);	         
+	$nestedData[] = rp($row["pembulatan"]);	
+
+	$nestedData[] = "<button class=' btn btn-danger btn-hapus' data-id='". $row['id'] ."' kode-barang='". $row['kode_barang'] ."' nama-barang='". $row['nama_barang'] ."'> <i class='fa fa-trash'></i> </button>";   
+
 	$data[] = $nestedData;
 
 }

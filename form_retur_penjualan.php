@@ -45,7 +45,7 @@ $session_id = session_id();
           while($data = mysqli_fetch_array($query))
           {
           
-          echo "<option value='".$data['kode_pelanggan'] ."' >".$data['kode_pelanggan'] ." - ".$data['nama_pelanggan'] ."</option>";
+          echo "<option value='".$data['id'] ."' >".$data['kode_pelanggan'] ." - ".$data['nama_pelanggan'] ."</option>";
           
           }
           

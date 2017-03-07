@@ -53,6 +53,8 @@ $pelanggan = mysqli_num_rows($pilih_akses_pelanggan);
 					<label> Kode Pelanggan </label><br>
 					<input type="text" name="kode_pelanggan" id="kode_pelanggan" class="form-control" autocomplete="off" required="" >
 					
+					<label> No KTP / No SIM</label><br>
+					<input type="text" name="no_ktp" id="no_ktp" class="form-control" autocomplete="off" required="" >
 
 					<label> Nama Pelanggan </label><br>
 					<input type="text" name="nama" id="nama_pelanggan" class="form-control" autocomplete="off" required="" >
@@ -218,6 +220,9 @@ $pelanggan = mysqli_num_rows($pilih_akses_pelanggan);
 					<label> Kode Pelanggan </label><br>
 					<input type="text" name="kode_edit" id="edit_kode" class="form-control" autocomplete="off" required="" >
 						
+					<label> No KTP / No SIM</label><br>
+					<input type="text" name="no_ktp_edit" id="no_ktp_edit" class="form-control" autocomplete="off" required="" >
+
 					<label> Nama Pelanggan </label><br>
 					<input type="text" name="nama_edit" id="edit_nama" class="form-control" autocomplete="off" required="" >
 
@@ -288,6 +293,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 		<thead>
 			
 			<th style='background-color: #4CAF50; color: white'> Kode Pelanggan </th>
+			<th style='background-color: #4CAF50; color: white'> No KTP </th>
 			<th style='background-color: #4CAF50; color: white'> Nama Pelanggan </th>
 			<th style='background-color: #4CAF50; color: white'> Level Harga </th>
 			<th style='background-color: #4CAF50; color: white'> Tgl. Lahir </th>
@@ -407,6 +413,8 @@ $pelanggan_edit = mysqli_num_rows($pilih_akses_pelanggan_edit);
 
 
 								var kode_pelanggan = $("#kode_pelanggan").val();
+								var no_ktp = $("#no_ktp").val();
+
 								var nama_pelanggan = $("#nama_pelanggan").val();
 								var level_harga = $("#level_harga").val();
 								var no_telp = $("#nomor").val();
@@ -418,7 +426,11 @@ $pelanggan_edit = mysqli_num_rows($pilih_akses_pelanggan_edit);
 
 									alert("Kode Pelanggan Harus Diisi");
 								}
+							else if (no_ktp == "") {
 
+									alert("Isi Dengan No KTP / No SIM");
+									$("#no_ktp").focus();
+								}
 								else if (nama_pelanggan == "") {
 
 									alert("Nama Pelanggan Harus Diisi");
@@ -434,7 +446,7 @@ $pelanggan_edit = mysqli_num_rows($pilih_akses_pelanggan_edit);
 									alert("Level Harga Harus Dipilih");
 								}
 								else {								
-									$.post('prosespelanggan.php', {kode_pelanggan:kode_pelanggan,nama_pelanggan:nama_pelanggan,level_harga:level_harga,no_telp:no_telp,e_mail:e_mail,tgl_lahir:tgl_lahir,wilayah:wilayah}, function(data){
+									$.post('prosespelanggan.php', {no_ktp:no_ktp,kode_pelanggan:kode_pelanggan,nama_pelanggan:nama_pelanggan,level_harga:level_harga,no_telp:no_telp,e_mail:e_mail,tgl_lahir:tgl_lahir,wilayah:wilayah}, function(data){
 								
 								if (data != "") {
 								$("#kode_pelanggan").val('');
@@ -444,7 +456,7 @@ $pelanggan_edit = mysqli_num_rows($pilih_akses_pelanggan_edit);
 								$("#nomor").val('');
 								$("#email").val('');
 								$("#wilayah").val('');
-								
+								$("#no_ktp").val('');
 								
 								
 								$(".alert").show('fast');
@@ -510,6 +522,8 @@ $pelanggan_edit = mysqli_num_rows($pilih_akses_pelanggan_edit);
 								var wilayah = $(this).attr("data-wilayah");
 								var level_harga = $(this).attr("data-level-harga");
 								var id   = $(this).attr("data-id");
+								var ktp   = $(this).attr("data-ktp");
+
 								$("#edit_nama").val(nama);
 								$("#edit_kode").val(kode);
 								$("#edit_tgl_lahir").val(tanggal);
@@ -518,7 +532,7 @@ $pelanggan_edit = mysqli_num_rows($pilih_akses_pelanggan_edit);
 								$("#edit_wilayah").val(wilayah);
 								$("#edit_level_harga").val(level_harga);
 								$("#id_edit").val(id);
-								
+								$("#no_ktp_edit").val(ktp);
 								
 								});
 								
@@ -531,12 +545,18 @@ $pelanggan_edit = mysqli_num_rows($pilih_akses_pelanggan_edit);
 								var wilayah = $("#edit_wilayah").val();
 								var level_harga = $("#edit_level_harga").val();
 								var id   = $("#id_edit").val();
+								var no_ktp   = $("#no_ktp_edit").val();
 
 								if (nama == ""){
 									alert("Nama Harus Diisi");
 								}
 								else if (kode == ""){
 									alert("Kode Pelangggan Harus Diisi");
+								}
+
+								else if (no_ktp == ""){
+									alert("Isi dengan No KTP / No SIM");
+									$("#no_ktp_edit").focus();
 								}
 								else if (nomor == ""){
 									alert("Nomor Telpon Harus Diisi");
@@ -553,9 +573,7 @@ $pelanggan_edit = mysqli_num_rows($pilih_akses_pelanggan_edit);
 									alert("Level Harga Harus Dipilih");
 								}
 								else {
-								$.post("update_pelanggan.php",{nama_pelanggan:nama,kode_pelanggan:kode,no_telp:nomor,tgl_lahir:tanggal,e_mail:email,wilayah:wilayah,level_harga:level_harga,id:id},function(data){
-
-								
+								$.post("update_pelanggan.php",{no_ktp:no_ktp,nama_pelanggan:nama,kode_pelanggan:kode,no_telp:nomor,tgl_lahir:tanggal,e_mail:email,wilayah:wilayah,level_harga:level_harga,id:id},function(data){
 
 								$("#table_baru").load('tabel-pelanggan.php');
 								$("#modal_edit").modal('hide');

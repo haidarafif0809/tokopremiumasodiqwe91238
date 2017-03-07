@@ -8,12 +8,13 @@ include 'sanitasi.php';
 
  
  $nomor_faktur = $_GET['no_faktur'];
- $kode_pelanggan = $_GET['kode_pelanggan'];
+ $id_pelanggan = $_GET['kode_pelanggan'];
  $nama_gudang = $_GET['nama_gudang'];
  $kode_gudang = $_GET['kode_gudang'];
 
-    $select_pel = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$kode_pelanggan'");
+    $select_pel = $db->query("SELECT kode_pelanggan,nama_pelanggan FROM pelanggan WHERE id = '$id_pelanggan'");
     $nma_pelanggan = mysqli_fetch_array($select_pel);
+    $kode_pelanggan = $nma_pelanggan['kode_pelanggan'];
 
     $perintah = $db->query("SELECT tanggal FROM penjualan WHERE no_faktur = '$nomor_faktur'");
     $ambil_tanggal = mysqli_fetch_array($perintah);
@@ -47,7 +48,7 @@ include 'sanitasi.php';
     $data_potongan_persen = $db->query("SELECT SUM(subtotal) AS subtotal FROM detail_penjualan WHERE no_faktur = '$nomor_faktur'");
     $ambil_potongan_persen = mysqli_fetch_array($data_potongan_persen);
     $subtotal_persen = $ambil_potongan_persen['subtotal'];
-
+   
     $potongan_persen = $potongan / $subtotal_persen * 100;
     $hasil_persen = intval($potongan_persen);
 
@@ -59,7 +60,7 @@ include 'sanitasi.php';
 
     $potongan_tax = $tax / $hasil_sub * 100;
     $hasil_tax = intval($potongan_tax);
-
+  
  ?>
 
 
@@ -101,6 +102,7 @@ include 'sanitasi.php';
 <div class="form-group col-sm-4">
   <label> Kode Pelanggan </label>
   <select type="text" name="kode_pelanggan" id="kd_pelanggan" class="form-control chosen"  required="" autofocus="">
+
   <option value="<?php echo $kode_pelanggan; ?>"><?php echo $kode_pelanggan; ?> - <?php echo $nma_pelanggan['nama_pelanggan']; ?></option>
           
   <?php 
@@ -264,7 +266,7 @@ tr:nth-child(even){background-color: #f2f2f2}
   <?php
                 
                 //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
-                $perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan FROM penjualan p INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE p.status = 'Simpan Sementara' ORDER BY p.id DESC ");
+                $perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan FROM penjualan p INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE p.status = 'Simpan Sementara' ORDER BY p.id DESC ");
                 
                 //menyimpan data sementara yang ada pada $perintah
                 
@@ -542,6 +544,8 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
   <input type="hidden" class="form-control" name="jumlah_barang_tbs" id="jumlah_barang_tbs">
+  <input type="hidden" class="form-control" name="real_id" id="real_id" value="<?php echo $id_pelanggan ?>">
+
   <input type="hidden" class="form-control" name="limit_stok" id="limit_stok">
   <input type="hidden" placeholder="Stok" class="form-control" name="jumlahbarang" id="jumlahbarang">
   <input type="hidden" class="form-control" name="ber_stok" id="ber_stok" placeholder="Ber Stok" >
@@ -1157,7 +1161,7 @@ $.post("ambil_edit_order_penjualan.php",{no_faktur_order:$(this).attr('data-orde
       $("#modal_order").modal('hide');
 
 
-$.post("ambil_select_order_edit.php",{no_faktur:no_faktur}function(data){
+$.post("ambil_select_order_edit.php",{no_faktur:no_faktur},function(data){
   $("#select_order").html(data);
   });
 
@@ -2073,6 +2077,8 @@ var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total
         var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#kredit").val() )))); 
         var kode_pelanggan = $("#kd_pelanggan").val();
         var tanggal_jt = $("#tanggal_jt").val();
+                var real_id = $("#real_id").val();
+
         var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#total1").val() )))); 
         var potongan =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#potongan_penjualan").val() ))));
 
@@ -2140,7 +2146,7 @@ alert("Pembayaran Harus Di Isi");
   $("#piutang").hide();
   $("#transaksi_baru").show();  
 
- $.post("proses_bayar_edit_jual.php",{biaya_adm:biaya_adm,total2:total2,kode_gudang:kode_gudang,tanggal:tanggal,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,keterangan:keterangan,jumlah_kredit_baru:jumlah_kredit_baru,x:x,ppn_input:ppn_input},function(info) {
+ $.post("proses_bayar_edit_jual.php",{real_id:real_id,biaya_adm:biaya_adm,total2:total2,kode_gudang:kode_gudang,tanggal:tanggal,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,keterangan:keterangan,jumlah_kredit_baru:jumlah_kredit_baru,x:x,ppn_input:ppn_input},function(info) {
 
    $("#total1").val('');
      $("#pembayaran_penjualan").val('');
@@ -2210,6 +2216,7 @@ else{
         var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#total1").val() )))); 
         var potongan =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#potongan_penjualan").val() ))));
         var biaya_adm =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+        var real_id = $("#real_id").val();
 
         var potongan_persen = $("#potongan_persen").val();
         var tax = $("#tax_rp").val();
@@ -2265,7 +2272,7 @@ else{
         $("#piutang").hide();
         $("#transaksi_baru").show(); 
         
-        $.post("proses_bayar_edit_jual.php",{biaya_adm:biaya_adm,total2:total2,kode_gudang:kode_gudang,tanggal:tanggal,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,keterangan:keterangan,jumlah_kredit_baru:jumlah_kredit_baru,x:x,ppn_input:ppn_input},function(info) {
+        $.post("proses_bayar_edit_jual.php",{real_id:real_id,biaya_adm:biaya_adm,total2:total2,kode_gudang:kode_gudang,tanggal:tanggal,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,keterangan:keterangan,jumlah_kredit_baru:jumlah_kredit_baru,x:x,ppn_input:ppn_input},function(info) {
         
         $("#table-baru").html(info);
         $("#alert_berhasil").show();

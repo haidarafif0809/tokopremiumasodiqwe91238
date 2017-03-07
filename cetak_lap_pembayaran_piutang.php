@@ -7,7 +7,7 @@ include 'db.php';
 
 $no_faktur_pembayaran = $_GET['no_faktur_pembayaran'];
 
-    $query0 = $db->query("SELECT pel.nama_pelanggan, da.nama_daftar_akun,pp.no_faktur_pembayaran ,pp.dari_kas ,pp.tanggal ,pp.nama_suplier ,pp.keterangan ,pp.total FROM pembayaran_piutang pp INNER JOIN daftar_akun da ON pp.dari_kas = da.kode_daftar_akun INNER JOIN pelanggan pel ON pp.nama_suplier = pel.kode_pelanggan WHERE pp.no_faktur_pembayaran = '$no_faktur_pembayaran' ");
+    $query0 = $db->query("SELECT pel.nama_pelanggan, da.nama_daftar_akun,pp.no_faktur_pembayaran ,pp.dari_kas ,pp.tanggal ,pp.nama_suplier ,pp.keterangan ,pp.total FROM pembayaran_piutang pp INNER JOIN daftar_akun da ON pp.dari_kas = da.kode_daftar_akun INNER JOIN pelanggan pel ON pp.nama_suplier = pel.id WHERE pp.no_faktur_pembayaran = '$no_faktur_pembayaran' ");
     $data0 = mysqli_fetch_array($query0);
 
     $query1 = $db->query("SELECT * FROM perusahaan ");

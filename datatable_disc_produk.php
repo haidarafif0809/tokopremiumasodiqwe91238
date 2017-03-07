@@ -7,6 +7,7 @@ include 'sanitasi.php';
 $pilih_akses = $db->query("SELECT program_promo_disc_tambah, program_promo_disc_edit, program_promo_disc_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]'");
 $produk_promo = mysqli_fetch_array($pilih_akses);
 
+$id = angkadoang($_POST['id_nya']);
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
 
@@ -22,14 +23,14 @@ $columns = array(
 
 // getting total number records without any search
 $sql = "SELECT pdp.id,pdp.harga_disc,pdp.qty_max,pdp.nama_program,pdp.nama_produk,b.kode_barang, b.nama_barang,b.id AS id_barang, pro2.kode_program, pro2.id AS id_program, pro2.nama_program AS napro ";
-$sql.=" FROM promo_disc_produk pdp INNER JOIN barang b ON pdp.nama_produk = b.id INNER JOIN program_promo pro2 ON pdp.nama_program = pro2.id ";
+$sql.=" FROM promo_disc_produk pdp INNER JOIN barang b ON pdp.nama_produk = b.id INNER JOIN program_promo pro2 ON pdp.nama_program = pro2.id WHERE pdp.nama_program = '$id' ";
 $query=mysqli_query($conn, $sql) or die("datatable_free_produk.php: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
 $sql = "SELECT pdp.id,pdp.harga_disc,pdp.qty_max,pdp.nama_program,pdp.nama_produk,b.kode_barang, b.nama_barang, b.id AS id_barang, pro2.kode_program, pro2.id AS id_program, pro2.nama_program AS napro ";
-$sql.=" FROM promo_disc_produk pdp INNER JOIN barang b  ON pdp.nama_produk = b.id INNER JOIN program_promo pro2 ON pdp.nama_program = pro2.id WHERE 1=1";
+$sql.=" FROM promo_disc_produk pdp INNER JOIN barang b  ON pdp.nama_produk = b.id INNER JOIN program_promo pro2 ON pdp.nama_program = pro2.id WHERE pdp.nama_program = '$id' AND 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 	$sql.=" AND ( b.nama_barang LIKE '".$requestData['search']['value']."%' ";
 	$sql.=" OR pro2.nama_program LIKE '".$requestData['search']['value']."%' ";

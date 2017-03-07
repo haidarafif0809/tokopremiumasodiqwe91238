@@ -55,13 +55,17 @@ if ($produk_promo['produk_promo_tambah'] > 0) {
           </form>
         </span><!--Akhir span untuk TAMBAH-->
 
+<!--input untuk masuk ke data table-->
+<input type="hidden" name="id_nya" id="id_nya" autocomplete="off" class="form-control" readonly="" value="<?php echo $id; ?>" style="height: 5%; width: 95%;">
+<!--input untuk masuk ke data table-->
+
 <span id="edit_produk_promo" style="display: none;"><!--span untuk EDIT-->
           <form class="form-inline" role="form" id="formeditproduk">
           <div class="row armun"><!--div class="row armun"-->
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
                 <input type="text" name="kode_produk_edit" id="kode_produk_edit" autocomplete="off" class="form-control" style="height: 5%; width: 95%;" placeholder="Kode Produk" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Ketikkan kode produk atau nama produk untuk memilih produk.'>
 
-                <input type="text" name="id_produk_edit" id="id_produk_edit" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;">
+                <input type="hidden" name="id_produk_edit" id="id_produk_edit" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;">
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
@@ -165,6 +169,7 @@ if ($produk_promo['produk_promo_tambah'] > 0) {
 
 <script type="text/javascript">
         $(document).ready(function(){
+    // kode produk BLUR
         $("#kode_produk").blur(function(){
 
           var kode_produk = $(this).val();
@@ -203,6 +208,49 @@ if ($produk_promo['produk_promo_tambah'] > 0) {
           }
 
         });
+// /END kode produk blur
+
+// kode produk mouseleave
+$("#kode_produk").mouseleave(function(){
+
+          var kode_produk = $(this).val();
+          var kode_produk = kode_produk.substr(0, kode_produk.indexOf('('));
+          
+          if (kode_produk != '')
+          {
+                $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json){
+                
+                if (json == null)
+                {
+                  
+                  $('#id_produk').val('');
+                 
+                }
+
+                else 
+                {
+                  $('#id_produk').val(json.id);
+                  
+                }
+
+                var id_produk = $("#id_produk").val();
+
+                $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data){
+            
+              if(data == 1){
+              alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+              $("#kode_produk").val('');
+              $("#id_produk").val('');
+              }//penutup if
+              
+              });////penutup function(data)
+                                                        
+                }); 
+          }
+
+        }); 
+        // end kode produk mouseleave
+
         });     
 </script>
 
@@ -299,12 +347,17 @@ if ($produk_promo['produk_promo_tambah'] > 0) {
           $("#tambah_produk_promo").show();
 
           $('#table_produk_promo').DataTable().destroy();
-                  
+                  var id_nya = $('#id_nya').val();
                   var dataTable = $('#table_produk_promo').DataTable( {
                     "processing": true,
                     "serverSide": true,
                     "ajax":{
                       url :"datatable_produk_promo.php", // json datasource
+                      "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                        },
                       type: "post",  // method  , by default get
                       error: function(){  // error handling
                         $(".tbody").html("");
@@ -449,12 +502,17 @@ if ($produk_promo['produk_promo_tambah'] > 0) {
           $("#table_le_kui").show();
 
           $('#table_produk_promo').DataTable().destroy();
-                  
+                  var id_nya = $('#id_nya').val();
                   var dataTable = $('#table_produk_promo').DataTable( {
                     "processing": true,
                     "serverSide": true,
                     "ajax":{
                       url :"datatable_produk_promo.php", // json datasource
+                      "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                        },
                       type: "post",  // method  , by default get
                       error: function(){  // error handling
                         $(".tbody").html("");
@@ -502,20 +560,25 @@ $(document).on('click', '.delete', function (e) {
     $("#modal_hapus").modal('hide');
 
         $('#table_produk_promo').DataTable().destroy();
-        
-        var dataTable = $('#table_produk_promo').DataTable( {
-          "processing": true,
-          "serverSide": true,
-          "ajax":{
-            url :"datatable_produk_promo.php", // json datasource
-            type: "post",  // method  , by default get
-            error: function(){  // error handling
-              $(".tbody").html("");
-              $("#table_produk_promo").append('<tbody class="tbody"><tr ><td colspan="3">No data found in the server</td></tr></tbody>');
-              $("#table_ri_processing").css("display","none");
-              
-            }
-          },
+                  var id_nya = $('#id_nya').val();
+                  var dataTable = $('#table_produk_promo').DataTable( {
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax":{
+                      url :"datatable_produk_promo.php", // json datasource
+                      "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                        },
+                      type: "post",  // method  , by default get
+                      error: function(){  // error handling
+                        $(".tbody").html("");
+                        $("#table_produk_promo").append('<tbody class="tbody"><tr ><td colspan="3">No data found in the server</td></tr></tbody>');
+                        $("#table_ri_processing").css("display","none");
+                        
+                      }
+                    },
 
            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
               $(nRow).attr('class','tr-id-'+aData[4]+'');
@@ -535,19 +598,26 @@ $(document).on('click', '.delete', function (e) {
 <script type="text/javascript" language="javascript" >
       $(document).ready(function() {
 
-          var dataTable = $('#table_produk_promo').DataTable( {
-          "processing": true,
-          "serverSide": true,
-          "ajax":{
-            url :"datatable_produk_promo.php", // json datasource
-           
-            type: "post",  // method  , by default get
-            error: function(){  // error handling
-              $(".employee-grid-error").html("");
-              $("#table_produk_promo").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-              $("#employee-grid_processing").css("display","none");
-            }
-        },
+          $('#table_produk_promo').DataTable().destroy();
+                  var id_nya = $('#id_nya').val();
+                  var dataTable = $('#table_produk_promo').DataTable( {
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax":{
+                      url :"datatable_produk_promo.php", // json datasource
+                      "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                        },
+                      type: "post",  // method  , by default get
+                      error: function(){  // error handling
+                        $(".tbody").html("");
+                        $("#table_produk_promo").append('<tbody class="tbody"><tr ><td colspan="3">No data found in the server</td></tr></tbody>');
+                        $("#table_ri_processing").css("display","none");
+                        
+                      }
+                    },
             
             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
                 $(nRow).attr('class','tr-id-'+aData[4]+'');

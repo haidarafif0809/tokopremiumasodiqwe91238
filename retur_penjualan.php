@@ -9,7 +9,7 @@ include 'db.php';
 
 
 //menampilkan seluruh data yang ada pada tabel pembelian dalan DB
-$perintah = $db->query("SELECT p.nama_pelanggan,rp.id,rp.kode_pelanggan,rp.no_faktur_retur,rp.kode_pelanggan,rp.total,rp.potongan,rp.tax,rp.tanggal,rp.jam,rp.user_buat,rp.user_edit,rp.tanggal_edit,rp.tunai,rp.sisa FROM retur_penjualan rp INNER JOIN pelanggan p ON rp.kode_pelanggan = p.id ");
+$perintah = $db->query("SELECT p.nama_pelanggan,rp.id,p.kode_pelanggan AS code_card,rp.no_faktur_retur,rp.kode_pelanggan,rp.total,rp.potongan,rp.tax,rp.tanggal,rp.jam,rp.user_buat,rp.user_edit,rp.tanggal_edit,rp.tunai,rp.sisa FROM retur_penjualan rp INNER JOIN pelanggan p ON rp.kode_pelanggan = p.id ");
 
 ?>
 
@@ -217,7 +217,7 @@ $row_alert = mysqli_num_rows($pilih);
 			echo "<td> <a href='cetak_lap_retur_penjualan.php?no_faktur_retur=".$data1['no_faktur_retur']."' class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print'> </span> Cetak Retur</a> </td>
 
 			<td>". $data1['no_faktur_retur'] ."</td>
-			<td>". $data1['kode_pelanggan'] ." ". $data1['nama_pelanggan'] ."</td>
+			<td>". $data1['code_card'] ." ". $data1['nama_pelanggan'] ."</td>
 			<td>". rp($data1['total']) ."</td>
 			<td>". rp($data1['potongan']) ."</td>
 			<td>". rp($data1['tax']) ."</td>

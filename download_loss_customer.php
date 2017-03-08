@@ -43,13 +43,13 @@ $bulan_sekarang = date('m');
 
             }
             
-          $select_data = $db->query("SELECT p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan,pl.no_telp FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_pelanggan != '$kode_a' GROUP BY p.kode_pelanggan");
+          $select_data = $db->query("SELECT pl.kode_pelanggan AS code_card,p.kode_pelanggan,SUM(p.total) AS jumlah,pl.nama_pelanggan,pl.no_telp FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_pelanggan != '$kode_a' GROUP BY p.kode_pelanggan");
 
             while ($out = mysqli_fetch_array($select_data))
             {
                 //menampilkan data
             echo "<tr>
-                <td>". $out['kode_pelanggan'] ."</td>
+                <td>". $out['code_card'] ."</td>
                 <td>". $out['nama_pelanggan'] ."</td>
                 <td>". $out['no_telp'] ."</td>
                 <td>". $out['jumlah'] ."</td>

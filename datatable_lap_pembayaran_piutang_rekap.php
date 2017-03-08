@@ -23,20 +23,22 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql ="SELECT pp.id,p.nama_pelanggan,pp.nama_suplier,pp.no_faktur_pembayaran,pp.tanggal,pp.dari_kas,pp.total,da.nama_daftar_akun ";
+$sql ="SELECT p.kode_pelanggan AS code_card,pp.id,p.nama_pelanggan,pp.nama_suplier,pp.no_faktur_pembayaran,pp.tanggal,pp.dari_kas,pp.total,da.nama_daftar_akun ";
 $sql.="FROM pembayaran_piutang pp LEFT JOIN pelanggan p ON pp.nama_suplier = p.id LEFT JOIN daftar_akun da ON pp.dari_kas = da.kode_daftar_akun WHERE pp.tanggal >= '$dari_tanggal' AND pp.tanggal <= '$sampai_tanggal' ";
 $query=mysqli_query($conn, $sql) or die("datatable_lap_pembayaran_piutang.php: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
-$sql ="SELECT pp.id,p.nama_pelanggan,pp.nama_suplier,pp.no_faktur_pembayaran,pp.tanggal,pp.dari_kas,pp.total,da.nama_daftar_akun ";
+$sql ="SELECT p.kode_pelanggan AS code_card,pp.id,p.nama_pelanggan,pp.nama_suplier,pp.no_faktur_pembayaran,pp.tanggal,pp.dari_kas,pp.total,da.nama_daftar_akun ";
 $sql.="FROM pembayaran_piutang pp LEFT JOIN pelanggan p ON pp.nama_suplier = p.id LEFT JOIN daftar_akun da ON pp.dari_kas = da.kode_daftar_akun WHERE pp.tanggal >= '$dari_tanggal' AND pp.tanggal <= '$sampai_tanggal' AND 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
 	$sql.=" AND ( p.nama_pelanggan LIKE '".$requestData['search']['value']."%' ";
 	$sql.=" OR pp.no_faktur_pembayaran LIKE '".$requestData['search']['value']."%' ";
 	$sql.=" OR pp.tanggal LIKE '".$requestData['search']['value']."%' ";
+	$sql.=" OR p.kode_pelanggan LIKE '".$requestData['search']['value']."%' ";
+
 	$sql.=" OR da.nama_daftar_akun LIKE '".$requestData['search']['value']."%' ";
 	$sql.=" OR pp.dari_kas LIKE '".$requestData['search']['value']."%' )";
 
@@ -60,7 +62,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 				$cek = mysqli_fetch_array($perintah0);
 				$nestedData[] = $row['no_faktur_pembayaran'];
 				$nestedData[] = $row['tanggal'];
-				$nestedData[] = $row['nama_suplier'] ." - ". $row['nama_pelanggan'];
+			$nestedData[] = $row['code_card'] ." - ". $row['nama_pelanggan'];
 				$nestedData[] = $row['nama_daftar_akun'];
 				$nestedData[] = $cek['potongan'];
 				$nestedData[] = rp($row['total']);

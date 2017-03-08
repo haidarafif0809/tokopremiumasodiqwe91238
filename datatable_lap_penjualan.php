@@ -33,7 +33,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 
 
-$sql = "SELECT pel.nama_pelanggan,pel.kode_pelanggan,p.id,p.total,p.no_faktur,p.kode_pelanggan,p.tanggal,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa ";
+$sql = "SELECT pel.nama_pelanggan,pel.kode_pelanggan AS code_card,p.id,p.total,p.no_faktur,p.kode_pelanggan,p.tanggal,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa ";
 $sql.="FROM penjualan p INNER JOIN pelanggan pel ON p.kode_pelanggan = pel.id WHERE 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
@@ -65,7 +65,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 				//menampilkan data
 				$nestedData[] = $row['no_faktur'];
-				$nestedData[] = $row['kode_pelanggan'] ." - ". $row['nama_pelanggan'];
+				$nestedData[] = $row['code_card'] ." - ". $row['nama_pelanggan'];
 				$nestedData[] = rp($total_kotor);
 				$nestedData[] = rp($row['total']);
 				$nestedData[] = $row['tanggal'];

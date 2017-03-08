@@ -50,7 +50,7 @@ $no_faktur_retur = $_GET['no_faktur_retur'];
   <tbody>
     <tr><td>No Faktur</td> <td>:&nbsp;</td><td><?php echo $data0['no_faktur_retur']; ?></td></tr>
     <tr><td>Tanggal</td> <td>:&nbsp;</td><td><?php echo tanggal($data0['tanggal']);?></td></tr>
-    <tr><td>Kode Pelanggan</td> <td>:&nbsp;</td><td><?php echo $data0['nama_pelanggan']; ?></td></tr>
+    <tr><td>Nama Pelanggan</td> <td>:&nbsp;</td><td><?php echo $data0['nama_pelanggan']; ?></td></tr>
 
   </tbody>
 </table>      
@@ -59,7 +59,7 @@ $no_faktur_retur = $_GET['no_faktur_retur'];
 
         <div class="col-sm-2">
                 <br><br><br><br><br>
-                User: <?php echo $_SESSION['user_name']; ?>  <br>
+                Petugas: <?php echo $_SESSION['nama']; ?>  <br>
 
         </div><!--penutup colsm4-->
 

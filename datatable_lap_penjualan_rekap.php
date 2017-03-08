@@ -28,7 +28,7 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql = " SELECT pel.nama_pelanggan,pel.kode_pelanggan,p.id,p.tanggal,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit ";
+$sql = " SELECT pel.nama_pelanggan,pel.kode_pelanggan AS code_card,p.id,p.tanggal,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit ";
 $sql.="FROM penjualan p INNER JOIN pelanggan pel ON p.kode_pelanggan = pel.id WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal' ";
 $query=mysqli_query($conn, $sql) or die("datatable_lap_penjualan.php: get employees");
 $totalData = mysqli_num_rows($query);
@@ -36,7 +36,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 
 
-$sql = "SELECT pel.nama_pelanggan,pel.kode_pelanggan,p.id,p.tanggal,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit ";
+$sql = "SELECT pel.nama_pelanggan,pel.kode_pelanggan AS code_card,p.id,p.tanggal,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit ";
 $sql.=" FROM penjualan p INNER JOIN pelanggan pel ON p.kode_pelanggan = pel.id WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal' AND 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
@@ -63,7 +63,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 				//menampilkan data
 				$nestedData[] = $row['tanggal'];
 				$nestedData[] = $row['no_faktur'];
-				$nestedData[] = $row['kode_pelanggan'] ." - ". $row['nama_pelanggan'];
+			$nestedData[] = $row['code_card'] ." - ". $row['nama_pelanggan'];
 				$nestedData[] = rp($row['total']);
 				$nestedData[] = $row['jam'];
 				$nestedData[] = $row['user'];

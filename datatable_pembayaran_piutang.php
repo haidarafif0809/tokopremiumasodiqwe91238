@@ -26,7 +26,7 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql = "SELECT p.id, p.no_faktur_pembayaran, p.tanggal, p.jam, p.nama_suplier, p.keterangan, p.total, p.user_buat, p.user_edit, p.tanggal_edit, p.dari_kas, pl.nama_pelanggan,pl.kode_pelanggan, da.nama_daftar_akun ";
+$sql = "SELECT p.id, p.no_faktur_pembayaran, p.tanggal, p.jam, p.nama_suplier, p.keterangan, p.total, p.user_buat, p.user_edit, p.tanggal_edit, p.dari_kas, pl.nama_pelanggan,pl.kode_pelanggan AS code_card, da.nama_daftar_akun ";
 $sql.="FROM pembayaran_piutang p INNER JOIN pelanggan pl ON p.nama_suplier = pl.id INNER JOIN daftar_akun da ON p.dari_kas = da.kode_daftar_akun ";
 $query=mysqli_query($conn, $sql) or die("datatable_item_keluar.php: get employees");
 $totalData = mysqli_num_rows($query);
@@ -34,12 +34,13 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 
 
-$sql = "SELECT p.id, p.no_faktur_pembayaran, p.tanggal, p.jam, p.nama_suplier, p.keterangan, p.total, p.user_buat, p.user_edit, p.tanggal_edit, p.dari_kas, pl.nama_pelanggan,pl.kode_pelanggan, da.nama_daftar_akun ";
+$sql = "SELECT p.id, p.no_faktur_pembayaran, p.tanggal, p.jam, p.nama_suplier, p.keterangan, p.total, p.user_buat, p.user_edit, p.tanggal_edit, p.dari_kas, pl.nama_pelanggan,pl.kode_pelanggan AS code_card, da.nama_daftar_akun ";
 $sql.="FROM pembayaran_piutang p INNER JOIN pelanggan pl ON p.nama_suplier = pl.id INNER JOIN daftar_akun da ON p.dari_kas = da.kode_daftar_akun WHERE 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
 	$sql.=" AND ( p.no_faktur_pembayaran LIKE '".$requestData['search']['value']."%' "; 
 	$sql.=" OR pl.nama_pelanggan LIKE '".$requestData['search']['value']."%' ";
+	$sql.=" OR pl.kode_pelanggan LIKE '".$requestData['search']['value']."%' ";
 	$sql.=" OR pl.id LIKE '".$requestData['search']['value']."%' ";
 	$sql.=" OR da.nama_daftar_akun LIKE '".$requestData['search']['value']."%' ";
 	$sql.=" OR p.keterangan LIKE '".$requestData['search']['value']."%' ";
@@ -83,7 +84,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 						$nestedData[] = $row['no_faktur_pembayaran'];
 						$nestedData[] = $row['tanggal'];
 						$nestedData[] = $row['jam'];
-						$nestedData[] = $row['kode_pelanggan'] ." - ". $row["nama_pelanggan"];
+						$nestedData[] = $row['code_card'] ." - ". $row["nama_pelanggan"];
 						$nestedData[] = $row['keterangan'];
 						$nestedData[] = rp($row['total']);
 						$nestedData[] = $row['user_buat'];

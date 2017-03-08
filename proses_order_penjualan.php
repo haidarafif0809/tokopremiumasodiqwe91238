@@ -72,7 +72,7 @@ echo $no_faktur = $nomor."/OR/".$data_bulan_terakhir."/".$tahun_terakhir;
     $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
     $no_jurnal = no_jurnal();
     
-    $select_kode_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$kode_pelanggan'");
+    $select_kode_pelanggan = $db->query("SELECT id,nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$kode_pelanggan'");
     $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
 
               
@@ -131,7 +131,7 @@ echo $no_faktur = $nomor."/OR/".$data_bulan_terakhir."/".$tahun_terakhir;
               
     // hubungkan "data" dengan prepared statements
               $stmt->bind_param("sssissss",
-              $no_faktur, $kode_gudang, $kode_pelanggan, $total, $tanggal_sekarang, $jam_sekarang, $sales, $keterangan);
+              $no_faktur, $kode_gudang, $ambil_kode_pelanggan[id], $total, $tanggal_sekarang, $jam_sekarang, $sales, $keterangan);
               
               
               $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);

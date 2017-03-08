@@ -34,7 +34,7 @@ $session_id = session_id();
     </div>
     <div class="modal-footer">
         
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Closed</button>
+        <button type="button" class="btn btn-danger" id="closed_alert_promo" data-dismiss="modal">Closed (Ctrl + G)</button>
     </div>
     </div>
   </div>
@@ -863,7 +863,7 @@ $(document).ready(function(){
 
 <script>
 //untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
-  $("#submit_barcode").click(function(){
+  $(document).on('click', '#submit_barcode', function (e) {
 
     var kode_barang = $("#kode_barcode").val();
     var level_harga = $("#level_harga").val();
@@ -968,7 +968,7 @@ $.post("lihat_promo_alert.php",{id:json.id},function(info){
 
    <script>
    //untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
-  $("#submit_produk").click(function(){
+  $(document).on('click', '#submit_produk', function (e) {
 
     var no_faktur = $("#nomor_faktur_penjualan").val();
     var kode_pelanggan = $("#kd_pelanggan").val();
@@ -1618,8 +1618,7 @@ $.post("lihat_promo_alert.php",{id:json.id},function(data){
 
 <script type="text/javascript">
 // START script untuk pilih kode barang menggunakan chosen     
-  $(document).ready(function(){
-  $("#kode_barang").change(function(){
+  $(document).on('change', '#kode_barang', function () {
 
     var kode_barang = $(this).val();
     var nama_barang = $('#opt-produk-'+kode_barang).attr("nama-barang");
@@ -1641,6 +1640,18 @@ $.post("lihat_promo_alert.php",{id:json.id},function(data){
     var id_barang = $('#opt-produk-'+kode_barang).attr("id-barang");
     var level_harga = $("#level_harga").val();
 
+$.post("lihat_promo_alert.php",{id:id_barang},function(data){
+
+    if (data == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(data);
+    }
+
+});
 
    if (level_harga == "harga_1") {
 
@@ -1726,7 +1737,6 @@ $.post('cek_kode_barang_tbs_penjualan_order.php',{kode_barang:kode_barang}, func
     
 
   });
-  }); 
   // end script untuk pilih kode barang menggunakan chosen   
 </script>
 
@@ -2003,6 +2013,14 @@ $(document).ready(function(){
 
     }); 
 
+
+        shortcut.add("ctrl+g", function() {
+        // Do something
+
+        $("#closed_alert_promo").click();
+
+    }); 
+    
     
     shortcut.add("f10", function() {
         // Do something

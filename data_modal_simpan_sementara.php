@@ -56,6 +56,7 @@ $totalFiltered = mysqli_num_rows($query); // when there is a search parameter th
         
 $sql.=" ORDER BY p.tanggal ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 
+
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */    
 $query=mysqli_query($conn, $sql) or die("eror 3");
 

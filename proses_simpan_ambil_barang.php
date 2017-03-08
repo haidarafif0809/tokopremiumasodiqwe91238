@@ -4,8 +4,14 @@ include 'db.php';
 
 $no_faktur = $_POST['no_faktur'];
 
-$delete = $db->query("DELETE FROM tbs_penjualan WHERE no_faktur = '$no_faktur'");
-$delete_fee = $db->query("DELETE FROM tbs_fee_produk WHERE no_faktur = '$no_faktur'");
+$select_order = $db->query("SELECT no_faktur_order FROM tbs_penjualan WHERE no_faktur = '$no_faktur'  ");
+while($sq = mysqli_fetch_array($select_order))
+{
+	$update_order = $db->query("UPDATE penjualan_order SET status_order = 'Sedang Order' WHERE no_faktur_order = '$sq[no_faktur_order]' ");
+}
+
+$delete = $db->query("DELETE FROM tbs_penjualan WHERE no_faktur = '$no_faktur' ");
+$delete_fee = $db->query("DELETE FROM tbs_fee_produk WHERE no_faktur = '$no_faktur' ");
 
 $select_fee = $db->query("SELECT * FROM laporan_fee_produk WHERE no_faktur = '$no_faktur'");
 while($out_fee = mysqli_fetch_array($select_fee))

@@ -116,11 +116,16 @@ $session_id = session_id();
                               $data_c = $c->retrieveAll();
 
                               foreach ($data_c as $key ) {
-                                if ($key['kategori'] == 'Hadiah') {
+
+                                  $cek = $db->query("SELECT kode_barang FROM master_poin WHERE kode_barang = '$key[kode_barang]' ");
+                                  $rows = mysqli_num_rows($cek);
+
+                                   if ($rows > 0) {
+                                   
                                    echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
-                                }
-                               
-                              }
+                                   
+                                   }
+                            }
 
                             ?>
                         </select>
@@ -416,52 +421,40 @@ $(document).on('click', '.pilih', function (e) {
               $("#kode_barang").val(kode_barang);
               $("#nama_barang").val(nama_barang);
 
-                    // CEK STOK
-                    $.post("cek_stok_barang_hadiah.php",{kode_barang:kode_barang},function(data){
 
-                        $("#stok").val(data)
-                                            
-                      });
+               $.post("cek_barang_tbs_tukar_poin.php",{kode_barang:kode_barang},function(data){
 
-              $.post("cek_barang_hadiah.php",{kode_barang:kode_barang},function(info){
+                        if (data == 1) {
+                              alert("Barang yang anda pilih sudah ada, silahkan pilih barang lain!");
 
-                        if (info != 0) {
+                                $("#kode_barang").chosen("destroy");
+                                $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});    
+                                $("#satuan").val('');
+                                $("#kode_barang").val('');
+                                $("#poin").val('');
+                                $("#nama_barang").val('');
+                                $("#stok").val('');
+                                $("#kode_barang").trigger('chosen:updated');
+                                $("#kode_barang").trigger('chosen:open');
 
-                           $("#poin").val(info);
-
-
-                                    $.post("cek_barang_tbs_tukar_poin.php",{kode_barang:kode_barang},function(data){
-                                            if (data == 1) {
-                                              alert("Barang yang anda pilih sudah ada, silahkan pilih barang lain!");
-
-                                                $("#kode_barang").chosen("destroy");
-                                                $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});    
-                                                $("#satuan").val('');
-                                                $("#kode_barang").val('');
-                                                $("#poin").val('');
-                                                $("#nama_barang").val('');
-                                                $("#stok").val('');
-                                                  $("#kode_barang").trigger('chosen:updated');
-                                                  $("#kode_barang").trigger('chosen:open');
-
-                                            };
-
-                                      });  
-
+                         }
+                         else
+                         {        // CEK STOK
+                                $.post("cek_stok_barang_hadiah.php",{kode_barang:kode_barang},function(data){
+                                                    
+                                $("#stok").val(data)
+                                                    
+                                });
+                                                    
+                                $.post("cek_barang_hadiah.php",{kode_barang:kode_barang},function(info){
+                                                    
+                                $("#poin").val(info);
+                                                    
+                                                    
+                                });                    
                         }
-                        else
-                        {
-                              alert("Barang yang anda pilih belum dimasukan ke DAFTAR BARANG HADIAH  !");
 
-                                          $("#kode_barang").chosen("destroy");
-                                          $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});    
-                                          $("#satuan").val('');
-                                          $("#kode_barang").val('');
-                                          $("#nama_barang").val('');
-                                          $("#kode_barang").trigger('chosen:updated');
-                                          $("#kode_barang").trigger('chosen:open');
-                                                $("#stok").val('');
-                        }
+                   
 
               });
 
@@ -777,7 +770,7 @@ $(document).ready(function(){
 
                                       if (total_akhir == 0) {
                                                     
-                                                                  $("#kd_pelanggan").val('');
+                                                          $("#kd_pelanggan").val('');
                                                           $("#jumlah_poin").val('');
                                                            $('#kd_pelanggan').prop('disabled', false).trigger("chosen:updated");
                                                           $("#kd_pelanggan").trigger("chosen:open");

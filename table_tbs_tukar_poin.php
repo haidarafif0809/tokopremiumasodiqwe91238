@@ -59,7 +59,8 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 						$nestedData[] = "<p style='font-size:15px;'>". $row['nama_barang'] ."</p>";
 						$nestedData[] = "<p style='font-size:15px'>". $row['nama'] ."</p>";
 						$nestedData[] = "<p style='font-size:15px' class='edit-jumlah' data-id='".$row['id']."'><span id='text-jumlah-".$row['id']."'>". $row['jumlah_barang'] ."</span> </p> 
-						<input type='hidden' id='input-jumlah-".$row['id']."' value='".$row['jumlah_barang']."' class='input_jumlah' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_barang']."' data-poin='".$row['poin']."' data-jumlah='".$row['jumlah_barang']."'>";
+						<input type='hidden' id='input-jumlah-".$row['id']."' value='".$row['jumlah_barang']."' class='input_jumlah' data-id='".$row['id']."' autofocus='' 
+						data-kode='".$row['kode_barang']."' data-poin='".$row['poin']."' data-jumlah='".$row['jumlah_barang']."' onkeydown='return numbersonly(this, event);' onkeyup='javascript:tandaPemisahTitik(this);'>";
 
 
 						$nestedData[] = "<p style='font-size:15px' >". rp($row['poin']) ."</p>";

@@ -5,87 +5,72 @@ include 'db.php';
 
 /* Database connection end */
 
+$no_faktur = stringdoang($_POST['no_faktur']);
 
-$dari_tgl = stringdoang($_POST['dari_tanggal']);
-$sampai_tgl = stringdoang($_POST['sampai_tanggal']);
-$kelipatan = angkadoang($_POST['kelipatan']);
-$satu = 1;
 
-// storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
-
 
 $columns = array( 
 // datatable column index  => database column name
 
-    0=>'omset', 
-    1=>'total_faktur',
-    2=>'%'
+    0=>'kode_barang', 
+    1=>'nama_barang',
+    2=>'satuan',
+    3=>'penjualan_periode',
+    4=>'penjulan_perhari',
+    5=>'target',
+    6=>'proyeksi',
+    7=>'stok',
+    8=>'kebutuhan'
+
+
 );
 
-
-
-
 // getting total number records without any search
-$sql = "SELECT MAX(total) AS total ";
-$sql.=" FROM penjualan";
-$sql.=" WHERE tanggal >= '$dari_tgl' AND tanggal <= '$sampai_tgl' ";
+$sql = "SELECT dt.no_faktur, dt.kode_barang, dt.nama_barang, dt.jumlah_barang, dt.poin, dt.subtotal_poin, s.nama";
+$sql.=" FROM detail_tukar_poin dt LEFT JOIN satuan s ON dt.satuan = s.id ";
+$sql.="  WHERE dt.no_faktur = '$no_faktur'";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
-$sql = "SELECT MAX(total) AS total ";
-$sql.=" FROM penjualan";
-$sql.=" WHERE tanggal >= '$dari_tgl' AND tanggal <= '$sampai_tgl' ";
-
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-    $sql.=" AND (tanggal LIKE '".$requestData['search']['value']."%' )";  
+$sql = "SELECT dt.no_faktur, dt.kode_barang, dt.nama_barang, dt.jumlah_barang, dt.poin, dt.subtotal_poin, s.nama";
+$sql.=" FROM detail_tukar_poin dt LEFT JOIN satuan s ON dt.satuan = s.id ";
+$sql.="  WHERE dt.no_faktur = '$no_faktur'";
+
+    $sql.=" AND (dt.kode_barang LIKE '".$requestData['search']['value']."%' ";
+    $sql.=" OR s.nama LIKE '".$requestData['search']['value']."%'  ";  
+    $sql.=" OR dt.nama_barang LIKE '".$requestData['search']['value']."%' )";  
 }
 
 $query=mysqli_query($conn, $sql) or die("eror 2");
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
-        
+
+$sql.=" ORDER BY dt.id ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */    
 $query=mysqli_query($conn, $sql) or die("eror 3");
 
 $data = array();
-
-$row=mysqli_fetch_array($query);
-
-            $total1 = $kelipatan + $row['total'];
-            
-            while($kelipatan <= $total1) {
+while( $row=mysqli_fetch_array($query) ) {
 
     $nestedData=array(); 
+             
 
-    $nestedData[] = rp($satu) ." - ". rp($kelipatan);
-
-    $query2 = $db->query("SELECT COUNT(*) AS total_faktur FROM penjualan WHERE total BETWEEN '$satu' AND '$kelipatan' ");
-    $data2 = mysqli_fetch_array($query2);
-
-    $query5 = $db->query("SELECT COUNT(*) AS total_faktur_semua FROM penjualan WHERE tanggal >= '$dari_tgl' AND tanggal <= '$sampai_tgl'");
-    $data5 = mysqli_fetch_array($query5);
-
-    //hitung persen 
-    $hitung = $data2['total_faktur'] / $data5['total_faktur_semua'] * 100 /100;
-
-
-    $nestedData[] = rp($data2['total_faktur']);
-    
-    $nestedData[] = rp(round($hitung,2));
-       
-
-    $kelipatan1 = angkadoang($_POST['kelipatan']);
-    $kelipatan += $kelipatan1;
-    $satu += $kelipatan1;
+    $nestedData[] = $no_faktur;   
+    $nestedData[] = $row["kode_barang"];
+    $nestedData[] = $row["nama_barang"];
+    $nestedData[] = $row["nama"];
+    $nestedData[] = rp($row['jumlah_barang']);
+    $nestedData[] = rp($row['poin']);
+    $nestedData[] = rp($row['subtotal_poin']);
+                    
 
     $data[] = $nestedData;
-    
         
-   
 }
 
 

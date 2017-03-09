@@ -506,8 +506,15 @@ $f = round($e, 2);
         $select_gudang = $db->query("SELECT nama_gudang FROM gudang WHERE kode_gudang = '$data1[gudang]'");
         $ambil_gudang = mysqli_fetch_array($select_gudang);
 
-        $select = $db->query("SELECT SUM(sisa) AS jumlah_barang FROM hpp_masuk WHERE kode_barang = '$data1[kode_barang]'");
-        $ambil_sisa = mysqli_fetch_array($select);
+        $select1 = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah_masuk FROM hpp_masuk WHERE kode_barang = '$data1[kode_barang]'");
+        $masuk = mysqli_fetch_array($select1);
+
+        $select2 = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah_keluar FROM hpp_keluar WHERE kode_barang = '$data1[kode_barang]'");
+        $keluar = mysqli_fetch_array($select2);
+
+        $jumlah_barang = $masuk['jumlah_masuk'] - $keluar['jumlah_keluar'];
+
+
 
             $hpp_masuk = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_masuk WHERE kode_barang = '$data1[kode_barang]'");
             $cek_awal_masuk = mysqli_fetch_array($hpp_masuk);
@@ -534,15 +541,12 @@ $total_akhir_hpp = $total_akhir_hpp + $total_hpp;
             echo "<td>". $total_hpp ."</td>";
 
             
-
-
-
 if ($data1['berkaitan_dgn_stok'] == 'Jasa') {
 
     echo "<td>0</td>";
 }
 else {
-    echo "<td>". $ambil_sisa['jumlah_barang'] ."</td>";
+    echo "<td>". $jumlah_barang ."</td>";
 }
 
 // SATUAN
@@ -613,7 +617,7 @@ $pilih_akses_barang_hapus = $db->query("SELECT item_hapus FROM otoritas_master_d
 $barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
 
 
-    if ($barang_hapus > 0 AND ($ambil_sisa['jumlah_barang'] == '0' OR $ambil_sisa['jumlah_barang'] == ''))      
+    if ($barang_hapus > 0 AND ($jumlah_barang == '0' OR $jumlah_barang == ''))      
 
             {
          
@@ -634,7 +638,7 @@ $barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
 
     if ($barang_edit > 0) {
 
-           if ($ambil_sisa['jumlah_barang'] == '0') 
+           if ($jumlah_barang == '0') 
 
              {
             echo "<td> <a href='editbarang.php?id=". $data1['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit</a> </td>
@@ -651,7 +655,7 @@ $pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_dat
 $barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
 
 
-    if ($barang_edit > 0 AND $ambil_sisa['jumlah_barang'] != '0')
+    if ($barang_edit > 0 AND $jumlah_barang != '0')
             {
 
             echo "<td> <a href='editbarang.php?id=". $data1['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit</a> </td>";

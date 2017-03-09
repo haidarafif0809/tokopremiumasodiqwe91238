@@ -268,27 +268,11 @@ $(document).ready(function(){
 					    var kode_barang = $(this).val();
 					    var nama_barang = $('#opt-produk-'+kode_barang).attr("nama-barang");
 					    var satuan = $('#opt-produk-'+kode_barang).attr("satuan");
-					    var kategori = $('#opt-produk-'+kode_barang).attr("kategori");
 
 					    $("#satuan").val(satuan);
 					    $("#kode_barang").val(kode_barang);
 					    $("#nama_barang").val(nama_barang);
-					    $("#kategori").val(kategori);
 
-					    if (kategori != 'Hadiah') {
-
-					    	alert("Barang yang anda pilih bukan termasuk barang hadiah!");
-
-					    			$("#kode_barang").chosen("destroy");
-					    			$(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});    
-					    			$("#satuan").val('');
-								    $("#kode_barang").val('');
-								    $("#nama_barang").val('');
-								    $("#kategori").val('');
-							        $("#kode_barang").trigger('chosen:updated');
-							        $("#kode_barang").trigger('chosen:open');
-
-					    };	
 
 					    $.post("cek_barang_master_poin.php",{kode_barang:kode_barang},function(data){
 					    	if (data == 1) {
@@ -329,9 +313,7 @@ $(document).ready(function(){
               
             }
           },
-            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-              $(nRow).attr('class','tr-id-'+aData[5]+'');
-            },
+
         });
       });
     </script>
@@ -551,9 +533,26 @@ $(document).on('click', '.pilih', function (e) {
 					 			var id = $("#id_hapus").val();
 
 					 				$("#modal_hapus").modal('hide');
-					 				$(".tr-id-"+id).remove();
+					 				
 
 					 				$.post("hapus_master_poin.php",{id:id,kode_barang:kode_barang},function(data){
+
+					 					        			   $('#table_poin').DataTable().destroy();
+					 					        			   var dataTable = $('#table_poin').DataTable( {
+													          "processing": true,
+													          "serverSide": true,
+													          "ajax":{
+													            url :"datatable_poin.php", // json datasource
+													            type: "post",  // method  , by default get
+													            error: function(){  // error handling
+													              $(".employee-grid-error").html("");
+													              $("#table_poin").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+													              $("#employee-grid_processing").css("display","none");
+													              
+													            }
+													          },
+
+													        });
 									
 									});
 

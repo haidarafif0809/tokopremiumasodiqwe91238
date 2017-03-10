@@ -192,7 +192,6 @@ $(document).on('click','#lihat_kartu_stok',function(e) {
           var dataTable = $('#table-kartustok').DataTable( {
           "processing": true,
           "serverSide": true,
-          "info":     false,
           "language": {
         "emptyTable":     "My Custom Message On Empty Table"
     },

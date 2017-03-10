@@ -5,8 +5,12 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
+$no_faktur = stringdoang($_GET['no_faktur']);
+$pelanggan = angkadoang($_GET['pelanggan']);
+$tanggal = stringdoang($_GET['tanggal']);
 
-$session_id = session_id();
+$ambil = $db->query("SELECT total_poin FROM tukar_poin WHERE no_faktur = '$no_faktur' ");
+$ambil_data = mysqli_fetch_array($ambil);
 ?>
 
 <!-- js untuk tombol shortcut -->
@@ -64,7 +68,7 @@ $session_id = session_id();
 
 
 
-                    <h3> FORM PENUKARAN POIN </h3>
+                    <h3> EDIT PENUKARAN POIN : <?php echo $no_faktur; ?></h3>
     <div class="row">  <!--div class="row"-->
 
 
@@ -72,7 +76,7 @@ $session_id = session_id();
 
 
 
-                    <!--div class="row"><!--ROW-
+                    <!--div class="row"><!ROW-
 
                             <div class="col-sm-4">
                                 <label> Pelanggan </label><br><br>
@@ -91,7 +95,7 @@ $session_id = session_id();
 
                             <div class="col-sm-2">
                               <label> Tanggal</label><br>
-                              <input type="text" class="form-control datepicker" name="tanggal" id="tanggal" autocomplete="off" placeholder="Tanggal" value="<?php echo date("Y-m-d"); ?>">
+                              <input type="text" class="form-control datepicker" name="tanggal" id="tanggal" autocomplete="off" placeholder="Tanggal" value="">
                           </div>
 
                     </div>ROW-->
@@ -142,9 +146,11 @@ $session_id = session_id();
                     </div>
 
                     <button id="submit_produk" class="btn btn-success" style="font-size:15px" >Tukar (F3)</button>
-
+                    <input type="hidden" id="no_faktur" name="no_faktur" class="form-control"  required="" value="<?php echo $no_faktur; ?>">
                     <input type="hidden" id="satuan" name="satuan" class="form-control"  required="">
                     <input type="hidden" id="stok" name="satuan" class="form-control"  required="">
+
+                    <input type="hidden" id="total_poin_sebelumnya" name="total_poin_sebelumnya" class="form-control"  required="" value="<?php echo $ambil_data['total_poin']; ?>">
                   </div>
 
                     </form>
@@ -211,6 +217,8 @@ $session_id = session_id();
                                       
                                       ?>
                                       </select>
+
+                                      <input type="hidden" class="form-control" name="pelanggan_edit" id="pelanggan_edit" autocomplete="off" readonly="" value="<?php echo $pelanggan; ?>" >
                               </div>
 
 
@@ -224,7 +232,7 @@ $session_id = session_id();
                          <div class="row">
                             <div class="col-sm-6">
                               <label> Tanggal</label><br>
-                              <input type="text" class="form-control datepicker" name="tanggal" id="tanggal" autocomplete="off" placeholder="Tanggal" value="<?php echo date("Y-m-d"); ?>">
+                              <input type="text" class="form-control datepicker" name="tanggal" id="tanggal" autocomplete="off" placeholder="Tanggal" value="<?php echo $tanggal; ?>">
                           </div>
 
                            <div class="col-sm-6">
@@ -246,12 +254,12 @@ $session_id = session_id();
                               </div>
                           </div>
 
-                           <a href='form_penukaran_poin.php' id="transaksi_baru" class="btn btn-info" style="display: none" style="font-size:15px;"> Transaksi Baru (Ctrl + M) </a>
+                           <a href='tukar_poin.php' id="transaksi_baru" class="btn btn-info" style="display: none" style="font-size:15px;"> Kembali (Ctrl + M) </a>
 
                           <a href='' id="cetak_tukar" style="display: none;" class="btn btn-warning" target="blank"> Cetak </a>
 
                           <button type="submit" id="simpan" class="btn btn-primary" style="font-size:15px">  Simpan (F10)</button>
-                          <a href='batal_transaksi_tukar_poin.php' id="batal_tukar" class="btn btn-warning"> Batal (Ctrl + B) </a>
+                          <a href='tukar_poin.php' id="batal_tukar" class="btn btn-warning"> Batal (Ctrl + B) </a>
 
 
 
@@ -287,7 +295,7 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
 
 </script>
 
-<script type="text/javascript">
+<!--script type="text/javascript">
   $(document).ready(function(){
       $(document).on('change','#kd_pelanggan',function(){
 
@@ -302,7 +310,7 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
 
       });
   });
-</script>
+</script-->
 
 
 
@@ -344,21 +352,36 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
 <!--Start tbs poin-->
 <script type="text/javascript" language="javascript" >
    $(document).ready(function() {
-        var dataTable = $('#tabel_tukar_poin').DataTable( {
+
+  
+
+          $('#tabel_tukar_poin').DataTable().destroy();
+
+          var dataTable = $('#tabel_tukar_poin').DataTable( {
           "processing": true,
           "serverSide": true,
+          "language": {
+        "emptyTable":     "My Custom Message On Empty Table"
+    },
           "ajax":{
-            url :"table_tbs_tukar_poin.php", // json datasource
-            type: "post",  // method  , by default get
+            url :"table_edit_tbs_tukar_poin.php", // json datasource
+             "data": function ( d ) {
+                d.no_faktur = $("#no_faktur").val();
+                // d.custom = $('#myInput').val();
+                // etc
+            },
+                type: "post",  // method  , by default get
             error: function(){  // error handling
-              $(".employee-grid-error").html("");
-              $("#tabel_tukar_poin").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $(".tbody").html("");
+              $("#tabel_tukar_poin").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
               $("#tabel_tukar_poin_processing").css("display","none");
               
             }
-          },
+          }
+    
 
-        });    
+
+        } );  
      
   });
  </script>
@@ -376,9 +399,10 @@ $(document).on('click', '.pilih', function (e) {
   document.getElementById("satuan").value = $(this).attr('satuan');
   document.getElementById("poin").value = $(this).attr('poin');
 
+  var no_faktur = $("#no_faktur").val();
   var kode_barang = $("#kode_barang").val();
 
- $.post('cek_barang_tbs_tukar_poin.php',{kode_barang:kode_barang}, function(data){
+ $.post('cek_barang_tbs_tukar_poin_edit.php',{kode_barang:kode_barang,no_faktur:no_faktur}, function(data){
   if(data == 1){
     alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
 
@@ -414,6 +438,7 @@ $(document).on('click', '.pilih', function (e) {
 
         $(document).on('change','#kode_barang',function(e){
 
+              var no_faktur = $("#no_faktur").val();
               var kode_barang = $(this).val();
               var nama_barang = $('#opt-produk-'+kode_barang).attr("nama-barang");
               var satuan = $('#opt-produk-'+kode_barang).attr("satuan");
@@ -423,7 +448,7 @@ $(document).on('click', '.pilih', function (e) {
               $("#nama_barang").val(nama_barang);
 
 
-               $.post("cek_barang_tbs_tukar_poin.php",{kode_barang:kode_barang},function(data){
+               $.post("cek_barang_tbs_tukar_poin_edit.php",{kode_barang:kode_barang,no_faktur:no_faktur},function(data){
 
                         if (data == 1) {
                               alert("Barang yang anda pilih sudah ada, silahkan pilih barang lain!");
@@ -472,7 +497,7 @@ $(document).on('click', '.pilih', function (e) {
 <script type="text/javascript">
     $(document).ready(function(){
         $(document).on('click','#submit_produk',function(e){
-
+          var no_faktur = $("#no_faktur").val();
           var tanggal = $("#tanggal").val();
           var pelanggan = $("#kd_pelanggan").val();
           var kode_barang = $("#kode_barang").val();
@@ -550,27 +575,39 @@ $(document).on('click', '.pilih', function (e) {
                                            $("#subtotal").val(tandaPemisahTitik(total_akhir));
                                            $("#sisa_poin").val(tandaPemisahTitik(hitung_sisa_poin));
 
-                                           $.post("prosestbstukarpoin.php",{kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,poin:poin,subtotal:subtotal,satuan:satuan,pelanggan:pelanggan,tanggal:tanggal},function(data){
+                                           $.post("prosestbstukarpoinedit.php",{kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,poin:poin,subtotal:subtotal,satuan:satuan,pelanggan:pelanggan,tanggal:tanggal,no_faktur:no_faktur},function(data){
 
 
                                               $('#kd_pelanggan').prop('disabled', true).trigger("chosen:updated");
 
-                                                $('#tabel_tukar_poin').DataTable().destroy();
-                                                  var dataTable = $('#tabel_tukar_poin').DataTable( {
-                                                      "processing": true,
-                                                      "serverSide": true,
-                                                      "ajax":{
-                                                        url :"table_tbs_tukar_poin.php", // json datasource
-                                                        type: "post",  // method  , by default get
-                                                        error: function(){  // error handling
-                                                          $(".employee-grid-error").html("");
-                                                          $("#tabel_tukar_poin").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-                                                          $("#tabel_tukar_poin_processing").css("display","none");
-                                                          
-                                                        }
-                                                      },
+                                                          $('#tabel_tukar_poin').DataTable().destroy();
 
-                                                    });    
+                                                          var dataTable = $('#tabel_tukar_poin').DataTable( {
+                                                          "processing": true,
+                                                          "serverSide": true,
+                                                          "language": {
+                                                        "emptyTable":     "My Custom Message On Empty Table"
+                                                    },
+                                                          "ajax":{
+                                                            url :"table_edit_tbs_tukar_poin.php", // json datasource
+                                                             "data": function ( d ) {
+                                                                d.no_faktur = $("#no_faktur").val();
+                                                                // d.custom = $('#myInput').val();
+                                                                // etc
+                                                            },
+                                                                type: "post",  // method  , by default get
+                                                            error: function(){  // error handling
+                                                              $(".tbody").html("");
+                                                              $("#tabel_tukar_poin").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                                                              $("#tabel_tukar_poin_processing").css("display","none");
+                                                              
+                                                            }
+                                                          }
+                                                    
+
+
+                                                        } );  
+                                                  
 
                                                 $("#kode_barang").val('');
                                                 $("#kode_barang").val('').trigger("chosen:updated");
@@ -601,39 +638,28 @@ $(document).on('click', '.pilih', function (e) {
 $(document).ready(function(){
     $("#kode_barang").trigger('chosen:open');
 
-      
-            $.get("cek_pelanggan_poin.php",function(data){
-            
-            if (data != 0) {
-                
-                var pelanggan = data;
+      var pelanggan = $("#pelanggan_edit").val();
+      var no_faktur = $("#no_faktur").val();
+      var total_poin_sebelumnya = $("#total_poin_sebelumnya").val();
 
-                $("#kd_pelanggan").val(data).trigger("chosen:updated");
+                $("#kd_pelanggan").val(pelanggan).trigger("chosen:updated");
                 $('#kd_pelanggan').prop('disabled', true).trigger("chosen:updated");
 
-                 $.get("cek_subtotal_poin.php",function(info){
+                 $.post("cek_subtotal_poin_edit.php",{no_faktur:no_faktur},function(info){
 
                   $("#subtotal").val(tandaPemisahTitik(info));
+                  $.post("cek_poin_pelanggan.php",{pelanggan:pelanggan}, function(data){
 
-                          $.post("cek_poin_pelanggan.php",{pelanggan:pelanggan}, function(data){
+                          var poin_pelangan = parseInt(data, 10) + parseInt(total_poin_sebelumnya ,10);
 
-                                var hitung_sisa_poin = parseInt(data, 10) - parseInt(info ,10);
-                                            data = data.replace(/\s+/g, '');
+                                var hitung_sisa_poin = parseInt(poin_pelangan, 10) - parseInt(info ,10);
+                                data = data.replace(/\s+/g, '');
 
-                                $("#jumlah_poin").val(tandaPemisahTitik(data));
+                                $("#jumlah_poin").val(tandaPemisahTitik(poin_pelangan));
                                 
                                 $("#sisa_poin").val(tandaPemisahTitik(hitung_sisa_poin));                    
 
                            });
-                 });
-
-
-            }
-            else
-            {
-            
-            $("#kd_pelanggan").trigger('chosen:open'); 
-            }
 
       });
 
@@ -797,22 +823,33 @@ $(document).ready(function(){
 
                                     $.post("hapus_tbs_tukar_poin.php",{id:id},function(info){
 
-                                                        $('#tabel_tukar_poin').DataTable().destroy();
-                                                        var dataTable = $('#tabel_tukar_poin').DataTable( {
-                                                            "processing": true,
-                                                            "serverSide": true,
-                                                            "ajax":{
-                                                              url :"table_tbs_tukar_poin.php", // json datasource
-                                                              type: "post",  // method  , by default get
-                                                              error: function(){  // error handling
-                                                                $(".employee-grid-error").html("");
-                                                                $("#tabel_tukar_poin").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-                                                                $("#tabel_tukar_poin_processing").css("display","none");
-                                                                
-                                                              }
-                                                            },
+                                                          $('#tabel_tukar_poin').DataTable().destroy();
 
-                                                          });    
+                                                          var dataTable = $('#tabel_tukar_poin').DataTable( {
+                                                          "processing": true,
+                                                          "serverSide": true,
+                                                          "language": {
+                                                        "emptyTable":     "My Custom Message On Empty Table"
+                                                    },
+                                                          "ajax":{
+                                                            url :"table_edit_tbs_tukar_poin.php", // json datasource
+                                                             "data": function ( d ) {
+                                                                d.no_faktur = $("#no_faktur").val();
+                                                                // d.custom = $('#myInput').val();
+                                                                // etc
+                                                            },
+                                                                type: "post",  // method  , by default get
+                                                            error: function(){  // error handling
+                                                              $(".tbody").html("");
+                                                              $("#tabel_tukar_poin").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                                                              $("#tabel_tukar_poin_processing").css("display","none");
+                                                              
+                                                            }
+                                                          }
+                                                    
+
+
+                                                        } );   
                                       
                                      });
                             }
@@ -844,6 +881,8 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
       $(document).on('click','#simpan',function(e){
+
+          var no_faktur = $("#no_faktur").val();
           var pelanggan = $("#kd_pelanggan").val();
           var poin_pelangan = $("#jumlah_poin").val();
           var tanggal = $("#tanggal").val();
@@ -872,9 +911,10 @@ $(document).ready(function(){
             $("#simpan").hide();
             $("#batal_tukar").hide();
 
-            $.post("proses_simpan_tukar_poin.php",{pelanggan:pelanggan,poin_pelangan:poin_pelangan,total_poin:total_poin,sisa_poin:sisa_poin,tanggal:tanggal,keterangan:keterangan},function(data){
+            $.post("proses_edit_simpan_tukar_poin.php",{pelanggan:pelanggan,poin_pelangan:poin_pelangan,total_poin:total_poin,sisa_poin:sisa_poin,
+              tanggal:tanggal,keterangan:keterangan,no_faktur:no_faktur},function(data){
 
-              $("#cetak_tukar").attr("href",'cetak_tukar_poin.php?no_faktur='+data+"&tanggal="+tanggal);
+              $("#cetak_tukar").attr("href",'cetak_tukar_poin.php?no_faktur='+no_faktur+"&tanggal="+tanggal);
               $("#result").html(data);
               $("#kd_pelanggan").val('');
               $('#kd_pelanggan').prop('disabled', true).trigger("chosen:updated");
@@ -931,14 +971,14 @@ $(document).ready(function(){
 
     shortcut.add("ctrl+b", function() {
         // Do something
-        window.location.href="batal_transaksi_tukar_poin.php";
+        window.location.href="tukar_poin.php";
 
 
     }); 
 
         shortcut.add("ctrl+m", function() {
         // Do something
-        window.location.href="form_penukaran_poin.php";
+        window.location.href="tukar_poin.php";
 
 
     }); 

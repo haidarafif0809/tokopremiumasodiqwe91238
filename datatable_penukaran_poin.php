@@ -27,7 +27,7 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql = "SELECT tp.sisa_poin, tp.total_poin , p.nama_pelanggan, tp.no_faktur, tp.jam, tp.tanggal, tp.id, tp.poin_pelanggan_terakhir , tp.pelanggan, tp.user, p.kode_pelanggan ";
+$sql = "SELECT tp.sisa_poin, tp.total_poin , p.nama_pelanggan, tp.no_faktur, tp.jam, tp.tanggal, tp.id, tp.poin_pelanggan_terakhir , tp.pelanggan, tp.user, p.kode_pelanggan , user_edit, date(waktu_edit) AS waktu_edit";
 $sql.=" FROM tukar_poin tp LEFT JOIN pelanggan p ON tp.pelanggan = p.id ";
 $query=mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
@@ -36,14 +36,17 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 
 // getting total number records without any search
-$sql = "SELECT tp.sisa_poin, tp.total_poin , p.nama_pelanggan, tp.no_faktur, tp.jam, tp.tanggal, tp.id, tp.poin_pelanggan_terakhir , tp.pelanggan , tp.user, p.kode_pelanggan";
-$sql.=" FROM tukar_poin tp LEFT JOIN pelanggan p ON tp.pelanggan = p.id ";
-if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
+if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
+$sql = "SELECT tp.sisa_poin, tp.total_poin , p.nama_pelanggan, tp.no_faktur, tp.jam, tp.tanggal, tp.id, tp.poin_pelanggan_terakhir , tp.pelanggan , tp.user, p.kode_pelanggan , date(waktu_edit) AS waktu_edit, user_edit";
+$sql.=" FROM tukar_poin tp LEFT JOIN pelanggan p ON tp.pelanggan = p.id ";
+$sql.= "WHERE 1=1 ";
 
 	$sql.=" AND ( tp.no_faktur LIKE '".$requestData['search']['value']."%' "; 
 	$sql.=" OR p.nama_pelanggan LIKE '".$requestData['search']['value']."%' ";
+	$sql.=" OR p.kode_pelanggan LIKE '".$requestData['search']['value']."%' "; 
 	$sql.=" OR tp.tanggal LIKE '".$requestData['search']['value']."%' "; 
+	$sql.=" OR tp.user LIKE '".$requestData['search']['value']."%' "; 
 	$sql.=" OR tp.jam LIKE '".$requestData['search']['value']."%' )";
 
 }
@@ -71,7 +74,7 @@ $tukar_poin_hapus = mysqli_num_rows($pilih_akses_tukar_poin_hapus);
 
 
 			if ($tukar_poin_edit > 0){
-				$nestedData[] = "<a style='width:50px;' href='proses_edit_tukar_poin.php?no_faktur=". $row['no_faktur']."&pelanggan=". $row['pelanggan']."' 
+				$nestedData[] = "<a style='width:50px;' href='proses_edit_tukar_poin.php?no_faktur=". $row['no_faktur']."&pelanggan=". $row['pelanggan']."&tanggal=".$row['tanggal']."' 
 				class='btn btn-success'> <i class='fa fa-edit'></i> Edit </a>"; 
 			}
 
@@ -87,13 +90,15 @@ $tukar_poin_hapus = mysqli_num_rows($pilih_akses_tukar_poin_hapus);
 
 
 						$nestedData[] = $row["no_faktur"];
-						$nestedData[] = "".$row["kode_pelanggan"]." || ".$row["nama_pelanggan"];
+						$nestedData[] = $row["kode_pelanggan"]." || ".$row["nama_pelanggan"];
 						$nestedData[] = rp($row["poin_pelanggan_terakhir"]);
 						$nestedData[] = rp($row["sisa_poin"]);
 						$nestedData[] = rp($row["total_poin"]);
 						$nestedData[] = $row["user"];
+						$nestedData[] = $row["user_edit"];
 						$nestedData[] = $row["jam"];
 						$nestedData[] = $row["tanggal"];
+						$nestedData[] = $row["waktu_edit"];
 						$nestedData[] = $row["id"];
 				$data[] = $nestedData;
 			}

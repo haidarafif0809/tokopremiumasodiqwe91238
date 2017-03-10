@@ -167,8 +167,10 @@ $tukar_poin_hapus = mysqli_num_rows($pilih_akses_tukar_poin_hapus);
 			<th style='background-color: #4CAF50; color:white' class='th'> Sisa Poin Terakhir </th>
       <th style='background-color: #4CAF50; color:white' class='th'> Total Poin </th>
       <th style='background-color: #4CAF50; color:white' class='th'> User </th>  
+      <th style='background-color: #4CAF50; color:white' class='th'> User Edit</th>  
       <th style='background-color: #4CAF50; color:white' class='th'> Jam </th>  
 			<th style='background-color: #4CAF50; color:white' class='th'> Tanggal </th>			
+      <th style='background-color: #4CAF50; color:white' class='th'> Tanggal Edit</th>    
 		</thead>
 		
 		
@@ -232,7 +234,6 @@ $tukar_poin_hapus = mysqli_num_rows($pilih_akses_tukar_poin_hapus);
           var dataTable = $('#table-detail').DataTable( {
           "processing": true,
           "serverSide": true,
-          "info":     false,
           "language": {
         "emptyTable":     "My Custom Message On Empty Table"
     },
@@ -288,7 +289,30 @@ $tukar_poin_hapus = mysqli_num_rows($pilih_akses_tukar_poin_hapus);
 						$.post("hapus_penukaran_poin.php", {id:id, no_faktur:no_faktur}, function(data){
 
 						$("#modal_hapus").modal("hide");
-						$(".tr-id-"+id).remove();
+        					$('#tukar_poin').DataTable().destroy();
+                  var status = $("#status").val();
+                  var dataTable = $('#tukar_poin').DataTable( {
+                  "processing": true,
+                  "serverSide": true,
+                  "ajax":{
+                    url :"datatable_penukaran_poin.php", // json datasource
+                    "data": function ( d ) {
+                              d.status = $("#status").val();
+                              // d.custom = $('#myInput').val();
+                              // etc
+                          },
+                    type: "post",  // method  , by default get
+                    error: function(){  // error handling
+                      $(".employee-grid-error").html("");
+                      $("#tukar_poin").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                      $("#tukar_poin_processing").css("display","none");
+                    }
+                },
+                    
+                    "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                        $(nRow).attr('class','tr-id-'+aData[9]);
+                    },
+                });
 						
 						
 						});

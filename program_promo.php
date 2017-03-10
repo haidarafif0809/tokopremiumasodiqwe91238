@@ -232,7 +232,7 @@ $program_promo = mysqli_fetch_array($pilih_akses);
      var kode_program = $("#kode_program").val();
      var nama_program = $("#nama_program").val();
      var batas_akhir = $("#batas_akhir").val();
-     var syarat_belanja = $("#syarat_belanja").val();
+     var syarat_belanja = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#syarat_belanja").val()))));
      var jenis_bonus = $("#jenis_bonus").val();
       if (kode_program == '') {
         alert("Silakan isikan kode program promo terlebih dahulu.");
@@ -381,7 +381,7 @@ $program_promo = mysqli_fetch_array($pilih_akses);
     var kode_program = $("#kode_program_edit").val();
      var nama_program = $("#nama_program_edit").val();
      var batas_akhir = $("#batas_akhir_edit").val();
-     var syarat_belanja = $("#syarat_belanja_edit").val();
+     var syarat_belanja = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#syarat_belanja_edit").val()))));
      var jenis_bonus = $("#jenis_bonus_edit").val();
      var id = $("#id_edit").val();
       if (kode_program == '') {

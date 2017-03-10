@@ -25,6 +25,13 @@ $laporan_laba_kotor_lihat = stringdoang(isset($_POST['laporan_laba_kotor_lihat']
 $laporan_laba_rugi_lihat = stringdoang(isset($_POST['laporan_laba_rugi_lihat']));
 $laporan_neraca_lihat = stringdoang(isset($_POST['laporan_neraca_lihat']));
 
+$set_hal_khusus_pelanggan_lihat = stringdoang(isset($_POST['set_hal_khusus_pelanggan_lihat']));
+$set_setting_halaman_promo_lihat = stringdoang(isset($_POST['set_setting_halaman_promo_lihat']));
+
+$set_timbangan = stringdoang(isset($_POST['set_timbangan']));
+$set_registrasi_lihat = stringdoang(isset($_POST['set_registrasi_lihat']));
+$set_penetapan_petugas_lihat = stringdoang(isset($_POST['set_penetapan_petugas_lihat']));
+$printer_lihat = stringdoang(isset($_POST['printer_lihat']));
 
 // empat pilihan
 $program_promo_lihat = stringdoang(isset($_POST['program_promo_lihat']));
@@ -262,10 +269,11 @@ $update_otoritas_kas_mutasi->bind_param("iiiii",
 
 $update_otoritas_kas_mutasi->execute();
 
-$update_otoritas_setting = $db->prepare("UPDATE otoritas_setting SET setting_lihat = ? WHERE id_otoritas = ?");
+$update_otoritas_setting = $db->prepare("UPDATE otoritas_setting SET setting_lihat = ?,set_hal_khusus_pelanggan_lihat = ?,
+set_setting_halaman_promo_lihat = ?,set_timbangan = ?,setting_registrasi_lihat = ?,penetapan_petugas_lihat = ?,printer_lihat = ? WHERE id_otoritas = ?");
 
-$update_otoritas_setting->bind_param("ii",
-    $setting_lihat, $id);
+$update_otoritas_setting->bind_param("iiiiiiii",
+    $setting_lihat,$set_hal_khusus_pelanggan_lihat,$set_setting_halaman_promo_lihat,$set_timbangan,$set_registrasi_lihat,$set_penetapan_petugas_lihat,$printer_lihat, $id);
 
 $update_otoritas_setting->execute();
 

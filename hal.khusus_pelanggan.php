@@ -5,7 +5,7 @@
     include 'sanitasi.php';
     include 'db.php';
 
-    $query = $db->query("SELECT nama_perusahaan FROM perusahaan ORDER BY id");
+    $query = $db->query("SELECT * FROM perusahaan ORDER BY id");
     $oke = mysqli_fetch_array($query);
     $naper = $oke['nama_perusahaan'];
 
@@ -18,14 +18,14 @@
 
 
 
-<div style="padding-top: 5%; padding-bottom: 5%; padding-right: 5%; padding-left: 5%;">
+<div class="container">
 
-<CENTER><h3>DAFTAR SEMUA PRODUK DI <?php echo $naper; ?></h3></CENTER>
+<CENTER><h3>INFO HARGA PRODUK DI <?php echo $naper; ?></h3></CENTER>
 
 
 <!-- Modal Tampilkan Produk yang promo -->
-<div id="modal_produk_promo" class="modal modal-lg" role="dialog">
-  <div class="modal-dialog">
+<div id="modal_produk_promo" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
     <div class="modal-content">
@@ -36,7 +36,7 @@
       <div class="modal-body">
 
       <marquee><h4><?php echo $ketpro ?></h4></marquee>
-  </div>
+    </div>
 				<div class ="modal-footer">
 				<button type ="button"  class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
@@ -44,40 +44,109 @@
 
   </div>
 </div><!-- end of modal buat data  -->
-<br><br><br>
-<div class="table-responsive">
-	<table id="table_khusus" class="table">
-		<thead>
-			<th style='background-color: #4CAF50; color:white'> Kode Barang </th>
-            <th style='background-color: #4CAF50; color:white'> Nama Barang </th>
-            <th style='background-color: #4CAF50; color:white'> Harga Jual Level 1</th>
-            <th style='background-color: #4CAF50; color:white'> Harga Jual Level 2</th>
-            <th style='background-color: #4CAF50; color:white'> Harga Jual Level 3</th>
-            <th style='background-color: #4CAF50; color:white'> Harga Jual Level 4</th>
-            <th style='background-color: #4CAF50; color:white'> Harga Jual Level 5</th>
-            <th style='background-color: #4CAF50; color:white'> Harga Jual Level 6</th>
-            <th style='background-color: #4CAF50; color:white'> Harga Jual Level 7</th>
-            <th style='background-color: #4CAF50; color:white'> Jumlah Barang </th>
-            <th style='background-color: #4CAF50; color:white'> Satuan </th>
-            <th style='background-color: #4CAF50; color:white'> Tipe Barang</th>
-            <th style='background-color: #4CAF50; color:white'> Kategori </th>
-		</thead>
-	</table>	
 
+<div class="row"> 
+  <center><img src='save_picture/<?php echo $oke['foto']; ?>' class='img-rounded' alt='Cinque Terre' width='80%;' height='60%;'></center>
+</div>
+<div class="row">
+          <div class="col-sm-3"></div>
+
+          <span id="kode">
+          <div class="col-sm-3">
+              <div class="form-group"> 
+                  <input type="text" name="kode_produk" id="kode_produk" class="form-control" placeholder="SILAKAN INPUT KODE PRODUK" required="">
+              </div>
+              <button type="submit" id="infonya" class="btn btn-primary" style="background-color:blue" ><i class="fa fa-eye"> </i> Lihat </button>
+           </div>
+          </span>
+
+           <div class="col-sm-3"></div> 
 
 </div>
-	
+
+    <div class="row">
+      <span id="infoharga" style="display: none;">
+      <div class="card card-block">
+      <div class="col-sm-3"><button type="submit" id="kembali" class="btn btn-warning" style="background-color:green" ><i class="fa fa-reply"> </i> Kembali </button></div>
+      <div class="col-sm-3">
+      <!--div class="form-group">
+      <label>Kode Produk</label>
+        <input type="text" name="kode_produk" id="kode_produk">
+      </div-->
+      
+      <div class="form-group">
+      <label>Nama Produk</label>
+        <input type="text" name="nama_produk" readonly="" id="nama_produk">
+      </div>
+
+      <div class="form-group">
+      <label>Harga</label>
+        <input type="text" name="harga_produk" readonly="" id="harga_produk">
+      </div>
+      </div>
+
+      <div class="col-sm-3">
+      <div class="form-group">
+      <label>Satuan</label>
+        <input type="text" name="satuan" readonly="" id="satuan">
+      </div>
+
+      <div class="form-group">
+      <label>Jumlah Produk</label>
+        <input type="text" name="jumlah_produk" readonly="" id="jumlah_produk">
+      </div>
+        </div>
+      </div>
+      </span>
+
+</div><!--end row-->	
 </div>
 
-<!--script type="text/javascript">
+<script type="text/javascript">
+    $(document).on('click','#infonya',function(e){
+     
+      var kode_produk = $("#kode_produk").val();
+      var kode_produk = kode_produk.substr(0, kode_produk.indexOf('('));
+      if (kode_produk == '') {
+        alert("Silakan input kode produk.")
+      }
+          
+      else{
+        $.getJSON('cek_info_harga.php',{kode_produk:kode_produk},function(json){
+
+         $("#kode").hide();
+        $("#infoharga").show();
+          $("#nama_produk").val(json.nama_barang);
+          $("#harga_produk").val(tandaPemisahTitik(json.harga_jual));
+          $("#satuan").val(json.satuan);
+          if (json.jumlah_barang == null) {
+          $("#jumlah_produk").val('0');
+          }
+          else{
+          $("#jumlah_produk").val(tandaPemisahTitik(json.jumlah_barang));
+          }
+  });
+      }
+          
+    });
+    
+</script>
+
+<script type="text/javascript">
+    $(document).on('click','#kembali',function(e){
+      $("#kode").show();
+        $("#infoharga").hide();
+    });
+</script>
+<script type="text/javascript">
 $(function() {
-    $( "#kode_barang" ).autocomplete({
+    $( "#kode_produk" ).autocomplete({
         source: 'kode_barang_autocomplete.php'
     });
 });
-</script-->
+</script>
 
-<script type="text/javascript">
+<!--script type="text/javascript">
 	$(document).ready(function(){
 			$('#table_khusus').DataTable().destroy();
 			
@@ -105,7 +174,7 @@ $(function() {
 
 		}
 		
-</script>
+</script-->
 
 <script type="text/javascript">
 //untuk jika ke table penjualan awal
@@ -121,7 +190,7 @@ $(function() {
     $(document).on('keypress click', function() { intvrefresh() });
     intvrefresh();
 
-}(300)); // define here seconds
+}(1000)); // define here seconds
 </script>
 
 <?php include 'footer.php' ?>

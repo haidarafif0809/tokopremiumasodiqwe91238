@@ -337,12 +337,11 @@ $("#kode_produk").mouseleave(function(){
             
               if(data == 1){
               alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
-              $("#kode_produk_edit").val('');
-              $("#id_produk_edit").val('');
+              $("#kode_produk").val('');
               }//penutup if
               
-              });////penutup function(data)
-        $.post("proses_detail_program_promo.php",{id_program:id_program,id_produk:id_produk},function(info) {
+              else{
+                 $.post("proses_detail_program_promo.php",{id_program:id_program,id_produk:id_produk},function(info) {
           $("#tambh_produk_promo").hide();
           $("#tambah_produk_promo").show();
 
@@ -375,6 +374,9 @@ $("#kode_produk").mouseleave(function(){
               $("#nama_program").val('');
               $("#nama_produk").val('');
        });
+              }
+              });////penutup function(data)
+       
       }
       $("#formproduk").submit(function(){
       return false;
@@ -494,9 +496,16 @@ $("#kode_produk").mouseleave(function(){
         alert("Silakan isikan kode produk promo terlebih dahulu.");
         $("#id_produk_edit").focus();
       }
-      else
+      else 
       {
-        $.post("edit_detail_program_promo.php",{id:id,id_program:id_program,id_produk:id_produk},function(info) {
+           $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data){
+            
+              if(data == 1){
+              alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+              $("#kode_produk").val('');
+              }//penutup if
+              else{
+                $.post("edit_detail_program_promo.php",{id:id,id_program:id_program,id_produk:id_produk},function(info) {
           $("#edit_produk_promo").hide();
           $("#tambah_produk_promo").show();
           $("#table_le_kui").show();
@@ -530,6 +539,9 @@ $("#kode_produk").mouseleave(function(){
               $("#nama_program_edit").val('');
               $("#nama_produk_edit").val('');
        });
+              }
+           });
+        
       }
       $("#formeditproduk").submit(function(){
       return false;

@@ -138,7 +138,10 @@ $total_saldo = $jumlah_masuk - $jumlah_keluar;
 
 <?php 
 
-$select = $db->query("SELECT no_faktur,jumlah_kuantitas,jenis_transaksi,tanggal,jenis_hpp,waktu FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND tanggal >= '$daritgl' AND tanggal <= '$sampaitgl' UNION SELECT no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp,waktu FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND tanggal >= '$daritgl' AND tanggal <= '$sampaitgl' ORDER BY waktu ASC ");
+$select = $db->query("SELECT no_faktur,jumlah_kuantitas,jenis_transaksi,tanggal,jenis_hpp,waktu FROM hpp_masuk 
+  WHERE kode_barang = '$kode_barang' AND tanggal >= '$daritgl' AND tanggal <= '$sampaitgl' 
+  UNION SELECT no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp,waktu FROM hpp_keluar 
+  WHERE kode_barang = '$kode_barang' AND tanggal >= '$daritgl' AND tanggal <= '$sampaitgl' ORDER BY CONCAT(tanggal,' ',jam)");
 
 
 while($data = mysqli_fetch_array($select))

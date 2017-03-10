@@ -58,12 +58,49 @@ else if ($bulan == '12')
 
 
 
+// awal Select untuk hitung Saldo Awal
+$hpp_masuk = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND CONCAT(tanggal,'',jam) <= '$bulan' AND CONCAT(tanggal,'',jam) <= '$tahun'");
+$out_masuk = mysqli_fetch_array($hpp_masuk);
+$jumlah_masuk = $out_masuk['jumlah'];
+
+
+$hpp_keluar = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND CONCAT(tanggal,'',jam) <= '$bulan' AND CONCAT(tanggal,'',jam) <= '$tahun'");
+$out_keluar = mysqli_fetch_array($hpp_keluar);
+$jumlah_keluar = $out_keluar['jumlah'];
+
+$total_saldo = $jumlah_masuk - $jumlah_keluar;
+
+
 
 
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
 
+if ($requestData['start'] > 0) 
+{	
 
+		// getting total number records without any search
+		$sql = $db->query("SELECT no_faktur,jumlah_kuantitas,jenis_transaksi,tanggal,jenis_hpp, tanggal, jam FROM hpp_masuk 
+			WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' 
+			UNION SELECT no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp, tanggal, jam FROM hpp_keluar 
+			WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' 
+			ORDER BY CONCAT(tanggal,' ',jam)  LIMIT ".$requestData['start']."  ");
+		while($row = mysqli_fetch_array($sql))
+		{
+					if ($data['jenis_hpp'] == '1')
+					{
+						$masuk = $data['jumlah_kuantitas'];
+						 $total_saldo = ($total_saldo + $masuk);
+					}
+					else
+					{
+
+					$keluar = $data['jumlah_kuantitas'];
+					$total_saldo = $total_saldo - $keluar;
+					}
+		} 
+
+}
 
 $columns = array( 
 // datatable column index  => database column name
@@ -77,90 +114,9 @@ $columns = array(
 
 
 );
-$datatable = array();
-// data yang akan di tampilkan di table
-
-if($bulan == '1')
-{
-	$bulan = 12;
-	$tahun_before = $tahun - 1;
-
-// awal Select untuk hitung Saldo Awal
-$hpp_masuk = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun_before'");
-$out_masuk = mysqli_fetch_array($hpp_masuk);
-$jumlah_masuk = $out_masuk['jumlah'];
-
-
-$hpp_keluar = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun_before'");
-$out_keluar = mysqli_fetch_array($hpp_keluar);
-$jumlah_keluar = $out_keluar['jumlah'];
-
-$total_saldo = $jumlah_masuk - $jumlah_keluar;
-
-}
-else
-{
-
-// awal Select untuk hitung Saldo Awal
-$hpp_masuk = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) < '$bulan' AND YEAR(tanggal) = '$tahun'");
-$out_masuk = mysqli_fetch_array($hpp_masuk);
-$jumlah_masuk = $out_masuk['jumlah'];
-
-
-$hpp_keluar = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) < '$bulan' AND YEAR(tanggal) = '$tahun'");
-$out_keluar = mysqli_fetch_array($hpp_keluar);
-$jumlah_keluar = $out_keluar['jumlah'];
-
-$total_saldo = $jumlah_masuk - $jumlah_keluar;
-
-}
-
-// akhir hitungan saldo awal
-//untuk menentukan saldo awal 
-if ($requestData['start']   == 0) {
-	# code...
-	$nestedData=array();
-
-$nestedData[] = "";
-$nestedData[] = "<font color='red'>SALDO AWAL</font>";
-$nestedData[] = "";
-$nestedData[] = "";
-$nestedData[] = "";
-$nestedData[] =  "<font color='red'>".rp($total_saldo)."</font>" ;
-
-
- 
-
-$datatable[] = $nestedData;
-}
-//untuk menentukan nilai saldo awal untuk di selain halaman ke 1 
-else {
-
-
-$hpp_keluar = $db->query("SELECT no_faktur,jumlah_kuantitas,'0' AS jumlah_keluar ,jenis_transaksi,tanggal,jenis_hpp FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' UNION SELECT no_faktur,kode_barang = '0' , jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' ORDER BY tanggal asc LIMIT 0 ,".$requestData['start']."");
-$total_masuk = 0;
-$total_keluar = 0;
-while ($out_keluar = mysqli_fetch_array($hpp_keluar)) {
-	# code...
-	$jumlah_keluar = $out_keluar['jumlah_keluar'];
-	$jumlah_masuk = $out_keluar['jumlah_kuantitas'];
-	$total_masuk = $total_masuk + $jumlah_masuk;
-	$total_keluar = $total_keluar + $jumlah_keluar;
-
-}
-
-
-
-$total_keluar;
-$total_saldo_setelah_page_1 = $total_masuk - $total_keluar;
-$total_saldo = $total_saldo + $total_saldo_setelah_page_1;
-
-}
-
-$bulan = stringdoang($_POST['bulan']);
 
 // getting total number records without any search
-$sql = "SELECT no_faktur,jumlah_kuantitas,jenis_transaksi,tanggal,jenis_hpp FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' UNION SELECT no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' ";
+$sql = "SELECT no_faktur,jumlah_kuantitas,jenis_transaksi,tanggal,jenis_hpp, tanggal, jam FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' UNION SELECT no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp, tanggal, jam FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' ";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
@@ -168,19 +124,33 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql = "SELECT no_faktur,jumlah_kuantitas,jenis_transaksi,tanggal,jenis_hpp FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' UNION SELECT no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' ";
-	$sql.=" AND ( no_faktur LIKE '".$requestData['search']['value']."%' "; 
-	$sql.=" OR DATE(waktu_jurnal) LIKE '".$requestData['search']['value']."%' ";
-	$sql.=" OR keterangan_jurnal LIKE '".$requestData['search']['value']."%' )  GROUP BY no_faktur";
+$sql = "SELECT no_faktur,jumlah_kuantitas,jenis_transaksi,tanggal,jenis_hpp , tanggal, jam FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' UNION SELECT no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp, tanggal, jam FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' ";
+	$sql.=" AND (no_faktur LIKE '".$requestData['search']['value']."%' ";
+	$sql.=" OR jenis_transaksi LIKE '".$requestData['search']['value']."%' ";
+	$sql.=" OR jumlah_kuantitas LIKE '".$requestData['search']['value']."%' ";
+	$sql.=" OR tanggal LIKE '".$requestData['search']['value']."%')   ";
 }
 
 $query=mysqli_query($conn, $sql) or die("eror 2");
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
 
-$sql.=" ORDER BY tanggal ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."  ";
+$sql.=" ORDER BY CONCAT(tanggal,' ',jam) ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."  ";
  /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */	
 $query= mysqli_query($conn, $sql) or die("eror 3");
 
+$datatable = array();
+
+	$nestedData=array();
+
+$nestedData[] = "";
+ $nestedData[] = "<font color='red'>SALDO AWAL</font>";
+$nestedData[] = "";
+$nestedData[] = "";
+$nestedData[] = "";
+$nestedData[] =  "<font color='red'>".rp($total_saldo)."</font>" ;
+
+
+$datatable[] = $nestedData;
 
 while($data = mysqli_fetch_array($query))
 	{

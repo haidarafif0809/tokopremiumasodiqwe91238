@@ -29,7 +29,7 @@ $session_id = session_id();
     </div>
     <div class="modal-footer">
         
-        <button type="button" class="btn btn-danger" id="closed_alert_promo" data-dismiss="modal">Closed (Ctrl+G)</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Closed</button>
     </div>
     </div>
   </div>
@@ -449,7 +449,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 <form id="form_barcode" class="form-inline">
   <br>
     <div class="form-group">
-        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" placeholder="Kode Barcode" autocomplete="off">
+        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" placeholder="Kode Barcode">
     </div>
         
     <button type="submit" id="submit_barcode" class="btn btn-primary" style="font-size:15px" ><i class="fa fa-barcode"></i> Submit Barcode</button>
@@ -983,7 +983,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 <script>
 //untuk form awal langsung ke kode barang focus
 $(document).ready(function(){
-    $("#kode_barang").trigger('chosen:open');
+    $("#kode_barang").focus();
 
 });
 
@@ -1971,7 +1971,7 @@ var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biay
   }
   else if (ber_stok == 'Jasa' ){
 
-$("#kode_barang").trigger('chosen:open');
+$("#kode_barang").focus();
 
       $("#potongan_persen").val(Math.round(pot_fakt_per));
       $("#total1").val(tandaPemisahTitik(total_akhir));
@@ -2020,7 +2020,7 @@ $("#kode_barang").trigger('chosen:open');
       $("#total2").val(tandaPemisahTitik(total_akhir1));
       $("#tax_rp").val(Math.round(hasil_tax));
 
-    $("#kode_barang").trigger('chosen:open');
+    $("#kode_barang").focus();
 
 // POST KE TBS ALL PRODUK
     $.post("prosestbspenjualan.php",{ppn:ppn,no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
@@ -2183,10 +2183,12 @@ alert("Silakan Bayar Piutang");
 //JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
      $.post("proses_bayar_jual.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
 
+      info = info.replace(/\s+/g, '');
 
      var no_faktur = info;
-     $("#cetak_tunai").attr('href', 'cetak_penjualan_tunai.php?no_faktur='+no_faktur+'');
-     $("#cetak_tunai_besar").attr('href', 'cetak_penjualan_tunai_besar.php?no_faktur='+no_faktur+'');
+
+     $("#cetak_tunai").attr('href', 'cetak_penjualan_tunai.php?no_faktur='+no_faktur);
+     $("#cetak_tunai_besar").attr('href', 'cetak_penjualan_tunai_besar.php?no_faktur='+no_faktur);
      $("#alert_berhasil").show();
      $("#pembayaran_penjualan").val('');
      $("#sisa_pembayaran_penjualan").val('');
@@ -3429,7 +3431,7 @@ $(document).ready(function(){
 
                             }
        
-                                    $("#kode_barang").trigger('chosen:open');
+                                    $("#kode_barang").focus();
                                     
 
                                  });
@@ -3539,7 +3541,7 @@ $(document).ready(function(){
     shortcut.add("f2", function() {
         // Do something
 
-        $("#kode_barang").trigger('chosen:open');
+        $("#kode_barang").focus();
 
     });
 
@@ -3605,13 +3607,7 @@ $(document).ready(function(){
 
     }); 
 
-        shortcut.add("ctrl+g", function() {
-        // Do something
-
-        $("#closed_alert_promo").click();
-
-    }); 
-
+    
     shortcut.add("ctrl+b", function() {
         // Do something
 
@@ -3658,20 +3654,6 @@ $(document).ready(function(){
     var tipe_produk = $('#opt-produk-'+kode_barang).attr("tipe_barang");
     var id_barang = $('#opt-produk-'+kode_barang).attr("id-barang");
     var level_harga = $("#level_harga").val();
-
-
-$.post("lihat_promo_alert.php",{id:id_barang},function(data){
-
-    if (data == '')
-    {
-
-    }
-    else{
-      $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(data);
-    }
-
-});
 
 
    if (level_harga == "harga_1") {

@@ -94,7 +94,7 @@ $(document).on('click','#btntgl',function(e) {
           var dataTable = $('#tabel_tampil').DataTable( {
           "processing": true,
           "serverSide": true,
-          "info":     false,
+          "info":     true,
           "language": {
         "emptyTable":     "My Custom Message On Empty Table"
     },

@@ -139,7 +139,7 @@ echo '<a href="target_penjualan.php"  class="btn btn-info"> <i class="fa fa-plus
 		<thead>
 			<th style='background-color: #4CAF50; color:white' class='th'> Detail </th>
 
-<!---------
+<!---
 
 include 'db.php';
 
@@ -152,7 +152,7 @@ $target_jual_edit = mysqli_num_rows($pilih_akses_target_jual_edit);
 
       }
 
--------------->
+-->
 
 
 <?php 
@@ -237,7 +237,7 @@ $target_jual_hapus = mysqli_num_rows($pilih_akses_target_jual_hapus);
           var dataTable = $('#table-detail').DataTable( {
           "processing": true,
           "serverSide": true,
-          "info":     false,
+          "info":     true,
           "language": {
         "emptyTable":     "My Custom Message On Empty Table"
     },

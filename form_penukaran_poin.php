@@ -300,6 +300,9 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
 
           });
 
+
+          
+
       });
   });
 </script>
@@ -418,10 +421,6 @@ $(document).on('click', '.pilih', function (e) {
               var nama_barang = $('#opt-produk-'+kode_barang).attr("nama-barang");
               var satuan = $('#opt-produk-'+kode_barang).attr("satuan");
 
-              $("#satuan").val(satuan);
-              $("#kode_barang").val(kode_barang);
-              $("#nama_barang").val(nama_barang);
-
 
                $.post("cek_barang_tbs_tukar_poin.php",{kode_barang:kode_barang},function(data){
 
@@ -440,7 +439,7 @@ $(document).on('click', '.pilih', function (e) {
 
                          }
                          else
-                         {        // CEK STOK
+                        {
                                 $.post("cek_stok_barang_hadiah.php",{kode_barang:kode_barang},function(data){
                                                     
                                 $("#stok").val(data)
@@ -452,8 +451,15 @@ $(document).on('click', '.pilih', function (e) {
                                 $("#poin").val(info);
                                                     
                                                     
-                                });                    
+                                });     
+
+                                $("#satuan").val(satuan);
+                                $("#kode_barang").val(kode_barang);
+                                $("#nama_barang").val(nama_barang);    
                         }
+   // CEK STOK
+           
+     
 
                    
 
@@ -522,6 +528,10 @@ $(document).on('click', '.pilih', function (e) {
           else if (jumlah_barang == '') {
             alert("Jumlah Barang Harus di Isi");
               $("#jumlah_barang").focus();
+          }
+          else if (poin == '') {
+            alert("Poin Harus di Isi");
+              $("#poin").focus();
           }
           else if (hitung < 0) {
              alert("Jumlah Barang Melebihi Stok!");

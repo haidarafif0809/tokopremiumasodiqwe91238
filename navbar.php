@@ -354,7 +354,7 @@ echo '<li><a href="order_penjualan.php" class="waves-effect">Data Order Penjuala
 
 
 
-echo "<li><a href='lap_bucket_size.php' class='waves-effect'>Lap. Backet Size</a></li>";
+echo "<li><a href='lap_bucket_size.php' class='waves-effect'>Lap. Bucket Size</a></li>";
 
  if ($lihat['laporan_pembelian_lihat'] > 0){
                             echo '<li><a href="lap_pembelian.php" class="waves-effect">Lap. Pembelian</a></li>';
@@ -859,8 +859,7 @@ echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> Data Penjua
 
 
 
-echo "<li><a href='lap_bucket_size.php' class='waves-effect'>Lap. Backet Size</a></li>";
-echo "<li><a href='order_target_penjualan.php' class='waves-effect'>Target Penjualan</a></li>";
+
 
  if ($lihat['laporan_pembelian_lihat'] > 0){
                             echo '<li><a href="lap_pembelian.php" class="waves-effect">Lap. Pembelian</a></li>';
@@ -903,6 +902,10 @@ echo '<li><a href="laporan_perubahan_harga_masal.php" class="waves-effect" style
  if ($lihat['laporan_komisi_faktur_lihat'] > 0){
                             echo '<li><a href="laporan_fee_faktur.php" class="waves-effect">Lap. Komisi / Faktur </a></li>';
 }
+
+echo "<li><a href='lap_bucket_size.php' class='waves-effect'>Lap. Bucket Size</a></li>";
+
+echo "<li><a href='order_target_penjualan.php' class='waves-effect'>Target Penjualan</a></li>";
 
 echo '<li><a href="loss_customer.php" class="waves-effect" style="font-size: 16px">Loss Customer</a></li>';
 

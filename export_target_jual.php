@@ -23,8 +23,8 @@ $sql = $db->query("SELECT dp.id,dp.jumlah_periode,dp.jual_perhari,dp.target_perh
 
 ?>
 
-<h3><b><center> ESTIMASI ORDER BERDASARKAN TARGET PENJUALAN Dari Tanggal <?php echo $daritgl; ?> s/d <?php echo $sampai_tanggal; ?> </center><b></h3>
-
+<h3><b><center> ESTIMASI ORDER BERDASARKAN TARGET PENJUALAN <br> Periode Data <?php echo $daritgl; ?> s/d <?php echo $sampai_tanggal; ?> </center><b></h3>
+ 
 <style>
 tr:nth-child(even){background-color: #f2f2f2}
 </style>

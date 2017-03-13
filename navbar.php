@@ -448,7 +448,7 @@ if ($lihat['set_member'] > 0){
 echo '<li><a href="setting_member.php" target="blank" class="waves-effect">Setting Member</a></li>';
 }
 if ($lihat['peringatan_jatuh_tempo_hutang'] > 0){
-echo '<li><a href="seeting_waktu_reminder.php" class="waves-effect">Setting Waktu Reminder</a></li>';
+    echo '<li><a href="seeting_waktu_reminder.php" class="waves-effect">Setting Waktu Reminder</a></li>';
 }
 if ($lihat['setting_lihat'] > 0){                           
                           echo ' </ul>

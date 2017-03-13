@@ -16,6 +16,72 @@ $session_id = session_id();
 <!--untuk membuat agar tampilan form terlihat rapih dalam satu tempat -->
  <div style="padding-left: 5%; padding-right: 5%">
 
+  <!-- Tampilan Modal -->
+<div id="modal-pelanggan" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Isi Modal-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"> Terakhir Belanja</h4>
+      </div>
+      <div class="modal-body"> <!--membuat kerangka untuk tempat tabel -->
+
+
+<span class="modal_retur_baru">
+
+      <!--perintah agar modal update-->
+
+<div class="table-responsive">
+      <!-- membuat agar ada garis pada tabel, disetiap kolom-->
+        <table id="table-pelanggan" class="table table-bordered">
+    <thead> <!-- untuk memberikan nama pada kolom tabel -->
+      <th> Nomor Faktur </th>
+      <th> Pelanggan </th>
+      <th> Total Belanja </th>
+      <th> Tanggal </th>
+      <th> Keterangan </th>
+      
+    </thead> <!-- tag penutup tabel -->
+    
+  </table> <!-- tag penutup table-->
+<?php 
+    //menampilkan seluruh data yang ada pada tabel penjualan
+  $perintah = $db->query("SELECT lama_tidak_aktif,aktif_kembali,satuan_tidak_aktif FROM setting_member");
+  $ambil = mysqli_fetch_array($perintah);
+
+  $satuan_tidak_aktif = $ambil['satuan_tidak_aktif']; 
+  $lama_tidak_aktif = $ambil['lama_tidak_aktif']; 
+  $aktif_kembali = $ambil['aktif_kembali'];
+
+
+      if ($ambil['satuan_tidak_aktif'] == 1) {
+        $satuan_tidak_aktif = "Bulan";
+      }
+      else if ($ambil['satuan_tidak_aktif'] == 2) {
+        $satuan_tidak_aktif = "Tahun";
+      }
+
+   ?>
+
+   </div>
+<br>
+<h6 style="text-align: left ; color: red" id="text-pelanggan">
+  <i> * Pelanggan ini sudah tidak aktif, karena sudah tidak belanja selama <?php echo $lama_tidak_aktif." " .$satuan_tidak_aktif; ?> dan akan aktif kembali jika sudah <?php echo $aktif_kembali; ?> Kali Belanja </i></h6>
+
+</span>
+
+</div> <!-- tag penutup modal body -->
+
+      <!-- tag pembuka modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div> <!--tag penutup moal footer -->
+    </div>
+
+  </div>
+</div>
 
 
 
@@ -23,8 +89,6 @@ $session_id = session_id();
 
     <div class="modal fade modal-ext" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-
-
 
     <!-- isi modal-->
     <div class="modal-content">
@@ -47,11 +111,6 @@ $session_id = session_id();
   </table></center>
   </div>
 
-      <div class="table-resposive">
-<span class="modal_baru">
-
-  </span>
-</div>
 </div> <!-- tag penutup modal-body-->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -72,7 +131,7 @@ $session_id = session_id();
 
 
 
-                    <!--div class="row"><!--ROW-
+                    <!--div class="row"><!ROW-
 
                             <div class="col-sm-4">
                                 <label> Pelanggan </label><br><br>
@@ -293,12 +352,61 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
 
           var pelanggan = $(this).val();
 
-          $.post("cek_poin_pelanggan.php",{pelanggan:pelanggan}, function(data){
-            data = data.replace(/\s+/g, '');
+          $.post("cek_aktif_pelanggan.php",{pelanggan:pelanggan}, function(info){
+            if (info == 1) {
 
-            $("#jumlah_poin").val(tandaPemisahTitik(data));
+                          $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});      
+                          $("#kd_pelanggan").val('').trigger("chosen:updated");
+                          $("#kd_pelanggan").trigger("chosen:open");
+                          $("#modal-pelanggan").modal('show');
 
+                          $('#table-pelanggan').DataTable().destroy();
+
+                            var dataTable = $('#table-pelanggan').DataTable( {
+                            "processing": true,
+                            "serverSide": true,
+                            "info": false,
+                            "language": {
+                          "emptyTable":     "My Custom Message On Empty Table"
+                      },
+                            "ajax":{
+                              url :"proses_terakhir_belanja.php", // json datasource
+                               "data": function ( d ) {
+                                  d.pelanggan = pelanggan;
+                                  // d.custom = $('#myInput').val();
+                                  // etc
+                              },
+                                  type: "post",  // method  , by default get
+                              error: function(){  // error handling
+                                $(".tbody").html("");
+                                $("#table-pelanggan").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                                $("#table-pelanggan_processing").css("display","none");
+                                
+                              }
+                            }
+                      
+
+
+                          } );
+
+  
+
+
+                }
+                else
+                {
+
+                        $.post("cek_poin_pelanggan.php",{pelanggan:pelanggan}, function(data){
+                        data = data.replace(/\s+/g, '');
+
+                        $("#jumlah_poin").val(tandaPemisahTitik(data));
+
+                      });
+                }
           });
+
+
+
 
 
           

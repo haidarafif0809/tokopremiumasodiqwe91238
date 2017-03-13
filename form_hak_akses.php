@@ -396,7 +396,7 @@ else{
 </div> <!-- / of otoritas HAL_khusus_pelanggan -->
 
 
-<div class="form-group col-sm-12">
+<div class="form-group col-sm-12"></div>
     <div class="form-group col-sm-2"> <!-- start otoritas timbangan -->
     <label>Timbangan</label><br>
 
@@ -468,9 +468,27 @@ else{
 
      ?>
  </div>
-</div>
+
+ <div class="form-group col-sm-2"> <!-- start otoritas timbangan -->
+    <label>Cash Drawer</label><br>
+
+    <?php 
+
+    if ($data_otoritas['tombol_cash_drawer'] == '1'){
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="tombol_cash_drawer" name="tombol_cash_drawer" checked="">
+        <label for="tombol_cash_drawer">Lihat</label> <br>';
+    }
+
+    else{
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="tombol_cash_drawer" name="tombol_cash_drawer">
+        <label for="tombol_cash_drawer">Lihat</label> <br>';  
+    }
+
+     ?>
+ </div>
 
 
+<div class="form-group col-sm-12"></div>
 
 <div class="form-group col-sm-2"> <!-- start otoritas penjualan -->
 <label>Penjualan</label><br>
@@ -2647,7 +2665,7 @@ else{
 </div> <!-- / of otoritas lap_komisi -->
 
 
-<div class="form-group col-sm-12">
+<div class="form-group col-sm-12"></div>
   
 <div class="form-group col-sm-2"> <!-- start otoritas pembayaran_hutang -->
 <label>Program Promo</label><br>
@@ -2856,7 +2874,7 @@ else{
 ?>
 </div>
   
-</div>
+
 
 
  <div class="form-group col-sm-2"> <!-- start otoritas set_diskon_tax -->
@@ -2892,7 +2910,7 @@ else{
 
 </div> <!-- / of otoritas set_diskon_tax -->
 
-
+<div class="form-group col-sm-12"> </div>
 <div class="form-group col-sm-2"> <!-- start otoritas set_perusahaan -->
 <label>Perusahaan</label><br>
 

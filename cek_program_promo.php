@@ -1,0 +1,23 @@
+<?php session_start();
+
+include 'db.php';
+include 'sanitasi.php';
+
+$tanggal_sekarang = $_POST['tanggal_sekarang'];
+
+$queryprogram = $db->query("SELECT batas_akhir FROM program_promo WHERE batas_akhir >= '$tanggal_sekarang'");
+
+$program = mysqli_num_rows($queryprogram);
+if ($program > 0 ) {
+    echo 1;
+}
+else {
+
+}
+
+        //Untuk Memutuskan Koneksi Ke Database
+
+        mysqli_close($db); 
+
+ ?>
+

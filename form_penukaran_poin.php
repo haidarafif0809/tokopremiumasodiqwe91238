@@ -176,12 +176,15 @@ $session_id = session_id();
 
                               foreach ($data_c as $key ) {
 
-                                  $cek = $db->query("SELECT kode_barang FROM master_poin WHERE kode_barang = '$key[kode_barang]' ");
+                                  $cek = $db->query("SELECT kode_barang,quantity_poin FROM master_poin WHERE kode_barang = '$key[kode_barang]' ");
+
                                   $rows = mysqli_num_rows($cek);
+                                  $data = mysqli_fetch_array($cek);
 
                                    if ($rows > 0) {
                                    
-                                   echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+                                   echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" 
+                                   nama-barang="'.$key['nama_barang'].'" poin="'.$data['quantity_poin'].'" satuan="'.$key['satuan'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
                                    
                                    }
                             }
@@ -197,7 +200,7 @@ $session_id = session_id();
                     </div>
 
                     <div class="col-sm-2">
-                      <input style="height:13px;" type="text" class="form-control" name="poin" autocomplete="off" id="poin" placeholder="Poin" readonly="" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
+                      <input style="height:13px;" type="text" class="form-control" name="poin" autocomplete="off" id="poin" placeholder="Poin" readonly="" >
                     </div>
 
                     <button id="submit_produk" class="btn btn-success" style="font-size:15px" >Tukar (F3)</button>
@@ -259,10 +262,11 @@ $session_id = session_id();
                                       $query = $db->query("SELECT id,nama_pelanggan ,kode_pelanggan FROM pelanggan");
 
                                       //untuk menyimpan data sementara yang ada pada $query
-                                      while($data = mysqli_fetch_array($query))
-                                      {
+                                      while($data = mysqli_fetch_array($query))                                      {
 
-                                      echo "<option value='".$data['id'] ."'>".$data['kode_pelanggan'] ." || ".$data['nama_pelanggan'] ."</option>";
+
+
+                                      echo "<option id='opt-pelanggan-".$data['id']."' value='".$data['id'] ."'>".$data['kode_pelanggan'] ." || ".$data['nama_pelanggan'] ."</option>";
 
                                              
                                       }
@@ -305,12 +309,15 @@ $session_id = session_id();
                               </div>
                           </div>
 
-                           <a href='form_penukaran_poin.php' id="transaksi_baru" class="btn btn-info" style="display: none" style="font-size:15px;"> Transaksi Baru (Ctrl + M) </a>
+                          <button  id="transaksi_baru" class="btn btn-info" style="display: none" style="font-size:15px">Transaksi Baru (Ctrl + M) </button>
 
-                          <a href='' id="cetak_tukar" style="display: none;" class="btn btn-warning" target="blank"> Cetak </a>
+                          <a href='' id="cetak_tukar" style="display: none;" class="btn btn-warning" target="blank"> Cetak Besar</a>
+                          <a href='' id="cetak_tukar_kecil" style="display: none;" class="btn btn-danger" target="blank"> Cetak </a>
 
                           <button type="submit" id="simpan" class="btn btn-primary" style="font-size:15px">  Simpan (F10)</button>
-                          <a href='batal_transaksi_tukar_poin.php' id="batal_tukar" class="btn btn-warning"> Batal (Ctrl + B) </a>
+
+                          <button id="batal_tukar" class="btn btn-warning" style="font-size:15px">  Batal (Ctrl + B) </button>
+
 
 
 
@@ -394,14 +401,15 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
 
                 }
                 else
-                {
+                { 
 
-                        $.post("cek_poin_pelanggan.php",{pelanggan:pelanggan}, function(data){
-                        data = data.replace(/\s+/g, '');
+                      $.post("cek_poin_pelanggan.php",{pelanggan:pelanggan},function(data){
 
-                        $("#jumlah_poin").val(tandaPemisahTitik(data));
+                    data = data.replace(/\s/g, '');
+                      $("#jumlah_poin").val(tandaPemisahTitik(data));
+                  });
+                  
 
-                      });
                 }
           });
 
@@ -528,7 +536,7 @@ $(document).on('click', '.pilih', function (e) {
               var kode_barang = $(this).val();
               var nama_barang = $('#opt-produk-'+kode_barang).attr("nama-barang");
               var satuan = $('#opt-produk-'+kode_barang).attr("satuan");
-
+              var poin = $('#opt-produk-'+kode_barang).attr("poin");
 
                $.post("cek_barang_tbs_tukar_poin.php",{kode_barang:kode_barang},function(data){
 
@@ -547,23 +555,18 @@ $(document).on('click', '.pilih', function (e) {
 
                          }
                          else
-                        {
+                        {  
+
                                 $.post("cek_stok_barang_hadiah.php",{kode_barang:kode_barang},function(data){
-                                                    
-                                $("#stok").val(data)
-                                                    
+
+                                 $("#stok").val(data);
                                 });
-                                                    
-                                $.post("cek_barang_hadiah.php",{kode_barang:kode_barang},function(info){
-                                                    
-                                $("#poin").val(info);
-                                                    
-                                                    
-                                });     
+
 
                                 $("#satuan").val(satuan);
                                 $("#kode_barang").val(kode_barang);
-                                $("#nama_barang").val(nama_barang);    
+                                $("#nama_barang").val(nama_barang); 
+                                $("#poin").val(tandaPemisahTitik(poin));   
                         }
    // CEK STOK
            
@@ -594,7 +597,13 @@ $(document).on('click', '.pilih', function (e) {
           var satuan = $("#satuan").val();
           var stok = $("#stok").val();
           var poin = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#poin").val()))));
+          if (poin == '') {
+            poin = 0;
+          };
           var jumlah_barang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_barang").val()))));
+          if (jumlah_barang ==  '') {
+            jumlah_barang = 0;
+          };
           var poin_pelangan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_poin").val()))));
           if (poin_pelangan == '') {
             poin_pelangan = 0;
@@ -626,20 +635,20 @@ $(document).on('click', '.pilih', function (e) {
 
            }
           else if (poin_pelangan == 0) {
-             alert("Total Poin 0!");
+             alert("Total Poin Pelanggan 0!");
            }
           else if (kode_barang == '') {
             alert("Anda belum memilih barang!");
             $("#kode_barang").trigger('chosen:updated');
             $("#kode_barang").trigger('chosen:open');
           }
-          else if (jumlah_barang == '') {
-            alert("Jumlah Barang Harus di Isi");
+          else if (jumlah_barang == 0) {
+            alert("Jumlah Barang Harus di Isi dan tidak boleh nol!");
               $("#jumlah_barang").focus();
           }
-          else if (poin == '') {
-            alert("Poin Harus di Isi");
-              $("#poin").focus();
+          else if (poin == 0) {
+            alert("Total Poin Produk 0!");
+
           }
           else if (hitung < 0) {
              alert("Jumlah Barang Melebihi Stok!");
@@ -987,21 +996,33 @@ $(document).ready(function(){
           {
             $("#transaksi_baru").show();
             $("#cetak_tukar").show();
+            $("#cetak_tukar_kecil").show();
             $("#simpan").hide();
             $("#batal_tukar").hide();
 
             $.post("proses_simpan_tukar_poin.php",{pelanggan:pelanggan,poin_pelangan:poin_pelangan,total_poin:total_poin,sisa_poin:sisa_poin,tanggal:tanggal,keterangan:keterangan},function(data){
 
               $("#cetak_tukar").attr("href",'cetak_tukar_poin.php?no_faktur='+data+"&tanggal="+tanggal);
-              $("#result").html(data);
+              $("#cetak_tukar_kecil").attr("href",'cetak_tukar_poin_kecil.php?no_faktur='+data+"&tanggal="+tanggal);
+              $("#result").hide();
               $("#kd_pelanggan").val('');
               $('#kd_pelanggan').prop('disabled', true).trigger("chosen:updated");
               $("#jumlah_poin").val('');
               $("#subtotal").val('');
               $("#sisa_poin").val('');
+              $("#stok").val('');
             });
 
           }
+
+
+            var url = window.location.href;
+             url = getPathFromUrl(url);
+            history.pushState('', 'Toko',  url);
+
+            function getPathFromUrl(url) {
+              return url.split("?")[0];
+            } 
 
             $("form").submit(function(){
             return false;  
@@ -1056,13 +1077,92 @@ $(document).ready(function(){
 
         shortcut.add("ctrl+m", function() {
         // Do something
-        window.location.href="form_penukaran_poin.php";
+        $("#transaksi_baru").click();
 
 
     }); 
 
 
 
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(document).on('click','#transaksi_baru',function(e){
+
+              $("#result").show();
+              $('#tabel_tukar_poin').DataTable().destroy();
+              var dataTable = $('#tabel_tukar_poin').DataTable( {
+                  "processing": true,
+                  "serverSide": true,
+                   "ajax":{
+                     url :"table_tbs_tukar_poin.php", // json datasource
+                     type: "post",  // method  , by default get
+                     error: function(){  // error handling
+                     $(".employee-grid-error").html("");
+                     $("#tabel_tukar_poin").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                     $("#tabel_tukar_poin_processing").css("display","none");
+                     
+                        }
+                      },
+    });    
+                                      
+
+              $("#transaksi_baru").hide();
+            $("#cetak_tukar_kecil").hide();
+              $("#cetak_tukar").hide();
+              $("#simpan").show();
+              $("#batal_tukar").show();
+              $("#kd_pelanggan").val('');
+              $('#kode_barang').trigger("chosen:open");
+              $('#kd_pelanggan').prop('disabled', false).trigger("chosen:updated");
+              $('#kd_pelanggan').trigger("chosen:open");
+              $('#kode_barang').val('');
+              $("#jumlah_poin").val('');
+              $("#subtotal").val('');
+              $("#sisa_poin").val('');
+
+            var url = window.location.href;
+             url = getPathFromUrl(url);
+            history.pushState('', 'Toko',  url);
+
+            function getPathFromUrl(url) {
+              return url.split("?")[0];
+            } 
+
+            $("form").submit(function(){
+            return false;  
+            });
+        });
+
+        
+    });
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+function getUrl(sParam) {
+      var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+
+    for (var i = 0; i < sURLVariables.length; i++)
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam)
+        {
+            return decodeURIComponent(sParameterName[1]);
+        }
+    }
+}
+});
+</script>
+
+<script type="text/javascript">
+  $(window).bind('beforeunload', function(){
+  return 'Apakah Yakin Ingin Meninggalkan Halaman Ini ? Karena Akan Membutuhkan Beberapa Waktu Untuk Membuka Kembali Halaman Ini!';
+});
 </script>
 
 <?php include 'footer.php'; ?>

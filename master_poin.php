@@ -314,6 +314,15 @@ $(document).ready(function(){
             }
           },
 
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+             $(nRow).attr('tr-kode', aData[0]);
+             $(nRow).attr('id', "tr-kode-"+aData[0]);
+
+
+
+          }
+
         });
       });
     </script>
@@ -401,7 +410,6 @@ $(document).on('click', '.pilih', function (e) {
 									  $("#nama_barang").val(nama_barang);
 									  $("#satuan").val(satuan);
 									  $("#kategori").val(kategori);
-
 									  $('#myModal').modal('hide'); 
 									  $("#quantity_poin").focus();
 					    	}
@@ -428,6 +436,7 @@ $(document).on('click', '.pilih', function (e) {
 								var nama_barang = $("#nama_barang").val();
 								var poin = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#quantity_poin").val()))));
 								var satuan = $("#satuan").val();
+								var cek_kode = $("#tr-kode"+kode_barang).attr("tr-kode");
 																
 								if (kode_barang == "") {
 
@@ -438,7 +447,11 @@ $(document).on('click', '.pilih', function (e) {
 
 									alert("Jumlah Poin Harus Diisi");
 								}
+								else if (cek_kode == kode_barang) {
 
+									alert("Barang yang anda pilih sudah ada, silahkan pilih baarang lain!");
+
+								}
 								else {	
 
 

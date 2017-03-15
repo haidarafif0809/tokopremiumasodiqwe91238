@@ -57,7 +57,9 @@ mysqli_close($db);
 					</tbody>
 
 	</table>
+
 </div>
+ <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom poin jika ingin mengedit.</i></h6>
 </div>
 
 

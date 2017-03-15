@@ -34,16 +34,14 @@ include 'db.php';
         $poin_yg_didapat = floor($hitung_poin) * $data_poin['nilai_poin'];
     // end hitung poin pelanggan
 
-    $select_kode_pelanggan = $db->query("SELECT id FROM pelanggan WHERE kode_pelanggan = '$data0[kode_pelanggan]'");
-    $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
-    $id_pelanggan = $ambil_kode_pelanggan['id'];
 
-    $poin_masuk = $db->query("SELECT SUM(poin) AS total_poin FROM poin_masuk WHERE id_pelanggan = '$id_pelanggan'");
+    $poin_masuk = $db->query("SELECT SUM(poin) AS total_poin FROM poin_masuk WHERE id_pelanggan = '$data0[kode_pelanggan]'");
     $masuk = mysqli_fetch_array($poin_masuk);
 
-    $poin_keluar = $db->query("SELECT SUM(total_poin) AS total_poin FROM poin_keluar WHERE id_pelanggan = '$id_pelanggan'");
+    $poin_keluar = $db->query("SELECT SUM(subtotal_poin) AS total_poin FROM poin_keluar WHERE id_pelanggan = '$data0[kode_pelanggan]'");
     $keluar = mysqli_fetch_array($poin_keluar);
 
+                                      
     $total_poin = $masuk['total_poin'] - $keluar['total_poin'];
 
     
@@ -90,7 +88,7 @@ mysqli_close($db);
     ===================<br>
      <table>
     <tbody>
-        <tr><td width="50%">Poin Sekarang</td> <td> :</td> <td><?php echo rp($poin_yg_didapat);?> </tr>
+        <tr><td width="50%">Poin Bertambah</td> <td> :</td> <td><?php echo rp($poin_yg_didapat);?> </tr>
         <tr><td  width="50%">Total Poin</td> <td> :</td> <td> <?php echo rp($total_poin);?> </td></tr>
            
 

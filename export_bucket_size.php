@@ -12,6 +12,7 @@ $dari_tgl = stringdoang($_GET['dari_tanggal']);
 $sampai_tgl = stringdoang($_GET['sampai_tanggal']);
 $kelipatan = angkadoang($_GET['kelipatan']);
 $satu = 1;
+$total_range = 0;
 
 
 
@@ -50,15 +51,16 @@ tr:nth-child(even){background-color: #f2f2f2}
 
     <td>".rp($satu) ." - ". rp($kelipatan)."</td>";
 
-    $query2 = $db->query("SELECT COUNT(*) AS total_faktur FROM penjualan WHERE total BETWEEN '$satu' AND '$kelipatan' ");
+    $query2 = $db->query("SELECT COUNT(*) AS total_faktur FROM penjualan WHERE total BETWEEN '$satu' AND '$kelipatan' AND tanggal >= '$dari_tgl' AND tanggal <= '$sampai_tgl'");
     $data2 = mysqli_fetch_array($query2);
 
     $query5 = $db->query("SELECT COUNT(*) AS total_faktur_semua FROM penjualan WHERE tanggal >= '$dari_tgl' AND tanggal <= '$sampai_tgl'");
     $data5 = mysqli_fetch_array($query5);
 
     //hitung persen 
-    $hitung = $data2['total_faktur'] / $data5['total_faktur_semua'] * 100 /100;
-
+    $hitung = $data2['total_faktur'] / $data5['total_faktur_semua'] * 100;
+        //hitung total range
+    $total_range = $total_range + $hitung;
 
     echo"<td>".rp($data2['total_faktur'])."</td>
     <td>".rp(round($hitung,2))."</td>";
@@ -71,6 +73,13 @@ tr:nth-child(even){background-color: #f2f2f2}
              
    }
 //Untuk Memutuskan Koneksi Ke Database
+    echo "<tr>
+
+    <td><font color='red'><b>TOTAL</b></font></td>
+    <td><font color='red'><b>".$data5['total_faktur_semua']."</b></font></td>
+    <td><font color='red'><b>".$total_range."</b></font></td>";
+
+    echo "</tr>";
 
 mysqli_close($db); 
 		?>

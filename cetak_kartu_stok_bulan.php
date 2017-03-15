@@ -80,7 +80,7 @@ $total_saldo = $jumlah_masuk - $jumlah_keluar;
 
     </div>
 
-   <!---- <div class="col-sm-3">
+   <!-- <div class="col-sm-3">
        <table>
         <tbody>
 
@@ -92,7 +92,7 @@ $total_saldo = $jumlah_masuk - $jumlah_keluar;
             </tbody>
       </table>
 
-    </div> ----end col-sm-2-->
+    </div> -end col-sm-2-->
    </div> <!--end row-->  
 
 
@@ -115,12 +115,12 @@ $total_saldo = $jumlah_masuk - $jumlah_keluar;
 <br><br>
 <table id="tableuser" class="table table-bordered table-sm">
         <thead>
-            <th class="table1" style="width: 3%"> No Faktur</th>
-            <th class="table1" style="width: 50%"> Tipe </th>
-            <th class="table1" style="width: 5%"> Tanggal</th>
-            <th class="table1" style="width: 5%"> Jumlah Masuk</th>
-            <th class="table1" style="width: 15%"> Jumlah Keluar</th>
-            <th class="table1" style="width: 5%"> Saldo</th>
+            <th class="table1" style="width: 1%"> No Faktur</th>
+            <th class="table1" style="width: 1%"> Tipe </th>
+            <th class="table1" style="width: 1%"> Tanggal</th>
+            <th class="table1" style="width: 1%"> Jumlah Masuk</th>
+            <th class="table1" style="width: 1%"> Jumlah Keluar</th>
+            <th class="table1" style="width: 1%"> Saldo</th>
 
     
         

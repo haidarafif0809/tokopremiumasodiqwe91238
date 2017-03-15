@@ -17,15 +17,18 @@ include 'db.php';
 <form id="perhari" class="form-inline"  method="POST" role="form">
 
 <div class="form-group">
+    <label>Order Untuk Berapa Hari</label><br>
     <input type="text" class="form-control" id="order" autocomplete="off" name="order" placeholder="Order Untuk Berapa Hari ">
 </div>
 
 <div class="form-group">
-    <input type="text" class="form-control dsds" id="daritgl" autocomplete="off" name="daritanggal" placeholder="Dari Tanggal ">
+    <label>Periode Data</label><br>
+    <input type="text" class="form-control dsds" id="daritgl" autocomplete="off" name="daritanggal" placeholder="Periode Data">
 </div>
 
 <div class="form-group">
-    <input type="text" class="form-control dsds" id="sampaitgl" autocomplete="off" name="sampaitanggal" placeholder="Sampai Tanggal ">
+    <label>Sampai</label><br>
+    <input type="text" class="form-control dsds" id="sampaitgl" autocomplete="off" name="sampaitanggal" placeholder="Sampai">
 </div>
 
     
@@ -119,7 +122,7 @@ $(document).on('click','#btntgl',function(e) {
           var dataTable = $('#tabel_tampil').DataTable( {
           "processing": true,
           "serverSide": true,
-          "info":     false,
+          "info":     true,
           "language": {
         "emptyTable":     "My Custom Message On Empty Table"
     },
@@ -205,7 +208,9 @@ $(document).on('click','#btntgl',function(e) {
         birthday3=birthday3.split("-");   
         var tahun = birthday3[0];
         return tahun;
-        }
+        }    
+
+        var order = $("#order").val();
         var dari_tanggal = $("#daritgl").val();
         var ambil_tgl1 = ambil_tgl(dari_tanggal);
         var ambil_bln1 = ambil_bln(dari_tanggal);
@@ -216,11 +221,11 @@ $(document).on('click','#btntgl',function(e) {
         var ambil_tgl2 = ambil_tgl(sampai_tanggal);
         var ambil_bln2 = ambil_bln(sampai_tanggal);
         var ambil_thn2 = ambil_thn(sampai_tanggal);
-        var tanggal2 = ambil_tgl2 + "/" + ambil_bln2 + "/" + ambil_thn2;
 
-        var order = $("#order_hide").val();
+        var tanggal2 = ((parseInt(ambil_tgl1,10) - 1) + parseInt(order,10)) + "/" + ambil_bln2 + "/" + ambil_thn2;
 
-        var judul = " Periode " + tanggal1 + " Sampai " + tanggal2;
+
+        var judul = " Periode Data " + tanggal1 + " Sampai " + tanggal2;
         var no_trx =  $("#table-baru").text();
 
 
@@ -284,6 +289,9 @@ $(document).on('click','#btntgl',function(e) {
 
         var hitung_proyeksi = parseInt(order,10) * parseInt(target_baru,10);
         var kebutuhan = parseInt(hitung_proyeksi,10) - parseInt(stok,10);
+        if (kebutuhan < 0) {
+          kebutuhan = 0;
+        };
 
 
         $.post("edit_target_jual.php",{target_baru:target_baru,hitung_proyeksi:hitung_proyeksi,kebutuhan:kebutuhan,id:id},function(data){
@@ -312,11 +320,38 @@ $(document).on('click','#btntgl',function(e) {
 
       $(document).on('click','#simpan',function(e){
 
+        function ambil_tgl(tanggal_input1){
+        var birthday1 = tanggal_input1;
+        birthday1=birthday1.split("-");   
+        var hari_ini = birthday1[2];
+        return hari_ini;
+        }
+        function ambil_bln(tanggal_input2){
+        var birthday2 = tanggal_input2;
+        birthday2=birthday2.split("-");   
+        var bulan = birthday2[1];
+        return bulan;
+        }
+
+        function ambil_thn(tanggal_input3){
+        var birthday3 = tanggal_input3;
+        birthday3=birthday3.split("-");   
+        var tahun = birthday3[0];
+        return tahun;
+        }   
+
         var keterangan = $("#keterangan").val();
         var order = $("#order_hide").val();
         var dari_tanggal = $("#daritgl").val();
-        var sampai_tanggal = $("#sampaitgl").val();
-        var order = $("#order_hide").val();
+        var sampai_tanggall = $("#sampaitgl").val();
+
+        var ambil_tgl1 = ambil_tgl(dari_tanggal);
+
+        var ambil_tgl2 = ambil_tgl(sampai_tanggall);
+        var ambil_bln2 = ambil_bln(sampai_tanggall);
+        var ambil_thn2 = ambil_thn(sampai_tanggall);
+
+        var sampai_tanggal = ambil_thn2 + "-"  + ambil_bln2 + "-" + ((parseInt(ambil_tgl1,10) - 1) + parseInt(order,10));
 
 
         $("#simpan").hide();

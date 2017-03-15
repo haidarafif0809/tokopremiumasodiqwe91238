@@ -121,12 +121,15 @@ $ambil_data = mysqli_fetch_array($ambil);
 
                               foreach ($data_c as $key ) {
 
-                                  $cek = $db->query("SELECT kode_barang FROM master_poin WHERE kode_barang = '$key[kode_barang]' ");
+                                  $cek = $db->query("SELECT kode_barang,quantity_poin FROM master_poin WHERE kode_barang = '$key[kode_barang]' ");
                                   $rows = mysqli_num_rows($cek);
+                                  $data = mysqli_fetch_array($cek);
 
                                    if ($rows > 0) {
                                    
-                                   echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+                                   echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" 
+                                   data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" poin="'.$data['quantity_poin'].'" 
+                                   satuan="'.$key['satuan'].'"> '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
                                    
                                    }
                             }
@@ -256,7 +259,8 @@ $ambil_data = mysqli_fetch_array($ambil);
 
                            <a href='tukar_poin.php' id="transaksi_baru" class="btn btn-info" style="display: none" style="font-size:15px;"> Kembali (Ctrl + M) </a>
 
-                          <a href='' id="cetak_tukar" style="display: none;" class="btn btn-warning" target="blank"> Cetak </a>
+                          <a href='' id="cetak_tukar" style="display: none;" class="btn btn-warning" target="blank"> Cetak Besar</a>
+                          <a href='' id="cetak_tukar_kecil" style="display: none;" class="btn btn-danger" target="blank"> Cetak </a>
 
                           <button type="submit" id="simpan" class="btn btn-primary" style="font-size:15px">  Simpan (F10)</button>
                           <a href='tukar_poin.php' id="batal_tukar" class="btn btn-warning"> Batal (Ctrl + B) </a>
@@ -442,11 +446,7 @@ $(document).on('click', '.pilih', function (e) {
               var kode_barang = $(this).val();
               var nama_barang = $('#opt-produk-'+kode_barang).attr("nama-barang");
               var satuan = $('#opt-produk-'+kode_barang).attr("satuan");
-
-              $("#satuan").val(satuan);
-              $("#kode_barang").val(kode_barang);
-              $("#nama_barang").val(nama_barang);
-
+              var poin = $('#opt-produk-'+kode_barang).attr("poin");
 
                $.post("cek_barang_tbs_tukar_poin_edit.php",{kode_barang:kode_barang,no_faktur:no_faktur},function(data){
 
@@ -471,13 +471,13 @@ $(document).on('click', '.pilih', function (e) {
                                 $("#stok").val(data)
                                                     
                                 });
+
+                               $("#satuan").val(satuan);
+                               $("#kode_barang").val(kode_barang);
+                               $("#nama_barang").val(nama_barang);
+                               $("#poin").val(tandaPemisahTitik(poin))
                                                     
-                                $.post("cek_barang_hadiah.php",{kode_barang:kode_barang},function(info){
-                                                    
-                                $("#poin").val(info);
-                                                    
-                                                    
-                                });                    
+                  
                         }
 
                    
@@ -505,7 +505,13 @@ $(document).on('click', '.pilih', function (e) {
           var satuan = $("#satuan").val();
           var stok = $("#stok").val();
           var poin = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#poin").val()))));
+          if (poin == '') {
+            poin = 0;
+          };
           var jumlah_barang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_barang").val()))));
+          if (jumlah_barang == '') {
+            jumlah_barang = 0;
+          };
           var poin_pelangan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_poin").val()))));
           if (poin_pelangan == '') {
             poin_pelangan = 0;
@@ -544,8 +550,8 @@ $(document).on('click', '.pilih', function (e) {
             $("#kode_barang").trigger('chosen:updated');
             $("#kode_barang").trigger('chosen:open');
           }
-          else if (jumlah_barang == '') {
-            alert("Jumlah Barang Harus di Isi");
+          else if (jumlah_barang == 0) {
+            alert("Jumlah Barang Harus di Isi dan tidak boleh nol!");
               $("#jumlah_barang").focus();
           }
           else if (hitung < 0) {
@@ -910,11 +916,13 @@ $(document).ready(function(){
             $("#cetak_tukar").show();
             $("#simpan").hide();
             $("#batal_tukar").hide();
+            $("#cetak_tukar_kecil").show();
 
             $.post("proses_edit_simpan_tukar_poin.php",{pelanggan:pelanggan,poin_pelangan:poin_pelangan,total_poin:total_poin,sisa_poin:sisa_poin,
               tanggal:tanggal,keterangan:keterangan,no_faktur:no_faktur},function(data){
 
               $("#cetak_tukar").attr("href",'cetak_tukar_poin.php?no_faktur='+no_faktur+"&tanggal="+tanggal);
+              $("#cetak_tukar_kecil").attr("href",'cetak_tukar_poin_kecil.php?no_faktur='+data+"&tanggal="+tanggal);
               $("#result").html(data);
               $("#kd_pelanggan").val('');
               $('#kd_pelanggan').prop('disabled', true).trigger("chosen:updated");

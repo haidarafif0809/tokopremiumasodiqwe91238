@@ -14,7 +14,9 @@ $x = 0;
 $query1 = $db->query("SELECT * FROM perusahaan ");
 $next_cp = mysqli_fetch_array($query1);
 
-$sql = $db->query("SELECT dp.id,dp.jumlah_periode,dp.jual_perhari,dp.target_perhari,dp.proyeksi,dp.stok_terakhir,dp.kebutuhan,dp.kode_barang, dp.nama_barang, dp.satuan, s.nama FROM detail_target_penjualan dp LEFT JOIN satuan s ON dp.satuan = s.id WHERE dp.no_trx = '$no_trx' GROUP BY dp.kode_barang ORDER BY dp.jumlah_periode DESC");
+$sql = $db->query("SELECT dp.id,dp.jumlah_periode,dp.jual_perhari,dp.target_perhari,dp.proyeksi,dp.stok_terakhir,dp.kebutuhan,dp.kode_barang, 
+  dp.nama_barang, dp.satuan, s.nama FROM detail_target_penjualan dp LEFT JOIN satuan s ON dp.satuan = s.id WHERE dp.no_trx = '$no_trx' 
+  GROUP BY dp.kode_barang ORDER BY dp.jumlah_periode DESC");
 
 
 
@@ -47,7 +49,7 @@ $sql = $db->query("SELECT dp.id,dp.jumlah_periode,dp.jual_perhari,dp.target_perh
 
 
     <center> <h4> <b> ESTIMASI ORDER BERDASARKAN TARGET PENJUALAN </b> </h4> </center>
-    <center> <h4> <b> Periode <?php echo$daritgl; ?> Sampai <?php echo $sampai_tanggal; ?></b> </h4> </center>
+    <center> <h4> <b> Periode Data <?php echo$daritgl; ?> Sampai <?php echo $sampai_tanggal; ?></b> </h4> </center>
 <br>
 
 

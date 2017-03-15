@@ -13,12 +13,12 @@ $nama_barang = stringdoang($_GET['nama_barang']);
 
 
 // awal Select untuk hitung Saldo Awal
-$hpp_masuk = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND waktu <= '$daritgl' ");
+$hpp_masuk = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND tanggal < '$daritgl' ");
 $out_masuk = mysqli_fetch_array($hpp_masuk);
 $jumlah_masuk = $out_masuk['jumlah'];
 
 
-$hpp_keluar = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND waktu <= '$daritgl' ");
+$hpp_keluar = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND tanggal < '$daritgl' ");
 $out_keluar = mysqli_fetch_array($hpp_keluar);
 $jumlah_keluar = $out_keluar['jumlah'];
 
@@ -115,12 +115,12 @@ $total_saldo = $jumlah_masuk - $jumlah_keluar;
 <br><br>
 <table id="tableuser" class="table table-bordered table-sm">
         <thead>
-            <th class="table1" style="width: 3%"> No Faktur</th>
-            <th class="table1" style="width: 50%"> Tipe </th>
-            <th class="table1" style="width: 5%"> Tanggal</th>
-            <th class="table1" style="width: 5%"> Jumlah Masuk</th>
-            <th class="table1" style="width: 15%"> Jumlah Keluar</th>
-            <th class="table1" style="width: 5%"> Saldo</th>
+            <th class="table1" style="width: 1%"> No Faktur</th>
+            <th class="table1" style="width: 1%"> Tipe </th>
+            <th class="table1" style="width: 1%"> Tanggal</th>
+            <th class="table1" style="width: 1%"> Jumlah Masuk</th>
+            <th class="table1" style="width: 1%"> Jumlah Keluar</th>
+            <th class="table1" style="width: 1%"> Saldo</th>
 
     
         

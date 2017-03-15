@@ -5,7 +5,7 @@ include 'db.php';
 
 $session_id = session_id();
 
-$no_faktur = stringdoang($_POST['no_faktur']);
+echo$no_faktur = stringdoang($_POST['no_faktur']);
 $pelanggan = angkadoang($_POST['pelanggan']);
 $poin_pelangan = angkadoang($_POST['poin_pelangan']);
 $total_poin = angkadoang($_POST['total_poin']);
@@ -83,9 +83,6 @@ $db->begin_transaction();
       
       
       $query3 = $db->query("DELETE  FROM tbs_tukar_poin WHERE no_faktur = '$no_faktur' AND session_id IS NULL ");
-
-
-      echo "success";
 
 
     // If we arrive here, it means that no exception was thrown

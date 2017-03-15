@@ -219,7 +219,11 @@ $laporan_penjualan_lihat = stringdoang(isset($_POST['laporan_penjualan_lihat']))
 $laporan_hutang_beredar_lihat = stringdoang(isset($_POST['laporan_hutang_beredar_lihat']));
 $laporan_piutang_beredar_lihat = stringdoang(isset($_POST['laporan_piutang_beredar_lihat']));
 
+$peringatan_jatuh_tempo_hutang = stringdoang(isset($_POST['peringatan_jatuh_tempo_hutang']));
 
+
+
+$tombol_cash_drawer = stringdoang(isset($_POST['tombol_cash_drawer']));
 
 $update_otoritas_item_keluar = $db->prepare("UPDATE otoritas_item_keluar SET item_keluar_lihat = ?, item_keluar_tambah = ?, item_keluar_edit = ?, item_keluar_hapus = ? WHERE id_otoritas = ?");
 
@@ -270,10 +274,10 @@ $update_otoritas_kas_mutasi->bind_param("iiiii",
 $update_otoritas_kas_mutasi->execute();
 
 $update_otoritas_setting = $db->prepare("UPDATE otoritas_setting SET setting_lihat = ?,set_hal_khusus_pelanggan_lihat = ?,
-set_setting_halaman_promo_lihat = ?,set_timbangan = ?,setting_registrasi_lihat = ?,penetapan_petugas_lihat = ?,printer_lihat = ? WHERE id_otoritas = ?");
+set_setting_halaman_promo_lihat = ?,set_timbangan = ?,setting_registrasi_lihat = ?,penetapan_petugas_lihat = ?,printer_lihat = ?,tombol_cash_drawer = ?, peringatan_jatuh_tempo_hutang = ? WHERE id_otoritas = ?");
 
-$update_otoritas_setting->bind_param("iiiiiiii",
-    $setting_lihat,$set_hal_khusus_pelanggan_lihat,$set_setting_halaman_promo_lihat,$set_timbangan,$set_registrasi_lihat,$set_penetapan_petugas_lihat,$printer_lihat, $id);
+$update_otoritas_setting->bind_param("iiiiiiiiii",
+    $setting_lihat,$set_hal_khusus_pelanggan_lihat,$set_setting_halaman_promo_lihat,$set_timbangan,$set_registrasi_lihat,$set_penetapan_petugas_lihat,$printer_lihat,$tombol_cash_drawer, $peringatan_jatuh_tempo_hutang, $id);
 
 $update_otoritas_setting->execute();
 

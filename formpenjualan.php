@@ -5,8 +5,8 @@ include 'navbar.php';
 include 'db.php';
 include 'sanitasi.php';
  
-// menampilkan seluruh data yang ada pada tabel penjualan yang terdapt pada DB
- $perintah = $db->query("SELECT * FROM penjualan");
+$pilih_akses_tombol = $db->query("SELECT tombol_cash_drawer FROM otoritas_setting WHERE id_otoritas = '$_SESSION[otoritas_id]' ");
+$otoritas_tombol = mysqli_fetch_array($pilih_akses_tombol);
 
 
 $session_id = session_id();
@@ -276,6 +276,56 @@ tr:nth-child(even){background-color: #f2f2f2}
 ?> 
 
 
+<!--MODAL OPEN CASH DRAWER -->
+<div class="modal fade modal-ext" id="modal_cash_drawer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="w-100"><i class="fa fa-user"></i> LOGIN PAGE</h3>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+
+            <form role="form" action="proses_open_cash_drawer.php.php" method="post" >
+                <div class="md-form">
+                    <i class="fa fa-envelope prefix"></i>
+                    <input type="text" id="username" name="username" class="form-control">
+                    <label for="username">USERNAME</label>
+                </div>
+
+                <div class="md-form">
+                    <i class="fa fa-lock prefix"></i>
+                    <input type="password" id="password" name="password" class="form-control">
+                    <label for="password">PASSWORD</label>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary btn-sm" id="btnLogin">Login</button>
+                </div>
+
+              </form>      
+
+                <div class="alert-gagal alert-danger" style="display:none">
+                  <strong>PERHATIAN!</strong> Username Atau Password Yang Anda Masukan Salah !!
+                </div>
+
+            </div>
+
+            <div class="options text-right">
+              <p style="color: red; padding-left: 20px"> <i>**Masukan Username dan Password Untuk Membuka Cash Drawer !</i> </p>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer">                
+                <button type="button" class="btn btn-warning btn-sm ml-auto" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div> <!-- / MODAL OPEN CASH DRAWER -->
 
 
 <!--tampilan modal-->
@@ -891,6 +941,11 @@ tr:nth-child(even){background-color: #f2f2f2}
           <a href='cetak_penjualan_tunai.php' id="cetak_tunai" style="display: none;" class="btn btn-primary" target="blank"> Cetak Tunai  </a>
 
           <button type="submit" id="cetak_langsung" target="blank" class="btn btn-success" style="font-size:15px"> Bayar / Cetak (Ctrl + K) </button>
+
+      <?php if ($otoritas_tombol['tombol_cash_drawer'] == 1): ?>
+        <button type="submit" id="openCashDrawer" target="blank" class="btn btn-purple" style="font-size:15px"> Open Cash Drawer (Alt + O) </button>
+      <?php endif ?>
+          
 
           <a href='cetak_penjualan_tunai_besar.php' id="cetak_tunai_besar" style="display: none;" class="btn btn-warning" target="blank"> Cetak Tunai  Besar </a>
           
@@ -3625,6 +3680,14 @@ $(document).ready(function(){
 
 
     }); 
+
+     shortcut.add("alt+o", function() {
+        // Do something
+
+        $("#openCashDrawer").click();
+
+
+    }); 
 </script>
 
 <!-- SHORTCUT -->
@@ -4118,5 +4181,58 @@ $("#kd_pelanggan").trigger("chosen:open");
   });
 
 </script>
+
+
+<script type="text/javascript">
+     function tutupmodal() {
+      $("#modal_cash_drawer").modal("hide")
+     }
+     function tutupalert() {
+      $(".alert-gagal").hide("fast")
+     }  
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $(document).on('click','#openCashDrawer',function(){
+      $("#modal_cash_drawer").modal('show');
+    });
+
+    $("#btnLogin").click(function(){
+      var username = $("#username").val();
+      var password = $("#password").val();
+
+      $.post('proses_open_cash_drawer.php',{username:username,password:password},function(data){
+
+        if (data != 0) {
+
+          var win = window.open('open_cash_drawer.php');
+           if (win) {    
+            win.focus(); 
+           }
+           else {    
+            alert('Mohon Izinkan PopUps Pada Website Ini !');
+            }
+
+
+          setTimeout(tutupmodal, 2000);
+
+        }
+        else{
+        
+          $(".alert-gagal").show();
+          setTimeout(tutupalert, 2000);
+          $("#username").val('');
+          $("#password").val('');
+        }
+    });
+
+   });
+
+});
+
+</script>
+
 <!-- memasukan file footer.php -->
 <?php include 'footer.php'; ?>

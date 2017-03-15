@@ -26,9 +26,9 @@ tr:nth-child(even){background-color: #f2f2f2}
 <div class="table-responsive">
 <table id="tableuser" class="table table-bordered">
 		<thead>
+			<th style='background-color: #4CAF50; color: white'> Poin </th>
 
 			<th style='background-color: #4CAF50; color: white'> Nilai Poin (Rp)</th>
-			<th style='background-color: #4CAF50; color: white'> Poin </th>
 		
 		</thead>
 		
@@ -39,13 +39,12 @@ tr:nth-child(even){background-color: #f2f2f2}
 			{
 				//menampilkan data
 			echo "<tr>
+			<td class='edit-nilai-poin' data-id='".$data1['id']."'><span id='text-nilai-poin-".$data1['id']."'>". rp($data1['nilai_poin']) ."</span>
+			<input type='hidden' data-id='".$data1['id']."' data-poin='".$data1['nilai_poin']."' class='edit-nilaipoin' id='input-nilai-poin-".$data1['id']."' autofocus='' value='".$data1['nilai_poin']."' onkeydown='return numbersonly(this, event);' onkeyup='javascript:tandaPemisahTitik(this);'>
+			</td>
 
 			<td class='edit-poin-rp' data-id='".$data1['id']."'><span id='text-poin-rp-".$data1['id']."'>". rp($data1['poin_rp']) ."</span>
 			<input type='hidden' data-id='".$data1['id']."' data-poin='".$data1['poin_rp']."' class='edit-poinrp' id='input-poin-".$data1['id']."' autofocus='' value='".$data1['poin_rp']."' onkeydown='return numbersonly(this, event);' onkeyup='javascript:tandaPemisahTitik(this);'>
-			</td>
-
-			<td class='edit-nilai-poin' data-id='".$data1['id']."'><span id='text-nilai-poin-".$data1['id']."'>". rp($data1['nilai_poin']) ."</span>
-			<input type='hidden' data-id='".$data1['id']."' data-poin='".$data1['nilai_poin']."' class='edit-nilaipoin' id='input-nilai-poin-".$data1['id']."' autofocus='' value='".$data1['nilai_poin']."' onkeydown='return numbersonly(this, event);' onkeyup='javascript:tandaPemisahTitik(this);'>
 			</td>
 			</tr>";
 		
@@ -58,7 +57,9 @@ mysqli_close($db);
 					</tbody>
 
 	</table>
+
 </div>
+ <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom poin jika ingin mengedit.</i></h6>
 </div>
 
 

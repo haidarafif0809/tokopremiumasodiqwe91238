@@ -9,7 +9,7 @@
 
     $tanggal_sekarang = date('Y-m-d');
 
-    $ambil_jatuh_tempo = $db->query("SELECT p.tanggal_jt, p.suplier, p.kredit, s.nama AS nama_suplier FROM pembelian p INNER JOIN suplier s ON p.suplier = s.id WHERE p.kredit != '0' AND p.tanggal_jt = '$tanggal_sekarang'");
+    $ambil_jatuh_tempo = $db->query("SELECT p.tanggal_jt, p.suplier, p.kredit, s.nama, p.no_faktur, p.tanggal, p.tanggal_jt AS nama_suplier FROM pembelian p INNER JOIN suplier s ON p.suplier = s.id WHERE p.kredit != '0' AND p.tanggal_jt = '$tanggal_sekarang'");
     $row_tanggal_jt = mysqli_num_rows($ambil_jatuh_tempo);
     
 
@@ -34,14 +34,17 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Hutang Jatuh Tempo </h4>
+        <h4 class="modal-title">Peringatan/Reminider Hutang Jatuh Tempo Hari Ini</h4>
       </div>
       <div class="modal-body">
       
       <table id="table-hutang-jt" class="table table-hover table-sm">
       <thead>
             <th style='background-color: #4CAF50; color:white'"> Suplier</th>
-            <th style='background-color: #4CAF50; color:white'"> Total Hutang </th>
+            <th style='background-color: #4CAF50; color:white'"> No. Faktur</th>
+            <th style='background-color: #4CAF50; color:white'"> Tanggal </th>
+            <th style='background-color: #4CAF50; color:white'"> Tanggal JT</th>
+            <th style='background-color: #4CAF50; color:white'"> Hutang </th>
       </thead>
 
       <tbody>
@@ -51,6 +54,9 @@
           {
           echo "<tr>
           <td>". $tanggal_jt['nama_suplier'] ."</td>
+          <td>". $tanggal_jt['no_faktur'] ."</td>
+          <td>". $tanggal_jt['tanggal'] ."</td>
+          <td>". $tanggal_jt['tanggal_jt'] ."</td>
           <td>". $tanggal_jt['kredit'] ."</td>
           </tr>";
           }
@@ -63,8 +69,7 @@
 
       </div>
       <div class ="modal-footer">
-        <button type ="button" id="btn-iya" class="btn btn-warning" value="Tampil Lagi">Yes</button>
-        <button type ="button" id="btn-tidak" class="btn btn-default" value="Tidak Tampil Lagi" >Close</button>
+        <button type ="button" id="btn-close" class="btn btn-default" value="close" >Close</button>
       </div>
   </div>
 
@@ -101,19 +106,22 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
-  $(document).on('click','#btn-iya',function(){
+  $(document).on('click','#btn-close',function(){
+    var jatuh_tempo = <?php echo $jatuh_tempo ?>;
 
-        $("#modal_reminder").modal("hide");
-    });
+    var pesan_alert = confirm("Apakah Pengingat/Reminder Akan Ditampilkan "+jatuh_tempo+" Menit Lagi?");
+    if (pesan_alert == true) {
+      $("#modal_reminder").modal("hide");
+    }
+    else {
+      $("#modal_reminder").modal('hide');
+      $.get("destroy_session_printer.php",function(data){
+        +$("#session_print").val(data);
+      });
+      clearInterval(reminderId);  
+    }
 
-  $(document).on('click','#btn-tidak',function(){
-        $("#modal_reminder").modal('hide');
-        $.get("destroy_session_printer.php",function(data){
-          $("#session_print").val(data);
-        });
-        clearInterval(reminderId);  
-    });
-
+  });
 });
 
 </script>

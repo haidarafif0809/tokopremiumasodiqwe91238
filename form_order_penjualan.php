@@ -1063,7 +1063,8 @@ if (harga == 0) {
     else{
 
           $("#kode_barang").val('');
-     $("#kode_barang").trigger('chosen:open');  
+          $("#kode_barang").trigger('chosen:updated');
+          $("#kode_barang").trigger('chosen:open');  
 
     }
 
@@ -1131,6 +1132,7 @@ else{
   }
   else{
      $("#kode_barang").val('');
+     $("#kode_barang").trigger('chosen:updated');  
      $("#kode_barang").trigger('chosen:open');  
   }
 

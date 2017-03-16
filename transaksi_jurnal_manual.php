@@ -14,7 +14,7 @@ $session_id = session_id();
 
 <div class="container"><!--tag yang digunakan untuk membuat tampilan form menjadi rapih dalam satu tempat-->
 
-<h3><b> DATA TRANSAKSI JURNAL MANUAL </b></h3> <hr>
+<h3><b> DATA TRANSAKSI JURNAL </b></h3> <hr>
 
 <?php
 include 'db.php';
@@ -89,22 +89,10 @@ tr:nth-child(even){background-color: #f2f2f2}
 </style>
 
 <div class="table-responsive"><!-- membuat agar ada garis pada tabel, disetiap kolom -->
-<span id="table_baru">
-<table id="tableuser" class="table table-bordered">
-		<thead> 
-			
-			
-<?php  
-if ($akuntansi['transaksi_jurnal_manual_hapus'] > 0) {
-			echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
-		}
-?>
-
-<?php 
-if ($akuntansi['transaksi_jurnal_manual_edit'] > 0) {
-    	echo "<th style='background-color: #4CAF50; color:white'> Edit </th>";
-    }
- ?>			
+<table id="table_jurnal_manual" class="table table-bordered table-sm">
+		<thead> 	
+			<th style='background-color: #4CAF50; color:white'> Hapus </th>
+			<th style='background-color: #4CAF50; color:white'> Edit </th>	
 			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
 			<th style='background-color: #4CAF50; color:white'> Jenis Transaksi</th>
 			<th style='background-color: #4CAF50; color:white'> User Buat</th>
@@ -113,45 +101,8 @@ if ($akuntansi['transaksi_jurnal_manual_edit'] > 0) {
 			<th style='background-color: #4CAF50; color:white'> Keterangan Jurnal </th>
 
 		</thead>
-		
-		<tbody>
-		<?php
-
-		// menyimpan data sementara yang ada pada $query
-			while ($data = mysqli_fetch_array($query))
-			{
-				//menampilkan data
-			
-if ($akuntansi['transaksi_jurnal_manual_hapus'] > 0) {
-
-			echo "<tr class='tr-id-".$data['id']."'>
-
-			<td> <button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-jurnal='". $data['jenis_transaksi'] ."' data-faktur='". $data['no_faktur'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-		}
-
-if ($akuntansi['transaksi_jurnal_manual_edit'] > 0) {
-			echo "<td> <a href='proses_edit_jurnal_manual.php?no_faktur=". $data['no_faktur']."&session_id=". $session_id ."' class='btn btn-success'> <span class='glyphicon glyphicon-edit'></span> Edit </a> </td>";
-
-	echo "
-		<td>".$data['no_faktur']."</td>
-		<td>".$data['jenis_transaksi']."</td>
-		<td>".$data['user_buat']."</td>
-		<td>".$data['user_edit']."</td>
-		<td>".$data['waktu_jurnal']."</td>
-		<td>".$data['keterangan_jurnal']."</td>
-
-</tr>";
-			}
-	}
-
-	//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-		?>
-
-		</tbody>
 
 	</table>
-</span>
 </div>
 </div> <!-- tag penutup cantainer -->
 
@@ -162,7 +113,7 @@ mysqli_close($db);
 
 	
 //fungsi hapus data 
-		$(".btn-hapus").click(function(){
+      $(document).on('click', '.btn-hapus', function (e){
 		var nomor_jurnal = $(this).attr("data-jurnal");
 		var nomor_faktur = $(this).attr("data-faktur");
 		var id = $(this).attr("data-id");
@@ -175,7 +126,7 @@ mysqli_close($db);
 		});
 
 
-		$("#btn_jadi_hapus").click(function(){
+      $(document).on('click', '#btn_jadi_hapus', function (e){
 		
 		var no_faktur = $("#jenis_transaksi").val();
 		var id = $(this).attr("data-id");
@@ -183,7 +134,32 @@ mysqli_close($db);
 		$.post("hapus_jurnal_trans.php",{id:id,no_faktur:no_faktur},function(data){
 
 		if (data != "") {
-		$("#table_baru").load('tabel-jurnal-manual.php');
+
+    $('#table_jurnal_manual').DataTable().destroy();
+
+        var dataTable = $('#table_jurnal_manual').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_transaksi_jurnal_manual.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_jurnal_manual").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class','tr-id-', aData[8]);
+
+          }
+
+        });    
+
+
 		$("#modal_hapus").modal('hide');
 		
 		}
@@ -218,13 +194,36 @@ mysqli_close($db);
 </script>
 
 
-<script type="text/javascript">
-	
-  $(function () {
-  $(".table").dataTable({ordering :false });
-  });
+<script type="text/javascript" language="javascript" >
+   $(document).ready(function() {
+   	      $('#table_jurnal_manual').DataTable().destroy();
 
-</script>
+        var dataTable = $('#table_jurnal_manual').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_transaksi_jurnal_manual.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_jurnal_manual").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class','tr-id-', aData[8]);
+
+          }
+
+        });    
+     
+  });
+ 
+ </script>
+
 
 <!-- memasukan file footer.db -->
 <?php include 'footer.php'; ?>

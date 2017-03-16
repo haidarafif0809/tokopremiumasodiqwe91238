@@ -1,3 +1,4 @@
+
 <div id="modal_logout" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -66,18 +67,12 @@ $lihat = mysqli_fetch_array($pilih_akses_lihat);
 
 if ($lihat['penjualan_lihat'] > 0){
                 echo '<li><a href="formpenjualan.php" class="waves-effect"> <i class="fa fa-shopping-cart"></i> Penjualan </a></li>';
-
-                 echo '<li><a href="form_simpan_sementara.php" class="waves-effect"> <i class="fa fa-shopping-cart"></i>Simpan Penjualan </a></li>';
 }
 
 if ($lihat['order_lihat'] > 0){
 
 echo '<li><a href="form_order_penjualan.php" class="waves-effect"> <i class="fa fa-shopping-cart"></i> Order Penjualan </a></li>';
 
-}
-
-if ($lihat['tukar_poin_lihat'] > 0){
-echo '<li><a href="tukar_poin.php" class="waves-effect"> <i class="fa fa-exchange"></i> Penukaran Poin </a></li>';
 }
 
 if ($lihat['pembelian_lihat'] > 0){
@@ -129,9 +124,9 @@ if ($lihat['kategori_lihat'] > 0){
                                 echo '<li><a href="kategori_barang.php" class="waves-effect">Kategori</a></li>';
 }
 
-if ($lihat['program_promo_lihat'] > 0){
+//if ($lihat['program_promo_produk'] > 0){
                                 echo '<li><a href="program_promo.php" class="waves-effect">Program Promo</a></li>';
-}
+//}
 
 if ($lihat['komisi_produk_lihat'] > 0){
                                 echo '<li><a href="fee_produk.php" class="waves-effect">Komisi Produk</a></li>';
@@ -153,19 +148,23 @@ if ($lihat['grup_akun_lihat'] > 0){
                                 echo '<li><a href="daftar_group_akun.php" class="waves-effect">Group Akun</a></li>';
 }
 
-
+if ($lihat['set_akun_lihat'] > 0){
+                                echo '<li><a href="setting_akun_data_item.php" class="waves-effect">Setting Akun</a></li>';
+}
 ?>
 
-
+<li><a href="setting_antrian_pelanggan.php" class="waves-effect">Setting Antrian & Order </a></li>
 <li><a href="promo_alert.php" class="waves-effect">Promo Alert</a></li>
 
 
-<li><a href="master_poin.php" class="waves-effect">Poin</a></li>
-
-
-
 <?php
+if ($lihat['set_perusahaan_lihat'] > 0){
+                                echo '<li><a href="setting_perusahaan.php" class="waves-effect">Data Perusahaan</a></li>';
+}
 
+if ($lihat['set_diskon_tax_lihat'] > 0){
+                                echo '<li><a href="set_diskon_tax.php" class="waves-effect">Default Diskon & Pajak</a></li>';
+}
 
 if ($lihat['daftar_pajak_lihat'] > 0){
                                 echo '<li><a href="daftar_pajak.php" class="waves-effect">Daftar Pajak</a></li>';
@@ -251,15 +250,7 @@ if ($lihat['pembayaran_hutang_lihat'] > 0){
 
 echo '<li><a href="kartu_stok.php" class="waves-effect" style="font-size: 16px">Kartu Stok</a></li>';
 
-
-echo '<li><a href="kartu_stok_periode.php" class="waves-effect" style="font-size: 16px">Kartu Stok Per Periode</a></li>';
-
-
-echo '<li><a href="cache_produk_penjualan.php" class="waves-effect" style="font-size: 16px" target="blank">Update Cache Produk</a></li>';
-
-
 echo '<li><a href="cache_produk_penjualan.php" class="waves-effect" style="font-size: 16px">Update Cache Produk</a></li>';
-
 
 echo '<li><a href="perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Perubahan Harga Masal</a></li>';
 
@@ -339,13 +330,6 @@ if ($lihat['akuntansi_lihat'] > 0){
 }
 
 echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> Data Penjualan </a></li>';
-echo '<li><a href="order_target_penjualan.php" class="waves-effect"> Target Penjualan </a></li>';
-
-if ($lihat['order_lihat'] > 0){
-
-echo '<li><a href="order_penjualan.php" class="waves-effect">Data Order Penjualan </a></li>';
-
-}
 
  if ($lihat['laporan_penjualan_lihat'] > 0)
  {
@@ -455,9 +439,7 @@ if ($lihat['setting_lihat'] > 0){
                         </div>
                     </li>';
 }
- ?>    
-                <li><a href="https://www.andaglos.com" class="waves-effect"> <i class="fa fa-envelope"></i> Contact Us </a></li>
-                    
+ ?>  
 
 
             </ul>

@@ -5,13 +5,15 @@
  include 'db.php';
  include 'sanitasi.php';
 
-$no_faktur = $_GET['no_faktur'];
-$session_id = $_GET['session_id'];
+$no_faktur = stringdoang($_GET['no_faktur']);
 
-$select_tanggal = $db->query("SELECT DATE(waktu_jurnal) AS tanggal FROM jurnal_trans WHERE no_faktur = '$no_faktur'");
+$select_tanggal = $db->query("SELECT DATE(waktu_jurnal) AS tanggal,keterangan_jurnal FROM jurnal_trans WHERE no_faktur = '$no_faktur'");
 $ambil_tanggal = mysqli_fetch_array($select_tanggal);
 
 $tanggal = $ambil_tanggal['tanggal'];
+$keterangan = $ambil_tanggal['keterangan_jurnal'];
+
+
 
 $tahun_sekarang = date('Y');
 $bulan_sekarang = date('m');
@@ -22,74 +24,13 @@ $tahun_terakhir = substr($tahun_sekarang, 2);
 
 
 
-//mengecek jumlah karakter dari bulan sekarang
-$cek_jumlah_bulan = strlen($bulan_sekarang);
-
-//jika jumlah karakter dari bulannya sama dengan 1 maka di tambah 0 di depannya
-if ($cek_jumlah_bulan == 1) {
-  # code...
-  $data_bulan_terakhir = "0".$bulan_sekarang;
- }
- else
- {
-  $data_bulan_terakhir = $bulan_sekarang;
-
- }
-//ambil bulan dari tanggal penjualan terakhir
-
- $bulan_terakhir = $db->query("SELECT MONTH(waktu_jurnal) as bulan FROM jurnal_trans ORDER BY id DESC LIMIT 1");
- $v_bulan_terakhir = mysqli_fetch_array($bulan_terakhir);
-
-//ambil nomor  dari penjualan terakhir
-$no_terakhir = $db->query("SELECT nomor_jurnal FROM jurnal_trans ORDER BY id DESC LIMIT 1");
- $v_no_terakhir = mysqli_fetch_array($no_terakhir);
-$ambil_nomor = substr($v_no_terakhir['nomor_jurnal'],0,-8);
-
-/*jika bulan terakhir dari penjualan tidak sama dengan bulan sekarang, 
-maka nomor nya kembali mulai dari 1 ,
-jika tidak maka nomor terakhir ditambah dengan 1
- 
- */
- if ($v_bulan_terakhir['bulan'] != $bulan_sekarang) {
-  # code...
-$no_jurnal = "1/JR/".$data_bulan_terakhir."/".$tahun_terakhir;
-
- }
-
- else
- {
-
-$nomor = 1 + $ambil_nomor ;
-
-$no_jurnal = $nomor."/JR/".$data_bulan_terakhir."/".$tahun_terakhir;
-
-
- }
-
-
  ?>
 
- 
-<style type="text/css">
-	.disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    disabled: true;
-}
-</style>
-
-
-
-
-  		<script>
+      <script>
   $(function() {
     $( "#tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
   });
   </script>
-
-
-
-
 
 <div class="container">
 
@@ -97,21 +38,20 @@ $no_jurnal = $nomor."/JR/".$data_bulan_terakhir."/".$tahun_terakhir;
 <br><br>
 
 
+<div class="card card-block"> 
 
 <form role="form" method="post" id="formtambahproduk">
 <div class="row">
 
-					<div class="form-group col-sm-3">
-					<label> Tanggal </label><br>
-					<input type="text" name="tanggal" id="tanggal" placeholder="Tanggal" value="<?php echo $tanggal; ?>" class="form-control" required="" >
-					</div>
+          <div class="form-group col-sm-3">
+          <label> Tanggal </label><br>
+          <input type="text" name="tanggal" id="tanggal" placeholder="Tanggal" value="<?php echo $tanggal; ?>" class="form-control" required="" >
+          </div>
 
           <div class="form-group col-sm-3">
           <label> No Faktur </label><br>
           <input type="text" name="no_faktur" id="no_faktur" class="form-control" readonly="" value="<?php echo $no_faktur; ?>" required="" >
           </div>
-
-					<input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
 
           <div class="form-group col-sm-3">
           <label> Jenis </label><br>
@@ -120,46 +60,38 @@ $no_jurnal = $nomor."/JR/".$data_bulan_terakhir."/".$tahun_terakhir;
 
           <div class="form-group col-sm-3">
           <label> Keterangan </label><br>
-          <input type="text" name="keterangan" autocomplete="off" id="keterangan" placeholder="Keterangan" class="form-control">
+          <input type="text" name="keterangan" autocomplete="off" id="keterangan" value="<?php echo $keterangan; ?>" placeholder="Keterangan" class="form-control">
           </div>
 
 </div> <!-- tag penutup div row -->
 
-<div class="row">
 
-              <div class="form-group col-sm-3">
-          <label style="display: none;"> No. Transaksi </label><br>
-          <input type="hidden" name="no_transaksi" id="no_transaksi" value="<?php echo $no_jurnal; ?>" class="form-control" readonly="" >
-          </div>
+
+
+<div class="row">
 
           <div class="form-group col-sm-3">
-          <label style="display: none;"> No. Ref </label><br>
-          <input type="hidden" name="no_ref" id="no_ref" value="<?php echo $no_jurnal; ?>" class="form-control" readonly="" >
-          </div>
-</div> 
+          
+          <label> Kode Akun </label>
+          <br>
+          <br>
+          <select type="text" name="kode_akun" id="kode_akun" class="form-control chosen" >
+          <option value="">--SILAHKAN PILIH--</option>
 
-
-<div class="row">
-
-					<div class="form-group col-sm-3">
-					<label> Kode Akun </label><br>
-					<select type="text" name="kode_akun" id="kode_akun" class="form-control chosen" >
-					<option value="">--SILAHKAN PILIH--</option>
-
-					 <?php 
+      <?php 
 
     
-    $query = $db->query("SELECT * FROM daftar_akun ");
+    $query = $db->query("SELECT kode_daftar_akun, nama_daftar_akun FROM daftar_akun ");
     while($data = mysqli_fetch_array($query))
     {
     
-    echo "<option>".$data['kode_daftar_akun'] ."</option>";
+    echo "<option value='".$data['kode_daftar_akun']."'>".$data['kode_daftar_akun'] ." || ".$data['nama_daftar_akun']."</option>";
     }
     
     
     ?>
-   					</select>
-					</div>
+            </select>
+          </div>
 
           
           <div class="form-group col-sm-3">
@@ -168,42 +100,31 @@ $no_jurnal = $nomor."/JR/".$data_bulan_terakhir."/".$tahun_terakhir;
           </div>
 
 
-          <div class="form-group col-sm-3">
+          <div class="form-group col-sm-2">
           <label> Debit </label><br>
           <input type="text" name="debit" id="debit" autocomplete="off" placeholder="Debit" class="form-control"  >
-					</div>
+          </div>
 
-          <div class="form-group col-sm-3">
+          <div class="form-group col-sm-2">
           <label> Kredit </label><br>
           <input type="text" name="kredit" id="kredit" autocomplete="off" placeholder="Kredit" class="form-control"  >
           </div>
 
-					
-					
-					
-					
+          <div class="form-group col-sm-2">
+          <br>
+          <br>
+          <button type="submit" id="submit_produk" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah </button>
+          </div>
+
+          
+          
+          
 </div> <!-- tag penutup div row-->
 
 </form>
 
-          <button type="submit" id="submit_produk" class="form-control btn btn-success"> <span class='glyphicon glyphicon-plus'> </span> Tambah </button>
+</div><!--penutup div card block-->
 
-
-<form action="proses_kas_masuk.php" id="form_submit" method="POST"><!--tag pembuka form-->
-<style type="text/css">
-	.disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    disabled: false;
-}
-</style>
-
-      
-  <!--membuat tombol submit bayar & Hutang-->
-     
-     
-
-          </form><!--tag penutup form-->
   <!--untuk mendefinisikan sebuah bagian dalam dokumen-->  
   <div class="alert alert-success" id="alert_berhasil" style="display:none">
   <strong>Success!</strong> Data Kas Masuk Berhasil
@@ -213,7 +134,7 @@ $no_jurnal = $nomor."/JR/".$data_bulan_terakhir."/".$tahun_terakhir;
       
         <div class="table-responsive">
       <!--tag untuk membuat garis pada tabel-->     
-  <table id="tableuser" class="table table-hover">
+  <table id="table_jurnal_tbs" class="table table-bordered table-sm">
     <thead>
       <th> Kode Akun </th>
       <th> Nama Akun </th>
@@ -222,55 +143,6 @@ $no_jurnal = $nomor."/JR/".$data_bulan_terakhir."/".$tahun_terakhir;
       <th> Hapus </th> 
       
     </thead>
-    
-    <tbody>
-    <?php
-
-    //menampilkan semua data yang ada pada tabel tbs kas masuk dalam DB
-     $perintah = $db->query("SELECT * FROM tbs_jurnal WHERE session_id = '$session_id'");
-
-      //menyimpan data sementara yang ada pada $perintah
-
-      while ($data1 = mysqli_fetch_array($perintah))
-      {
-        //menampilkan data
-      echo "<tr class='tr-id-". $data1['id'] ."'>
-      <td>". $data1['kode_akun_jurnal'] ."</td>
-      <td>". $data1['nama_akun_jurnal'] ."</td>";
-
-if ($data1['debit'] == 0) {
-      echo "<td>". rp($data1['debit']) ."</td>   ";
-} 
-
-else {
-       echo "<td class='edit-debit' data-id='".$data1['id']."'> <span id='text-debit-".$data1['id']."'> ". rp($data1['debit']) ." </span> <input type='hidden' id='input-debit-".$data1['id']."' value='".$data1['debit']."' class='input-debit' data-id='".$data1['id']."' autofocus=''> </td>"; 
-}
-//
-//
-//    
-if ($data1['kredit'] == 0) {
-      echo "<td>". rp($data1['kredit']) ."</td>   ";
-} 
-
-else {
-       echo "<td class='edit-kredit' data-id='".$data1['id']."'> <span id='text-kredit-".$data1['id']."'> ". rp($data1['kredit']) ." </span> 
-       <input type='hidden' id='input-kredit-".$data1['id']."' value='".$data1['kredit']."' class='input-kredit' data-id='".$data1['id']."' autofocus=''> </td>   "; 
-}
-
-         
-
-      echo "
-      <td> <button class='btn btn-danger btn-hapus-tbs' data-id='". $data1['id'] ."' data-kode-akun='". $data1['kode_akun_jurnal'] ."' data-nama='". $data1['nama_akun_jurnal'] ."'><span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>
-
-      </tr>";
-      }
-
-//Untuk Memutuskan Koneksi Ke Database
-
-mysqli_close($db); 
-    ?>
-    </tbody>
-
   </table>
 
   
@@ -311,25 +183,49 @@ mysqli_close($db);
 </div> <!-- tag penutup div container -->
 
 
-<script>
+<script type="text/javascript" language="javascript" >
+   $(document).ready(function() {
+          $('#table_jurnal_tbs').DataTable().destroy();
 
-// untk menampilkan datatable atau filter seacrh
-$(document).ready(function(){
-    $('#tableuser').DataTable();
-});
+        var dataTable = $('#table_jurnal_tbs').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_edit_tbs_jurnal.php", // json datasource
+              "data": function ( d ) {
+                d.no_faktur = "<?php echo $no_faktur;?>";
+                // d.custom = $('#myInput').val();
+                // etc
+            },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_jurnal_tbs").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
 
-</script>
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class','tr-id-', aData[5]);
+
+          }
+
+        });    
+     
+  });
+ 
+ </script>
 
       <script type="text/javascript">
       
-      $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});  
+      $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});  
       
       </script>
 
 <script>
-
-  
-        $(document).ready(function(){
+$(document).ready(function(){
         $("#kode_akun").change(function(){
 
           var kode_akun = $(this).val();
@@ -352,12 +248,7 @@ $(document).ready(function(){
         });
 
         });
-
-        });
-
-
-      
-      
+    });     
 </script>
 
 
@@ -367,14 +258,14 @@ $(document).ready(function(){
 
    $("#submit_produk").click(function(){
 
-   	var session_id = $("#session_id").val();
-   	var keterangan = $("#keterangan").val();
-   	var kode_akun = $("#kode_akun").val();
-   	var nama_akun = $("#nama_akun").val();
+    var no_faktur = $("#no_faktur").val();
+    var keterangan = $("#keterangan").val();
+    var kode_akun = $("#kode_akun").val();
+    var nama_akun = $("#nama_akun").val();
     var jenis = $("#jenis").val();
     var debit = $("#debit").val();
     var kredit = $("#kredit").val();
-    var no_transaksi = $("#no_transaksi").val();
+  
     var no_ref = $("#no_ref").val();
     var tanggal = $("#tanggal").val();
 
@@ -393,21 +284,73 @@ alert('Kolom Debit Atau Kredit Masih Kosong');
 }
 else{
 
-	$.post("proses_tbs_jurnal_manual.php", {session_id:session_id, keterangan:keterangan,kode_akun:kode_akun,jenis:jenis,nama_akun:nama_akun,debit:debit,kredit:kredit}, function(info) {
+  $.post("proses_edit_tbs_jurnal_manual.php", {no_faktur:no_faktur, keterangan:keterangan,kode_akun:kode_akun,jenis:jenis,nama_akun:nama_akun,debit:debit,kredit:kredit}, function(info) {
 
 
-       $("#result").html(info);
-       $("#result").load('tabel_jurnal_manual.php');
+          $('#table_jurnal_tbs').DataTable().destroy();
+
+        var dataTable = $('#table_jurnal_tbs').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_edit_tbs_jurnal.php", // json datasource
+              "data": function ( d ) {
+                d.no_faktur = "<?php echo $no_faktur;?>";
+                // d.custom = $('#myInput').val();
+                // etc
+            },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_jurnal_tbs").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class','tr-id-', aData[5]);
+
+          }
+
+        });    
+ 
+
        $("#kode_akun").val('');
-       $("#nama_akun").val('');
+      $("#kode_akun").trigger('chosen:updated');
+     $("#kode_akun").trigger('chosen:open');
+     $("#nama_akun").val('');
+
        $("#debit").val('');
        $("#kredit").val('');
-       $("#keterangan").val('');
 
 
 
    });
 }
+
+
+  $.post("cek_edit_total_debit.php",
+        {
+        no_faktur: no_faktur
+        },
+        function(data){
+
+        $("#t_debit").val(data);
+        });
+
+
+
+        $.post("cek_edit_total_kredit.php",
+        {
+        no_faktur: no_faktur
+        },
+        function(data){
+
+        $("#t_kredit").val(data);
+        });
+        
 
 
       $("form").submit(function(){
@@ -426,11 +369,11 @@ else{
         $(document).ready(function(){
         $(".container").hover(function(){
         
-        var session_id = $("#session_id").val();
+        var no_faktur = $("#no_faktur").val();
         
-        $.post("cek_total_debit.php",
+        $.post("cek_edit_total_debit.php",
         {
-        session_id: session_id
+        no_faktur: no_faktur
         },
         function(data){
 
@@ -439,43 +382,9 @@ else{
 
 
 
-        $.post("cek_total_kredit.php",
+        $.post("cek_edit_total_kredit.php",
         {
-        session_id: session_id
-        },
-        function(data){
-
-        $("#t_kredit").val(data);
-        });
-        
-        
-        });
-        
-        });
-</script>
-
-<script type="text/javascript">
-
-        
-        $(document).ready(function(){
-        $("#submit_produk").mouseleave(function(){
-        
-        var session_id = $("#session_id").val();
-        
-        $.post("cek_total_debit.php",
-        {
-        session_id: session_id
-        },
-        function(data){
-
-        $("#t_debit").val(data);
-        });
-
-
-
-        $.post("cek_total_kredit.php",
-        {
-        session_id: session_id
+        no_faktur: no_faktur
         },
         function(data){
 
@@ -489,9 +398,9 @@ else{
 </script>
 
 
+
 <script type="text/javascript">
-  
-$("#submit_jurnal_manual").click(function(){
+    $(document).on('click', '#submit_jurnal_manual', function (e){
 
     var no_faktur = $("#no_faktur").val();
     var keterangan = $("#keterangan").val();
@@ -500,12 +409,10 @@ $("#submit_jurnal_manual").click(function(){
     var jenis = $("#jenis").val();
     var debit = $("#debit").val();
     var kredit = $("#kredit").val();
-    var no_transaksi = $("#no_transaksi").val();
     var no_ref = $("#no_ref").val();
     var tanggal = $("#tanggal").val();
     var t_debit = $("#t_debit").val();
     var t_kredit = $("#t_kredit").val();
-    var session_id = $("#session_id").val();
 
 if(t_debit != t_kredit){
 
@@ -518,13 +425,44 @@ else{
   $("#submit_jurnal_manual").hide();
   $("#transaksi_baru").show();
 
-  $.post("proses_selesai_edit_jurnal_manual.php", {session_id:session_id,no_faktur:no_faktur,keterangan:keterangan,kode_akun:kode_akun,jenis:jenis,nama_akun:nama_akun,debit:debit,kredit:kredit,no_transaksi:no_transaksi,no_ref:no_ref,t_debit:t_debit,t_kredit:t_kredit,tanggal:tanggal}, function(info) {
+  $.post("proses_selesai_edit_jurnal_manual.php", {no_faktur:no_faktur,keterangan:keterangan,kode_akun:kode_akun,jenis:jenis,nama_akun:nama_akun,debit:debit,kredit:kredit,no_ref:no_ref,t_debit:t_debit,t_kredit:t_kredit,tanggal:tanggal}, function(info) {
 
 
+          $('#table_jurnal_tbs').DataTable().destroy();
 
-       $("#result").load('tabel_jurnal_manual.php');
-       $("#nama_akun").val('');
-       $("#debit").val('');
+        var dataTable = $('#table_jurnal_tbs').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_edit_tbs_jurnal.php", // json datasource
+              "data": function ( d ) {
+                d.no_faktur = "<?php echo $no_faktur;?>";
+                // d.custom = $('#myInput').val();
+                // etc
+            },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_jurnal_tbs").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class','tr-id-', aData[5]);
+
+          }
+
+        });    
+
+      $("#kode_akun").val('');
+      $("#kode_akun").trigger('chosen:updated');
+      $("#kode_akun").trigger('chosen:open');
+      $("#nama_akun").val('');
+
+      $("#debit").val('');
        $("#kredit").val('');
        $("#t_debit").val('');
        $("#t_kredit").val('');
@@ -544,13 +482,9 @@ else{
 </script>
 
 
-<script type="text/javascript">
-
-    $(document).ready(function(){
-      
+<script type="text/javascript">   
 //fungsi hapus data 
-    $(".btn-hapus-tbs").click(function(){
-
+    $(document).on('click', '.btn-hapus-tbs', function (e){
     
     var nama_akun_jurnal = $(this).attr("data-nama");
     var kode_akun_jurnal = $(this).attr("data-kode-akun");
@@ -562,20 +496,50 @@ else{
     
     
     $(".tr-id-"+id+"").remove();
-    
+       $("#kode_akun").val('');
+      $("#kode_akun").trigger('chosen:updated');
+     $("#kode_akun").trigger('chosen:open');
+     $("#nama_akun").val('');
+
     }
     });
-    
+ 
+
+          $('#table_jurnal_tbs').DataTable().destroy();
+
+        var dataTable = $('#table_jurnal_tbs').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_edit_tbs_jurnal.php", // json datasource
+              "data": function ( d ) {
+                d.no_faktur = "<?php echo $no_faktur;?>";
+                // d.custom = $('#myInput').val();
+                // etc
+            },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_jurnal_tbs").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class','tr-id-', aData[5]);
+
+          }
+
+        });    
+
+
     });
                   $('form').submit(function(){
                   
                   return false;
                   });
-
-
-    });
-  
-//end fungsi hapus data
 </script>
 
       <script>
@@ -587,7 +551,7 @@ else{
       var kredit = $("#kredit").val();
              
 
-             if (debit != ""){
+             if (debit != "" || debit != 0){
              $("#kredit").attr("readonly", true);
              $("#kredit").val('0');
              }
@@ -606,7 +570,7 @@ else{
       var kredit = $("#kredit").val();
              
 
-             if (kredit != ""){
+             if (kredit != "" || kredit != 0){
              $("#debit").attr("readonly", true);
              $("#debit").val('0');
              }
@@ -623,14 +587,15 @@ else{
       $("#kode_akun").change(function(){
 
 
-          var session_id = $("#session_id").val();
+          var no_faktur = $("#no_faktur").val();
                
-        $.post('cek_edit_tbs_jurnal_manual.php',{kode_akun:$(this).val(), session_id:session_id}, function(data){
+        $.post('cek_edit_tbs_jurnal_manual.php',{kode_akun:$(this).val(), no_faktur:no_faktur}, function(data){
                 
           if(data == 1){
 
                 alert ("Akun Sudah Ada, Silakan pilih Akun lain.");
                 $("#kode_akun").val('');
+                $("#kode_akun").trigger('chosen:updated');
                 $("#nama_akun").val('');
                 $("#debit").attr("readonly", true);
                 $("#kredit").attr("readonly", true);
@@ -650,19 +615,14 @@ else{
               
         });
 
-
-
-
-
       });
-      });
-
+ });
 </script>
 
 
                              <script type="text/javascript">
                                  
-                                 $(".edit-debit").dblclick(function(){
+                                 $(document).on('click', '.edit-debit', function (e){
 
                                     var id = $(this).attr("data-id");
 
@@ -672,7 +632,7 @@ else{
 
                                  });
 
-                                 $(".input-debit").blur(function(){
+                                 $(document).on('blur', '.input-debit', function (e){
 
                                     var id = $(this).attr("data-id");
 
@@ -689,11 +649,11 @@ else{
                                     });
 
                                           $(document).ready(function(){
-                                            var session_id = $("#session_id").val();
+                                            var no_faktur = $("#no_faktur").val();
                                             
-                                            $.post("cek_total_debit.php",
+                                            $.post("cek_edit_total_debit.php",
                                             {
-                                            session_id: session_id
+                                            no_faktur: no_faktur
                                             },
                                             function(data){
                                             
@@ -702,9 +662,9 @@ else{
                                             
                                             
                                             
-                                            $.post("cek_total_kredit.php",
+                                            $.post("cek_edit_total_kredit.php",
                                             {
-                                            session_id: session_id
+                                            no_faktur: no_faktur
                                             },
                                             function(data){
                                             
@@ -719,7 +679,7 @@ else{
 
                              <script type="text/javascript">
                                  
-                                 $(".edit-kredit").dblclick(function(){
+                                 $(document).on('click', '.edit-kredit', function (e){
 
                                     var id = $(this).attr("data-id");
 
@@ -729,7 +689,7 @@ else{
 
                                  });
 
-                                 $(".input-kredit").blur(function(){
+                                 $(document).on('blur', '.input-kredit', function (e){
 
                                     var id = $(this).attr("data-id");
 
@@ -745,11 +705,11 @@ else{
 
                                     });
                                           $(document).ready(function(){
-                                            var session_id = $("#session_id").val();
+                                            var no_faktur = $("#no_faktur").val();
                                             
-                                            $.post("cek_total_debit.php",
+                                            $.post("cek_edit_total_debit.php",
                                             {
-                                            session_id: session_id
+                                            no_faktur: no_faktur
                                             },
                                             function(data){
                                             
@@ -758,9 +718,9 @@ else{
                                             
                                             
                                             
-                                            $.post("cek_total_kredit.php",
+                                            $.post("cek_edit_total_kredit.php",
                                             {
-                                            session_id: session_id
+                                            no_faktur: no_faktur
                                             },
                                             function(data){
                                             
@@ -774,4 +734,3 @@ else{
 <?php 
 include 'footer.php';
  ?>
-

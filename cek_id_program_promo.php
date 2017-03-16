@@ -6,11 +6,11 @@ include 'sanitasi.php';
 $session_id = session_id();
  $tanggal_sekarang = $_GET['tanggal_sekarang'];
  
-$tbs = $db->query("SELECT sum(subtotal) as subto FROM tbs_penjualan WHERE session_id = '$session_id'");
+$tbs = $db->query("SELECT sum(subtotal) as subto,sum(potongan) as pot FROM tbs_penjualan WHERE session_id = '$session_id'");
 $tbs_pen = mysqli_fetch_array($tbs);
 $subto = $tbs_pen['subto'];
 
-$querytb = $db->query("SELECT pr.jenis_bonus,pr.id as id_program,pr.syarat_belanja FROM promo_disc_produk pp LEFT JOIN program_promo pr ON pp.nama_program = pr.id WHERE pr.batas_akhir >= '$tanggal_sekarang' AND pr.jenis_bonus = 'Disc Produk'");
+$querytb = $db->query("SELECT pr.jenis_bonus,pr.id as id_program,pr.syarat_belanja, pp.harga_disc, pp.id as idnya, pp.qty_max FROM promo_disc_produk pp LEFT JOIN program_promo pr ON pp.nama_program = pr.id WHERE pr.batas_akhir >= '$tanggal_sekarang' AND pr.jenis_bonus = 'Disc Produk' ORDER BY pp.id");
 $idtb = mysqli_fetch_array($querytb);
 
 $syaratt = $idtb['syarat_belanja'];
@@ -25,7 +25,10 @@ if ($produk > 0 && $sub >= $syarat){
   echo json_encode($idtbs);
 }
 else if ($subto >= $syaratt){
-
+	$subto = $tbs_pen['subto'];
+	$pot = $tbs_pen['pot'];
+$idtb['nama_produk'] = $subto;
+$idtb['id'] = $pot;
   echo json_encode($idtb);
 }
 

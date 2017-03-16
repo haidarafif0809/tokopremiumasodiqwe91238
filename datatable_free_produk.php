@@ -4,6 +4,8 @@ include 'db.php';
 /* Database connection end */
 include 'sanitasi.php';
 
+$id = angkadoang($_POST['id_nya']);
+
 $pilih_akses = $db->query("SELECT program_promo_free_tambah, program_promo_free_edit, program_promo_free_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]'");
 $produk_promo = mysqli_fetch_array($pilih_akses);
 
@@ -21,14 +23,14 @@ $columns = array(
 
 // getting total number records without any search
 $sql = "SELECT pfp.id,pfp.qty,pfp.nama_program,pfp.nama_produk,b.kode_barang, b.nama_barang,b.id AS id_barang, pro2.kode_program, pro2.nama_program AS napro, pro2.id AS id_program ";
-$sql.=" FROM promo_free_produk pfp INNER JOIN barang b ON pfp.nama_produk = b.id INNER JOIN program_promo pro2 ON pfp.nama_program = pro2.id ";
+$sql.=" FROM promo_free_produk pfp INNER JOIN barang b ON pfp.nama_produk = b.id INNER JOIN program_promo pro2 ON pfp.nama_program = pro2.id WHERE pfp.nama_program = '$id'";
 $query=mysqli_query($conn, $sql) or die("datatable_free_produk.php: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
 $sql = "SELECT pfp.id,pfp.qty,pfp.nama_program,pfp.nama_produk,b.kode_barang, b.nama_barang, b.id AS id_barang, pro2.kode_program, pro2.nama_program AS napro, pro2.id AS id_program ";
-$sql.=" FROM promo_free_produk pfp INNER JOIN barang b  ON pfp.nama_produk = b.id INNER JOIN program_promo pro2 ON pfp.nama_program = pro2.id WHERE 1=1";
+$sql.=" FROM promo_free_produk pfp INNER JOIN barang b  ON pfp.nama_produk = b.id INNER JOIN program_promo pro2 ON pfp.nama_program = pro2.id WHERE pfp.nama_program = '$id' AND 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 	$sql.=" AND ( b.nama_barang LIKE '".$requestData['search']['value']."%' ";
 	$sql.=" OR pro2.nama_program LIKE '".$requestData['search']['value']."%' ";
@@ -45,7 +47,7 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData=array(); 
 	$nestedData[] = $row["nama_barang"] . "(" . $row["kode_barang"] .")";
-	$nestedData[] = $row["qty"];
+	$nestedData[] = rp($row["qty"]);
 	$nestedData[] = $row["napro"] . "(" . $row["kode_program"] .")";
 
 	 if ($produk_promo['program_promo_free_edit'] > 0) {

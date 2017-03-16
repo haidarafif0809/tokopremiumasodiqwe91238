@@ -337,8 +337,7 @@ $("#kode_produk").mouseleave(function(){
             
               if(data == 1){
               alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
-              $("#kode_produk_edit").val('');
-              $("#id_produk_edit").val('');
+              $("#kode_produk").val('');
               }//penutup if
               
               });////penutup function(data)
@@ -372,8 +371,8 @@ $("#kode_produk").mouseleave(function(){
                 },
                 });
 
-              $("#nama_program").val('');
-              $("#nama_produk").val('');
+              $("#kode_produk").val('');
+              $("#id_produk").val('');
        });
       }
       $("#formproduk").submit(function(){
@@ -527,7 +526,6 @@ $("#kode_produk").mouseleave(function(){
                 },
                 });
 
-              $("#nama_program_edit").val('');
               $("#nama_produk_edit").val('');
        });
       }

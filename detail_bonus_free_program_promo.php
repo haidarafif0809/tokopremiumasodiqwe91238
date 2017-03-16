@@ -26,7 +26,9 @@ $produk_promo = mysqli_fetch_array($pilih_akses);
  </span>
 
 <a href="program_promo.php" class="btn btn-primary" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Klik untuk kembali ke utama.'><i class="fa fa-reply"></i> <u>K</u>embali</a>
-
+<!--input untuk masuk ke data table-->
+<input type="hidden" name="id_nya" id="id_nya" autocomplete="off" class="form-control" readonly="" value="<?php echo $id; ?>" style="height: 5%; width: 95%;">
+<!--input untuk masuk ke data table-->
 <?php 
 if ($produk_promo['program_promo_free_tambah'] > 0) {
   echo '<button type="submit" id="tambah_free_produk" class="btn btn-success" style="background-color:#0277bd"><i class="fa fa-plus"> </i> Tambah</button>';
@@ -282,6 +284,9 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
                     "serverSide": true,
                     "ajax":{
                       url :"datatable_free_produk.php", // json datasource
+                      "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                    },
                       type: "post",  // method  , by default get
                       error: function(){  // error handling
                         $(".tbody").html("");
@@ -296,9 +301,9 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
                 },
                 });
 
-              $("#nama_program").val('');
               $("#nama_produk").val('');
               $("#qty").val('');
+              $("#kode_produk").val('');
        });
       }
       $("#formfreeproduk").submit(function(){
@@ -374,6 +379,9 @@ $(document).on('click', '.edit', function (e) {
                     "serverSide": true,
                     "ajax":{
                       url :"datatable_free_produk.php", // json datasource
+                      "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                    },
                       type: "post",  // method  , by default get
                       error: function(){  // error handling
                         $(".tbody").html("");
@@ -388,9 +396,9 @@ $(document).on('click', '.edit', function (e) {
                 },
                 });
 
-              $("#nama_program_edit").val('');
-              $("#nama_produk_edit").val('');
+              $("#kode_produk_edit").val('');
               $("#qty_max_edit").val('');
+              $("#id_produk_edit").val('');
        });
       }
       $("#formfreeproduk").submit(function(){
@@ -483,6 +491,9 @@ $(document).on('click', '.delete', function (e) {
           "serverSide": true,
           "ajax":{
             url :"datatable_free_produk.php", // json datasource
+            "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                    },
             type: "post",  // method  , by default get
             error: function(){  // error handling
               $(".tbody").html("");
@@ -516,7 +527,9 @@ $(document).on('click', '.delete', function (e) {
           "serverSide": true,
           "ajax":{
             url :"datatable_free_produk.php", // json datasource
-           
+           "data": function ( d ) {
+                      d.id_nya = $("#id_nya").val();
+                    },
             type: "post",  // method  , by default get
             error: function(){  // error handling
               $(".employee-grid-error").html("");

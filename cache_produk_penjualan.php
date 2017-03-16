@@ -58,5 +58,6 @@ foreach ($retrieve as $key) {
 
   echo $key['kode_barang'];echo "<br>";
   echo $key['nama_barang'];echo "<br>";
+  echo $key['satuan'];echo "<br>";
 }
 ?>

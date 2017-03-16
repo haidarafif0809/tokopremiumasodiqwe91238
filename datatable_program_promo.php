@@ -51,10 +51,15 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData[] = $row["kode_program"];
 	$nestedData[] = $row["nama_program"];
 	$nestedData[] = $row["batas_akhir"];
-	$nestedData[] = $row["syarat_belanja"];
+	$nestedData[] = rp($row["syarat_belanja"]);
 	$nestedData[] = $row["jenis_bonus"];
 
+	 if ($row["jenis_bonus"] == 'Free Produk') {
       $nestedData[] = "<a href='detail_program_promo.php?id=".$row['id']."&kode=". $row['kode_program']."&nama=". $row['nama_program']."' class='btn btn-success'></span> Detail Program </a>";
+      }
+      else{
+      	$nestedData[] = "";
+      }
 
       if ($row["jenis_bonus"] == 'Free Produk') {
       	$nestedData[] = "<a href='detail_bonus_free_program_promo.php?id=".$row['id']."&kode=". $row['kode_program']."&nama=". $row['nama_program']."' class='btn btn-success'>Free Produk </a>";

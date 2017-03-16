@@ -11,6 +11,14 @@
     $jumlah = angkadoang($_POST['jumlah']);
     $tanggal = date('Y-m-d');
     $jam = date('H:i:s');
+
+    $select = $db->query("SELECT kode_produk,keterangan FROM tbs_bonus_penjualan WHERE kode_produk = '$kode_barang' AND session_id = '$session_id' AND tanggal = '$tanggal' AND keterangan = 'Free Produk'");
+    $tbs = mysqli_num_rows($select);
+    if ($tbs > 0) {
+        $update = $db->query("UPDATE tbs_bonus_penjualan SET qty_bonus = '$jumlah'")
+    }
+    else{
+
         $perintah = $db->prepare("INSERT INTO tbs_bonus_penjualan (session_id,kode_produk,nama_produk,qty_bonus,keterangan,tanggal,jam) VALUES (?,?,?,?,'Free Produk',?,?)");
 
         $perintah->bind_param("sssiss",
@@ -28,7 +36,7 @@
         {
            
         }
-
+    }
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db); 
 ?>

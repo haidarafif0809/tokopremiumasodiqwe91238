@@ -45,7 +45,7 @@ $sql.="FROM promo_disc_produk pp LEFT JOIN barang b ON pp.nama_produk = b.id LEF
 $query=mysqli_query($conn, $sql) or die("eror 2");
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
         
-$sql.=" ORDER BY pp.id DESC  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+$sql.=" ORDER BY pp.id LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */    
 $query=mysqli_query($conn, $sql) or die("eror 3");

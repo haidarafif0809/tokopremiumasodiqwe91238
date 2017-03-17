@@ -22,15 +22,21 @@ include 'sanitasi.php';
 
 		<th style='background-color: #4CAF50; color:white'> Kode Barang </th>
 		<th style='background-color: #4CAF50; color:white'> Nama Barang </th>
-		<th style='background-color: #4CAF50; color:white'> Total Terjual Bulan Lalu </th>
     <th style='background-color: #4CAF50; color:white'> Satuan </th>
+    <th style='background-color: #4CAF50; color:white'> Total Terjual Bulan Lalu </th>
 
     </thead>
     
 
    </table>
   </div>
+
+  <a href='cetak_loss_item.php' type='submit' target="blank" id="btn-print" class='btn btn-success'><i class="fa fa-print"> Print</i></a>
+
+  <a href='download_loss_item.php' type='submit' target="blank" id="btn-download" class='btn btn-purple'><i class="fa fa-download"> Download Excel</i></a>
+
  </span>
+
 </div>
 
 </div>

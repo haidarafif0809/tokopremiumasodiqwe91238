@@ -51,8 +51,17 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
   $nestedData=array(); 
 
       $nestedData[] = $row["kode_produk"];
-      $nestedData[] = $row["nama_produk"] ." | ". $row["keterangan"];
-      $nestedData[] = rp($row["qty_bonus"]);
+      $nestedData[] = $row["nama_produk"];
+      if ($row['keterangan'] == 'Disc Produk') {
+        $nestedData[] = "<p style='font-size:15px' align='right' class='edit-qty-bonus' data-id='".$row['id']."' data-kode-produk-input='".$row['kode_produk']."'> <span id='text-qty-".$row['id']."'>".$row["qty_bonus"]."</span> <input type='hidden' id='input-qty-".$row['id']."' value='".$row['qty_bonus']."' class='input_qty_bonus' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_produk']."' data-harga='".$row['harga_disc']."' data-nama-produk='".$row['nama_produk']."'> </p>";
+      }
+      else{
+        $nestedData[] = rp($row["qty_bonus"]);
+      }
+
+      $nestedData[] = rp($row["harga_disc"]);
+      $nestedData[] = rp($row["qty_bonus"] * $row["harga_disc"]);
+      $nestedData[] =  $row["keterangan"];
       $nestedData[] = "<button class='btn btn-danger btn-sm btn-hapus-tbsbonus' id='hapus-tbs-". $row['id'] ."' data-id='". $row['id'] ."' data-kode-produk='". $row['kode_produk'] ."' data-produk='". $row['nama_produk'] ."' data-qty='". $row['qty_bonus'] ."'>Hapus</button>";
       $nestedData[] = $row["id"];
 

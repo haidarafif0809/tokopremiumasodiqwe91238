@@ -15,7 +15,7 @@
     $select = $db->query("SELECT kode_produk,keterangan FROM tbs_bonus_penjualan WHERE kode_produk = '$kode_barang' AND session_id = '$session_id' AND tanggal = '$tanggal' AND keterangan = 'Free Produk'");
     $tbs = mysqli_num_rows($select);
     if ($tbs > 0) {
-        $update = $db->query("UPDATE tbs_bonus_penjualan SET qty_bonus = '$jumlah'")
+        $update = $db->query("UPDATE tbs_bonus_penjualan SET qty_bonus = '$jumlah' WHERE session_id = '$session_id' ");
     }
     else{
 

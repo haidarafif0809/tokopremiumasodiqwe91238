@@ -8,8 +8,8 @@ $id = $_POST['idnya'];
 $kode_barang = $_POST['kodenya'];
 
 
-//awal nya bonus
-$querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.harga_disc FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id' AND tp.id = '$id'");
+//awal nya bonus(mengembalikan jumlah bonus ke promo_produk_disc/_free)
+/*$querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.harga_disc FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id' AND tp.id = '$id'");
     while ($datatb = mysqli_fetch_array($querytb))
       {
         if ($datatb['keterangan'] == 'Free Produk') {
@@ -39,7 +39,7 @@ $querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.kete
           echo "Error: " . $update_prodisc . "<br>" . $db->error;
           }
         }
-      }
+      }*/
 //end nya bonus
 
 //menghapus seluruh data yang ada pada tabel tbs penjualan berdasarkan id

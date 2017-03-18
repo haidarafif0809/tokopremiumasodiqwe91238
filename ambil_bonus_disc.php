@@ -7,11 +7,18 @@
     // mengirim data sesuai variabel yang ada dengan menggunakan metode POST
     $kode_barang = stringdoang($_POST['kode_barang']);
     $nama_barang = stringdoang($_POST['nama_bonus']);
-    $jumlah = angkadoang($_POST['jumlah']);
+    $jumlahnya = angkadoang($_POST['jumlah']);
     $harga = angkadoang($_POST['harga']);
     $qty_max = angkadoang($_POST['qty_max']);
     $tanggal = date('Y-m-d');
     $jam = date('H:i:s');
+
+    if ($jumlahnya > $qty_max) {
+        $jumlah = $qty_max;
+    }
+    else{
+        $jumlah = $jumlahnya;
+    }
 
     $select = $db->query("SELECT kode_produk,keterangan FROM tbs_bonus_penjualan WHERE kode_produk = '$kode_barang' AND session_id = '$session_id' AND tanggal = '$tanggal' AND keterangan = 'Disc Produk'");
     $tbs = mysqli_num_rows($select);

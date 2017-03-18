@@ -158,49 +158,6 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
         
       }
 
-//awal nya bonus
-$querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.harga_disc FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id'");
-    while ($datatb = mysqli_fetch_array($querytb))
-      {
-
-      $querybonus = "INSERT INTO bonus_penjualan (no_faktur_penjualan, kode_pelanggan, tanggal, jam, kode_produk, nama_produk, qty_bonus,keterangan,harga_disc) VALUES ('$no_faktur', '$id_pelanggan', '$tanggal_sekarang', '$jam_sekarang', '$datatb[kode_produk]', '$datatb[nama_produk]', '$datatb[qty_bonus]', '$datatb[keterangan]', '$datatb[harga_disc]' )";
-
-        if ($db->query($querybonus) === TRUE) {
-        } 
-
-        else {
-        echo "Error: " . $querybonus . "<br>" . $db->error;
-        }
-
-        if ($datatb['keterangan'] == 'Free Produk') {
-          //mengambil qty produk free kemudian di hitung dg qty bonus untuk mengambil qty sekarang
-          $de = $db->query("SELECT qty FROM promo_free_produk WHERE nama_produk = '$datatb[baranga]'");
-          $e = mysqli_fetch_array($de);
-          $a = $e['qty'] - $datatb['qty_bonus'];
-          //menupdate qty free
-          $update_profre = "UPDATE promo_free_produk SET qty = '$a' WHERE nama_produk = '$datatb[baranga]'";
-          if ($db->query($update_profre) === TRUE) {
-          } 
-
-          else {
-          echo "Error: " . $update_profre . "<br>" . $db->error;
-          }
-        }
-        else{
-          $disc = $db->query("SELECT qty FROM promo_disc_produk WHERE nama_produk = '$datatb[baranga]'");
-          $ddisc = mysqli_fetch_array($disc);
-          $qdisc = $ddisc['qty'] - $datatb['qty_bonus'];
-
-          $update_prodisc = "UPDATE promo_disc_produk SET qty = '$qdisc' WHERE nama_produk = '$datatb[baranga]'";
-          if ($db->query($update_prodisc) === TRUE) {
-          } 
-
-          else {
-          echo "Error: " . $update_prodisc . "<br>" . $db->error;
-          }
-        }
-      }
-//end nya bonus
 
     $sisa = angkadoang($_POST['sisa']);
     $sisa_kredit = angkadoang($_POST['kredit']);
@@ -495,9 +452,65 @@ else
       }
 
 
+//awal nya bonus
+$querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.harga_disc FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id'");
+    while ($datatb = mysqli_fetch_array($querytb))
+      {
+
+      $querybonus = "INSERT INTO bonus_penjualan (no_faktur_penjualan, kode_pelanggan, tanggal, jam, kode_produk, nama_produk, qty_bonus,keterangan,harga_disc) VALUES ('$no_faktur', '$id_pelanggan', '$tanggal_sekarang', '$jam_sekarang', '$datatb[kode_produk]', '$datatb[nama_produk]', '$datatb[qty_bonus]', '$datatb[keterangan]', '$datatb[harga_disc]' )";
+
+        if ($db->query($querybonus) === TRUE) {
+        } 
+
+        else {
+        echo "Error: " . $querybonus . "<br>" . $db->error;
+        }
+
+        if ($datatb['keterangan'] == 'Free Produk') {
+          //mengambil qty produk free kemudian di hitung dg qty bonus untuk mengambil qty sekarang
+          $de = $db->query("SELECT qty FROM promo_free_produk WHERE nama_produk = '$datatb[baranga]'");
+          $e = mysqli_fetch_array($de);
+          $a = $e['qty'] - $datatb['qty_bonus'];
+          //menupdate qty free
+          $update_profre = "UPDATE promo_free_produk SET qty = '$a' WHERE nama_produk = '$datatb[baranga]'";
+          if ($db->query($update_profre) === TRUE) {
+          } 
+
+          else {
+          echo "Error: " . $update_profre . "<br>" . $db->error;
+          }
+        }
+        else{
+          $disc = $db->query("SELECT qty FROM promo_disc_produk WHERE nama_produk = '$datatb[baranga]'");
+          $ddisc = mysqli_fetch_array($disc);
+          $qdisc = $ddisc['qty'] - $datatb['qty_bonus'];
+
+          //mengupdate qty di promo_disc_produk
+          $update_prodisc = "UPDATE promo_disc_produk SET qty = '$qdisc' WHERE nama_produk = '$datatb[baranga]'";
+          if ($db->query($update_prodisc) === TRUE) {
+          } 
+
+          else {
+          echo "Error: " . $update_prodisc . "<br>" . $db->error;
+          }
+          
+        }
+
+        //mengupdate keterangan_program_disc di table penjualan
+          $update_jual = "UPDATE penjualan SET keterangan_promo_disc = '$datatb[keterangan]' WHERE no_faktur = '$no_faktur'";
+          if ($db->query($update_jual) === TRUE) {
+          } 
+
+          else {
+          echo "Error: " . $update_jual . "<br>" . $db->error;
+          }
+      }
+//end nya bonus
+
+
+
 
 // BOT STAR AUTO      
-
               $total = angkadoang($_POST['total']);
 
                     

@@ -3,7 +3,7 @@
 include 'db.php';
 include 'sanitasi.php';
 
-$tanggal_sekarang = $_POST['tanggal_sekarang'];
+$tanggal_sekarang = date('Y-m-d');
 
 $queryprogram = $db->query("SELECT batas_akhir FROM program_promo WHERE batas_akhir >= '$tanggal_sekarang'");
 

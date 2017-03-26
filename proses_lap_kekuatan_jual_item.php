@@ -62,9 +62,13 @@ while( $row=mysqli_fetch_array($query) ) {
    
             $zxc = $db->query("SELECT SUM(jumlah_barang) AS jumlah_periode FROM detail_penjualan  WHERE kode_barang = '$row[kode_barang]' AND tanggal >= '$dari_tgl' AND tanggal <= '$sampai_tgl' ");
             $qewr = mysqli_fetch_array($zxc);
-
-            $select = $db->query("SELECT SUM(sisa) AS stok FROM hpp_masuk WHERE kode_barang = '$row[kode_barang]'");
-                $ambil_sisa = mysqli_fetch_array($select);
+            $select1 = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah_masuk FROM hpp_masuk WHERE kode_barang = '$row[kode_barang]' AND tanggal <= '$sampai_tgl'  ");
+            $masuk = mysqli_fetch_array($select1);
+            
+            $select2 = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah_keluar FROM hpp_keluar WHERE kode_barang = '$row[kode_barang]' AND tanggal <= '$sampai_tgl'  ");
+            $keluar = mysqli_fetch_array($select2);
+            
+            $stok_barang = $masuk['jumlah_masuk'] - $keluar['jumlah_keluar'];
 
 
             //hitung hari
@@ -73,18 +77,38 @@ while( $row=mysqli_fetch_array($query) ) {
             $difference = $datetime1->diff($datetime2);
             $difference->days;
 
+
+            if ($difference->days < 1) {
+               
+            // hitung jumlah rata2 perhari
+            $jumlah_perhari = $qewr['jumlah_periode'];
+
+            }
+            else
+            {
             // hitung jumlah rata2 perhari
             $jumlah_perhari = $qewr['jumlah_periode'] / $difference->days;
+                        // hitung stok habis(hari)
+            }
 
-            // hitung stok habis(hari)
-            $stok_habis = $ambil_sisa['stok'] / round($jumlah_perhari);
+            if ($jumlah_perhari < 1) {
+                 $stok_habis = round($jumlah_perhari);
+            }
+            else
+            {
+
+                 $stok_habis = $stok_barang / round($jumlah_perhari);
+            }
+           
+           
+            
 
     $nestedData[] = $row["kode_barang"];
     $nestedData[] = $row["nama_barang"];
     $nestedData[] = $row["nama"];
     $nestedData[] = rp($qewr['jumlah_periode']);
     $nestedData[] = rp(round($jumlah_perhari));
-    $nestedData[] = rp($ambil_sisa['stok']);
+    $nestedData[] = rp($stok_barang);
     $nestedData[] = rp(round($stok_habis));
                     
 

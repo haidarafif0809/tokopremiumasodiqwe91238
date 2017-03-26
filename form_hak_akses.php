@@ -355,14 +355,157 @@ else{
 
  ?>
 
-</div> <!-- / of otoritas laporan_neraca -->
+</div> <!-- / of otoritas laporan neraca -->
+
+<div class="form-group col-sm-2"> <!-- start otoritas hal_khusus -->
+<label>Info Harga Produk</label><br>
+
+<?php 
+
+if ($data_otoritas['set_hal_khusus_pelanggan_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox212" name="set_hal_khusus_pelanggan_lihat" checked="">
+    <label for="checkbox212">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox212" name="set_hal_khusus_pelanggan_lihat">
+    <label for="checkbox212">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas HAL_khusus_pelanggan -->
+
+<div class="form-group col-sm-2"> <!-- start otoritas hal_khusus -->
+<label>Halaman Promo</label><br>
+
+<?php 
+
+if ($data_otoritas['set_setting_halaman_promo_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox115" name="set_setting_halaman_promo_lihat" checked="">
+    <label for="checkbox115">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox115" name="set_setting_halaman_promo_lihat">
+    <label for="checkbox115">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas HAL_khusus_pelanggan -->
 
 
-<div class="form-group col-sm-12">
-    
+<div class="form-group col-sm-12"></div>
+    <div class="form-group col-sm-2"> <!-- start otoritas timbangan -->
+    <label>Timbangan</label><br>
+
+    <?php 
+
+    if ($data_otoritas['set_timbangan'] == '1'){
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="set_timbangan" checked="">
+        <label for="checkbox21">Lihat</label> <br>';
+    }
+
+    else{
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="set_timbangan">
+        <label for="checkbox21">Lihat</label> <br>';  
+    }
+
+     ?>
+ </div>
+
+ <div class="form-group col-sm-2"> <!-- start otoritas timbangan -->
+    <label>Registrasi</label><br>
+
+    <?php 
+
+    if ($data_otoritas['setting_registrasi_lihat'] == '1'){
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2121" name="set_registrasi_lihat" checked="">
+        <label for="checkbox2121">Lihat</label> <br>';
+    }
+
+    else{
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2121" name="set_registrasi_lihat">
+        <label for="checkbox2121">Lihat</label> <br>';  
+    }
+
+     ?>
+ </div>
+
+ <div class="form-group col-sm-2"> <!-- start otoritas timbangan -->
+    <label>Penetapan Petugas</label><br>
+
+    <?php 
+
+    if ($data_otoritas['penetapan_petugas_lihat'] == '1'){
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="set_penetapan_petugas_lihat" checked="">
+        <label for="checkbox21">Lihat</label> <br>';
+    }
+
+    else{
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="set_penetapan_petugas_lihat">
+        <label for="checkbox21">Lihat</label> <br>';  
+    }
+
+     ?>
+ </div>
+
+ <div class="form-group col-sm-2"> <!-- start otoritas timbangan -->
+    <label>Printer</label><br>
+
+    <?php 
+
+    if ($data_otoritas['printer_lihat'] == '1'){
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="printer_lihat" checked="">
+        <label for="checkbox21">Lihat</label> <br>';
+    }
+
+    else{
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="printer_lihat">
+        <label for="checkbox21">Lihat</label> <br>';  
+    }
+
+     ?>
+ </div>
+
+ <div class="form-group col-sm-2"> <!-- start otoritas timbangan -->
+    <label>Cash Drawer</label><br>
+
+    <?php 
+
+    if ($data_otoritas['tombol_cash_drawer'] == '1'){
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="tombol_cash_drawer" name="tombol_cash_drawer" checked="">
+        <label for="tombol_cash_drawer">Lihat</label> <br>';
+    }
+
+    else{
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="tombol_cash_drawer" name="tombol_cash_drawer">
+        <label for="tombol_cash_drawer">Lihat</label> <br>';  
+    }
+
+     ?>
+ </div>
+
+
+ <div class="form-group col-sm-2"> <!-- start otoritas timbangan -->
+    <label>Peringatan Jatuh Tempo Hutang</label><br>
+<?php 
+if ($data_otoritas['peringatan_jatuh_tempo_hutang'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="peringatan_jatuh_tempo_hutang" name="peringatan_jatuh_tempo_hutang" checked=""> 
+    <label for="peringatan_jatuh_tempo_hutang">Lihat </label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="peringatan_jatuh_tempo_hutang" name="peringatan_jatuh_tempo_hutang"> 
+    <label for="peringatan_jatuh_tempo_hutang">Lihat </label><br>';  
+}
+
+?>
 </div>
 
 
+<div class="form-group col-sm-12"></div>
 
 <div class="form-group col-sm-2"> <!-- start otoritas penjualan -->
 <label>Penjualan</label><br>
@@ -2539,7 +2682,7 @@ else{
 </div> <!-- / of otoritas lap_komisi -->
 
 
-<div class="form-group col-sm-12">
+<div class="form-group col-sm-12"></div>
   
 <div class="form-group col-sm-2"> <!-- start otoritas pembayaran_hutang -->
 <label>Program Promo</label><br>
@@ -2748,7 +2891,7 @@ else{
 ?>
 </div>
   
-</div>
+
 
 
  <div class="form-group col-sm-2"> <!-- start otoritas set_diskon_tax -->
@@ -2784,7 +2927,7 @@ else{
 
 </div> <!-- / of otoritas set_diskon_tax -->
 
-
+<div class="form-group col-sm-12"> </div>
 <div class="form-group col-sm-2"> <!-- start otoritas set_perusahaan -->
 <label>Perusahaan</label><br>
 

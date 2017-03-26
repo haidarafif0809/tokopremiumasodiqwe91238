@@ -314,6 +314,7 @@ $kode_program = stringdoang($_GET['kode']);
 
               $("#harga_disc").val('');
               $("#nama_produk").val('');
+              $("#kode_produk").val('');
               $("#qty_max").val('');
               $("#qty").val('');
        });

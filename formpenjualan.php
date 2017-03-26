@@ -5,8 +5,8 @@ include 'navbar.php';
 include 'db.php';
 include 'sanitasi.php';
  
-// menampilkan seluruh data yang ada pada tabel penjualan yang terdapt pada DB
- $perintah = $db->query("SELECT * FROM penjualan");
+$pilih_akses_tombol = $db->query("SELECT tombol_cash_drawer FROM otoritas_setting WHERE id_otoritas = '$_SESSION[otoritas_id]' ");
+$otoritas_tombol = mysqli_fetch_array($pilih_akses_tombol);
 
 
 $session_id = session_id();
@@ -29,7 +29,7 @@ $session_id = session_id();
     </div>
     <div class="modal-footer">
         
-        <button type="button" class="btn btn-danger" id="closed_alert_promo" data-dismiss="modal">Closed (Ctrl+G)</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Closed</button>
     </div>
     </div>
   </div>
@@ -425,6 +425,56 @@ tr:nth-child(even){background-color: #f2f2f2}
 ?> 
 
 
+<!--MODAL OPEN CASH DRAWER -->
+<div class="modal fade modal-ext" id="modal_cash_drawer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="w-100"><i class="fa fa-user"></i> LOGIN PAGE</h3>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+
+            <form role="form" action="proses_open_cash_drawer.php.php" method="post" >
+                <div class="md-form">
+                    <i class="fa fa-envelope prefix"></i>
+                    <input type="text" id="username" name="username" class="form-control">
+                    <label for="username">USERNAME</label>
+                </div>
+
+                <div class="md-form">
+                    <i class="fa fa-lock prefix"></i>
+                    <input type="password" id="password" name="password" class="form-control">
+                    <label for="password">PASSWORD</label>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary btn-sm" id="btnLogin">Login</button>
+                </div>
+
+              </form>      
+
+                <div class="alert-gagal alert-danger" style="display:none">
+                  <strong>PERHATIAN!</strong> Username Atau Password Yang Anda Masukan Salah !!
+                </div>
+
+            </div>
+
+            <div class="options text-right">
+              <p style="color: red; padding-left: 20px"> <i>**Masukan Username dan Password Untuk Membuka Cash Drawer !</i> </p>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer">                
+                <button type="button" class="btn btn-warning btn-sm ml-auto" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div> <!-- / MODAL OPEN CASH DRAWER -->
 
 
 <!--tampilan modal-->
@@ -598,7 +648,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 <form id="form_barcode" class="form-inline">
   <br>
     <div class="form-group">
-        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" placeholder="Kode Barcode" autocomplete="off">
+        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" placeholder="Kode Barcode">
     </div>
         
     <button type="submit" id="submit_barcode" class="btn btn-primary" style="font-size:15px" ><i class="fa fa-barcode"></i> Submit Barcode</button>
@@ -1065,6 +1115,11 @@ tr:nth-child(even){background-color: #f2f2f2}
 
           <button type="submit" id="cetak_langsung" target="blank" class="btn btn-success" style="font-size:15px"> Bayar / Cetak (Ctrl + K) </button>
 
+      <?php if ($otoritas_tombol['tombol_cash_drawer'] == 1): ?>
+        <button type="submit" id="openCashDrawer" target="blank" class="btn btn-purple" style="font-size:15px"> Open Cash Drawer (Alt + O) </button>
+      <?php endif ?>
+          
+
           <a href='cetak_penjualan_tunai_besar.php' id="cetak_tunai_besar" style="display: none;" class="btn btn-warning" target="blank"> Cetak Tunai  Besar </a>
           
      
@@ -1154,7 +1209,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 <script>
 //untuk form awal langsung ke kode barang focus
 $(document).ready(function(){
-    $("#kode_barang").trigger('chosen:open');
+    $("#kode_barang").focus();
 
 });
 
@@ -2341,7 +2396,7 @@ var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biay
   }
   else if (ber_stok == 'Jasa' ){
 
-$("#kode_barang").trigger('chosen:open');
+$("#kode_barang").focus();
 
       $("#potongan_persen").val(Math.round(pot_fakt_per));
       $("#total1").val(tandaPemisahTitik(total_akhir));
@@ -2452,7 +2507,7 @@ $("#kode_barang").trigger('chosen:open');
       $("#total2").val(tandaPemisahTitik(total_akhir1));
       $("#tax_rp").val(Math.round(hasil_tax));
 
-    $("#kode_barang").trigger('chosen:open');
+    $("#kode_barang").focus();
 
 
 // POST KE TBS ALL PRODUK
@@ -2840,10 +2895,12 @@ alert("Silakan Bayar Piutang");
 //JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
      $.post("proses_bayar_jual.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
 
+      info = info.replace(/\s+/g, '');
 
      var no_faktur = info;
-     $("#cetak_tunai").attr('href', 'cetak_penjualan_tunai.php?no_faktur='+no_faktur+'');
-     $("#cetak_tunai_besar").attr('href', 'cetak_penjualan_tunai_besar.php?no_faktur='+no_faktur+'');
+
+     $("#cetak_tunai").attr('href', 'cetak_penjualan_tunai.php?no_faktur='+no_faktur);
+     $("#cetak_tunai_besar").attr('href', 'cetak_penjualan_tunai_besar.php?no_faktur='+no_faktur);
      $("#alert_berhasil").show();
      $("#pembayaran_penjualan").val('');
      $("#sisa_pembayaran_penjualan").val('');
@@ -4268,7 +4325,7 @@ $(document).ready(function(){
 
                             }
        
-                                    $("#kode_barang").trigger('chosen:open');
+                                    $("#kode_barang").focus();
                                     
 
                                  });
@@ -4445,7 +4502,7 @@ $(document).ready(function(){
     shortcut.add("f2", function() {
         // Do something
 
-        $("#kode_barang").trigger('chosen:open');
+        $("#kode_barang").focus();
 
     });
 
@@ -4511,13 +4568,7 @@ $(document).ready(function(){
 
     }); 
 
-        shortcut.add("ctrl+g", function() {
-        // Do something
-
-        $("#closed_alert_promo").click();
-
-    }); 
-
+    
     shortcut.add("ctrl+b", function() {
         // Do something
 
@@ -4532,6 +4583,14 @@ $(document).ready(function(){
         // Do something
 
         $("#cetak_langsung").click();
+
+
+    }); 
+
+     shortcut.add("alt+o", function() {
+        // Do something
+
+        $("#openCashDrawer").click();
 
 
     }); 
@@ -4565,29 +4624,7 @@ $(document).ready(function(){
     var id_barang = $('#opt-produk-'+kode_barang).attr("id-barang");
     var level_harga = $("#level_harga").val();
 
-// cek promo alert
-$.post("lihat_promo_alert.php",{id:id_barang},function(data){
-
-    if (data == '')
-    {
-
-    }
-    else{
-      $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(data);
-    }
-
-});
-
-// cek promo produk
-/*$.post("cek_promo_produk.php",{kode_barang:kode_barang},function(joya){
-  if (joya == '') {
     
-  }
-  else{
-    $("#modal_promo_produk").modal('show');
-  }
-});*/
 
    if (level_harga == "harga_1") {
 
@@ -5051,5 +5088,58 @@ $("#kd_pelanggan").trigger("chosen:open");
   });
 
 </script>
+
+
+<script type="text/javascript">
+     function tutupmodal() {
+      $("#modal_cash_drawer").modal("hide")
+     }
+     function tutupalert() {
+      $(".alert-gagal").hide("fast")
+     }  
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $(document).on('click','#openCashDrawer',function(){
+      $("#modal_cash_drawer").modal('show');
+    });
+
+    $("#btnLogin").click(function(){
+      var username = $("#username").val();
+      var password = $("#password").val();
+
+      $.post('proses_open_cash_drawer.php',{username:username,password:password},function(data){
+
+        if (data != 0) {
+
+          var win = window.open('open_cash_drawer.php');
+           if (win) {    
+            win.focus(); 
+           }
+           else {    
+            alert('Mohon Izinkan PopUps Pada Website Ini !');
+            }
+
+
+          setTimeout(tutupmodal, 2000);
+
+        }
+        else{
+        
+          $(".alert-gagal").show();
+          setTimeout(tutupalert, 2000);
+          $("#username").val('');
+          $("#password").val('');
+        }
+    });
+
+   });
+
+});
+
+</script>
+
 <!-- memasukan file footer.php -->
 <?php include 'footer.php'; ?>

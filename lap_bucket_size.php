@@ -122,7 +122,11 @@ $(document).on('click','#btntgl',function(e) {
 
 
         } );
-          $("#result").show()
+          $("#result").show();
+
+          $("#btn-export").attr('href','export_bucket_size.php?dari_tanggal='+dari_tanggal+'&sampai_tanggal='+sampai_tanggal+'&kelipatan='+kelipatan);
+          $("#trx").attr("href",'cetak_bucket_size.php?dari_tanggal='+dari_tanggal+'&sampai_tanggal='+sampai_tanggal+'&kelipatan='+kelipatan);
+     
     }
     
 
@@ -205,9 +209,8 @@ $(document).on('click','#btntgl',function(e) {
 
           $("#judul").show();
           $("#judul").text(judul);
-          $("#trx").attr('href','cetak_lap_bucket_size.php?dari_tanggal='+dari_tanggal+'&sampai_tanggal='+sampai_tanggal+"&kelipatan="+kelipatan+"");
-          $("#btn-export").attr("href","export_lap_bucket_size.php?dari_tanggal="+dari_tanggal+"&sampai_tanggal="+sampai_tanggal+"&kelipatan="+kelipatan+"");
-
+           $("#btn-export").attr('href','export_bucket_size.php?dari_tanggal='+dari_tanggal+'&sampai_tanggal='+sampai_tanggal+'&kelipatan='+kelipatan);
+          $("#trx").attr("href",'cetak_bucket_size.php?dari_tanggal='+dari_tanggal+'&sampai_tanggal='+sampai_tanggal+'&kelipatan='+kelipatan);
 
     });  
 

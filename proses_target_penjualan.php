@@ -43,8 +43,14 @@ while ($data22 = mysqli_fetch_array($query22)) {
             $proyeksi = round($jumlah_perhari) * $order;
             $kebutuhan = $proyeksi - $ambil_sisa10['stok'];
 
+            if ($kebutuhan < 0) {
+                $kebutuhan = 0;
+            }
 
-       $query2 ="INSERT INTO  tbs_target_penjualan(session_id, kode_barang, nama_barang, satuan, jumlah_periode, jual_perhari, target_perhari, proyeksi, stok_terakhir, kebutuhan, dari_tgl, sampai_tgl, order_hari) VALUES ('$session_id', '$kode_barang', '$nama_barang', '$satuan', '$jumlah_periode', '$jumlah_perhari', '$jumlah_perhari','$proyeksi', '$sisa_stok', '$kebutuhan', '$dari_tgl', '$sampai_tgl', '$order')";
+
+       $query2 ="INSERT INTO  tbs_target_penjualan(session_id, kode_barang, nama_barang, satuan, jumlah_periode, jual_perhari, target_perhari, proyeksi, 
+        stok_terakhir, kebutuhan, dari_tgl, sampai_tgl, order_hari) 
+VALUES ('$session_id', '$kode_barang', '$nama_barang', '$satuan', '$jumlah_periode', '$jumlah_perhari', '$jumlah_perhari','$proyeksi', '$sisa_stok', '$kebutuhan', '$dari_tgl', '$sampai_tgl', '$order')";
 
        if ($db->query($query2) === TRUE) {
        } else {

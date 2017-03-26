@@ -3,7 +3,7 @@
 
 // memasukan file db.php
 include 'db.php';
-
+include 'sanitasi.php';
 
  // mengirim data no faktur menggunakan metode POST
  $session_id = $_POST['session_id'];
@@ -17,7 +17,7 @@ include 'db.php';
  $data = mysqli_fetch_array($query);
 
 // menampilkan file atau isi dari data total pembelian
- echo $data['t_kredit'] ;
+ echo koma($data['t_kredit'],2);
 
          //Untuk Memutuskan Koneksi Ke Database
 

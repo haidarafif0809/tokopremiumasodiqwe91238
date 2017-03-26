@@ -19,120 +19,143 @@ $session_id = session_id();
 <div class="container">
 
 
-<!--membuat agar tabel berada dalam baris tertentu-->
-   <div class="row">
- <!--membuat tampilan halaman menjadi 8 bagian-->
+      <h3> FORM ITEM KELUAR </h3><hr> 
+
+<button type="button" class="btn btn-info" id="cari_item_keluar" data-toggle="modal" data-target="#myModal"> <i class='fa fa-search'> </i> Cari (F1) </button>  <br><br>
+  <!-- Tampilan Modal -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog ">
+
+      <!-- Isi Modal-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Data Barang</h4>
+        </div>
+        <div class="modal-body"> <!--membuat kerangka untuk tempat tabel -->
+        <div class="table-responsive">                              
+          <center>
+            <table id="tabel_item_keluar" class="table table-bordered table-sm">
+              <thead> <!-- untuk memberikan nama pada kolom tabel -->
+              
+                <th> Kode Barang </th>
+                <th> Nama Barang </th>
+                <th> Jumlah Barang </th>
+                <th> Kategori </th>
+                <th> Suplier </th>
+                <th> Satuan </th>
+                <th> Harga Beli</th>
+              
+              </thead> <!-- tag penutup tabel -->
+            </table>
+          </center>
+        </div>
+        </div> <!-- tag penutup modal body -->
 
 
-  <!-- membuat form menjadi beberpa bagian -->
-         <form enctype="multipart/form-data" role="form" action="form_item_keluar.php" method="post ">
-          
-          <!-- membuat teks dengan ukuran h3 -->
-          <h3> <u>FORM ITEM KELUAR</u> </h3><br> 
-   
-
-          <!-- membuat agar teks tidak bisa di ubah, dan hanya bisa dibaca -->
-          <input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
-          
-         </form>
-         <div class="col-sm-8">
-
-<!-- membuat tombol agar menampilkan modal -->
-<button type="button" class="btn btn-info" id="cari_item_keluar1" data-toggle="modal" data-target="#myModal"> <i class='fa fa-search'> </i> Cari</button>
-<br><br>
-<!-- Tampilan Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-
-    <!-- Isi Modal-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Data Barang</h4>
+        <!-- tag pembuka modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div> <!--tag penutup moal footer -->
       </div>
-      <div class="modal-body"> <!--membuat kerangka untuk tempat tabel -->
 
-<span class="modal_baru">
-
-</span>
-          
-      </div> <!-- tag penutup modal body -->
-
-
-      <!-- tag pembuka modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div> <!--tag penutup moal footer -->
     </div>
-
-  </div>
-</div>
-
-
-<!-- membuat form -->
- <form class="form-inline" action="proses_tbs_item_keluar.php" role="form" id="formtambahproduk">
-  
-
-  <!-- agar tampilan berada pada satu group -->
-  <!-- memasukan teks pada kolom kode barang -->
-  <div class="form-group"> 
-    <input type="text" class="form-control" name="kode_barang" id="kode_barang" autocomplete="off" placeholder="Kode Produk">
-  </div>
-
-<div class="form-group">
-  <input type="text" class="form-control" name="nama_barang" id="nama_barang" readonly="" placeholder="Nama Barang">
   </div>
 
 
-  <div class="form-group">
-    <input type="text" class="form-control" name="jumlah_barang" id="jumlah_barang" autocomplete="off" placeholder="Jumlah Barang" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
-  </div>
+  <form enctype="multipart/form-data" role="form" action="form_item_keluar.php" method="post ">
 
-  
- <input type="hidden" id="jml_barang" name="jml_barang" class="form-control">
-<!-- memasukan teks pada kolom satuan, harga, dan nomor faktur namun disembunyikan -->
-  <input type="hidden" id="satuan_produk" name="satuan" class="form-control" value="" required="">
-  <input type="hidden" id="harga_produk" name="harga" class="form-control" value="" required="">
-  <input type="hidden" name="session_id" id="session_id" class="form-control" value="<?php echo $session_id; ?>" required="" >
-  
-  <!-- membuat tombol submit-->
-  <button type="submit" id="submit_produk" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah Produk</button>
-</form>
-                  
+
+      <input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
+
+  </form>
+
+<div class="row">
+
+  <div class="col-sm-8">
+
+      <!-- membuat form -->
+      <form class="form"  role="form" id="formtambahproduk">
+        
+        <div class="form-group col-sm-3"> 
+          <input type="text" class="form-control" name="kode_barang" id="kode_barang" autocomplete="off" placeholder="Kode Produk">
+        </div>
+
+          <input type="hidden" class="form-control" name="nama_barang" id="nama_barang" readonly="" placeholder="Nama Barang">
+
+        <div class="form-group col-sm-3">
+          <input type="text" class="form-control" name="jumlah_barang" id="jumlah_barang" autocomplete="off" placeholder="Jumlah Barang" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
+        </div>
+
+        
+        <input type="hidden" id="jml_barang" name="jml_barang" class="form-control">
+        <input type="hidden" id="satuan_produk" name="satuan" class="form-control" value="" required="">
+        <input type="hidden" id="harga_produk" name="harga" class="form-control" value="" required="">
+        <input type="hidden" name="session_id" id="session_id" class="form-control" value="<?php echo $session_id; ?>" required="" >
+        
+        <!-- membuat tombol submit-->
+        <label><br></label>
+      <button type="submit" id="submit_produk" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah (F3)</button>
+
+      </form>
+
+
+                <span id="span_tbs">   
+                
+                  <div class="table-responsive">
+                    <table id="tabel_tbs_item_masuk" class="table table-bordered table-sm">
+                          <thead> <!-- untuk memberikan nama pada kolom tabel -->
+
+                              <th> Kode Barang </th>
+                              <th> Nama Barang </th>
+                              <th> Jumlah </th>
+                              <th> Satuan </th>
+                              <th> Harga </th>
+                              <th> Subtotal </th>
+                              <th> Hapus </th>
+                          
+                          </thead> <!-- tag penutup tabel -->
+                    </table>
+                  </div>
+
+                </span>
+
+                <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom jumlah barang jika ingin mengedit.</i></h6>
+                <h6 style="text-align: left ;"><i><b> * Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</b></i></h6>
+
 
   </div><!-- end of col sm 8 --> <!--tag penutup col sm 8-->
 
- <div class="col-sm-4" id="col_sm_4"> <!--tag pembuka col sm 4-->
+   <div class="col-sm-4" id="col_sm_4"> <!--tag pembuka col sm 4-->
+    
+    <div class="card card-block">
+      <form class="form"  role="form" id="form_item_masuk">
 
-  <form action="proses_bayar_item_keluar.php" id="form_item_keluar" method="POST"><!--tag pembuka form-->
+        <div class="col-sm-12">
+          <label> <b> Total Akhir </b></label><br>
+          <input type="text" name="total" id="total_item_keluar" class="form-control" data-total="" placeholder="TOTAL AKHIR" readonly="" style="height: 15px" >
+        </div>
 
-      <label> Total </label><br>
-      <!--readonly = agar tek yang ada kolom total tidak bisa diubah hanya bisa dibaca-->
-      <input type="text" name="total" id="total_item_keluar" class="form-control" placeholder="Total" readonly=""  >
+        <div class="col-sm-12">
+          <label> Keterangan </label><br>
+          <textarea name="keterangan" id="keterangan" class="form-control" ></textarea> 
+        </div>
+        
+        <input type="hidden" name="no_faktur" id="nomorfaktur" class="form-control" value="<?php echo $session_id; ?>">
+        
+        <button type="submit" id="transaksi_baru" class="btn btn-primary" style="display: none"> <i class='fa fa-refresh'> </i> Transaksi Baru (Alt + R)</a> </button>
+        <button type="submit" id="pembayaran_item_keluar" class="btn btn-info"> <i class='fa fa-send'> </i> Selesai (F8)</a> </button>
+        <button type="submit" id="batal" class="btn btn-danger"> <i class='fa fa-close'> </i> Batal (F9)</a> </button>
 
-      <label>Keterangan </label><br>
-      <textarea name="keterangan" id="keterangan" class="form-control"></textarea>
+      </form><!--tag penutup form-->
+    </div>
 
-      <br>
+    <div class="alert alert-success" id="alert_berhasil" style="display:none">
+    <strong>Sukses!</strong> Data Item Keluar Berhasil !
+    </div>
 
-<input type="hidden" name="session_id" id="nomorfaktur" class="form-control" value="<?php echo $session_id; ?>">
-
-<a class="btn btn-primary" href="form_item_keluar.php" id="transaksi_baru" style="display: none"> <i class='fa fa-refresh'> </i> Transaksi Baru</a>
-
-  <!--membuat tombol submit bayar & Hutang-->
-      <button type="submit" id="pembayaran_item_keluar" class="btn btn-info"><i class='fa fa-send'> </i> Selesai </a> </button>
-      
-
-      <!--membuaat link pada tombol batal-->
-      <a href='batal_item_keluar.php?session_id=<?php echo $session_id;?>' id='batal' class='btn btn-danger'><i class='fa fa-close'></i> Batal </a>
-     
-
-          </form><!--tag penutup form-->
-
-<div class="alert alert-success" id="alert_berhasil" style="display:none">
-  <strong>Success!</strong> Data Item Keluar Berhasil
-</div>
   </div><!-- end of col sm 4 -->
+
 </div><!-- end of row -->
      
 <!-- Modal Hapus data -->
@@ -186,20 +209,21 @@ $session_id = session_id();
       </div>
       <div class="modal-body">
   <form role="form">
+
    <div class="form-group">
-                  <label> Jumlah Barang Baru </label> <br>
-                  <input type="text" name="jumlah_baru" id="edit_jumlah" class="form-control" autocomplete="off" required="" >
 
-                  <label> Jumlah Barang Lama </label> <br>
-                  <input type="text" name="jumlah_lama" id="edit_jumlah_lama" class="form-control" readonly="">
+      <label> Jumlah Barang Baru </label> <br>
+      <input type="text" name="jumlah_baru" id="edit_jumlah" class="form-control" autocomplete="off" required="" >
 
-                  <input type="hidden" name="kode_barang" id="kode_edit">
-                  <input type="hidden" name="harga" id="edit_harga">
+      <label> Jumlah Barang Lama </label> <br>
+      <input type="text" name="jumlah_lama" id="edit_jumlah_lama" class="form-control" readonly="">
 
-                  <input type="hidden" class="form-control" id="id_edit">
-                              
-   </div>
-   
+      <input type="hidden" name="kode_barang" id="kode_edit">
+      <input type="hidden" name="harga" id="edit_harga">
+
+      <input type="hidden" class="form-control" id="id_edit">
+
+   </div>   
    
    <button type="submit" id="submit_edit" class="btn btn-success">Submit</button>
   </form>
@@ -221,66 +245,43 @@ $session_id = session_id();
 </div><!-- end of modal edit data  -->
 
 
-      <!--untuk mendefinisikan sebuah bagian dalam dokumen-->  
-      <span id="result">  
-
-        <div class="table-responsive">
-      <!--tag untuk membuat garis pada tabel-->     
-  <table id="tableuser" class="table table-bordered">
-    <thead>
-      <th> Kode Barang </th>
-      <th> Nama Barang </th>
-      <th> Jumlah </th>
-      <th> Satuan </th>
-      <th> Harga </th>
-      <th> Subtotal </th>
-    
-      <th> Hapus </th>
-      
-    </thead>
-    
-    <tbody>
-    <?php
-
-    //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
-     $perintah = $db->query("SELECT * FROM tbs_item_keluar
-                WHERE session_id = '$session_id'");
-
-      //menyimpan data sementara yang ada pada $perintah
-
-      while ($data1 = mysqli_fetch_array($perintah))
-      {
-        //menampilkan data
-      echo "<tr class='tr-id-".$data1['id']."'>
-      <td>". $data1['kode_barang'] ."</td>
-      <td>". $data1['nama_barang'] ."</td>
-
-      <td class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."'  value='".$data1['jumlah']."' class='input_jumlah' data-subtotal='".$data1['subtotal']."' data-id='".$data1['id']."' autofocus='' data-harga='".$data1['harga']."' data-faktur='".$data1['no_faktur']."' data-kode='".$data1['kode_barang']."' > </td>
-
-      <td>". $data1['satuan'] ."</td>
-      <td>". rp($data1['harga']) ."</td>
-      <td><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
-
-      <td> <button class='btn btn-danger btn-hapus' id='btn-hapus-".$data1['id']."' data-subtotal='".$data1['subtotal']."' data-id='". $data1['id'] ."' data-nama-barang='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td> 
-      
-      </tr>";
-      }
-
-//Untuk Memutuskan Koneksi Ke Database
-
-mysqli_close($db); 
-      
-    ?>
-    </tbody>
-
-  </table>
-  </div>
-        </span>
-
 
       <span id="demo"> </span>
 
 </div><!-- end of container -->
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#tabel_item_keluar").DataTable().destroy();
+          var dataTable = $('#tabel_item_keluar').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"modal_item_keluar_baru.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#tabel_item_keluar").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class', "pilih");
+              $(nRow).attr('data-kode', aData[0]+"("+aData[1]+")");
+              $(nRow).attr('nama-barang', aData[1]);
+              $(nRow).attr('satuan', aData[7]);
+              $(nRow).attr('harga', aData[6]);
+
+
+          }
+
+        }); 
+});
+</script>
 
 
 <script>
@@ -332,19 +333,19 @@ $(document).ready(function(){
 
     var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_item_keluar").val()))));
 
-                                          
+
     if (total == '') 
     {
     total = 0;
-    }                                         
-                                          
-                                          
-                                          
+    }
+
+
+
     var sub_tbs = parseInt(harga,10) * parseInt(jumlah_barang,10);
-                                          
+
     var subtotal = parseInt(total,10) + parseInt(sub_tbs,10);
-                                          
-                                          
+
+
 
      $("#kode_barang").val('');
      $("#nama_barang").val('');
@@ -389,23 +390,9 @@ $(document).ready(function(){
   });
 
 //menampilkan no urut faktur setelah tombol click di pilih
-   $("#cari_item_keluar1").click(function() {
-     $.get('no_faktur_IK.php', function(data) {
-   /*optional stuff to do after getScript */ 
-$("#nomorfaktur").val(data);
-$("#nomorfaktur1").val(data);
+   $("#cari_item_keluar").click(function() {
 
- });
-//menyembunyikan notif berhasil
      $("#alert_berhasil").hide();
-    /* Act on the event */
-
-$.get('modal_item_keluar_baru.php', function(data) {
-
-$(".modal_baru").html(data);
-
-
-     })
 
   });
 
@@ -437,16 +424,16 @@ else
 
      $.post("proses_bayar_item_keluar.php",{session_id:session_id,total:total,keterangan:keterangan},function(info) {
                               
-                              $("#demo").html(info);       
-                              $("#result").load("tabel_item_masuk.php");
-                              $("#alert_berhasil").show();
-                              $("#total_item_keluar").val('');
-                              $("#keterangan").val('');
-                              
-                              
-                              
-                              
-                              });
+$("#demo").html(info);       
+$("#result").load("tabel_item_masuk.php");
+$("#alert_berhasil").show();
+$("#total_item_keluar").val('');
+$("#keterangan").val('');
+
+
+
+
+});
 
  /*$.post($("#form_item_keluar").attr("action"), $("#form_item_keluar :input").serializeArray(), function(info) {
 $("#demo").html(info);
@@ -519,7 +506,7 @@ $.post("cek_total_item_keluar.php",
               {
                 total = 0;
               }
-                                        
+
             else if (sub_total == '') {
                 sub_total = 0;
               }
@@ -611,7 +598,7 @@ $.post("cek_total_item_keluar.php",
         $('#satuan_produk').val(json.satuan);
         $('#harga_produk').val(json.harga_jual);
       }
-                                              
+
         });
         
         });

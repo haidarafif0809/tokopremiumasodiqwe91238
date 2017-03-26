@@ -10,6 +10,7 @@ $tahun_sekarang = date('Y');
 $bulan_sekarang = date('m');
 $tanggal_sekarang = date('Y-m-d');
 $jam_sekarang = date('H:i:s');
+$waktu = date('Y-m-d H:i:s');
 $tahun_terakhir = substr($tahun_sekarang, 2);
 $no_jurnal = no_jurnal();
 
@@ -74,6 +75,49 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
     $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
     $id_pelanggan = $ambil_kode_pelanggan['id'];
     
+    
+    // AMBIL  ATURAN POIN
+    $ambil_poin = $db->query("SELECT poin_rp, nilai_poin FROM aturan_poin ");
+    $data_poin = mysqli_fetch_array($ambil_poin);
+
+    $nilai_poin = $data_poin['nilai_poin'];
+    $poin_rp = $data_poin['poin_rp'];
+
+  // total penjualan dibagi dengan ketentuan poin / aturan poin / nilai poin RP
+    $hitung_poin = $total / $poin_rp;
+
+    // poin yang didapat = membulatkan hasil hitungan poin(kebwah) * nilai poin yg ada di aturan poin.
+    $poin_yg_didapat = floor($hitung_poin) * $nilai_poin;
+    // hitung jumlah poin yang didapat
+        
+  
+    // insert poin pelanggan
+    $poin_masuk = $db->prepare("INSERT INTO poin_masuk(no_faktur_penjualan, id_pelanggan, total_penjualan, nilai_poin_akhir, poin_rp_akhir, poin,tanggal, jam, waktu) 
+      VALUES (?,?,?,?,?,?,?,?,?)");
+              
+    // hubungkan "data" dengan prepared statements
+    $poin_masuk->bind_param("siiiiisss",
+    $no_faktur, $id_pelanggan,$total,$nilai_poin,$poin_rp, $poin_yg_didapat,$tanggal_sekarang,$jam_sekarang,$waktu);
+              
+    $poin_masuk->execute();
+
+        // cek query
+          if (!$poin_masuk) 
+          {
+          die('Query Error : '.$db->errno.
+          ' - '.$db->error);
+          }
+          
+          else 
+          {
+          
+          }
+
+
+
+    // end hitung poin pelanggan
+
+    
     $perintah0 = $db->query("SELECT * FROM fee_faktur WHERE nama_petugas = '$sales'  ");
     $cek = mysqli_fetch_array($perintah0);
     $nominal = $cek['jumlah_uang'];
@@ -136,6 +180,7 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
         $jumlah_barang = $data['jumlah_barang'];
         $satuan = $data['satuan'];
       }
+
 
     
         $query2 = "INSERT INTO detail_penjualan (no_faktur, tanggal, jam, kode_barang, nama_barang, jumlah_barang, asal_satuan,satuan, harga, subtotal, potongan, tax, sisa) VALUES ('$no_faktur', '$data[tanggal]', '$data[jam]', '$data[kode_barang]','$data[nama_barang]','$jumlah_barang','$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]', '$jumlah_barang')";
@@ -369,6 +414,11 @@ $total_tax = $jumlah_tax['total_tax'];
     $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
 
 
+ 
+    
+
+
+
 /*
 //PERSEDIAAN    
         $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Penjualan Piutang - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[persediaan]', '0', '$total_hpp', 'Penjualan', '$no_faktur','1', '$user')");
@@ -511,9 +561,12 @@ $querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.kete
 
 
 // BOT STAR AUTO      
-              $total = angkadoang($_POST['total']);
+
+      $total = angkadoang($_POST['total']);
 
                     
+/*
+ 
       $url = "https://api.telegram.org/bot233675698:AAEbTKDcPH446F-bje4XIf1YJ0kcmoUGffA/sendMessage?chat_id=-129639785&text=";
       $text = urlencode("No Faktur : ".$no_faktur."\n");
       $pesanan_jadi = "";
@@ -541,6 +594,7 @@ $querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.kete
       }
     
 }
+ */
 
 
     $query3 = $db->query("DELETE  FROM tbs_penjualan WHERE session_id = '$session_id'");

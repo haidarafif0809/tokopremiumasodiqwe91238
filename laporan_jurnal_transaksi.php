@@ -11,9 +11,7 @@ include 'db.php';
  ?>
 
 <div class="container">
-
-<h1> LAPORAN JURNAL TRANSAKSI </h1><hr>
-
+<h1>JURNAL UMUM </h1><hr>
 <form id="perhari" class="form-inline" action="proses_laporan_jurnal.php" method="POST" role="form">
          
 <div class="form-group">
@@ -29,34 +27,82 @@ include 'db.php';
     
 </form>
 <br>
-<span id="result"></span>
+<span id="result" style="display: none">
+  
+  <div class="card card-block">
+
+
+
+<div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
+<table id="tableuser" class="table table-hover">
+            <thead>
+      <th style='background-color: #4CAF50; color: white' style="font-size: 20px"> No Akun </th>
+      <th style='background-color: #4CAF50; color: white' style="font-size: 20px"> Nama Akun </th>
+      <th style='background-color: #4CAF50; color: white' style="font-size: 20px"> Debet </th>
+      <th style='background-color: #4CAF50; color: white' style="font-size: 20px"> Kredit </th>
+      <th style='background-color: #4CAF50; color: white' style="font-size: 20px"> Keterangan </th>
+
+
+      
+    </thead>
+    
+  </table>
+ </div>
+  <br><br>
+
+      
+
+</div>   
+</span>
 </div> <!-- END DIV container -->
 
-<!-- Script Untuk Tampilan-->
-<script type="text/javascript">
-$("#btntgl").click(function() {
-
-      var dari_tanggal = $("#daritgl").val();
-      var sampai_tanggal = $("#sampaitgl").val();
-
-    $.post("proses_laporan_jurnal.php" ,{dari_tanggal:dari_tanggal,sampai_tanggal:sampai_tanggal},function(data){
 
 
-    $("#result").html(data); 
+    <script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
+$(document).on('click','#btntgl',function(e) {
+     $('#tableuser').DataTable().destroy();
 
-  });  
-});
+          var dataTable = $('#tableuser').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "info":     false,
+          "language": {
+        "emptyTable":     "My Custom Message On Empty Table"
+    },
+          "ajax":{
+            url :"proses_laporan_jurnal.php", // json datasource
+             "data": function ( d ) {
+                d.dari_tanggal = $("#daritgl").val();
+                d.sampai_tanggal = $("#sampaitgl").val();
+                // d.custom = $('#myInput').val();
+                // etc
+            },
+                type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".tbody").html("");
+              $("#tableuser").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+              $("#tableuser_processing").css("display","none");
+              
+            }
+          }
+    
 
-$("#perhari").submit(function(){
-    return false;
-});
-function clearInput(){
-    $("#perhari :input").each(function(){
-        $(this).val('');
-    });
-};
-</script>
-<!-- END Script Untuk Tampilan-->
+
+        } );
+          $("#result").show()
+
+   } );  
+  $("#perhari").submit(function(){
+      return false;
+  });
+  function clearInput(){
+      $("#perhari :input").each(function(){
+          $(this).val('');
+      });
+  };
+  } );
+    </script>
 
 
 <!--SCRIPT datepicker -->

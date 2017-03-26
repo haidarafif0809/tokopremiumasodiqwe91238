@@ -454,7 +454,12 @@ $penjualan_hapus = mysqli_num_rows($pilih_akses_penjualan_hapus);
 		
 		
 		$("#modal_hapus").modal('hide');
+
 		$.post("hapus_data_penjualan.php",{id:id,no_faktur:no_faktur,kode_meja:kode_meja},function(data){
+
+
+                $('#table_penjualan').DataTable().destroy();
+
       var dataTable = $('#table_penjualan').DataTable( {
           "processing": true,
           "serverSide": true,

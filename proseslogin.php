@@ -33,6 +33,7 @@
                 $_SESSION['otoritas'] = $otoritas;
                 $_SESSION['user_name'] = $username;
                 $_SESSION['nama'] = $nama;
+                $_SESSION['printer'] = 1; 
                 
                 echo '<META HTTP-EQUIV="Refresh" Content="0; URL=home.php">';
                 

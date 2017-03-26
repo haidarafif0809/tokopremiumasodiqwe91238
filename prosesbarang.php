@@ -2,6 +2,7 @@
     //memasukkan file db.php
     include 'db.php';
     include 'sanitasi.php';
+     include 'cache.class.php'; 
 
 
                    
@@ -46,6 +47,39 @@ $kode_barang, $nama_barang, $harga_beli, $harga_jual, $harga_jual_2, $harga_jual
 
 $stmt->execute();
  
+
+
+$query_id_barang = $db->query("SELECT id FROM barang WHERE kode_barang = '$kode_barang'");  
+$data_id_barang = mysqli_fetch_array($query_id_barang);  
+  
+ // setup 'default' cache  
+    $c = new Cache();  
+    $c->setCache('produk');  
+  
+    $c->store($kode_barang, array(  
+      'kode_barang' => $kode_barang,  
+      'nama_barang' => $nama_barang,  
+      'harga_beli' => $harga_beli,  
+      'harga_jual' => $harga_jual,  
+      'harga_jual2' => $harga_jual_2,  
+      'harga_jual3' => $harga_jual_3,  
+      'harga_jual4' => $harga_jual_4,  
+      'harga_jual5' => $harga_jual_5,  
+      'harga_jual6' => $harga_jual_6,  
+      'harga_jual7' => $harga_jual_7,  
+      'kategori' => $kategori,  
+      'suplier' => $suplier,  
+      'limit_stok' => $limit_stok,  
+      'over_stok' => $over_stok,  
+      'berkaitan_dgn_stok' => $golongan,  
+      'tipe_barang' => $tipe,  
+      'status' => $status,  
+      'satuan' => $satuan,  
+      'id' => $data_id_barang['id'] ,  
+  
+  
+    ));  
+
 // cek query
 if (!$stmt) {
    die('Query Error : '.$db->errno.

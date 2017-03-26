@@ -728,7 +728,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <!--untuk melihat disc di tbs-->
 <input type="hidden" class="form-control" name="disc_tbs" autocomplete="off" id="disc_tbs" placeholder="DISKONE TBS" >
-<input type="text" class="form-control" name="subtotal_jual_disc" autocomplete="off" id="subtotal_jual_disc" placeholder="subtotal disc Harga PROMO" >
+<input type="hidden" class="form-control" name="subtotal_jual_disc" autocomplete="off" id="subtotal_jual_disc" placeholder="subtotal disc Harga PROMO" >
 <!--hidden data produk yang ingin ditambahkan ke tbs -->
 <input type="hidden" class="form-control" name="limit_stok" autocomplete="off" id="limit_stok" placeholder="Limit Stok" >
     <input type="hidden" class="form-control" name="ber_stok" id="ber_stok" placeholder="Ber Stok" >
@@ -2757,10 +2757,11 @@ if (pesan_alert == true) {
         function(data){
           //cek total keseluruhan bonus disc
         $.get("cek_total_bonus_promo.php",function(tot){
+          
         var total = parseInt(data) + parseInt(tot);
         $("#total2").val(tandaPemisahTitik(total));
         $("#total1").val(tandaPemisahTitik(total));
-        if (total == 0) {
+        if (tot == 0) {
           $("#tbs_bonus_penjualan").hide();
         }
       });

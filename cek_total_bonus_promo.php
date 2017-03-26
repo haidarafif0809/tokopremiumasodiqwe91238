@@ -6,7 +6,7 @@ include 'sanitasi.php';
 
 $session_id = session_id();
 // menampilakn hasil penjumlah subtotal ALIAS total penjualan dari tabel tbs_penjualan berdasarkan data no faktur
- $query = $db->query("SELECT SUM(qty_bonus) AS qty,harga_disc FROM tbs_bonus_penjualan WHERE session_id = '$session_id' AND keterangan = 'Disc Produk'");
+ $query = $db->query("SELECT IFNULL(SUM(qty_bonus),0) AS qty,harga_disc FROM tbs_bonus_penjualan WHERE session_id = '$session_id' AND keterangan = 'Disc Produk'");
  
  // menyimpan data sementara yg ada pada $query
  $data = mysqli_fetch_array($query);

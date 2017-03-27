@@ -15,6 +15,9 @@ $session_id = session_id();
 
  ?>
 
+<!-- js untuk tombol shortcut -->
+ <script src="shortcut.js"></script>
+
 <!--membuat tampilan form agar terlihat rapih dalam satu tempat-->
 <div class="container">
 
@@ -78,7 +81,26 @@ $session_id = session_id();
       <form class="form"  role="form" id="formtambahproduk">
         
         <div class="form-group col-sm-3"> 
-          <input type="text" class="form-control" name="kode_barang" id="kode_barang" autocomplete="off" placeholder="Kode Produk">
+      <select style="font-size:15px; height:20px" type="text" name="kode_barang" id="kode_barang" class="form-control chosen" data-placeholder="SILAKAN PILIH...">
+            <option value="">SILAKAN PILIH...</option>
+       <?php 
+
+        include 'cache.class.php';
+          $c = new Cache();
+          $c->setCache('produk');
+          $data_c = $c->retrieveAll();
+
+          foreach ($data_c as $key) {
+
+            if ($key['berkaitan_dgn_stok'] == 'Barang') {
+              # code...
+               echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_beli'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+            }
+           
+          }
+
+        ?>
+    </select>
         </div>
 
           <input type="hidden" class="form-control" name="nama_barang" id="nama_barang" readonly="" placeholder="Nama Barang">
@@ -103,8 +125,8 @@ $session_id = session_id();
                 <span id="span_tbs">   
                 
                   <div class="table-responsive">
-                    <table id="tabel_tbs_item_masuk" class="table table-bordered table-sm">
-                          <thead> <!-- untuk memberikan nama pada kolom tabel -->
+                    <table id="tabel_tbs_item_keluar" class="table table-bordered table-sm">
+                          <thead> 
 
                               <th> Kode Barang </th>
                               <th> Nama Barang </th>
@@ -114,7 +136,7 @@ $session_id = session_id();
                               <th> Subtotal </th>
                               <th> Hapus </th>
                           
-                          </thead> <!-- tag penutup tabel -->
+                          </thead> 
                     </table>
                   </div>
 
@@ -253,8 +275,12 @@ $session_id = session_id();
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $("#tabel_item_keluar").DataTable().destroy();
-          var dataTable = $('#tabel_item_keluar').DataTable( {
+
+
+  
+    $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});
+
+        var dataTable = $('#tabel_item_keluar').DataTable( {
           "processing": true,
           "serverSide": true,
           "ajax":{
@@ -271,7 +297,7 @@ $session_id = session_id();
           "fnCreatedRow": function( nRow, aData, iDataIndex ) {
 
               $(nRow).attr('class', "pilih");
-              $(nRow).attr('data-kode', aData[0]+"("+aData[1]+")");
+              $(nRow).attr('data-kode', aData[0]);
               $(nRow).attr('nama-barang', aData[1]);
               $(nRow).attr('satuan', aData[7]);
               $(nRow).attr('harga', aData[6]);
@@ -280,7 +306,96 @@ $session_id = session_id();
           }
 
         }); 
+
+          $('#tabel_tbs_item_masuk').DataTable().destroy();
+            var dataTable = $('#tabel_tbs_item_keluar').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "info":     false,
+            "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
+            "ajax":{
+              url :"data_tbs_item_keluar.php", // json datasource
+              
+                  type: "post",  // method  , by default get
+              error: function(){  // error handling
+                $(".tbody").html("");
+                $("#tabel_tbs_item_masuk").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                $("#tableuser_processing").css("display","none");
+                
+              }
+            }   
+
+      });
+
+   
+
 });
+
+  shortcut.add("f2", function() {
+        // Do something
+      $("#kode_barang").trigger('chosen:open');
+
+    });
+
+    shortcut.add("f8", function() {
+        // Do something
+      $("#pembayaran_item_keluar").click();
+
+    });
+
+
+    shortcut.add("f9", function() {
+        // Do something
+      $("#batal").click();
+
+    });
+
+    shortcut.add("f1", function() {
+        // Do something
+      $("#cari_item_keluar").click();
+
+    });
+
+    shortcut.add("f3", function() {
+        // Do something
+      $("#submit_produk").click();
+
+    });
+
+
+    $("#transaksi_baru").click(function(){
+
+      $("#alert_berhasil").hide();
+       var dataTable = $('#tabel_tbs_item_keluar').DataTable().draw();
+      $(this).hide();
+     $("#pembayaran_item_keluar").show();
+     $("#batal").show();
+        $("#kode_barang").trigger('chosen:updated');
+       $("#kode_barang").trigger('chosen:open');
+
+
+    });
+
+    $("#batal").click(function(){
+            var konfirmasi_batal = confirm("Apakah Anda Yakin Untuk Membatalkan Item Keluar Ini ?");
+
+            if (konfirmasi_batal == true) {
+
+               $.get('batal_item_keluar.php',function(data){
+                    if (data == 1) {
+                      //perbarui datatable
+                       var dataTable = $('#tabel_tbs_item_keluar').DataTable().draw();
+                       $("#total_item_keluar").val(0);
+                    }
+                    else {
+                      alert('Terjadi kesalahan, Batal Item Keluar Gagal');
+                    }
+                });
+
+            }
+      
+    });
+
 </script>
 
 
@@ -302,6 +417,7 @@ $(document).ready(function(){
   document.getElementById("satuan_produk").value = $(this).attr('satuan');
   document.getElementById("harga_produk").value = $(this).attr('harga');
   document.getElementById("jml_barang").value = $(this).attr('jumlah-barang');
+$("#kode_barang").trigger('chosen:updated');
 
 
   $('#myModal').modal('hide');
@@ -323,6 +439,7 @@ $(document).ready(function(){
   $("#submit_produk").click(function(){
 
     var kode_barang = $("#kode_barang").val();
+
     var nama_barang = $("#nama_barang").val();
     var jumlah_barang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_barang").val()))));
     var jml_barang = $("#jml_barang").val();
@@ -369,13 +486,13 @@ $(document).ready(function(){
         $("#total_item_keluar").val(tandaPemisahTitik(subtotal));
                                     
  $.post("proses_tbs_item_keluar.php",{session_id:session_id,kode_barang:kode_barang,jumlah_barang:jumlah_barang,satuan:satuan,nama_barang:nama_barang,harga:harga},function(info) {
-
-
-     $("#result").html(info);
-     $("#result").load('tabel_item_keluar.php');
+    
      $("#kode_barang").val('');
      $("#nama_barang").val('');
      $("#jumlah_barang").val('');
+
+     var dataTable = $('#tabel_tbs_item_keluar').DataTable().draw();
+       $("#kode_barang").trigger('chosen:open');
        
        });
 
@@ -424,15 +541,14 @@ else
 
      $.post("proses_bayar_item_keluar.php",{session_id:session_id,total:total,keterangan:keterangan},function(info) {
                               
-$("#demo").html(info);       
-$("#result").load("tabel_item_masuk.php");
-$("#alert_berhasil").show();
-$("#total_item_keluar").val('');
-$("#keterangan").val('');
+
+      $("#alert_berhasil").show();
+      $("#total_item_keluar").val('');
+      $("#keterangan").val('');
 
 
 
-
+      var dataTable = $('#tabel_tbs_item_keluar').DataTable().draw();
 });
 
  /*$.post($("#form_item_keluar").attr("action"), $("#form_item_keluar :input").serializeArray(), function(info) {
@@ -462,6 +578,8 @@ $("#demo").html(info);
 
 
   
+
+
       
   </script>
 
@@ -491,40 +609,50 @@ $.post("cek_total_item_keluar.php",
 
 
 
-            <script type="text/javascript">
+      <script type="text/javascript">
             $(document).ready(function(){
             
             
             //fungsi hapus data 
             $(document).on('click', '.btn-hapus', function (e) {
+
+
+
             var nama_barang = $(this).attr("data-nama-barang");
             var id = $(this).attr("data-id");
             var sub_total = $(this).attr("data-subtotal");
             var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_item_keluar").val()))));
 
-            if (total == '') 
-              {
-                total = 0;
-              }
+             var konfirmasi_hapus = confirm("Apakah Anda Yakin Untuk Menghapus "+ nama_barang+" ?");
+              if (konfirmasi_hapus == true) {
+                  if (total == '') 
+                  {
+                    total = 0;
+                  }
 
-            else if (sub_total == '') {
-                sub_total = 0;
-              }
+                  else if (sub_total == '') {
+                   sub_total = 0;
+                  }
+
+                   var total_akhir = parseInt(total,10) - parseInt(sub_total,10);
+
+                  $("#total_item_keluar").val(tandaPemisahTitik(total_akhir));
 
 
+
+
+                        $.post("hapus_tbs_item_keluar.php",{id:id},function(data){
+                        if (data == "sukses") {
+                        $(".tr-id-"+id).remove();
+                      }
+
+                       var dataTable = $('#tabel_tbs_item_keluar').DataTable().draw();
+                        });
+
+
+              }// end konfirmasi hapus 
             
-            var total_akhir = parseInt(total,10) - parseInt(sub_total,10);
 
-            $("#total_item_keluar").val(tandaPemisahTitik(total_akhir));
-
-
-
-
-            $.post("hapus_tbs_item_keluar.php",{id:id},function(data){
-            if (data == "sukses") {
-            $(".tr-id-"+id).remove();
-          }
-            });
             });
       
 
@@ -559,47 +687,46 @@ $.post("cek_total_item_keluar.php",
 <script type="text/javascript">
   
         $(document).ready(function(){
-        $("#kode_barang").blur(function(){
+        $("#kode_barang").change(function(){
 
           var kode_barang = $(this).val();
           var session_id = $("#session_id").val();
 
-          $.post("cek_barang_item_masuk.php",
-          {
-          kode_barang: $(this).val()
-          },
-          function(data){
-          $("#jml_barang"). val(data);
-          });
+         
           
     $.post('cek_kode_barang_tbs_item_keluar.php',{kode_barang:kode_barang,session_id:session_id}, function(data){
     
     if(data == 1){
+
     alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+
     $("#kode_barang").val('');
     $("#nama_barang").val('');
+
+
     }//penutup if
+    else {
+
+        //hitung stok
+
+        $.post("cek_stok.php",{kode_barang: $("#kode_barang").val()},
+          function(data){
+          $("#jml_barang"). val(data);
+          });
+  
+        $('#nama_barang').val($('#opt-produk-'+kode_barang).attr('nama-barang'));
+        $('#satuan_produk').val($('#opt-produk-'+kode_barang).attr('satuan'));
+        $('#harga_produk').val($('#opt-produk-'+kode_barang).attr('harga'));
+
+    }
+
     
     });////penutup function(data)
 
-      $.getJSON('lihat_item_keluar.php',{kode_barang:$(this).val()}, function(json){
-      
-      if (json == null)
-      {
-        
-        $('#nama_barang').val('');
-        $('#satuan_produk').val('');
-        $('#harga_produk').val('');
-      }
 
-      else 
-      {
-        $('#nama_barang').val(json.nama_barang);
-        $('#satuan_produk').val(json.satuan);
-        $('#harga_produk').val(json.harga_jual);
-      }
+     
 
-        });
+       
         
         });
         });
@@ -610,18 +737,18 @@ $.post("cek_total_item_keluar.php",
 
                               <script type="text/javascript">
                                  
-                                 $(".edit-jumlah").dblclick(function(){
+                  $(document).on('dblclick', '.edit-jumlah', function (e) { 
 
-                                    var id = $(this).attr("data-id");
+                         var id = $(this).attr("data-id");
 
-                                    $("#text-jumlah-"+id+"").hide();
+                         $("#text-jumlah-"+id+"").hide();
 
-                                    $("#input-jumlah-"+id+"").attr("type", "text");
+                         $("#input-jumlah-"+id+"").attr("type", "text");
 
-                                 });
+                    });
 
 
-                                 $(".input_jumlah").blur(function(){
+                       $(document).on('blur', '.input_jumlah',function(e){
 
                                     var id = $(this).attr("data-id");
                                     var jumlah_baru = $(this).val();
@@ -637,7 +764,7 @@ $.post("cek_total_item_keluar.php",
 
                                     $.post("cek_stok_pesanan_barang.php",{kode_barang:kode_barang, jumlah_baru:jumlah_baru},function(data){
 
-                                       if (data == "ya") {
+                                       if (data < 0) {
 
                                        alert ("Jumlah Yang Di Masukan Melebihi Stok !");
 
@@ -679,6 +806,8 @@ $.post("cek_total_item_keluar.php",
   $(document).on('click', '.pilih', function (e) {
     var session_id = $("#session_id").val();
     var kode_barang = $("#kode_barang").val();
+  
+  $("#kode_barang").trigger('chosen:updated');
 
  $.post('cek_kode_barang_tbs_item_keluar.php',{kode_barang:kode_barang,session_id:session_id}, function(data){
   

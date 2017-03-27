@@ -149,7 +149,7 @@ else if ($level_harga == 'harga_5')
 }
 else if ($level_harga == 'harga_6')
 {
-  $harga = $harga_jual5;
+  $harga = $harga_jual6;
 }
 else if ($level_harga == 'harga_7')
 {
@@ -167,15 +167,28 @@ $stok_barang = $ambil_sisa['jumlah_barang'] - $jumlah_barang;
 // pengambilan data untuk logika insert / update laporan fee produk
 
 
+    $ambil_row_barang = $db->query("SELECT id FROM barang WHERE kode_barang = '$kode_barang'");
+    $cek_row_barang = mysqli_num_rows($ambil_row_barang);
 
-if ($ber_stok == 'Barang' OR $ber_stok == 'barang') {
+
+if ($ber_stok == 'Barang' OR $ber_stok == 'barang' ) {
     
-    if ($stok_barang <= 0 ) {
+    if ($stok_barang <= 0 ) 
+    {
       ECHO 1;
     }
 
-    else{
+
+
+  else{
   
+if ($cek_row_barang == 0)
+    {
+      echo 3;
+    }
+
+else
+    {
 // cari subtotal
 $a = $harga * $jumlah_barang;
 // cari subtotal
@@ -275,6 +288,8 @@ echo komarupiah($a,2);
 //untuk pengambilan data subttotal di form penjualan
 
 
+}//end else kode barang adaa
+
 
     } // END ELSE dari IF ($stok_barang < 0) {
 
@@ -282,6 +297,14 @@ echo komarupiah($a,2);
 
 else{
 
+
+if ($cek_row_barang == 0)
+    {
+      echo 3;
+    }
+
+else
+    {
 // cari subtotal
 $a = $harga * $jumlah_barang;
 // cari subtotal
@@ -382,6 +405,7 @@ $jumlah = mysqli_num_rows($cek);
 echo komarupiah($a,2);
 //untuk pengambilan data subttotal di form penjualan
 
+}//end else kode barang ada
 
 }// END berkaitan dgn stok == Jasa
 

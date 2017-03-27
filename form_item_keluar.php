@@ -7,6 +7,7 @@ include 'navbar.php';
 include 'db.php';
 include 'sanitasi.php';
 
+//menampilkan seluruh data yang ada pada tabel pembelian
 
 $session_id = session_id();
 

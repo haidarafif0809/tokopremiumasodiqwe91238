@@ -11,10 +11,6 @@ $id = angkadoang($_POST['id']);
 $subtotal = angkadoang($_POST['subtotal']);
 
 
-$query00 = $db->query("SELECT * FROM tbs_item_keluar WHERE id = '$id'");
-$data = mysqli_fetch_array($query00);
-
-
 $query = $db->prepare("UPDATE tbs_item_keluar SET jumlah = ?, subtotal = ? WHERE id = ?");
 
 

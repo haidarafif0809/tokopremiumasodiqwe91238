@@ -23,8 +23,8 @@ else
 $result = $db->query("SELECT id FROM barang WHERE kode_barang = '$kode_barang'");
 $row = mysqli_fetch_array($result);
    
-    echo json_encode($row);
-    exit;
+    echo $row;
+
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

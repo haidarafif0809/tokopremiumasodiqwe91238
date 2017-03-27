@@ -7,8 +7,6 @@ include 'navbar.php';
 include 'db.php';
 include 'sanitasi.php';
 
-//menampilkan seluruh data yang ada pada tabel pembelian
-$perintah = $db->query("SELECT * FROM item_keluar");
 
 $session_id = session_id();
 
@@ -179,93 +177,7 @@ $session_id = session_id();
   </div><!-- end of col sm 4 -->
 
 </div><!-- end of row -->
-     
-<!-- Modal Hapus data -->
-<div id="modal_hapus" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Konfirmasi Hapus Data Item Hapus</h4>
-      </div>
-
-      <div class="modal-body">
-   
-   <p>Apakah Anda yakin Ingin Menghapus Data ini ?</p>
-   <form >
-    <div class="form-group">
-    <label> Nama Barang :</label>
-     <input type="text" id="hapus_nama" class="form-control" readonly=""> 
-     <input type="hidden" id="id_hapus" class="form-control" > 
-    </div>
-   
-   </form>
-   
-  <div class="alert alert-success" style="display:none">
-   <strong>Berhasil!</strong> Data berhasil Di Edit
-  </div>
  
-
-     </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-info" id="btn_jadi_hapus"> <span class='glyphicon glyphicon-ok-sign'> </span> Ya</button>
-        <button type="button" class="btn btn-warning" data-dismiss="modal"> <span class='glyphicon glyphicon-remove-sign'> </span> Batal</button>
-      </div>
-    </div>
-
-  </div>
-</div><!-- end of modal hapus data  -->
-
-<!-- Modal edit data -->
-<div id="modal_edit" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Edit Data Item Masuk</h4>
-      </div>
-      <div class="modal-body">
-  <form role="form">
-
-   <div class="form-group">
-
-      <label> Jumlah Barang Baru </label> <br>
-      <input type="text" name="jumlah_baru" id="edit_jumlah" class="form-control" autocomplete="off" required="" >
-
-      <label> Jumlah Barang Lama </label> <br>
-      <input type="text" name="jumlah_lama" id="edit_jumlah_lama" class="form-control" readonly="">
-
-      <input type="hidden" name="kode_barang" id="kode_edit">
-      <input type="hidden" name="harga" id="edit_harga">
-
-      <input type="hidden" class="form-control" id="id_edit">
-
-   </div>   
-   
-   <button type="submit" id="submit_edit" class="btn btn-success">Submit</button>
-  </form>
-
-  <span id="alert"></span>
-  <div class="alert alert-success" style="display:none">
-   <strong>Berhasil!</strong> Data Berhasil Di Edit
-  </div>
-
-</div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-
-</div>
-
-  </div>
-</div><!-- end of modal edit data  -->
-
 
 
       <span id="demo"> </span>

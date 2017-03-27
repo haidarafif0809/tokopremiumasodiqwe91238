@@ -2,6 +2,7 @@
 /* Database connection start */
 include 'sanitasi.php';
 include 'db.php';
+include 'persediaan.function.php';
 
 /* Database connection end */
 
@@ -28,7 +29,7 @@ $columns = array(
 
 
 // getting total number records without any search
-$sql = "SELECT b.id,s.nama,b.kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.harga_jual,b.harga_jual2,b.harga_jual3,b.stok_barang,b.satuan,b.kategori,b.suplier, b.berkaitan_dgn_stok ";
+$sql = "SELECT b.id,s.nama,b.kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.satuan,b.kategori,b.suplier, b.berkaitan_dgn_stok ";
 $sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id  WHERE b.berkaitan_dgn_stok = 'Barang'";
 
 
@@ -37,7 +38,7 @@ $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql = " SELECT b.id,s.nama,b.kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.harga_jual,b.harga_jual2,b.harga_jual3,b.stok_barang,b.satuan,b.kategori,b.suplier, b.berkaitan_dgn_stok ";
+$sql = " SELECT b.id,s.nama,b.kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.satuan,b.kategori,b.suplier, b.berkaitan_dgn_stok ";
 $sql.="  FROM barang b INNER JOIN satuan s ON b.satuan = s.id ";
 $sql.=" WHERE 1=1 AND b.berkaitan_dgn_stok = 'Barang'";
 
@@ -64,83 +65,22 @@ $data = array();
 
 while( $row=mysqli_fetch_array($query) ) {
 
-    $nestedData=array(); 
+            $nestedData=array(); 
 
-    $nestedData[] = $row["kode_barang"];
-    $nestedData[] = $row["nama_barang"];
+            $nestedData[] = $row["kode_barang"];
+            $nestedData[] = $row["nama_barang"];
 
     // mencari jumlah Barang
-            $query0 = $db->query("SELECT SUM(jumlah_barang) AS jumlah_pembelian FROM detail_pembelian WHERE kode_barang = '$row[kode_barang]'");
-            $cek0 = mysqli_fetch_array($query0);
-            $jumlah_pembelian = $cek0['jumlah_pembelian'];
+            $stok_barang = cekStokHpp($row["kode_barang"]);
 
-            $query1 = $db->query("SELECT SUM(jumlah) AS jumlah_item_masuk FROM detail_item_masuk WHERE kode_barang = '$row[kode_barang]'");
-            $cek1 = mysqli_fetch_array($query1);
-            $jumlah_item_masuk = $cek1['jumlah_item_masuk'];
-
-            $query2 = $db->query("SELECT SUM(jumlah_retur) AS jumlah_retur_penjualan FROM detail_retur_penjualan WHERE kode_barang = '$row[kode_barang]'");
-            $cek2 = mysqli_fetch_array($query2);
-            $jumlah_retur_penjualan = $cek2['jumlah_retur_penjualan'];
-
-            $query20 = $db->query("SELECT SUM(jumlah_awal) AS jumlah_stok_awal FROM stok_awal WHERE kode_barang = '$row[kode_barang]'");
-            $cek20 = mysqli_fetch_array($query20);
-            $jumlah_stok_awal = $cek20['jumlah_stok_awal'];
-
-            $query200 = $db->query("SELECT SUM(selisih_fisik) AS jumlah_fisik FROM detail_stok_opname WHERE kode_barang = '$row[kode_barang]'");
-            $cek200 = mysqli_fetch_array($query200);
-            $jumlah_fisik = $cek200['jumlah_fisik'];
-//total barang 1
-            $total_1 = $jumlah_pembelian + $jumlah_item_masuk + $jumlah_retur_penjualan + $jumlah_stok_awal + $jumlah_fisik;
-
-
- 
-
-            $query3 = $db->query("SELECT SUM(jumlah_barang) AS jumlah_penjualan FROM detail_penjualan WHERE kode_barang = '$row[kode_barang]'");
-            $cek3 = mysqli_fetch_array($query3);
-            $jumlah_penjualan = $cek3['jumlah_penjualan'];
-
-
-            $query4 = $db->query("SELECT SUM(jumlah) AS jumlah_item_keluar FROM detail_item_keluar WHERE kode_barang = '$row[kode_barang]'");
-            $cek4 = mysqli_fetch_array($query4);
-            $jumlah_item_keluar = $cek4['jumlah_item_keluar'];
-
-            $query5 = $db->query("SELECT SUM(jumlah_retur) AS jumlah_retur_pembelian FROM detail_retur_pembelian WHERE kode_barang = '$row[kode_barang]'");
-            $cek5 = mysqli_fetch_array($query5);
-            $jumlah_retur_pembelian = $cek5['jumlah_retur_pembelian'];
-
-
- 
-
-
-
-//total barang 2
-            $total_2 = $jumlah_penjualan + $jumlah_item_keluar + $jumlah_retur_pembelian;
-
-            $stok_barang = $total_1 - $total_2;
-
-       $cek_harga_hpp = $db->query("SELECT total_nilai,jumlah_kuantitas FROM hpp_masuk WHERE kode_barang = '$row[kode_barang]' AND sisa != 0 ORDER BY waktu DESC LIMIT 1  ");
-       $harga_kel = mysqli_fetch_array($cek_harga_hpp);
-
-        $jumlah_kuantitas = $harga_kel['jumlah_kuantitas'];
-
-        if ($jumlah_kuantitas == 0)
-        {
-            $jumlah_kuantitas = 1;
-        }
-
-        $harga_hpp = $harga_kel['total_nilai'] / $jumlah_kuantitas;
-
-            if ($row['berkaitan_dgn_stok'] == 'Jasa') {
-                 $nestedData[] =  "0";
-             }      
-             else{
-                $nestedData[] =  $stok_barang;
-             }      
+        
+            $nestedData[] =  $stok_barang;
+                  
 
             $nestedData[] =  $row["kategori"];
             $nestedData[] =  $row["suplier"];
             $nestedData[] =  $row["nama"];
-            $nestedData[] =  $harga_hpp;
+            $nestedData[] =  $row["harga_beli"];
             $nestedData[] =  $row["satuan"];
 
     

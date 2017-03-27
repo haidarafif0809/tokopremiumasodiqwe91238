@@ -80,6 +80,11 @@ if ($lihat['pembelian_lihat'] > 0){
                 echo '<li><a href="pembelian.php" class="waves-effect"> <i class="fa fa-shopping-basket"></i> Pembelian </a></li>';
 }
 
+if ($lihat['tukar_poin_lihat'] > 0){
+
+                echo '<li><a href="tukar_poin.php" class="waves-effect"> <i class="fa fa-shopping-basket"></i> Penukaran Poin </a></li>';
+}
+
 if ($lihat['master_data_lihat'] > 0){
                 echo '<li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-server"></i> Master Data <i class="fa fa-angle-down rotate-icon"></i></a>
                         <div class="collapsible-body">

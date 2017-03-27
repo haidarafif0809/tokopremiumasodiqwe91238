@@ -92,6 +92,10 @@ while ($data = $query->fetch_array()) {
       'harga_jual' => $data['harga_jual'],
       'harga_jual2' => $data['harga_jual2'],
       'harga_jual3' => $data['harga_jual3'],
+      'harga_jual4' => $data['harga_jual4'],
+      'harga_jual5' => $data['harga_jual5'],
+      'harga_jual6' => $data['harga_jual6'],
+      'harga_jual7' => $data['harga_jual7'],
       'satuan' => $data['satuan'],
       'kategori' => $data['kategori'],
       'gudang' => $data['gudang'],
@@ -373,7 +377,7 @@ $jumlah = mysqli_num_rows($cek);
             $perintah->execute();
 
     }
-    
+
 //untuk pengambilan data subttotal di form penjualan
 echo komarupiah($a,2);
 //untuk pengambilan data subttotal di form penjualan

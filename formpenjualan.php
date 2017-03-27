@@ -1726,20 +1726,44 @@ else
 
 /// JAVASCRIPT BARCODE
 $.post("barcode.php",{kode_barang:kode_barang,sales:sales,level_harga:level_harga},function(data){
-
     if (data == 1)
   {
   alert("Stok Tidak Mencukupi ,Segera Lakukan Pembelian");
   }
+  if (data == 3)
+  {
+  alert("Kode Barang Yang Anda Masukan Tidak Ada , Silakan Periksa Kembali ");
+  $("#kode_barcode").focus();
+  }
+
 else
 {
+
+
+/// JAVASCRIPT MUNCULKAN ALERT PROMO (JIKA AADA PROMO DALAM BARANG ITU DARI INPUT BARCODE)
+$.getJSON('lihat_nama_barang.php',{kode_barang:kode_barang}, function(json){
+  console.log(json.id);
+$.post("lihat_promo_alert.php",{id:json},function(info){
+
+    if (info == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(info);
+    }
+});
+});
+///END  JAVASCRIPT ALERT PROMO
+
+
         $(".tr-kode-"+kode_barang+"").remove();
         $("#ppn").attr("disabled", true);
         $("#nama_barang").val('');
-        $("#nama_barang").val('');
         $("#jumlah_barang").val('');
         $("#potongan1").val('');
-
+        $("#kode_barcode").val('');
 
 //perhitungan form pembayaran (total & subtotal / biaya admin) 
 
@@ -1880,12 +1904,12 @@ else
 
 //perhitungan form pembayaran (total & subtotal / biaya admin) 
  var biaya_adm_tampil = parseFloat(biaya_adm) / parseFloat(total_akhir1) * 100;
-// perhitungan rupiah total akhir
-$("#total1").val(total_akhir.format(2, 3, '.', ','));
-$("#total2").val(total_akhir1.format(2, 3, '.', ','));
-// perhitungan rupiah total akhir
 
 
+// perhitungan rupiah total akhir
+    $("#total1").val(total_akhir.format(2, 3, '.', ','));
+    $("#total2").val(total_akhir1.format(2, 3, '.', ','));
+// perhitungan rupiah total akhir
  if (pot_fakt_rp == 0.00)
       {
         $("#potongan_penjualan").val();
@@ -1894,7 +1918,8 @@ $("#total2").val(total_akhir1.format(2, 3, '.', ','));
       {
         $("#potongan_penjualan").val(potongaaan.format(2, 3, '.', ','));
       }
-            $("#tax_rp").val(hasil_tax.format(2, 3, '.', ','));
+      
+      $("#tax_rp").val(hasil_tax.format(2, 3, '.', ','));
       $("#biaya_admin_persen").val(biaya_adm_tampil.format(2, 3, '.', ','));
 
 //perhitungan form pembayaran (total & subtotal / biaya admin) 
@@ -1929,21 +1954,6 @@ $("#total2").val(total_akhir1.format(2, 3, '.', ','));
 
 
 
-/// JAVASCRIPT MUNCULKAN ALERT PROMO (JIKA AADA PROMO DALAM BARANG ITU DARI INPUT BARCODE)
-$.getJSON('lihat_nama_barang.php',{kode_barang:kode_barang}, function(json){
-$.post("lihat_promo_alert.php",{id:json.id},function(info){
-
-    if (info == '')
-    {
-
-    }
-    else{
-      $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(info);
-    }
-});
-});
-///END  JAVASCRIPT ALERT PROMO
 
 
 

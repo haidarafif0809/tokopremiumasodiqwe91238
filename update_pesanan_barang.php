@@ -4,15 +4,55 @@ include 'sanitasi.php';
 include 'db.php';
 
 $kode_barang = stringdoang($_POST['kode_barang']);
-$jumlah_baru = angkadoang($_POST['jumlah_baru']);
-$jumlah_lama = angkadoang($_POST['jumlah_lama']);
-$potongan = angkadoang($_POST['potongan']);
-$harga = angkadoang($_POST['harga']);
-$jumlah_tax = angkadoang($_POST['jumlah_tax']);
-$subtotal = angkadoang($_POST['subtotal']);
+$jumlah_baru = stringdoang($_POST['jumlah_baru']);
+ $jumlah_baru = str_replace(',','.',$jumlah_baru);
+ if ($jumlah_baru == '') 
+ {
+   $jumlah_baru = 0;
+ }
+
+$jumlah_lama = stringdoang($_POST['jumlah_lama']);
+ $jumlah_lama = str_replace(',','.',$jumlah_lama);
+if ($jumlah_lama == '') 
+ {
+   $jumlah_lama = 0;
+ }
+
+$potongan = stringdoang($_POST['potongan']);
+ $potongan = str_replace(',','.',$potongan);
+if ($potongan == '') 
+ {
+   $potongan = 0;
+ }
+
+$harga = stringdoang($_POST['harga']);
+ $harga = str_replace(',','.',$harga);
+if ($harga == '') 
+ {
+   $harga = 0;
+ }
+
+$jumlah_tax = stringdoang($_POST['jumlah_tax']);
+ $jumlah_tax = str_replace(',','.',$jumlah_tax);
+if ($jumlah_tax == '') 
+ {
+   $jumlah_tax = 0;
+ }
+
+$subtotal = stringdoang($_POST['subtotal']);
+ $subtotal = str_replace(',','.',$subtotal);
+if ($subtotal == '') 
+ {
+   $subtotal = 0;
+ }
 
 $hasil_sub = $subtotal + $jumlah_tax;
-
+ $hasil_sub = str_replace(',','.',$hasil_sub);
+if ($hasil_sub == '') 
+ {
+   $hasil_sub = 0;
+ }
+ 
 $user = $_SESSION['nama'];
 $id = stringdoang($_POST['id']);
 
@@ -25,7 +65,7 @@ $nomor = $data['no_faktur'];
 $query = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = ?, subtotal = ?, tax = ? WHERE id = ?");
 
 
-$query->bind_param("iiii",
+$query->bind_param("sssi",
     $jumlah_baru, $hasil_sub, $jumlah_tax, $id);
 
 $query->execute();

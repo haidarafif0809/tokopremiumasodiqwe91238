@@ -118,6 +118,3 @@ $(document).on('click','#btntgl',function(e) {
 </script> 
 <!--end SCRIPT datepicker -->
 
-<?php 
-include 'footer.php';
- ?>

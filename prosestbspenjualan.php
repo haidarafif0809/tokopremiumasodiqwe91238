@@ -6,13 +6,14 @@
     //mengirim data sesuai dengan variabel denagn metode POST 
 
     $kode_barang = stringdoang($_POST['kode_barang']);
-    $harga = angkadoang($_POST['harga']);
-    $jumlah_barang = angkadoang($_POST['jumlah_barang']);
+    $harga = stringdoang($_POST['harga']);
+    $jumlah_barang = stringdoang($_POST['jumlah_barang']);
     $nama_barang = stringdoang($_POST['nama_barang']);
     $sales = stringdoang($_POST['sales']);
     $user = $_SESSION['nama'];
     $potongan = stringdoang($_POST['potongan']);
-    $a = $harga * $jumlah_barang;$tahun_sekarang = date('Y');
+    $a = $harga * $jumlah_barang;
+    $tahun_sekarang = date('Y');
     $bulan_sekarang = date('m');
     $tanggal_sekarang = date('Y-m-d');
     $jam_sekarang = date('H:i:s');
@@ -148,16 +149,16 @@ else
             ?,?,?,?,?,?,?,?,?)");
             
             
-            $perintah->bind_param("sssisiiisss",
+            $perintah->bind_param("sssssssssss",
             $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotaljadi, $potongan_tampil, $tax_persen,$tanggal_sekarang,$jam_sekarang);
             
             
             $kode_barang = stringdoang($_POST['kode_barang']);
-            $jumlah_barang = angkadoang($_POST['jumlah_barang']); 
+            $jumlah_barang = stringdoang($_POST['jumlah_barang']); 
             $nama_barang = stringdoang($_POST['nama_barang']);
             $satuan = stringdoang($_POST['satuan']);
-            $harga = angkadoang($_POST['harga']);
-            $tax = angkadoang($_POST['tax']);
+            $harga = stringdoang($_POST['harga']);
+            $tax = stringdoang($_POST['tax']);
             if ($tax == '') {
               $tax = 0;
             }

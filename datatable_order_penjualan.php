@@ -34,14 +34,14 @@ $columns = array(
 
 // getting total number records without any search
 $sql = " SELECT u.nama,po.keterangan,po.id,po.no_faktur_order,po.total,po.kode_pelanggan,po.tanggal,po.jam,po.user,po.status_order,g.nama_gudang,po.kode_gudang,pl.nama_pelanggan ";
-$sql.=" FROM penjualan_order po INNER JOIN gudang g ON po.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON po.kode_pelanggan = pl.kode_pelanggan INNER JOIN user u ON po.user = u.id";
+$sql.=" FROM penjualan_order po INNER JOIN gudang g ON po.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON po.kode_pelanggan = pl.id INNER JOIN user u ON po.user = u.id";
 $query=mysqli_query($conn, $sql) or die("1.php: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
 $sql = "SELECT  u.nama,po.keterangan,po.id,po.no_faktur_order,po.total,po.kode_pelanggan,po.tanggal,po.jam,po.user,po.status_order,g.nama_gudang,po.kode_gudang,pl.nama_pelanggan  ";
-$sql.=" FROM penjualan_order po INNER JOIN gudang g ON po.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON po.kode_pelanggan = pl.kode_pelanggan INNER JOIN user u ON po.user = u.id WHERE 1=1 ";
+$sql.=" FROM penjualan_order po INNER JOIN gudang g ON po.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON po.kode_pelanggan = pl.id INNER JOIN user u ON po.user = u.id WHERE 1=1 ";
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 	$sql.=" AND ( po.no_faktur_order LIKE '".$requestData['search']['value']."%' ";    

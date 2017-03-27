@@ -1,8 +1,8 @@
 <?php 
 
 function persen($persen){
-	$hasil = "". $persen."%";
-	return $hasil;
+  $hasil = "". $persen."%";
+  return $hasil;
 }
 
 function rp($rupiah){
@@ -11,6 +11,24 @@ $rpp = $rp;
 return $rpp;
 }
 
+function koma($rupiah,$angka){
+$rp = number_format($rupiah,$angka,",",".");
+$rpp = $rp;
+return $rpp;
+}
+
+
+function komarupiah($rupiah,$angka){
+$rp = number_format($rupiah,$angka,".","");
+$rpp = $rp;
+return $rpp;
+}
+
+function normal($sasa){
+$rp = substr($sasa,-0,-3);
+$rpp = $rp;
+return $rpp;
+}
 
 function angkadoang($angka){
 
@@ -72,34 +90,34 @@ return $baru;
 
 }
 // Untuk membuat angka menjadi tulisan huruf
-		function kekata($x) {
-		$x = abs($x);
-		$angka = array("", "satu", "dua", "tiga", "empat", "lima",
-		"enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
-		$temp = "";
-		if ($x <12) {
-		$temp = " ". $angka[$x];
-		} else if ($x <20) {
-		$temp = kekata($x - 10). " belas";
-		} else if ($x <100) {
-		$temp = kekata($x/10)." puluh". kekata($x % 10);
-		} else if ($x <200) {
-		$temp = " seratus" . kekata($x - 100);
-		} else if ($x <1000) {
-		$temp = kekata($x/100) . " ratus" . kekata($x % 100);
-		} else if ($x <2000) {
-		$temp = " seribu" . kekata($x - 1000);
-		} else if ($x <1000000) {
-		$temp = kekata($x/1000) . " ribu" . kekata($x % 1000);
-		} else if ($x <1000000000) {
-		$temp = kekata($x/1000000) . " juta" . kekata($x % 1000000);
-		} else if ($x <1000000000000) {
-		$temp = kekata($x/1000000000) . " milyar" . kekata(fmod($x,1000000000));
-		} else if ($x <1000000000000000) {
-		$temp = kekata($x/1000000000000) . " trilyun" . kekata(fmod($x,1000000000000));
-		}     
-		return $temp;
-		}
+    function kekata($x) {
+    $x = abs($x);
+    $angka = array("", "satu", "dua", "tiga", "empat", "lima",
+    "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
+    $temp = "";
+    if ($x <12) {
+    $temp = " ". $angka[$x];
+    } else if ($x <20) {
+    $temp = kekata($x - 10). " belas";
+    } else if ($x <100) {
+    $temp = kekata($x/10)." puluh". kekata($x % 10);
+    } else if ($x <200) {
+    $temp = " seratus" . kekata($x - 100);
+    } else if ($x <1000) {
+    $temp = kekata($x/100) . " ratus" . kekata($x % 100);
+    } else if ($x <2000) {
+    $temp = " seribu" . kekata($x - 1000);
+    } else if ($x <1000000) {
+    $temp = kekata($x/1000) . " ribu" . kekata($x % 1000);
+    } else if ($x <1000000000) {
+    $temp = kekata($x/1000000) . " juta" . kekata($x % 1000000);
+    } else if ($x <1000000000000) {
+    $temp = kekata($x/1000000000) . " milyar" . kekata(fmod($x,1000000000));
+    } else if ($x <1000000000000000) {
+    $temp = kekata($x/1000000000000) . " trilyun" . kekata(fmod($x,1000000000000));
+    }     
+    return $temp;
+    }
 
 function tanggal($tanggal){
 
@@ -166,8 +184,8 @@ $kode_barang = stringdoang($kode_barang);
 
 
             $stok_barang = $total_1 - $total_2;
-	
-	return $stok_barang;
+  
+  return $stok_barang;
 
 }
 
@@ -177,7 +195,7 @@ $kode_barang = stringdoang($kode_barang);
 
 function no_jurnal(){
 
-	include 'db.php';
+  include 'db.php';
 
 
 $tahun_sekarang = date('Y');
@@ -235,7 +253,7 @@ return $nomor_jurnal;
 
 function no_faktur_jurnal(){
 
-	include 'db.php';
+  include 'db.php';
 
 
 $tahun_sekarang = date('Y');

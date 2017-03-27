@@ -18,6 +18,8 @@ $ambil_suplier = mysqli_fetch_array($select_suplier);
 
     $nomor_faktur = stringdoang($_POST['no_faktur']);
 
+            $perintah09 = $db->query("DELETE FROM jurnal_trans WHERE no_faktur = '$nomor_faktur'");
+
             $perintah1 = $db->query("DELETE FROM detail_pembelian WHERE no_faktur = '$nomor_faktur'");
 
 

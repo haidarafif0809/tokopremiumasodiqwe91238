@@ -10,7 +10,7 @@ $session_id = session_id();
  // menyimpan data sementara yg ada pada $query
  $data = mysqli_fetch_array($query);
  if ($data > 0) {
- 	echo $total = $data['total_penjualan'];
+ 	echo $total = koma($data['total_penjualan'],2);
  }
  else{
  	echo 0;

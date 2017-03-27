@@ -1,9 +1,9 @@
-<?php 
+<?php  session_start();
 
 include 'db.php';
-
-$session_id = $_POST['session_id'];
-$kode_barang = $_POST['kode_barang'];
+include 'sanitasi.php';
+$session_id = session_id();
+$kode_barang = stringdoang($_POST['kode_barang']);
 
 $query = $db->query("SELECT kode_barang FROM tbs_item_keluar WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
 $jumlah = mysqli_num_rows($query);
@@ -15,6 +15,7 @@ if ($jumlah > 0){
 }
 else {
 
+echo "0";
 }
         //Untuk Memutuskan Koneksi Ke Database
 

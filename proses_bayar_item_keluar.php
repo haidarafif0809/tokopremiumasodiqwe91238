@@ -28,7 +28,7 @@ if ($cek_jumlah_bulan == 1) {
  }
 //ambil bulan dari tanggal item_keluar terakhir
 
- $bulan_terakhir = $db->query("SELECT MONTH(tanggal) as bulan FROM item_keluar ORDER BY id DESC LIMIT 1");
+ $bulan_terakhir = $db->query("SELECT MONTH(waktu_input) as bulan FROM item_keluar ORDER BY id DESC LIMIT 1");
  $v_bulan_terakhir = mysqli_fetch_array($bulan_terakhir);
 
 //ambil nomor  dari item_keluar terakhir
@@ -76,12 +76,15 @@ $no_faktur = $nomor."/IK/".$data_bulan_terakhir."/".$tahun_terakhir;
 
 
 
-    $query = $db->query("SELECT * FROM tbs_item_keluar WHERE session_id = '$session_id'");
+    $query = $db->query("SELECT kode_barang,nama_barang,jumlah,satuan,harga,subtotal FROM tbs_item_keluar WHERE session_id = '$session_id'");
     while ($data = mysqli_fetch_array($query))
     {
        
         $query2 = $db->query("INSERT INTO detail_item_keluar (no_faktur, tanggal,jam, kode_barang, nama_barang, jumlah, satuan, harga, subtotal) 
 		VALUES ('$no_faktur','$tanggal_sekarang','$jam_sekarang', '$data[kode_barang]','$data[nama_barang]','$data[jumlah]','$data[satuan]','$data[harga]','$data[subtotal]')");
+
+
+
     }
 
     //BATAS SINI
@@ -91,7 +94,7 @@ $sum_hpp_keluar = $db->query("SELECT SUM(total_nilai) AS total FROM hpp_keluar W
 $ambil_sum = mysqli_fetch_array($sum_hpp_keluar);
 $total = $ambil_sum['total'];
 
-$select_setting_akun = $db->query("SELECT * FROM setting_akun");
+$select_setting_akun = $db->query("SELECT persediaan, item_keluar FROM setting_akun");
 $ambil_setting = mysqli_fetch_array($select_setting_akun);
 
 

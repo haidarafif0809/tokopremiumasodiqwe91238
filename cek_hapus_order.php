@@ -1,11 +1,11 @@
 <?php session_start();
+$session_id = session_id();
 
 // memasukan file db.php
 include 'db.php';
 include 'sanitasi.php';
 
 
-$session_id = session_id();
 $hapus_order = stringdoang($_POST['hapus_order']);
 
 

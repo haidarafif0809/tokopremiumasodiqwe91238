@@ -82,7 +82,7 @@ if ($lihat['pembelian_lihat'] > 0){
 
 if ($lihat['tukar_poin_lihat'] > 0){
 
-                echo '<li><a href="tukar_poin.php" class="waves-effect"> <i class="fa fa-shopping-basket"></i> Penukaran Poin </a></li>';
+                echo '<li><a href="tukar_poin.php" class="waves-effect"> <i class="fa fa-exchange"></i> Penukaran Poin </a></li>';
 }
 
 if ($lihat['master_data_lihat'] > 0){

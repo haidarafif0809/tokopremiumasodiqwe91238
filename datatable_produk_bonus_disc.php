@@ -16,7 +16,6 @@ $columns = array(
     0=>'kode_barang', 
     1=>'nama_produk',
     2=>'nama_program',
-    3=>'qty',
     4=>'qty_max',
     5=>'harga_disc',
     6=>'harga_jual',
@@ -26,16 +25,16 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql = "SELECT b.id,b.nama_barang,b.harga_jual,b.kode_barang,pp.nama_produk,pp.nama_program,pp.id,pp.harga_disc,pp.qty_max,p.nama_program as program ";
-$sql.=" FROM promo_disc_produk pp LEFT JOIN barang b ON pp.nama_produk = b.id LEFT JOIN program_promo p ON pp.nama_program = p.id where pp.nama_program = '$program' AND pp.qty != '0'";
+$sql = "SELECT b.id,b.nama_barang,b.harga_jual,b.kode_barang,pp.nama_produk,pp.nama_program,pp.satuan,pp.id,pp.harga_disc,pp.qty_max,p.nama_program as program ";
+$sql.=" FROM promo_disc_produk pp LEFT JOIN barang b ON pp.nama_produk = b.id LEFT JOIN program_promo p ON pp.nama_program = p.id where pp.nama_program = '$program' AND pp.qty_max != '0'";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql = "SELECT b.id,b.nama_barang,b.kode_barang,pp.nama_produk,pp.nama_program,pp.id,p.nama_program as program";
-$sql.="FROM promo_disc_produk pp LEFT JOIN barang b ON pp.nama_produk = b.id LEFT JOIN program_promo p ON pp.nama_program = p.id WHERE pp.nama_program = '$program' AND pp.qty != '0' AND 1=1 ";
+$sql = "SELECT b.id,b.nama_barang,b.kode_barang,pp.nama_produk,pp.nama_program,pp.satuan,pp.id,p.nama_program as program";
+$sql.="FROM promo_disc_produk pp LEFT JOIN barang b ON pp.nama_produk = b.id LEFT JOIN program_promo p ON pp.nama_program = p.id WHERE pp.nama_program = '$program' AND pp.qty_max != '0' AND 1=1 ";
 
     $sql.=" AND ( b.kode_barang LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR b.nama_barang LIKE '".$requestData['search']['value']."%' )"; 
@@ -64,6 +63,7 @@ while( $row=mysqli_fetch_array($query) ) {
     $nestedData[] = rp($row["harga_disc"]);
     $nestedData[] = rp($row["harga_jual"]);
     $nestedData[] = $row["program"];
+    $nestedData[] = $row["satuan"];
     $nestedData[] = $row["id"];
     
     $data[] = $nestedData;

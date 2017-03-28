@@ -1,5 +1,5 @@
 <?php
-	//memasukkan file db.php
+    //memasukkan file db.php
     include 'sanitasi.php';
     include 'db.php';
     // mengirim data, menggunakan metode POST
@@ -9,13 +9,12 @@
         $qty_max = angkadoang($_POST['qty_max']);
         $harga_disc = angkadoang($_POST['harga_disc']);
         $nama_produk = angkadoang($_POST['id_produk']);
-        $qty = angkadoang($_POST['qty']);
         
     // merubah seluruh data yang ada pada tabel user, berdasarkan masing masing kolom
-    $query = $db->prepare("UPDATE promo_disc_produk SET nama_program = ?, qty_max = ?, harga_disc = ?,	nama_produk= ? , qty= ? WHERE id = ?");
+    $query = $db->prepare("UPDATE promo_disc_produk SET nama_program = ?, qty_max = ?, harga_disc = ?,  nama_produk= ? WHERE id = ?");
     
-    $query->bind_param("iiiiii",
-        $nama_program, $qty_max, $harga_disc, $nama_produk,$qty, $id);
+    $query->bind_param("iiiii",
+        $nama_program, $qty_max, $harga_disc, $nama_produk, $id);
 
 
     $query->execute();

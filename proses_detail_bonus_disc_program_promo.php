@@ -9,17 +9,16 @@ die('Koneksi gagal: ' .$db->connect_errno.
 ' - '.$db->connect_error);
 }
 
-	$id_program = angkadoang($_POST['id_program']);
+    $id_program = angkadoang($_POST['id_program']);
     $id_produk = angkadoang($_POST['id_produk']);
     $qty = angkadoang($_POST['qty_max']);
-    $qty_p = angkadoang($_POST['qty']);
     $harga_disc = angkadoang($_POST['harga_disc']);
 
-$insert_produk = $db->prepare("INSERT INTO promo_disc_produk (nama_program,nama_produk,qty_max,harga_disc,qty) VALUES (?,?,?,?,?)");
+$insert_produk = $db->prepare("INSERT INTO promo_disc_produk (nama_program,nama_produk,qty_max,harga_disc) VALUES (?,?,?,?)");
   
 // hubungkan "data" dengan prepared statements
-$insert_produk->bind_param("iiiii",
-$id_program,$id_produk,$qty,$harga_disc,$qty_p);
+$insert_produk->bind_param("iiii",
+$id_program,$id_produk,$qty,$harga_disc);
        
   
 

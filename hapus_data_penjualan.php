@@ -2,7 +2,7 @@
 
 // memsukan file db,php
 include 'db.php';
-
+include 'sanitasi.php';
 
 $id = stringdoang($_POST['id']);
 $no_faktur = stringdoang($_POST['no_faktur']);

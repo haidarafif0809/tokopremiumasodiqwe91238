@@ -297,28 +297,23 @@ $pembelian_hapus = mysqli_num_rows($pilih_akses_pembelian_hapus);
 						$("#nama_suplier").val(suplier);
 						$("#faktur_hapus").val(no_faktur);
 						$("#id_hapus").val(id);
-						$("#modal_hapus").modal('show');
-						$("#btn_jadi_hapus").attr("data-id", id);
+						
+                var konfirmasi_hapus = confirm("Apakah Anda Yakin Ingin Menghapus Pembelian "+no_faktur+" dengan suplier " +suplier);
+
+                if (konfirmasi_hapus == true) {
+
+
+                    $.post("hapus_data_pembelian.php", {id:id, no_faktur:no_faktur}, function(data){  
+
+                    $(".tr-id-"+id).remove();
+                    
+                    
+                    });
+                }
 
 						});
 						
-						$("#btn_jadi_hapus").click(function(){
-						
-						var id = $(this).attr("data-id");
-						var no_faktur = $("#faktur_hapus").val();
-
-						$.post("hapus_data_pembelian.php", {id:id, no_faktur:no_faktur}, function(data){
-						if (data == 'sukses') {
-						
-						$("#modal_hapus").modal("hide");
-						$(".tr-id-"+id).remove();
-						
-						}
-						
-						});
-						
-						
-						});
+					
 						
 						$('form').submit(function(){
 						

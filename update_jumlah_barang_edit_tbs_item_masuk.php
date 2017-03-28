@@ -10,7 +10,7 @@ $user = $_SESSION['nama'];
 $id = angkadoang($_POST['id']);
 
 
-$query00 = $db->query("SELECT * FROM tbs_item_masuk WHERE id = '$id'");
+$query00 = $db->query("SELECT harga FROM tbs_item_masuk WHERE id = '$id'");
 $data = mysqli_fetch_array($query00);
 
 $subtotal = $data['harga'] * $jumlah_baru;

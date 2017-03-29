@@ -4,9 +4,9 @@ include 'sanitasi.php';
 include 'db.php';
 
 
- $no_faktur = $_POST['no_faktur'];
+ $no_faktur = stringdoang($_POST['no_faktur']);
 
- $query = $db->query ("SELECT * FROM detail_item_masuk WHERE no_faktur = '$no_faktur'");
+ $query = $db->query ("SELECT no_faktur,kode_barang,nama_barang,jumlah,satuan.nama AS satuan ,harga, subtotal FROM detail_item_masuk INNER JOIN satuan ON detail_item_masuk.satuan = satuan.id WHERE no_faktur = '$no_faktur'");
 
  
  ?>

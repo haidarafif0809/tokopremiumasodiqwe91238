@@ -35,16 +35,17 @@ if ($produk_promo['produk_promo_tambah'] > 0) {
 <span id="tambh_produk_promo" style="display: none;"><!--span untuk TAMBAH-->
           <form class="form-inline" role="form" id="formproduk">
           <div class="row armun"><!--div class="row armun"-->
-            <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="kode_produk" id="kode_produk" autocomplete="off" class="form-control" style="height: 5%; width: 95%;" placeholder="Kode Produk" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Ketikkan kode produk atau nama produk untuk memilih produk.'>
-
-                <input type="hidden" name="id_produk" id="id_produk" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;">
-            </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
                 <input type="hidden" name="id_program" id="id_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $id ;?>" style="height: 5%; width: 95%;">
 
                 <b><input type="text" name="nama_program" id="nama_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 5%; width: 95%; font-size: 125%;" placeholder="Nama Program"></b>
+            </div><!--div class="col-sm-2 armun"-->
+
+            <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
+                <input type="text" name="kode_produk" id="kode_produk" autocomplete="off" class="form-control" style="height: 5%; width: 95%;" placeholder="Kode Produk" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Ketikkan kode produk atau nama produk untuk memilih produk.'>
+
+                <input type="hidden" name="id_produk" id="id_produk" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;">
             </div><!--div class="col-sm-2 armun"-->
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"--><br>
@@ -62,19 +63,22 @@ if ($produk_promo['produk_promo_tambah'] > 0) {
 <span id="edit_produk_promo" style="display: none;"><!--span untuk EDIT-->
           <form class="form-inline" role="form" id="formeditproduk">
           <div class="row armun"><!--div class="row armun"-->
-            <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="kode_produk_edit" id="kode_produk_edit" autocomplete="off" class="form-control" style="height: 5%; width: 95%;" placeholder="Kode Produk" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Ketikkan kode produk atau nama produk untuk memilih produk.'>
-
-                <input type="hidden" name="id_produk_edit" id="id_produk_edit" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;">
-            </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
                 <input type="hidden" name="id_program_edit" id="id_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $id ;?>" style="height: 5%; width: 95%;">
 
                 <b><input type="text" name="nama_program_edit" id="nama_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 5%; width: 95%; font-size: 125%;" placeholder="Nama Program"></b>
+            </div><!--div class="col-sm-2 armun"-->
 
+            <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
+                <input type="text" name="kode_produk_edit" id="kode_produk_edit" autocomplete="off" class="form-control" style="height: 5%; width: 95%;" placeholder="Kode Produk" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Ketikkan kode produk atau nama produk untuk memilih produk.'>
+
+                <input type="hidden" name="id_produk_edit" id="id_produk_edit" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;">
+                
                 <input type="hidden" name="id_edit" id="id_edit" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;">
             </div><!--div class="col-sm-2 armun"-->
+
+
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"--><br>
               <button type="submit" id="submit_edit" class="btn btn-primary" style="background-color:#0277bd"><i class="fa fa-edit"> </i> EDIT</button>
@@ -320,7 +324,7 @@ $("#kode_produk").mouseleave(function(){
 // MENAMPILKAN FORM
   $(document).ready(function(){
     $("#tambah_produk").click(function(){
-
+    $("#edit_produk_promo").hide();
      var id_program = $("#id_program").val();
      var id_produk = $("#id_produk").val();
       if (id_produk == '') {
@@ -340,8 +344,8 @@ $("#kode_produk").mouseleave(function(){
               $("#kode_produk").val('');
               }//penutup if
               
-              else{
-                 $.post("proses_detail_program_promo.php",{id_program:id_program,id_produk:id_produk},function(info) {
+              });////penutup function(data)
+        $.post("proses_detail_program_promo.php",{id_program:id_program,id_produk:id_produk},function(info) {
           $("#tambh_produk_promo").hide();
           $("#tambah_produk_promo").show();
 
@@ -374,9 +378,6 @@ $("#kode_produk").mouseleave(function(){
               $("#kode_produk").val('');
               $("#id_produk").val('');
        });
-              }
-              });////penutup function(data)
-       
       }
       $("#formproduk").submit(function(){
       return false;
@@ -476,6 +477,7 @@ $("#kode_produk").mouseleave(function(){
     $("#id_edit").val(id_edit);
 
       $("#edit_produk_promo").show();
+      $("#tambh_produk_promo").hide();
       $("#judul_edit_bodel").show();
       $("#judul_bodel").hide();
       $("#table_le_kui").hide();
@@ -496,16 +498,9 @@ $("#kode_produk").mouseleave(function(){
         alert("Silakan isikan kode produk promo terlebih dahulu.");
         $("#id_produk_edit").focus();
       }
-      else 
+      else
       {
-           $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data){
-            
-              if(data == 1){
-              alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
-              $("#kode_produk").val('');
-              }//penutup if
-              else{
-                $.post("edit_detail_program_promo.php",{id:id,id_program:id_program,id_produk:id_produk},function(info) {
+        $.post("edit_detail_program_promo.php",{id:id,id_program:id_program,id_produk:id_produk},function(info) {
           $("#edit_produk_promo").hide();
           $("#tambah_produk_promo").show();
           $("#table_le_kui").show();
@@ -538,9 +533,6 @@ $("#kode_produk").mouseleave(function(){
 
               $("#nama_produk_edit").val('');
        });
-              }
-           });
-        
       }
       $("#formeditproduk").submit(function(){
       return false;

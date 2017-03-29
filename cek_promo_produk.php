@@ -2,31 +2,22 @@
 
 include 'db.php';
 
-$tanggal_sekarang = date('yy-mm-dd');
+$kode_barang = $_POST['kode_barang'];
 
-$querytbs = $db->query("SELECT kode_barang,sum(subtotal) sub_jumlah FROM tbs_penjualan WHERE kode_barang = '$kode_barang'");
-$idtbs = mysqli_num_rows($querytbs);
-$total = $idtbs['sub_jumlah'];
-
-$querybarang = $db->query("SELECT id FROM barang WHERE kode_barang = '$idtbs[kode_barang]'");
-$idbar = mysqli_num_rows($querybarang);
-
-$queryprogram = $db->query("SELECT syarat_belanja,id,tanggal FROM program_promo WHERE tanggal = tanggal AND batas_akhir <= '$tanggal_sekarang'");
-$idpro = mysqli_num_rows($queryprogram);
-$syarat = $idpro['syarat_belanja'];
-
-$query = $db->query("SELECT nama_produk,nama_program FROM promo_produk WHERE nama_produk = '$idbar[id]' and nama_program = '$idpro[id]'");
-$jumlah = mysqli_num_rows($query);
+$tanggal_sekarang = date('Y-m-d');
 
 
-if ($sub_jumlah = $syarat || $sub_jumlah > $syarat) {
-	if ($jumlah > 0){
+$querytbs = $db->query("SELECT b.id,sum(tp.subtotal) as sub_tp,pp.nama_produk,pr.syarat_belanja FROM tbs_penjualan tp LEFT JOIN barang b ON tp.kode_barang = b.kode_barang LEFT JOIN produk_promo pp ON b.id = pp.nama_produk LEFT JOIN program_promo pr ON pp.nama_program = pr.id WHERE pr.batas_akhir >= '$tanggal_sekarang' AND pp.nama_produk = b.id AND pr.jenis_bonus = 'Free Produk' ");
+$idtbs = mysqli_fetch_array($querytbs);
+$produk = $idtbs['nama_produk'];
+$sub = $idtbs['sub_tp'];
+$syarat = $idtbs['syarat_belanja'];
+if ($produk > 0 && $sub >= $syarat){
 
   echo 1;
 }
 else {
-
-}
+echo 0;
 }
         //Untuk Memutuskan Koneksi Ke Database
 

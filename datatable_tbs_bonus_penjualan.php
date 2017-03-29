@@ -22,18 +22,18 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql =" SELECT * ";
-$sql.=" FROM tbs_bonus_penjualan WHERE session_id = '$session_id' AND kode_pelanggan IS NULL ";
+$sql =" SELECT s.nama,tbp.kode_produk, tbp.nama_produk, tbp.keterangan, tbp.qty_bonus, tbp.harga_disc, tbp.qty_bonus, tbp.harga_disc, tbp.id ";
+$sql.=" FROM tbs_bonus_penjualan tbp LEFT JOIN satuan s ON tbp.satuan = s.id WHERE tbp.session_id = '$session_id' AND tbp.kode_pelanggan IS NULL ";
 $query = mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql =" SELECT * ";
-$sql.=" FROM tbs_bonus_penjualan WHERE session_id = '$session_id' AND kode_pelanggan IS NULL AND 1=1 ";
+$sql =" SELECT s.nama,tbp.kode_produk, tbp.nama_produk, tbp.keterangan, tbp.qty_bonus, tbp.harga_disc, tbp.qty_bonus, tbp.harga_disc, tbp.id ";
+$sql.=" FROM tbs_bonus_penjualan tbp LEFT JOIN satuan s ON tbp.satuan = s.id WHERE tbp.session_id = '$session_id' AND tbp.kode_pelanggan IS NULL AND 1=1 ";
 
-    $sql.=" AND (kode_produk LIKE '".$requestData['search']['value']."%'";  
-    $sql.=" OR nama_produk LIKE '".$requestData['search']['value']."%' )";
+    $sql.=" AND (tbp.kode_produk LIKE '".$requestData['search']['value']."%'";  
+    $sql.=" OR tbp.nama_produk LIKE '".$requestData['search']['value']."%' )";
 
 }
 
@@ -41,7 +41,7 @@ $sql.=" FROM tbs_bonus_penjualan WHERE session_id = '$session_id' AND kode_pelan
 $query=mysqli_query($conn, $sql) or die("eror 2");
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
         
-$sql.=" ORDER BY id DESC  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+$sql.=" ORDER BY tbp.id DESC  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */    
 $query=mysqli_query($conn, $sql) or die("eror 3");
@@ -58,7 +58,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
       else{
         $nestedData[] = rp($row["qty_bonus"]);
       }
-
+      $nestedData[] = $row["nama"];
       $nestedData[] = rp($row["harga_disc"]);
       $nestedData[] = rp($row["qty_bonus"] * $row["harga_disc"]);
       $nestedData[] =  $row["keterangan"];

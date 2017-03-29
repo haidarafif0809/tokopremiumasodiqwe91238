@@ -42,15 +42,11 @@ $kode_program = stringdoang($_GET['kode']);
             </div><!--div class="col-sm-2 armun"-->
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="harga_disc" id="harga_disc" autocomplete="off" class="form-control" style="height: 5%; width: 65%;"  placeholder="Harga Disc.">
+                <input type="text" name="harga_disc" id="harga_disc" autocomplete="off" class="form-control" style="height: 5%; width: 65%;"  placeholder="Harga Promo">
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
                 <input type="text" name="qty_max" id="qty_max" autocomplete="off" class="form-control" style="height: 5%; width: 45%;"  placeholder="Qty Max. Bonus">
-            </div><!--div class="col-sm-2 armun"-->
-
-            <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="qty" id="qty" autocomplete="off" class="form-control" style="height: 5%; width: 45%;"  placeholder="Qty">
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"--><br>
@@ -79,17 +75,13 @@ $kode_program = stringdoang($_GET['kode']);
             </div><!--div class="col-sm-2 armun"-->
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="harga_disc_edit" id="harga_disc_edit" autocomplete="off" class="form-control" style="height: 5%; width: 65%;"  placeholder="Harga Disc.">
+                <input type="text" name="harga_disc_edit" id="harga_disc_edit" autocomplete="off" class="form-control" style="height: 5%; width: 65%;"  placeholder="Harga Promo">
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
                 <input type="text" name="qty_max_edit" id="qty_max_edit" autocomplete="off" class="form-control" style="height: 5%; width: 45%;"  placeholder="Qty Max.">
 
                 <input type="hidden" name="id_edit" id="id_edit" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;">
-            </div><!--div class="col-sm-2 armun"-->
-
-            <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="qty_edit" id="qty_edit" autocomplete="off" class="form-control" style="height: 5%; width: 45%;"  placeholder="Qty">
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"--><br>
@@ -146,9 +138,8 @@ $kode_program = stringdoang($_GET['kode']);
   <table id="table_disc_produk" class="table table-bordered table-sm">
     <thead>
       <th style="background-color: #4CAF50; color: white;"> Nama Produk</th>
-      <th style="background-color: #4CAF50; color: white;"> Harga Disc </th>
+      <th style="background-color: #4CAF50; color: white;"> Harga Promo </th>
       <th style="background-color: #4CAF50; color: white;"> Qty Max Bonus</th>
-      <th style="background-color: #4CAF50; color: white;"> Qty</th>
       <th style="background-color: #4CAF50; color: white;"> Nama Program </th>
       <th style="background-color: #4CAF50; color: white;"> Edit </th>
       <th style="background-color: #4CAF50; color: white;"> hapus </th>
@@ -258,7 +249,6 @@ $kode_program = stringdoang($_GET['kode']);
      var id_program = $("#id_program").val();
      var id_produk = $("#id_produk").val();
      var qty_max = $("#qty_max").val();
-     var qty = $("#qty").val();
      var harga_disc = $("#harga_disc").val();
       if (id_program == '') {
         alert("Silakan isikan program promo terlebih dahulu.");
@@ -276,13 +266,9 @@ $kode_program = stringdoang($_GET['kode']);
         alert("Silakan isikan qty max terlebih dahulu.");
         $("#qty_max").focus();
       } 
-      else if (qty == '') {
-        alert("Silakan isikan qty terlebih dahulu.");
-        $("#qty").focus();
-      }
       else
       {
-        $.post("proses_detail_bonus_disc_program_promo.php",{id_program:id_program,id_produk:id_produk,qty_max:qty_max,harga_disc:harga_disc,qty:qty},function(info) {
+        $.post("proses_detail_bonus_disc_program_promo.php",{id_program:id_program,id_produk:id_produk,qty_max:qty_max,harga_disc:harga_disc},function(info) {
           $("#tambh_disc_produk").hide();
           $("#tambah_disc_produk").show();
 
@@ -314,7 +300,6 @@ $kode_program = stringdoang($_GET['kode']);
 
               $("#harga_disc").val('');
               $("#nama_produk").val('');
-              $("#kode_produk").val('');
               $("#qty_max").val('');
               $("#qty").val('');
        });
@@ -370,7 +355,6 @@ $(document).on('click', '.edit', function (e) {
     var id_produk = $("#id_produk_edit").val();
     var id = $("#id_edit").val();
     var qty_max = $("#qty_max_edit").val();
-    var qty = $("#qty_edit").val();
     var harga_disc = $("#harga_disc_edit").val();
     if (id_program == '') {
         alert("Silakan isikan program promo terlebih dahulu.");
@@ -388,13 +372,9 @@ $(document).on('click', '.edit', function (e) {
         alert("Silakan isikan qty max terlebih dahulu.");
         $("#qty_max_edit").focus();
       }
-      else if (qty == '') {
-        alert("Silakan isikan qty max terlebih dahulu.");
-        $("#qty_edit").focus();
-      } 
       else
       {
-        $.post("edit_detail_bonus_disc_program_promo.php",{id:id,id_program:id_program,id_produk:id_produk,qty_max:qty_max,harga_disc:harga_disc,qty:qty},function(info) {
+        $.post("edit_detail_bonus_disc_program_promo.php",{id:id,id_program:id_program,id_produk:id_produk,qty_max:qty_max,harga_disc:harga_disc},function(info) {
           $("#edit_disc_produk").hide();
           $("#tambah_disc_produk").show();
           $("#table_le_kui").show();

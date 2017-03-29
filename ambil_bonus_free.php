@@ -9,6 +9,8 @@
     $kode_barang = stringdoang($_POST['kode_barang']);
     $nama_barang = stringdoang($_POST['nama_bonus']);
     $jumlah = angkadoang($_POST['jumlah']);
+    $satuan = angkadoang($_POST['satuan']);
+    $harga_disc = angkadoang($_POST['harga_disc']);
     $tanggal = date('Y-m-d');
     $jam = date('H:i:s');
 
@@ -19,10 +21,10 @@
     }
     else{
 
-        $perintah = $db->prepare("INSERT INTO tbs_bonus_penjualan (session_id,kode_produk,nama_produk,qty_bonus,keterangan,tanggal,jam) VALUES (?,?,?,?,'Free Produk',?,?)");
+        $perintah = $db->prepare("INSERT INTO tbs_bonus_penjualan (session_id,kode_produk,nama_produk,qty_bonus,keterangan,tanggal,jam,satuan,harga_disc) VALUES (?,?,?,?,'Free Produk',?,?,?,?)");
 
-        $perintah->bind_param("sssiss",
-          $session_id, $kode_barang, $nama_barang, $jumlah,$tanggal,$jam);
+        $perintah->bind_param("sssissii",
+          $session_id, $kode_barang, $nama_barang, $jumlah,$tanggal,$jam,$satuan,$harga_disc);
           
 
         $perintah->execute();

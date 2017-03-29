@@ -27,33 +27,90 @@ include 'db.php';
 <button id="btntgl" class="btn btn-primary"><i class="fa fa-eye"></i> Tampil</button>
     
 </form>
-<br>
-<span id="result"></span>
+<div class="card card-block">
+      <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
+        <span id="span_lap">
+          <table id="tabel_lap" class="table table-bordered table-sm">
+            <thead>
+              
+              <th  style="background-color: #4CAF50; color: white;"> Nomor Transaksi </th>
+              <th  style="background-color: #4CAF50; color: white;"> Tanggal </th>
+              <th  style="background-color: #4CAF50; color: white;"> Kode Pelanggan</th>
+              <th  style="background-color: #4CAF50; color: white;"> Sub Total </th>
+              <th  style="background-color: #4CAF50; color: white;"> Total Pokok </th>
+              <th  style="background-color: #4CAF50; color: white;"> Laba Kotor </th>
+              <th  style="background-color: #4CAF50; color: white;"> Diskon Faktur </th>
+              <th  style="background-color: #4CAF50; color: white;"> Laba Jual </th>        
+            
+            </thead>
+
+          </table>
+        </span>
+      </div> <!--/ responsive-->
+
+      <span id="cetak" style="display: none">
+        <a href='cetak_laporan_laba_kotor.php' id="cetak_lap" class='btn btn-warning' target='blank'><i class='fa fa-print'> </i> Cetak Laporan</a>
+      </span>
+</div>
+
 </div> <!-- END DIV container -->
 
-<!-- Script Untuk Tampilan-->
+
+
 <script type="text/javascript">
-$("#btntgl").click(function() {
-
-      var dari_tanggal = $("#daritgl").val();
-      var sampai_tanggal = $("#sampaitgl").val();
-
-    $.post("proses_laporan_laba_kotor.php" ,{dari_tanggal:dari_tanggal,sampai_tanggal:sampai_tanggal},function(data){
+$(document).ready(function() {
+$(document).on('click','#btntgl',function(e){
 
 
-    $("#result").html(data); 
+     var sampai_tanggal = $("#sampaitgl").val();
+     var dari_tanggal = $("#daritgl").val();  
+     
 
-  });  
-});
 
-$("#perhari").submit(function(){
-    return false;
-});
-function clearInput(){
-    $("#perhari :input").each(function(){
-        $(this).val('');
+  //untuk tampilkan table kas MUTASI MASUK detail
+     $('#tabel_lap').DataTable().destroy();
+          var dataTable = $('#tabel_lap').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "info":     true,
+          "language": {
+          "emptyTable":     "My Custom Message On Empty Table"},
+          "ajax":{
+            url :"proses_laporan_laba_kotor.php", // json datasource
+             "data": function ( d ) {
+                d.dari_tanggal = $("#daritgl").val();
+                d.sampai_tanggal = $("#sampaitgl").val();
+                // d.custom = $('#myInput').val();
+                // etc
+            },
+                type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".tbody_lap").html("");
+              $("#tabel_lap").append('<tbody class="tbody_lap"><tr><th colspan="3"></th></tr></tbody>');
+              $("#tabel_lap_processing").css("display","none");
+              
+         
+            }
+          }
+    
     });
-};
+
+  $("#cetak").show();
+  $("#cetak_lap").attr("href", "cetak_laporan_laba_kotor.php?dari_tanggal="+dari_tanggal+"&sampai_tanggal="+sampai_tanggal+"");
+});
+
+    $("#perhari").submit(function(){
+      return false;
+    });
+
+    function clearInput(){
+        $("#perhari :input").each(function(){
+            $(this).val('');
+        });
+    };
+
+});
+//Ending untuk tampilkan table kas MUTASI MASUK detail
 </script>
 <!-- END Script Untuk Tampilan-->
 

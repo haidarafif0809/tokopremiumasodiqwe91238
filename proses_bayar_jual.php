@@ -319,6 +319,33 @@ $nomor = 1 + $ambil_nomor ;
 }
 //insert data penjualan piutang
 
+//awal nya bonus
+$querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.harga_disc,satuan FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id'");
+    while ($datatb = mysqli_fetch_array($querytb))
+      {
+          $subtotal_bonusnya = $datatb['qty_bonus'] * $datatb['harga_disc'];
+      $querybonus = "INSERT INTO bonus_penjualan (no_faktur_penjualan, kode_pelanggan, tanggal, jam, kode_produk, nama_produk, qty_bonus,keterangan,harga_disc,subtotal,satuan) VALUES ('$no_faktur', '$id_pelanggan', '$datatb[tanggal]', '$datatb[jam]', '$datatb[kode_produk]', '$datatb[nama_produk]', '$datatb[qty_bonus]', '$datatb[keterangan]', '$datatb[harga_disc]' ,'$subtotal_bonusnya','$datatb[satuan]' )";
+
+        if ($db->query($querybonus) === TRUE) {
+        } 
+
+        else {
+        echo "Error: " . $querybonus . "<br>" . $db->error;
+        }
+
+
+
+        // MENGAUPDATE KETERANGAN_PROMO_DISC DI TABLE PENJAUALAN 
+          $update_jual = "UPDATE penjualan SET keterangan_promo_disc = '$datatb[keterangan]' WHERE no_faktur = '$no_faktur'";
+          if ($db->query($update_jual) === TRUE) {
+          } 
+
+          else {
+          echo "Error: " . $update_jual . "<br>" . $db->error;
+          }
+      }
+//end nya bonus
+
 
     $query3 = $db->query("DELETE  FROM tbs_penjualan WHERE session_id = '$session_id'");
     $query30 = $db->query("DELETE  FROM tbs_fee_produk WHERE session_id = '$session_id'");

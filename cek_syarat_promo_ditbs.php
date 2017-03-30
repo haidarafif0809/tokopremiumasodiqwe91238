@@ -32,9 +32,7 @@ $syaratt = $idtb['syarat_belanja'];
 $querytbsbonus = $db->query("SELECT kode_produk,keterangan,id, tanggal,jam,satuan,harga_disc,nama_produk,kode_pelanggan FROM tbs_bonus_penjualan WHERE tanggal = '$tanggal_sekarang' AND session_id = '$session_id' ORDER BY id");
 $tbsbonus = mysqli_fetch_array($querytbsbonus);
 
-if (($idtbsnya > 0 && $sub < $syarat && $tbsbonus['keterangan'] == 'Free Produk') || $subto < $syaratt){
 
-	$tbsbonus['tanggal'] = $subto;
 	$tbsbonus['jam'] = $idtbsnya;
 	$tbsbonus['satuan'] = $sub;
 	$tbsbonus['harga_disc'] = $syarat;

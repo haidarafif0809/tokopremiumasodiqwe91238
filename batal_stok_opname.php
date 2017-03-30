@@ -4,7 +4,7 @@
 
     $session_id = $_GET['session_id'];
 
-    $query = $db->query("DELETE FROM tbs_stok_opname WHERE session_id='$session_id'");
+    $query = $db->query("DELETE FROM tbs_stok_opname WHERE no_faktur  = '' OR no_faktur IS NULL ");
 
     
     if ($query == TRUE)

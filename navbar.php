@@ -255,6 +255,8 @@ if ($lihat['pembayaran_hutang_lihat'] > 0){
 
 echo '<li><a href="kartu_stok.php" class="waves-effect" style="font-size: 16px">Kartu Stok</a></li>';
 
+ echo '<li><a href="kartu_stok_periode.php" class="waves-effect" style="font-size: 16px">Kartu Stok Per Periode</a></li>';
+
 echo '<li><a href="cache_produk_penjualan.php" class="waves-effect" style="font-size: 16px">Update Cache Produk</a></li>';
 
 echo '<li><a href="perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Perubahan Harga Masal</a></li>';
@@ -315,11 +317,11 @@ if ($lihat['retur_lihat'] > 0){
 }
 
  if ($lihat['laporan_jurnal_lihat'] > 0){
-                            echo '<li><a href="laporan_jurnal_transaksi.php" class="waves-effect"> Jurnal</a></li>';
+                            echo '<li><a href="laporan_jurnal_transaksi.php" class="waves-effect"> Jurnal Umum</a></li>';
 }
 
  if ($lihat['transaksi_jurnal_manual_lihat'] > 0){
-                            echo '<li><a href="transaksi_jurnal_manual.php" class="waves-effect">Transaksi Jurnal Manual</a></li>';
+                            echo '<li><a href="transaksi_jurnal_manual.php" class="waves-effect">Jurnal </a></li>';
 }
 
 if ($lihat['akuntansi_lihat'] > 0){       

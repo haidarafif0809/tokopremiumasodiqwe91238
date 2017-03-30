@@ -22,7 +22,7 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql = "SELECT b.id,b.harga_jual,b.nama_barang,b.kode_barang,pp.nama_produk,pp.nama_program,pp.satuan,pp.qty, pp.id,p.nama_program as program ";
+$sql = "SELECT b.id,b.harga_jual,b.nama_barang,b.satuan as satuan_barang,b.kode_barang,pp.nama_produk,pp.nama_program,pp.satuan,pp.qty, pp.id,p.nama_program as program ";
 $sql.=" FROM promo_free_produk pp LEFT JOIN barang b ON pp.nama_produk = b.id LEFT JOIN program_promo p ON pp.nama_program = p.id where pp.nama_program = '$program' AND pp.qty != '0'";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
@@ -30,7 +30,7 @@ $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql = "SELECT b.id,b.harga_jual,b.nama_barang,b.kode_barang,pp.nama_produk,pp.nama_program,pp.satuan,pp.qty, pp.id,p.nama_program as program";
+$sql = "SELECT b.id,b.harga_jual,b.nama_barang,b.satuan as satuan_barang,b.kode_barang,pp.nama_produk,pp.nama_program,pp.satuan,pp.qty, pp.id,p.nama_program as program";
 $sql.="FROM promo_free_produk pp LEFT JOIN barang b ON pp.nama_produk = b.id LEFT JOIN program_promo p ON pp.nama_program = p.id WHERE pp.nama_program = '$program' AND pp.qty != '0' AND 1=1 ";
 
     $sql.=" AND ( b.kode_barang LIKE '".$requestData['search']['value']."%'";  
@@ -58,7 +58,7 @@ while( $row=mysqli_fetch_array($query) ) {
     $nestedData[] = $row["nama_barang"];
     $nestedData[] = $row["program"];
     $nestedData[] = $row["qty"];
-    $nestedData[] = $row["satuan"];
+    $nestedData[] = $row["satuan_barang"];
     $nestedData[] = $row["harga_jual"];
     $nestedData[] = $row["id"];
     

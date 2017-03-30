@@ -153,9 +153,21 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
         $select_gudang = $db->query("SELECT nama_gudang FROM gudang WHERE kode_gudang = '$row[gudang]'");
             $ambil_gudang = mysqli_fetch_array($select_gudang);
-
-            $select = $db->query("SELECT SUM(sisa) AS jumlah_barang FROM hpp_masuk WHERE kode_barang = '$row[kode_barang]'");
-            $ambil_sisa = mysqli_fetch_array($select);
+			
+			// SUM(jumlah kuantitaas) dar hpp masuk
+			$query_hpp_masuk = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_masuk WHERE kode_barang = '$kode_barang'");
+			
+			// SUM(jumlah kuantitaas) dar hpp keluar
+			$query_hpp_keluar = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_keluar WHERE kode_barang = '$kode_barang'");
+			
+			
+			$data_hpp_masuk = mysqli_fetch_array($query_hpp_masuk);
+			
+			$data_hpp_keluar = mysqli_fetch_array($query_hpp_keluar);
+				
+				// hitung stok
+				// SUM(jumlah kuantitaas) dari hpp masuk - SUM(jumlah kuantitaas) dar hpp keluar
+			$stok = $data_hpp_masuk['jumlah'] - $data_hpp_keluar['jumlah'];
 
             $hpp_masuk = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_masuk WHERE kode_barang = '$row[kode_barang]'");
             $cek_awal_masuk = mysqli_fetch_array($hpp_masuk);
@@ -175,7 +187,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 			    if ($barang_hapus > 0)  
 			    {
-			    	if ($ambil_sisa['jumlah_barang'] == '0' OR $ambil_sisa['jumlah_barang'] == '')
+			    	if ($stok == '0' OR $stok == '')
 			    	{
 			         
 			             $nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."'  data-nama='". $row['nama_barang'] ."' data-kode='". $row['kode_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> ";
@@ -194,7 +206,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 			    if ($barang_edit > 0) {
 
-			           if ($ambil_sisa['jumlah_barang'] == '0') 
+			           if ($stok == '0') 
 
 			             {
 			            $nestedData[] = "<a href='editbarang.php?id=". $row['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit</a>";
@@ -204,7 +216,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 			    $pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
 				$barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
 
-			    if ($barang_edit > 0 AND $ambil_sisa['jumlah_barang'] != '0')
+			    if ($barang_edit > 0 AND $stok != '0')
 			            {
 
 			            $nestedData[] = "<a href='editbarang.php?id=".$row['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit</a> ";
@@ -240,7 +252,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
                 $nestedData[] = "0";
             }
             else {
-                $nestedData[] = $ambil_sisa['jumlah_barang'];
+                $nestedData[] = $stok;
             }
 
 	$nestedData[] = $row['nama'];

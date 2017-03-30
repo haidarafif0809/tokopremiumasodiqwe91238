@@ -5,7 +5,7 @@ function cekStokHpp($kode_barang)
 {
 
   include 'db.php';
-  
+
   $query_hpp_masuk = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_masuk WHERE kode_barang = '$kode_barang'");
 
   $query_hpp_keluar = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_keluar WHERE kode_barang = '$kode_barang'");

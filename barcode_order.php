@@ -150,7 +150,7 @@ if ($ber_stok == 'Barang' OR $ber_stok == 'barang') {
       $a = $harga * $jumlah_barang;
     // display the cached array
 
-    $query9 = $db->query("SELECT * FROM fee_produk WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
+    $query9 = $db->query("SELECT jumlah_prosentase,jumlah_uang FROM fee_produk WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
     $cek9 = mysqli_fetch_array($query9);
     $prosentase = $cek9['jumlah_prosentase'];
     $nominal = $cek9['jumlah_uang'];
@@ -159,7 +159,7 @@ if ($ber_stok == 'Barang' OR $ber_stok == 'barang') {
 
     if ($prosentase != 0){
       
-      $query90 = $db->query("SELECT * FROM tbs_penjualan_order WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
+      $query90 = $db->query("SELECT jumlah_barang FROM tbs_penjualan_order WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
       $cek01 = mysqli_num_rows($query90);
 
       $cek90 = mysqli_fetch_array($query90);
@@ -193,7 +193,7 @@ if ($ber_stok == 'Barang' OR $ber_stok == 'barang') {
 
         elseif ($nominal != 0) {
 
-              $query900 = $db->query("SELECT * FROM tbs_penjualan_order WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
+              $query900 = $db->query("SELECT jumlah_barang FROM tbs_penjualan_order WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
               $cek011 = mysqli_num_rows($query900);
 
               $cek900 = mysqli_fetch_array($query900);
@@ -226,7 +226,7 @@ if ($ber_stok == 'Barang' OR $ber_stok == 'barang') {
 
 
  
-$cek = $db->query("SELECT * FROM tbs_penjualan_order WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
+$cek = $db->query("SELECT kode_barang FROM tbs_penjualan_order WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
 
 $jumlah = mysqli_num_rows($cek);
     
@@ -268,7 +268,7 @@ else{
   $a = $harga * $jumlah_barang;
     // display the cached array
 
-    $query9 = $db->query("SELECT * FROM fee_produk WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
+    $query9 = $db->query("SELECT jumlah_prosentase,jumlah_uang FROM fee_produk WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
     $cek9 = mysqli_fetch_array($query9);
     $prosentase = $cek9['jumlah_prosentase'];
     $nominal = $cek9['jumlah_uang'];
@@ -277,7 +277,7 @@ else{
 
     if ($prosentase != 0){
       
-      $query90 = $db->query("SELECT * FROM tbs_penjualan_order WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
+      $query90 = $db->query("SELECT jumlah_barang FROM tbs_penjualan_order WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
       $cek01 = mysqli_num_rows($query90);
 
       $cek90 = mysqli_fetch_array($query90);
@@ -311,7 +311,7 @@ else{
 
         elseif ($nominal != 0) {
 
-              $query900 = $db->query("SELECT * FROM tbs_penjualan_order WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
+              $query900 = $db->query("SELECT jumlah_barang FROM tbs_penjualan_order WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
               $cek011 = mysqli_num_rows($query900);
 
               $cek900 = mysqli_fetch_array($query900);
@@ -344,7 +344,7 @@ else{
 
 
  
-$cek = $db->query("SELECT * FROM tbs_penjualan_order WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
+$cek = $db->query("SELECT kode_barang FROM tbs_penjualan_order WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
 
 $jumlah = mysqli_num_rows($cek);
     
@@ -383,134 +383,3 @@ $jumlah = mysqli_num_rows($cek);
 
     ?>
 
-
-
-<?php
-    if ($ber_stok == 'Jasa' OR ($ber_stok == 'Barang' AND $stok_barang >= 0)){
-
-  //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
-                $perintah = $db->query("SELECT tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama FROM tbs_penjualan_order tp INNER JOIN satuan s ON tp.satuan = s.id WHERE tp.session_id = '$session_id' AND tp.kode_barang = '$kode_barang'");
-                
-                //menyimpan data sementara yang ada pada $perintah
-                
-               $data1 = mysqli_fetch_array($perintah);
-
-                //menampilkan data
-                echo "<tr class='tr-kode-". $data1['kode_barang'] ." tr-id-". $data1['id'] ."' data-kode-barang='".$data1['kode_barang']."'>
-                <td style='font-size:15px'>". $data1['kode_barang'] ."</td>
-                <td style='font-size:15px;'>". $data1['nama_barang'] ."</td>";
-                  if ($otoritas_tombol['edit_produk'] != 0) {
-
-               echo "<td style='font-size:15px' align='right' class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>";
-               }
-       else{  
-          echo " <td style='font-size:15px' align='right' class='tidak_punya_otoritas' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-berstok = '".$data1['berkaitan_dgn_stok']."'  data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>";
-
-             }
-                echo "<td style='font-size:15px'>". $data1['nama'] ."</td>
-                <td style='font-size:15px' align='right'>". rp($data1['harga']) ."</td>
-                <td style='font-size:15px' align='right'><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
-                <td style='font-size:15px' align='right'><span id='text-potongan-".$data1['id']."'>". rp($data1['potongan']) ."</span></td>
-                <td style='font-size:15px' align='right'><span id='text-tax-".$data1['id']."'>". rp($data1['tax']) ."</span></td>";
-
-        if ($otoritas_tombol['hapus_produk'] > 0) {
-
-               echo "<td style='font-size:15px'> <button class='btn btn-danger btn-hapus-tbs' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-barang='". $data1['nama_barang'] ."' data-subtotal='". $data1['subtotal'] ."'>Hapus</button> </td>";
-             }
-             else{
-
-               echo "<td style='font-size:15px; color:red'> Tidak Ada Otoritas </td>";
-
-             }
-
-                echo "</tr>";
-
-              }
-//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-
-    ?>
-
-
-
-
-
-                           <script type="text/javascript">
-                                 
-                                 $(".edit-jumlah").dblclick(function(){
-
-                                    var id = $(this).attr("data-id");
-
-                                    $("#text-jumlah-"+id+"").hide();
-
-                                    $("#input-jumlah-"+id+"").attr("type", "text");
-
-                                 });
-
-
-                                 $(".input_jumlah").blur(function(){
-
-                                    var id = $(this).attr("data-id");
-                                    var jumlah_baru = $(this).val();
-                                    var kode_barang = $(this).attr("data-kode");
-                                    var harga = $(this).attr("data-harga");
-                                    var jumlah_lama = $("#text-jumlah-"+id+"").text();
-                                    var satuan_konversi = $(this).attr("data-satuan");
-
-                                    var subtotal_lama = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-subtotal-"+id+"").text()))));
-                                    var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-potongan-"+id+"").text()))));
-
-                                    var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-tax-"+id+"").text()))));
-                                   
-                                    var subtotal = harga * jumlah_baru - potongan;
-
-                                    var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
-
-                                    subtotal_penjualan = subtotal_penjualan - subtotal_lama + subtotal;
-                                    
-                                    var tax_tbs = tax / subtotal_lama * 100;
-                                    var jumlah_tax = Math.round(tax_tbs) * subtotal / 100;
-
-
-                                    $.post("cek_stok_pesanan_barang.php",{kode_barang:kode_barang, jumlah_baru:jumlah_baru,satuan_konversi:satuan_konversi},function(data){
-
-                                       if (data < 0) {
-
-                                       alert ("Jumlah Yang Di Masukan Melebihi Stok !");
-
-                                    $("#input-jumlah-"+id+"").val(jumlah_lama);
-                                    $("#text-jumlah-"+id+"").text(jumlah_lama);
-                                    $("#text-jumlah-"+id+"").show();
-                                    $("#input-jumlah-"+id+"").attr("type", "hidden");
-
-                                     }
-
-                                      else{
-
-                                     $.post("update_pesanan_barang.php",{jumlah_lama:jumlah_lama,tax:tax,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,potongan:potongan,harga:harga,jumlah_tax:jumlah_tax,subtotal:subtotal},function(info){
-
-
-                                    
-                                    
-                                    $("#text-jumlah-"+id+"").show();
-                                    $("#text-jumlah-"+id+"").text(jumlah_baru);
-                                    $("#text-subtotal-"+id+"").text(tandaPemisahTitik(subtotal));
-                                    $("#text-tax-"+id+"").text(Math.round(jumlah_tax));
-                                    $("#input-jumlah-"+id+"").attr("type", "hidden"); 
-                                    $("#total2").val(tandaPemisahTitik(subtotal_penjualan));
-
-
-                                    });
-
-                                   }
-
-                                 });
-
-
-       
-                                    $("#kode_barang").focus();
-                                    
-
-                                 });
-
-                             </script>

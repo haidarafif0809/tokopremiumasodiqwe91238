@@ -5,7 +5,7 @@ include 'db.php';
 
 /* Database connection end */
 
-$session_id = stringdoang($_POST['session_id']);
+$session_id = session_id();
 
 $pilih_akses_tombol = $db->query("SELECT * FROM otoritas_form_order_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]' ");
 $otoritas_tombol = mysqli_fetch_array($pilih_akses_tombol);

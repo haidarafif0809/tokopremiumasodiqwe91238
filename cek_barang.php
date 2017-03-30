@@ -1,10 +1,10 @@
 <?php 
-
+include 'sanitasi.php';
 include 'db.php';
 
-$kode_barang = $_GET['kode_barang'];
+$kode_barang = stringdoang($_GET['kode_barang']);
 
-$query = $db->query("SELECT * FROM barang WHERE kode_barang = '$kode_barang'");
+$query = $db->query("SELECT kode_barang FROM barang WHERE kode_barang = '$kode_barang'");
 $jumlah = mysqli_num_rows($query);
 
 

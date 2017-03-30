@@ -60,7 +60,7 @@ include 'db.php';
         }
 
 
-        $cek = $db->query("SELECT * FROM stok_awal WHERE kode_barang = '$kode_barang' ");
+        $cek = $db->query("SELECT jumlah_awal FROM stok_awal WHERE kode_barang = '$kode_barang' ");
         $data = mysqli_fetch_array($cek);
         $stok_awal = $data['jumlah_awal'];
         

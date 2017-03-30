@@ -3,9 +3,7 @@
         include 'sanitasi.php';
         include 'db.php';
 
-                 
-                  $perintah = $db->query("SELECT * FROM stok_opname");
-                  
+                                   
                   //ambil 2 angka terakhir dari tahun sekarang 
                   $tahun = $db->query("SELECT YEAR(NOW()) as tahun");
                   $v_tahun = mysqli_fetch_array($tahun);
@@ -22,11 +20,11 @@
                   //jika jumlah karakter dari bulannya sama dengan 1 maka di tambah 0 di depannya
                   if ($cek_jumlah_bulan == 1) {
                   # code...
-                  $data_bulan_terakhir = "0".$v_bulan['bulan'];
+                    $data_bulan_terakhir = "0".$v_bulan['bulan'];
                   }
                   else
                   {
-                  $data_bulan_terakhir = $v_bulan['bulan'];
+                    $data_bulan_terakhir = $v_bulan['bulan'];
                   
                   }
                   //ambil bulan dari tanggal stok_opname terakhir
@@ -82,12 +80,10 @@
 
 
 
-        $query1 = $db->query("SELECT * FROM tbs_stok_opname WHERE no_faktur = '' OR no_faktur IS NULL");
+        $query1 = $db->query("SELECT kode_barang,nama_barang,awal,masuk,keluar,stok_sekarang,fisik,selisih_fisik,selisih_harga,harga,hpp FROM tbs_stok_opname WHERE no_faktur = '' OR no_faktur IS NULL");
         while ($data = mysqli_fetch_array($query1))
         {
-
-
-            
+ 
             $query = $db->query("UPDATE barang SET stok_opname = '' WHERE kode_barang = '$data[kode_barang]'");
 
             $query4 = "INSERT INTO detail_stok_opname (no_faktur, tanggal, jam, kode_barang, nama_barang, awal, masuk, keluar, stok_sekarang, fisik, selisih_fisik, selisih_harga, harga, hpp) 

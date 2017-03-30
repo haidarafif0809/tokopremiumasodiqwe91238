@@ -20,7 +20,7 @@ $sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
       
       $laba_kotor = $subtotal - $cek_sum_hpp['total_hpp'];
       
-      $laba_jual = $laba_kotor - $cek_sum_pajak['diskon'];;
+      $laba_jual = $laba_kotor - $cek_sum_pajak['diskon'];
       
       $total_subtotal = $subtotal;
       $total_total_pokok = $cek_sum_hpp['total_hpp'];

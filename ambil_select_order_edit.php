@@ -1,5 +1,5 @@
 <?php session_start();
-
+include 'sanitasi.php';
 include 'db.php';
 
 $session_id = session_id();

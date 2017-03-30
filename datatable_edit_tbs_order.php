@@ -5,7 +5,7 @@ include 'db.php';
 
 /* Database connection end */
 
-$session_id = session_id();
+$nomor_faktur = stringdoang($_POST['no_faktur']);
 
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
@@ -15,33 +15,35 @@ $requestData= $_REQUEST;
 $columns = array( 
 // datatable column index  => database column name
 
-    0=>'kode_barang', 
-    1=>'nama_barang',
-    2=>'jumlah_barang',
-    3=>'satuan',
-    4=>'harga',
-    5=>'subtotal',
-    6=>'potongan',
-    7=>'tax',
-    8=>'id'   
+    0=>'no_faktur_order', 
+    1=>'kode_barang',
+    2=>'nama_barang',
+    3=>'jumlah_barang',
+    4=>'satuan',
+    5=>'harga',
+    6=>'subtotal',
+    7=>'potongan',
+    8=>'pajak', 
+    9=>'id' 
 
 );
 
 // getting total number records without any search
-$sql =" SELECT bb.berkaitan_dgn_stok,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
-$sql.=" FROM tbs_penjualan tp LEFT JOIN satuan s ON tp.satuan = s.id LEFT JOIN barang bb ON tp.kode_barang = bb.kode_barang ";
-$sql.=" WHERE tp.session_id = '$session_id' AND tp.no_faktur IS NULL AND tp.no_faktur_order IS NULL ";
+$sql =" SELECT tp.no_faktur_order,tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama ";
+$sql.=" FROM tbs_penjualan tp INNER JOIN satuan s ON tp.satuan = s.id ";
+$sql.=" WHERE tp.no_faktur = '$nomor_faktur' AND (tp.no_faktur_order != '' OR tp.no_faktur_order IS NOT NULL)  ";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql =" SELECT bb.berkaitan_dgn_stok,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
-$sql.=" FROM tbs_penjualan tp LEFT JOIN satuan s ON tp.satuan = s.id  LEFT JOIN barang bb ON tp.kode_barang = bb.kode_barang  ";
-$sql.=" WHERE tp.session_id = '$session_id' AND tp.no_faktur IS NULL AND tp.no_faktur_order IS NULL ";
+$sql =" SELECT tp.no_faktur_order,tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama ";
+$sql.=" FROM tbs_penjualan tp INNER JOIN satuan s ON tp.satuan = s.id ";
+$sql.=" WHERE tp.no_faktur = '$nomor_faktur' AND  (tp.no_faktur_order != '' OR tp.no_faktur_order IS NOT NULL) ";
 
-    $sql.=" AND (tp.kode_barang LIKE '".$requestData['search']['value']."%'";  
+    $sql.=" AND ( tp.no_faktur_order LIKE '".$requestData['search']['value']."%'";  
+    $sql.=" OR tp.kode_barang LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR tp.nama_barang LIKE '".$requestData['search']['value']."%' ";
     $sql.=" OR s.nama LIKE '".$requestData['search']['value']."%' )";
 
@@ -51,7 +53,7 @@ $sql.=" WHERE tp.session_id = '$session_id' AND tp.no_faktur IS NULL AND tp.no_f
 $query=mysqli_query($conn, $sql) or die("eror 2");
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
         
-$sql.=" ORDER BY kode_barang ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+$sql.=" ORDER BY tp.no_faktur_order ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */    
 $query=mysqli_query($conn, $sql) or die("eror 3");
@@ -60,23 +62,11 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
   $nestedData=array(); 
 
-
-        if ($row['nama'] != 'KG')
-        {
-          $jumlah_ganti = hapus_koma($row["jumlah_barang"]);
-        }
-        else 
-        {
-          $jumlah_ganti = koma($row["jumlah_barang"],3);
-        }
-
-
+      $nestedData[] = $row["no_faktur_order"];
       $nestedData[] = $row["kode_barang"];
       $nestedData[] = $row["nama_barang"];
 
-
-
-      $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jumlah-jual' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_ganti."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_barang'],3)."' class='input_jumlah_jual' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_barang']."' data-harga='".koma($row['harga'],2)."' data-tipe='".$row['tipe_barang']."' data-satuan='".$row['satuan']."' data-berstok = '".$row['berkaitan_dgn_stok']."' data-nama-barang='".$row['nama_barang']."'> </p>";
+      $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jumlah' data-id='".$row['id']."'><span id='text-jumlah-".$row['id']."'>". koma($row['jumlah_barang'],3) ."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".$row['jumlah_barang']."' class='input_jumlah' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_barang']."'  data-harga='".$row['harga']."' data-satuan='".$row['satuan']."' > </p>";
 
       $nestedData[] = $row["nama"];
 
@@ -85,13 +75,6 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-subtotal-".$row['id']."'> ".koma($row["subtotal"],2)." </span> </p>";
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-potongan-".$row['id']."'> ".koma($row["potongan"],2)." </span> </p>";
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-tax-".$row['id']."'> ".koma($row["tax"],2)." </span> </p>";
-
-
-
-      $nestedData[] = "<button class='btn btn-danger btn-sm btn-hapus-tbs' id='hapus-tbs-". $row['id'] ."' data-id='". $row['id'] ."' data-kode-barang='". $row['kode_barang'] ."' data-barang='". $row['nama_barang'] ."' data-subtotal='". $row['subtotal'] ."'>Hapus</button>";
-
-
-
 
       $nestedData[] = $row["id"];
 

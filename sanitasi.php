@@ -17,6 +17,12 @@ $rpp = $rp;
 return $rpp;
 }
 
+function hapus_koma($rupiah){
+$rp = str_replace(".000", "",$rupiah);
+$rpp = $rp;
+return $rpp;
+}
+
 
 function komarupiah($rupiah,$angka){
 $rp = number_format($rupiah,$angka,".","");

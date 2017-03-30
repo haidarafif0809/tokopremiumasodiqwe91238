@@ -4217,11 +4217,11 @@ $(document).ready(function(){
             var subtotal_bonus = 0;
         }
 
-        var subtotal_tampil = parseInt(total_penj) + parseInt(subtotal_bonus);
+        var subtotal_tampil = parseFloat(total_penj) + parseFloat(subtotal_bonus);
         //jika tbs ada maka subtotal (total2 dan total1) muncul
         if (data != 0) {
-          $("#total2").val(tandaPemisahTitik(subtotal_tampil));
-        $("#total1").val(tandaPemisahTitik(subtotal_tampil));
+          $("#total2").val(subtotal_tampil.format(2, 3, '.', ','));
+        $("#total1").val(subtotal_tampil.format(2, 3, '.', ','));
         }
         else{
           $("#total2").val(tandaPemisahTitik('0'));

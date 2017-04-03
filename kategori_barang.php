@@ -215,8 +215,7 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 		$("#nama_kategori").val('');
 
 		$(".alert").show('fast');
-		$("#table_baru").load('tabel-kategori.php');
-		
+		$('#table_kategori_barang').DataTable().draw();
 		setTimeout(tutupalert, 2000);
 		$(".modal").modal("hide");
 		}

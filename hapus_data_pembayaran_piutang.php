@@ -8,18 +8,6 @@ $id = $_POST['id'];
 $no_faktur_pembayaran = $_POST['no_faktur_pembayaran'];
 $user = $_SESSION['user_name'];
 
-    $tbs = $db->query("SELECT * FROM detail_pembayaran_piutang WHERE no_faktur_pembayaran = '$no_faktur_pembayaran'");
-    while ($data_tbs = mysqli_fetch_array($tbs))
-    {
-
-       $query002 = $db->query("UPDATE penjualan SET kredit = kredit + '$data_tbs[potongan]' WHERE no_faktur = '$data_tbs[no_faktur_penjualan]'");
-       
-       $query003 = $db->query("UPDATE penjualan SET kredit = kredit + '$data_tbs[jumlah_bayar]' WHERE no_faktur = '$data_tbs[no_faktur_penjualan]'");
-       
-       $perintah2 = $db->query("UPDATE penjualan SET status = 'Lunas' WHERE kredit = 0 AND no_faktur = '$data_tbs[no_faktur_penjualan]'");  
-
-    }
-
 
  // INSERT HISTORY PEMBAYARAN PIUTANG
 $pembayaran_piutang = $db->query("SELECT * FROM pembayaran_piutang WHERE no_faktur_pembayaran = '$no_faktur_pembayaran'");

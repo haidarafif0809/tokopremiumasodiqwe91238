@@ -7,41 +7,8 @@
     include 'db.php';
 
 
-$kategori = $_GET['kategori'];
-$tipe = $_GET['tipe'];
-
-
-
-if ($tipe == 'barang') {
-
-    if ($kategori == 'semua' AND $tipe = 'barang') {
-    
-    $perintah = $db->query("SELECT * FROM barang WHERE berkaitan_dgn_stok = '$tipe' ORDER BY id DESC");
-    
-    }
-
-    else{
-    $perintah = $db->query("SELECT * FROM barang WHERE kategori = '$kategori' berkaitan_dgn_stok = '$tipe' ORDER BY id DESC");
-    }
-
-    
-}
-
-else{
-
-
-    if ($kategori == 'semua') {
-    
-    $perintah = $db->query("SELECT * FROM barang ORDER BY id DESC");
-    
-    }
-    
-    else{
-    $perintah = $db->query("SELECT * FROM barang WHERE kategori = '$kategori' ORDER BY id DESC");
-    }
-
-}
-
+$kategori = stringdoang($_GET['kategori']);
+$tipe = stringdoang($_GET['tipe']);
 
 
     ?>
@@ -49,7 +16,7 @@ else{
 
 
 
-<div class="container">
+<div class="container 1">
 <h3><b>DATA ITEM</b></h3><hr>
 
 
@@ -57,13 +24,14 @@ else{
     <div class="col-sm-4">
         
 <?php  
-include 'db.php';
 
-$pilih_akses_barang_tambah = $db->query("SELECT item_tambah FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_tambah = '1'");
-$barang_tambah = mysqli_num_rows($pilih_akses_barang_tambah);
+$pilih_akses_barang = $db->query("SELECT item_tambah ,item_hapus ,
+item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_tambah = '1'");
+$data_akses = mysqli_fetch_array($pilih_akses_barang);
 
 
-    if ($barang_tambah > 0){
+
+    if ($data_akses['item_tambah'] > 0){
 
 echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"> </i> ITEM </button> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#my_Modal"><i class="fa fa-upload"> </i> Import Data Excell
 </button>';
@@ -89,8 +57,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
         }
 
 
-          include 'db.php';
-          $pilih_kategori = $db->query("SELECT * FROM kategori");
+          $pilih_kategori = $db->query("SELECT nama_kategori FROM kategori");
           
           while ($cek = mysqli_fetch_array($pilih_kategori)) 
           {
@@ -117,7 +84,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
 ?> 
     </div>
 </div>
-
+</div><!--div class="container 1"-->
 
 
 
@@ -133,23 +100,93 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
 
                     <form enctype="multipart/form-data" role="form" action="prosesbarang.php" method="post">
 
-                        <div class="form-group">
-                            <label> Kode Barang </label>
-                            <br>
-                            <input type="text" placeholder="Kode Barang" name="kode_barang" id="kode_barang" class="form-control" autocomplete="off" required="">
-                        </div>
 
-
-
+                       
                         <div class="form-group">
                             <label>Nama Barang </label>
                             <br>
                             <input type="text" placeholder="Nama Barang" name="nama_barang" id="nama_barang" class="form-control" autocomplete="off" required="">
                         </div>
+
+
+                            <div class="form-group">
+                            <label> Golongan Produk </label>
+                            <br>
+                            <select type="text" name="golongan_produk" class="form-control" required="">
+                            <option value=""> -- SILAHKAN PILIH -- </option>
+                            <option> Barang </option>
+                            <option> Jasa </option>
+                            </select>
+                            </div>
+
+
+                            <div class="form-group">
+                            <label> Tipe Produk </label>
+                            <br>
+                            <select type="text" id="tipe_produk" name="tipe" class="form-control" required="">
+                            <option value=""> -- SILAHKAN PILIH -- </option>
+                            <option value="Barang"> Barang </option>
+                            <option value="Jasa"> Jasa </option>
+                            <option value="Alat"> Alat </option>
+                            <option value="BHP"> BHP </option>
+                            <option value="Obat Obatan"> Obat-obatan </option>
+                            </select>
+                            </div>
+
+
+                            <div class="form-group">
+                            <label for="sel1">Jenis Obat</label>
+                            <select class="form-control" id="jenis_obat" name="jenis_obat" autocomplete="off">
+                            <option value="">Silakan Pilih</option>
+                            <?php
+                            $query = $db->query("SELECT nama FROM jenis");       
+                            while ( $data = mysqli_fetch_array($query)) {
+                            echo "<option value='".$data['nama']."'>".$data['nama']."</option>";
+                            }
+                            ?>
+                            </select>
+                            </div>
+
+
+                                    <div class="form-group">
+                                    <label> Kategori Obat </label>
+                                    <br>
+                                    <select type="text" name="kategori_obat" id="kategori_obat" class="form-control" required="">
+                                    <option value=""> -- SILAHKAN PILIH -- </option>
+                                    <?php 
+                                    
+                                    $ambil_kategori = $db->query("SELECT nama_kategori FROM kategori");
+                                    
+                                    while($data_kategori = mysqli_fetch_array($ambil_kategori))
+                                    {
+                                    
+                                    echo "<option>".$data_kategori['nama_kategori'] ."</option>";
+                                    
+                                    }
+                                    
+                                    ?>
+                                    </select>
+                                    </div>
+
+                            <div class="form-group">
+                            <label> Golongan Obat </label>
+                            <br>
+                            <select type="text" id="golongan_obat" name="golongan_obat" class="form-control">
+                            <option value=""> -- SILAHKAN PILIH -- </option>
+                            <option value="Obat Keras"> Obat Keras </option>
+                            <option value="Obat Bebas"> Obat Bebas </option>
+                            <option value="Obat Bebas"> Obat Bebas Terbatas </option>
+                            <option value="Obat Psikotropika"> Obat Psikotropika </option>
+                            <option value="Narkotika"> Narkotika </option>
+                            </select>
+                            </div>
+
+
+
                         <div class="form-group">
                             <label> Harga Beli </label>
                             <br>
-                            <input type="text" placeholder="Harga Beli" name="harga_beli" id="harga_beli" class="form-control" autocomplete="off" required="">
+                            <input type="text" placeholder="Harga Beli" name="harga_beli" id="harga_beli" class="form-control" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label> Harga Jual Level 1</label>
@@ -161,29 +198,50 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <br>
                             <input type="text" placeholder="Harga Jual Level 2" name="harga_jual_2" id="harga_jual2" class="form-control" autocomplete="off">
                         </div>
+
                         <div class="form-group">
                             <label> Harga Jual Level 3</label>
                             <br>
                             <input type="text" placeholder="Harga Jual Level 3" name="harga_jual_3" id="harga_jual3" class="form-control" autocomplete="off">
                         </div>
+
                         <div class="form-group">
+                            <label> Harga Jual Level 4</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 4" name="harga_jual_4" id="harga_jual4" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 5</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 5" name="harga_jual_5" id="harga_jual5" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 6</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 6" name="harga_jual_6" id="harga_jual6" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 7</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 7" name="harga_jual_7" id="harga_jual7" class="form-control" autocomplete="off">
+                        </div>
+
+                   <div class="form-group">
                             <label> Satuan </label>
                             <br>
                             <select type="text" name="satuan" class="form-control" required="">
-                    
                             <?php 
-                            
                             // memasukan file db.php
-                            include 'db.php';
+                       
                             
                             // menampilkan seluruh data yang ada di tabel satuan
-                            $query = $db->query("SELECT * FROM satuan ");
+                            $query = $db->query("SELECT id, nama FROM satuan ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
                             {
                             
-                            echo "<option>".$data['nama'] ."</option>";
+                            echo "<option value='".$data['id']."' >".$data['nama'] ."</option>";
                             }
                             
                             
@@ -191,25 +249,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             </select>
                             </div>
 
- <div class="form-group">
-                            <label> Kategori </label>
-                            <br>
-                            <select type="text" name="kategori" class="form-control" required="">
-                            <option value=""> -- SILAHKAN PILIH -- </option>
-<?php 
-
-$ambil_kategori = $db->query("SELECT * FROM kategori");
-
-    while($data_kategori = mysqli_fetch_array($ambil_kategori))
-    {
-    
-    echo "<option>".$data_kategori['nama_kategori'] ."</option>";
-
-    }
-
- ?>
-                            </select>
-                            </div>
+                            
 
                         <div class="form-group" style="display: none">
                             <label> Gudang </label>
@@ -218,12 +258,10 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
                             <option value=""> -- SILAHKAN PILIH -- </option>
                     
                             <?php 
-                            
-                            // memasukan file db.php
-                            include 'db.php';
+                   
                             
                             // menampilkan seluruh data yang ada di tabel satuan
-                            $query = $db->query("SELECT * FROM gudang ");
+                            $query = $db->query("SELECT kode_gudang ,nama_gudang FROM gudang ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
@@ -249,25 +287,20 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
                             </select>
                             </div>
 
-                            <div class="form-group">
-                            <label> Tipe </label>
-                            <br>
-                            <select type="text" name="tipe" class="form-control" required="">
-                            <option value=""> -- SILAHKAN PILIH -- </option>
-                            <option> Barang </option>
-                            <option> Jasa </option>
-                            </select>
-                            </div>
+                       
+
+
+
 
                             <div class="form-group">
                             <label> Suplier </label>
                             <br>
                             <select type="text" name="suplier" class="form-control">                            
                             <?php 
-                            include 'db.php';
+                    
                             
                             // menampilkan data yang ada pada tabel suplier
-                            $query = $db->query("SELECT * FROM suplier ");
+                            $query = $db->query("SELECT nama FROM suplier ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
@@ -291,17 +324,13 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
                             <br>
                             <input type="text" placeholder="Over Stok" name="over_stok" id="over_stok" class="form-control" autocomplete="off">
                         </div>
-
-                            
-                            
-                            
                             
 
                        
 
 
 <!-- membuat tombol submit -->
-<button type="submit" name="submit" value="submit" class="btn btn-info">Tambah</button>
+<button type="submit" name="submit" value="usbmit" class="btn btn-info">Tambah</button>
 </form>
 </div>
 
@@ -424,18 +453,18 @@ th {
     color: white;
 }
 </style>
-          <ul class="nav nav-tabs md-pills pills-ins" role="tablist">
-          
+            
+        <div class="container 2">
           <ul class="nav nav-tabs md-pills pills-ins" role="tablist">
           <?php if ($tipe == 'barang'): ?>
 
-          <li class="nav-item"><a class="nav-link " href='barang.php?kategori=semua&tipe=barang'> Umum </a></li>
+          <li class="nav-item"><a class="nav-link" href='barang.php?kategori=semua&tipe=barang'> Umum </a></li>
           <li class="nav-item"><a class="nav-link active" href='barang_2.php?kategori=semua&tipe=barang' > Lain - lain </a></li>
 
           <?php else: ?>
 
 
-          <li class="nav-item"><a class="nav-link" href='barang.php?kategori=semua&tipe=barang_jasa'> Umum </a></li>
+          <li class="nav-item"><a class="nav-link " href='barang.php?kategori=semua&tipe=barang_jasa'> Umum </a></li>
           <li class="nav-item"><a class="nav-link  active" href='barang_2.php?kategori=semua&tipe=barang_jasa' > Lain - lain </a></li>
               
           <?php endif ?>
@@ -443,190 +472,48 @@ th {
           
           
           </ul>
+        </div><!--end div class="container 2"-->
+        <br>
+<div class="container 3">
 <!-- membuat table dan garis tabel-->
 <div class="table-responsive">
           
 <span id="table_baru">
-    <table id="tableuser" class="table table-bordered">
+    <table id="table_barang2" class="table table-bordered table-sm">
 
         <!-- membuat nama kolom tabel -->
         <thead>
 
-            <th> Kode Barang </th>
-            <th> Nama Barang </th>
-            <th> Tipe </th>
-            <th> Suplier </th>
-            <th> Foto </th>
-            <th>Limit Stok</th>
-            <th>Over Stok</th>
-            <th>Status</th>
-            <th> Hapus </th>
-
+            <th style='background-color: #4CAF50; color: white'> Kode Barang </th>
+            <th style='background-color: #4CAF50; color: white'> Nama Barang </th>
+            <th style='background-color: #4CAF50; color: white'> Tipe </th>
+            <th style='background-color: #4CAF50; color: white'> Suplier </th>
+            <th style='background-color: #4CAF50; color: white'> Foto </th>
+            <th style='background-color: #4CAF50; color: white'>Limit Stok</th>
+            <th style='background-color: #4CAF50; color: white'>Over Stok</th>
+            <th style='background-color: #4CAF50; color: white'>Status</th>
+            
+     
 <?php  
-include 'db.php';
-
-$pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
-$barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
 
 
-    if ($barang_edit > 0){
-                            echo    "<th> Edit </th>";
+    if ($data_akses['item_hapus'] > 0 ){
+
+            echo "<th style='background-color: #4CAF50; color: white'> Hapus </th>";
+        }
+
+
+    if ($data_akses['item_edit'] > 0){
+                            echo    "<th style='background-color: #4CAF50; color: white'> Edit </th>";
 
                         }
              ?>
             
            </thead>
 
-        <tbody>
-            
-        <?php
-    // menyimpan data sementara yang ada di $perintah
-    while ($data1 = mysqli_fetch_array($perintah))
-    {
-
-
-        $select_gudang = $db->query("SELECT nama_gudang FROM gudang WHERE kode_gudang = '$data1[gudang]'");
-        $ambil_gudang = mysqli_fetch_array($select_gudang);
-
-        $select = $db->query("SELECT SUM(sisa) AS jumlah_barang FROM hpp_masuk WHERE kode_barang = '$data1[kode_barang]'");
-        $ambil_sisa = mysqli_fetch_array($select);
-    
-        // menampilkan file yang ada di masing-masing data dibawah ini
-        echo "<tr>
-            <td>". $data1['kode_barang'] ."</td>
-            <td>". $data1['nama_barang'] ."</td>";
-
-// Berkaitan Dengan STOK
-
-        echo "<td class='edit-berstok' data-id='".$data1['id']."'><span id='text-berstok-".$data1['id']."'>". $data1['berkaitan_dgn_stok'] ."</span> <select style='display:none' id='select-berstok-".$data1['id']."' value='".$data1['berkaitan_dgn_stok']."' class='select-berstok' data-id='".$data1['id']."' autofocus=''>";
-
-
-echo '<option value="'. $data1['berkaitan_dgn_stok'] .'"> '. $data1['berkaitan_dgn_stok'] .'</option>
-            <option> Barang </option>
-            <option> Jasa </option>';
-
-          echo  '</select>
-            </td>';
-
-
-// SUPLIER
-
-        echo "<td class='edit-suplier' data-id='".$data1['id']."'><span id='text-suplier-".$data1['id']."'>". $data1['suplier'] ."</span> <select style='display:none' id='select-suplier-".$data1['id']."' value='".$data1['suplier']."' class='select-suplier' data-id='".$data1['id']."' autofocus=''>";
-
-
-echo '<option value="'. $data1['suplier'] .'"> '. $data1['suplier'] .'</option>';
-
-     $query2 = $db->query("SELECT * FROM suplier");
-
-    while($data2 = mysqli_fetch_array($query2))
-    {
-    
-   echo ' <option>'.$data2["nama"] .'</option>';
-    }
-
-          echo  '</select>
-            </td>';
-
-
-
-            if ($data1['foto'] == "" ){
-
-
-                echo "<td><a href='unggah_foto.php?id=". $data1['id']."' class='btn btn-primary'><span class='glyphicon glyphicon-upload'></span> Unggah Foto</a> </td>";
-            }
-
-            else{
-
-                echo "<td><img src='save_picture/". $data1['foto'] ."' height='30px' width='60px' > <br><br> <a href='unggah_foto.php?id=". $data1['id']."' class='btn btn-primary btn-sm'><span class='glyphicon glyphicon-upload'></span> Edit Foto</a> </td>";
-
-            }
-            echo "<td class='edit-limit' data-id='".$data1['id']."'><span id='text-limit-".$data1['id']."'>". $data1['limit_stok'] ."</span> <input type='hidden' id='input-limit-".$data1['id']."' value='".$data1['limit_stok']."' class='input_limit' data-id='".$data1['id']."' autofocus=''></td>
-
-            <td class='edit-over' data-id='".$data1['id']."'><span id='text-over-".$data1['id']."'>". $data1['over_stok'] ."</span> <input type='hidden' id='input-over-".$data1['id']."' value='".$data1['over_stok']."' class='input_over' data-id='".$data1['id']."' autofocus=''></td>";
-
-
-
-
-
-// STATUS
-
-        echo "<td class='edit-status' data-id='".$data1['id']."'><span id='text-status-".$data1['id']."'>". $data1['status'] ."</span> 
-        <select style='display:none' id='select-status-".$data1['id']."' value='".$data1['status']."' class='select-status' data-id='".$data1['id']."' autofocus=''>";
-
-
-echo '<option value="'. $data1['status'] .'"> '. $data1['status'] .'</option>
-            <option> Aktif </option>
-            <option>Tidak Aktif </option>';
-
-          echo  '</select>
-            </td>';
-
-
-include 'db.php';
-
-$pilih_akses_barang_hapus = $db->query("SELECT item_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_hapus = '1'");
-$barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
-
-
-    if ($barang_hapus > 0 AND ($ambil_sisa['jumlah_barang'] == '0' OR $ambil_sisa['jumlah_barang'] == ''))        
-
-            {
-         
-            echo "
-            <td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."'  data-nama='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-        }
-        else
-        {
-            echo "<td>Tidak Bisa Dihapus</td>";
-        }
-
-
-
-
-include 'db.php';
-
-$pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
-$barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
-
-
-    if ($barang_edit > 0) {
-
-           if ($ambil_sisa['jumlah_barang'] == '0') 
-
-             {
-            echo "<td> <a href='editbarang.php?id=". $data1['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit</a> </td>
-            </tr>";
-            
-            }
-
-    }
-
-
-include 'db.php';
-
-$pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
-$barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
-
-
-    if ($barang_edit > 0 AND $ambil_sisa['jumlah_barang'] != '0')
-            {
-
-            echo "<td> <a href='editbarang.php?id=". $data1['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit</a> </td>";
-            }
-
-            "</tr>";
-         
-        }
-
-        //Untuk Memutuskan Koneksi Ke Database
-
-        mysqli_close($db);
-
-    ?>
-        </tbody>
+        
 
     </table>
-        <h6 style="text-align: left ; color: red"><i> * Jika barang sudah terjadi transaksi maka barang tersebut tidak dapat dihapus.</i></h6>
 </span>
 
 
@@ -635,18 +522,38 @@ $barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
 
 </div> <!-- penutup table responsive -->
 
-</div><!-- penutup tag div clas="container" -->
+</div><!-- penutup tag div clas="container 3" -->
 
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#tipe_produk').change(function(){
+            var tipe_produk = $('#tipe_produk').val();
 
-<script>
-// untuk memunculkan data tabel 
-$(document).ready(function() {
-        $('#tableuser').DataTable({"ordering":false});
-    });
+            
+             if(tipe_produk == 'Jasa'){
+                $("#golongan_obat").attr("disabled", true);
+                $("#kategori_obat").attr("disabled", true);
+                $("#jenis_obat").attr("disabled", true);
+                $("#harga_beli").attr("disabled", true);
+                $("#limit_stok").attr("disabled", true);
+                $("#over_stok").attr("disabled", true);
+            }
 
+            else{
+
+                    $("#golongan_obat").attr("disabled", false);
+                $("#kategori_obat").attr("disabled", false);
+                $("#jenis_obat").attr("disabled", false);
+                $("#harga_beli").attr("disabled", false);
+                $("#limit_stok").attr("disabled", false);
+                $("#over_stok").attr("disabled", false);
+
+            }
+            
+            
+        });
+        });
 </script>
-
-
 <script type="text/javascript">
 
                $(document).ready(function(){
@@ -675,7 +582,7 @@ $(document).ready(function() {
                              <script type="text/javascript">
                                  
 //fungsi hapus data 
-                                $(".btn-hapus").click(function(){
+                                $(document).on('click','.btn-hapus',function(e){
                                 var nama = $(this).attr("data-nama");
                                 var id = $(this).attr("data-id");
                                 $("#data_barang").val(nama);
@@ -690,10 +597,11 @@ $(document).ready(function() {
                                 
                                 var id = $("#id_hapus").val();
                                 
+                                $(".tr-id-"+id).remove();
+                                $("#modal_hapus").modal('hide');
                                 $.post("hapusbarang.php",{id:id},function(data){
                                 if (data != "") {
-                                $("#table_baru").load('tabel-barang.php');
-                                $("#modal_hapus").modal('hide');
+                                
                                 
                                 }
                                 
@@ -971,7 +879,7 @@ $(document).ready(function() {
 
 
                              <script type="text/javascript">
-                                 
+                                 //update tipe / berkaitan dg stok
                                  $(".edit-berstok").dblclick(function(){
 
                                     var id = $(this).attr("data-id");
@@ -1001,10 +909,21 @@ $(document).ready(function() {
 
                              </script>
 
+                             <script type="text/javascript">
+                                 
+                                $(document).ready(function(){
+                                    // Tooltips Initialization
+                                $(function () {
+                                  $('[data-toggle="tooltip"]').tooltip()
+                                });
+                                });
+
+                             </script>
+
 
 
                               <script type="text/javascript">
-                                 
+                                 //edit suplier 
                                  $(".edit-suplier").dblclick(function(){
 
                                     var id = $(this).attr("data-id");
@@ -1036,7 +955,7 @@ $(document).ready(function() {
 
 
                              <script type="text/javascript">
-                                 
+                                 //edit limit stok 
                                  $(".edit-limit").dblclick(function(){
 
                                     var id = $(this).attr("data-id");
@@ -1097,6 +1016,42 @@ $(document).ready(function() {
 
                              </script>
 
+<script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
 
+          var dataTable = $('#table_barang2').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            "url" :"datatable_cari_barang2.php", // json datasource
+            "data": function ( d ) {
+                
+                d.tipe =  '<?php echo $tipe ?>' ;       
+                d.kategori = '<?php echo $kategori; ?>';   
+               
+                // d.custom = $('#myInput').val();
+                // etc
+            },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_barang2").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+        },
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+              $(nRow).attr('class','tr-id-'+aData[10]+'');
+    },
+
+        });
+
+        $("#form").submit(function(){
+        return false;
+        });
+        
+
+      } );
+    </script>
 
 <?php  include 'footer.php'; ?>

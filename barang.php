@@ -6,6 +6,8 @@
     include 'sanitasi.php';
     include 'db.php';
 
+$kategori = stringdoang($_GET['kategori']);
+$tipe = stringdoang($_GET['tipe']);
 
 $kategori = stringdoang($_GET['kategori']);
 $tipe = stringdoang($_GET['tipe']);
@@ -54,13 +56,13 @@ else{
     <div class="col-sm-4">
         
 <?php  
-include 'db.php';
 
-$pilih_akses_barang_tambah = $db->query("SELECT item_tambah FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_tambah = '1'");
-$barang_tambah = mysqli_num_rows($pilih_akses_barang_tambah);
+$pilih_akses_barang = $db->query("SELECT item_tambah ,item_hapus ,
+item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_tambah = '1'");
+$data_akses = mysqli_fetch_array($pilih_akses_barang);
 
 
-    if ($barang_tambah > 0){
+    if ($data_akses['item_tambah'] > 0){
 
 echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"> </i> ITEM </button>   
     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#my_Modal"><i class="fa fa-upload"> </i> Import Data Excell</button>
@@ -88,8 +90,8 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
         <li class='nav-item'><a class='nav-link active' href='barang.php?kategori=semua&tipe=barang_jasa'> Semua Item </a></li>";        
         }
 
-          include 'db.php';
-          $pilih_kategori = $db->query("SELECT * FROM kategori");
+    
+          $pilih_kategori = $db->query("SELECT nama_kategori FROM kategori");
           
           while ($cek = mysqli_fetch_array($pilih_kategori)) 
           {
@@ -158,20 +160,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             </div>
 
 
-                            <div class="form-group">
-                            <label> Tipe Produk </label>
-                            <br>
-                            <select type="text" id="tipe_produk" name="tipe" class="form-control" required="">
-                            <option value=""> -- SILAHKAN PILIH -- </option>
-                            <option value="Barang"> Barang </option>
-                            <option value="Jasa"> Jasa </option>
-                            <option value="Alat"> Alat </option>
-                            <option value="BHP"> BHP </option>
-                            <option value="Obat Obatan"> Obat-obatan </option>
-                            </select>
-                            </div>
-
-
+                           
 
                                     <div class="form-group">
                                     <label> Kategori Produk </label>
@@ -243,8 +232,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <select type="text" name="satuan" class="form-control" required="">
                             <?php 
                             // memasukan file db.php
-                            include 'db.php';
-                            
+                           
                             // menampilkan seluruh data yang ada di tabel satuan
                             $query = $db->query("SELECT id,nama FROM satuan ");
                             
@@ -271,10 +259,9 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <?php 
                             
                             // memasukan file db.php
-                            include 'db.php';
-                            
+                     
                             // menampilkan seluruh data yang ada di tabel satuan
-                            $query = $db->query("SELECT kode_gudang,nama_gudang FROM gudang ");
+                            $query = $db->query("SELECT kode_gudang , nama_gudang FROM gudang ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
@@ -310,7 +297,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <br>
                             <select type="text" name="suplier" class="form-control">                            
                             <?php 
-                            include 'db.php';
+                  
                             
                             // menampilkan data yang ada pada tabel suplier
                             $query = $db->query("SELECT nama FROM suplier ");
@@ -501,11 +488,10 @@ th {
         <thead>
 <?php  
 
-$pilih_akses_barang_hapus = $db->query("SELECT item_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_hapus = '1'");
-$barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
 
 
-    if ($barang_hapus > 0){
+
+    if ($data_akses['item_hapus'] > 0){
 
             echo "<th style='background-color: #4CAF50; color: white'> Hapus </th>";
         }
@@ -513,11 +499,8 @@ $barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
 
 <?php  
 
-$pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
-$barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
 
-
-    if ($barang_edit > 0){
+    if ($data_akses['item_edit'] > 0){
                             echo    "<th style='background-color: #4CAF50; color: white'> Edit </th>";
 
                         }
@@ -550,61 +533,24 @@ $barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
 </div> <!-- penutup table responsive -->
 
 <?php 
-    $total_akhir_hpp = 0;
-    
-    while($row = mysqli_fetch_array($perintah))
-    {
-            $select_gudang = $db->query("SELECT nama_gudang FROM gudang WHERE kode_gudang = '$row[gudang]'");
-            $ambil_gudang = mysqli_fetch_array($select_gudang);
 
-            $select = $db->query("SELECT SUM(sisa) AS jumlah_barang FROM hpp_masuk WHERE kode_barang = '$row[kode_barang]'");
-            $ambil_sisa = mysqli_fetch_array($select);
-
-            $hpp_masuk = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_masuk WHERE kode_barang = '$row[kode_barang]'");
-            $cek_awal_masuk = mysqli_fetch_array($hpp_masuk);
+        //perhitungan total hpp 
+  
+        $hpp_masuk = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_masuk ");
+        $data_hpp_masuk = mysqli_fetch_array($hpp_masuk);
             
-            $hpp_keluar = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE kode_barang = '$row[kode_barang]'");
-            $cek_awal_keluar = mysqli_fetch_array($hpp_keluar);
+        $hpp_keluar = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar");
+        $data_hpp_keluar = mysqli_fetch_array($hpp_keluar);
 
-           $total_hpp = $cek_awal_masuk['total_hpp'] - $cek_awal_keluar['total_hpp'];
+        $total_hpp = $data_hpp_masuk['total_hpp'] - $data_hpp_keluar['total_hpp'];
 
-            $total_akhir_hpp = $total_akhir_hpp + $total_hpp;
-        }
+        
+        //end perhitungan total hpp 
+  
  ?>
-<h3 style="color:red">TOTAL HPP : <?php echo rp($total_akhir_hpp); ?></h3>
+<h3 style="color:red">TOTAL HPP : <?php echo rp($total_hpp); ?></h3>
 
 </div><!-- penutup tag div clas="container" -->
-
-<!--DATA TABLE MENGGUNAKAN AJAX-->
-<script type="text/javascript" language="javascript" >
-      $(document).ready(function() {
-
-          var dataTable = $('#table_barang').DataTable( {
-          "processing": true,
-          "serverSide": true,
-          "ajax":{
-            url :"datatable_cari_barang.php", // json datasource
-           
-            type: "post",  // method  , by default get
-            error: function(){  // error handling
-              $(".employee-grid-error").html("");
-              $("#table_barang").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-              $("#employee-grid_processing").css("display","none");
-            }
-        },
-            
-            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                $(nRow).attr('class','tr-id-'+aData[18]+'');
-            },
-        });
-
-        $("#form").submit(function(){
-        return false;
-        });
-        
-
-      } );
-    </script>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -641,26 +587,7 @@ $barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
 <script type="text/javascript">
 
                $(document).ready(function(){
-               // KODE BARANG BLUR
                $("#kode_barang").blur(function(){
-               var kode_barang = $("#kode_barang").val();
-
-              $.post('cek_kode_barang.php',{kode_barang:$(this).val()}, function(data){
-                
-                if(data == 1){
-
-                    alert ("Kode Barang Sudah Ada");
-                    $("#kode_barang").val('');
-                }
-                else {
-                    
-                }
-              });
-                
-               });
-
-               // KODE BARANG MOUSELEAVE
-               $("#kode_barang").mouseleave(function(){
                var kode_barang = $("#kode_barang").val();
 
               $.post('cek_kode_barang.php',{kode_barang:$(this).val()}, function(data){
@@ -1392,7 +1319,44 @@ if (harga_jual1 < harga_beli)
                              </script>
 
 
-                             
+                     <!--DATA TABLE MENGGUNAKAN AJAX-->
+<script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
+
+          var dataTable = $('#table_barang').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            "url" :"datatable_cari_barang.php", // json datasource
+         "data": function ( d ) {
+                
+                d.tipe =  '<?php echo $tipe ?>' ;       
+                d.kategori = '<?php echo $kategori; ?>';   
+               
+                // d.custom = $('#myInput').val();
+                // etc
+            },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_barang").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[18]+'');
+            },
+        });
+
+        $("#form").submit(function(){
+        return false;
+        });
+        
+
+      } );
+    </script>
+            
 
 
 <?php  include 'footer.php'; ?>

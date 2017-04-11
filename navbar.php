@@ -234,7 +234,7 @@ if ($lihat['pembayaran_hutang_lihat'] > 0){
 }
 
  if ($lihat['item_lihat'] > 0){
-                            echo '<li><a href="persediaan_barang.php?kategori=semua&tipe=barang" class="waves-effect" style="font-size: 16px">Persediaan Barang</a></li>';
+                            echo '<li><a href="barang.php?kategori=semua&tipe=barang" class="waves-effect" style="font-size: 16px">Persediaan Barang</a></li>';
 }
 
  if ($lihat['item_masuk_lihat'] > 0){

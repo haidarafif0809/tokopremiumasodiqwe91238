@@ -86,7 +86,7 @@ if (!$stmt) {
    ' - '.$db->error);
 }
 else {
-echo '<META HTTP-EQUIV="Refresh" Content="0; URL=barang.php?kategori=semua&tipe=barang">';
+//  echo '<META HTTP-EQUIV="Refresh" Content="0; URL=barang.php?kategori=semua&tipe=barang">';
 }
  
 // tutup statements

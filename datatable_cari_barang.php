@@ -184,7 +184,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 
 
-	$nestedData[] = persen($f);
+	$nestedData[] = persen($margin);
 
 	$nestedData[] = "<p style='font-size:15px' align='right' class='edit-jual' data-id='".$row['id']."'> 
 	<span id='text-jual-".$row['id']."'>".rp($row["harga_jual"])."</span> 

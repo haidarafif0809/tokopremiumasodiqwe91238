@@ -525,7 +525,7 @@ $(document).ready(function(){
                  $("#total_selisih_harga").val(tandaPemisahTitik(total))
 
 
-              $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang},function(data){
+              $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang,id:id},function(data){
              
                 var dataTable = $('#table_opname').DataTable();
                 dataTable.draw();

@@ -6,8 +6,41 @@
     include 'sanitasi.php';
     include 'db.php';
 
-$kategori = $_GET['kategori'];
-$tipe = $_GET['tipe'];
+
+$kategori = stringdoang($_GET['kategori']);
+$tipe = stringdoang($_GET['tipe']);
+
+
+
+if ($tipe == 'barang') {
+
+    if ($kategori == 'semua' AND $tipe = 'barang') {
+    
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
+    
+    }
+
+    else{
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kategori = '$kategori' AND b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
+    }
+
+    
+}
+
+else{
+
+
+    if ($kategori == 'semua') {
+    
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id ORDER BY b.id DESC");
+    
+    }
+    
+    else{
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kategori = '$kategori' ORDER BY b.id DESC");
+    }
+
+}
 
 
     ?>
@@ -1164,9 +1197,9 @@ if (harga_jual1 < harga_beli)
 
 
 
-                             <script type="text/javascript">
+         <script type="text/javascript">
                                  
-                                 $(document).on('dblclick', '.edit-satuan', function (e) {
+                                $(document).on('dblclick','.edit-satuan',function(e){
 
                                     var id = $(this).attr("data-id");
 
@@ -1176,17 +1209,21 @@ if (harga_jual1 < harga_beli)
 
                                  });
 
-                                 $(document).on('blur', '.select-satuan', function (e) {
+                                $(document).on('blur','.select-satuan',function(e){
 
                                     var id = $(this).attr("data-id");
 
                                     var select_satuan = $(this).val();
+                                    var kode_barang = $("#select-satuan-"+id).attr("data-kode");
+
+                                    var nama_satuan = $("#nama-satuan-"+select_satuan).attr("data-nama");
 
 
-                                    $.post("update_barang.php",{id:id, select_satuan:select_satuan,jenis_edit:"satuan"},function(data){
+                                    $.post("update_barang.php",{id:id, select_satuan:select_satuan,kode_barang:kode_barang,jenis_edit:"satuan"},function(data){
 
                                     $("#text-satuan-"+id+"").show();
-                                    $("#text-satuan-"+id+"").text(select_satuan);
+                                    $("#text-satuan-"+id+"").text(nama_satuan);
+
 
                                     $("#select-satuan-"+id+"").hide();           
 

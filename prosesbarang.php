@@ -20,7 +20,7 @@ $stmt = $db->prepare("INSERT INTO barang (kode_barang, nama_barang, harga_beli, 
   
 // hubungkan "data" dengan prepared statements
 $stmt->bind_param("ssiiiiiiiisssssiiss", 
-$kode_barang, $nama_barang, $harga_beli, $harga_jual, $harga_jual_2, $harga_jual_3,$harga_jual_4, $harga_jual_5,$harga_jual_6, $harga_jual_7, $satuan, $kategori, $gudang, $status, $suplier, $limit_stok, $over_stok, $tipe,$golongan);
+$kode_barang, $nama_barang, $harga_beli, $harga_jual, $harga_jual_2, $harga_jual_3,$harga_jual_4, $harga_jual_5,$harga_jual_6, $harga_jual_7, $satuan, $kategori, $gudang, $status, $suplier, $limit_stok, $over_stok, $golongan,$golongan);
  
 // siapkan "data" query
     $kode_barang = stringdoang($_POST['kode_barang']);
@@ -39,7 +39,6 @@ $kode_barang, $nama_barang, $harga_beli, $harga_jual, $harga_jual_2, $harga_jual
     $kategori = stringdoang($_POST['kategori_obat']);
     $gudang = stringdoang($_POST['gudang']);
     $status = stringdoang($_POST['status']);
-    $tipe = stringdoang($_POST['tipe']);
     $suplier = stringdoang($_POST['suplier']);
     $limit_stok = angkadoang($_POST['limit_stok']);
     $over_stok = angkadoang($_POST['over_stok']);
@@ -72,7 +71,7 @@ $data_id_barang = mysqli_fetch_array($query_id_barang);
       'limit_stok' => $limit_stok,  
       'over_stok' => $over_stok,  
       'berkaitan_dgn_stok' => $golongan,  
-      'tipe_barang' => $tipe,  
+      'tipe_barang' => $golongan,  
       'status' => $status,  
       'satuan' => $satuan,  
       'id' => $data_id_barang['id'] ,  
@@ -86,7 +85,7 @@ if (!$stmt) {
    ' - '.$db->error);
 }
 else {
-//  echo '<META HTTP-EQUIV="Refresh" Content="0; URL=barang.php?kategori=semua&tipe=barang">';
+  echo '<META HTTP-EQUIV="Refresh" Content="0; URL=barang.php?kategori=semua&tipe=barang_jasa">';
 }
  
 // tutup statements

@@ -1,5 +1,6 @@
 <?php session_start();
-
+    include 'sanitasi.php';
+    include 'db.php';
 $session_id = session_id();
 
 $tahun_sekarang = date('Y');

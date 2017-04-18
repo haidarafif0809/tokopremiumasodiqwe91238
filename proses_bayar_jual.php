@@ -50,7 +50,7 @@ jika tidak maka nomor terakhir ditambah dengan 1
  */
  if ($v_bulan_terakhir['bulan'] != $bulan_sekarang) {
   # code...
- $no_faktur = "1/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
+ echo $no_faktur = "1/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
 
  }
 
@@ -59,7 +59,7 @@ jika tidak maka nomor terakhir ditambah dengan 1
 
 $nomor = 1 + $ambil_nomor ;
 
- $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
+ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
 
 
  }
@@ -319,30 +319,46 @@ $nomor = 1 + $ambil_nomor ;
 }
 //insert data penjualan piutang
 
+
+
+
 //awal nya bonus
-$querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.harga_disc,satuan FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id'");
+$querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.harga_disc,tp.satuan FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id'");
     while ($datatb = mysqli_fetch_array($querytb))
       {
-          $subtotal_bonusnya = $datatb['qty_bonus'] * $datatb['harga_disc'];
-      $querybonus = "INSERT INTO bonus_penjualan (no_faktur_penjualan, kode_pelanggan, tanggal, jam, kode_produk, nama_produk, qty_bonus,keterangan,harga_disc,subtotal,satuan) VALUES ('$no_faktur', '$id_pelanggan', '$datatb[tanggal]', '$datatb[jam]', '$datatb[kode_produk]', '$datatb[nama_produk]', '$datatb[qty_bonus]', '$datatb[keterangan]', '$datatb[harga_disc]' ,'$subtotal_bonusnya','$datatb[satuan]' )";
 
-        if ($db->query($querybonus) === TRUE) {
-        } 
+//LOGIKA KETIKA ADA PRODUK PARCEL YANG AKAN DIJUAL, KARENA PARCEL TIDAK MASUK KE DALAM PRODUK BONUS
+        $query_cek_produk = $db->query("SELECT COUNT(kode_barang) FROM barang WHERE kode_barang = '$datatb[kode_barang]'");
+        $jumlah_cek_produk = mysqli_num_rows($query_cek_produk);
+          
+          if ($jumlah_cek_produk > 0 ) {
 
-        else {
-        echo "Error: " . $querybonus . "<br>" . $db->error;
-        }
+              $subtotal_bonusnya = $datatb['qty_bonus'] * $datatb['harga_disc'];
+              $querybonus = "INSERT INTO bonus_penjualan (no_faktur_penjualan, kode_pelanggan, tanggal, jam, kode_produk, nama_produk, qty_bonus,keterangan,harga_disc,subtotal,satuan) VALUES ('$no_faktur', '$id_pelanggan', '$datatb[tanggal]', '$datatb[jam]', '$datatb[kode_produk]', '$datatb[nama_produk]', '$datatb[qty_bonus]', '$datatb[keterangan]', '$datatb[harga_disc]' ,'$subtotal_bonusnya','$datatb[satuan]' )";
+
+                if ($db->query($querybonus) === TRUE) {
+                } 
+
+                else {
+                echo "Error: " . $querybonus . "<br>" . $db->error;
+                }
 
 
 
-        // MENGAUPDATE KETERANGAN_PROMO_DISC DI TABLE PENJAUALAN 
-          $update_jual = "UPDATE penjualan SET keterangan_promo_disc = '$datatb[keterangan]' WHERE no_faktur = '$no_faktur'";
-          if ($db->query($update_jual) === TRUE) {
-          } 
+              // MENGAUPDATE KETERANGAN_PROMO_DISC DI TABLE PENJAUALAN 
+                $update_jual = "UPDATE penjualan SET keterangan_promo_disc = '$datatb[keterangan]' WHERE no_faktur = '$no_faktur'";
+                if ($db->query($update_jual) === TRUE) {
+                } 
 
-          else {
-          echo "Error: " . $update_jual . "<br>" . $db->error;
+                else {
+                echo "Error: " . $update_jual . "<br>" . $db->error;
+                }
+
           }
+          else{
+
+          }
+
       }
 //end nya bonus
 

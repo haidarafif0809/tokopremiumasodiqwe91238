@@ -195,7 +195,7 @@ $session_id = session_id();
 
                   foreach ($data_c as $key) {
                     
-                      echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+                      echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" data-harga="'.$key['harga_beli'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
                     
                     
                   }
@@ -217,6 +217,8 @@ $session_id = session_id();
 
        
         <input type="hidden" name="id_produk" id="id_produk" class="form-control" required="" >
+        <input type="hidden" name="harga_produk" id="harga_produk" class="form-control" required="" >
+
       <input type="hidden" name="session_id" id="session_id" class="form-control" value="<?php echo $session_id; ?>" required="" >
       <input type="hidden" name="sisa_produk" id="sisa_produk" class="form-control" required="" >                                   
     </form>
@@ -329,6 +331,7 @@ $(document).on('click', '.pilih', function (e) {
   $("#kode_barang").trigger('chosen:updated');
   document.getElementById("nama_barang").value = $(this).attr('nama-barang');
   document.getElementById("id_produk").value = $(this).attr('data-id-produk');
+  document.getElementById("harga_produk").value = $(this).attr('data-harga');
 
   var kode_parcel =  $("#kode_parcel").val();
   var id_produk =  $("#id_produk").val();
@@ -420,6 +423,7 @@ $(document).on('click', '.pilih-parcel', function (e) {
               $(nRow).attr('data-kode', aData[0]);
               $(nRow).attr('nama-barang', aData[1]);
               $(nRow).attr('data-id-produk', aData[8]);
+              $(nRow).attr('data-harga', aData[4]);
 
 
           }
@@ -564,6 +568,7 @@ $("#submit_produk").click(function(){
   var jumlah_parcel = $("#jumlah_parcel").val();
   var jumlah_parcel = $("#jumlah_parcel").val();
   var nama_parcel = $("#nama_parcel").val();
+  var harga_produk = $("#harga_produk").val();
   var harga_parcel_1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_1").val()))));
 
 if (nama_parcel == "") {
@@ -605,7 +610,7 @@ if (nama_parcel == "") {
       }
       else{
             
-            $.post("proses_isi_parcel.php",{id_produk:id_produk,kode_parcel:kode_parcel,jumlah_barang:jumlah_barang,session_id:session_id},function(data) {
+            $.post("proses_isi_parcel.php",{harga_produk:harga_produk,id_produk:id_produk,kode_parcel:kode_parcel,jumlah_barang:jumlah_barang,session_id:session_id},function(data) {
 
               $("#nama_barang").val('');
               $("#kode_barang").val('');
@@ -778,12 +783,14 @@ if (nama_parcel == "") {
 
     var kode_parcel = $("#kode_parcel").val();
     var kode_barang = $(this).val();
+    var harga_beli = $('#opt-produk-'+kode_barang).attr("data-harga");
     var nama_barang = $('#opt-produk-'+kode_barang).attr("nama-barang");
     var id_produk = $('#opt-produk-'+kode_barang).attr("id-barang");
 
 
     $("#kode_barang").val(kode_barang);
     $("#nama_barang").val(nama_barang);
+    $("#harga_produk").val(harga_beli);
     $("#id_produk").val(id_produk);
 
 
@@ -1102,6 +1109,7 @@ $(document).ready(function(){
               $(nRow).attr('data-kode', aData[0]);
               $(nRow).attr('nama-barang', aData[1]);
               $(nRow).attr('data-id-produk', aData[8]);
+              $(nRow).attr('data-harga', aData[4]);
 
 
           }

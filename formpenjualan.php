@@ -290,6 +290,7 @@ Number.prototype.format = function(n, x, s, c) {
   <form class="form-inline" method="post ">
 
 <button type="button" id="cari_produk_penjualan" class="btn btn-info " data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
+<button type="button" id="daftar_parcel" class="btn btn-primary" data-toggle="modal" data-target="#modal_parcel"><i class='fa  fa-search'></i> Cari Parcel (F) </button>
 <button type="button" id="daftar_order" class="btn btn-success" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
 
 <?php 
@@ -487,6 +488,42 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
 
+<!-- START MODAL PARCEL-->
+<div id="modal_parcel" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- isi modal-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Produk Parcel</h4>
+      </div>
+      <div class="modal-body">
+      <div class="table-responsive">
+            <table id="table_parcel" align="center" class="table">
+                <thead>
+                        <th> Kode Parcel </th>
+                        <th> Nama Parcel </th>
+                        <th> Jumlah Parcel </th>
+                        <th> Harga Level 1</th>
+                        <th> Harga Level 2</th>
+                        <th> Harga Level 3</th>
+                        <th> Harga Level 4 </th>
+                        <th> Harga Level 5</th>
+                        <th> Harga Level 6</th>
+                        <th> Harga Level 7</th>
+                </thead>
+        </table>
+    </div>
+  </div> <!-- tag penutup modal-body-->
+      <div class="modal-footer">
+        <button type="button" order="" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div><!-- END MODAL PARCEL  -->
+
+
+
 <!-- Modal Hapus data -->
 <div id="modal_hapus" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -604,6 +641,14 @@ tr:nth-child(even){background-color: #f2f2f2}
             echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
           }
 
+          $cache_parcel = new Cache();
+          $cache_parcel->setCache('produk_parcel');
+          $data_parcel = $cache_parcel->retrieveAll();
+
+          foreach ($data_parcel as $key_parcel) {
+            echo '<option id="opt-produk-'.$key_parcel['kode_parcel'].'" value="'.$key_parcel['kode_parcel'].'" data-kode="'.$key_parcel['kode_parcel'].'" nama-barang="'.$key_parcel['nama_parcel'].'" harga="'.$key_parcel['harga_parcel'].'" harga_barang_2="'.$key_parcel['harga_parcel_2'].'" harga_barang_3="'.$key_parcel['harga_parcel_3'].'" harga_barang_4="'.$key_parcel['harga_parcel_4'].'" harga_barang_5="'.$key_parcel['harga_parcel_5'].'" harga_barang_6="'.$key_parcel['harga_parcel_6'].'" harga_barang_7="'.$key_parcel['harga_parcel_7'].'"  ber-stok="Barang" tipe_barang="Barang" id-barang="'.$key_parcel['id'].'" satuan="125"> '. $key_parcel['kode_parcel'].' ( '.$key_parcel['nama_parcel'].' ) </option>';
+          }
+
         ?>
     </select>
   </div>
@@ -624,12 +669,11 @@ tr:nth-child(even){background-color: #f2f2f2}
           
           $query = $db->query("SELECT id, nama  FROM satuan");
           while($data = mysqli_fetch_array($query))
-          {
-          
-          echo "<option value='".$data['id']."'>".$data['nama'] ."</option>";
+          {          
+            echo "<option value='".$data['id']."'>".$data['nama'] ."</option>";
           }
                       
-          ?>       
+          ?>
     </select>
   </div>
 
@@ -660,9 +704,9 @@ tr:nth-child(even){background-color: #f2f2f2}
     <input type="hidden" class="form-control"  placeholder="Lama" name="harga_lama" id="harga_lama">
     <input type="hidden" class="form-control"  placeholder="Baru" name="harga_baru" id="harga_baru">
     <input type="hidden" class="form-control" name="jumlahbarang" id="jumlahbarang">
-    <input type="hidden" id="satuan_produk" name="satuan" class="form-control" value="" required="">
-    <input type="hidden" id="harga_produk" name="harga" class="form-control" value="" required="">
-    <input type="hidden" id="id_produk" name="id_produk" class="form-control" value="" required="">        
+    <input type="hidden" id="satuan_produk" name="satuan" class="form-control" value="" required="" placeholder="satuan">
+    <input type="hidden" id="harga_produk" name="harga" class="form-control" value="" required="" placeholder="harga produk">
+    <input type="hidden" id="id_produk" name="id_produk" class="form-control" value="" required="" placeholder="id produk">        
 <input type="hidden" id="total_barcode" name="total_barcode" class="form-control" value="" required=""> 
 <!--end hidden data produk yang ingin ditambahkan ke tbs -->
 
@@ -1046,6 +1090,54 @@ tr:nth-child(even){background-color: #f2f2f2}
     });
 </script>
 <!--/DATA TABLE MENGGUNAKAN AJAX-->
+
+
+<!--DATA TABLE PRODUK PARCEL MENGGUNAKAN AJAX-->
+<script type="text/javascript" language="javascript" >
+  $(document).ready(function() {
+    $(document).on('click', '#daftar_parcel', function (e) {
+        $('#table_parcel').DataTable().destroy();
+
+          var dataTable = $('#table_parcel').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_daftar_parcel.php", // json datasource           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_parcel").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class', "pilih-parcel");
+              $(nRow).attr('data-kode', aData[0]);
+              $(nRow).attr('data-nama', aData[1]);
+              $(nRow).attr('data-stok', aData[2]);
+              $(nRow).attr('data-harga1', aData[3]);
+              $(nRow).attr('data-harga2', aData[4]);
+              $(nRow).attr('data-harga3', aData[5]);
+              $(nRow).attr('data-harga4', aData[6]);
+              $(nRow).attr('data-harga5', aData[7]);
+              $(nRow).attr('data-harga6', aData[8]);
+              $(nRow).attr('data-harga7', aData[9]);
+              $(nRow).attr('data-faktur', aData[10]);
+              $(nRow).attr('data-id', aData[11]);
+
+          },
+        });
+
+      $("#form").submit(function(){
+        return false;
+      });
+        
+    });
+  });
+</script>
+<!--/DATA TABLE PRODUK PARCEL MENGGUNAKAN AJAX-->
 
 
 <!--MULAI PUNYYA PROMO PENJUALAN-->
@@ -1654,6 +1746,105 @@ $.post("lihat_promo_alert.php",{id:$(this).attr('id-barang')},function(data){
 
 
   $('#myModal').modal('hide'); 
+  $("#jumlah_barang").focus();
+
+
+});
+
+</script>
+
+
+<!--START INPUT DARI MODAL PARCEL-->
+<script type="text/javascript">
+//AMBIL DAN INPUT KE FORM DARI CARI PARCEL
+$(document).on('click', '.pilih-parcel', function (e) {
+
+  document.getElementById("kode_barang").value = $(this).attr('data-kode');
+  $("#kode_barang").trigger('chosen:updated');
+
+  document.getElementById("nama_barang").value = $(this).attr('data-nama');
+  document.getElementById("ber_stok").value = "Barang";
+  document.getElementById("id_produk").value = $(this).attr('data-id');
+  document.getElementById("satuan_konversi").value = "125"
+  document.getElementById("satuan_produk").value = "125";
+
+  var kode_barang = $("#kode_barang").val();
+
+ $.post('cek_kode_barang_tbs_penjualan.php',{kode_barang:kode_barang}, function(data){
+  if(data == 1){
+    alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+
+    $("#kode_barang").val('');
+    $("#kode_barang").trigger('chosen:updated');
+    $("#kode_barang").trigger('chosen:open');
+    $("#nama_barang").val('');
+   }//penutup if
+
+    });////penutup function(cek_kode_barang_tbs_penjualan)
+
+var level_harga = $("#level_harga").val();
+
+var harga_level_1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga1')))));
+var harga_level_2 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga2')))));  
+var harga_level_3 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga3')))));
+var harga_level_4 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga4')))));
+var harga_level_5 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga5')))));  
+var harga_level_6 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga6')))));
+var harga_level_7 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga7')))));
+console.log(harga_level_1);
+
+if (level_harga == "harga_1") {
+  $("#harga_produk").val(harga_level_1);
+  $("#harga_lama").val(harga_level_1);
+  $("#harga_baru").val(harga_level_1);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_2") {
+  $("#harga_produk").val(harga_level_2);
+  $("#harga_baru").val(harga_level_2);
+  $("#harga_lama").val(harga_level_2);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_3") {
+  $("#harga_produk").val(harga_level_3);
+  $("#harga_lama").val(harga_level_3);
+  $("#harga_baru").val(harga_level_3);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_4") {
+  $("#harga_produk").val(harga_level_4);
+  $("#harga_lama").val(harga_level_4);
+  $("#harga_baru").val(harga_level_4);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_5") {
+  $("#harga_produk").val(harga_level_5);
+  $("#harga_lama").val(harga_level_5);
+  $("#harga_baru").val(harga_level_5);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_6") {
+  $("#harga_produk").val(harga_level_6);
+  $("#harga_lama").val(harga_level_6);
+  $("#harga_baru").val(harga_level_6);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_7") {
+  $("#harga_produk").val(harga_level_7);
+  $("#harga_lama").val(harga_level_7);
+  $("#harga_baru").val(harga_level_7);
+  $('#kolom_cek_harga').val('1');
+}
+document.getElementById("jumlahbarang").value = $(this).attr('data-stok');
+
+
+  $('#modal_parcel').modal('hide'); 
   $("#jumlah_barang").focus();
 
 
@@ -3063,6 +3254,7 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
  //pengambilan data form pembayaran
 
 
+
 // POST KE PROSES TBSNYA JIKA JASA
  $.post("prosestbspenjualan.php",{ppn:ppn,no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
      
@@ -3205,13 +3397,13 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
           });
     //end show ajax tbs
 
-    $("#ppn").attr("disabled", true);
-    $("#level_harga").attr("disabled", true);
-    $("#kd_pelanggan").attr("disabled", true);
-    $("#tbody").prepend(data);
-    $("#kode_barang").val('');
-    $("#kode_barang").val('').trigger("chosen:updated");
-    $("#kode_barang").trigger("chosen:open");
+     $("#ppn").attr("disabled", true);
+     $("#level_harga").attr("disabled", true);
+     $("#kd_pelanggan").attr("disabled", true);
+     $("#tbody").prepend(data);
+     $("#kode_barang").val('');
+     $("#kode_barang").trigger('chosen:updated');
+     $("#kode_barang").trigger('chosen:open');
      $("#nama_barang").val('');
      $("#harga_produk").val('');
      $("#ber_stok").val('');
@@ -3667,7 +3859,15 @@ alert("Silakan Bayar Piutang");
 
  $.post("cek_subtotal_penjualan.php",{total2:total2,session_id:session_id},function(data) {
 
-  if (data == "Oke") {
+  if (data == "1") {
+
+   alert("Maaf Subtotal Penjualan Tidak Sesuai, Silakan Tunggu Sebentar!");       
+        window.location.href="formpenjualan.php";
+  
+
+  }
+  else{
+    
 // POST KE BAYAR LANGSUNG CETAK
    $.post("proses_bayar_tunai_cetak_langsung.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
   
@@ -3693,12 +3893,6 @@ alert("Silakan Bayar Piutang");
     
        
    });
-  
-
-  }
-  else{
-    alert("Maaf Subtotal Penjualan Tidak Sesuai, Silakan Tunggu Sebentar!");       
-        window.location.href="formpenjualan.php";
   }
 
  });
@@ -5510,7 +5704,7 @@ $(document).ready(function(){
     var id_barang = $('#opt-produk-'+kode_barang).attr("id-barang");
     var level_harga = $("#level_harga").val();
 
-$.post("lihat_promo_alert.php",{id:id_barang},function(data){
+$.post("lihat_promo_alert.php",{id_barang:id_barang},function(data){
 
     if (data == '')
     {

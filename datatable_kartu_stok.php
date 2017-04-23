@@ -6,7 +6,10 @@ $id = stringdoang($_POST['id_produk']);
 $kode_barang = stringdoang($_POST['kode_barang']); 
 $bulan = stringdoang($_POST['bulan']); 
 $tahun = stringdoang($_POST['tahun']);
+?>
 
+
+<?php 
 if ($bulan == '1')
 {
 	$moon = 'Januari';
@@ -85,7 +88,7 @@ if ($requestData['start'] > 0)
 			UNION SELECT no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp, tanggal, jam FROM hpp_keluar 
 			WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) = '$bulan' AND YEAR(tanggal) = '$tahun' 
 			ORDER BY CONCAT(tanggal,' ',jam)  LIMIT ".$requestData['start']."  ");
-		while($row = mysqli_fetch_array($sql))
+		while($data = mysqli_fetch_array($sql))
 		{
 					if ($data['jenis_hpp'] == '1')
 					{
@@ -142,18 +145,21 @@ $datatable = array();
 
 	$nestedData=array();
 
+
 $nestedData[] = "";
- $nestedData[] = "<font color='red'>SALDO AWAL</font>";
+$nestedData[] = "<p style='color:red'>SALDO AWAL</p>";
 $nestedData[] = "";
 $nestedData[] = "";
 $nestedData[] = "";
-$nestedData[] =  "<font color='red'>".rp($total_saldo)."</font>" ;
+$nestedData[] = "";
+$nestedData[] =  "<p style='color:red; text-align:right'>".rp($total_saldo)."</p>" ;
 
 
 $datatable[] = $nestedData;
 
 while($data = mysqli_fetch_array($query))
 	{
+
 
 $nestedData=array();
 
@@ -165,11 +171,87 @@ if ($data['jenis_hpp'] == '1')
 		
 
 		$nestedData[] = $data['no_faktur'] ;
-			$nestedData[] = $data['jenis_transaksi'];
-			$nestedData[] = $data['tanggal'];
-			$nestedData[] = $masuk ;
-		$nestedData[] =   	"0";
-		$nestedData[] =  $total_saldo ;
+
+//LOGIKA UNTUK MENAMPILKAN JENIS TRANSAKSI DARI MASING" TRANSAKSI (JUMLAH PRODUK BERTAMBAH)
+			
+			if ($data['jenis_transaksi'] == 'Pembelian') {
+
+				$ambil_suplier = $db->query("SELECT p.suplier, s.nama FROM pembelian p INNER JOIN  suplier s ON p.suplier = s.id WHERE p.no_faktur = '$data[no_faktur]' ");
+				$data_suplier = mysqli_fetch_array($ambil_suplier);
+				$nama_suplier = $data_suplier['nama'];
+
+				$nestedData[] = "<td> ".$data['jenis_transaksi']." (".$nama_suplier.") </td>";
+				
+			}
+			else if ($data['jenis_transaksi'] == 'Retur Penjualan') {
+				$ambil_pelanggan = $db->query("SELECT rp.kode_pelanggan, p.nama_pelanggan FROM retur_penjualan rp INNER JOIN  pelanggan p ON rp.kode_pelanggan = p.kode_pelanggan WHERE rp.no_faktur_retur = '$data[no_faktur]' ");
+				$data_pelanggan = mysqli_fetch_array($ambil_pelanggan);
+				$nama_pelanggan = $data_pelanggan['nama_pelanggan'];
+				$nestedData[] = "<td> ".$data['jenis_transaksi']." (".$nama_pelanggan.") </td>";
+			}
+			else if ($data['jenis_transaksi'] == 'Stok Opname') {
+				$nestedData[] = "<td> ".$data['jenis_transaksi']." ( + ) </td>";
+			}
+			else{
+				$nestedData[] = $data['jenis_transaksi'];
+			}
+
+//LOGIKA UNTUK MENAMPILKAN JENIS TRANSAKSI DARI MASING" TRANSAKSI (JUMLAH PRODUK BERTAMBAH)
+//
+//LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERTAMBAH)
+			if ($data['jenis_transaksi'] == 'Pembelian') {
+
+				$ambil_harga_beli = $db->query("SELECT harga AS harga_beli FROM detail_pembelian  WHERE no_faktur = '$data[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_beli = mysqli_fetch_array($ambil_harga_beli);
+				$harga_beli = $data_beli['harga_beli'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_beli)."<p/>";
+				
+			}
+			else if ($data['jenis_transaksi'] == 'Retur Penjualan') {
+
+
+				$ambil_harga_retur_jual = $db->query("SELECT harga AS harga_retur_jual FROM detail_retur_penjualan  WHERE no_faktur_retur = '$data[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_retur_jual = mysqli_fetch_array($ambil_harga_retur_jual);
+				$harga_retur_jual = $data_retur_jual['harga_retur_jual'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_retur_jual)."<p/>";
+			}
+			else if ($data['jenis_transaksi'] == 'Item Masuk') {
+
+
+				$ambil_harga_masuk = $db->query("SELECT harga AS harga_masuk FROM detail_item_masuk  WHERE no_faktur = '$data[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_masuk = mysqli_fetch_array($ambil_harga_masuk);
+				$harga_masuk = $data_masuk['harga_masuk'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_masuk)."<p/>";
+			}
+			else if ($data['jenis_transaksi'] == 'Stok Opname') {
+
+
+				$ambil_harga_opname = $db->query("SELECT harga AS harga_opname FROM detail_stok_opname  WHERE no_faktur = '$data[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_opname = mysqli_fetch_array($ambil_harga_opname);
+				$harga_opname = $data_opname['harga_opname'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_opname)."<p/>";
+			}
+			else if ($data['jenis_transaksi'] == 'Stok Awal') {
+
+
+				$ambil_harga_awal = $db->query("SELECT harga AS harga_awal FROM stok_awal  WHERE no_faktur = '$data[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_awal = mysqli_fetch_array($ambil_harga_awal);
+				$harga_awal = $data_awal['harga_awal'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_awal)."<p/>";
+			}
+
+//LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERTAMBAH)
+
+
+			$nestedData[] = tanggal($data['tanggal']);
+			$nestedData[] = "<p style='text-align:right'>".rp($masuk)."<p/>";
+			$nestedData[] = "<p style='text-align:right'>0<p/>";
+			$nestedData[] = "<p style='text-align:right'>".rp($total_saldo)."<p/>";
 
 		$datatable[] = $nestedData;
 		
@@ -183,13 +265,81 @@ $total_saldo = $total_saldo - $keluar;
 
 		
 		$nestedData[] =	$data['no_faktur'] ;
-		$nestedData[] = $data['jenis_transaksi'] ;
-		$nestedData[] =	 $data['tanggal'] ;
-		$nestedData[] =	"0";
-		 $nestedData[] = 	$keluar;
-		$nestedData[] =   $total_saldo;
 
-			$datatable[] = $nestedData;
+
+//LOGIKA UNTUK MENAMPILKAN JENIS TRANSAKSI DARI MASING" TRANSAKSI (JUMLAH PRODUK BERKURANG)
+
+			if ($data['jenis_transaksi'] == 'Retur Pembelian') {
+
+				$ambil_suplier = $db->query("SELECT p.nama_suplier, s.nama FROM retur_pembelian p INNER JOIN suplier s ON p.nama_suplier = s.id WHERE p.no_faktur_retur = '$data[no_faktur]' ");
+				$data_suplier = mysqli_fetch_array($ambil_suplier);
+				$nama_suplier = $data_suplier['nama'];
+
+				$nestedData[] = "<td> ".$data['jenis_transaksi']." (".$nama_suplier.") </td>";
+				
+			}
+			else if ($data['jenis_transaksi'] == 'Penjualan') {
+				$ambil_pelanggan = $db->query("SELECT p.kode_pelanggan, pl.nama_pelanggan FROM penjualan p INNER JOIN  pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE p.no_faktur = '$data[no_faktur]' ");
+				$data_pelanggan = mysqli_fetch_array($ambil_pelanggan);
+				$nama_pelanggan = $data_pelanggan['nama_pelanggan'];
+				$nestedData[] = "<td> ".$data['jenis_transaksi']." (".$nama_pelanggan.") </td>";
+			}
+			else if ($data['jenis_transaksi'] == 'Stok Opname') {
+				$nestedData[] = "<td> ".$data['jenis_transaksi']." ( - ) </td>";
+			}
+			else{
+				$nestedData[] = $data['jenis_transaksi'];
+			}
+
+//LOGIKA UNTUK MENAMPILKAN JENIS TRANSAKSI DARI MASING" TRANSAKSI (JUMLAH PRODUK BERKURANG)
+//
+
+//LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERKURANG)
+
+			if ($data['jenis_transaksi'] == 'Penjualan') {
+
+				$ambil_harga_jual = $db->query("SELECT harga AS harga_jual FROM detail_penjualan  WHERE no_faktur = '$data[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_jual = mysqli_fetch_array($ambil_harga_jual);
+				$harga_jual = $data_jual['harga_jual'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_jual)."<p/>";
+				
+			}
+			else if ($data['jenis_transaksi'] == 'Retur Pembelian') {
+
+
+				$ambil_harga_retur_beli = $db->query("SELECT harga AS harga_retur_beli FROM detail_retur_pembelian  WHERE no_faktur_retur = '$data[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_retur_beli = mysqli_fetch_array($ambil_harga_retur_beli);
+				$harga_retur_beli = $data_retur_beli['harga_retur_beli'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_retur_beli)."<p/>";
+			}
+			else if ($data['jenis_transaksi'] == 'Item Keluar') {
+
+
+				$ambil_harga_keluar = $db->query("SELECT harga AS harga_keluar FROM detail_item_keluar  WHERE no_faktur = '$data[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_keluar = mysqli_fetch_array($ambil_harga_keluar);
+				$harga_keluar = $data_keluar['harga_keluar'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_keluar)."<p/>";
+			}
+			else if ($data['jenis_transaksi'] == 'Stok Opname') {
+
+
+				$ambil_harga_opname = $db->query("SELECT harga AS harga_opname FROM detail_stok_opname  WHERE no_faktur = '$data[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_opname = mysqli_fetch_array($ambil_harga_opname);
+				$harga_opname = $data_opname['harga_opname'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_opname)."<p/>";
+			}
+
+//LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERKURANG)
+
+		$nestedData[] =	 tanggal($data['tanggal']);
+		$nestedData[] =	"<p style='text-align:right'>0<p/>";
+		$nestedData[] = "<p style='text-align:right'>".rp($keluar)."<p/>";
+		$nestedData[] = "<p style='text-align:right'>".rp($total_saldo)."<p/>";
+		$datatable[] = $nestedData;
 }
 
 

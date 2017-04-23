@@ -30,24 +30,21 @@ include 'db.php';
         <h4 class="modal-title"><center><b>Data Barang</b></center></h4>
       </div>
       <div class="modal-body">
-
-        <div class="table-resposive">
-            <span class="modal_baru">
-              <table id="table-modal" class="table table-bordered">
-                  <thead> <!-- untuk memberikan nama pada kolom tabel -->
-          
-                        <th> Kode Barang </th>
-                        <th> Nama Barang </th>
-                        <th> Jumlah Barang </th>
-                        <th> Satuan </th>
-                        <th> Kategori </th>
-                        <th> Status </th>
-          
-                  </thead> <!-- tag penutup tabel -->
-                </table> <!-- tag penutup table-->
-              </span>
+      <center>
+          <div class="table-responsive">    
+            <table id="table-modal" class="table table-bordered table-sm">
+              <thead>
+                <th> Kode Barang </th>
+                <th> Nama Barang </th>
+                <th> Jumlah Barang </th>
+                <th> Satuan </th>
+                <th> Kategori </th>
+                <th> Status </th>
+              </thead>
+            </table>
           </div>
-</div> <!-- tag penutup modal-body-->
+      </center>
+      </div> <!-- tag penutup modal-body-->
       <div class="modal-footer">
         <center><b><button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       </div></b></center>
@@ -59,7 +56,7 @@ include 'db.php';
 
 
 
-<h1>KARTU STOK</h1> <hr>
+<h3>KARTU STOK PERIODE</h3> <hr>
 
 <button type="button" id="cari_produk_penjualan" class="btn btn-info " data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'> Cari (F1)</i>  </button> 
 <br><br>
@@ -76,7 +73,7 @@ include 'db.php';
                 $data_c = $c->retrieveAll();
 
                 foreach ($data_c as $key) {
-                  echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+                  echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'"  satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'"  id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
                 }
 
               ?>
@@ -130,6 +127,7 @@ include 'db.php';
 
       <th style='background-color: #4CAF50; color:white'> No Faktur </th>
       <th style='background-color: #4CAF50; color:white'> Jenis Transaksi </th>
+      <th style='background-color: #4CAF50; color:white'> Harga</th>
       <th style='background-color: #4CAF50; color:white'> Tanggal </th>
       <th style='background-color: #4CAF50; color:white'> Jumlah Masuk</th>
       <th style='background-color: #4CAF50; color:white'> Jumlah Keluar</th>
@@ -140,15 +138,11 @@ include 'db.php';
      </table>
 
 </div>
-	<div class="row">
-        <div class="col-sm-2"><br>
+  <div class="row">
           <a id="trx" href='' class='btn btn-success' target='blank'><i class='fa fa-print'> </i> Cetak</a>
-        </div>  
-
-         <div class="col-sm-2">
-         <br>
+        
         <a href='' style="width: 170px;" type='submit' id="btn-export" class='btn btn-default'><i class='fa fa-download'> </i> Download Excel</a>
-        </div>
+
     </div>
 </div>
 
@@ -218,10 +212,10 @@ $(document).on('click','#lihat_kartu_stok',function(e) {
 
 
         } );
-				$("#result").show()
+        $("#result").show()
 
 
-  		 function ambil_tgl(tanggal_input1){
+       function ambil_tgl(tanggal_input1){
         var birthday1 = tanggal_input1;
         birthday1=birthday1.split("-");   
         var hari_ini = birthday1[2];
@@ -411,7 +405,7 @@ $(document).on('click','#lihat_kartu_stok',function(e) {
 
 <script type="text/javascript">
   //SELECT CHOSSESN    
-$(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});    
+$(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});   
 </script>
 
 <script>

@@ -30,8 +30,9 @@ include 'db.php';
       <div class="modal-body">
 
       <center>
-      <div class="table-resposive">
+      <div class="table-responsive">
            <table id="table_modal_kartu_stok" class="table table-bordered table-sm">
+
            <thead> <!-- untuk memberikan nama pada kolom tabel -->
                               
             <th> Kode Barang </th>
@@ -57,7 +58,7 @@ include 'db.php';
 
 
 
-<h1>KARTU STOK</h1> <hr>
+<h3>KARTU STOK</h3> <hr>
 
 
 <button type="button" id="cari_produk_penjualan" class="btn btn-info " data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'> Cari (F1) </i>  </button> 
@@ -76,7 +77,7 @@ include 'db.php';
                 $data_c = $c->retrieveAll();
 
                 foreach ($data_c as $key) {
-                  echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+                  echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
                 }
 
               ?>
@@ -148,7 +149,8 @@ include 'db.php';
         <thead>
 
       <th style='background-color: #4CAF50; color:white'> No Faktur </th>
-      <th style='background-color: #4CAF50; color:white'> Tipe </th>
+      <th style='background-color: #4CAF50; color:white'> Jenis Transaksi </th>
+      <th style='background-color: #4CAF50; color:white'> Harga </th>
       <th style='background-color: #4CAF50; color:white'> Tanggal </th>
       <th style='background-color: #4CAF50; color:white'> Jumlah Masuk </th>
       <th style='background-color: #4CAF50; color:white'> Jumlah Keluar </th>
@@ -159,14 +161,10 @@ include 'db.php';
   </div>
 
   <div class="row">
-        <div class="col-sm-2"><br>
           <a id="trx" href='' class='btn btn-success' target='blank'><i class='fa fa-print'> </i> Cetak</a>
-        </div>  
 
-         <div class="col-sm-2">
-         <br>
         <a href='' style="width: 170px;" type='submit' id="btn-export" class='btn btn-default'><i class='fa fa-download'> </i> Download Excel</a>
-        </div>
+
     </div>
 </div>
 
@@ -349,7 +347,7 @@ include 'db.php';
 
 <script type="text/javascript">
   //SELECT CHOSSESN    
-$(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});    
+$(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});    
 </script>
 
 <script>

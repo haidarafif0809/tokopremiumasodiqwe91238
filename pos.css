@@ -1,0 +1,30 @@
+div.img {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 100px;
+    height: 100px;
+}
+
+div.img:hover {
+    border: 1px solid #777;
+}
+
+
+div.desc {
+    padding: 15px;
+    text-align: center;
+}
+
+/* Tooltip */
+  .test + .tooltip > .tooltip-inner {
+      background-color: #00ccff; 
+      color: #000000; 
+      border: 1px solid #00ccff; 
+      padding: 10px;
+      font-size: 20px;
+  }
+
+    .test + .tooltip.top > .tooltip-arrow {
+      border-top: 5px solid #00ccff;
+  }

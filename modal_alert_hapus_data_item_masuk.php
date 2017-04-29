@@ -30,7 +30,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 }
 </style>
 
-<h4>Maaf No Transaksi <strong><?php echo $no_faktur; ?></strong> tidak dapat dihapus, karena telah terdapat Transaksi Penjualan atau Item Keluar. Dengan daftar sebagai berikut :</h4>
+<h4>Maaf No Transaksi <strong><?php echo $no_faktur; ?></strong> tidak dapat dihapus, karena telah terdapat Transaksi Penjualan , Item Keluar atau Transfer Stok. Dengan daftar sebagai berikut :</h4>
 
 <table id="tableuser" class="table table-hover">
     <thead>

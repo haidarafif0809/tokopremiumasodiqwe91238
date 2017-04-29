@@ -4,14 +4,14 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "surya_demo";
+$dbname = "surya";
 
 
 $conn = mysqli_connect($servername, $username, $password, $dbname) or die("Connection failed: " . mysqli_connect_error());
 
 // perintah untuk mengkoneksikan php ke database mysql
 
-$db = new mysqli('localhost','root','','surya_demo');
+$db = new mysqli('localhost','root','','surya');
 
 
 

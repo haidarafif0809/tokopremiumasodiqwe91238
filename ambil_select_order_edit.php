@@ -11,7 +11,7 @@ $no_faktur = stringdoang($_POST['no_faktur']);
           <?php 
           
           // menampilkan seluruh data yang ada pada tabel suplier
-          $query = $db->query("SELECT no_faktur_order FROM tbs_penjualan WHERE no_faktur = '$no_faktur' AND no_faktur_order != ''");
+          $query = $db->query("SELECT no_faktur_order FROM tbs_penjualan WHERE no_faktur = '$no_faktur' AND no_faktur_order IS NOT NULL ");
           
           // menyimpan data sementara yang ada pada $query
           while($data = mysqli_fetch_array($query))

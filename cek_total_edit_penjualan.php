@@ -15,10 +15,7 @@ include 'sanitasi.php';
  $data = mysqli_fetch_array($query);
  $total = $data['total_penjualan'];
 
-
-$a =  intval($total);
-
-echo rp($a);
+echo koma($total,2);
 
         //Untuk Memutuskan Koneksi Ke Database
 

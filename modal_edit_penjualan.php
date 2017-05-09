@@ -2,6 +2,7 @@
 /* Database connection start */
 include 'sanitasi.php';
 include 'db.php';
+include 'persediaan.function.php';
 
 /* Database connection end */
 $no_faktur = stringdoang($_POST['no_faktur']);
@@ -75,52 +76,13 @@ $data = array();
 
 while( $row=mysqli_fetch_array($query) ) {
 
-    // mencari jumlah Barang
-            $query0 = $db->query("SELECT SUM(jumlah_barang) AS jumlah_pembelian FROM detail_pembelian WHERE kode_barang = '$row[kode_barang]'");
-            $cek0 = mysqli_fetch_array($query0);
-            $jumlah_pembelian = $cek0['jumlah_pembelian'];
-
-            $query1 = $db->query("SELECT SUM(jumlah) AS jumlah_item_masuk FROM detail_item_masuk WHERE kode_barang = '$row[kode_barang]'");
-            $cek1 = mysqli_fetch_array($query1);
-            $jumlah_item_masuk = $cek1['jumlah_item_masuk'];
-
-            $query2 = $db->query("SELECT SUM(jumlah_retur) AS jumlah_retur_penjualan FROM detail_retur_penjualan WHERE kode_barang = '$row[kode_barang]'");
-            $cek2 = mysqli_fetch_array($query2);
-            $jumlah_retur_penjualan = $cek2['jumlah_retur_penjualan'];
-
-            $query20 = $db->query("SELECT SUM(jumlah_awal) AS jumlah_stok_awal FROM stok_awal WHERE kode_barang = '$row[kode_barang]'");
-            $cek20 = mysqli_fetch_array($query20);
-            $jumlah_stok_awal = $cek20['jumlah_stok_awal'];
-
-            $query200 = $db->query("SELECT SUM(selisih_fisik) AS jumlah_fisik FROM detail_stok_opname WHERE kode_barang = '$row[kode_barang]'");
-            $cek200 = mysqli_fetch_array($query200);
-            $jumlah_fisik = $cek200['jumlah_fisik'];
-//total barang 1
-            $total_1 = $jumlah_pembelian + $jumlah_item_masuk + $jumlah_retur_penjualan + $jumlah_stok_awal + $jumlah_fisik;
-
-
- 
-
-            $query3 = $db->query("SELECT SUM(jumlah_barang) AS jumlah_penjualan FROM detail_penjualan WHERE kode_barang = '$row[kode_barang]'");
-            $cek3 = mysqli_fetch_array($query3);
-            $jumlah_penjualan = $cek3['jumlah_penjualan'];
-
-
-            $query4 = $db->query("SELECT SUM(jumlah) AS jumlah_item_keluar FROM detail_item_keluar WHERE kode_barang = '$row[kode_barang]'");
-            $cek4 = mysqli_fetch_array($query4);
-            $jumlah_item_keluar = $cek4['jumlah_item_keluar'];
-
-            $query5 = $db->query("SELECT SUM(jumlah_retur) AS jumlah_retur_pembelian FROM detail_retur_pembelian WHERE kode_barang = '$row[kode_barang]'");
-            $cek5 = mysqli_fetch_array($query5);
-            $jumlah_retur_pembelian = $cek5['jumlah_retur_pembelian'];
+            $stok_barang = cekStokHpp($row['kode_barang']);
 
 // select detail penjualan dan tbs_penjualan
             $queryyy = $db->query("SELECT dp.jumlah_barang AS jumlah_detail ,tp.jumlah_barang AS jumlah_tbs, dp.satuan  FROM detail_penjualan dp LEFT JOIN tbs_penjualan tp ON dp.no_faktur = tp.no_faktur WHERE dp.kode_barang = '$row[kode_barang]' AND dp.no_faktur = '$no_faktur' ");
             $data000 = mysqli_fetch_array($queryyy);
 
 
-//total barang 2
-            $total_2 = $jumlah_penjualan + $jumlah_item_keluar + $jumlah_retur_pembelian;
 
             $konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE id_satuan = '$data000[satuan]' AND kode_produk = '$row[kode_barang]'");
             $data_konversi = mysqli_fetch_array($konversi);
@@ -128,8 +90,6 @@ while( $row=mysqli_fetch_array($query) ) {
 
              $jumlah_tbs = $data000['jumlah_tbs'] * $data_konversi['konversi'];
 
-
-            $stok_barang = $total_1 - $total_2;
             $sisa_barang = ($stok_barang + $data000['jumlah_detail']) - $jumlah_tbs;
 
             $harga1 = $row['harga_jual'];
@@ -177,7 +137,12 @@ while( $row=mysqli_fetch_array($query) ) {
         $nestedData[] = "0";
         }
     else{
-        $nestedData[] = $sisa_barang;
+        if($row["nama"] == 'KG'){
+           $nestedData[] = koma(cekStokHpp($row["kode_barang"]),3);
+        }
+        else{
+            $nestedData[] = hapus_koma(cekStokHpp($row["kode_barang"]));
+        }
         }
 
     $nestedData[] = $row["nama"];

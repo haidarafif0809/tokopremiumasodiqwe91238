@@ -834,10 +834,10 @@ tr:nth-child(even){background-color: #f2f2f2}
       
 
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
           
            <label style="font-size:15px"> <b> Subtotal </b></label><br>
-      <input style="height:15px;font-size:15px" type="text" name="total" id="total2" class="form-control" placeholder="Total" readonly="" >
+      <b><input style="height: 25px; width:90%; font-size:20px;" type="text" name="total" id="total2" class="form-control" placeholder="Total" readonly="" ></b>
 
         </div>
 
@@ -849,8 +849,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
          <div class="col-sm-6">
 
-          <label>Biaya Admin </label><br>
-            <select class="form-control chosen" id="biaya_admin_select" name="biaya_admin_select" >
+            <select style="display:none;" class="form-control" id="biaya_admin_select" name="biaya_admin_select" >
               <option value="0" selected=""> Silahkan Pilih </option>
                 <?php 
                 $get_biaya_admin = $db->query("SELECT prosentase,nama FROM biaya_admin");
@@ -869,13 +868,11 @@ tr:nth-child(even){background-color: #f2f2f2}
      <div class="row">
 
            <div class="col-xs-6">          
-              <label>Biaya Admin (Rp)</label>
-              <input type="text" name="biaya_admin_rupiah" style="height:15px;font-size:15px" id="biaya_adm" class="form-control" placeholder="Biaya Admin Rp" autocomplete="off" >
+              <input type="hidden" name="biaya_admin_rupiah" style="height:15px;font-size:15px" id="biaya_adm" class="form-control" placeholder="Biaya Admin Rp" autocomplete="off" >
            </div>
 
            <div class="col-xs-6">
-              <label>Biaya Admin (%)</label>
-              <input type="text" name="biaya_admin_persen" style="height:15px;font-size:15px" id="biaya_admin_persen" class="form-control" placeholder="Biaya Admin %" autocomplete="off" >
+              <input type="hidden" name="biaya_admin_persen" style="height:15px;font-size:15px" id="biaya_admin_persen" class="form-control" placeholder="Biaya Admin %" autocomplete="off" >
            </div>
 
       </div> 
@@ -954,7 +951,7 @@ tr:nth-child(even){background-color: #f2f2f2}
  
     <div class="col-sm-6">  
            <label style="font-size:15px">  <b> Pembayaran (F7)</b> </label><br>
-           <b><input type="text" name="pembayaran" id="pembayaran_penjualan" autocomplete="off" class="form-control"   style="font-size: 20px"  ></b>
+           <b><input type="text" name="pembayaran" id="pembayaran_penjualan" autocomplete="off" class="form-control"   style="height: 25px; width:90%; font-size:20px;"  ></b>
        </div>
  </div>
            
@@ -1194,8 +1191,8 @@ $(document).on('click', '.pilih_bonus_disc', function (e) {
   var harga = $(this).attr('data-harga');
   var harga_normal = $(this).attr('data-harga-normal');
   var jumlah = $(this).attr('data-qty-max');;
-  var potongan = parseInt(harga_normal) - parseInt(harga);
-  var  subtotal_disc = parseInt(jumlah) * parseInt(potongan);
+  var potongan = parseFloat(harga_normal) - parseFloat(harga);
+  var  subtotal_disc = parseFloat(jumlah) * parseFloat(potongan);
 
         $.post("ambil_bonus_disc.php",{kode_barang:kode_barang,nama_bonus:nama_bonus,jumlah:jumlah,harga:harga,satuan:satuan},function(data){
 
@@ -1256,15 +1253,15 @@ $(document).on('click', '.pilih_bonus_disc', function (e) {
                             }
 
                             
-                            var subtotal_tampil = parseInt(total_penj) + parseInt(subtotal_bonus);
+                            var subtotal_tampil = parseFloat(total_penj) + parseFloat(subtotal_bonus);
                             //jika tbs ada maka
                             if (data != 0) {
-                              $("#total2").val(tandaPemisahTitik(subtotal_tampil));
-                            $("#total1").val(tandaPemisahTitik(subtotal_tampil));
+                              $("#total2").val(subtotal_tampil.format(2, 3, '.', ','));
+                            $("#total1").val(subtotal_tampil.format(2, 3, '.', ','));
                             }
                             else{
-                              $("#total2").val(tandaPemisahTitik('0'));
-                            $("#total1").val(tandaPemisahTitik('0'));
+                              $("#total2").val('0');
+                            $("#total1").val('0');
                             }
                             //jika tbs bonus ada maka 
                             if (tot == 0) {
@@ -1440,15 +1437,15 @@ $.getJSON("cek_tbs_penjualan_dan_tbs_bonus.php",function(yae){
                         }
 
                         
-                        var subtotal_tampil = parseInt(total_penj) + parseInt(subtotal_bonus);
+                        var subtotal_tampil = parseFloat(total_penj) + parseFloat(subtotal_bonus);
                         //jika tbs ada maka
                         if (data != 0) {
-                          $("#total2").val(tandaPemisahTitik(subtotal_tampil));
-                        $("#total1").val(tandaPemisahTitik(subtotal_tampil));
+                          $("#total2").val(subtotal_tampil.format(2, 3, '.', ','));
+                        $("#total1").val(subtotal_tampil.format(2, 3, '.', ','));
                         }
                         else{
-                          $("#total2").val(tandaPemisahTitik('0'));
-                        $("#total1").val(tandaPemisahTitik('0'));
+                          $("#total2").val('0');
+                        $("#total1").val('0');
                         }
                         //jika tbs bonus ada maka 
                         if (tot == 0) {
@@ -1482,7 +1479,7 @@ $(document).on('click','.btn-hapus-tbsbonus',function(e){
       var qty = $(this).attr("data-qty");
       var total_disc_promo = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#subtotal_jual_disc").val()))));
       var subtotal_tbs = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
-      var total_akhir = parseInt(subtotal_tbs - total_disc_promo);
+      var total_akhir = parseFloat(subtotal_tbs - total_disc_promo);
 
 // start hapus ajax TBS PENJUALAN
 var pesan_alert = confirm("Apakah Anda Yakin Ingin Menghapus "+nama_barang+""+ "?");
@@ -1540,15 +1537,15 @@ if (pesan_alert == true) {
         }
 
         
-        var subtotal_tampil = parseInt(total_penj) + parseInt(subtotal_bonus);
+        var subtotal_tampil = parseFloat(total_penj) + parseFloat(subtotal_bonus);
         //jika tbs ada maka
         if (data != 0) {
-          $("#total2").val(tandaPemisahTitik(subtotal_tampil));
-        $("#total1").val(tandaPemisahTitik(subtotal_tampil));
+          $("#total2").val(subtotal_tampil.format(2, 3, '.', ','));
+        $("#total1").val(subtotal_tampil.format(2, 3, '.', ','));
         }
         else{
-          $("#total2").val(tandaPemisahTitik('0'));
-        $("#total1").val(tandaPemisahTitik('0'));
+          $("#total2").val('0');
+        $("#total1").val('0');
         }
         //jika tbs bonus ada maka 
         if (tot == 0) {
@@ -2141,11 +2138,11 @@ $.get("ambil_select_order.php",function(info){
 
 var total_akhir1 = parseFloat(subtotal.replace(",",".")) - parseFloat(total_perorder.replace(",","."));
 
-var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+/*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
     if (biaya_adm == '' || biaya_adm == 0,00)
     {
       biaya_adm = 0;
-    }
+    }*/
 
 var pot_fakt_per = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
    if (pot_fakt_per == "" || pot_fakt_per == 0,00) {
@@ -2165,13 +2162,13 @@ var tax_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax
       var pot_fakt_per = parseFloat(potongaaan) / parseFloat(total_akhir1) * 100;
 
 
-if (biaya_adm == 0 || pot_fakt_rp == 0.00 )
+if (pot_fakt_rp == 0.00 )
 {
    var total_akhier = parseFloat(total_akhir1);
 }
 else
 {
-  var total_akhier = parseFloat(total_akhir1) + parseFloat(biaya_adm.replace(',','.')) - parseFloat(pot_fakt_rp.replace(',','.'));
+  var total_akhier = parseFloat(total_akhir1) /*+ parseFloat(biaya_adm.replace(',','.'))*/ - parseFloat(pot_fakt_rp.replace(',','.'));
 }
 
 //Hitung pajak
@@ -2198,13 +2195,13 @@ else
        var   potongan_persen = potongan_persen.replace("%","");
      var potongaaan = parseFloat(total_akhir1) * parseFloat(potongan_persen.replace(',','.')) / 100;
 
-  if (biaya_adm == 0 || pot_fakt_rp == 0.00 )
+  if ( pot_fakt_rp == 0.00 )
 {   
     var total_akhier = parseFloat(total_akhir1);
 }
 else
 {
-   var total_akhier = parseFloat(total_akhir1) + parseFloat(biaya_adm.replace(',','.')) - parseFloat(potongaaan);
+   var total_akhier = parseFloat(total_akhir1) /*+ parseFloat(biaya_adm.replace(',','.'))*/ - parseFloat(potongaaan);
 }
 
 //Hitung pajak
@@ -2229,13 +2226,13 @@ else
        var   potongan_persen = potongan_persen.replace("%","");
      var potongaaan = parseFloat(total_akhir1) * parseFloat(potongan_persen.replace(",",".")) / 100;
 
-  if (biaya_adm == 0 || pot_fakt_rp == 0.00 )
+  if ( pot_fakt_rp == 0.00 )
 {   
     var total_akhier = parseFloat(total_akhir1);
 }
 else
 {
-    var total_akhier = parseFloat(total_akhir1) + parseFloat(biaya_adm.replace(",",".")) - parseFloat(potongaaan);
+    var total_akhier = parseFloat(total_akhir1) /*+ parseFloat(biaya_adm.replace(",","."))*/ - parseFloat(potongaaan);
 }
 
 
@@ -2254,7 +2251,7 @@ else
 
     }
 
-    var biaya_adm_tampil = parseFloat(biaya_adm.replace(',','.')) / parseFloat(total_akhir1) * 100;
+    /*var biaya_adm_tampil = parseFloat(biaya_adm.replace(',','.')) / parseFloat(total_akhir1) * 100;*/
 
       $("#total1").val(total_akhir.format(2, 3, '.', ','));
   if (pot_fakt_rp == 0.00)
@@ -2268,7 +2265,6 @@ else
 
       $("#tax_rp").val(hasil_tax.format(2, 3, '.', ','));
       $("#total2").val(total_akhir1.format(2, 3, '.', ','));
-      $("#biaya_admin_persen").val(biaya_adm_tampil.format(2, 3, '.', ','));
 
     });
 </script>
@@ -2295,11 +2291,11 @@ $.get("ambil_select_order.php",function(data){
 
 });//END AMBIL ORDER PENJUALAN 
 
-var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+/*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
     if (biaya_adm == ''  || biaya_adm == 0,00 )
     {
       biaya_adm = 0;
-    }
+    }*/
 
 var total_perorder = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-total')))));
     if (total_perorder == '' ) 
@@ -2337,13 +2333,13 @@ var total_akhir1 = parseFloat(subtotal.replace(",",".")) + parseFloat(total_pero
       var pot_fakt_per = parseFloat(potongaaan.replace(",",".")) / parseFloat(total_akhir1) * 100;
 
 
-  if (biaya_adm == 0 || pot_fakt_rp == 0.00 )
+  if (pot_fakt_rp == 0.00 )
     {   
       var total_akhier = parseFloat(total_akhir1);
     }
 else
     {
-      var total_akhier = parseFloat(total_akhir1) + parseFloat(biaya_adm.replace(",",".")) - parseFloat(pot_fakt_rp.replace(",","."));
+      var total_akhier = parseFloat(total_akhir1) /*+ parseFloat(biaya_adm.replace(",","."))*/ - parseFloat(pot_fakt_rp.replace(",","."));
     }
 
  //Hitung pajak
@@ -2370,13 +2366,13 @@ else if(pot_fakt_rp == 0)
        var   potongan_persen = potongan_persen.replace("%","");
      var potongaaan = parseFloat(total_akhir1) * parseFloat(potongan_persen.replace(',','.')) / 100;
 
-  if (biaya_adm == 0 || pot_fakt_rp == 0.00 )
+  if (pot_fakt_rp == 0.00 )
 {  
     var total_akhier = parseFloat(total_akhir1);
 }
 else
 {
-     var total_akhier = parseFloat(total_akhir1) + parseFloat(biaya_adm.replace(',','.')) - parseFloat(potongaaan); 
+     var total_akhier = parseFloat(total_akhir1) /*+ parseFloat(biaya_adm.replace(',','.'))*/ - parseFloat(potongaaan); 
 }
 
 //Hitung pajak
@@ -2402,13 +2398,13 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
       var   potongan_persen = potongan_persen.replace("%","");
       var potongaaan = parseFloat(total_akhir1) * parseFloat(potongan_persen.replace(',','.')) / 100;
 
- if (biaya_adm == 0 || pot_fakt_rp == 0.00 )
+ if ( pot_fakt_rp == 0.00 )
   {      
     var total_akhier = parseFloat(total_akhir1);
   }
 else
   {
-    var total_akhier = parseFloat(total_akhir1) + parseFloat(biaya_adm.replace(',','.')) - parseFloat(potongaaan); 
+    var total_akhier = parseFloat(total_akhir1) /*+ parseFloat(biaya_adm.replace(',','.'))*/ - parseFloat(potongaaan); 
   }
 
 //Hitung pajak
@@ -2428,7 +2424,8 @@ else
 
 
 // ganti / update data pembayaran 
-    var biaya_adm_tampil = parseFloat(biaya_adm.replace(',','.')) / parseFloat(total_akhir1) * 100;
+    /*var biaya_adm_tampil = parseFloat(biaya_adm.replace(',','.')) / parseFloat(total_akhir1) * 100;*/
+
     $("#total1").val(total_akhir.format(2, 3, '.', ','));
   
   if (pot_fakt_rp == 0.00)
@@ -2441,10 +2438,8 @@ else
     }
       $("#tax_rp").val(hasil_tax.format(2, 3, '.', ','));
       $("#total2").val(total_akhir1.format(2, 3, '.', ','));
-      $("#biaya_admin_persen").val(biaya_adm_tampil.format(2, 3, '.', ','));
+
 // ganti / update data pembayaran 
-
-
 // ambil datatable yang terbaru
             $('#table_tbs_order').DataTable().destroy();
           var dataTable = $('#table_tbs_order').DataTable( {
@@ -2485,8 +2480,7 @@ $.post("barcode.php",{kode_barang:kode_barang,sales:sales,level_harga:level_harg
   {
   alert("Stok Tidak Mencukupi ,Segera Lakukan Pembelian");
   }
-  if (data == 3)
-  {
+  else if (data == 3){
   alert("Kode Barang Yang Anda Masukan Tidak Ada , Silakan Periksa Kembali ");
   $("#kode_barcode").focus();
   }
@@ -2522,11 +2516,11 @@ $.post("lihat_promo_alert.php",{id:json},function(info){
 
 //perhitungan form pembayaran (total & subtotal / biaya admin) 
 
- var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+ /*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
     if (biaya_adm == '')
     {
       biaya_adm = 0;
-    }
+    }*/
 
 var total_perorder = data;
     if (total_perorder == '') 
@@ -2567,13 +2561,13 @@ var total_akhir1 = parseFloat(subtotal.replace(',','.')) + parseFloat(total_pero
 
 
 // prhitungan total akhir
-if (biaya_adm == 0 || pot_fakt_rp == 0.00 )
+if (pot_fakt_rp == 0.00 )
   {      
     var total_akhier = parseFloat(total_akhir1);
   }
 else
   {
-    var total_akhier = parseFloat(total_akhir1) + parseFloat(biaya_adm.replace(',','.')) - parseFloat(pot_fakt_rp.replace(',','.'));
+    var total_akhier = parseFloat(total_akhir1) /*+ parseFloat(biaya_adm.replace(',','.'))*/ - parseFloat(pot_fakt_rp.replace(',','.'));
   }
 // prhitungan total akhir
 
@@ -2602,13 +2596,13 @@ if (tax_faktur != 0 )
      var potongaaan = parseFloat(total_akhir1) * parseFloat(potongan_persen.replace(',','.')) / 100;
 
 // prhitungan total akhir
-   if (biaya_adm == 0 || pot_fakt_rp == 0 )
+   if (pot_fakt_rp == 0 )
 { 
     var total_akhier = parseFloat(total_akhir1);
 }
 else
 {
-   var total_akhier = parseFloat(total_akhir1) + parseFloat(biaya_adm.replace(',','.')) - parseFloat(potongaaan);
+   var total_akhier = parseFloat(total_akhir1) /*+ parseFloat(biaya_adm.replace(',','.'))*/ - parseFloat(potongaaan);
 }
 
 //Hitung pajak
@@ -2632,13 +2626,13 @@ else
       var   potongan_persen = potongan_persen.replace("%","");
       var potongaaan = parseFloat(total_akhir1) * parseFloat(potongan_persen.replace(',','.')) / 100;
 
-   if (biaya_adm == 0 || pot_fakt_rp == 0 )
+   if (pot_fakt_rp == 0 )
     {
       var total_akhier = parseFloat(total_akhir1);
     }
   else
     {
-      var total_akhier = parseFloat(total_akhir1) + parseFloat(biaya_adm.replace(',','.')) - parseFloat(potongaaan);
+      var total_akhier = parseFloat(total_akhir1) /*+ parseFloat(biaya_adm.replace(',','.'))*/ - parseFloat(potongaaan);
     }
 
 //Hitung pajak
@@ -2657,8 +2651,8 @@ else
     }
 
 
-//perhitungan form pembayaran (total & subtotal / biaya admin) 
- var biaya_adm_tampil = parseFloat(biaya_adm) / parseFloat(total_akhir1) * 100;
+//perhitungan form pembayaran (total & subtotal) 
+ /*var biaya_adm_tampil = parseFloat(biaya_adm) / parseFloat(total_akhir1) * 100;*/
 
 
 // perhitungan rupiah total akhir
@@ -2675,8 +2669,6 @@ else
       }
       
       $("#tax_rp").val(hasil_tax.format(2, 3, '.', ','));
-      $("#biaya_admin_persen").val(biaya_adm_tampil.format(2, 3, '.', ','));
-
 //perhitungan form pembayaran (total & subtotal / biaya admin) 
 
 
@@ -2749,11 +2741,11 @@ $(document).on('click','.btn-hapus-tbs',function(e){
       }
 
 
- var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+ /*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
     if (biaya_adm == '')
     {
       biaya_adm = 0;
-    }
+    }*/
 
     var total_akhir1 = parseFloat(subtotal_tbs.replace(',','.')) - parseFloat(subtotal.replace(',','.'));
 
@@ -2767,13 +2759,13 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
       /*var tax_bener = parseFloat(hitung_tax) * parseFloat(tax_faktur) / 100;*/
 
-if (biaya_adm == 0 || pot_fakt_rp == 0.00 )
+if ( pot_fakt_rp == 0.00 )
 {
   var total_akhir = parseFloat(total_akhir1,2)/* + parseFloat(tax_bener)*/;
 }
 else
 {
-  var total_akhir = parseFloat(total_akhir1,2) + parseFloat(biaya_adm.replace(',','.'),2) - parseFloat(pot_fakt_rp.replace(',','.'),2)/* + parseFloat(tax_bener)*/;
+  var total_akhir = parseFloat(total_akhir1,2) /*+ parseFloat(biaya_adm.replace(',','.'),2)*/ - parseFloat(pot_fakt_rp.replace(',','.'),2)/* + parseFloat(tax_bener)*/;
 }
 
     }
@@ -2790,13 +2782,13 @@ else
       var hitung_tax = parseFloat(total_akhir1,2) - parseFloat(potongaaan,2);
 
       /*var tax_bener = parseFloat(hitung_tax) * parseFloat(tax_faktur) / 100;*/
-if (biaya_adm == 0 || pot_fakt_rp == 0.00 )
+if (pot_fakt_rp == 0.00 )
 {
      var total_akhir = parseFloat(total_akhir1,2) /*+ parseFloat(Math.round(tax_bener))*/;
 }
 else
 {
-     var total_akhir = parseFloat(total_akhir1,2) + parseFloat(biaya_adm.replace(',','.'),2) - parseFloat(potongaaan,2) /*+ parseFloat(Math.round(tax_bener))*/;
+     var total_akhir = parseFloat(total_akhir1,2) /*+ parseFloat(biaya_adm.replace(',','.'),2)*/ - parseFloat(potongaaan,2) /*+ parseFloat(Math.round(tax_bener))*/;
 }
     }
      else if(pot_fakt_rp != 0.00 && pot_fakt_rp != 0.00)
@@ -2811,19 +2803,16 @@ else
       var hitung_tax = parseFloat(total_akhir1,2) - parseFloat(potongaaan,2);
 
       /*var tax_bener = parseFloat(hitung_tax) * parseFloat(tax_faktur) / 100;*/
-if (biaya_adm == 0 || pot_fakt_rp == 0 )
+if ( pot_fakt_rp == 0 )
 {
   var total_akhir = parseFloat(total_akhir1,2) /*+ parseFloat(Math.round(tax_bener))*/;
 }
 else
 {
-  var total_akhir = parseFloat(total_akhir1,2) + parseFloat(biaya_adm.replace(',','.'),2) - parseFloat(potongaaan,2) /*+ parseFloat(Math.round(tax_bener))*/;
+  var total_akhir = parseFloat(total_akhir1,2) /*+ parseFloat(biaya_adm.replace(',','.'),2)*/ - parseFloat(potongaaan,2) /*+ parseFloat(Math.round(tax_bener))*/;
 }
     
     }
-    var biaya_adm_tampil = parseFloat(biaya_adm) / parseFloat(total_akhir1) * 100;
-
-
 
 
 // start hapus ajax TBS PENJUALAN
@@ -2843,7 +2832,6 @@ if (pesan_alert == true) {
         $("#potongan_penjualan").val(potongaaan.format(2, 3, '.', ','));
       }
 
-        $("#biaya_admin_persen").val(biaya_adm_tampil.format(2, 3, '.', ','));
         $("#pembayaran_penjualan").val('');
         $("#kredit").val('');
         $("#sisa_pembayaran_penjualan").val('');
@@ -2854,11 +2842,11 @@ if (pesan_alert == true) {
             var kodenya = syaratbonus.kode_produk;
             var idnya = syaratbonus.id;
 
-            var subtotal_tbspenjualan = parseInt(syaratbonus.tanggal);
+            var subtotal_tbspenjualan = parseFloat(syaratbonus.tanggal);
             var idtbsnya = syaratbonus.jam;
-            var subtotal = parseInt(syaratbonus.satuan);
-            var syarat_free = parseInt(syaratbonus.harga_disc);
-            var syarat_disc = parseInt(syaratbonus.kode_pelanggan);
+            var subtotal = parseFloat(syaratbonus.satuan);
+            var syarat_free = parseFloat(syaratbonus.harga_disc);
+            var syarat_disc = parseFloat(syaratbonus.kode_pelanggan);
             var keterangan = syaratbonus.keterangan;*/
             //if ((idtbsnya > 0 && subtotal_tbspenjualan > syarat_free  && keterangan != 'Free Produk'  || syaratbonus == 0) || (subtotal_tbspenjualan > syarat_disc && keterangan != 'Disc Produk' || syaratbonus == 0)) {}
           var subtotal_tbs_penjualan = syaratbonus.subtotal_tbs_penjualan
@@ -2939,15 +2927,15 @@ if (pesan_alert == true) {
                 var subtotal_bonus = 0;
             }
 
-            var subtotal_tampil = parseInt(total_penj) + parseInt(subtotal_bonus);
+            var subtotal_tampil = parseFloat(total_penj) + parseFloat(subtotal_bonus);
             //jika tbs ada maka subtotal (total2 dan total1) muncul
             if (data != 0) {
-              $("#total2").val(tandaPemisahTitik(subtotal_tampil));
-            $("#total1").val(tandaPemisahTitik(subtotal_tampil));
+              $("#total2").val(subtotal_tampil.format(2, 3, '.', ','));
+            $("#total1").val(subtotal_tampil.format(2, 3, '.', ','));
             }
             else{
-              $("#total2").val(tandaPemisahTitik('0'));
-            $("#total1").val(tandaPemisahTitik('0'));
+              $("#total2").val('0');
+            $("#total1").val('0');
             }
             // end if (data != 0)
 
@@ -3045,11 +3033,12 @@ $('form').submit(function(){
       potongan = 0;
     }
 
-var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+/*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
     if (biaya_adm == '')
     {
       biaya_adm = 0;
-    }
+    }*/
+
     var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax1").val()))));
      if (tax == '')
     {
@@ -3115,13 +3104,13 @@ var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biay
 
 
 //mendapatkan total akhir
-      if (biaya_adm == 0 || pot_fakt_rp == 0.00) 
+      if (pot_fakt_rp == 0.00) 
       {
           var total_akhier = parseFloat(total_akhir1,2);
       }
       else
       {
-          var total_akhier = parseFloat(total_akhir1,2) + parseFloat(biaya_adm.replace(',','.'),2) - parseFloat(pot_fakt_rp.replace(',','.'),2);
+          var total_akhier = parseFloat(total_akhir1,2) /*+ parseFloat(biaya_adm.replace(',','.'),2)*/ - parseFloat(pot_fakt_rp.replace(',','.'),2);
       }
 //mendapatkan total akhir
 
@@ -3150,13 +3139,13 @@ else if(pot_fakt_rp == 0.00)
       var   potongan_persen = potongan_persen.replace("%","");
       var potongaaan = parseFloat(total_akhir1.replace(',','.'),2) * parseFloat(potongan_persen.replace(',','.'),2) / 100;
 
-      if (biaya_adm == 0 || pot_fakt_rp == 0.00) 
+      if ( pot_fakt_rp == 0.00) 
       {
           var total_akhier = parseFloat(total_akhir1.replace(',','.'),2);
       }
       else
       {
-          var total_akhier = parseFloat(total_akhir1.replace(',','.'),2) + parseFloat(biaya_adm.replace(',','.'),2) - parseFloat(potongaaan,2);
+          var total_akhier = parseFloat(total_akhir1.replace(',','.'),2) /*+ parseFloat(biaya_adm.replace(',','.'),2)*/ - parseFloat(potongaaan,2);
       }
 
 //Hitung pajak
@@ -3183,13 +3172,13 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
       var   potongan_persen = potongan_persen.replace("%","");
       var potongaaan = parseFloat(total_akhir1,2) * parseFloat(potongan_persen.replace(',','.'),2) / 100;
 
-           if (biaya_adm == 0 || pot_fakt_rp == 0.00) 
+           if (pot_fakt_rp == 0.00) 
         {
           var total_akhier = parseFloat(total_akhir1,2);
         }
         else
         {
-          var total_akhier = parseFloat(total_akhir1,2) + parseFloat(biaya_adm.replace(',','.'),2) - parseFloat(potongaaan,2);
+          var total_akhier = parseFloat(total_akhir1,2) /*+ parseFloat(biaya_adm.replace(',','.'),2)*/ - parseFloat(potongaaan,2);
         }
 
          //Hitung pajak
@@ -3207,7 +3196,7 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
 
     }//end else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
 
-    var biaya_adm_tampil = parseFloat(biaya_adm) / parseFloat(total_akhir1) * 100;
+    
      $("#jumlah_barang").val('');
      $("#potongan1").val('');
      $("#tax1").val('');
@@ -3241,7 +3230,6 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
  //pengambilan data form pembayaran
       $("#total1").val(total_akhir.format(2, 3, '.', ','));
       $("#total2").val(total_akhir1.format(2, 3, '.', ','));
-      $("#biaya_admin_persen").val(biaya_adm_tampil.format(2, 3, '.', ','));
  if (pot_fakt_rp == 0.00)
       {
         $("#potongan_penjualan").val();
@@ -3432,7 +3420,6 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
       {
         $("#potongan_penjualan").val(potongaaan.format(2, 3, '.', ','));
       }
-      $("#biaya_admin_persen").val(biaya_adm_tampil.format(2, 3, '.', ','));
       $("#total1").val(total_akhir.format(2, 3, '.', ','));
       $("#total2").val(total_akhir1.format(2, 3, '.', ','));
       $("#tax_rp").val(hasil_tax.format(2, 3, '.', ','));
@@ -3642,9 +3629,9 @@ $("#formtambahproduk").submit(function(){
         var ppn = $("#ppn").val();
         
         
-        var sisa = parseFloat(pembayaran,2) - parseFloat(total,2);
+        var sisa = parseFloat($("#pembayaran_penjualan").val(),2) - parseFloat($("#total1").val(),2);
         
-        var sisa_kredit = parseFloat(total,2) - parseFloat(pembayaran,2);
+        var sisa_kredit = parseFloat($("#total1").val(),2) - parseFloat($("#pembayaran_penjualan").val(),2);
 
 
 
@@ -3876,7 +3863,7 @@ alert("Silakan Bayar Piutang");
      $("#pembayaran_penjualan").val('');
      $("#sisa_pembayaran_penjualan").val('');
      $("#kredit").val('');
-              $("#span_tbs").hide();
+     $("#span_tbs").hide();
       $("#kd_pelanggan").val('');
       $("#kd_pelanggan").trigger("chosen:open");
       $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true}); 
@@ -4111,18 +4098,18 @@ $("#potongan_persen").keyup(function(){
         var potongan_penjualan = ((parseFloat(total.replace(',','.')) * parseFloat(potongan_persen)) / 100);
         var tax = $("#tax").val();
 
-        var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+        /*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
         if (biaya_adm == '')
         {
           biaya_adm = 0.00;
-        }
+        }*/
 
-      var ambil_semula = parseFloat(total.replace(',','.')) + parseFloat(biaya_adm.replace(',','.'));/*parseFloat(tax_rp)*/
+      var ambil_semula = parseFloat(total.replace(',','.')) /*+ parseFloat(biaya_adm.replace(',','.'));parseFloat(tax_rp)*/
         var sisa_potongan = parseFloat(total.replace(',','.')) - parseFloat(potongan_penjualan);
 
 
              /*var t_tax = ((parseFloat(sisa_potongan.replace(',','.')) * parseFloat(tax.replace(',','.'))) / 100);*/
-             var hasil_akhir = parseFloat(sisa_potongan) + parseFloat(biaya_adm.replace(',','.'));/*parseFloat(tax_rp)*/
+             var hasil_akhir = parseFloat(sisa_potongan) /*+ parseFloat(biaya_adm.replace(',','.'));parseFloat(tax_rp)*/
 
 
          $("#total1").val(hasil_akhir.format(2, 3, '.', ','));
@@ -4161,11 +4148,11 @@ $("#potongan_penjualan").keyup(function(){
          var potongan_persen = ((parseFloat(potongan_penjualan.replace(',','.')) / parseFloat(total.replace(',','.'))) * 100);
     }
 
-var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+/*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
         if (biaya_adm == '')
         {
           biaya_adm = 0;
-        }
+        }*/
 
 
    if(potongan_persen > 100.00)
@@ -4174,21 +4161,16 @@ var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biay
          $("#potongan_persen").val('');
         $("#potongan_penjualan").val('');
       
-     /* var tax = $("#tax").val();
+        /* var tax = $("#tax").val();
 
         if (tax == "")
         {
           tax = 0;
         }
         var t_tax = ((parseFloat(total.replace(',','.')) * parseFloat(tax.replace(',','.'))) / 100);*/
-        if (biaya_adm == 0) 
-        {
-           var hasil_akhir = parseFloat(total.replace(',','.'));/*+ parseFloat(t_tax);*/
-        }
-        else
-        {
-           var hasil_akhir = parseFloat(total.replace(',','.')) + parseFloat(biaya_adm.replace(',','.'));/*+ parseFloat(t_tax);*/
-        }
+      
+           var hasil_akhir = parseFloat(total.replace(',','.'));
+      
 
         $("#total1").val(hasil_akhir.format(2, 3, '.', ','));
 
@@ -4215,20 +4197,15 @@ var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biay
               
               var t_tax = ((parseFloat(sisa_potongan) * parseFloat(tax)) / 100);*/
 
-        if (biaya_adm == 0) 
-        {
-             var hasil_akhir = parseFloat(sisa_potongan); /*+ parseFloat(t_tax,10);*/
-        }
-        else
-        {
-             var hasil_akhir = parseFloat(sisa_potongan) + parseFloat(biaya_adm.replace(',','.')); /*+ parseFloat(t_tax,10);*/
+
+             var hasil_akhir = parseFloat(sisa_potongan) /*+ parseFloat(biaya_adm.replace(',','.')); + parseFloat(t_tax,10);*/
         }
         
         $("#total1").val(hasil_akhir.format(2, 3, '.', ','));
         
-}
+
       });
-        
+     });   
 //TUTUP TIDAK MEMAKAI tax atau pajak DI PEMBAYARAN
 /*$("#tax").keyup(function(){
 
@@ -4271,26 +4248,24 @@ var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biay
               else {
 
 
-              var t_tax = ((parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) * parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(tax,10)))))) / 100);
+              var t_tax = ((parseFloat(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) * parseFloat(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(tax,10)))))) / 100);
 
-              var total_akhir = parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) + Math.round(parseInt(t_tax,10));
+              var total_akhir = parseFloat(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) + Math.round(parseFloat(t_tax,10));
               
               
-            $("#tax_rp").val(parseInt(t_tax));
+            $("#tax_rp").val(parseFloat(t_tax));
             $("#total1").val(tandaPemisahTitik(total_akhir));
    }
 
 
         });*/
 
-        });
-        
         </script>
 
 
 
 <script type="text/javascript">
-  $(document).ready(function(){
+ /* $(document).ready(function(){
     
   //START KEYUP BIAYA ADMIN RUPIAH
 
@@ -4316,7 +4291,7 @@ var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biay
       var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
       if (tax == '') {
         tax = 0;
-      }*/
+      }
 
        if (potongan == 0,00 || potongan == '')
             {
@@ -4335,10 +4310,10 @@ if (biaya_adm == 0,00 || biaya_adm == '')
 else
 {
       var biaya_admin_persen = parseFloat(biaya_adm.replace(',','.')) / parseFloat(subtotal.replace(',','.')) * 100;
- }     /*
+ }    
       var t_tax = parseFloat(t_total) * parseFloat(tax) / 100;
       var total_akhir1 = parseFloat(t_total) + Math.round(parseFloat(t_tax));
-      */
+    
 
 if (biaya_adm == 0,00 || biaya_adm == '')
 {
@@ -4447,10 +4422,6 @@ else
   //END KEYUP BIAYA ADMIN PERSEN
   });
   
-</script>
- 
-
-<script type="text/javascript">
 
 $(document).ready(function(){
   //Hitung Biaya Admin
@@ -4527,7 +4498,7 @@ if (diskon == 0,00 || diskon == '' )
       
     });
 });
-//end Hitu8ng Biaya Admin
+//end Hitu8ng Biaya Admin*/
 </script>
 
 
@@ -4751,8 +4722,8 @@ $(document).ready(function(){
         $("#total1").val(subtotal_tampil.format(2, 3, '.', ','));
         }
         else{
-          $("#total2").val(tandaPemisahTitik('0'));
-        $("#total1").val(tandaPemisahTitik('0'));
+          $("#total2").val('0');
+        $("#total1").val('0');
         }
         // end if (data != 0)
 
@@ -4992,11 +4963,11 @@ $(document).ready(function(){
     ////////////////////////PPN
                                     var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
 
-                                    var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+                                    /*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
                                     if(biaya_adm == '' || biaya_adm == 0,00)
                                     {
                                       biaya_adm = 0,00;
-                                    }
+                                    }*/
                                    
 
                                 subtotal_penjualan = parseFloat(subtotal_penjualan.replace(',','.'),2) - parseFloat(subtotal_lama.replace(',','.'),2) + parseFloat(subtotal,2);
@@ -5027,16 +4998,16 @@ $(document).ready(function(){
 
                                     var pajak_faktur = tax_fakt;
 
-                                    if (potongaaan == 0,00 || biaya_adm == 0)
+                                    if (potongaaan == 0,00 )
                                     {
                                      var sub_akhir = (parseFloat(subtotal_penjualan,2));
                                     }
                                     else
                                     {
-                                    var sub_akhir = (parseFloat(subtotal_penjualan,2) + parseFloat(biaya_adm.replace(',','.'),2)) - parseFloat(potongaaan,2);
+                                    var sub_akhir = parseFloat(subtotal_penjualan,2)  - parseFloat(potongaaan,2);
                                     }
 
-
+  
                                     var jumlah_kirim = jumlah_baru.replace(',','.');
                                     var harga_kirim = harga.replace(',','.');
 
@@ -5061,12 +5032,12 @@ $(document).ready(function(){
                             var kodenya = syaratbonus.kode_produk;
                             var idnya = syaratbonus.id;
                            
-                          var subtotal_tbspenjualan = parseInt(syaratbonus.tanggal);
-                          var idtbsnya = parseInt(syaratbonus.jam);
-                          var subtotal = parseInt(syaratbonus.satuan);
-                          var syarat_free = parseInt(syaratbonus.harga_disc);
-                          var syarat_disc = parseInt(syaratbonus.kode_pelanggan);
-                          var keterangan = parseInt(syaratbonus.keterangan);*/
+                          var subtotal_tbspenjualan = parseFloat(syaratbonus.tanggal);
+                          var idtbsnya = parseFloat(syaratbonus.jam);
+                          var subtotal = parseFloat(syaratbonus.satuan);
+                          var syarat_free = parseFloat(syaratbonus.harga_disc);
+                          var syarat_disc = parseFloat(syaratbonus.kode_pelanggan);
+                          var keterangan = parseFloat(syaratbonus.keterangan);*/
                          
                              var subtotal_tbs_penjualan = syaratbonus.subtotal_tbs_penjualan
                             var syarat_promo_disc_produk = syaratbonus.syarat_promo_disc_produk;
@@ -5277,12 +5248,12 @@ $(document).ready(function(){
                                                 var kodenya = syaratbonus.kode_produk;
                                                 var idnya = syaratbonus.id;
                                                
-                                              var subtotal_tbspenjualan = parseInt(syaratbonus.tanggal);
-                                              var idtbsnya = parseInt(syaratbonus.jam);
-                                              var subtotal = parseInt(syaratbonus.satuan);
-                                              var syarat_free = parseInt(syaratbonus.harga_disc);
-                                              var syarat_disc = parseInt(syaratbonus.kode_pelanggan);
-                                              var keterangan = parseInt(syaratbonus.keterangan);*/
+                                              var subtotal_tbspenjualan = parseFloat(syaratbonus.tanggal);
+                                              var idtbsnya = parseFloat(syaratbonus.jam);
+                                              var subtotal = parseFloat(syaratbonus.satuan);
+                                              var syarat_free = parseFloat(syaratbonus.harga_disc);
+                                              var syarat_disc = parseFloat(syaratbonus.kode_pelanggan);
+                                              var keterangan = parseFloat(syaratbonus.keterangan);*/
                                              
                                                  var subtotal_tbs_penjualan = syaratbonus.subtotal_tbs_penjualan
                                                   var syarat_promo_disc_produk = syaratbonus.syarat_promo_disc_produk;

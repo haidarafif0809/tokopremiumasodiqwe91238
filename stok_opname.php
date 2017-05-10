@@ -1,5 +1,5 @@
 <?php include 'session_login.php';
-//gone stok opname ajax
+
 //memasukkan file session login, header, navbar, db.php
 include 'header.php';
 include 'navbar.php';
@@ -7,14 +7,15 @@ include 'sanitasi.php';
 include 'db.php';
 
 
+//menampilkan seluruh data yang ada pada tabel pembelian dalan DB
+$perintah = $db->query("SELECT * FROM stok_opname");
+
+
  ?>
 
 
 <style>
-
-
-tr:nth-child(even){background-color: #f2f2f2}
-
+	tr:nth-child(even){background-color: #f2f2f2}
 </style>
 
 <div class="container"> <!--start of container-->
@@ -90,58 +91,90 @@ tr:nth-child(even){background-color: #f2f2f2}
   </div>
 </div>
 
-<div id="modal_detail" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Detail Stok Opname </h4>
-      </div>
-
-      <div class="modal-body">
-      <div class="table-responsive">
-      <span id="modal-detail"> </span>
-      </div>
-
-     </div>
-
-      <div class="modal-footer">
-        
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
 
 <!--membuat link-->
 
 <?php
-$pilih_akses_stok_opname = $db->query("SELECT * FROM otoritas_stok_opname WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+include 'db.php';
+
+$pilih_akses_stok_opname = $db->query("SELECT stok_opname_edit,stok_opname_tambah,stok_opname_hapus FROM otoritas_stok_opname WHERE id_otoritas = '$_SESSION[otoritas_id]'");
 $stok_opname = mysqli_fetch_array($pilih_akses_stok_opname);
 
 if ($stok_opname['stok_opname_tambah'] > 0) {
 
-echo '<a href="form_stok_opname.php"  class="btn btn-info" > <i class="fa fa-plus"> </i> STOK OPNAME</a>';
-
+echo '<button id="tambah" type="submit" class="btn btn-primary" data-toggle="collapse"  accesskey="r" ><i class="fa fa-plus"> </i>&nbsp;Stok Opname</button>';
+echo '<button style="display:none" data-toggle="collapse tooltip" accesskey="k" id="kembali" class="btn btn-warning" data-placement="top" title="Klik untuk kembali ke utama.""><i class="fa fa-reply"></i> <u>K</u>embali </button>';
 }
 
 ?>
-<br>
+<div id="demo" class="collapse">
 
-<span id="mbalek" style="display: none;">
-	<button type="submit" name="kembali" id="kembali" class="btn btn-primary" ><i class="fa fa-reply"> </i>Kembali </button>
-</span>
-<button type="submit" name="submit" id="filter_1" class="btn btn-primary" ><i class="fa fa-eye"> </i> Filter Faktur </button>
-<button type="submit" name="submit" id="filter_2" class="btn btn-primary" ><i class="fa fa-eye"> </i> Filter Detail </button>
+ <form role="form" id="formtambahproduk">
+
+  <div class="form-group">        
+    <input type="text" name="kode_barang" id="kode_barang" style="width:35%" class="form-control" placeholder="Ketikan Kode Barang / Nama Barang ">
+       <?php 
+
+        /* include 'cache.class.php';
+          $c = new Cache();
+          $c->setCache('produk');
+          $data_c = $c->retrieveAll();
+
+          foreach ($data_c as $key) {
+            echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+          }
+
+        */?>
+ 
+
+      <input type="hidden" class="form-control" name="nama_barang" id="nama_barang" >
+   
+      <input type="text"  class="form-control"  style="width:35%" name="fisik" autocomplete="off" id="jumlah_fisik" placeholder="Jumlah Fisik">
+
+       <!-- memasukan teks pada kolom satuan, harga, dan nomor faktur namun disembunyikan -->
+                  <input type="hidden" id="satuan" name="satuan" class="form-control" value="" required="">
+                  <input type="hidden" name="no_faktur" id="nomorfaktur1" class="form-control" value="" required="" >
+            
+        <button type="submit" id="submit_produk" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah Produk</button>
+     </div>
+</form>
+
+            <span id="result">  
+                  <div class="table-responsive">    
+                  <table id="tabel_tbs_stok_opname" align="center" class="table table-bordered table-sm">
+                  <thead>
+                      <th> Kode Barang </th>
+                      <th> Nama Barang </th>
+                      <th> Satuan </th>
+                      <th> Stok Komputer </th>
+                      <th> Jumlah Fisik </th>
+                      <th> Selisih Fisik </th>
+                      <th> Hapus </th>         
+                  </thead>
+                 
+                  
+                  </table>
+                  </div>
+                  </span> <!--tag penutup span-->
+                <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom jumlah barang jika ingin mengedit.</i></h6>
+                <h6 style="text-align: left ;"><i><b> * Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</b></i></h6>
 
 
+    <input type="hidden" class="form-control" style="font-size: 25px" name="total_selisih_harga" id="total_selisih_harga" readonly="" placeholder="Total Selisih Harga">
+
+    <button type="submit" id="selesai" style="display:none;" class="btn btn-info"> <i class='fa fa-send'> </i> Selesai </button>
+
+
+</div>
+
+<br><br>
+<button type="submit" name="submit" id="filter_1" class="btn btn-primary" > Filter Faktur </button>
+<button type="submit" name="submit" id="filter_2" class="btn btn-primary" > Filter Detail </button>
+
+  <input type="hidden" name="no_faktur_detail" class="form-control " id="no_faktur_detail" placeholder="no_faktur  "/>
 <!--START FILTER FAKTUR-->
 <span id="fil_faktur">
-<form class="form-inline" action="show_filter_stok_opname.php" method="post" role="form">
+<form class="form-inline" action="show_filter_stok_opname.php" method="get" role="form">
 					
 					<div class="form-group"> 
 					
@@ -153,7 +186,7 @@ echo '<a href="form_stok_opname.php"  class="btn btn-info" > <i class="fa fa-plu
 					<input type="text" name="sampai_tanggal" id="sampai_tanggal" class="form-control" placeholder="Sampai Tanggal" value="<?php echo date("Y-m-d"); ?>" required="">
 					</div>
 					
-					<button type="submit" name="submit" id="submit_filter_1" class="btn btn-primary" ><i class="fa fa-eye"> </i> Filter Faktur </button>
+					<button type="submit" name="submit" id="submit_filter_1" class="btn btn-success" ><i class="fa fa-eye"> </i> Lihat Faktur </button>
 
 					
 </form>
@@ -163,7 +196,7 @@ echo '<a href="form_stok_opname.php"  class="btn btn-info" > <i class="fa fa-plu
 
 <!--START FILTER DETAIl-->
 <span id="fil_detail">
-<form class="form-inline" action="show_filter_stok_opname_detail.php" method="post" role="form">
+<form class="form-inline" action="show_filter_stok_opname_detail.php" method="get" role="form">
 					
 					<div class="form-group"> 
 					
@@ -175,7 +208,7 @@ echo '<a href="form_stok_opname.php"  class="btn btn-info" > <i class="fa fa-plu
 					<input type="text" name="sampai_tanggal" id="sampai_tanggal2" class="form-control" placeholder="Sampai Tanggal" value="<?php echo date("Y-m-d"); ?>" required="">
 					</div>
 					
-					<button type="submit" name="submit" id="submit_filter_2" class="btn btn-primary" ><i class="fa fa-eye"> </i> Filter Detail </button>
+					<button type="submit" name="submit" id="submit_filter_2" class="btn btn-success" ><i class="fa fa-eye"> </i> Lihat Detail </button>
 
 					
 </form>
@@ -183,112 +216,189 @@ echo '<a href="form_stok_opname.php"  class="btn btn-info" > <i class="fa fa-plu
 </span>
 <!--END FILTER DETAIl-->
 
-
-<br><br>
-
-<span id="table_baru">
 <div class="table-responsive">
-<table id="table_stok_opname" class="table table-bordered">
+<span id="tabel_baru">
+<table id="table_stok_opname" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
-			<th style='background-color: #4CAF50; color:white'> Tanggal </th>
-			<th style='background-color: #4CAF50; color:white'> Jam </th>
-			<th style='background-color: #4CAF50; color:white'> Status </th>
-			<th style='background-color: #4CAF50; color:white'> Keterangan </th>
-			<th style='background-color: #4CAF50; color:white'> Total Selisih</th>
-			
-			<th style='background-color: #4CAF50; color:white'> User </th>
-			<th style='background-color: #4CAF50; color:white'> Detail </th>
+      <th style='background-color: #4CAF50; color:white'> Kode Barang </th>
+      <th style='background-color: #4CAF50; color:white'> Nama Barang </th>
+      <th style='background-color: #4CAF50; color:white'> Stok Komputer </th>
+      <th style='background-color: #4CAF50; color:white'> Fisik </th>
+      <th style='background-color: #4CAF50; color:white'> Selisih Fisik </th>
+      <th style='background-color: #4CAF50; color:white'> Selisih Harga</th>
+      <th style='background-color: #4CAF50; color:white'> Status </th>
+      <th style='background-color: #4CAF50; color:white'> User </th>
+      <th style='background-color: #4CAF50; color:white'> Keterangan </th>
+      <th style='background-color: #4CAF50; color:white'> Tanggal </th>
+      <th style='background-color: #4CAF50; color:white'> Jam </th>
+
 			<?php 
 
-if ($stok_opname['stok_opname_edit'] > 0) {
-	echo "<th style='background-color: #4CAF50; color:white'> Edit </th>";
-}
-			 ?>
+				if ($stok_opname['stok_opname_edit'] > 0) {
+					echo "<th style='background-color: #4CAF50; color:white'> Edit </th>";
+				}
+							 ?>
 
-<?php
-if ($stok_opname['stok_opname_hapus'] > 0) {
+				<?php
+				include 'db.php';
 
-				echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
-			}
+				if ($stok_opname['stok_opname_hapus'] > 0) {
 
-?>
+								echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
+							}
+			?>
 			
-			
+			<th style='background-color: #4CAF50; color:white'> Download </th>
 			
 		</thead>
+		
 	</table>
+</span>
 </div>
-</span>
 
-<span id="table_faktur" style="display: none;">
-<div class="table-responsive">
-<table id="table_filter_faktur" class="table table-bordered">
-		<thead>
-			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
-			<th style='background-color: #4CAF50; color:white'> Tanggal </th>
-			<th style='background-color: #4CAF50; color:white'> Jam </th>
-			<th style='background-color: #4CAF50; color:white'> Status </th>
-			<th style='background-color: #4CAF50; color:white'> Keterangan </th>
-			<th style='background-color: #4CAF50; color:white'> Total Selisih</th>
-			
-			<th style='background-color: #4CAF50; color:white'> User </th>
-			<th style='background-color: #4CAF50; color:white'> Detail </th>
-			<?php 
-
-if ($stok_opname['stok_opname_edit'] > 0) {
-	echo "<th style='background-color: #4CAF50; color:white'> Edit </th>";
-}
-			 ?>
-
-<?php
-include 'db.php';
-
-if ($stok_opname['stok_opname_hapus'] > 0) {
-
-				echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
-			}
-
-?>
-						
-		</thead>
-	</table>
-</div>
-</span>
-
-<span id="table_detail" style="display: none;">
-<div class="table-responsive">
-<table id="table_filter_detail" class="table table-bordered">
-		<thead>
-			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
-			<th style='background-color: #4CAF50; color:white'> Kode Barang </th>
-			<th style='background-color: #4CAF50; color:white'> Nama Barang </th>
-			<th style='background-color: #4CAF50; color:white'> Stok Komputer </th>
-			<th style='background-color: #4CAF50; color:white'> Fisik </th>
-			<th style='background-color: #4CAF50; color:white'> Selisih Fisik </th>
-			<th style='background-color: #4CAF50; color:white'> Hpp </th>
-			<th style='background-color: #4CAF50; color:white'> Selisih Harga </th>
-
-		</thead>
-	</table>
-</div> 
-
-<a href='expor_excel_stok_opname_detail.php' id="export_excel" class='btn btn-warning' role='button'>Download Excel</a>
-</span>
 <br>
-	<button type="submit" id="submit_close" class="glyphicon glyphicon-remove btn btn-danger" style="display:none"></button> 
-</div><!--end of container-->
-		<span id="demo"> </span>
+
+
+                 <script>
+                  //perintah javascript yang diambil dari form tbs pembelian dengan id=form tambah produk
+                 $(document).on('click', '#submit_produk', function () {
+                  
+                  var kode_barang = $("#kode_barang").val();
+                  var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
+                  var nama_barang = $("#nama_barang").val();
+                  var fisik = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_fisik").val()))));
+                  var satuan = $("#satuan").val();
+
+                  if (kode_barang == ""){
+                  alert("Kode Barang Harus Diisi");
+                  }
+                  else if (fisik == ""){
+                  alert("Jumlah Fisik Harus Diisi");
+                  }
+                 
+                  else{
+
+                    $.get('cek_kode_barang_tbs_stok_opname.php',function(json){
+      
+                  if(json == 1)
+                  {
+                    alert("Anda Sudah Melakukan Stok Opname , Selesaikan Terlebih dahulu ");
+                    $("#kode_barang").focus();
+                    $("#kode_barang").val('');
+                    $("#nama_barang").val('');
+                    $("#jumlah_fisik").val('');
+
+                  }
+                  else{  
+
+                 $.post("proses_tbs_stok_opname.php", {kode_barang:kode_barang,nama_barang:nama_barang,satuan:satuan,fisik:fisik}, function(info) {
+                  
+
+
+                  $("#kode_barang").focus();
+
+          $('#tabel_tbs_stok_opname').DataTable().destroy();
+          //pembaruan datatable data tbs stok opname 
+           var dataTable = $('#tabel_tbs_stok_opname').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_stok_opname.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#tabel_tbs_stok_opname").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+           },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-tbs-id-'+aData[7]+'');
+            },
+          });
+         //pembaruan datatable data tbs stok opname 
+
+
+                  $("#kode_barang").val('');
+                  $("#nama_barang").val('');
+                  $("#jumlah_fisik").val('');
+                  $("#satuan").val('');
+                  $("#kode_barang").hide();
+                  $("#nama_barang").hide();
+                  $("#jumlah_fisik").hide();
+                  $("#satuan").hide();
+                  $("#submit_produk").hide();
+                  $("#selesai").click();
+                  
+
+                  });
+               
+               } // penutup else 
+
+           }); // penutup  $.get('cek_kode_barang_tbs_stok_opname.php',function(json){
+
+        }//penutup else luar
+
+                  $("form").submit(function(){
+                  return false;
+                  });
+        });
+//menyembunyikan notif berhasil
+     $("#alert_berhasil").hide();
+</script>
+
 
 <script type="text/javascript">
-	$(document).ready(function(){
-			$('#table_stok_opname').DataTable().destroy();
-			
+       $(document).ready(function(){
+                $.get("cek_total_selisih_harga.php",function(data){
+                data = data.replace(/\s+/g, '');
+                    $("#total_selisih_harga").val(tandaPemisahTitik(data));
+                    });
+
+
+              $(".container").hover(function(){
+                  
+                  $.get("cek_total_selisih_harga.php",function(data){
+                     data = data.replace(/\s+/g, '');
+                  $("#total_selisih_harga").val(tandaPemisahTitik(data));
+                  }); 
+             });
+     });
+</script>
+
+
+<script>            
+    $(document).on('click', '#selesai', function () {
+                  var total_selisih_harga = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_selisih_harga").val()))));
+                  var keterangan = $("#keterangan").val();
+
+
+                 
+                  $.get('cek_kode_barang_tbs_stok_opname.php',function(json){
+      
+                  if(json == 0)
+                  {
+                    alert("Anda Belum Melakukan Stok Opname  ");
+                    $("#kode_barang").focus();
+                  }
+                  else{
+                  $.post("proses_selesai_stok_opname.php",{total_selisih_harga:total_selisih_harga,keterangan:keterangan},function(info) {
+                  
+                  $("#result").hide();
+
+            $('#table_stok_opname').DataTable().destroy();
+            $('#tabel_tbs_stok_opname').DataTable().destroy();
+
+
+//pembaruan datatable data stok opname 
           var dataTable = $('#table_stok_opname').DataTable( {
           "processing": true,
           "serverSide": true,
           "ajax":{
             url :"datatable_stok_opname.php", // json datasource
+           
             type: "post",  // method  , by default get
             error: function(){  // error handling
               $(".employee-grid-error").html("");
@@ -298,145 +408,326 @@ if ($stok_opname['stok_opname_hapus'] > 0) {
         },
             
             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                $(nRow).attr('class','tr-id-'+aData[10]+'');
+                $(nRow).attr('class','tr-id-'+aData[15]+'');
             },
-
         });
+//pembaruan datatable data stok opname 
 
-        $("form").submit(function(){
-        return false;
+//pembaruan datatable data tbs stok opname 
+         var dataTable = $('#tabel_tbs_stok_opname').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_stok_opname.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#tabel_tbs_stok_opname").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-tbs-id-'+aData[7]+'');
+            },
         });
-		
-		});
-		
+//pembaruan datatable data tbs stok opname 
+
+
+                  $("#total_selisih_harga").val('');       
+                  $("#alert_berhasil").show();
+                  $("#kode_barang").show();
+                  $("#nama_barang").show();
+                  $("#jumlah_fisik").show();
+
+                  $("#kode_barang").val('');
+                  $("#nama_barang").val('');
+                  $("#jumlah_fisik").val('');
+
+                  $("#submit_produk").show();
+                  $("#satuan").show();
+                  $("#demo").hide();
+                  $("#tambah").show();
+                  $("#kembali").hide();
+                  $("#filter_1").show();
+                  $("#filter_2").show();
+
+
+                  
+                  });
+                  
+                  // #result didapat dari tag span id=result
+                  //mengambil no_faktur pembelian agar berurutan
+               
+                  $("form").submit(function(){
+                  return false;
+               });
+              }//ennd else kode barang
+          });  
+   });                  
 </script>
+
+
+<!--script disable hubungan pasien-->
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $("#tambah").click(function(){
+  $("#demo").show();
+  $("#kembali").show();
+  $("#tambah").hide();
+  $("#filter_1").hide();
+  $("#filter_2").hide();
+  $("#kode_barang").show();
+  $("#nama_barang").show();
+  $("#jumlah_fisik").show();
+
+  $("#kode_barang").val('');
+  $("#nama_barang").val('');
+  $("#jumlah_fisik").val('');
+  $("#submit_produk").show(); 
+
+            $('#tabel_tbs_stok_opname').DataTable().destroy();
+//pembaruan datatable data tbs stok opname 
+         var dataTable = $('#tabel_tbs_stok_opname').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_stok_opname.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#tabel_tbs_stok_opname").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-tbs-id-'+aData[7]+'');
+            },
+        });
+//pembaruan datatable data tbs stok opname 
+
+
+
+  });
+
+  $("#kembali").click(function(){
+  $("#demo").hide();
+  $("#tambah").show();
+  $("#kembali").hide();
+  $("#filter_1").show();
+  $("#filter_2").show();
+
+            $('#tabel_tbs_stok_opname').DataTable().destroy();
+  //pembaruan datatable data tbs stok opname 
+         var dataTable = $('#tabel_tbs_stok_opname').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_stok_opname.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#tabel_tbs_stok_opname").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-tbs-id-'+aData[7]+'');
+            },
+        });
+//pembaruan datatable data tbs stok opname 
+
+
+  });
+});
+</script>
+
 
 <script type="text/javascript">
-//FILTER FAKTUR
-	$(document).ready(function(){
-		$(document).on('click','#submit_filter_1',function(e){
-			var sampai_tanggal = $("#sampai_tanggal").val();
-			var dari_tanggal = $("#dari_tanggal").val();
-			if (dari_tanggal == "") {
-				alert("silahkan isi dari tanggal terlebih dahulu.");
-				$("#dari_tanggal").focus();
-			}
-			else if (sampai_tanggal == "") {
-				alert("silakan isi sampai tanggal terlebih dahulu.");
-				$("#sampai_tanggal").focus();
-			}
-			else{
+  
+        $(document).ready(function(){
+          $("#kode_barang").blur(function(){
 
-				$("#table_faktur").show();
-				$("#table_detail").hide();
-				$("#table_baru").hide();
-				$('#table_filter_faktur').DataTable().destroy();
-		          var dataTable = $('#table_filter_faktur').DataTable( {
-		          "processing": true,
-		          "serverSide": true,
-		          "ajax":{
-		            url :"datatable_filter_faktur_stok_opname.php", // json datasource
-		            "data": function ( d ) {
-                      d.dari_tanggal = $("#dari_tanggal").val();
-                      d.sampai_tanggal = $("#sampai_tanggal").val();
-                      // d.custom = $('#myInput').val();
-                      // etc
-                  },
-		            type: "post",  // method  , by default get
-		            error: function(){  // error handling
-		              $(".employee-grid-error").html("");
-		              $("#table_filter_faktur").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-		              $("#employee-grid_processing").css("display","none");
-		            }
-		        },
-		            
-		            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-		                $(nRow).attr('class','tr-id-'+aData[10]+'');
-		            },
+          var kode_barang = $('#kode_barang').val();
+          var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
 
-		        });
-			}// end else
-		});
-		$("form").submit(function(){
-        return false;
+
+    $.getJSON('lihat_stok_opname.php',{kode_barang:kode_barang}, function(json){
+      
+      if (json == null)
+      {
+        $('#nama_barang').val('');
+        $('#satuan').val('');
+      }
+
+      else 
+      {
+        $('#nama_barang').val(json.nama_barang);
+        $('#satuan').val(json.satuan);
+      }
+                                              
+      });
+      
+        
         });
-	});
-	// /FILTER FAKTUR
+        }); 
 </script>
+
+
+
+
+                              <script type="text/javascript">
+                                $(document).on('dblclick', '.edit-jumlah', function () {
+
+                                    var id = $(this).attr("data-id");
+
+                                    $("#text-jumlah-"+id+"").hide();
+
+                                    $("#input-jumlah-"+id+"").attr("type", "text");
+
+                                 });
+
+                                $(document).on('blur', '.input_jumlah', function () {
+
+                                    var id = $(this).attr("data-id");
+                                    var jumlah_baru = $(this).val();
+                                    var harga = $(this).attr("data-harga");
+                                    var kode_barang = $(this).attr("data-kode");
+
+                                    var stok_sekarang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-stok-sekarang-"+id+"").text()))));
+                                    var hpp = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-hpp-"+id+"").text()))));
+
+                                    var selisih_fisik = parseInt(jumlah_baru,10) - parseInt(stok_sekarang,10);
+                                    var selisih_harga = parseInt(selisih_fisik,10) * parseInt(hpp,10);
+
+
+                              
+                                  $.post("update_tbs_stok_opname.php", {jumlah_baru:jumlah_baru,id:id,kode_barang:kode_barang,selisih_harga:selisih_harga,selisih_fisik:selisih_fisik}, function(info){
+
+
+                                    $("#text-jumlah-"+id+"").show();
+                                    $("#text-jumlah-"+id+"").text(jumlah_baru);
+                                    $("#text-selisih-"+id+"").text(tandaPemisahTitik(selisih_harga));
+                                    $("#text-selisih-fisik-"+id+"").text(tandaPemisahTitik(selisih_fisik));
+                                    $("#input-jumlah-"+id+"").attr("type", "hidden");        
+                                    
+                                    
+                                    });
+                                    
+                           
+
+                                   
+                                   $("#kode_barang").focus();
+
+                                 });
+
+                             </script>
+
+
 
 <script type="text/javascript">
-//FILTER DETAIL
-	$(document).ready(function(){
-		$(document).on('click','#submit_filter_2',function(e){
-			var sampai_tanggal = $("#sampai_tanggal2").val();
-			var dari_tanggal = $("#dari_tanggal2").val();
-			if (dari_tanggal == "") {
-				alert("silahkan isi dari tanggal terlebih dahulu.");
-				$("#dari_tanggal").focus();
-			}
-			else if (sampai_tanggal == "") {
-				alert("silakan isi sampai tanggal terlebih dahulu.");
-				$("#sampai_tanggal").focus();
-			}
-			else{
 
-				$("#table_detail").show();
-				$("#table_faktur").hide();
-				$("#table_baru").hide();
-				$('#table_filter_detail').DataTable().destroy();
-		          var dataTable = $('#table_filter_detail').DataTable( {
-		          "processing": true,
-		          "serverSide": true,
-		          "ajax":{
-		            url :"datatable_filter_detail_stok_opname.php", // json datasource
-		            "data": function ( d ) {
-                      d.dari_tanggal = $("#dari_tanggal2").val();
-                      d.sampai_tanggal = $("#sampai_tanggal2").val();
-                      // d.custom = $('#myInput').val();
-                      // etc
-                  },
-		            type: "post",  // method  , by default get
-		            error: function(){  // error handling
-		              $(".employee-grid-error").html("");
-		              $("#table_filter_detail").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-		              $("#employee-grid_processing").css("display","none");
-		            }
-		        },
-		            
-		            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-		                $(nRow).attr('class','tr-id-'+aData[10]+'');
-		            },
+                                  
+//fungsi hapus data 
+    $(document).on('click', '.btn-hapus-tbs', function (e) {
+    var nama_barang = $(this).attr("data-nama-barang");
+    var kode_barang = $(this).attr("data-kode-barang");
+    var id = $(this).attr("data-id");
+                  
+                  $.get("cek_total_selisih_harga.php",function(data){
+                     data = data.replace(/\s+/g, '');
+                  $("#total_selisih_harga").val(tandaPemisahTitik(data));
+                  });
 
-		        });
+    $(".tr-tbs-id-"+id).remove();
+    $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang},function(data){
+   
+    
+    });
+    
+    });
+// end fungsi hapus data
+ </script>
 
-		     $("#export_excel").attr("href", "expor_excel_stok_opname_detail.php?&dari_tanggal="+dari_tanggal+"&sampai_tanggal="+sampai_tanggal+"");
-		  
-		  
-			}// /else
-		});
-		$("form").submit(function(){
+
+<script>
+$(function() {
+    $( "#kode_barang" ).autocomplete({
+        source: 'kode_barang_autocomplete.php'
+    });
+});
+</script>
+
+
+	<button type="submit" id="submit_close" class="glyphicon glyphicon-remove btn btn-danger" style="display:none"></button> 
+</div><!--end of container-->
+		<span id="demo"> </span>
+
+<!--DATA TABLE MENGGUNAKAN AJAX-->
+<script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
+
+            $('#table_stok_opname').DataTable().destroy();
+            $('#table_tbs_stok_opname').DataTable().destroy();
+
+
+//pembaruan datatable data stok opname 
+          var dataTable = $('#table_stok_opname').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_stok_opname.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_stok_opname").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[15]+'');
+            },
+        });
+//pembaruan datatable data stok opname 
+
+//pembaruan datatable data tbs stok opname 
+         var dataTable = $('#tabel_tbs_stok_opname').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_stok_opname.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#tabel_tbs_stok_opname").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-tbs-id-'+aData[7]+'');
+            },
+        });
+//pembaruan datatable data tbs stok opname 
+
+
+        $("#form").submit(function(){
         return false;
         });
-	});
-	// /FILTER DETAIL
-</script>
-		<!--menampilkan detail penjualan-->
-		<script type="text/javascript">
-		$(document).on('click','.detail',function(e){
-		var no_faktur = $(this).attr('no_faktur');
-				
-		$("#modal_detail").modal('show');
-		
-		$.post('detail_stok_opname.php',{no_faktur:no_faktur},function(info) {
-		
-		$("#modal-detail").html(info);
-		
-		
-		});
-		
-		});
-		
-		</script>
+        
+
+      } );
+    </script>
+<!--/DATA TABLE MENGGUNAKAN AJAX-->
 
 
 <script type="text/javascript">
@@ -452,33 +743,51 @@ if ($stok_opname['stok_opname_hapus'] > 0) {
 		
 		
 		});
-
-
-		$("#btn_jadi_hapus").click(function(){
-		
-		var no_faktur = $("#data_faktur").val();
-		var id = $(this).attr("data-id");
-
-		$.post("hapus_data_stok_opname.php",{no_faktur:no_faktur},function(data){
-		if (data != "") {
-
-         
-         $("#modal_hapus").modal('hide');
-         $(".tr-id-"+id).remove();
-		
-		}
-
-		
-		});
-		
-		});
 // end fungsi hapus data
 
 </script>
 
 <script type="text/javascript">
+     $(document).on('click', '#btn_jadi_hapus', function (e) {    
+					var no_faktur = $("#data_faktur").val();
+					var id = $(this).attr("data-id");
+                    
+                    
+                    $("#modal_hapus").modal('hide');
+                    
+                    $.post("hapus_data_stok_opname.php",{no_faktur:no_faktur},function(data){
+                      $('#table_stok_opname').DataTable().destroy();
+     
+                  var dataTable = $('#table_stok_opname').DataTable( {
+                      "processing": true,
+                      "serverSide": true,
+                      "ajax":{
+                        url :"datatable_stok_opname.php", // json datasource
+                        type: "post",  // method  , by default get
+                        error: function(){  // error handling
+                          $(".employee-grid-error").html("");
+                          $("#table_stok_opname").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                          $("#employee-grid_processing").css("display","none");
+                          }
+                      },
+                         "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+                          $(nRow).attr('class','tr-id-'+aData[15]+'');         
+
+                      }
+                    });
+                    });
+
+                    
+        }); 
+
+     
+</script>
+
+<script type="text/javascript">
 	
-		$(document).on('click', '.btn-alert', function (e) {
+	$(document).on('click', '.btn-alert', function (e) {    
+
 		var no_faktur = $(this).attr("data-faktur");
 
 		$.post('modal_alert_hapus_data_stok_opname.php',{no_faktur:no_faktur},function(data){
@@ -493,6 +802,8 @@ if ($stok_opname['stok_opname_hapus'] > 0) {
 		});
 
 </script>
+
+
 
 <script>
     $(function() {
@@ -520,9 +831,9 @@ if ($stok_opname['stok_opname_hapus'] > 0) {
     });
     </script>
 
-    <!--<script type="text/javascript">
+    <script type="text/javascript">
 //fil FAKTUR
-$(document).on('click','#submit_filter_1',function(e) {
+$("#submit_filter_1").click(function() {
 $.post($("#formtanggal").attr("action"), $("#formtanggal :input").serializeArray(), function(info) { $("#dataabsen").html(info); });
     
 });
@@ -539,11 +850,11 @@ function clearInput(){
 
 
 
-</script>-->
+</script>
 
-<!--<script type="text/javascript">
+<script type="text/javascript">
 //fill DETAIL
-$(document).on('click','#submit_filter_2',function(e) {
+$("#submit_filter_2").click(function() {
 $.post($("#formtanggal").attr("action"), $("#formtanggal :input").serializeArray(), function(info) { $("#dataabsen").html(info); });
     
 });
@@ -560,11 +871,7 @@ function clearInput(){
 
 
 
-</script>-->
-
-
-
-
+</script>
 
 <script type="text/javascript">
 		$(document).ready(function(){
@@ -577,36 +884,17 @@ function clearInput(){
 <script type="text/javascript">
 		$(document).ready(function(){
 				$("#filter_1").click(function(){		
-			$("#mbalek").show();				
 			$("#fil_faktur").show();
 			$("#filter_2").show();
-			$("#table_faktur").show();
-			$("#table_detail").hide();
 			$("#filter_1").hide();	
 			$("#fil_detail").hide();
-			$("#table_baru").hide();
 			});
 
-				$("#filter_2").click(function(){
-			$("#mbalek").show();		
-			$("#fil_detail").show();
-			$("#filter_1").show();
-			$("#table_detail").show();
-			$("#table_faktur").hide();	
+				$("#filter_2").click(function(){		
+			$("#fil_detail").show();	
 			$("#fil_faktur").hide();
 			$("#filter_2").hide();
-			$("#table_baru").hide();
-			});
-
-				$("#kembali").click(function(){
-			$("#mbalek").hide();		
-			$("#fil_detail").hide();
-			$("#table_detail").hide();
-			$("#table_faktur").hide();	
-			$("#fil_faktur").hide();
 			$("#filter_1").show();
-			$("#filter_2").show();
-			$("#table_baru").show();
 			});
 
 	});

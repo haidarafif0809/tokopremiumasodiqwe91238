@@ -234,7 +234,7 @@ if ($lihat['pembayaran_hutang_lihat'] > 0){
 }
 
  if ($lihat['item_lihat'] > 0){
-                            echo '<li><a href="barang.php?kategori=semua&tipe=barang" class="waves-effect" style="font-size: 16px">Persediaan Barang</a></li>';
+                            echo '<li><a href="persediaan_barang.php?kategori=semua&tipe=barang" class="waves-effect" style="font-size: 16px">Persediaan Barang</a></li>';
 }
 
  if ($lihat['item_masuk_lihat'] > 0){
@@ -252,6 +252,8 @@ if ($lihat['pembayaran_hutang_lihat'] > 0){
  if ($lihat['stok_opname_lihat'] > 0){
                             echo '<li><a href="stok_opname.php" class="waves-effect">Stok Opname</a></li>';
 }
+
+echo '<li><a href="transfer_stok.php" class="waves-effect" style="font-size: 16px">Transfer Stok</a></li>';
 
 echo '<li><a href="kartu_stok.php" class="waves-effect" style="font-size: 16px">Kartu Stok</a></li>';
 

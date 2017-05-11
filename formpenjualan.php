@@ -5620,6 +5620,14 @@ $(document).ready(function(){
 
         $("#closed_alert_promo").click();
 
+    });
+
+
+        shortcut.add("ctrl+m", function() {
+        // Do something
+
+        $("#transaksi_baru").click();
+
     }); 
     
     shortcut.add("ctrl+b", function() {

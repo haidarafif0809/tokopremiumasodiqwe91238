@@ -1728,15 +1728,16 @@ else if (level_harga == "harga_7") {
   document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang');
 
 
-$.post("lihat_promo_alert.php",{id:$(this).attr('id-barang')},function(data){
+$.post("lihat_promo_alert.php",{id_barang:$(this).attr('id-barang')},function(data){
 
-    if (data == '')
+   
+    if (data.promo == null)
     {
 
     }
     else{
       $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(data);
+      $("#tampil_alert").html(data.promo);
     }
 
 });
@@ -2492,17 +2493,18 @@ else
 /// JAVASCRIPT MUNCULKAN ALERT PROMO (JIKA AADA PROMO DALAM BARANG ITU DARI INPUT BARCODE)
 $.getJSON('lihat_nama_barang.php',{kode_barang:kode_barang}, function(json){
   console.log(json.id);
-$.post("lihat_promo_alert.php",{id:json},function(info){
 
-    if (info == '')
-    {
+    $.post("lihat_promo_alert.php",{id_barang:json},function(data){
 
-    }
-    else{
-      $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(info);
-    }
-});
+      if (data.promo == null)
+      {
+
+      }
+      else{
+        $("#modal_promo_alert").modal('show');
+        $("#tampil_alert").html(data.promo);
+      }
+    });
 });
 ///END  JAVASCRIPT ALERT PROMO
 
@@ -5677,14 +5679,16 @@ $(document).ready(function(){
 
 $.post("lihat_promo_alert.php",{id_barang:id_barang},function(data){
 
-    if (data == '')
+    if (data.promo == null)
     {
 
     }
     else{
       $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(data);
+      $("#tampil_alert").html(data.promo);
     }
+
+    console.log(data.promo);
 
 });
 

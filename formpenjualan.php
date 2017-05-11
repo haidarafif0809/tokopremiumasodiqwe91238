@@ -290,7 +290,7 @@ Number.prototype.format = function(n, x, s, c) {
   <form class="form-inline" method="post ">
 
 <button type="button" id="cari_produk_penjualan" class="btn btn-info " data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
-<button type="button" id="daftar_parcel" class="btn btn-primary" data-toggle="modal" data-target="#modal_parcel"><i class='fa  fa-search'></i> Cari Parcel (F) </button>
+<button type="button" id="daftar_parcel" class="btn btn-primary" data-toggle="modal" data-target="#modal_parcel"><i class='fa  fa-search'></i> Cari Parcel (alt+p) </button>
 <button type="button" id="daftar_order" class="btn btn-success" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
 
 <?php 
@@ -5619,6 +5619,13 @@ $(document).ready(function(){
         // Do something
 
         $("#closed_alert_promo").click();
+
+    });
+
+  shortcut.add("alt+p", function() {
+        // Do something
+
+        $("#daftar_parcel").click();
 
     });
 

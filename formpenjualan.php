@@ -290,7 +290,7 @@ Number.prototype.format = function(n, x, s, c) {
   <form class="form-inline" method="post ">
 
 <button type="button" id="cari_produk_penjualan" class="btn btn-info " data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
-<button type="button" id="daftar_parcel" class="btn btn-primary" data-toggle="modal" data-target="#modal_parcel"><i class='fa  fa-search'></i> Cari Parcel (F) </button>
+<button type="button" id="daftar_parcel" class="btn btn-primary" data-toggle="modal" data-target="#modal_parcel"><i class='fa  fa-search'></i> Cari Parcel (alt+p) </button>
 <button type="button" id="daftar_order" class="btn btn-success" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
 
 <?php 
@@ -1728,15 +1728,16 @@ else if (level_harga == "harga_7") {
   document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang');
 
 
-$.post("lihat_promo_alert.php",{id:$(this).attr('id-barang')},function(data){
+$.post("lihat_promo_alert.php",{id_barang:$(this).attr('id-barang')},function(data){
 
-    if (data == '')
+   
+    if (data.promo == null)
     {
 
     }
     else{
       $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(data);
+      $("#tampil_alert").html(data.promo);
     }
 
 });
@@ -2492,17 +2493,18 @@ else
 /// JAVASCRIPT MUNCULKAN ALERT PROMO (JIKA AADA PROMO DALAM BARANG ITU DARI INPUT BARCODE)
 $.getJSON('lihat_nama_barang.php',{kode_barang:kode_barang}, function(json){
   console.log(json.id);
-$.post("lihat_promo_alert.php",{id:json},function(info){
 
-    if (info == '')
-    {
+    $.post("lihat_promo_alert.php",{id_barang:json},function(data){
 
-    }
-    else{
-      $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(info);
-    }
-});
+      if (data.promo == null)
+      {
+
+      }
+      else{
+        $("#modal_promo_alert").modal('show');
+        $("#tampil_alert").html(data.promo);
+      }
+    });
 });
 ///END  JAVASCRIPT ALERT PROMO
 
@@ -5618,6 +5620,21 @@ $(document).ready(function(){
 
         $("#closed_alert_promo").click();
 
+    });
+
+  shortcut.add("alt+p", function() {
+        // Do something
+
+        $("#daftar_parcel").click();
+
+    });
+
+
+        shortcut.add("ctrl+m", function() {
+        // Do something
+
+        $("#transaksi_baru").click();
+
     }); 
     
     shortcut.add("ctrl+b", function() {
@@ -5677,14 +5694,16 @@ $(document).ready(function(){
 
 $.post("lihat_promo_alert.php",{id_barang:id_barang},function(data){
 
-    if (data == '')
+    if (data.promo == null)
     {
 
     }
     else{
       $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(data);
+      $("#tampil_alert").html(data.promo);
     }
+
+    console.log(data.promo);
 
 });
 

@@ -78,10 +78,9 @@
               //ENDING MASUKIN KE HISTORY TBSNYA 
 
 
-        $query_tbs_stok_opname = $db->query("SELECT * FROM tbs_stok_opname WHERE no_faktur = '' OR no_faktur IS NULL ");
+        $query_tbs_stok_opname = $db->query("SELECT * FROM tbs_stok_opname WHERE session_id = '$session_id' AND  (no_faktur = '' OR no_faktur IS NULL) ");
         while ($data = mysqli_fetch_array($query_tbs_stok_opname))
         {
-
 
             //pengambilan stok barang dari hpp masuk - hpp keluar
             $stok_barang = cekStokHpp($data['kode_barang']);

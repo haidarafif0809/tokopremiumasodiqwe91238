@@ -167,54 +167,6 @@ echo '<button style="display:none" data-toggle="collapse tooltip" accesskey="k" 
 
 </div>
 
-<br><br>
-<button type="submit" name="submit" id="filter_1" class="btn btn-primary" > Filter Faktur </button>
-<button type="submit" name="submit" id="filter_2" class="btn btn-primary" > Filter Detail </button>
-
-  <input type="hidden" name="no_faktur_detail" class="form-control " id="no_faktur_detail" placeholder="no_faktur  "/>
-<!--START FILTER FAKTUR-->
-<span id="fil_faktur">
-<form class="form-inline" action="show_filter_stok_opname.php" method="get" role="form">
-					
-					<div class="form-group"> 
-					
-					<input type="text" name="dari_tanggal" id="dari_tanggal" class="form-control" placeholder="Dari Tanggal" required="">
-					</div>
-					
-					<div class="form-group"> 
-					
-					<input type="text" name="sampai_tanggal" id="sampai_tanggal" class="form-control" placeholder="Sampai Tanggal" value="<?php echo date("Y-m-d"); ?>" required="">
-					</div>
-					
-					<button type="submit" name="submit" id="submit_filter_1" class="btn btn-success" ><i class="fa fa-eye"> </i> Lihat Faktur </button>
-
-					
-</form>
-<span id="result"></span>  
-</span>
-<!--END FILTER FAKTUR-->
-
-<!--START FILTER DETAIl-->
-<span id="fil_detail">
-<form class="form-inline" action="show_filter_stok_opname_detail.php" method="get" role="form">
-					
-					<div class="form-group"> 
-					
-					<input type="text" name="dari_tanggal" id="dari_tanggal2" class="form-control" placeholder="Dari Tanggal" required="">
-					</div>
-					
-					<div class="form-group"> 
-					
-					<input type="text" name="sampai_tanggal" id="sampai_tanggal2" class="form-control" placeholder="Sampai Tanggal" value="<?php echo date("Y-m-d"); ?>" required="">
-					</div>
-					
-					<button type="submit" name="submit" id="submit_filter_2" class="btn btn-success" ><i class="fa fa-eye"> </i> Lihat Detail </button>
-
-					
-</form>
-<span id="result"></span>  
-</span>
-<!--END FILTER DETAIl-->
 
 <div class="table-responsive">
 <span id="tabel_baru">
@@ -646,7 +598,7 @@ $(document).ready(function(){
                   });
 
     $(".tr-tbs-id-"+id).remove();
-    $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang},function(data){
+    $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang,id:id},function(data){
    
     
     });

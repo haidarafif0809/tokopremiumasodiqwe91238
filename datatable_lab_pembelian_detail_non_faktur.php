@@ -65,7 +65,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 					//menampilkan data
 					$nestedData[] = $row['kode_barang'];
 					$nestedData[] = $row['nama_barang'];
-					$nestedData[] = "<p align='right'>".$row['sum_jumlah']." ". $row['nama']." </p>";
+					$nestedData[] = "<p align='right'>".$row['sum_jumlah']." ". $row['asal_satuan']." </p>";
 					$nestedData[] = "<p align='right'>".rp($row['sum_subtotal'])." </p>";
 					$nestedData[] = rp($row['sum_potongan']);
 					$nestedData[] = rp($row['sum_tax']);

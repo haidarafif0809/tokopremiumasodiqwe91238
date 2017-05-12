@@ -78,7 +78,7 @@ $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
           <tr>
           <td>".$data11['kode_barang']."</td>
           <td>".$data11['nama_barang']."</td>
-          <td align='right'>".$data11['sum_jumlah'] ." ". $data11['nama']."</td>
+          <td align='right'>".$data11['sum_jumlah'] ." ". $data11['asal_satuan']."</td>
           <td align='right'>".rp($data11['sum_subtotal'])."</td>
           <td>".rp($data11['sum_potongan'])."</td>
           <td>".rp($data11['sum_tax'])."</td>

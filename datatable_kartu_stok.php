@@ -60,19 +60,17 @@ else if ($bulan == '12')
 }
 
 
-
 // awal Select untuk hitung Saldo Awal
-$hpp_masuk = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND CONCAT(tanggal,'',jam) <= '$bulan' AND CONCAT(tanggal,'',jam) <= '$tahun'");
+$hpp_masuk = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) < '$bulan' AND YEAR(tanggal) <= '$tahun'");
 $out_masuk = mysqli_fetch_array($hpp_masuk);
 $jumlah_masuk = $out_masuk['jumlah'];
 
 
-$hpp_keluar = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND CONCAT(tanggal,'',jam) <= '$bulan' AND CONCAT(tanggal,'',jam) <= '$tahun'");
+$hpp_keluar = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND MONTH(tanggal) < '$bulan' AND YEAR(tanggal) <= '$tahun'");
 $out_keluar = mysqli_fetch_array($hpp_keluar);
 $jumlah_keluar = $out_keluar['jumlah'];
 
 $total_saldo = $jumlah_masuk - $jumlah_keluar;
-
 
 
 
@@ -245,6 +243,17 @@ if ($data['jenis_hpp'] == '1')
 				$nestedData[] = "<p style='text-align:right'>".rp($harga_awal)."<p/>";
 			}
 
+			else if ($row['jenis_transaksi'] == 'Transfer Stok') {
+
+
+				$ambil_harga_transfer = $db->query("SELECT harga AS harga_transfer FROM detail_transfer_stok  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_transfer = mysqli_fetch_array($ambil_harga_transfer);
+				$harga_transfer = $data_transfer['harga_transfer'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_transfer)."</p>";
+			}
+
+
 //LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERTAMBAH)
 
 
@@ -331,6 +340,16 @@ $total_saldo = $total_saldo - $keluar;
 				$harga_opname = $data_opname['harga_opname'];
 
 				$nestedData[] = "<p style='text-align:right'>".rp($harga_opname)."<p/>";
+			}
+
+			else if ($row['jenis_transaksi'] == 'Transfer Stok') {
+
+
+				$ambil_harga_transfer = $db->query("SELECT harga AS harga_transfer FROM detail_transfer_stok  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_transfer = mysqli_fetch_array($ambil_harga_transfer);
+				$harga_transfer = $data_transfer['harga_transfer'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_transfer)."</p>";
 			}
 
 //LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERKURANG)

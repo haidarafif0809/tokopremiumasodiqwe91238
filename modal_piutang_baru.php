@@ -29,7 +29,7 @@ include 'db.php';
     <tbody> <!-- tag pembuka tbody, yang digunakan untuk menampilkan data yang ada di database --> 
     <?php
 
-    $kode_pelanggan = $_POST['kode_pelanggan'];
+    $kode_pelanggan = angkadoang($_POST['kode_pelanggan']);
     
     $perintah = $db->query("SELECT * FROM penjualan WHERE kode_pelanggan = '$kode_pelanggan' AND kredit != 0");
 
@@ -45,7 +45,7 @@ include 'db.php';
 
         else{
                   // menampilkan datakredit
-       echo "<tr class='pilih' no-faktur='". $data1['no_faktur'] ."' kredit='". $data1['kredit'] ."' total='". $data1['total'] ."' tanggal_jt='". $data1['tanggal_jt'] ."' >
+       echo "<tr class='pilih' no-faktur='". $data1['no_faktur'] ."' kredit='". rp($data1['kredit']) ."' total='". rp($data1['total']) ."' tanggal_jt='". $data1['tanggal_jt'] ."' >
       
       <td>". $data1['no_faktur'] ."</td>
       <td>". $data1['kode_pelanggan'] ."</td>

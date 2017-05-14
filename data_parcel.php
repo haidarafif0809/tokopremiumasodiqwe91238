@@ -242,8 +242,10 @@ include 'db.php';
 	</table>
 </span>
 </div>
-
-	<h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom Jumlah Parcel jika ingin mengedit.</i></h6>
+<!--
+	<h6 style="text-align: left ; color: red"><i><b> * Klik 2x Pada Kolom Jumlah Parcel Untuk Mengedit. </b></i></h6>
+-->
+	<h6 style="text-align: left ; color: red"><i><b> ** Produk Tidak Bisa Dihapus Jika Jumlah Parcel Tidak Sama Dengan 0 (Nol)</b></i></h6>
 
 </div> <!-- END CONTAINER -->
 

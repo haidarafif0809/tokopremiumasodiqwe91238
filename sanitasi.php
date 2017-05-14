@@ -23,6 +23,12 @@ $rpp = $rp;
 return $rpp;
 }
 
+function gantiTitik($rupiah){
+$koma = str_replace(",",".",$rupiah);
+$titik = $koma;
+return $titik;
+}
+
 
 function komarupiah($rupiah,$angka){
 $rp = number_format($rupiah,$angka,".","");

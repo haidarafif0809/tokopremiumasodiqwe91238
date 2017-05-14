@@ -57,9 +57,19 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
   $nestedData=array();
 
+    $jumlah_produk_tampil = koma($row["jumlah_produk"],3);
+    $dibelakang_koma = substr($jumlah_produk_tampil, -4);
+          
+    if ($dibelakang_koma == ",000") {
+        $jumlah_produk_tampil = hapus_koma($row["jumlah_produk"],3);
+    }
+    else{
+        $jumlah_produk_tampil = koma($row["jumlah_produk"],3);
+    }
+
       $nestedData[] = $row["kode_barang"];
       $nestedData[] = $row["nama_barang"];
-      $nestedData[] = $row["jumlah_produk"];
+      $nestedData[] = $jumlah_produk_tampil;
       $nestedData[] = $row["nama"];
 
   $data[] = $nestedData;

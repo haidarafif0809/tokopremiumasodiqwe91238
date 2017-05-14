@@ -291,10 +291,12 @@ $(document).ready(function(){
 -->
 
 
-
 <script type="text/javascript">
-$(document).ready(function(){
-  $('#tabel_tbs_parcel').DataTable().destroy();
+  $(document).ready(function(){    
+    $.get("buat_kode_parcel.php",function(data){
+      $("#kode_parcel").val(data);
+
+        $('#tabel_tbs_parcel').DataTable().destroy();
       var dataTable = $('#tabel_tbs_parcel').DataTable( {
             "processing": true,
             "serverSide": true,
@@ -319,6 +321,14 @@ $(document).ready(function(){
       });
 
   $("#span_tbs").show()
+    });
+  });
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
 });
 </script>
 
@@ -564,12 +574,12 @@ $("#submit_produk").click(function(){
   var kode_barang = $("#kode_barang").val();
   var nama_barang = $("#nama_barang").val();
   var nama_parcel = $("#nama_parcel").val();
-  var jumlah_barang = $("#jumlah_barang").val();
-  var jumlah_parcel = $("#jumlah_parcel").val();
+  var jumlah_barang = gantiTitik($("#jumlah_barang").val());
   var jumlah_parcel = $("#jumlah_parcel").val();
   var nama_parcel = $("#nama_parcel").val();
   var harga_produk = $("#harga_produk").val();
   var harga_parcel_1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_1").val()))));
+
 
 if (nama_parcel == "") {
       alert ("SILAKAN ISI NAMA PARCEL");
@@ -674,7 +684,7 @@ $("#simpan_produk").click(function(){
     var id_produk = $("#id_produk").val();
     var kode_barang = $("#kode_barang").val();
     var nama_barang = $("#nama_barang").val();
-    var jumlah_barang = $("#jumlah_barang").val();
+    var jumlah_barang = gantiTitik($("#jumlah_barang").val());
     var jumlah_parcel = $("#jumlah_parcel").val();
     var kode_parcel = $("#kode_parcel").val();
     var nama_parcel = $("#nama_parcel").val();
@@ -855,6 +865,7 @@ $(document).on('blur','.input_jumlah',function(e){
   var id_produk = $(this).attr("data-id-produk");
   var id = $(this).attr("data-id");
   var kode_barang = $(this).attr("data-kode");
+  var harga_produk = $(this).attr("data-harga");
   var nama_barang = $(this).attr("data-nama-barang");
   var jumlah_lama = $("#text-jumlah-"+id+"").text();
   var jumlah_baru = $(this).val();
@@ -865,6 +876,8 @@ $(document).on('blur','.input_jumlah',function(e){
   if (jumlah_baru == '') {
   jumlah_baru = 0;
   }
+
+  var dibelakang_koma = jumlah_baru.substr(-4);
 
   if (jumlah_baru == 0) {
       alert("Jumlah barang tidak boleh nol atau kosong");
@@ -884,8 +897,8 @@ $(document).on('blur','.input_jumlah',function(e){
         var jumlah_parcel_yg_bisa_dibuat = json.jenis_transaksi;
 
 
-
       if (jumlah_produk < 0) {
+        console.log("!asdasd")
 
           alert ("Persediaan Produk '"+nama_barang+"' Tidak Mencukupi Untuk Membuat '"+jumlah_parcel+"' Parcel '"+nama_parcel+"', Hanya Cukup Untuk Membuat '"+jumlah_parcel_yg_bisa_dibuat+"' Parcel '"+nama_parcel+"' !");
 
@@ -898,14 +911,19 @@ $(document).on('blur','.input_jumlah',function(e){
 
       }
 
-      else{
+      else{ 
 
+          if (dibelakang_koma == ",000" || dibelakang_koma == ",00" || dibelakang_koma == ",0") {
+            jumlah_baru = hapusBelakangKoma(jumlah_baru);
+          }
+          else{
+            jumlah_baru = jumlah_baru;
+          }
+            $("#text-jumlah-"+id+"").show();
+            $("#text-jumlah-"+id+"").text(jumlah_baru);
+            $("#input-jumlah-"+id+"").attr("type", "hidden");
 
-          $("#text-jumlah-"+id+"").show();
-          $("#text-jumlah-"+id+"").text(jumlah_baru);
-          $("#input-jumlah-"+id+"").attr("type", "hidden");
-
-          $.post("update_jumlah_produk_parcel.php",{jumlah_lama:jumlah_lama,id_produk:id_produk,jumlah_baru:jumlah_baru, kode_parcel:kode_parcel},function(){
+          $.post("update_jumlah_produk_parcel.php",{jumlah_lama:jumlah_lama,id_produk:id_produk,jumlah_baru:jumlah_baru, kode_parcel:kode_parcel, harga_produk:harga_produk},function(){
 
           });
 
@@ -1001,14 +1019,6 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 //end fungsi hapus data
 </script>
 
-
-<script type="text/javascript">
-  $(document).ready(function(){    
-    $.get("buat_kode_parcel.php",function(data){
-      $("#kode_parcel").val(data);
-    });
-  });
-</script>
 
 
 

@@ -211,7 +211,7 @@ $ambil_parcel = mysqli_fetch_array($data_parcel);
 
                   foreach ($data_c as $key) {
                     
-                      echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+                      echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" data-harga="'.$key['harga_beli'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
                     
                     
                   }
@@ -233,6 +233,8 @@ $ambil_parcel = mysqli_fetch_array($data_parcel);
 
        
         <input type="hidden" name="id_produk" id="id_produk" class="form-control" required="" >
+        <input type="hidden" name="harga_produk" id="harga_produk" class="form-control" required="" >
+
       <input type="hidden" name="session_id" id="session_id" class="form-control" value="<?php echo $session_id; ?>" required="" >
       <input type="hidden" name="no_faktur" id="no_faktur" class="form-control" value="<?php echo $no_faktur; ?>" required="" >
       <input type="hidden" name="sisa_produk" id="sisa_produk" class="form-control" required="" >                                   
@@ -346,6 +348,7 @@ $(document).on('click', '.pilih', function (e) {
   $("#kode_barang").trigger('chosen:updated');
   document.getElementById("nama_barang").value = $(this).attr('nama-barang');
   document.getElementById("id_produk").value = $(this).attr('data-id-produk');
+  document.getElementById("harga_produk").value = $(this).attr('data-harga');
 
   var kode_parcel =  $("#kode_parcel").val();
   var id_produk =  $("#id_produk").val();
@@ -379,29 +382,8 @@ $(document).on('click', '.pilih-parcel', function (e) {
   $('#modalParcel').modal('hide');
 
   // START DATATABLE AJAX START DATATABLE AJAX START DATATABLE AJAX START DATATABLE AJAX START DATATABLE AJAX START DATATABLE AJAX
-              $('#tabel_tbs_parcel').DataTable().destroy();
-              var dataTable = $('#tabel_tbs_parcel').DataTable( {
-                    "processing": true,
-                    "serverSide": true,
-                    "info":     false,
-                    "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
-                    "ajax":{
-                      url :"data_tbs_parcel_edit.php", // json datasource
-                       "data": function ( d ) {
-                          d.kode_parcel = $("#kode_parcel").val();
-                          // d.custom = $('#myInput').val();
-                          // etc
-                      },
-                          type: "post",  // method  , by default get
-                      error: function(){  // error handling
-                        $(".tbody").html("");
-                        $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                        $("#tableuser_processing").css("display","none");
-                        
-                      }
-                    }   
-
-              });
+              var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                  tabel_tbs_parcel.draw();
 
               $("#span_tbs").show();
 
@@ -437,6 +419,7 @@ $(document).on('click', '.pilih-parcel', function (e) {
               $(nRow).attr('data-kode', aData[0]);
               $(nRow).attr('nama-barang', aData[1]);
               $(nRow).attr('data-id-produk', aData[8]);
+              $(nRow).attr('data-harga', aData[4]);
 
 
           }
@@ -493,29 +476,8 @@ $(document).on('click', '.pilih-parcel', function (e) {
   $.post("proses_input_parcel.php",{kode_parcel:kode_parcel, nama_parcel:nama_parcel, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel},function(data){
      
      
-      $('#tabel_tbs_parcel').DataTable().destroy();
-      var dataTable = $('#tabel_tbs_parcel').DataTable( {
-            "processing": true,
-            "serverSide": true,
-            "info":     false,
-            "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
-            "ajax":{
-              url :"data_tbs_parcel_edit.php", // json datasource
-               "data": function ( d ) {
-                  d.kode_parcel = $("#kode_parcel").val();
-                  // d.custom = $('#myInput').val();
-                  // etc
-              },
-                  type: "post",  // method  , by default get
-              error: function(){  // error handling
-                $(".tbody").html("");
-                $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                $("#tableuser_processing").css("display","none");
-                
-              }
-            }   
-
-      });
+      var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+          tabel_tbs_parcel.draw();
 
   $("#span_tbs").show()
 
@@ -577,11 +539,12 @@ $("#submit_produk").click(function(){
   var kode_barang = $("#kode_barang").val();
   var nama_barang = $("#nama_barang").val();
   var nama_parcel = $("#nama_parcel").val();
-  var jumlah_barang = $("#jumlah_barang").val();
+  var jumlah_barang = gantiTitik($("#jumlah_barang").val());
   var jumlah_parcel = $("#jumlah_parcel").val();
   var jumlah_parcel = $("#jumlah_parcel").val();
   var no_faktur = $("#no_faktur").val();
   var nama_parcel = $("#nama_parcel").val();
+  var harga_produk = $("#harga_produk").val();
   var harga_parcel_1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_1").val()))));
 
 if (nama_parcel == "") {
@@ -623,7 +586,7 @@ if (nama_parcel == "") {
       }
       else{
             
-            $.post("proses_isi_parcel_edit.php",{id_produk:id_produk,kode_parcel:kode_parcel,jumlah_barang:jumlah_barang,no_faktur:no_faktur},function(data) {
+            $.post("proses_isi_parcel_edit.php",{id_produk:id_produk,kode_parcel:kode_parcel,jumlah_barang:jumlah_barang,no_faktur:no_faktur,harga_produk:harga_produk},function(data) {
 
               $("#nama_barang").val('');
               $("#kode_barang").val('');
@@ -634,29 +597,8 @@ if (nama_parcel == "") {
 
             });
 
-              $('#tabel_tbs_parcel').DataTable().destroy();
-              var dataTable = $('#tabel_tbs_parcel').DataTable( {
-                    "processing": true,
-                    "serverSide": true,
-                    "info":     false,
-                    "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
-                    "ajax":{
-                      url :"data_tbs_parcel_edit.php", // json datasource
-                       "data": function ( d ) {
-                          d.kode_parcel = $("#kode_parcel").val();
-                          // d.custom = $('#myInput').val();
-                          // etc
-                      },
-                          type: "post",  // method  , by default get
-                      error: function(){  // error handling
-                        $(".tbody").html("");
-                        $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                        $("#tableuser_processing").css("display","none");
-                        
-                      }
-                    }   
-
-              });
+              var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                  tabel_tbs_parcel.draw();
 
               $("#span_tbs").show();
 
@@ -687,7 +629,7 @@ $("#simpan_produk").click(function(){
     var id_produk = $("#id_produk").val();
     var kode_barang = $("#kode_barang").val();
     var nama_barang = $("#nama_barang").val();
-    var jumlah_barang = $("#jumlah_barang").val();
+    var jumlah_barang = gantiTitik($("#jumlah_barang").val());
     var jumlah_parcel = $("#jumlah_parcel").val();
     var kode_parcel = $("#kode_parcel").val();
     var nama_parcel = $("#nama_parcel").val();
@@ -750,29 +692,8 @@ if (nama_parcel == "") {
  
 
 
-              $('#tabel_tbs_parcel').DataTable().destroy();
-              var dataTable = $('#tabel_tbs_parcel').DataTable( {
-                    "processing": true,
-                    "serverSide": true,
-                    "info":     false,
-                    "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
-                    "ajax":{
-                      url :"data_tbs_parcel_edit.php", // json datasource
-                       "data": function ( d ) {
-                          d.kode_parcel = $("#kode_parcel").val();
-                          // d.custom = $('#myInput').val();
-                          // etc
-                      },
-                          type: "post",  // method  , by default get
-                      error: function(){  // error handling
-                        $(".tbody").html("");
-                        $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                        $("#tableuser_processing").css("display","none");
-                        
-                      }
-                    }   
-
-              });
+              var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                  tabel_tbs_parcel.draw();
 
               $("#span_tbs").show();
 
@@ -801,12 +722,14 @@ if (nama_parcel == "") {
 
     var kode_parcel = $("#kode_parcel").val();
     var kode_barang = $(this).val();
+    var harga_beli = $('#opt-produk-'+kode_barang).attr("data-harga");
     var nama_barang = $('#opt-produk-'+kode_barang).attr("nama-barang");
     var id_produk = $('#opt-produk-'+kode_barang).attr("id-barang");
 
 
     $("#kode_barang").val(kode_barang);
     $("#nama_barang").val(nama_barang);
+    $("#harga_produk").val(harga_beli);
     $("#id_produk").val(id_produk);
 
 
@@ -871,6 +794,7 @@ $(document).on('blur','.input_jumlah',function(e){
   var id_produk = $(this).attr("data-id-produk");
   var id = $(this).attr("data-id");
   var kode_barang = $(this).attr("data-kode");
+  var harga_produk = $(this).attr("data-harga");
   var nama_barang = $(this).attr("data-nama-barang");
   var jumlah_lama = $("#text-jumlah-"+id+"").text();
   var jumlah_baru = $(this).val();
@@ -881,6 +805,8 @@ $(document).on('blur','.input_jumlah',function(e){
   if (jumlah_baru == '') {
   jumlah_baru = 0;
   }
+
+  var dibelakang_koma = jumlah_baru.substr(-4);
 
   if (jumlah_baru == 0) {
       alert("Jumlah barang tidak boleh nol atau kosong");
@@ -913,12 +839,18 @@ $(document).on('blur','.input_jumlah',function(e){
 
       else{
 
+        if (dibelakang_koma == ",000" || dibelakang_koma == ",00" || dibelakang_koma == ",0") {
+            jumlah_baru = hapusBelakangKoma(jumlah_baru);
+          }
+        else{
+            jumlah_baru = jumlah_baru;
+          }
 
           $("#text-jumlah-"+id+"").show();
           $("#text-jumlah-"+id+"").text(jumlah_baru);
           $("#input-jumlah-"+id+"").attr("type", "hidden");
 
-          $.post("update_jumlah_produk_parcel.php",{jumlah_lama:jumlah_lama,id_produk:id_produk,jumlah_baru:jumlah_baru, kode_parcel:kode_parcel},function(){
+          $.post("update_jumlah_produk_parcel.php",{jumlah_lama:jumlah_lama,id_produk:id_produk,jumlah_baru:jumlah_baru, kode_parcel:kode_parcel, harga_produk:harga_produk},function(){
 
           });
 
@@ -963,34 +895,8 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
           $.post("hapus_tbs_parcel.php",{id:id},function(data){
             
-          $('#tabel_tbs_parcel').DataTable().destroy();
-              var dataTable = $('#tabel_tbs_parcel').DataTable( {
-                    "processing": true,
-                    "serverSide": true,
-                    "info":     false,
-                    "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
-                    "ajax":{
-                      url :"data_tbs_parcel_edit.php", // json datasource
-                       "data": function ( d ) {
-                          d.kode_parcel = $("#kode_parcel").val();
-                          // d.custom = $('#myInput').val();
-                          // etc
-                      },
-                          type: "post",  // method  , by default get
-                      error: function(){  // error handling
-                        $(".tbody").html("");
-                        $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                        $("#tableuser_processing").css("display","none");
-                        
-                      },
-                               "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-
-                                $(nRow).attr('class','tr-id-'+aData[5]+'');         
-
-                            }
-                    }   
-
-              });
+          var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+              tabel_tbs_parcel.draw();
 
           $("#span_tbs").show()
           $("#kode_barang").trigger('chosen:open')  ;
@@ -1026,29 +932,10 @@ $(document).ready(function(){
         
         $.get("batal_perakitan_parcel.php",{kode_parcel:kode_parcel},function(data){
 
-          $('#tabel_tbs_parcel').DataTable().destroy();
-              var dataTable = $('#tabel_tbs_parcel').DataTable( {
-                    "processing": true,
-                    "serverSide": true,
-                    "info":     false,
-                    "language": { "emptyTable":     "Tidak Ada Data Di Tabel Ini" },
-                    "ajax":{
-                      url :"data_tbs_parcel_edit.php", // json datasource
-                       "data": function ( d ) {
-                          d.kode_parcel = $("#kode_parcel").val();
-                          // d.custom = $('#myInput').val();
-                          // etc
-                      },
-                          type: "post",  // method  , by default get
-                      error: function(){  // error handling
-                        $(".tbody").html("");
-                        $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                        $("#tableuser_processing").css("display","none");
-                        
-                      }
-                    }   
+          var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                  tabel_tbs_parcel.draw();
 
-              });
+          $("#span_tbs").show();
 
         });
     } 

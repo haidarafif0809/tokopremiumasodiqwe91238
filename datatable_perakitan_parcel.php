@@ -2,6 +2,7 @@
 /* Database connection start */
 include 'db.php';
 include 'sanitasi.php';
+include 'persediaan.function.php';
 
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
@@ -58,6 +59,8 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
   $nestedData=array();
 
+$stok_parcel = cekStokHpp($row['kode_parcel']);
+
   $nestedData[] = $row["kode_parcel"];
   $nestedData[] = $row["nama_parcel"];
   $nestedData[] = rp($row["harga_parcel"]); 
@@ -68,7 +71,12 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
   $nestedData[] = rp($row["harga_parcel_6"]); 
   $nestedData[] = rp($row["harga_parcel_7"]); 
 
+/*
   $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jumlah' data-id='".$row['id']."' data-kode='".$row['kode_parcel']."'> <span id='text-jumlah-".$row['id']."'>".$row["jumlah_parcel"]."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".$row['jumlah_parcel']."' class='input_jumlah' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_parcel']."' data-nama='".$row['nama_parcel']."' data-harga='".$row['harga_parcel']."'> </p>";
+
+*/
+
+  $nestedData[] = rp($stok_parcel);
 
   $nestedData[] = $row["user_input"];
   $nestedData[] = $row["user_edit"];
@@ -77,7 +85,14 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
   $nestedData[] = "<a href='proses_edit_parcel.php?no_faktur=". $row['no_faktur']."&kode_parcel=". $row['kode_parcel']."&nama_parcel=".$row['nama_parcel']."' class='btn btn-success btn-floating'><i class='fa fa-edit'></i></a>"; 
 
-  $nestedData[] = "<button class='btn btn-hapus-parcel btn-danger btn-floating' data-id='". $row['id']."' data-nama='". $row['nama_parcel']."' > <i class='fa fa-trash'></i> </button>";
+  
+  if ($stok_parcel == 0) {
+      $nestedData[] = "<button class='btn btn-hapus-parcel btn-danger btn-floating' data-id='". $row['id']."' data-nama='". $row['nama_parcel']."' > <i class='fa fa-trash'></i> </button>";
+  }
+  else{
+      $nestedData[] = "<p style='color:red'> Tidak Bisa Dihapus </p>";
+  }
+
   $nestedData[] = $row["id"];
   
   $data[] = $nestedData;

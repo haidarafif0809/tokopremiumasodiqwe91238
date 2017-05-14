@@ -149,7 +149,7 @@ $session_id = session_id();
 
 <script>
   $(function() {
-    $( "#tanggal_jt" ).datepicker({datecoba: "yy-mm-dd"});
+    $( "#tanggal_jt" ).datepicker({dateFormat: "yy-mm-dd"});
   });
 
 

@@ -232,12 +232,10 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
 
 <div class="row">
   <div class="col-sm-9">
-                  <span id="result">  
-                  
+        <span id="result">  
                   <div class="table-responsive">    
-                  <table id="tableuser" class="table table-bordered table-sm">
-                  <thead>
-                  
+                  <table id="table_edit_stok_opname" class="table table-bordered table-sm">
+                  <thead>      
                   <th> Kode Barang </th>
                   <th> Nama Barang </th>
                   <th> Satuan </th>
@@ -247,69 +245,11 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
                   <th> Hpp </th>
                   <th> Selisih Harga </th>
                   <th> Harga </th>
-                  <th> Hapus </th>
-                  
+                  <th> Hapus </th> 
                   </thead>
-                  
-                  <tbody id="tbody">
-                  <?php
-                  
-                  
-                  $perintah = $db->query("SELECT tio.no_faktur,tio.kode_barang,tio.nama_barang,s.nama,tio.id,tio.stok_sekarang,tio.fisik,tio.selisih_fisik,tio.harga,tio.selisih_harga,tio.hpp FROM tbs_stok_opname tio LEFT JOIN satuan s ON tio.satuan = s.id WHERE tio.no_faktur = '$no_faktur' ORDER BY tio.id DESC");
-                  
-                  //menyimpan data sementara yang ada pada $perintah
-                  while ($data1 = mysqli_fetch_array($perintah))
-                  {
-                  
-                  
-                  echo "<tr class='tr-id-".$data1['id']."'>
-                  
-                  <td>". $data1['kode_barang'] ."</td>
-                  <td>". $data1['nama_barang'] ."</td>
-                  <td>". $data1['nama'] ."</td>
-                  <td><span id='text-stok-sekarang-".$data1['id']."'>". rp($data1['stok_sekarang']) ."</span></td>";
-
-     $pilih = $db->query("SELECT no_faktur FROM hpp_masuk WHERE no_faktur = '$data1[no_faktur]' AND kode_barang = '$data1[kode_barang]' AND sisa != jumlah_kuantitas");
-        $row_alert = mysqli_num_rows($pilih);
-
-                  if ($row_alert > 0){
-                  
-                  echo "<td class='btn-alert' data-kode-barang='". $data1['kode_barang'] ."' data-faktur='". $data1['no_faktur'] ."' >". $data1['fisik'] ."  </td>";
-                  }
-                  
-                  else{
-                  
-                  echo "<td class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['fisik'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['fisik']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-faktur='".$data1['no_faktur']."' data-harga='".$data1['harga']."' data-kode='".$data1['kode_barang']."' data-selisih-fisik='".$data1['selisih_fisik']."' data-stok-sekarang='".$data1['stok_sekarang']."'> </td>";
-                      }
-
-
-                  echo "<td><span id='text-selisih-fisik-".$data1['id']."'>". rp($data1['selisih_fisik']) ."</span></td>
-                  <td><span id='text-hpp-".$data1['id']."'>". rp($data1['hpp']) ."</span></td>
-                  <td><span id='text-selisih-".$data1['id']."'>". rp($data1['selisih_harga']) ."</span></td>
-                  <td>". rp($data1['harga']) ."</td>";
-
-             
-                  
-                  if ($row_alert > 0) {
-                  
-                  echo "<td> <button class='btn btn-danger btn-alert btn-sm' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-faktur='". $data1['no_faktur'] ."' data-nama-barang='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td> ";
-                }
-                else{
-                  echo "<td> <button class='btn btn-danger btn-hapus btn-sm' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-nama-barang='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-                }
-
-
-                 echo "</tr>";
-                  }
-
-                  //Untuk Memutuskan Koneksi Ke Database
-                  mysqli_close($db);   
-                  ?>
-                  </tbody>
-                  
                   </table>
                   </div>
-                  </span> <!--tag penutup span-->
+          </span> <!--tag penutup span-->
                 <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom jumlah barang jika ingin mengedit.</i></h6>
                 <h6 style="text-align: left ;"><i><b> * Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</b></i></h6>
 
@@ -350,15 +290,44 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
                   
                   
                   
-                  <script>
-                  // untuk memunculkan data tabel 
-                  $(document).ready(function(){
-                  $("#tableuser").dataTable();
-                  
-                  
-                  });
-                  
-                  </script>
+<script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
+            $('#table_edit_stok_opname').DataTable().destroy();
+
+          var dataTable = $('#table_edit_stok_opname').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_edit_stok_opname.php", // json datasource
+            "data": function ( d ) {
+              d.no_faktur = $("#nomorfaktur").val();
+              // d.custom = $('#myInput').val();
+              // etc
+              },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_edit_stok_opname").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+           $(nRow).attr('class','tr-id-'+aData[10]+'');         
+
+          },
+            
+            
+        });
+
+        $("#form").submit(function(){
+        return false;
+        });
+        
+      });
+</script>
+
+
                   <!-- untuk memasukan perintah javascript -->
                   <script type="text/javascript">
                   
@@ -406,8 +375,7 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
                   <script>
                   //perintah javascript yang diambil dari form tbs pembelian dengan id=form tambah produk
                   
-                  
-                  $("#submit_produk").click(function(){
+                  $(document).on('click', '#submit_produk', function (e) {                  
                   
                   var no_faktur = $("#nomorfaktur").val();
                   var kode_barang = $("#kode_barang").val();
@@ -432,11 +400,14 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
                   {
                   
                   
-                 $.post("proses_tbs_stok_opname.php", {no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,satuan:satuan,fisik:fisik}, function(info) {
+                 $.post("proses_tbs_stok_opname_edit.php", {no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,satuan:satuan,fisik:fisik}, function(info) {
                   
                   
                   $("#kode_barang").focus();
-                  $("#tbody").prepend(info);
+                  
+                  var table_edit_stok_opname = $('#table_edit_stok_opname').DataTable();
+                  table_edit_stok_opname.draw();     
+
                   $("#kode_barang").val('');
                   $("#nama_barang").val('');
                   $("#jumlah_fisik").val('');
@@ -555,8 +526,9 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
                   
                   <script>
                   
-                  $("#selesai").click(function(){
-                  var no_faktur = $("#nomorfaktur").val();
+                  $(document).on('click', '#selesai', function (e) {
+
+                   var no_faktur = $("#nomorfaktur").val();
                   var tanggal = $("#tanggal").val();
                   var keterangan = $("#keterangan").val();
                   var total_selisih_harga = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_selisih_harga").val()))));
@@ -570,10 +542,11 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
                   $.post("proses_selesai_edit_stok_opname.php",{tanggal:tanggal,no_faktur:no_faktur,total_selisih_harga:total_selisih_harga,keterangan:keterangan},function(info) {
                   
                   $("#result").hide();
-                  $("#tbody").val('');
-                  $("#total_selisih_harga").val('');
+                  var table_edit_stok_opname = $('#table_edit_stok_opname').DataTable();
+                  table_edit_stok_opname.draw(); 
+                   
                   $("#alert_berhasil").show();
-
+                  console.log(total_selisih_harga);
                   
                   });
                
@@ -591,21 +564,28 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
 
 <script type="text/javascript">
 
-                                  
+               
 //fungsi hapus data 
-    $(".btn-hapus").click(function(){
+ $(document).on('click', '.btn-hapus', function (e) {
     var nama_barang = $(this).attr("data-nama-barang");
     var kode_barang = $(this).attr("data-kode-barang");
     var id = $(this).attr("data-id");
+    var no_faktur = $("#nomorfaktur").val();
 
-    $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang},function(data){
-    if (data == "sukses") {
+    $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang,id:id},function(data){
     $(".tr-id-"+id).remove();
     $("#modal_hapus").modal('hide');
     
-    }
 
-    
+    $.post("cek_total_selisih_harga_editso.php",
+                  {
+                  no_faktur: no_faktur
+                  },
+                  function(data){
+                  data = data.replace(/\s+/g, '');
+                  $("#total_selisih_harga"). val(tandaPemisahTitik(data));
+                  });
+
     });
     
     });
@@ -616,50 +596,6 @@ $('form').submit(function(){
 });
                          
  </script>
-
-<!--       <script type="text/javascript">
-  
-        $(document).ready(function(){
-          $("#kode_barang").blur(function(){
-
-          var no_faktur = $("#nomorfaktur").val();
-          var kode_barang = $("#kode_barang").val();
-        
-        
-        $.post('cek_kode_barang_tbs_stok_opname.php',{kode_barang:kode_barang,no_faktur:no_faktur}, function(data){
-        
-        if(data == 1){
-        alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
-        $("#kode_barang").val('');
-        $("#nama_barang").val('');
-        }//penutup if
-        
-        });////penutup function(data)
-
-
-      $.getJSON('lihat_stok_opname.php',{kode_barang:$(this).val()}, function(json){
-      
-      if (json == null)
-      {
-        
-        $('#nama_barang').val('');
-        $('#satuan').val('');
-      }
-
-      else 
-      {
-        $('#nama_barang').val(json.nama_barang);
-        $('#satuan').val(json.satuan);
-      }
-                                              
-        });
-        
-        });
-        });
-
-      
-      
-</script>-->
 
 <script type="text/javascript">
   $(document).ready(function(){
@@ -734,15 +670,13 @@ function myFunction(event) {
 
     });////penutup function(data)
 
-   $("#jumlah_barang").val(data);  
     });//penutup click(function()
   });//penutup ready(function()
 </script>   
 
 
                               <script type="text/javascript">
-                                 
-                                 $(".edit-jumlah").dblclick(function(){
+                             $(document).on('dblclick', '.edit-jumlah', function (e) {
 
                                     var id = $(this).attr("data-id");
 
@@ -752,8 +686,7 @@ function myFunction(event) {
 
                                  });
 
-
-                                 $(".input_jumlah").blur(function(){
+                                  $(document).on('blur', '.input_jumlah', function (e) {
 
                                     var id = $(this).attr("data-id");
                                     var jumlah_baru = $(this).val();

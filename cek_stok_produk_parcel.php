@@ -1,15 +1,17 @@
 <?php session_start();
 
  include 'db.php';
+ include 'sanitasi.php';
+ include 'persediaan.function.php';
 
- $jumlah_parcel = $_GET['jumlah_parcel'];
- $jumlah_baru = $_GET['jumlah_baru'];
- $kode_barang = $_GET['kode_barang'];
- $id_produk = $_GET['id_produk'];
+ $jumlah_parcel = angkadoang($_GET['jumlah_parcel']);
+ $jumlah_baru = gantiTitik(stringdoang($_GET['jumlah_baru']));
+ $kode_barang = stringdoang($_GET['kode_barang']);
+ $id_produk = angkadoang($_GET['id_produk']);
 
- $queryy = $db->query("SELECT SUM(sisa) AS total_sisa, jenis_hpp, jenis_transaksi FROM hpp_masuk WHERE kode_barang = '$kode_barang' ");
+ $queryy = $db->query("SELECT jenis_hpp, jenis_transaksi FROM hpp_masuk WHERE kode_barang = '$kode_barang' ");
  $dataaa = mysqli_fetch_array($queryy);
- $stok = $dataaa['total_sisa'];
+ $stok = cekStokHpp($kode_barang);
 
  $jumlah_produk_yg_diperlukan = $jumlah_baru * $jumlah_parcel;
  $hasil = $stok - $jumlah_produk_yg_diperlukan;

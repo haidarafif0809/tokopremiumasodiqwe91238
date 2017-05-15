@@ -5,7 +5,7 @@ include 'sanitasi.php';
 include 'db.php';
 $session_id = stringdoang($_POST['session_id']);
 $id_produk = angkadoang($_POST['id_produk']);
-$jumlah_barang = angkadoang($_POST['jumlah_barang']);
+$jumlah_barang = stringdoang($_POST['jumlah_barang']);
 $kode_parcel = stringdoang($_POST['kode_parcel']);
 $harga_produk = stringdoang($_POST['harga_produk']);
 $subtotal_produk = $harga_produk * $jumlah_barang;

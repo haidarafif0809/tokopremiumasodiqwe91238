@@ -261,6 +261,8 @@ echo '<li><a href="kartu_stok.php" class="waves-effect" style="font-size: 16px">
 
 echo '<li><a href="cache_produk_penjualan.php" class="waves-effect" style="font-size: 16px">Update Cache Produk</a></li>';
 
+echo '<li><a href="cache_produk_parcel.php" class="waves-effect" style="font-size: 16px">Update Cache Parcel</a></li>';
+
 echo '<li><a href="perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Perubahan Harga Masal</a></li>';
 
 

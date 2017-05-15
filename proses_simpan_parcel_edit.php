@@ -42,8 +42,9 @@ $hapus_detail = $db->query("DELETE FROM detail_perakitan_parcel WHERE no_faktur 
 $query12 = $db->query("SELECT * FROM tbs_parcel WHERE no_faktur = '$no_faktur' AND kode_parcel = '$kode_parcel' ");
 while ($data = mysqli_fetch_array($query12)) {
 	
+	$subtotal = $data['subtotal_produk'] * $jumlah_parcel;
 	
-	$query2 = "INSERT INTO detail_perakitan_parcel (no_faktur,kode_parcel,id_produk,jumlah_produk,tanggal,jam) VALUES ('$no_faktur','$data[kode_parcel]', '$data[id_produk]', '$data[jumlah_produk]', '$tanggal', '$jam_sekarang')";
+	$query2 = "INSERT INTO detail_perakitan_parcel (no_faktur,kode_parcel,id_produk,jumlah_produk,tanggal,jam, harga_produk, subtotal_produk) VALUES ('$no_faktur','$data[kode_parcel]', '$data[id_produk]', '$data[jumlah_produk]', '$tanggal', '$jam_sekarang', '$data[harga_produk]', '$subtotal')";
 
 	if ($db->query($query2) === TRUE) {
 	} 

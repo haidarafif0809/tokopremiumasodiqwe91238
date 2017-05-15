@@ -234,6 +234,7 @@ $session_id = session_id();
                               <th style='background-color: #4CAF50; color: white'> Kode Produk </th>
                               <th style='background-color: #4CAF50; color: white'> Nama Produk</th>
                               <th style='background-color: #4CAF50; color: white'> Jumlah Produk </th>
+                              <th style='background-color: #4CAF50; color: white'> Total Produk </th>
                               <th style='background-color: #4CAF50; color: white'> Satuan Produk</th>
                               <th style='background-color: #4CAF50; color: white'> Hapus Produk</th>
                           
@@ -291,10 +292,12 @@ $(document).ready(function(){
 -->
 
 
-
 <script type="text/javascript">
-$(document).ready(function(){
-  $('#tabel_tbs_parcel').DataTable().destroy();
+  $(document).ready(function(){    
+    $.get("buat_kode_parcel.php",function(data){
+      $("#kode_parcel").val(data);
+
+        $('#tabel_tbs_parcel').DataTable().destroy();
       var dataTable = $('#tabel_tbs_parcel').DataTable( {
             "processing": true,
             "serverSide": true,
@@ -304,6 +307,7 @@ $(document).ready(function(){
               url :"data_tbs_parcel.php", // json datasource
                "data": function ( d ) {
                   d.kode_parcel = $("#kode_parcel").val();
+                  d.jumlah_parcel = $("#jumlah_parcel").val();
                   // d.custom = $('#myInput').val();
                   // etc
               },
@@ -319,6 +323,20 @@ $(document).ready(function(){
       });
 
   $("#span_tbs").show()
+    });
+  });
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $(document).on('keyup','#jumlah_parcel',function(e){
+
+    var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+        tabel_tbs_parcel.draw();
+    $("#span_tbs").show();
+
+  });
 });
 </script>
 
@@ -564,12 +582,12 @@ $("#submit_produk").click(function(){
   var kode_barang = $("#kode_barang").val();
   var nama_barang = $("#nama_barang").val();
   var nama_parcel = $("#nama_parcel").val();
-  var jumlah_barang = $("#jumlah_barang").val();
-  var jumlah_parcel = $("#jumlah_parcel").val();
+  var jumlah_barang = gantiTitik($("#jumlah_barang").val());
   var jumlah_parcel = $("#jumlah_parcel").val();
   var nama_parcel = $("#nama_parcel").val();
   var harga_produk = $("#harga_produk").val();
   var harga_parcel_1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_1").val()))));
+
 
 if (nama_parcel == "") {
       alert ("SILAKAN ISI NAMA PARCEL");
@@ -621,29 +639,8 @@ if (nama_parcel == "") {
 
             });
 
-              $('#tabel_tbs_parcel').DataTable().destroy();
-              var dataTable = $('#tabel_tbs_parcel').DataTable( {
-                    "processing": true,
-                    "serverSide": true,
-                    "info":     false,
-                    "language": { "emptyTable":     "My Custom Message On Empty Table" },
-                    "ajax":{
-                      url :"data_tbs_parcel.php", // json datasource
-                       "data": function ( d ) {
-                          d.kode_parcel = $("#kode_parcel").val();
-                          // d.custom = $('#myInput').val();
-                          // etc
-                      },
-                          type: "post",  // method  , by default get
-                      error: function(){  // error handling
-                        $(".tbody").html("");
-                        $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                        $("#tableuser_processing").css("display","none");
-                        
-                      }
-                    }   
-
-              });
+              var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                  tabel_tbs_parcel.draw();
 
               $("#span_tbs").show();
 
@@ -674,7 +671,7 @@ $("#simpan_produk").click(function(){
     var id_produk = $("#id_produk").val();
     var kode_barang = $("#kode_barang").val();
     var nama_barang = $("#nama_barang").val();
-    var jumlah_barang = $("#jumlah_barang").val();
+    var jumlah_barang = gantiTitik($("#jumlah_barang").val());
     var jumlah_parcel = $("#jumlah_parcel").val();
     var kode_parcel = $("#kode_parcel").val();
     var nama_parcel = $("#nama_parcel").val();
@@ -732,29 +729,8 @@ if (nama_parcel == "") {
 
             });
 
-              $('#tabel_tbs_parcel').DataTable().destroy();
-              var dataTable = $('#tabel_tbs_parcel').DataTable( {
-                    "processing": true,
-                    "serverSide": true,
-                    "info":     false,
-                    "language": { "emptyTable":     "My Custom Message On Empty Table" },
-                    "ajax":{
-                      url :"data_tbs_parcel.php", // json datasource
-                       "data": function ( d ) {
-                          d.kode_parcel = $("#kode_parcel").val();
-                          // d.custom = $('#myInput').val();
-                          // etc
-                      },
-                          type: "post",  // method  , by default get
-                      error: function(){  // error handling
-                        $(".tbody").html("");
-                        $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                        $("#tableuser_processing").css("display","none");
-                        
-                      }
-                    }   
-
-              });
+              var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                  tabel_tbs_parcel.draw();
 
               $("#span_tbs").show();
 
@@ -855,6 +831,7 @@ $(document).on('blur','.input_jumlah',function(e){
   var id_produk = $(this).attr("data-id-produk");
   var id = $(this).attr("data-id");
   var kode_barang = $(this).attr("data-kode");
+  var harga_produk = $(this).attr("data-harga");
   var nama_barang = $(this).attr("data-nama-barang");
   var jumlah_lama = $("#text-jumlah-"+id+"").text();
   var jumlah_baru = $(this).val();
@@ -865,6 +842,8 @@ $(document).on('blur','.input_jumlah',function(e){
   if (jumlah_baru == '') {
   jumlah_baru = 0;
   }
+
+  var dibelakang_koma = jumlah_baru.substr(-4);
 
   if (jumlah_baru == 0) {
       alert("Jumlah barang tidak boleh nol atau kosong");
@@ -884,8 +863,8 @@ $(document).on('blur','.input_jumlah',function(e){
         var jumlah_parcel_yg_bisa_dibuat = json.jenis_transaksi;
 
 
-
       if (jumlah_produk < 0) {
+        console.log("!asdasd")
 
           alert ("Persediaan Produk '"+nama_barang+"' Tidak Mencukupi Untuk Membuat '"+jumlah_parcel+"' Parcel '"+nama_parcel+"', Hanya Cukup Untuk Membuat '"+jumlah_parcel_yg_bisa_dibuat+"' Parcel '"+nama_parcel+"' !");
 
@@ -898,14 +877,19 @@ $(document).on('blur','.input_jumlah',function(e){
 
       }
 
-      else{
+      else{ 
 
+          if (dibelakang_koma == ",000" || dibelakang_koma == ",00" || dibelakang_koma == ",0") {
+            jumlah_baru = hapusBelakangKoma(jumlah_baru);
+          }
+          else{
+            jumlah_baru = jumlah_baru;
+          }
+            $("#text-jumlah-"+id+"").show();
+            $("#text-jumlah-"+id+"").text(jumlah_baru);
+            $("#input-jumlah-"+id+"").attr("type", "hidden");
 
-          $("#text-jumlah-"+id+"").show();
-          $("#text-jumlah-"+id+"").text(jumlah_baru);
-          $("#input-jumlah-"+id+"").attr("type", "hidden");
-
-          $.post("update_jumlah_produk_parcel.php",{jumlah_lama:jumlah_lama,id_produk:id_produk,jumlah_baru:jumlah_baru, kode_parcel:kode_parcel},function(){
+          $.post("update_jumlah_produk_parcel.php",{jumlah_lama:jumlah_lama,id_produk:id_produk,jumlah_baru:jumlah_baru, kode_parcel:kode_parcel, harga_produk:harga_produk},function(){
 
           });
 
@@ -950,34 +934,8 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
           $.post("hapus_tbs_parcel.php",{id:id},function(data){
             
-          $('#tabel_tbs_parcel').DataTable().destroy();
-              var dataTable = $('#tabel_tbs_parcel').DataTable( {
-                    "processing": true,
-                    "serverSide": true,
-                    "info":     false,
-                    "language": { "emptyTable":     "My Custom Message On Empty Table" },
-                    "ajax":{
-                      url :"data_tbs_parcel.php", // json datasource
-                       "data": function ( d ) {
-                          d.kode_parcel = $("#kode_parcel").val();
-                          // d.custom = $('#myInput').val();
-                          // etc
-                      },
-                          type: "post",  // method  , by default get
-                      error: function(){  // error handling
-                        $(".tbody").html("");
-                        $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                        $("#tableuser_processing").css("display","none");
-                        
-                      },
-                               "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-
-                                $(nRow).attr('class','tr-id-'+aData[5]+'');         
-
-                            }
-                    }   
-
-              });
+          var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                  tabel_tbs_parcel.draw();
 
           $("#span_tbs").show()
           $("#kode_barang").trigger('chosen:open')  ;
@@ -1002,14 +960,6 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 </script>
 
 
-<script type="text/javascript">
-  $(document).ready(function(){    
-    $.get("buat_kode_parcel.php",function(data){
-      $("#kode_parcel").val(data);
-    });
-  });
-</script>
-
 
 
 <script type="text/javascript">
@@ -1023,29 +973,10 @@ $(document).ready(function(){
         
         $.get("batal_perakitan_parcel.php",{kode_parcel:kode_parcel},function(data){
 
-          $('#tabel_tbs_parcel').DataTable().destroy();
-              var dataTable = $('#tabel_tbs_parcel').DataTable( {
-                    "processing": true,
-                    "serverSide": true,
-                    "info":     false,
-                    "language": { "emptyTable":     "My Custom Message On Empty Table" },
-                    "ajax":{
-                      url :"data_tbs_parcel.php", // json datasource
-                       "data": function ( d ) {
-                          d.kode_parcel = $("#kode_parcel").val();
-                          // d.custom = $('#myInput').val();
-                          // etc
-                      },
-                          type: "post",  // method  , by default get
-                      error: function(){  // error handling
-                        $(".tbody").html("");
-                        $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                        $("#tableuser_processing").css("display","none");
-                        
-                      }
-                    }   
+          var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                  tabel_tbs_parcel.draw();
 
-              });
+          $("#span_tbs").show();
 
         });
     } 
@@ -1064,29 +995,10 @@ $(document).ready(function(){
   $(document).ready(function(){
     $(document).on('click','#transaksi_baru',function(e){
 
-        $('#tabel_tbs_parcel').DataTable().destroy();
-          var dataTable = $('#tabel_tbs_parcel').DataTable( {
-                "processing": true,
-                "serverSide": true,
-                "info":     false,
-                "language": { "emptyTable":     "My Custom Message On Empty Table" },
-                "ajax":{
-                  url :"data_tbs_parcel.php", // json datasource
-                   "data": function ( d ) {
-                      d.kode_parcel = $("#kode_parcel").val();
-                      // d.custom = $('#myInput').val();
-                      // etc
-                  },
-                      type: "post",  // method  , by default get
-                  error: function(){  // error handling
-                    $(".tbody").html("");
-                    $("#tabel_tbs_parcel").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                    $("#tableuser_processing").css("display","none");
-                    
-                  }
-                }   
+        var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                  tabel_tbs_parcel.draw();
 
-          });
+          $("#span_tbs").show();
 
         $("#table_item_masuk").DataTable().destroy();
           var dataTable = $('#table_item_masuk').DataTable( {

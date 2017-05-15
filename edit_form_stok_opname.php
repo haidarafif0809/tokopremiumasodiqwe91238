@@ -1,24 +1,24 @@
 <?php include 'session_login.php';
-
+//memasukkan file session login, header, navbar, db
+    include 'header.php';
+    include 'navbar.php';
+    include 'db.php';
+    include 'sanitasi.php';
                   
-                  //memasukkan file session login, header, navbar, db
-                  include 'header.php';
-                  include 'navbar.php';
-                  include 'db.php';
-                  include 'sanitasi.php';
-                  
-                  $no_faktur = $_GET['no_faktur'];
-                  $tanggal = $_GET['tanggal'];
+    $no_faktur = stringdoang($_GET['no_faktur']);
+    $tanggal = stringdoang($_GET['tanggal']);
 
-                  ?>
+$perintah3 = $db->query("SELECT keterangan FROM stok_opname WHERE no_faktur = '$no_faktur'");
+$data_stok_opname = mysqli_fetch_array($perintah3);
 
 
+?>
 
-                  <script>
-                  $(function() {
-                  $( "#tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
-                  });
-                  </script>
+<script>
+   $(function() {
+   $( "#tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
+  });
+</script>
                   
                   
                   <!--membuat tampilan form agar terlihat rapih dalam satu tempat-->
@@ -60,29 +60,35 @@
                   <form class="form-inline" enctype="multipart/form-data" role="form" action="form_item_masuk.php" method="post ">
                   
                   <!-- membuat teks dengan ukuran h3 -->
-                  <h3>Edit Stok Opname</h3><br> 
+                  <h3>EDIT STOK OPNAME</h3> <hr>
                
+                                 <div class="card card-block">
                   <div class="form-group">
+                  <label>No Faktur</label><br>
                   <input type="text" name="no_faktur" id="nomorfaktur" class="form-control" readonly="" value="<?php echo $no_faktur; ?>" required="" >
                   </div>
 
                   <div class="form-group">
+                  <label>No Faktur</label><br>
                    <input type="text" name="user" class="form-control" id="user" readonly="" value="<?php echo $_SESSION['user_name']; ?>" required="">
                    </div>
 
                    <div class="form-group">
+                   <label>Tanggal</label><br>
                   <input type="text" name="tanggal" id="tanggal" placeholder="Tanggal" value="<?php echo $tanggal; ?>" class="form-control" required="" >
                   </div>
-                  
+
+                 <div class="form-group">
+                   <label>Keterangan</label><br>
+             <textarea name="keterangan" id="keterangan" placeholder="Tanggal" ketrengan class="form-control"   ><?php echo $data_stok_opname['keterangan']; ?> </textarea>
+                  </div>
+                  </div><!-- div card block-->
                   </form>
 
                   <!-- membuat teks dengan ukuran h3 -->
-                  
-                  
-                  <br>
-                  <br><br>
+         
                   <!-- membuat tombol agar menampilkan modal -->
-                  <button type="button" class="btn btn-info" id="cari_produk_pembelian" data-toggle="modal" data-target="#myModal"> <span class='glyphicon glyphicon-search'> </span> Cari</button>
+                  <button type="button" class="btn btn-info" id="cari_produk_pembelian" data-toggle="modal" data-target="#myModal"> <i class='fa fa-search'> </i> Cari</button>
                   <br>
                   <br>
                   <!-- Tampilan Modal -->
@@ -98,11 +104,21 @@
                   <div class="modal-body"> <!--membuat kerangka untuk tempat tabel -->
                   
                   <!--perintah agar modal update-->
-                  <span class="modal_stok_baru">
-                  
-
-                  </span>
-                  
+                  <center>
+                        <div class="table-responsive">
+                              <table id="table_stok_opname" class="table table-bordered ">
+                              <thead> <!-- untuk memberikan nama pada kolom tabel -->
+                              
+                              <th> Kode Barang </th>
+                              <th> Nama Barang </th>
+                              <th> Satuan </th>
+                              <th> Kategori </th>
+                              <th> Suplier </th>
+                              
+                              </thead> <!-- tag penutup tabel -->
+                              </table>
+                        </div>
+                  </center>
                   </div> <!-- tag penutup modal body -->
                   
                   <!-- tag pembuka modal footer -->
@@ -115,22 +131,41 @@
                   </div>
                   
                   
-                  <form class="form-inline" action="proses_tbs_stok_opname.php" role="form" id="formtambahproduk">
+                  <form class="form" action="proses_tbs_stok_opname.php" role="form" id="formtambahproduk">
                   
-                  <div class="form-group">
-                  <input type="text" class="form-control" name="kode_barang" id="kode_barang" placeholder="Kode Produk" autocomplete="off">
-                  </div>
+            <div class="row">  
+    <div class="col-xs-4">
+        <br>
+  <div class="form-group">        
+    <select style="font-size:15px; height:10px" type="text" name="kode_barang" id="kode_barang" class="form-control chosen" data-placeholder="SILAKAN PILIH...">
+    <option value="">SILAKAN PILIH...</option>
+       <?php 
+
+        include 'cache.class.php';
+          $c = new Cache();
+          $c->setCache('produk');
+          $data_c = $c->retrieveAll();
+
+          foreach ($data_c as $key) {
+            echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_jual'].'" harga_jual_2="'.$key['harga_jual2'].'" harga_jual_3="'.$key['harga_jual3'].'" harga_jual_4="'.$key['harga_jual4'].'" harga_jual_5="'.$key['harga_jual5'].'" harga_jual_6="'.$key['harga_jual6'].'" harga_jual_7="'.$key['harga_jual7'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+          }
+
+        ?>
+    </select>
+    </div>
+    </div>
                   
                   <div class="form-group"> <!-- agar tampilan berada pada satu group -->
                   <!-- memasukan teks pada kolom kode barang -->
-                  <input type="text" class="form-control" name="nama_barang" id="nama_barang" placeholder="Nama Barang" readonly="">
+                  <input type="hidden" class="form-control" name="nama_barang" id="nama_barang" placeholder="Nama Barang" readonly="">
                   </div>
                   
                   
-                  <div class="form-group">
-                  <input type="text" onkeydown="return numbersonly(this, event);" class="form-control" name="fisik" autocomplete="off" id="jumlah_fisik" placeholder="Jumlah Fisik">
-                  </div>
-                  
+  <div class="col-xs-4">               
+     <div class="form-group">
+      <input type="text"  class="form-control" name="fisik" autocomplete="off" id="jumlah_fisik" placeholder="Jumlah Fisik">
+    </div>
+</div>   
                   
                   
                   
@@ -143,12 +178,15 @@
                   </div>
 
                   
-                  
-                  <button type="submit" id="submit_produk" class="btn btn-success"> <span class='glyphicon glyphicon-plus'> </span> Tambah Produk</button>
+                 <div class="col-xs-4">
+
+                  <button type="submit" id="submit_produk" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah Produk</button>
+                  </div>
+      </div> <!-- end of row -->
                   </form>
                   
                   
-                  </div><!-- end of row -->
+                  </div>
 
 <!-- Modal Hapus data -->
 <div id="modal_hapus" class="modal fade" role="dialog">
@@ -190,67 +228,16 @@
   </div>
 </div><!-- end of modal hapus data  -->
 
-<!-- Modal edit data -->
-<div id="modal_edit" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Edit Data Tbs Stok Awal</h4>
-      </div>
-      <div class="modal-body">
-  <form role="form">
-   <div class="form-group">
-
-          <label> Jumlah Fisik Baru</label> <br>
-          <input type="text" name="jumlah_baru" id="jumlah_baru" class="form-control" required="" >
-
-          <input type="hidden" name="fisik" id="jumlah_lama" class="form-control" required="" >
-          
-          <input type="hidden" name="selisih_fisik" id="selisih_fisik" class="form-control" required="" >
-
-          <input type="hidden" name="selisih_harga" id="selisih_harga" class="form-control" required="" >
-
-          <input type="hidden" name="kode_barang" id="kode_edit" class="form-control" required="" >
-
-          <input type="hidden" name="hpp" id="hpp" >
-          
-          <input type="hidden" class="form-control" id="id_edit">
-          
-        
-   
-   </div>
-          <button type="submit" id="submit_edit" class="btn btn-success">Submit</button>
 
 
-  </form>
-
-  <div class="alert alert-success" style="display:none">
-   <strong>Berhasil!</strong> Data Berhasil Di Edit
-  </div>
- 
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div><!-- end of modal edit data  -->
-                  
-                  
-                  <br>
-                  <br> 
+<div class="row">
+  <div class="col-sm-9">
                   <span id="result">  
                   
                   <div class="table-responsive">    
-                  <table id="tableuser" class="table table-bordered">
+                  <table id="tableuser" class="table table-bordered table-sm">
                   <thead>
                   
-                  <th> Nomor Faktur </th>
                   <th> Kode Barang </th>
                   <th> Nama Barang </th>
                   <th> Satuan </th>
@@ -264,11 +251,11 @@
                   
                   </thead>
                   
-                  <tbody>
+                  <tbody id="tbody">
                   <?php
                   
                   
-                  $perintah = $db->query("SELECT * FROM tbs_stok_opname WHERE no_faktur = '$no_faktur'");
+                  $perintah = $db->query("SELECT tio.no_faktur,tio.kode_barang,tio.nama_barang,s.nama,tio.id,tio.stok_sekarang,tio.fisik,tio.selisih_fisik,tio.harga,tio.selisih_harga,tio.hpp FROM tbs_stok_opname tio LEFT JOIN satuan s ON tio.satuan = s.id WHERE tio.no_faktur = '$no_faktur' ORDER BY tio.id DESC");
                   
                   //menyimpan data sementara yang ada pada $perintah
                   while ($data1 = mysqli_fetch_array($perintah))
@@ -277,10 +264,9 @@
                   
                   echo "<tr class='tr-id-".$data1['id']."'>
                   
-                  <td>". $data1['no_faktur'] ."</td>
                   <td>". $data1['kode_barang'] ."</td>
                   <td>". $data1['nama_barang'] ."</td>
-                  <td>". $data1['satuan'] ."</td>
+                  <td>". $data1['nama'] ."</td>
                   <td><span id='text-stok-sekarang-".$data1['id']."'>". rp($data1['stok_sekarang']) ."</span></td>";
 
      $pilih = $db->query("SELECT no_faktur FROM hpp_masuk WHERE no_faktur = '$data1[no_faktur]' AND kode_barang = '$data1[kode_barang]' AND sisa != jumlah_kuantitas");
@@ -306,10 +292,10 @@
                   
                   if ($row_alert > 0) {
                   
-                  echo "<td> <button class='btn btn-danger btn-alert' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-faktur='". $data1['no_faktur'] ."' data-nama-barang='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td> ";
+                  echo "<td> <button class='btn btn-danger btn-alert btn-sm' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-faktur='". $data1['no_faktur'] ."' data-nama-barang='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td> ";
                 }
                 else{
-                  echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-nama-barang='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
+                  echo "<td> <button class='btn btn-danger btn-hapus btn-sm' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-nama-barang='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
                 }
 
 
@@ -324,23 +310,30 @@
                   </table>
                   </div>
                   </span> <!--tag penutup span-->
+                <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom jumlah barang jika ingin mengedit.</i></h6>
+                <h6 style="text-align: left ;"><i><b> * Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</b></i></h6>
 
+              </div> <!--taag penutup col sm 9-->
+
+
+              <div class="col-sm-3"> <!--taag penutup col sm 3-->
 
                   <form action="proses_selesai_stok_opname.php" role="form" id="form_selesai" method="POST">
-                   
-                  <br>
-                  <br>
 
                   <div class="form-group">
-                  <input type="text" class="form-control" name="total_selisih_harga" id="total_selisih_harga" readonly="" placeholder="Total Selisih Harga">
+
+                  <div class="card card-block">
+                  <label><h5>Total Selisih</h5></label>
+                 <b><input type="text" class="form-control" style="font-size: 25px" name="total_selisih_harga" id="total_selisih_harga" readonly="" placeholder="Total Selisih Harga"></b> 
                   </div>
 
+                  </div>
 
                   <button type="submit" id="selesai" class="btn btn-info"> <span class='glyphicon glyphicon-ok'> </span> Selesai</button>
                   
-                  <button type="submit" id="batal" class="btn btn-danger"> <span class='glyphicon glyphicon-remove'> </span> Batal</button>
+                  <a href='batal_stok_opname_edit.php?no_faktur=<?php $no_faktur;?>'  id="batal" class="btn btn-danger"> <span class='glyphicon glyphicon-remove'> </span> Batal</button>
 
-                  <a class="btn btn-info" href="form_stok_opname.php" id="transaksi_baru" style="display: none"> <span class="glyphicon glyphicon-repeat"></span> Transaksi Baru</a>
+                  <a class="btn btn-info" href="stok_opname.php" id="transaksi_baru" style="display: none"> <span class="glyphicon glyphicon-repeat"></span> Kembali </a>
                   
 
                  </form>
@@ -348,15 +341,11 @@
                   <div class="alert alert-success" id="alert_berhasil" style="display:none">
                   <strong>Success!</strong> Pembayaran Berhasil
                   </div>
-                  
-                  <br>
-                  <br>
-                  <label> User : <?php echo $_SESSION['user_name']; ?> </label> 
+   
                   <!-- readonly = digunakan agar teks atau isi hanya bisa dibaca tapi tidak bisa diubah -->
-                  
-                  
+
                   <span id="demo"> </span>
-                  
+                   </div>      <!--tag penutup col sm 3-->         
                   </div> <!-- end of container -->
                   
                   
@@ -378,12 +367,30 @@
                     
                    
                   document.getElementById("kode_barang").value = $(this).attr('data-kode');
+                  $("#kode_barang").trigger('chosen:updated');
+
+                  var kode_barang = $("#kode_barang").val();
+                  var no_faktur = $("#nomorfaktur").val();
+
                   document.getElementById("nama_barang").value = $(this).attr('nama-barang');
                   document.getElementById("satuan").value = $(this).attr('satuan');
 
-                  
+
+        $.post('cek_kode_barang_tbs_stok_opname_edit.php',{kode_barang:kode_barang,no_faktur:no_faktur}, function(data){
+        
+        if(data == 1){
+        alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+        $("#kode_barang").val('');
+        $("#kode_barang").trigger('chosen:updated');
+        $("#nama_barang").val('');
+        }//penutup if
+        
+        });////penutup function(data)
+
                   $('#myModal').modal('hide');
                   $('#jumlah_fisik').focus();
+
+
                   });
                   
                   
@@ -404,15 +411,10 @@
                   
                   var no_faktur = $("#nomorfaktur").val();
                   var kode_barang = $("#kode_barang").val();
-                  var nama_barang = $("#nama_barang").val();
-                  var fisik = $("#jumlah_fisik").val();
-                  var satuan = $("#satuan").val();
-
-                  $("#kode_barang").val('');
-                  $("#nama_barang").val('');
-                  $("#jumlah_fisik").val('');
                   
-
+                  var nama_barang = $("#nama_barang").val();
+                  var fisik = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_fisik").val()))));
+                  var satuan = $("#satuan").val();
 
                   if (fisik == ""){
                   alert("Jumlah Fisik Harus Diisi");
@@ -434,10 +436,17 @@
                   
                   
                   $("#kode_barang").focus();
-                  $("#result").load('tabel_stok_opname.php?no_faktur=<?php echo $no_faktur; ?>');
+                  $("#tbody").prepend(info);
                   $("#kode_barang").val('');
                   $("#nama_barang").val('');
                   $("#jumlah_fisik").val('');
+                  
+
+                  $.post("cek_total_selisih_harga_editso.php",{no_faktur:no_faktur},
+                    function(data){
+                    $("#total_selisih_harga"). val(tandaPemisahTitik(data));
+                    });
+
 
                   });
                   
@@ -446,69 +455,37 @@
                   $("form").submit(function(){
                   return false;
                   });
-                  });
 
+              
 
-                  $("#submit_produk").mouseleave(function(){
-                  var no_faktur = $("#nomorfaktur").val();
-                  
-                  $.post("cek_total_selisih_harga.php",
-                  {
-                  no_faktur: no_faktur
-                  },
-                  function(data){
-                  $("#total_selisih_harga"). val(data);
-                  });
-                  
-                  
-                  });
-                                       
-                 
-                  $("#cari_produk_pembelian").click(function() {
-                    
-                        
-                  //menyembunyikan notif berhasil
-                  $("#alert_berhasil").hide();
-
-                  
-
-                  /* Act on the event */
-                  
-                  $.get('modal_stok_opname_baru.php', function(data) {
-                  
-                  $(".modal_stok_baru").html(data);
-                  
-                  
-                  });
-                  
-                  });
-                  
-                  
-                  </script>
+   });
+</script>
                 
                 <script type="text/javascript">
                   $(document).ready(function(){
 
                     var no_faktur = $("#nomorfaktur").val();
                     
-                    $.post("cek_total_selisih_harga.php",
+                    $.post("cek_total_selisih_harga_editso.php",
                     {
                     no_faktur: no_faktur
                     },
                     function(data){
-                    $("#total_selisih_harga"). val(data);
+                    data = data.replace(/\s+/g, '');
+                    $("#total_selisih_harga"). val(tandaPemisahTitik(data));
                     });
 
 
                   $(".container").hover(function(){
                   var no_faktur = $("#nomorfaktur").val();
                   
-                  $.post("cek_total_selisih_harga.php",
+                  $.post("cek_total_selisih_harga_editso.php",
                   {
                   no_faktur: no_faktur
                   },
                   function(data){
-                  $("#total_selisih_harga"). val(data);
+                  data = data.replace(/\s+/g, '');
+                  $("#total_selisih_harga"). val(tandaPemisahTitik(data));
                   });
                   
                   
@@ -517,17 +494,57 @@
 
                 </script>
 
+          <script type="text/javascript">
+      
+      $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});  
+      
+      </script>
+     
+
+
+
+<script type="text/javascript">
+  
+  $(document).ready(function(){
+  $("#kode_barang").change(function(){
+
+    var kode_barang = $(this).val();
+    var nama_barang = $('#opt-produk-'+kode_barang).attr("nama-barang");
+    var satuan = $('#opt-produk-'+kode_barang).attr("satuan");
+    var no_faktur = $("#nomorfaktur").val();
+
+        $.post('cek_kode_barang_tbs_stok_opname_edit.php',{kode_barang:kode_barang,no_faktur:no_faktur}, function(data){
+        
+        if(data == 1){
+        alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+        $("#kode_barang").val('');
+        $("#kode_barang").trigger('chosen:updated');
+        $("#nama_barang").val('');
+        }//penutup if
+        
+        });////penutup function(data)
+
+        $('#nama_barang').val(nama_barang);
+        $('#satuan').val(satuan);
+       });////penutup function(data)
+   });////penutup function(data)
+    </script>
+
+
+
+
                 <script type="text/javascript">
                   $(document).ready(function(){
                   $("#kode_barang").focus(function(){
                   var no_faktur = $("#nomorfaktur").val();
                   
-                  $.post("cek_total_selisih_harga.php",
+                  $.post("cek_total_selisih_harga_editso.php",
                   {
                   no_faktur: no_faktur
                   },
                   function(data){
-                  $("#total_selisih_harga"). val(data);
+                  data = data.replace(/\s+/g, '');
+                  $("#total_selisih_harga"). val(tandaPemisahTitik(data));
                   });
                   
                   
@@ -541,20 +558,20 @@
                   $("#selesai").click(function(){
                   var no_faktur = $("#nomorfaktur").val();
                   var tanggal = $("#tanggal").val();
-                  var total_selisih_harga = $("#total_selisih_harga").val();
+                  var keterangan = $("#keterangan").val();
+                  var total_selisih_harga = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_selisih_harga").val()))));
+
 
                   $("#selesai").hide();
                   $("#batal").hide();
                   $("#transaksi_baru").show();
                  
                   
-                  $.post("proses_selesai_edit_stok_opname.php",{tanggal:tanggal,no_faktur:no_faktur,total_selisih_harga:total_selisih_harga},function(info) {
+                  $.post("proses_selesai_edit_stok_opname.php",{tanggal:tanggal,no_faktur:no_faktur,total_selisih_harga:total_selisih_harga,keterangan:keterangan},function(info) {
                   
-                  $("#demo").html(info);
-                  $("#result").load('tabel_stok_opname.php?no_faktur=<?php echo $no_faktur; ?>');
+                  $("#result").hide();
+                  $("#tbody").val('');
                   $("#total_selisih_harga").val('');
-                   
-  
                   $("#alert_berhasil").show();
 
                   
@@ -600,7 +617,7 @@ $('form').submit(function(){
                          
  </script>
 
-       <script type="text/javascript">
+<!--       <script type="text/javascript">
   
         $(document).ready(function(){
           $("#kode_barang").blur(function(){
@@ -642,7 +659,41 @@ $('form').submit(function(){
 
       
       
+</script>-->
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#table_stok_opname").DataTable().destroy();
+          var dataTable = $('#table_stok_opname').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"modal_stok_opname_baru.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_stok_opname").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class', "pilih");
+              $(nRow).attr('data-kode', aData[0]);
+              $(nRow).attr('nama-barang', aData[1]);
+              $(nRow).attr('satuan', aData[6]);
+              $(nRow).attr('harga_beli', aData[5]);
+
+
+
+          }
+
+        }); 
+});
 </script>
+
 
 <script>
 /* Membuat Tombol Shortcut */
@@ -754,8 +805,6 @@ function myFunction(event) {
     });
 
 </script>
-
-                             
-                  
+            
 <!-- memasukan file footer.php -->
 <?php include 'footer.php'; ?>

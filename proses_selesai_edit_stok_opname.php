@@ -1,4 +1,4 @@
-<?php session_start();
+ <?php session_start();
 
         include 'sanitasi.php';
         include 'db.php';
@@ -13,7 +13,7 @@ $no_faktur = stringdoang($_POST['no_faktur']);
 $hapus_detail = $db->query("DELETE FROM detail_stok_opname WHERE no_faktur = '$no_faktur'");
 
 
-                $query2 = $db->prepare("UPDATE stok_opname SET no_faktur = ?, tanggal = ?, jam = ?, status = 'ya', total_selisih = ?, user = ? WHERE no_faktur = ?");
+                $query2 = $db->prepare("UPDATE stok_opname SET no_faktur = ?, tanggal = ?, jam = ?, status = 'ya', total_selisih = ?, user = ? , keterangan = ? WHERE no_faktur = ?");
                 
                 $query2->bind_param("sssiss",
                 $no_faktur, $tanggal, $jam_sekarang, $selisih_harga, $user, $no_faktur);
@@ -21,6 +21,7 @@ $hapus_detail = $db->query("DELETE FROM detail_stok_opname WHERE no_faktur = '$n
                 $no_faktur = stringdoang($_POST['no_faktur']); 
                 $tanggal = stringdoang($_POST['tanggal']);
                 $total_selisih_harga = angkadoang($_POST['total_selisih_harga']);
+                $keterangan = stringdoang($_POST['keterangan']);
                 $selisih_harga = $total_selisih_harga;
                 $user = $_SESSION['user_name'];
                 
@@ -28,7 +29,7 @@ $hapus_detail = $db->query("DELETE FROM detail_stok_opname WHERE no_faktur = '$n
 
 
 
-        $query1 = $db->query("SELECT * FROM tbs_stok_opname ");
+        $query1 = $db->query("SELECT * FROM tbs_stok_opname WHERE no_faktur = '$no_faktur' ");
         while ($data = mysqli_fetch_array($query1))
         {
 
@@ -56,7 +57,7 @@ $total_tbs = $data_tbs['total'];
 
 
 
-$select_setting_akun = $db->query("SELECT * FROM setting_akun");
+$select_setting_akun = $db->query("SELECT persediaan,pengaturan_stok FROM setting_akun");
 $ambil_setting = mysqli_fetch_array($select_setting_akun);
 
 if ($total_tbs < 0) {
@@ -85,7 +86,7 @@ else {
 
 
 
-        $hapus = $db->query("DELETE FROM tbs_stok_opname");
+        $hapus = $db->query("DELETE FROM tbs_stok_opname WHERE no_faktur = '$no_faktur'   ");
         
         
         echo "Success";

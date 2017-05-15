@@ -87,3 +87,15 @@ function bersihPemisah(ini){
 	//a = a.replace(".","");
 	return a;
 }
+
+function gantiTitik(ini){
+	a = ini.toString().replace(",",".");
+	//a = a.replace(".","");
+	return a;
+}
+
+function hapusBelakangKoma(ini){
+	a = ini.toString().replace(",000","");
+	//a = a.replace(".","");
+	return a;
+}

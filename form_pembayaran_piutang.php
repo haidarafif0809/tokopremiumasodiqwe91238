@@ -294,8 +294,7 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
     <?php
 
     //untuk menampilkan semua data yang ada pada tabel tbs pembelian dalam DB
-    $perintah = $db->query("SELECT * FROM tbs_pembayaran_piutang 
-                WHERE session_id = '$session_id'");
+    $perintah = $db->query("SELECT * FROM tbs_pembayaran_piutang WHERE session_id = '$session_id'");
 
     //menyimpan data sementara yang ada pada $perintah
       while ($data1 = mysqli_fetch_array($perintah))
@@ -394,15 +393,15 @@ mysqli_close($db);
   
    $("#submit_tambah").click(function(){
       
-      var kredit = $("#kredit").val();
+      var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kredit").val()))));
       var kode_pelanggan = $("#kd_pelanggan").val();
       var no_faktur_penjualan = $("#nomorfakturbeli").val();
-      var total = $("#total").val();
+      var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total").val()))));
       var tanggal_jt = $("#tanggal_jt").val();
       var session_id = $("#session_id").val();
       var tanggal = $("#tanggal").val();
       var cara_bayar = $("#carabayar1").val();
-      var potongan = $("#potongan_penjualan").val();
+      var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
       var total_kredit = kredit - potongan;
       var potongan1 = $("#potongan1").val();
       var faktur = $("#faktur").val();

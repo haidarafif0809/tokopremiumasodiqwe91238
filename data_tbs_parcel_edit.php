@@ -24,7 +24,7 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql =" SELECT tp.id, tp.kode_parcel, tp.id_produk, tp.jumlah_produk, b.kode_barang, b.nama_barang, b.satuan, s.nama";
+$sql =" SELECT tp.id, tp.kode_parcel, tp.harga_produk, tp.id_produk, tp.jumlah_produk, b.kode_barang, b.nama_barang, b.satuan, s.nama";
 $sql.=" FROM tbs_parcel tp INNER JOIN barang b ON tp.id_produk = b.id INNER JOIN satuan s ON b.satuan = s.id";
 $sql.=" WHERE tp.kode_parcel = '$kode_parcel'";
 
@@ -33,7 +33,7 @@ $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql =" SELECT tp.id, tp.kode_parcel, tp.id_produk, tp.jumlah_produk, b.kode_barang, b.nama_barang, b.satuan, s.nama";
+$sql =" SELECT tp.id, tp.kode_parcel, tp.harga_produk, tp.id_produk, tp.jumlah_produk, b.kode_barang, b.nama_barang, b.satuan, s.nama";
 $sql.=" FROM tbs_parcel tp INNER JOIN barang b ON tp.id_produk = b.id INNER JOIN satuan s ON b.satuan = s.id";
 $sql.=" WHERE tp.kode_parcel = '$kode_parcel'";
 
@@ -57,11 +57,21 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
   $nestedData=array(); 
 
+      $jumlah_produk_tampil = koma($row["jumlah_produk"],3);
+      $dibelakang_koma = substr($jumlah_produk_tampil, -4);
+      
+      if ($dibelakang_koma == ",000") {
+          $jumlah_produk_tampil = hapus_koma($row["jumlah_produk"],3);
+       }
+       else{
+          $jumlah_produk_tampil = koma($row["jumlah_produk"],3);
+       }
 
       $nestedData[] = $row["kode_barang"];
       $nestedData[] = $row["nama_barang"];
 
-      $nestedData[] = "<p style='font-size:15px' class='edit-jumlah' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$row["jumlah_produk"]."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".$row['jumlah_produk']."' class='input_jumlah' data-id='".$row['id']."' data-id-produk='".$row['id_produk']."' autofocus='' data-kode='".$row['kode_barang']."' data-satuan='".$row['satuan']."' data-nama-barang='".$row['nama_barang']."'> </p>";
+      $nestedData[] = "<p style='font-size:15px' class='edit-jumlah' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_produk_tampil."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_produk'],3)."' class='input_jumlah'
+      data-id='".$row['id']."' data-id-produk='".$row['id_produk']."' autofocus='' data-kode='".$row['kode_barang']."' data-satuan='".$row['satuan']."' data-harga='".$row['harga_produk']."' data-nama-barang='".$row['nama_barang']."'> </p>";
 
       $nestedData[] = $row["nama"];
 

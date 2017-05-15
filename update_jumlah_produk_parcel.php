@@ -4,30 +4,15 @@
 include 'sanitasi.php';
 include 'db.php';
 
-$jumlah_baru = angkadoang($_POST['jumlah_baru']);
-$jumlah_lama = angkadoang($_POST['jumlah_lama']);
+$jumlah_baru = gantiTitik(stringdoang($_POST['jumlah_baru']));
+$harga_produk = stringdoang($_POST['harga_produk']);
+$jumlah_lama = stringdoang($_POST['jumlah_lama']);
 $id = stringdoang($_POST['id_produk']);
 $kode_parcel = $_POST['kode_parcel'];
+$subtotal = $jumlah_baru * $harga_produk;
 
 
-$query = $db->prepare("UPDATE tbs_parcel SET jumlah_produk = ? WHERE id_produk = ? AND kode_parcel = ?");
-
-$query->bind_param("iii",
-    $jumlah_baru, $id, $kode_parcel);
-
-$query->execute();
-
-    if (!$query) 
-    {
-    die('Query Error : '.$db->errno.
-    ' - '.$db->error);
-    }
-    else
-    {
-
-    }
-
-
+$query = $db->query("UPDATE tbs_parcel SET jumlah_produk = '$jumlah_baru', subtotal_produk = '$subtotal'  WHERE id_produk = '$id' AND kode_parcel = '$kode_parcel'");
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

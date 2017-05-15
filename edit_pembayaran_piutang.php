@@ -11,12 +11,12 @@ $query = $db->query("SELECT tanggal FROM pembayaran_piutang WHERE no_faktur_pemb
 $ambil_tanggal = mysqli_fetch_array($query);
  
  
-$perintah50 = $db->query("SELECT * FROM tbs_pembayaran_piutang 
-                WHERE no_faktur_pembayaran = '$nomor_faktur_pembayaran'");
+$perintah50 = $db->query("SELECT no_faktur_penjualan FROM tbs_pembayaran_piutang WHERE no_faktur_pembayaran = '$nomor_faktur_pembayaran'");
 $data50 = mysqli_fetch_array($perintah50);
 $no_faktur_penjualan = $data50['no_faktur_penjualan']; 
 
  ?>
+
 <style type="text/css">
   .disabled {
     opacity: 0.6;
@@ -25,11 +25,11 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
 }
 </style>
       
-      <script>
+<script>
       $(function() {
       $( "#tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
       });
-      </script>
+</script>
 
 
 
@@ -37,7 +37,7 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
  <div class="container">
  
 
-<h3><u>FORM EDIT PEMBAYARAN PIUTANG</u> </h3>
+<h3><u>FORM EDIT PEMBAYARAN PIUTANG</u> : <?php echo $nomor_faktur_pembayaran; ?> </h3>
 <br><br>
 
 
@@ -134,36 +134,28 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
 <div class="row">
 
 
-          <div class="form-group col-sm-6">
-          <label> Nomor Faktur Pembayaran </label><br>
-          <input type="text" name="no_faktur_pembayaran" id="no_faktur_pembayaran" class="form-control" readonly="" value="<?php echo $nomor_faktur_pembayaran; ?>" required="" >
-          </div>
+          <input type="hidden" name="no_faktur_pembayaran" id="no_faktur_pembayaran" class="form-control" readonly="" value="<?php echo $nomor_faktur_pembayaran; ?>" required="" >
 
-          <div class="form-group col-sm-6">
+          <div class="form-group col-sm-4">
           <label> Tanggal </label><br>
-          <input type="text" name="tanggal" id="tanggal" placeholder="Tanggal" value ="<?php echo $ambil_tanggal['tanggal']; ?>" class="form-control" required="" >
+          <input type="text" name="tanggal"  style="height: 20px" id="tanggal" placeholder="Tanggal" value ="<?php echo $ambil_tanggal['tanggal']; ?>" class="form-control" required="" >
           </div>
-
-
           
-          
-          
-          <div class="form-group col-sm-8">
+          <div class="form-group col-sm-4">
           <label> Kode Pelanggan </label>
           <br>
-          <select type="text" name="kode_pelanggan" id="kd_pelanggan" class="form-control chosen" required="">
-                    
+          <select type="text" name="kode_pelanggan" id="kd_pelanggan" class="form-control chosen" required="">             
           <?php 
           include 'db.php';
           
           // menampilkan data yang ada pada tabel suplier
-          $query = $db->query("SELECT * FROM pelanggan ");
+          $query = $db->query("SELECT id,kode_pelanggan,nama_pelanggan FROM pelanggan ");
           
           // menyimpan data sementara yang ada pada $query
           while($data = mysqli_fetch_array($query))
           {
           
-          echo "<option value='".$data['kode_pelanggan'] ."' >".$data['kode_pelanggan'] ." - ".$data['nama_pelanggan'] ."</option>";
+          echo "<option value='".$data['id'] ."' >".$data['kode_pelanggan'] ." - ".$data['nama_pelanggan'] ."</option>";
           }
           
           
@@ -171,37 +163,21 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
           </select>
           </div>
 
-<div class="form-group col-sm-4">
+          <div class="form-group col-sm-4">
           <label> Cara Bayar </label><br>
           <select type="text" name="cara_bayar" id="carabayar1" class="form-control" required="" >
           <option value=""> --SILAHKAN PILIH-- </option>
              <?php 
-             
-               
              $sett_akun = $db->query("SELECT sa.kas, da.nama_daftar_akun FROM setting_akun sa INNER JOIN daftar_akun da ON sa.kas = da.kode_daftar_akun");
              $data_sett = mysqli_fetch_array($sett_akun);
-             
-             
-             
              echo "<option selected value='".$data_sett['kas']."'>".$data_sett['nama_daftar_akun'] ."</option>";
              
              $query = $db->query("SELECT nama_daftar_akun, kode_daftar_akun FROM daftar_akun WHERE tipe_akun = 'Kas & Bank'");
              while($data = mysqli_fetch_array($query))
              {
-             
-             
-             
-             
              echo "<option value='".$data['kode_daftar_akun']."'>".$data['nama_daftar_akun'] ."</option>";
-             
-             
-             
-             
              }
-             
-             
              ?>
-          
           </select>
           </div>
 
@@ -212,9 +188,9 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
 </div> <!-- tag penutup div row -->
 
 
-<br>
+
 <button type="button" class="btn btn-info" id="cari_produk_penjualan" data-toggle="modal" data-target="#myModal"> <i class='fa fa-search'> </i> Cari</button>
-<br><br>
+
 <!-- Tampilan Modal -->
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -228,10 +204,9 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
       <div class="modal-body"> <!--membuat kerangka untuk tempat tabel -->
 
       <!--perintah agar modal update-->
-<span class="modal_piutang_baru">
+        <span class="modal_piutang_baru">
 
-
-</span>
+        </span>
           
       </div> <!-- tag penutup modal body -->
 
@@ -248,6 +223,10 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
     <!-- membuat form -->
  <form class="form-inline" role="form" id="formtambahproduk">
   
+<div class="row">
+  
+  <div class="col-sm-8">
+
 
    <!-- agar tampilan berada pada satu group -->
   <!-- memasukan teks pada kolom kode barang -->
@@ -284,17 +263,11 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
 
 
 </form>
-
-
-     <!--Mendefinisikan sebuah bagian dalam dokumen-->  
-  <br>   
-  <br> 
-  
   
   <div class="table-responsive">
 <span id="tabel_baru"> 
   <!--tag untuk membuat garis pada tabel-->       
-  <table id="tableuser" class="table table-bordered">
+  <table id="table_pembayaran_piutang" class="table table-bordered table-sm">
     <thead>
       <th> Nomor Faktur Pembayaran </th>
       <th> Nomor Faktur Penjualan</th>
@@ -308,58 +281,26 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
       <th> Edit </th>
       
     </thead>
-    
-    <tbody>
-    <?php
-
-    //untuk menampilkan semua data yang ada pada tabel tbs pembelian dalam DB
-    $perintah = $db->query("SELECT * FROM tbs_pembayaran_piutang 
-                WHERE no_faktur_pembayaran = '$nomor_faktur_pembayaran'");
-
-    //menyimpan data sementara yang ada pada $perintah
-      while ($data1 = mysqli_fetch_array($perintah))
-      {
-
-        // menampilkan data
-      echo "<tr>
-      <td>". $data1['no_faktur_pembayaran'] ."</td>
-      <td>". $data1['no_faktur_penjualan'] ."</td>
-      <td>". $data1['tanggal'] ."</td>
-      <td>". $data1['tanggal_jt'] ."</td>
-      <td>". rp($data1['kredit']) ."</td>
-      <td>". rp($data1['potongan']) ."</td>
-      <td>". rp($data1['total']) ."</td>
-      <td>". rp($data1['jumlah_bayar']) ."</td>
-      
-
-      <td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."' data-faktur='". $data1['no_faktur_penjualan'] ."' data-piutang='". $data1['kredit'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td> 
-
-      <td> <button class='btn btn-success btn-edit-tbs' data-id='". $data1['id'] ."' data-kredit='". $data1['kredit'] ."' data-jumlah-bayar='". $data1['jumlah_bayar'] ."' data-no-faktur-penjualan='". $data1['no_faktur_penjualan'] ."' data-potongan='". $data1['potongan'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button> </td>
-      </tr>";
-      
-      }
-
-//Untuk Memutuskan Koneksi Ke Database
-
-mysqli_close($db); 
-    ?>
-    </tbody>
 
   </table>
   </span> <!--tag penutup span-->
   </div>
         
 
+  </div>
+  
+  <div class="col-sm-4">
+
 <br>
-<div class="total">
-<div class="form-group">
+            <div class="total">
+            <div class="form-group">
           <label> Total Bayar </label><br>
           <input type="text" name="total_bayar" id="totalbayar" placeholder="Total Bayar" class="form-control" readonly="" required="">
           </div>
 
 
 
-<div class="form-group">
+            <div class="form-group">
           <label> Keterangan </label><br>
           <textarea type="text" name="keterangan" id="keterangan" placeholder="Keterangan" class="form-control" > 
           </textarea> 
@@ -367,40 +308,62 @@ mysqli_close($db);
 
 
 
-<button type="submit" id="pembayaran" class="btn btn-info"><i class='fa fa-send'></i> Bayar</button>
+      <button type="submit" id="pembayaran" class="btn btn-info"><i class='fa fa-send'></i> Bayar</button>
 
-<a href='batal_piutang.php?no_faktur_penjualan=<?php echo $no_faktur_penjualan; ?>&no_faktur_pembayaran=<?php echo $nomor_faktur_pembayaran; ?>' id='batal_piutang' class='btn btn-danger'><i class='fa fa-close'></i> Batal </a>
+      <a href='batal_piutang.php?no_faktur_penjualan=<?php echo $no_faktur_penjualan; ?>&no_faktur_pembayaran=<?php echo $nomor_faktur_pembayaran; ?>' id='batal_piutang' class='btn btn-danger'><i class='fa fa-close'></i> Batal  </a>
+      <a href="pembayaran_piutang.php" class="btn btn-primary" id="transaksi_baru" style="display: none"><i class="fa fa-refresh"></i>Transaksi Baru</a>
+      <a href='cetak_pembayaran_piutang.php' id="cetak_piutang" style="display: none;" class="btn btn-success" target="blank"><i class="fa fa-print"> </i> Cetak Pembayaran Piutang </a>
 
-<a href="form_pembayaran_piutang.php" class="btn btn-primary" id="transaksi_baru" style="display: none"><i class="fa fa-refresh"></i>Transaksi Baru</a>
+      <div class="alert alert-success" id="alert_berhasil" style="display:none">
+            <strong>Success!</strong> Pembayaran Berhasil
+      </div>
 
-<a href='cetak_pembayaran_piutang.php' id="cetak_piutang" style="display: none;" class="btn btn-success" target="blank"><i class="fa fa-print"> </i> Cetak Pembayaran Piutang </a>
-          
-<br>
-<div class="alert alert-success" id="alert_berhasil" style="display:none">
-  <strong>Success!</strong> Pembayaran Berhasil
 </div>
 
-<br>
-<br><br>
+          <span id="demo"> </span>
+    </div><!-- end ofclass="total" -->
+  </div><!-- end of col-sm-4 -->
 
-<label> User : <?php echo $_SESSION['user_name']; ?> </label> 
-          <!-- readonly = digunakan agar teks atau isi hanya bisa dibaca tapi tidak bisa diubah -->
-  </div>
-
-<span id="demo"> </span>
-</div>
 </div><!-- end of container -->
 
 
-    
-<script>
-// untuk memunculkan data tabel 
-    $(document).ready(function(){
-    $('.table').DataTable({"ordering": false});    
-    
+
+<!--DATA TABLE MENGGUNAKAN AJAX-->
+<script type="text/javascript" language="javascript" >
+      $(document).ready(function() {
+
+            $('#table_pembayaran_piutang').DataTable().destroy();
+
+          var dataTable = $('#table_pembayaran_piutang').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_edit_pembayaran_piutang.php", // json datasource
+
+            "data": function ( d ) {
+                      d.no_faktur_pembayaran = $("#no_faktur_pembayaran").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_pembayaran_piutang").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+        });
+
+        $("#form").submit(function(){
+        return false;
+        });
+
     });
-  
 </script>
+<!--/DATA TABLE MENGGUNAKAN AJAX-->
+
+
+
 <!-- untuk memasukan perintah javascript -->
 <script type="text/javascript">
 
@@ -420,20 +383,18 @@ mysqli_close($db);
 
 <script>
    //perintah javascript yang diambil dari form tbs pembelian dengan id=form tambah produk
+          $(document).on('click','#submit_tambah',function(e){
 
-  
-$("#submit_tambah").click(function(){
-      
-      var jumlah_bayar = $("#jumlah_bayar").val();
-      var kredit = $("#kredit").val();
+      var jumlah_bayar = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_bayar").val()))));
+      var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kredit").val()))));
       var kode_pelanggan = $("#kd_pelanggan").val();
       var no_faktur_penjualan = $("#nomorfakturbeli").val();
-      var total = $("#total").val();
+      var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total").val()))));
       var tanggal_jt = $("#tanggal_jt").val();
       var no_faktur_pembayaran = $("#no_faktur_pembayaran").val();
       var tanggal = $("#tanggal").val();
       var cara_bayar = $("#carabayar1").val();
-      var potongan = $("#potongan_penjualan").val();
+      var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
 
       var total_kredit = kredit - potongan;
 
@@ -466,8 +427,8 @@ $("#submit_tambah").click(function(){
     $.post("proses_edit_tbs_pembayaran_piutang.php", {no_faktur_pembayaran:no_faktur_pembayaran,no_faktur_penjualan:no_faktur_penjualan,tanggal:tanggal,tanggal_jt:tanggal_jt,total:total_kredit,potongan:potongan,jumlah_bayar:jumlah_bayar,kredit:kredit,kode_pelanggan:kode_pelanggan},function(info) {
 
 
-     $("#tabel_baru").html(info);
-     $("#tabel_baru").load("tabel-edit-tbs-pembayaran-piutang.php?no_faktur_pembayaran=<?php echo $nomor_faktur_pembayaran; ?>");
+      var table_pembayaran_piutang = $('#table_pembayaran_piutang').DataTable();
+          table_pembayaran_piutang.draw();
      $("#nomorfakturbeli").val('');
      $("#kredit").val('');
      $("#jumlah_bayar").val('');
@@ -479,42 +440,18 @@ $("#submit_tambah").click(function(){
    });
  
 }
-      $("form").submit(function(){
-    return false;
-});
-  
-
-
+       $("form").submit(function(){
+         return false;
+        });
+    
+      if (kode_pelanggan != ""){
+       $("#kd_pelanggan").attr("disabled", true);
+     }
   });
 
-
- $("#submit_tambah").click(function(){
-
-            var kode_pelanggan = $("#kd_pelanggan").val();
-            
-            if (kode_pelanggan != ""){
-            $("#kd_pelanggan").attr("disabled", true);
-            }
-                     
-            
-            });
-
-  
   $("#cari_produk_penjualan").click(function() {
 
-     $.get('no_faktur_pp.php', function(data) {
-   /*optional stuff to do after getScript */ 
-$("#nomorfaktur_pembayaran").val(data);
- });
-    //modal baru
-
-
-
-      $.get('no_faktur_retur_jl.php', function(data) {
-   /*optional stuff to do after getScript */ 
-$("#nomorfakturbeli").val(data);
- });
-//menyembunyikan notif berhasil
+    //menyembunyikan notif berhasil
      $("#alert_berhasil").hide();
     /* Act on the event */
 
@@ -536,8 +473,8 @@ $("#nomorfakturbeli").val(data);
   <script type="text/javascript">
    $(document).ready(function(){
       $("#jumlah_bayar").keyup(function(){
-      var kredit = $("#kredit").val();
-      var jumlah_bayar = $("#jumlah_bayar").val();
+      var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kredit").val()))));
+      var jumlah_bayar = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_bayar").val()))));
       var hasil = jumlah_bayar - kredit;
 
       $("#totalbayar").val(jumlah_bayar);
@@ -557,26 +494,25 @@ $("#nomorfakturbeli").val(data);
 
  <script>
    //perintah javascript yang diambil dari form proses_bayar_beli.php dengan id=form_beli
-  $("#pembayaran").click(function(){
+ $(document).on('click','#pembayaran',function(e){
 
    var no_faktur_pembayaran = $("#no_faktur_pembayaran").val();
    var no_faktur_penjualan = $("#nomorfakturbeli").val();
    var cara_bayar = $("#carabayar1").val();
    var kode_pelanggan = $("#kd_pelanggan").val();
    var keterangan = $("#keterangan").val();
-   var total = $("#total").val();
+   var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total").val()))));
    var user_buat = $("#user_buat").val();
    var dari_kas = $("#dari_kas").val();
-   var kredit = $("#kredit").val();
+   var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kredit").val()))));
    var status = $("#status").val();
-   var total_bayar = $("#totalbayar").val();
+   var total_bayar = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#totalbayar").val()))));
    var tanggal = $("#tanggal").val();
 
    
 
 
-if (cara_bayar == "")
-  {
+  if (cara_bayar == ""){
   
   alert("Cara Bayar Harus Di Isi");
   
@@ -587,12 +523,7 @@ if (cara_bayar == "")
   alert("Kode Pelangan Harus Di Isi");
   }
 
-
-
-
-else
-
- {
+  else{
   $("#transaksi_baru").show();
   $("#batal_piutang").hide();
   $("#pembayaran").hide();
@@ -603,7 +534,8 @@ else
 
 
     $("#alert_berhasil").show();
-    $("#tabel_baru").load("tabel-edit-tbs-pembayaran-piutang.php?no_faktur_pembayaran=<?php echo $nomor_faktur_pembayaran; ?>");
+  var table_pembayaran_piutang = $('#table_pembayaran_piutang').DataTable();
+          table_pembayaran_piutang.draw();
     $("#cetak_piutang").show();
      $("#nama_suplier").val('');
      $("#carabayar1").val('');
@@ -615,10 +547,7 @@ else
        
    });
 
-$("#tabel_baru").load("tabel-edit-tbs-pembayaran-piutang.php?no_faktur_pembayaran=<?php echo $nomor_faktur_pembayaran; ?>");
 //mengambil no_faktur pembelian agar berurutan
-
-
  }
 
  $("form").submit(function(){
@@ -694,8 +623,6 @@ $.post("cek_total_edit_pembayaran_piutang.php",
     });
 
 });
-
-
 </script>
 
 
@@ -770,7 +697,8 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
 <script type="text/javascript">
                                
 //fungsi hapus data 
-    $(".btn-hapus").click(function(){
+    $(document).on('click','.btn-hapus',function(e){
+
     var no_faktur_penjualan = $(this).attr("data-faktur");
     var kredit = $(this).attr("data-piutang");
     var id = $(this).attr("data-id");
@@ -782,15 +710,16 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
     
     });
     
-    
-    $("#btn_jadi_hapus").click(function(){
-    
+      
+    $(document).on('click','#btn_jadi_hapus',function(e){
+
     var id = $("#id_hapus").val();
     var no_faktur_penjualan = $("#no_faktur_penjualan").val();
     var kredit = $("#jumlah_piutang").val();
     $.post("hapus_tbs_pembayaran_piutang.php",{id:id, no_faktur_penjualan:no_faktur_penjualan, kredit:kredit},function(data){
     
-    $("#tabel_baru").load('tabel-edit-tbs-pembayaran-piutang.php?no_faktur_pembayaran=<?php echo $nomor_faktur_pembayaran; ?>');
+          var table_pembayaran_piutang = $('#table_pembayaran_piutang').DataTable();
+          table_pembayaran_piutang.draw();
     $("#totalbayar").val('');
     $("#modal_hapus").modal('hide');
      $("#hapus_edit").html('');
@@ -804,8 +733,9 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
     
   
  //fungsi edit data 
-        $(".btn-edit-tbs").click(function(){
-        
+            $(document).on('click','.btn-edit-tbs',function(e){
+
+
         $("#modal_edit").modal('show');
         var jumlah_lama = $(this).attr("data-jumlah-bayar");
         var potongan_lama = $(this).attr("data-potongan");
@@ -823,7 +753,7 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
         
         });
         
-        $("#submit_edit").click(function(){
+            $(document).on('click','#submit_edit',function(e){
         var jumlah_lama = $("#bayar_lama").val();
         var jumlah_baru = $("#bayar_edit").val();
         var potongan_lama = $("#potongan_lama").val();
@@ -837,7 +767,10 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
 
         
         $("#alert").html(data);
-        $("#tabel_baru").load('tabel-edit-tbs-pembayaran-piutang.php?no_faktur_pembayaran=<?php echo $nomor_faktur_pembayaran; ?>');
+
+          var table_pembayaran_piutang = $('#table_pembayaran_piutang').DataTable();
+          table_pembayaran_piutang.draw();
+        
         setTimeout(tutupmodal, 2000);
         setTimeout(tutupalert, 2000);
         
@@ -847,11 +780,8 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
 //end function edit data
 
               $('form').submit(function(){
-              
               return false;
               });
-        
-
 
     function tutupalert() {
     $("#alert").html("")

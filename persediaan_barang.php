@@ -62,7 +62,7 @@ $barang_tambah = mysqli_num_rows($pilih_akses_barang_tambah);
     if ($barang_tambah > 0){
 
 echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"> </i> ITEM </button> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#my_Modal"><i class="fa fa-upload"> </i> Import Data Excell
-</button>';
+</button>    <a href="export_barang.php" style="width: 170px;" type="submit" id="btn-export" class="btn btn-danger"><i class="fa fa-download"> </i> Download Excel</a>';
     }
 ?>
     </div>

@@ -20,7 +20,8 @@ include 'db.php';
 
              <ul class="dropdown-menu">
 				<li><a href="lap_pembelian_rekap.php"> Laporan Pembelian Rekap </a></li> 
-				<li><a href="lap_pembelian_detail.php"> Laporan Pembelian Detail </a></li>
+				<li><a href="lap_pembelian_detail.php"> Laporan Pembelian Detail Per Faktur</a></li>
+				<li><a href="lap_pembelian_detail_non_faktur.php"> Laporan Pembelian Detail Non Faktur</a></li>
 				<li><a href="lap_pembelian_harian.php"> Laporan Pembelian Harian </a></li>
 				<!--
 				<li><a href="lap_pelanggan_detail.php"> Laporan Jual Per Pelanggan Detail </a></li>

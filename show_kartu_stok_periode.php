@@ -182,6 +182,19 @@ if ($row['jenis_hpp'] == '1')
 				$nestedData[] = "<p style='text-align:right'>".rp($harga_awal)."</p>";
 			}
 
+
+			else if ($row['jenis_transaksi'] == 'Transfer Stok') {
+
+
+				$ambil_harga_transfer = $db->query("SELECT harga AS harga_transfer FROM detail_transfer_stok  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_transfer = mysqli_fetch_array($ambil_harga_transfer);
+				$harga_transfer = $data_transfer['harga_transfer'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_transfer)."</p>";
+			}
+
+
+
 //LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERTAMBAH)
 //
 		$nestedData[] = tanggal($row['tanggal']);
@@ -262,6 +275,16 @@ else
 
 				$nestedData[] = "<p style='text-align:right'>".rp($harga_opname)."</p>";
 			}
+			else if ($row['jenis_transaksi'] == 'Transfer Stok') {
+
+
+				$ambil_harga_transfer = $db->query("SELECT harga AS harga_transfer FROM detail_transfer_stok  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
+				$data_transfer = mysqli_fetch_array($ambil_harga_transfer);
+				$harga_transfer = $data_transfer['harga_transfer'];
+
+				$nestedData[] = "<p style='text-align:right'>".rp($harga_transfer)."</p>";
+			}
+
 
 //LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERKURANG)
 

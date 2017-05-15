@@ -154,10 +154,8 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 		    if ($data_otoritas_item['item_edit']  > 0) {
 
-		           if ( $stok_barang  == '0') {
 		               $nestedData[] = "<a href='editbarang.php?id=". $row['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit</a>";
-		            
-		            }
+
 
 		    }
 

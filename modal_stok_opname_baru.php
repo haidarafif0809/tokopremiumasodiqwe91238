@@ -16,14 +16,12 @@ $columns = array(
         
     0=>'kode_barang', 
     1=>'nama_barang',
-    2=>'nama',
+    2=>'jumlah_barang',
     3=>'kategori',
     4=>'suplier', 
-    5=>'harga_beli', 
-    6=>'satuan', 
-    7=>'stok',
-    8=>'jumlah_hpp_minus',
-    9=>'jumlah_hpp_plus'
+    5=>'satuan', 
+    6=>'harga_beli', 
+    7=>'id',
 
 
 
@@ -32,7 +30,7 @@ $columns = array(
 
 // getting total number records without any search
 $sql ="SELECT s.nama,kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.stok_barang,b.satuan,b.kategori,b.suplier,b.harga_jual ";
-$sql.="FROM barang b LEFT JOIN satuan s ON b.satuan = s.id ";
+$sql.="FROM barang b INNER JOIN satuan s ON b.satuan = s.id ";
 $sql.="WHERE b.berkaitan_dgn_stok = 'Barang' || b.berkaitan_dgn_stok = '' ";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
@@ -41,7 +39,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 $sql ="SELECT s.nama,kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.stok_barang,b.satuan,b.kategori,b.suplier,b.harga_jual ";
-$sql.="FROM barang b LEFT JOIN satuan s ON b.satuan = s.id ";
+$sql.="FROM barang b INNER JOIN satuan s ON b.satuan = s.id ";
 $sql.="WHERE b.berkaitan_dgn_stok = 'Barang' ";
 
     $sql.=" AND (b.kode_barang LIKE '".$requestData['search']['value']."%'";  
@@ -87,53 +85,6 @@ while( $row=mysqli_fetch_array($query) ) {
             $nestedData[] = $row["harga_beli"];
             $nestedData[] = $row["satuan"];
             $nestedData[] = $stok_barang;
-
-            //if ($selisih_fisik < 0) { // JIka selisih fisik nya minus maka harga yang diambil dari hpp masuk terakhir
-           $pilih_hpp = $db->query("SELECT harga_unit FROM hpp_masuk WHERE kode_barang = '$row[kode_barang]' ORDER BY id DESC LIMIT 1");
-           $ambil_hpp = mysqli_fetch_array($pilih_hpp);
-
-
-           // jumlah hpp/ harga unit dari hpp masuk
-           $jumlah_hpp_minus = $ambil_hpp['harga_unit'];
-
-            if ($jumlah_hpp_minus == '' OR $jumlah_hpp_minus == NULL ) {
-            $jumlah_hpp_minus = 0;
-            }  
-           // dimasukan ke array nested data
-           // 
-           $nestedData[] = $jumlah_hpp_minus;
-
-           
-            //if ($selisih_fisik > 0) { // JIka selisih fisik lebih dari nol maka harga yang diambil dari pembelian terakhir atau dari barang
-           $select2 = $db->query("SELECT harga FROM detail_pembelian WHERE kode_barang = '$row[kode_barang]' ORDER BY id DESC LIMIT 1");
-           $num_rows = mysqli_num_rows($select2);
-           $fetc_array = mysqli_fetch_array($select2);
-           
-           $select3 = $db->query("SELECT harga_beli FROM barang WHERE kode_barang = '$row[kode_barang]' ORDER BY id DESC LIMIT 1");
-           $ambil_barang = mysqli_fetch_array($select3);
-           
-           // jika tidak ada pembelian maka yang diambil dari barang
-           if ($num_rows == 0) {
-           
-           $jumlah_hpp_plus = $ambil_barang['harga_beli'];  
-           if ($jumlah_hpp_plus == '' OR $jumlah_hpp_plus == NULL ) {
-            $jumlah_hpp_plus = 0;
-            }         
-           // dimasukan ke array nested data
-
-            $nestedData[] = $jumlah_hpp_plus;
-           } 
-           
-           else {
-            // jika ada pembelian maka yang diambil dari pembelian
-           $jumlah_hpp_plus = $fetc_array['harga'];
-            if ($jumlah_hpp_plus == '' OR $jumlah_hpp_plus == NULL ) {
-            $jumlah_hpp_plus = 0;
-            }   
-
-             // dimasukan ke array nested data
-            $nestedData[] = $jumlah_hpp_plus;
-           }
 
     
     $data[] = $nestedData;

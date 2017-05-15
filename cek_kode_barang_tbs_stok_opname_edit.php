@@ -1,0 +1,24 @@
+<?php session_start();
+include 'db.php';
+include 'sanitasi.php';
+
+$no_faktur = stringdoang($_POST['no_faktur']);
+
+
+$query = $db->query("SELECT kode_barang FROM tbs_stok_opname WHERE no_faktur = '$no_faktur' ");
+$jumlah = mysqli_num_rows($query);
+
+
+if ($jumlah > 0){
+
+  echo 1;
+}
+else {
+
+}
+        //Untuk Memutuskan Koneksi Ke Database
+
+        mysqli_close($db); 
+
+ ?>
+

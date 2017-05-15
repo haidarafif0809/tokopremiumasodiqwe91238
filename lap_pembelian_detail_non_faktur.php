@@ -44,7 +44,6 @@ include 'db.php';
 					<th style="background-color: #4CAF50; color: white;"> Total </th>
 					<th style="background-color: #4CAF50; color: white;"> Potongan </th>
 					<th style="background-color: #4CAF50; color: white;"> Tax </th>
-					<th style="background-color: #4CAF50; color: white;"> Sisa Barang </th>
 
 					
 					
@@ -70,7 +69,6 @@ include 'db.php';
 					<th style="background-color: #4CAF50; color: white;"> Total </th>
 					<th style="background-color: #4CAF50; color: white;"> Potongan </th>
 					<th style="background-color: #4CAF50; color: white;"> Tax </th>
-					<th style="background-color: #4CAF50; color: white;"> Sisa Barang </th>
 					</thead>
 
 		</table>

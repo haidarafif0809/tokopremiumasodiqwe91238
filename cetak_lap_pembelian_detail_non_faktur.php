@@ -61,7 +61,6 @@ $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
           <th> Total </th>
           <th> Potongan </th>
           <th> Tax </th>
-          <th> Sisa Barang </th>
 
                   <th> </th>                                    
                 </thead>
@@ -82,7 +81,6 @@ $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
           <td align='right'>".rp($data11['sum_subtotal'])."</td>
           <td>".rp($data11['sum_potongan'])."</td>
           <td>".rp($data11['sum_tax'])."</td>
-          <td>".rp($data11['sum_sisa']) ." ". $data11['asal_satuan']."</td>
           </tr>";
 
 
@@ -94,7 +92,6 @@ $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
         <td style='color:red'> - </td>
         <td style='color:red' align='right'> <?php echo rp($total_jumlah); ?> </td>
         <td style='color:red' align='right'> <?php echo rp($total_akhir); ?> </td>
-        <td style='color:red'> - </td>
         <td style='color:red'> - </td>
         <td style='color:red'> - </td>
             </tbody>

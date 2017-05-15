@@ -16,7 +16,7 @@ $hapus_detail = $db->query("DELETE FROM detail_stok_opname WHERE no_faktur = '$n
                 $query2 = $db->prepare("UPDATE stok_opname SET no_faktur = ?, tanggal = ?, jam = ?, status = 'ya', total_selisih = ?, user = ? , keterangan = ? WHERE no_faktur = ? ");
                 
                 $query2->bind_param("sssisss",
-                $no_faktur,$tanggal,$jam_sekarang, $total_selisih_harga,$keterangan, $user, $no_faktur);
+                $no_faktur,$tanggal,$jam_sekarang, $total_selisih_harga, $user,$keterangan, $no_faktur);
                 
                 $no_faktur = stringdoang($_POST['no_faktur']); 
                 $tanggal = stringdoang($_POST['tanggal']);

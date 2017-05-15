@@ -69,7 +69,7 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
                   </div>
 
                   <div class="form-group">
-                  <label>No Faktur</label><br>
+                  <label>User</label><br>
                    <input type="text" name="user" class="form-control" id="user" readonly="" value="<?php echo $_SESSION['user_name']; ?>" required="">
                    </div>
 
@@ -93,7 +93,7 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
                   <br>
                   <!-- Tampilan Modal -->
                   <div id="myModal" class="modal fade" role="dialog">
-                  <div class="modal-dialog modal-lg">
+                  <div class="modal-dialog modal-md">
                   
                   <!-- Isi Modal-->
                   <div class="modal-content">
@@ -253,8 +253,16 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
                 <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom jumlah barang jika ingin mengedit.</i></h6>
                 <h6 style="text-align: left ;"><i><b> * Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</b></i></h6>
 
+
+                  <button type="submit" id="selesai" class="btn btn-info"> <span class='glyphicon glyphicon-ok'> </span> Selesai</button>
+                  <a href='batal_stok_opname_edit.php?no_faktur=<?php $no_faktur;?>'  id="batal" class="btn btn-danger"> <span class='glyphicon glyphicon-remove'> </span> Batal</button>
+                  <a class="btn btn-info" href="stok_opname.php" id="transaksi_baru" style="display: none"> <span class="glyphicon glyphicon-repeat"></span> Kembali </a>
+
+
               </div> <!--taag penutup col sm 9-->
 
+                  
+                  
 
               <div class="col-sm-3"> <!--taag penutup col sm 3-->
 
@@ -262,18 +270,13 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
 
                   <div class="form-group">
 
-                  <div class="card card-block">
+                  <div class="card card-block" style="display: none;">
                   <label><h5>Total Selisih</h5></label>
                  <b><input type="text" class="form-control" style="font-size: 25px" name="total_selisih_harga" id="total_selisih_harga" readonly="" placeholder="Total Selisih Harga"></b> 
                   </div>
 
                   </div>
 
-                  <button type="submit" id="selesai" class="btn btn-info"> <span class='glyphicon glyphicon-ok'> </span> Selesai</button>
-                  
-                  <a href='batal_stok_opname_edit.php?no_faktur=<?php $no_faktur;?>'  id="batal" class="btn btn-danger"> <span class='glyphicon glyphicon-remove'> </span> Batal</button>
-
-                  <a class="btn btn-info" href="stok_opname.php" id="transaksi_baru" style="display: none"> <span class="glyphicon glyphicon-repeat"></span> Kembali </a>
                   
 
                  </form>
@@ -285,7 +288,9 @@ $data_stok_opname = mysqli_fetch_array($perintah3);
                   <!-- readonly = digunakan agar teks atau isi hanya bisa dibaca tapi tidak bisa diubah -->
 
                   <span id="demo"> </span>
-                   </div>      <!--tag penutup col sm 3-->         
+                   </div>      <!--tag penutup col sm 3--> 
+
+
                   </div> <!-- end of container -->
                   
                   

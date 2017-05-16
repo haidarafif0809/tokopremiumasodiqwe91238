@@ -6,7 +6,11 @@ include 'db.php';
 /* Database connection end */
 
 $kode_parcel = stringdoang($_POST['kode_parcel']);
+$jumlah_parcel = stringdoang($_POST['jumlah_parcel']);
 
+if ($jumlah_parcel == "") {
+  $jumlah_parcel = 0;
+}
 
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
@@ -67,10 +71,14 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
           $jumlah_produk_tampil = koma($row["jumlah_produk"],3);
        }
 
+      $total_produk_yg_dibutuhkan = $jumlah_parcel * $row["jumlah_produk"];
+
       $nestedData[] = $row["kode_barang"];
       $nestedData[] = $row["nama_barang"];
 
       $nestedData[] = "<p style='font-size:15px' class='edit-jumlah' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_produk_tampil."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_produk'],3)."' class='input_jumlah' data-id='".$row['id']."' data-id-produk='".$row['id_produk']."' autofocus='' data-kode='".$row['kode_barang']."' data-satuan='".$row['satuan']."' data-harga='".$row['harga_produk']."' data-nama-barang='".$row['nama_barang']."'> </p>";
+
+      $nestedData[] = gantiKoma($total_produk_yg_dibutuhkan);
 
       $nestedData[] = $row["nama"];
 

@@ -1,5 +1,5 @@
 <?php  include 'session_login.php';
-	// memasukan file login, header, navbar, dan db.
+    // memasukan file login, header, navbar, dan db.
     
     include 'header.php';
     include 'navbar.php';
@@ -166,7 +166,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <label> Satuan </label>
                             <br>
                             <select type="text" name="satuan" class="form-control" required="">
-					
+                    
                             <?php 
                             
                             // memasukan file db.php
@@ -425,12 +425,14 @@ th {
 
           <li class="nav-item"><a class="nav-link active" href='persediaan_barang.php?kategori=semua&tipe=barang'> Umum </a></li>
           <li class="nav-item"><a class="nav-link" href='persediaan_barang2.php?kategori=semua&tipe=barang' > Lain - lain </a></li>
+          <li class="nav-item"><a class="nav-link" href='filter_stok_produk.php?kategori=semua&tipe=barang'> Filter Stok Produk </a></li>
 
           <?php else: ?>
 
 
           <li class="nav-item"><a class="nav-link active" href='persediaan_barang.php?kategori=semua&tipe=barang_jasa'> Umum </a></li>
           <li class="nav-item"><a class="nav-link" href='persediaan_barang2.php?kategori=semua&tipe=barang_jasa' > Lain - lain </a></li>
+          <li class="nav-item"><a class="nav-link" href='filter_stok_produk.php?kategori=semua&tipe=barang_jasa' > Filter Stok Produk </a></li>
               
           <?php endif ?>
           
@@ -471,17 +473,17 @@ $barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
 
 
     if ($barang_edit > 0){
-							echo	"<th> Edit </th>";
+                            echo    "<th> Edit </th>";
 
-						}
-			 ?>
-			
-		   </thead>
+                        }
+             ?>
+            
+           </thead>
 
         <tbody>
-			
-		<?php
-	
+            
+        <?php
+    
 $total_akhir_hpp = 0;
     // menyimpan data sementara yang ada di $perintah
     while ($data1 = mysqli_fetch_array($perintah))
@@ -527,14 +529,14 @@ $f = round($e, 2);
 $total_akhir_hpp = $total_akhir_hpp + $total_hpp;
 
         echo "<tr class='tr-id-".$data1['id']."' data-kode='".$data1['kode_barang']."'>
-			<td>". $data1['kode_barang'] ."</td>
-			<td>". $data1['nama_barang'] ."</td>
-			<td class='edit-beli' data-id='".$data1['id']."'><span id='text-beli-".$data1['id']."'>". rp($data1['harga_beli']) ."</span> 
+            <td>". $data1['kode_barang'] ."</td>
+            <td>". $data1['nama_barang'] ."</td>
+            <td class='edit-beli' data-id='".$data1['id']."'><span id='text-beli-".$data1['id']."'>". rp($data1['harga_beli']) ."</span> 
             <input type='hidden' id='input-beli-".$data1['id']."' value='".$data1['harga_beli']."' class='input_beli' 
             data-id='".$data1['id']."' data-kode='".$data1['kode_barang']."' autofocus=''> </td>
 
-			<td>".persen($f)."</td>
-			<td class='edit-jual' data-id='".$data1['id']."'><span id='text-jual-".$data1['id']."'>". rp($data1['harga_jual']) ."</span> 
+            <td>".persen($f)."</td>
+            <td class='edit-jual' data-id='".$data1['id']."'><span id='text-jual-".$data1['id']."'>". rp($data1['harga_jual']) ."</span> 
             <input type='hidden' id='input-jual-".$data1['id']."' value='".$data1['harga_jual']."' class='input_jual' data-id='".$data1['id']."' 
             data-kode='".$data1['kode_barang']."' autofocus=''></td>
 
@@ -558,7 +560,7 @@ else {
 }
 
 // SATUAN
-			echo "<td class='edit-satuan' data-id='".$data1['id']."'><span id='text-satuan-".$data1['id']."'>". $data1['nama'] ."</span> 
+            echo "<td class='edit-satuan' data-id='".$data1['id']."'><span id='text-satuan-".$data1['id']."'>". $data1['nama'] ."</span> 
             <select style='display:none' id='select-satuan-".$data1['id']."' value='".$data1['id']."' class='select-satuan' data-id='".$data1['id']."' 
             data-kode='".$data1['kode_barang']."' autofocus=''>";
 
@@ -579,7 +581,7 @@ echo '<option value="'. $data1['satuan'] .'"> '. $data1['nama'] .'</option>';
 
 
 //KATEGORI
-		echo "<td class='edit-kategori' data-id='".$data1['id']."'><span id='text-kategori-".$data1['id']."'>". $data1['kategori'] ."</span> 
+        echo "<td class='edit-kategori' data-id='".$data1['id']."'><span id='text-kategori-".$data1['id']."'>". $data1['kategori'] ."</span> 
         <select style='display:none' id='select-kategori-".$data1['id']."' value='".$data1['kategori']."' class='select-kategori' 
         data-kode='".$data1['kode_barang']."' data-id='".$data1['id']."' autofocus=''>";
 
@@ -634,7 +636,7 @@ $barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
             {
          
             echo "
-			<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."'  data-nama='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
+            <td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."'  data-nama='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
             }
         else
         {
@@ -681,9 +683,9 @@ $barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
 
         mysqli_close($db);
     ?>
-		</tbody>
+        </tbody>
 
-	</table>
+    </table>
         <h6 style="text-align: left ; color: red"><i> * Jika barang sudah terjadi transaksi maka barang tersebut tidak dapat dihapus.</i></h6>
 </span>
 

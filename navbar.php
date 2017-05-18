@@ -146,7 +146,7 @@ if ($lihat['gudang_lihat'] > 0){
 }
 
 if ($lihat['daftar_akun_lihat'] > 0){
-                                echo '<li><a href="daftar_akun.php?kategori=semua" class="waves-effect">Daftar Akun</a></li>';
+                                echo '<li><a href="daftar_akun.php?kategori=Aktiva" class="waves-effect">Daftar Akun</a></li>';
 }
 
 if ($lihat['grup_akun_lihat'] > 0){

@@ -29,21 +29,21 @@
 
 					<div class="form-group">
 					<label> Group Akun </label><br>
-					<select type="text" name="grup_akun" id="grup_akun" class="form-control">
+					<select type="text" name="grup_akun" id="grup_akun" class="form-control chosen">
 					<option value="">--Group Akun--</option>	
 
-<?php 
-$select = $db->query("SELECT kode_grup_akun, nama_grup_akun FROM grup_akun ");
-while ($ambil = mysqli_fetch_array($select))
-{
+						<?php 
+						$select = $db->query("SELECT kode_grup_akun, nama_grup_akun FROM grup_akun ");
+						while ($ambil = mysqli_fetch_array($select))
+						{
 
-echo"<option value='".$ambil['kode_grup_akun']."'>".$ambil['kode_grup_akun']." -- ".$ambil['nama_grup_akun']."</option>";
-}
+						echo"<option value='".$ambil['kode_grup_akun']."'>".$ambil['kode_grup_akun']." -- ".$ambil['nama_grup_akun']."</option>";
+						}
 
 
-//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
- ?>
+						//Untuk Memutuskan Koneksi Ke Database
+						mysqli_close($db);   
+						 ?>
 
 
 					
@@ -52,18 +52,18 @@ mysqli_close($db);
 
 					<div class="form-group">
 					<label> Kategori Akun </label><br>
-					<select type="text" name="kategori_akun" id="kategori_akun" class="form-control">
+					<select type="text" name="kategori_akun" id="kategori_akun" class="form-control chosen">
 
 					<option value="">--Kategori Akun--</option>	
 
-					<option value="Aktiva">Aktiva</option>	
-					<option value="Kewajiban">Kewajiban</option>	
-					<option value="Modal">Modal</option>	
-					<option value="Pendapatan">Pendapatan</option>	
-					<option value="HPP">HPP</option>	
-					<option value="Biaya">Biaya</option>
-					<option value="HPP">Pendapatan Lain</option>	
-					<option value="Biaya">Biaya Lain</option>	
+					<option>Aktiva</option>	
+					<option>Kewajiban</option>	
+					<option>Modal</option>	
+					<option>Pendapatan</option>	
+					<option>HPP</option>	
+					<option>Biaya</option>
+					<option>Pendapatan Lain</option>	
+					<option>Biaya Lain</option>	
 
 					</select>
 					</div>
@@ -121,9 +121,7 @@ mysqli_close($db);
 
 
       <script type="text/javascript">
-      
-      $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});  
-      
+      $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});       
       </script>
 
 <script type="text/javascript">

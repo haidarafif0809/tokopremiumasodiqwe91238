@@ -26,8 +26,7 @@ $columns = array(
 	 6=>'tax',
 	 7=>'sisa',
 	 8=>'id',
-	 9=>'sisa',
-	 11=>'id'
+	 9=>'id'
 );
 
 // getting total number records without any search
@@ -69,7 +68,6 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 					$nestedData[] = "<p align='right'>".rp($row['sum_subtotal'])." </p>";
 					$nestedData[] = rp($row['sum_potongan']);
 					$nestedData[] = rp($row['sum_tax']);
-					$nestedData[] = rp($row['sum_sisa']) ." ". $row['asal_satuan'];
 					$nestedData[] = $row["id"];
 				$data[] = $nestedData;
 			}
@@ -81,7 +79,6 @@ $nestedData=array();
       $nestedData[] = "<p style='color:red'> - </p>";
       $nestedData[] = "<p style='color:red' align='right'> ".rp($total_jumlah)." </p>";
       $nestedData[] = "<p style='color:red' align='right'> ".rp($total_akhir)." </p>";
-      $nestedData[] = "<p style='color:red'> - </p>";
       $nestedData[] = "<p style='color:red'> - </p>";
       $nestedData[] = "<p style='color:red'> - </p>";
 	

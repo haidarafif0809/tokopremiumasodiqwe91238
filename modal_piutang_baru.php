@@ -29,9 +29,9 @@ include 'db.php';
     <tbody> <!-- tag pembuka tbody, yang digunakan untuk menampilkan data yang ada di database --> 
     <?php
 
-    $kode_pelanggan = angkadoang($_POST['kode_pelanggan']);
+    $id_pelanggan = angkadoang($_POST['id_pelanggan']);
     
-    $perintah = $db->query("SELECT * FROM penjualan WHERE kode_pelanggan = '$kode_pelanggan' AND kredit != 0");
+    $perintah = $db->query("SELECT pl.nama_pelanggan,p.no_faktur,p.total,p.tanggal,p.tanggal_jt,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit FROM penjualan p LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE p.kode_pelanggan = '$id_pelanggan' AND p.kredit != 0");
 
     //menyimpan data sementara yang ada pada $perintah
       while ($data1 = mysqli_fetch_array($perintah))
@@ -48,7 +48,7 @@ include 'db.php';
        echo "<tr class='pilih' no-faktur='". $data1['no_faktur'] ."' kredit='". rp($data1['kredit']) ."' total='". rp($data1['total']) ."' tanggal_jt='". $data1['tanggal_jt'] ."' >
       
       <td>". $data1['no_faktur'] ."</td>
-      <td>". $data1['kode_pelanggan'] ."</td>
+      <td>". $data1['nama_pelanggan'] ."</td>
       <td>". rp($data1['total']) ."</td>
       <td>". $data1['tanggal'] ."</td>
       <td>". $data1['tanggal_jt'] ."</td>

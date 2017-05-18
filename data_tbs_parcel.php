@@ -2,6 +2,7 @@
 /* Database connection start */
 include 'sanitasi.php';
 include 'db.php';
+include 'persediaan.function.php';
 
 /* Database connection end */
 
@@ -63,6 +64,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
       $jumlah_produk_tampil = koma($row["jumlah_produk"],3);
       $dibelakang_koma = substr($jumlah_produk_tampil, -4);
+      $total_hpp = hitungHargaUnitHpp($row['kode_barang']);
       
       if ($dibelakang_koma == ",000") {
           $jumlah_produk_tampil = hapus_koma($row["jumlah_produk"],3);
@@ -73,12 +75,17 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
       $total_produk_yg_dibutuhkan = $jumlah_parcel * $row["jumlah_produk"];
 
-      $nestedData[] = $row["kode_barang"];
-      $nestedData[] = $row["nama_barang"];
+      $subtotal_hpp = $total_hpp * $total_produk_yg_dibutuhkan;
 
-      $nestedData[] = "<p style='font-size:15px' class='edit-jumlah' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_produk_tampil."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_produk'],3)."' class='input_jumlah' data-id='".$row['id']."' data-id-produk='".$row['id_produk']."' autofocus='' data-kode='".$row['kode_barang']."' data-satuan='".$row['satuan']."' data-harga='".$row['harga_produk']."' data-nama-barang='".$row['nama_barang']."'> </p>";
+      $nestedData[] = '<p style="width:50">'.$row["kode_barang"].'</p>';
+      $nestedData[] = '<p style="width:250">'.$row["nama_barang"].'</p>';
+
+      $nestedData[] = "<p style='font-size:15px; width:50' class='edit-jumlah' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_produk_tampil."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_produk'],3)."' class='input_jumlah' data-id='".$row['id']."' data-id-produk='".$row['id_produk']."' autofocus='' data-kode='".$row['kode_barang']."' data-satuan='".$row['satuan']."' data-harga='".$row['harga_produk']."' data-nama-barang='".$row['nama_barang']."'> </p>";
 
       $nestedData[] = gantiKoma($total_produk_yg_dibutuhkan);
+
+      $nestedData[] = '<p style="width:50">'.rp($total_hpp).'</p>';
+      $nestedData[] = '<p style="width:50">'.rp($subtotal_hpp).'</p>';
 
       $nestedData[] = $row["nama"];
 

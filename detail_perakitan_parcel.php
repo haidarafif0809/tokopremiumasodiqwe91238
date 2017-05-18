@@ -51,9 +51,7 @@ $session_id = session_id();
         <input style="height:15px;" type="text" class="form-control" name="harga_parcel_3" autocomplete="off" id="harga_parcel_3" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 3">
       </div>
 
-    </div>
 
-    <div class="row">
 
       <div class="col-sm-2">
         <label>Harga 4</label>
@@ -235,6 +233,8 @@ $session_id = session_id();
                               <th style='background-color: #4CAF50; color: white'> Nama Produk</th>
                               <th style='background-color: #4CAF50; color: white'> Jumlah Produk </th>
                               <th style='background-color: #4CAF50; color: white'> Total Produk </th>
+                              <th style='background-color: #4CAF50; color: white'> Hpp Produk </th>
+                              <th style='background-color: #4CAF50; color: white'> Total Hpp </th>
                               <th style='background-color: #4CAF50; color: white'> Satuan Produk</th>
                               <th style='background-color: #4CAF50; color: white'> Hapus Produk</th>
                           
@@ -586,17 +586,11 @@ $("#submit_produk").click(function(){
   var jumlah_parcel = $("#jumlah_parcel").val();
   var nama_parcel = $("#nama_parcel").val();
   var harga_produk = $("#harga_produk").val();
-  var harga_parcel_1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_1").val()))));
 
 
 if (nama_parcel == "") {
       alert ("SILAKAN ISI NAMA PARCEL");
       $("#nama_parcel").focus();
-   }
-
-  else if (harga_parcel_1 == "") {
-      alert ("SILAKAN ISI HARGA PARCEL 1");
-      $("#harga_parcel_1").focus();
    }
   else if (jumlah_parcel == "") {
       alert ("SILAKAN ISI JUMLAH PARCEL 1");
@@ -637,12 +631,14 @@ if (nama_parcel == "") {
               $("#jumlah_barang").val('');
               $("#id_produk").val('');
 
-            });
+
 
               var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
                   tabel_tbs_parcel.draw();
 
               $("#span_tbs").show();
+
+            });
 
       }
 
@@ -726,13 +722,13 @@ if (nama_parcel == "") {
               $("#harga_parcel_7").val('');
               $("#jumlah_parcel").val('');
 
-
-            });
-
               var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
                   tabel_tbs_parcel.draw();
 
               $("#span_tbs").show();
+
+            });
+
 
 
 
@@ -890,7 +886,9 @@ $(document).on('blur','.input_jumlah',function(e){
             $("#input-jumlah-"+id+"").attr("type", "hidden");
 
           $.post("update_jumlah_produk_parcel.php",{jumlah_lama:jumlah_lama,id_produk:id_produk,jumlah_baru:jumlah_baru, kode_parcel:kode_parcel, harga_produk:harga_produk},function(){
-
+            var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                tabel_tbs_parcel.draw();
+            $("#span_tbs").show();
           });
 
       }

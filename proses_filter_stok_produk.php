@@ -102,11 +102,11 @@ while ($data_barang = mysqli_fetch_array($query_barang)) {
 			$stok = cekStokHpp($row['kode_barang']);
 			    $nestedData=array();
 
-			      $nestedData[] = $row['kode_barang'];
-			      $nestedData[] = $row['nama_barang'];
-			      $nestedData[] = "<h6 align='right'>". gantiKoma($stok) ." </h6>";
-			      $nestedData[] = $row['nama_satuan'];
-			      $nestedData[] = $row['kategori'];
+			      $nestedData[] = "<p style='width:5'>".$row['kode_barang'] ." </p>";
+			      $nestedData[] = "<p style='width:500'>".$row['nama_barang'] ." </p>";
+			      $nestedData[] = "<p style='width:5'>". gantiKoma($stok) ." </p>";
+			      $nestedData[] = "<p style='width:5'>". $row['nama_satuan']." </p>";
+			      $nestedData[] = "<p style='width:100'>". $row['kategori']." </p>";
 				
 				$data[] = $nestedData;
 		}

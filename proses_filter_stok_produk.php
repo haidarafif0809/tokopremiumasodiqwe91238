@@ -84,8 +84,16 @@ $columns = array(
 		$query=mysqli_query($conn, $sql) or die("eror 2");
 		$totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
 
+	if ($filter == "Kurang Dari") {
+		$sql.= " ORDER BY b.stok_barang DESC LIMIT ".$requestData['start']." ,".$requestData['length']."  ";
+	}
+	elseif ($filter == "Lebih Dari") {
+		$sql.= " ORDER BY b.stok_barang ASC LIMIT ".$requestData['start']." ,".$requestData['length']."  ";
+	}
+	else{
+		$sql.= " ORDER BY b.stok_barang ASC LIMIT ".$requestData['start']." ,".$requestData['length']."  ";
+	}
 
-		$sql.= " ORDER BY b.kategori DESC LIMIT ".$requestData['start']." ,".$requestData['length']."  ";
 
 		/* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */	
 		$query=mysqli_query($conn, $sql) or die("1-grid-data.php: get employees");

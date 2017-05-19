@@ -79,6 +79,22 @@ function hitungNilaiHpp($kode_barang){
 
 }
 
+function hitungHargaUnitHpp($kode_barang){
+
+  include 'db.php';
+         $hpp_masuk = $db->query("SELECT SUM(harga_unit) AS total_hpp FROM hpp_masuk WHERE kode_barang = '$kode_barang'");
+         $cek_awal_masuk = mysqli_fetch_array($hpp_masuk);
+            
+         $hpp_keluar = $db->query("SELECT SUM(harga_unit) AS total_hpp FROM hpp_keluar WHERE kode_barang = '$kode_barang'");
+         $cek_awal_keluar = mysqli_fetch_array($hpp_keluar);
+
+
+         $total_hpp = $cek_awal_masuk['total_hpp'] - $cek_awal_keluar['total_hpp'];
+
+         return $total_hpp;
+
+}
+
 
 
 

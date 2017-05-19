@@ -425,14 +425,14 @@ th {
 
           <li class="nav-item"><a class="nav-link active" href='persediaan_barang.php?kategori=semua&tipe=barang'> Umum </a></li>
           <li class="nav-item"><a class="nav-link" href='persediaan_barang2.php?kategori=semua&tipe=barang' > Lain - lain </a></li>
-          <li class="nav-item"><a class="nav-link" href='filter_stok_produk.php?kategori=semua&tipe=barang'> Filter Stok Produk </a></li>
+          <li class="nav-item"><a class="nav-link" href='menu_filter_stok_produk.php?kategori=semua&tipe=barang'> Filter Stok Produk </a></li>
 
           <?php else: ?>
 
 
           <li class="nav-item"><a class="nav-link active" href='persediaan_barang.php?kategori=semua&tipe=barang_jasa'> Umum </a></li>
           <li class="nav-item"><a class="nav-link" href='persediaan_barang2.php?kategori=semua&tipe=barang_jasa' > Lain - lain </a></li>
-          <li class="nav-item"><a class="nav-link" href='filter_stok_produk.php?kategori=semua&tipe=barang_jasa' > Filter Stok Produk </a></li>
+          <li class="nav-item"><a class="nav-link" href='menu_filter_stok_produk.php?kategori=semua&tipe=barang_jasa' > Filter Stok Produk </a></li>
               
           <?php endif ?>
           

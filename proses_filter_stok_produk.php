@@ -41,11 +41,6 @@ $columns = array(
 
 );
 
-$query_barang = $db->query("SELECT kode_barang, nama_barang FROM barang WHERE berkaitan_dgn_stok = 'Barang' ");
-while ($data_barang = mysqli_fetch_array($query_barang)) {
-	
-	$stok_produk = cekStokHpp($data_barang['kode_barang']);
-	$query_update = $db->query("UPDATE barang SET stok_barang = '$stok_produk' WHERE kode_barang = '$data_barang[kode_barang]' ");
 
 // getting total number records without any search
 	if ($filter == "Kurang Dari") {
@@ -110,8 +105,6 @@ while ($data_barang = mysqli_fetch_array($query_barang)) {
 				
 				$data[] = $nestedData;
 		}
-
-}
 
 $json_data = array(
 			"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 

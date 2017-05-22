@@ -13,7 +13,7 @@ $nama = $_GET['nama'];
 $id_suplier = $_GET['suplier'];
 $nilai_hutang_pemb = 0;
 
-$perintah = $db->query("SELECT * FROM retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur'");
+$perintah = $db->query("SELECT nama_suplier, tanggal FROM retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur'");
 $ambil = mysqli_fetch_array($perintah);  
 
 

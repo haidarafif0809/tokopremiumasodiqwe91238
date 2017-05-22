@@ -80,9 +80,8 @@ $data001 = mysqli_fetch_array($perintah);
            <th> Satuan </th>
            <th> Harga </th>
            <th> Potongan </th>
-           <th> Total </th>
-           <th> Subtotal </th>
            <th> Tax </th>
+           <th> Subtotal </th>
            
             
         </thead>
@@ -99,13 +98,12 @@ $data001 = mysqli_fetch_array($perintah);
             echo "<tr>
                 <td>". $data5['kode_barang'] ."</td>
                 <td>". $data5['nama_barang'] ."</td>
-                <td>". $data5['jumlah_retur'] ."</td>
+                <td align='right'>". $data5['jumlah_retur'] ."</td>
                 <td>". $data5['nama_satuan'] ."</td>
-                <td>". rp($data5['harga']) ."</td>
-                <td>". rp($data5['potongan']) ."</td>
-                <td>". rp($data0['total']) ."</td>
-                <td>". rp($data5['subtotal']) ."</td>
-                <td>". rp($data5['tax']) ."</td>
+                <td align='right'>". rp($data5['harga']) ."</td>
+                <td align='right'>". rp($data5['potongan']) ."</td>
+                <td align='right'>". rp($data5['tax']) ."</td>
+                <td align='right'>". rp($data5['subtotal']) ."</td>
             <tr>";
 
             }

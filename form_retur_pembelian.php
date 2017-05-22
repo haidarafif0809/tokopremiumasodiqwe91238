@@ -367,9 +367,7 @@ $session_id = session_id();
       <label><b> Potongan (%) </b></label><br>
       <input style="height: 20px" type="text" name="potongan_persen" id="potongan_persen" class="form-control" data-diskon="" placeholder="Potongan" autocomplete="off">
   </div>
-</div>
-           
-<div class="row">
+
   <div class="col-sm-3">
       <label><b> Tax (%) </b></label><br>
       <input style="height: 20px" type="text" name="tax" id="tax" class="form-control" placeholder="Tax" data-pajak="" autocomplete="off">
@@ -1088,21 +1086,24 @@ $("#potongan_pembelian").keyup(function(){
              var jumlah_kas_masuk = 0;
              }
 
-        if (potongan_persen > 100) {
-          alert ("Potongan %, Tidak Boleh Lebih Dari 100%");
-          potongan_persen = 0;
-          $("#potongan_pembelian").val('0');
-          $("#tax").val('0');
-          hasil_akhir = total;
-             
-             if (data_total_if > 0) {
-             var jumlah_kas_masuk = parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
-             }
-             else{
-             var jumlah_kas_masuk = 0;
-             }
+          if (potongan_persen > 100) {
 
-        $("#potongan_pembelian").focus();
+            alert ("Potongan %, Tidak Boleh Lebih Dari 100%");
+            potongan_persen = 0;
+              $("#potongan_pembelian").val('0');
+              $("#tax").val('0');
+            hasil_akhir = total;
+            var data_total_if =  parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
+
+               if (data_total_if > 0) {
+               var jumlah_kas_masuk = parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
+               }
+               else{
+               var jumlah_kas_masuk = 0;
+               }
+
+          $("#potongan_pembelian").focus();
+          $("#pembayaran_pembelian").val(tandaPemisahTitik(parseInt(jumlah_kas_masuk)));
         }
 
 
@@ -1162,23 +1163,26 @@ $("#potongan_pembelian").keyup(function(){
              }
 
         
-        if (potongan_persen > 100) {
-          alert ("Potongan %, Tidak Boleh Lebih Dari 100%");
-          $("#potongan_persen").val('0');
-          $("#tax").val('0');
-          potongan_rupiah = 0;
-          hasil_akhir = total;
-          
-             if (data_total_if > 0) {
-             var jumlah_kas_masuk = parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
-             }
-             else{
-             var jumlah_kas_masuk = 0;
-             }
+              if (potongan_persen > 100) {
+                  alert ("Potongan %, Tidak Boleh Lebih Dari 100%");
+                  $("#potongan_persen").val('0');
+                  $("#tax").val('0');
+                  potongan_rupiah = 0;
+                  hasil_akhir = total;
+                  
+                  var data_total_if =  parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
 
-             $("#potongan_persen").focus();
+                     if (data_total_if > 0) {
+                     var jumlah_kas_masuk = parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
+                     }
+                     else{
+                     var jumlah_kas_masuk = 0;
+                     }
 
-        }
+                  $("#potongan_persen").focus();
+                  $("#pembayaran_pembelian").val(tandaPemisahTitik(parseInt(jumlah_kas_masuk)));
+
+                }
 
         
         
@@ -1331,7 +1335,7 @@ $(document).ready(function(){
 $(document).ready(function(){
     $("#no_faktur_hutang").change(function(){
       var no_faktur_hutang = $("#no_faktur_hutang").val();
-      var total_retur = $("#total_retur_pembelian").val();
+      var total_retur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian").val()))));
       if (total_retur == "") {
         total_retur = 0;
       }

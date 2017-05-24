@@ -13,7 +13,7 @@ include 'db.php';
 <div class="container">
 <h1>LAPORAN MUTASI STOK</h1><hr>
 
-<form class="form-inline" role="form">
+<form id="perhari" class="form-inline" action="proses_laporan_mutasi_stok.php" method="POST" role="form">
          
 <div class="form-group">
     <input type="text" class="form-control dsds" id="daritgl" autocomplete="off" name="daritanggal" placeholder="Dari Tanggal ">
@@ -27,108 +27,100 @@ include 'db.php';
 <button id="btntgl" class="btn btn-primary"><i class="fa fa-eye"></i> Tampil</button>
     
 </form>
-
-<span id="table_tampil" style="display: none;">
-    <div class="card card-block">
-      <div class="table-responsive">
-       <table id="table_lap_mutasi_stok" class="table table-hover">
-          <thead>
-            <th style="text-align: center"> Kode Item </th>
-            <th style="text-align: center"> Nama Item </th>
-            <th style="text-align: center"> Satuan </th>
-            <th style="text-align: center"> Awal </th>
-            <th style="text-align: center"> Nilai Awal </th>
-            <th style="text-align: center"> Masuk </th>
-            <th style="text-align: center"> Nilai Masuk </th>
-            <th style="text-align: center"> Keluar </th>
-            <th style="text-align: center"> Nilai Keluar </th>
-            <th style="text-align: center"> Akhir </th>
-            <th style="text-align: center"> Nilai Akhir </th>
-            
-          </thead>
-
-        </table>
-      </div>
-      <br>
-       <br>
-
-             <a href='cetak_laporan_mutasi_stok.php'
-             id="cetak_lap" class='btn btn-warning' target='blank'><i class='fa fa-print'> </i> Cetak Laporan Mutasi Stok </a>
-      </div>
-</span>
 <br>
-<span id="result"></span>
+
+
+
+<span id="result" style="display: none;">
+
+<div class="card card-block">
+  <div class="table-responsive">
+    <table id="tabel_mutasi_stok" class="table table-bordered table-sm">
+        <thead> <!-- untuk memberikan nama pada kolom tabel -->
+        
+            <th style='background-color: #4CAF50; color: white' style="font-size: 20px; text-align: center; "> Kode Item </th>
+            <th style='background-color: #4CAF50; color: white' style="font-size: 20px; text-align: center; "> Nama Item </th>
+            <th style='background-color: #4CAF50; color: white' style="font-size: 20px; text-align: center; "> Satuan </th>
+            <th style='background-color: #4CAF50; color: white' style="font-size: 20px; text-align: center; "> Awal </th>
+            <th style='background-color: #4CAF50; color: white' style="font-size: 20px; text-align: center; "> Nilai Awal </th>
+            <th style='background-color: #4CAF50; color: white' style="font-size: 20px; text-align: center; "> Masuk </th>
+            <th style='background-color: #4CAF50; color: white' style="font-size: 20px; text-align: center; "> Nilai Masuk </th>
+            <th style='background-color: #4CAF50; color: white' style="font-size: 20px; text-align: center; "> Keluar </th>
+            <th style='background-color: #4CAF50; color: white' style="font-size: 20px; text-align: center; "> Nilai Keluar </th>
+            <th style='background-color: #4CAF50; color: white' style="font-size: 20px; text-align: center; "> Akhir </th>
+            <th style='background-color: #4CAF50; color: white' style="font-size: 20px; text-align: center; "> Nilai Akhir </th>
+        
+        </thead> <!-- tag penutup tabel -->
+  </table>
+  </div>
+</div>
+
+</span>
+
+<span id="cetak" style="display: none;">
+
+  <a href='export_lap_mutasi_stok.php' target="blank" id="export_lap" class='btn btn-success'><i class='fa fa-download'> </i> Export Excel</a>
+
+</span>
+
 </div> <!-- END DIV container -->
 
 
-<!-- Script Untuk Tampilan-->
-<script type="text/javascript">
-$(document).on('click','#btntgl',function(e) {
 
-      $('#table_lap_mutasi_stok').DataTable().destroy();
-      var dari_tanggal = $("#daritgl").val();
-      var sampai_tanggal = $("#sampaitgl").val();
-          if (dari_tanggal == '') {
-            alert("Silakan dari tanggal diisi terlebih dahulu.");
-            $("#daritgl").focus();
-          }
-          else if (sampai_tanggal == '') {
-            alert("Silakan sampai tanggal diisi terlebih dahulu.");
-            $("#sampaitgl").focus();
-          }
-            else{
-      $('#table_tampil').show();
-          var dataTable = $('#table_lap_mutasi_stok').DataTable( {
+<!-- START DATATABLE AJAX-->
+
+<script type="text/javascript" language="javascript" >
+  $(document).ready(function() {
+  $(document).on('click','#btntgl',function(e) {
+     $('#tabel_mutasi_stok').DataTable().destroy();
+
+        var dari_tanggal = $("#daritgl").val();        
+        var sampai_tanggal = $("#sampaitgl").val();
+
+          var dataTable = $('#tabel_mutasi_stok').DataTable( {
           "processing": true,
           "serverSide": true,
+          "info":     true,
+          "language": {
+        "emptyTable":     "My Custom Message On Empty Table"
+    },
           "ajax":{
-            url :"datatable_lap_mutasi_stok.php", // json datasource
-            "data": function ( d ) {
-                      d.dari_tanggal = $("#daritgl").val();
-                      d.sampai_tanggal = $("#sampaitgl").val();
-                      // d.custom = $('#myInput').val();
-                      // etc
-                  },
-            type: "post",  // method  , by default get
-            error: function(){  // error handling
-              $(".employee-grid-error").html("");
-              $("#table_lap_mutasi_stok").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-              $("#employee-grid_processing").css("display","none");
-            }
-        },
-            
-            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                $(nRow).attr('class','tr-id-'+aData[11]+'');
+            url :"proses_laporan_mutasi_stok.php", // json datasource
+             "data": function ( d ) {
+                d.dari_tanggal = $("#daritgl").val();
+                d.sampai_tanggal = $("#sampaitgl").val();
+                // d.custom = $('#myInput').val();
+                // etc
             },
+                type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".tbody").html("");
+              $("#tabel_mutasi_stok").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+              $("#tableuser_processing").css("display","none");
+              
+            }
+          }   
+
 
         });
+          $("#result").show();
+          $("#cetak").show();
 
-        /*$.post("cek_total_lap_mutasi_stok.php",{dari_tanggal:dari_tanggal,sampai_tanggal:sampai_tanggal},function(data){
+          $("#export_lap").attr("href", "export_lap_mutasi_stok.php?dari_tanggal="+dari_tanggal+"&sampai_tanggal="+sampai_tanggal+"");
 
-          $("#total_akhir").html(data);
+   });  
 
-        });*/
-
-
-        $("#cetak").show();
-      $("#cetak_lap").attr("href", "cetak_laporan_mutasi_stok.php?&dari_tanggal="+dari_tanggal+"&sampai_tanggal="+sampai_tanggal+"");
-        }//end else
-        $("form").submit(function(){
-    return false;
-});
-
-    /*$.post("proses_laporan_mutasi_stok.php" ,{dari_tanggal:dari_tanggal,sampai_tanggal:sampai_tanggal},function(data){
-
-
-    $("#result").html(data); 
-
-  });  */
-});
-
-
-
+      $("#perhari").submit(function(){
+          return false;
+      });
+      function clearInput(){
+          $("#perhari :input").each(function(){
+              $(this).val('');
+          });
+      };
+  });
 </script>
-<!-- END Script Untuk Tampilan-->
+<!-- END DATATABLE AJAX-->
 
 
 <!--SCRIPT datepicker -->

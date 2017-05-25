@@ -105,7 +105,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="tabel_baru">
-<table id="table_item_keluar" class="table table-bordered">
+<table id="table_item_keluar" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
 			<th style='background-color: #4CAF50; color:white'> Tanggal </th>

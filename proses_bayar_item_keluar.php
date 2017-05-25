@@ -9,7 +9,7 @@
 $tahun_sekarang = date('Y');
 $bulan_sekarang = date('m');
 $tanggal_sekarang = date('Y-m-d');
-$jam_sekarang = date('H:i:sa');
+$jam_sekarang = date('H:i:s');
 $tahun_terakhir = substr($tahun_sekarang, 2);
 
 
@@ -57,44 +57,46 @@ $no_faktur = $nomor."/IK/".$data_bulan_terakhir."/".$tahun_terakhir;
 
  }
 
-// siapkan "data" query
-    $total = angkadoang($_POST['total']);
-    $user = $_SESSION['user_name'];
-    $keterangan = stringdoang($_POST['keterangan']);
-
-  // buat prepared statements
-        $stmt = $db->prepare("INSERT INTO item_keluar (no_faktur, total, tanggal, jam, user, keterangan)
-			VALUES (?,?,?,?,?,?)");
-
-  // hubungkan "data" dengan prepared statements
-        $stmt->bind_param("sissss", 
-        $no_faktur, $total , $tanggal_sekarang, $jam_sekarang, $user, $keterangan);		
-
-  
-  // jalankan query
-        $stmt->execute();
 
 
 
-    $query = $db->query("SELECT kode_barang,nama_barang,jumlah,satuan,harga,subtotal FROM tbs_item_keluar WHERE session_id = '$session_id'");
+
+
+    $query = $db->query("SELECT * FROM tbs_item_keluar WHERE session_id = '$session_id'");
     while ($data = mysqli_fetch_array($query))
     {
        
         $query2 = $db->query("INSERT INTO detail_item_keluar (no_faktur, tanggal,jam, kode_barang, nama_barang, jumlah, satuan, harga, subtotal) 
-		VALUES ('$no_faktur','$tanggal_sekarang','$jam_sekarang', '$data[kode_barang]','$data[nama_barang]','$data[jumlah]','$data[satuan]','$data[harga]','$data[subtotal]')");
-
-
-
+    VALUES ('$no_faktur','$tanggal_sekarang','$jam_sekarang', '$data[kode_barang]','$data[nama_barang]','$data[jumlah]','$data[satuan]','$data[harga]','$data[subtotal]')");
     }
 
     //BATAS SINI
 
+//mengambil nilai persediaan dari hpp keluar item keluar
 
 $sum_hpp_keluar = $db->query("SELECT SUM(total_nilai) AS total FROM hpp_keluar WHERE no_faktur = '$no_faktur'");
 $ambil_sum = mysqli_fetch_array($sum_hpp_keluar);
 $total = $ambil_sum['total'];
 
-$select_setting_akun = $db->query("SELECT persediaan, item_keluar FROM setting_akun");
+
+  // buat prepared statements untuk memasukkan data ke item keluar
+        $stmt = $db->prepare("INSERT INTO item_keluar (no_faktur, total, tanggal, jam, user, keterangan)
+      VALUES (?,?,?,?,?,?)");
+
+  // hubungkan "data" dengan prepared statements
+        $stmt->bind_param("sissss", 
+        $no_faktur, $total , $tanggal_sekarang, $jam_sekarang, $user, $keterangan);   
+
+  // siapkan "data" query
+    $user = $_SESSION['user_name'];
+    $keterangan = stringdoang($_POST['keterangan']);
+
+  // jalankan query item keluar
+        $stmt->execute();
+
+
+
+$select_setting_akun = $db->query("SELECT persediaan,item_keluar FROM setting_akun");
 $ambil_setting = mysqli_fetch_array($select_setting_akun);
 
 
@@ -102,7 +104,7 @@ $ambil_setting = mysqli_fetch_array($select_setting_akun);
         $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Persediaan -', '$ambil_setting[persediaan]', '0', '$total', 'Item Keluar', '$no_faktur','1', '$user')");
 
   //ITEM KELUAR    
-        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Item Keluar -', '$ambil_setting[item_keluar]', '$total', '0', 'Item Masuk', '$no_faktur','1', '$user')");
+        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Item Keluar -', '$ambil_setting[item_keluar]', '$total', '0', 'Item Keluar', '$no_faktur','1', '$user')");
 
     $query3 = $db->query("DELETE  FROM tbs_item_keluar WHERE session_id = '$session_id'");
     echo "Success";

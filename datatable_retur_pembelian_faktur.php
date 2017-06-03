@@ -29,14 +29,14 @@ $columns = array(
 
 // getting total number records without any search
 $sql ="SELECT p.id,p.no_faktur_retur,p.keterangan,p.total,p.nama_suplier,p.tanggal,p.tanggal_edit,p.jam,p.user_buat,p.user_edit,p.potongan,p.tax,p.tunai,p.sisa,p.cara_bayar,s.nama ";
-$sql.=" FROM retur_pembelian p INNER JOIN suplier s ON p.nama_suplier = s.id WHERE p.total_bayar IS NULL ";
+$sql.=" FROM retur_pembelian p INNER JOIN suplier s ON p.nama_suplier = s.id WHERE p.total_bayar IS NOT NULL AND p.jenis_retur = '0' ";
 $query=mysqli_query($conn, $sql) or die("datatable_lap_pembelian.php: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
 $sql ="SELECT p.id,p.no_faktur_retur,p.keterangan,p.total,p.nama_suplier,p.tanggal,p.tanggal_edit,p.jam,p.user_buat,p.user_edit,p.potongan,p.tax,p.tunai,p.sisa,p.cara_bayar,s.nama ";
-$sql.=" FROM retur_pembelian p INNER JOIN suplier s ON p.nama_suplier = s.id WHERE p.total_bayar IS NULL AND 1=1";
+$sql.=" FROM retur_pembelian p INNER JOIN suplier s ON p.nama_suplier = s.id WHERE p.total_bayar IS NOT NULL AND p.jenis_retur = '0' AND 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
 	$sql.=" AND ( p.no_faktur_retur LIKE '".$requestData['search']['value']."%' ";

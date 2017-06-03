@@ -4,9 +4,9 @@ include 'sanitasi.php';
 include 'db.php';
 
 
- $no_faktur = stringdoang($_POST['no_faktur']);
+ $no_faktur = $_POST['no_faktur'];
 
- $query = $db->query ("SELECT no_faktur,kode_barang,nama_barang,jumlah,satuan.nama AS satuan,harga,subtotal FROM detail_item_keluar INNER JOIN satuan ON detail_item_keluar.satuan = satuan.id WHERE no_faktur = '$no_faktur'");
+ $query = $db->query ("SELECT * FROM detail_item_keluar WHERE no_faktur = '$no_faktur'");
 
  ?>
 
@@ -36,7 +36,7 @@ include 'db.php';
 			while ($data1 = mysqli_fetch_array($query))
 			{
 				
-
+				$subtotal = $data1['jumlah'] * $data1['harga'];
 				//menampilkan data
 			echo "<tr>
 			<td>". $data1['no_faktur'] ."</td>
@@ -45,7 +45,7 @@ include 'db.php';
 			<td>". rp($data1['jumlah']) ."</td>
 			<td>". $data1['satuan'] ."</td>
 			<td>". rp($data1['harga']) ."</td>
-			<td>". rp($data1['subtotal']) ."</td>
+			<td>". rp($subtotal) ."</td>
 			
 
 

@@ -11,11 +11,42 @@ $no_faktur_retur = $_GET['no_faktur_retur'];
 $cara_bayar = $_GET['cara_bayar'];
 $nama = $_GET['nama'];
 $id_suplier = $_GET['suplier'];
+$nilai_hutang_pemb = 0;
 
-$perintah = $db->query("SELECT * FROM retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur'");
+$perintah = $db->query("SELECT nama_suplier, tanggal FROM retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur'");
 $ambil = mysqli_fetch_array($perintah);  
 
 
+  $row_hutang = $db->query("SELECT no_faktur_hutang FROM retur_pembayaran_hutang WHERE no_faktur_retur = '$no_faktur_retur'");
+  $data_row_hutang = mysqli_num_rows($row_hutang);
+
+if ($data_row_hutang > 0) {
+  
+    $faktur_hutang = $db->query("SELECT no_faktur_hutang FROM retur_pembayaran_hutang WHERE no_faktur_retur = '$no_faktur_retur'");
+    while ($data_faktur_hutang = mysqli_fetch_array($faktur_hutang)) {
+      $hutang_pemb = $db->query("SELECT kredit FROM pembelian WHERE no_faktur = '$data_faktur_hutang[no_faktur_hutang]'");
+      $data_hutang = mysqli_fetch_array($hutang_pemb);
+      $nilai_hutang = $data_hutang['kredit'];
+      
+      $nilai_hutang_pemb = $nilai_hutang_pemb + $nilai_hutang;
+
+
+
+      $potongan_hutang = $db->query("SELECT total_bayar, total FROM retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur'");
+      $data_potongan_hutang = mysqli_fetch_array($potongan_hutang);
+      $nilai_total_bayar = $data_potongan_hutang['total_bayar'];
+      $nilai_total = $data_potongan_hutang['total'];
+      $nilai_pot_hutang = $nilai_total_bayar - $nilai_total;
+
+    }
+
+    $total_pot_hutang = $nilai_hutang_pemb + $nilai_pot_hutang;
+
+}
+else{
+    $total_pot_hutang = 0;
+    $nilai_pot_hutang = 0;
+}
 
 
     $data_potongan = $db->query("SELECT potongan, tax, ppn FROM retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur'");
@@ -38,9 +69,9 @@ $ambil = mysqli_fetch_array($perintah);
     $potongan_tax = $tax / $hasil_sub * 100;
     $hasil_tax = intval($potongan_tax);
 
+
 // untuk ambil ppn
-$tbs = $db->query("SELECT * FROM tbs_retur_pembelian WHERE 
-  no_faktur_retur = '$no_faktur_retur'");
+$tbs = $db->query("SELECT * FROM tbs_retur_pembelian WHERE no_faktur_retur = '$no_faktur_retur'");
 $data_tbs = mysqli_num_rows($tbs);
     // end ambil ppn
  ?>
@@ -57,34 +88,6 @@ $data_tbs = mysqli_num_rows($tbs);
           
           <!-- membuat teks dengan ukuran h3 -->
     <div class="row">
-
-      <div class="col-sm-3">
-          <label> Suplier </label><br>
-          
-          <select data-placeholder="--SILAHKAN PILIH--" name="suplier" id="nama_suplier" class="form-control chosen" required="" >
-          
-          
-          <?php 
-          
-          // menampilkan seluruh data yang ada pada tabel suplier
-          $query = $db->query("SELECT id,nama FROM suplier");
-          
-          // menyimpan data sementara yang ada pada $query
-          while($data = mysqli_fetch_array($query))
-          {
-          if ($id_suplier == $data['id']) {
-            echo "<option selected value='".$data['id'] ."'>".$data['nama'] ."</option>";
-          }
-          else{
-            echo "<option value='".$data['id'] ."'>".$data['nama'] ."</option>";
-          }
-          }
-          
-          
-          ?>
-          </select>
-      </div>
-
 
       <div class="col-sm-2">
           <label> Tanggal </label><br>
@@ -163,8 +166,125 @@ $data_tbs = mysqli_num_rows($tbs);
            </select>
       </div>
 
-  
+    </div>
 
+    <div class="row">
+
+      <div class="col-sm-3">
+          <label> Suplier </label><br>
+          
+          <select data-placeholder="--SILAHKAN PILIH--" name="suplier" id="nama_suplier" class="form-control chosen" required="" >
+          
+          
+          <?php 
+          
+          // menampilkan seluruh data yang ada pada tabel suplier
+          $query = $db->query("SELECT id,nama FROM suplier");
+          
+          // menyimpan data sementara yang ada pada $query
+          while($data = mysqli_fetch_array($query))
+          {
+          if ($id_suplier == $data['id']) {
+            echo "<option selected value='".$data['id'] ."'>".$data['nama'] ."</option>";
+          }
+          else{
+            echo "<option value='".$data['id'] ."'>".$data['nama'] ."</option>";
+          }
+          }
+          
+          
+          ?>
+          </select>
+      </div>
+
+        <input type="hidden" class="form-control" name="nilai_pot_hutang" id="nilai_pot_hutang" placeholder="nilai_pot_hutang" value="<?php echo $nilai_pot_hutang; ?>">
+
+<?php if ($data_row_hutang > '0' ): ?>
+
+
+          <div id="col-faktur-hutang" class="col-sm-3">
+          <label> No. Faktur Hutang </label><br>          
+          <select data-placeholder="--SILAHKAN PILIH--" name="no_faktur_hutang" id="no_faktur_hutang" multiple="" class="form-control chosen" required="" >
+          <?php 
+          
+          $nilai_hutang_pembelian = 0;
+          // menampilkan seluruh data yang ada pada tabel suplier
+          $query = $db->query("SELECT no_faktur FROM pembelian WHERE status_beli_awal = 'Kredit'");
+          while($data = mysqli_fetch_array($query))
+          {
+          $ambil_hutang = $db->query("SELECT kredit FROM pembelian WHERE no_faktur = '$data[no_faktur]'");
+          $data_hutang = mysqli_fetch_array($ambil_hutang);
+
+          $faktur_hutang_pembelian = $db->query("SELECT no_faktur_hutang, kredit_pembelian_lama FROM retur_pembayaran_hutang WHERE no_faktur_hutang = '$data[no_faktur]' AND no_faktur_retur = '$no_faktur_retur'");
+          $data_faktur_hutang_pembelian = mysqli_fetch_array($faktur_hutang_pembelian);
+          $nomor_faktur_hutang = $data_faktur_hutang_pembelian['no_faktur_hutang'];
+
+          $total_hutang = $data_hutang['kredit'] + $data_faktur_hutang_pembelian['kredit_pembelian_lama'];
+          
+
+          if ($nomor_faktur_hutang == $data['no_faktur']) {
+          echo "<option selected='selected' value='".$data['no_faktur'] ."'>".$data['no_faktur'] ." || Rp. ".rp($total_hutang) ."</option>";
+          }          
+          else{
+          echo "<option value='".$data['no_faktur'] ."'>".$data['no_faktur'] ." || Rp. ".rp($total_hutang) ."</option>";
+          }
+          }          
+          
+          ?>
+          </select>
+      </div>
+
+      <div class="col-sm-2"> 
+        <input type="checkbox" id="checkbox" checked="" data-toogle="1">
+        <label for="checkbox">Potong Hutang</label>
+      </div>
+
+
+
+<?php else: ?>
+
+
+          <div id="col-faktur-hutang" class="col-sm-3" style="display: none">
+          <label> No. Faktur Hutang </label><br>          
+          <select data-placeholder="--SILAHKAN PILIH--" name="no_faktur_hutang" id="no_faktur_hutang" multiple class="form-control chosen" required="" >
+          <?php 
+          
+          // menampilkan seluruh data yang ada pada tabel suplier
+          $query = $db->query("SELECT no_faktur FROM pembelian WHERE status_beli_awal = 'Kredit'");
+          while($data = mysqli_fetch_array($query))
+          {
+          $ambil_hutang = $db->query("SELECT kredit FROM pembelian WHERE no_faktur = '$data[no_faktur]'");
+          $data_hutang = mysqli_fetch_array($ambil_hutang);
+
+          $faktur_hutang_pembelian = $db->query("SELECT no_faktur_hutang FROM retur_pembayaran_hutang WHERE no_faktur_retur = '$no_faktur_retur'");
+          $data_faktur_hutang_pembelian = mysqli_fetch_array($faktur_hutang_pembelian);
+          $nomor_faktur_hutang = $data_faktur_hutang_pembelian['no_faktur_hutang'];
+
+          if ($nomor_faktur_hutang == $data['no_faktur']) {
+          echo "<option selected value='".$data['no_faktur'] ."'>".$data['no_faktur'] ." || Rp. ".rp($data_hutang['kredit']) ."</option>";
+          }     
+          else{
+          echo "<option value='".$data['no_faktur'] ."'>".$data['no_faktur'] ." || Rp. ".rp($data_hutang['kredit']) ."</option>";
+          }
+          }          
+          
+          ?>
+          </select>
+      </div>
+     
+     <div class="col-sm-2"> 
+        <input type="checkbox" id="checkbox" data-toogle="0">
+        <label for="checkbox">Potong Hutang</label>
+      </div>
+
+  
+<?php endif ?>
+
+
+      
+
+
+   
 
 
     </div>
@@ -290,13 +410,24 @@ $data_tbs = mysqli_num_rows($tbs);
 </div>
    
 
-    
+  
+
 
    <div class="form-group">
   <input type="hidden" class="form-control" name="jumlahbarang" id="jumlahbarang" placeholder="jumlahbarang">
   </div>
-
   
+  <?php if ($data_row_hutang > 0): ?>
+
+      <input type="hidden" value="" name="no_faktur_hutang_hidden" id="no_faktur_hutang_hidden" class="form-control" readonly="">
+
+  <?php else: ?>      
+
+      <input type="hidden" value="" name="no_faktur_hutang_hidden" id="no_faktur_hutang_hidden" class="form-control" readonly="">
+
+  <?php endif ?>
+
+
 
 <!-- memasukan teks pada kolom satuan, harga, dan nomor faktur namun disembunyikan -->
   <input type="hidden" id="satuan_produk" name="satuan" class="form-control" value="" required="" placeholder="satuan_produk">
@@ -406,7 +537,7 @@ $data_tbs = mysqli_num_rows($tbs);
 
 
 </div>
-           
+
 <div class="row">
 
   <div class="col-sm-3">
@@ -414,20 +545,26 @@ $data_tbs = mysqli_num_rows($tbs);
       <input style="height: 20px" type="text" name="tax" id="tax" class="form-control" value="<?php echo $hasil_tax; ?>"  placeholder="Tax" data-pajak="" autocomplete="off">
   </div>
 
-  <div class="col-sm-9">
+    <div class="col-sm-4">
+      <label><b> Potong Hutang </b></label><br>
+      <input style="height: 20px" type="text" name="potong_hutang" id="potong_hutang" class="form-control" value="<?php echo rp($total_pot_hutang); ?>" placeholder="Nilai Hutang" readonly="">
+  </div>
+
+
+  <div class="col-sm-5">
       <label><b> Total Akhir </b></label><br>
       <!--readonly = agar tek yang ada kolom total tidak bisa diubah hanya bisa dibaca-->
       <b> <input style="height: 20px; font-size: 25px;" type="text" name="total" id="total_retur_pembelian" class="form-control" placeholder="Total Akhir" readonly="" > </b>
 </div>
 
-  <div class="col-sm-6">
-      <label><b> Tunai </b></label><br>
-      <input style="height: 20px; font-size: 20px;" type="text" name="pembayaran" id="pembayaran_pembelian" autocomplete="off" class="form-control" placeholder="Tunai" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
+  <div class="col-sm-12">
+      <label><b> KAS </b></label><br>
+      <input style="height: 20px; font-size: 20px;" type="text" name="pembayaran" id="pembayaran_pembelian" autocomplete="off" class="form-control" placeholder="KAS" >
   </div>
 
-  <div class="col-sm-6">
+  <div class="col-sm-12" style="display: none">
   <label> <b>Kembalian</b>  </label><br>
-      <input style="height: 20px" type="text" name="sisa" id="sisa_pembayaran_pembelian" class="form-control" placeholder="Kembalian" readonly="" >
+      <input style="height: 20px" type="text" name="sisa" id="sisa_pembayaran_pembelian" class="form-control" placeholder="Sisa Pembayaran" readonly="" >
   </div>
 </div>
 
@@ -725,15 +862,21 @@ $("#potongan2").keyup(function(){
     var tax1 = $("#tax1").val();
     var ppn = $("#ppn"). val();  
     var satuan_beli = $("#satuan_beli").val();
+
     var jumlah_retur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_retur").val()))));
     var jumlah_beli = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlahbarang").val()))));
     var harga = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_produk").val()))));
     var potongan1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
+    var potong_hutang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potong_hutang").val()))));
     var potongan_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
     var pajak_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
     var sub_total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian1").val()))));
     var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian").val()))));
 
+          if (potong_hutang == '') 
+          {
+             potong_hutang = 0;
+          }
           if (sub_total == '') 
           {
           sub_total = 0;
@@ -772,13 +915,29 @@ $("#potongan2").keyup(function(){
             };
           }
 
+          var subtotal = parseInt(jumlah_retur, 10) *  parseInt(harga, 10) - parseInt(potongan1, 10);
+          
+          
+          var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian").val()))));
+          if (total == '') 
+          {
+          total = 0;
+          };
+
     var subtotal = parseInt(jumlah_retur, 10) *  parseInt(harga, 10) - parseInt(potongan1, 10);
     var sub_total_akhir = parseInt(sub_total,10) + parseInt(subtotal,10);
     var diskon_per_faktur = parseInt(potongan_faktur, 10) *  parseInt(sub_total_akhir, 10) / 100;
     var sub_setelah_potong_diskon =  parseInt(sub_total_akhir, 10) - parseInt(diskon_per_faktur, 10);
     var pajak_per_faktur = parseInt(pajak_faktur, 10) *  parseInt(sub_setelah_potong_diskon, 10) / 100;
     var total_akhir = parseInt(sub_setelah_potong_diskon,10) + parseInt(pajak_per_faktur,10);
-  
+    var data_total_if =  parseInt(total_akhir,10) - parseInt(potong_hutang,10);
+
+    if (data_total_if > 0) {
+      var jumlah_kas_masuk = parseInt(total_akhir,10) - parseInt(potong_hutang,10);
+    }
+    else{
+      var jumlah_kas_masuk = 0;
+    }  
 
      $("#kode_barang").val('');
      $("#nama_barang").val('');
@@ -802,6 +961,7 @@ else
     $("#total_retur_pembelian").val(tandaPemisahTitik(total_akhir));
     $("#total_retur_pembelian1").val(tandaPemisahTitik(sub_total_akhir));
     $("#potongan_pembelian").val(tandaPemisahTitik(diskon_per_faktur));
+    $("#pembayaran_pembelian").val(tandaPemisahTitik(jumlah_kas_masuk));
 
 
     $.post("proses_tbs_edit_retur_pembelian_faktur.php",{no_faktur_retur:no_faktur_retur,kode_barang:kode_barang,jumlah_retur:jumlah_retur,satuan_produk:satuan_produk,nama_barang:nama_barang,no_faktur_pembelian:no_faktur2,harga:harga,potongan1:potongan1,tax1:tax1,satuan_beli:satuan_beli},function(info) {
@@ -810,7 +970,9 @@ else
       $("#kode_barang").focus();
       $("#ppn").attr("disabled", true);
       $("#tbody").prepend(info);
+      $("#kode_barang").val('');
       $("#nama_barang").val('');
+      $("#jumlah_retur").val('');
       $("#no_faktur2").val('');
       $("#potongan1").val('');
       $("#potongan2").val('');
@@ -885,6 +1047,8 @@ $("#cari_produk_pembelian").click(function(){
   var ppn_input = $("#ppn_input"). val();
   var total1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian1"). val()))));
   var tanggal = $("#tanggal"). val();
+  var no_faktur_hutang = $("#no_faktur_hutang"). val();
+  var potong_hutang = $("#potong_hutang"). val();
 
 
 
@@ -914,7 +1078,7 @@ alert("Suplier Harus Di Isi");
   $("#transaksi_baru").show();
 
 
-$.post("proses_edit_bayar_retur_beli_faktur.php",{tanggal:tanggal,no_faktur_retur:no_faktur_retur,sisa:sisa,nama_suplier:suplier,total:total,cara_bayar:carabayar,potongan:potongan_pembelian,tax:tax,pembayaran:pembayaran_pembelian,total1:total1,ppn_input:ppn_input},function(info) {
+$.post("proses_edit_bayar_retur_beli_faktur.php",{tanggal:tanggal,no_faktur_retur:no_faktur_retur,sisa:sisa,nama_suplier:suplier,total:total,cara_bayar:carabayar,potongan:potongan_pembelian,tax:tax,pembayaran:pembayaran_pembelian,total1:total1,ppn_input:ppn_input,no_faktur_hutang:no_faktur_hutang, potong_hutang:potong_hutang},function(info) {
 
      $("#demo").html(info);
      $("#alert_berhasil").show();
@@ -954,6 +1118,7 @@ $("#potongan_pembelian").keyup(function(){
 
         var potongan_pembelian =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#potongan_pembelian").val() ))));
         var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian1").val()))));
+        var potong_hutang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potong_hutang").val()))));
             var potongan_persen = ((potongan_pembelian / total) * 100);
         var tax = $("#tax").val();
 
@@ -963,14 +1128,43 @@ $("#potongan_pembelian").keyup(function(){
 
 
              
+
+
+
              var sisa_potongan = total - potongan_pembelian;
              
              var t_tax = ((parseInt(sisa_potongan,10) * parseInt(tax,10)) / 100);
              var hasil_akhir = parseInt(sisa_potongan, 10) + parseInt(t_tax,10);
+             var data_total_if =  parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
              
+             if (data_total_if > 0) {
+             var jumlah_kas_masuk = parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
+             }
+             else{
+             var jumlah_kas_masuk = 0;
+             }
 
+        if (potongan_persen > 100) {
+          alert ("Potongan %, Tidak Boleh Lebih Dari 100%");
+          potongan_persen = 0;
+          $("#potongan_pembelian").val('0');
+          $("#tax").val('0');
+          hasil_akhir = total;
+          var data_total_if =  parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
+             
+             if (data_total_if > 0) {
+             var jumlah_kas_masuk = parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
+             }
+             else{
+             var jumlah_kas_masuk = 0;
+             }
+
+        $("#potongan_pembelian").focus();
+        $("#pembayaran_pembelian").val(tandaPemisahTitik(parseInt(jumlah_kas_masuk)));
+        }
         
         $("#total_retur_pembelian").val(tandaPemisahTitik(parseInt(hasil_akhir)));
+        $("#pembayaran_pembelian").val(tandaPemisahTitik(parseInt(jumlah_kas_masuk)));
         $("#potongan_persen").val(parseInt(potongan_persen));
 
       });
@@ -987,30 +1181,49 @@ $("#potongan_pembelian").keyup(function(){
 
         var potongan_persen = $("#potongan_persen").val();
         var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah( $("#total_retur_pembelian1").val() ))));
-            var potongan_rupiah = ((total * potongan_persen) / 100);
+        var potong_hutang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potong_hutang").val()))));
+        var potongan_rupiah = ((total * potongan_persen) / 100);
         var tax = $("#tax").val();
 
         if (tax == "") {
         tax = 0;
         }
-
       
              var sisa_potongan = total - potongan_rupiah;             
              var t_tax = ((parseInt(sisa_potongan,10) * parseInt(tax,10)) / 100);
              var hasil_akhir = parseInt(sisa_potongan, 10) + parseInt(t_tax,10);
+             var data_total_if =  parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
              
+             if (data_total_if > 0) {
+             var jumlah_kas_masuk = parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
+             }
+             else{
+             var jumlah_kas_masuk = 0;
+             }            
         
         if (potongan_persen > 100) {
           alert ("Potongan %, Tidak Boleh Lebih Dari 100%");
-        $("#potongan_persen").val('0');
-        $("#tax").val('0');
-        potongan_rupiah = 0;
-        hasil_akhir = total;
+          $("#potongan_persen").val('0');
+             $("#tax").val('0');
+             potongan_rupiah = 0;
+             hasil_akhir = total;
+             var data_total_if =  parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
+             
+             if (data_total_if > 0) {
+             var jumlah_kas_masuk = parseInt(hasil_akhir,10) - parseInt(potong_hutang,10);
+             }
+             else{
+             var jumlah_kas_masuk = 0;
+             }
+
+             $("#potongan_persen").focus();
+             $("#pembayaran_pembelian").val(tandaPemisahTitik(parseInt(jumlah_kas_masuk)));
         }
 
         
         
         $("#total_retur_pembelian").val(tandaPemisahTitik(parseInt(hasil_akhir)));
+        $("#pembayaran_pembelian").val(tandaPemisahTitik(parseInt(jumlah_kas_masuk)));
         $("#potongan_pembelian").val(tandaPemisahTitik(parseInt(potongan_rupiah)));
 
       });
@@ -1018,6 +1231,8 @@ $("#potongan_pembelian").keyup(function(){
   });
 
 </script>
+
+
 
 <script type="text/javascript">
       
@@ -1029,7 +1244,8 @@ $("#potongan_pembelian").keyup(function(){
         var potongan_rupiah = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_pembelian").val() ))));
         var potongan_persen = $("#potongan_persen").val();
         var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian1").val() ))));
-    
+        var potong_hutang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potong_hutang").val()))));
+
               var cara_bayar = $("#carabayar1").val();
               var tax = $("#tax").val();
               var t_total = total - potongan_rupiah;
@@ -1047,17 +1263,36 @@ $("#potongan_pembelian").keyup(function(){
               var t_tax = ((parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) * parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(tax,10)))))) / 100);
 
               var total_akhir = parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) + Math.round(parseInt(t_tax,10));
-             
-             if (tax > 100) {
+              var data_total_if =  parseInt(total_akhir,10) - parseInt(potong_hutang,10);
+               
+               if (data_total_if > 0) {
+               var jumlah_kas_masuk = parseInt(total_akhir,10) - parseInt(potong_hutang,10);
+               }
+               else{
+               var jumlah_kas_masuk = 0;
+               }
+              
+
+              if (tax > 100) {
                 alert ('Jumlah Tax Tidak Boleh Lebih Dari 100%');
-                 $("#tax").val('0');
-                 total_akhir = t_total;
+                $("#tax").val('0');
+                total_akhir = t_total;
+                
+                if (data_total_if > 0) {
+                var jumlah_kas_masuk = parseInt(total_akhir,10) - parseInt(potong_hutang,10);
+                }
+                else{
+                var jumlah_kas_masuk = 0;
+                }
+
+                $("#tax").focus();
 
               }
+
+
               
               $("#total_retur_pembelian").val(tandaPemisahTitik(total_akhir));
-
-
+              $("#pembayaran_pembelian").val(tandaPemisahTitik(jumlah_kas_masuk));
 
 
 
@@ -1072,42 +1307,46 @@ $("#potongan_pembelian").keyup(function(){
 
 // untuk memunculkan data cek total pembelian
 $(document).ready(function(){
-
-
-$.post("cek_total_edit_retur_pembelian_faktur.php", {no_faktur_retur: "<?php echo $no_faktur_retur; ?>"},function(data){
-
-
-
-    var potongan_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
-    var pajak_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
-
-    var diskon_per_faktur = parseInt(potongan_faktur, 10) *  parseInt(data, 10) / 100;
-
-    var sub_setelah_potong_diskon =  parseInt(data, 10) - parseInt(diskon_per_faktur, 10);
-
-    var pajak_per_faktur = parseInt(pajak_faktur, 10) *  parseInt(sub_setelah_potong_diskon, 10) / 100;
-
-    var total_akhir = parseInt(sub_setelah_potong_diskon,10) + parseInt(pajak_per_faktur,10);
+  var pajak_faktur = $("#tax").val()
+  var diskon_faktur = $("#potongan_pembelian").val()
+  var potong_hutang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potong_hutang").val()))));
 
 
   if (pajak_faktur == "") {
     pajak_faktur = 0;
   }
-  if (diskon_per_faktur == "") {
-    diskon_per_faktur = 0;
+  if (diskon_faktur == "") {
+    diskon_faktur = 0;
+  }
+  if (potong_hutang == "") {
+    potong_hutang = 0;
   }
 
-  var total_retur = ( parseInt(data,10) - parseInt(diskon_per_faktur,10) ) + parseInt(pajak_per_faktur,10);
+$.post("cek_total_edit_retur_pembelian_faktur.php", {no_faktur_retur: "<?php echo $no_faktur_retur; ?>"},function(data){
+
+  
+  var total_selah_dipotong = ( parseInt(data,10) - parseInt(diskon_faktur,10) );
+  var pajak_rupiah = ( parseInt(total_selah_dipotong,10) * parseInt(pajak_faktur,10) ) / 100;
+  var total_retur = ( parseInt(data,10) - parseInt(diskon_faktur,10) ) + parseInt(Math.round(pajak_rupiah,10));
+  var info_data = parseInt(total_retur,10) - parseInt(potong_hutang,10);
+
+  if (info_data > 0) {
+    jumlah_kas_masuk = parseInt(total_retur,10) - parseInt(potong_hutang,10);
+  }
+  else{
+    jumlah_kas_masuk = 0;    
+  }
+
+        
         $("#total_retur_pembelian").val(tandaPemisahTitik(total_retur));
         $('#total_retur_pembelian1').val(data);
-        $('#potongan_pembelian').val(tandaPemisahTitik(diskon_per_faktur));
+        $("#pembayaran_pembelian").val(tandaPemisahTitik(jumlah_kas_masuk));
     });
 
 });
 
 
 </script>
-
 
 <script>
 
@@ -1216,6 +1455,7 @@ $(document).on('click','.btn-hapus-tbs',function(e){
         {
           total = 0;
         };
+    var potong_hutang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potong_hutang").val()))));
 
     var potongan_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
     var pajak_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
@@ -1229,12 +1469,21 @@ $(document).on('click','.btn-hapus-tbs',function(e){
     var pajak_per_faktur = parseInt(pajak_faktur, 10) *  parseInt(sub_setelah_potong_diskon, 10) / 100;
 
     var total_akhir = parseInt(sub_setelah_potong_diskon,10) + parseInt(pajak_per_faktur,10);
+    var data_total_if =  parseInt(total_akhir,10) - parseInt(potong_hutang,10);
+
+    if (data_total_if > 0) {
+      var jumlah_kas_masuk = parseInt(total_akhir,10) - parseInt(potong_hutang,10);
+    }
+    else{
+      var jumlah_kas_masuk = 0;
+    }
 
 
 
       $("#total_retur_pembelian").val(tandaPemisahTitik(total_akhir));
       $("#total_retur_pembelian1").val(tandaPemisahTitik(sub_total_akhir));
       $("#potongan_pembelian").val(tandaPemisahTitik(diskon_per_faktur));
+      $("#pembayaran_pembelian").val(tandaPemisahTitik(jumlah_kas_masuk));
 
 
 
@@ -1277,8 +1526,9 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
     var no_faktur_retur = $("#nomorfaktur").val();
     var kode_barang = $("#kode_barang").val();
+    var no_faktur_pembelian = $("#no_faktur2").val();
     
-    $.post('cek_kode_barang_edit_tbs_retur_pembelian_faktur.php',{kode_barang:kode_barang,no_faktur_retur:no_faktur_retur}, function(data){
+    $.post('cek_kode_barang_edit_tbs_retur_pembelian_faktur.php',{kode_barang:kode_barang,no_faktur_retur:no_faktur_retur,no_faktur_pembelian:no_faktur_pembelian}, function(data){
     
     if(data == 1){
     alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
@@ -1421,7 +1671,11 @@ $(document).ready(function(){
                                    
                                     var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-potongan-"+id+"").text()))));
 
-                                
+                                    var potong_hutang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potong_hutang").val()))));
+
+                                    if (potong_hutang == "") {
+                                      potong_hutang = 0;
+                                    }                                
 
                                     var sub_total = parseInt(harga,10) * parseInt(jumlah_baru,10);
                                    
@@ -1454,7 +1708,15 @@ $(document).ready(function(){
                                     var tax_tbs = tax / subtotal_lama * 100;
                                     var jumlah_tax = tax_tbs * subtotal / 100;
 
-                                    var subtotal_akhir = parseInt(subtotal_penjualan,10) - Math.round(parseInt(potongan_faktur,10)) + Math.round(parseInt(tax_faktur,10));
+                                    var subtotal_akhir = parseInt(subtotal_penjualan,10) - parseInt(potongan_faktur,10) + parseInt(tax_faktur,10);
+
+                                    var total_retur_dikurang_hutang = parseInt(subtotal_akhir,10) - parseInt(potong_hutang,10);
+                                    if (total_retur_dikurang_hutang > 0) {
+                                      var total_akhir_edit = parseInt(subtotal_akhir,10) - parseInt(potong_hutang,10);
+                                    }
+                                    else{
+                                      var total_akhir_edit = 0;
+                                    }
 
 
 
@@ -1492,6 +1754,7 @@ $(document).ready(function(){
                                     $("#text-potongan-"+id+"").text(Math.round(jumlah_potongan));
                                     $("#total_retur_pembelian").val(tandaPemisahTitik(subtotal_akhir)); 
                                     $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_penjualan));
+                                    $("#pembayaran_pembelian").val(tandaPemisahTitik(total_akhir_edit));
                                     $("#potongan_pembelian").val(tandaPemisahTitik(potongan_faktur));
 
                                      $.post("update_pesanan_barang_retur_pembelian_faktur.php",{harga:harga,jumlah_retur:jumlah_retur,jumlah_tax:Math.round(jumlah_tax),jumlah_potongan:Math.round(jumlah_potongan),id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,subtotal:subtotal},function(info){
@@ -1524,8 +1787,9 @@ $(document).ready(function(){
     $(document).on('click', '.pilih', function (e) {
     var no_faktur_retur = $("#nomorfaktur").val();
     var kode_barang = $("#kode_barang").val();
+    var no_faktur_pembelian = $("#no_faktur2").val();
     
-    $.post('cek_kode_barang_edit_tbs_retur_pembelian_faktur.php',{kode_barang:kode_barang,no_faktur_retur:no_faktur_retur}, function(data){
+    $.post('cek_kode_barang_edit_tbs_retur_pembelian_faktur.php',{kode_barang:kode_barang,no_faktur_retur:no_faktur_retur,no_faktur_pembelian:no_faktur_pembelian}, function(data){
     
     if(data == 1){
     alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
@@ -1783,6 +2047,101 @@ $(document).ready(function(){
 
  </script>
  <!-- Datatable AJAX -->
+
+
+ <!-- Potongan Hutang Faktur -->
+ <script type="text/javascript">
+$(function() {
+    $('#checkbox').click(function() {
+      var data_toogle = $(this).attr("data-toogle");
+      var no_faktur_hutang = $("#no_faktur_hutang").val();
+      $("#kode_barang").val(data_toogle); 
+
+      if (data_toogle == "1") {
+
+            $("#pembayaran_pembelian").attr("readonly", false); 
+            $("#no_faktur_hutang").chosen("destroy");
+            $('#col-faktur-hutang').hide();
+            $("#no_faktur_hutang").chosen({no_results_text: "Maaf, Data Tidak Ada!"});  
+            $(this).attr("data-toogle", 0);  
+            $("#no_faktur_hutang").val("");  
+            $("#no_faktur_hutang_hidden").val("");  
+    
+      }
+      else{
+
+          $("#pembayaran_pembelian").attr("readonly", true);  
+          $("#no_faktur_hutang").chosen("destroy");
+          $('#col-faktur-hutang').show();
+          $("#no_faktur_hutang").chosen({no_results_text: "Maaf, Data Tidak Ada!"});  
+          $(this).attr("data-toogle", 1);
+          $("#no_faktur_hutang").val("");  
+          $("#no_faktur_hutang_hidden").val("");   
+
+      }
+
+    });
+});
+</script>
+
+<script>
+
+$(document).ready(function(){
+    $("#no_faktur_hutang").change(function(){
+      var no_faktur_hutang = $("#no_faktur_hutang").val();
+      $("#no_faktur_hutang_hidden").val(no_faktur_hutang);
+        
+    });
+});
+
+</script>
+
+
+<script>
+
+$(document).ready(function(){
+    $("#no_faktur_hutang").change(function(){
+      var no_faktur_hutang = $("#no_faktur_hutang").val();
+      var total_retur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian").val()))));
+      var nilai_pot_hutang = $("#nilai_pot_hutang").val();
+      if (total_retur == "") {
+        total_retur = 0;
+      }
+      if (nilai_pot_hutang == "" || no_faktur_hutang == null) {
+        nilai_pot_hutang = 0;
+      }
+
+        $.post("nilai_hutang_pembelian.php",{no_faktur_hutang: no_faktur_hutang},function(data){
+
+          var info_data = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(data))));
+
+          if (no_faktur_hutang == "") {
+            var nilai_potong_hutang = 0;  
+          }        
+          else{
+            var nilai_potong_hutang = parseInt(nilai_pot_hutang,10) + parseInt(info_data,10);  
+          }
+
+          var data_kas = parseInt(total_retur,10) - parseInt(nilai_potong_hutang,10);
+          if (data_kas > 0) {
+            kas = parseInt(total_retur,10) - parseInt(nilai_potong_hutang,10);
+          }
+          else{
+            kas = 0;
+          }
+
+
+        $("#potong_hutang").val(tandaPemisahTitik(nilai_potong_hutang));
+        $("#pembayaran_pembelian").val(tandaPemisahTitik(kas));
+        $("#no_faktur_hutang_hidden").val(no_faktur_hutang);
+
+
+        });
+
+        
+    });
+});
+</script>
 
 
 

@@ -3034,6 +3034,12 @@ $('form').submit(function(){
     {
       potongan = 0;
     }
+  var subtotal_produk = parseFloat(harga,2) * parseFloat(jumlah_barang.replace(',','.'),2);
+
+  var persen = potongan.search("%");
+  var diskon_persen = potongan;
+  var diskon_persen = diskon_persen.replace("%","");
+  var nilai_disc_persen = parseFloat(subtotal_produk,2) * parseFloat(diskon_persen.replace(',','.'),2) / 100;
 
 /*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
     if (biaya_adm == '')
@@ -3079,7 +3085,7 @@ $('form').submit(function(){
   if (ppn == 'Exclude') 
     {
   
-         var total1 = parseFloat(jumlah_barang.replace(',','.'),2) * parseFloat(harga.replace(',','.'),2) - parseFloat(potongan.replace(',','.'),2);
+         var total1 = parseFloat(jumlah_barang.replace(',','.'),2) * parseFloat(harga.replace(',','.'),2) - parseFloat(nilai_disc_persen.replace(',','.'),2);
 
          var total_tax_exclude = parseFloat(total1.replace(',','.'),2) * parseFloat(tax.replace(',','.'),2) / 100;
 
@@ -3089,7 +3095,7 @@ $('form').submit(function(){
     }
     else
     {
-        var total = parseFloat(jumlah_barang.replace(',','.'),2) * parseFloat(harga,2) - parseFloat(potongan,2);
+        var total = parseFloat(jumlah_barang.replace(',','.'),2) * parseFloat(harga,2) - parseFloat(nilai_disc_persen,2);
     }
   //PPN
    

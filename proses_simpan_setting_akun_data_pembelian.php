@@ -11,12 +11,13 @@ $pot_retur_beli = stringdoang($_POST['pot_retur_beli']);
 $pajak_retur_beli = stringdoang($_POST['pajak_retur_beli']);
 $bayar_retur_tunai = stringdoang($_POST['bayar_retur_tunai']);
 $bayar_retur_kredit = stringdoang($_POST['bayar_retur_kredit']);
+$bayar_hutang_retur = stringdoang($_POST['bayar_hutang_retur']);
 
 
 
-$update = $db->prepare("UPDATE setting_akun SET potongan = ?, pajak = ?, pembayaran_tunai = ?, hutang = ?, potongan_retur_beli = ?, pajak_retur_beli = ?, tunai_retur_beli = ?, kredit_retur_beli = ?");
-$update->bind_param("ssssssss",
-	$pot_beli, $pajak_beli, $bayar_tunai, $bayar_kredit, $pot_retur_beli, $pajak_retur_beli, $bayar_retur_tunai, $bayar_retur_kredit);
+$update = $db->prepare("UPDATE setting_akun SET potongan = ?, pajak = ?, pembayaran_tunai = ?, hutang = ?, potongan_retur_beli = ?, pajak_retur_beli = ?, tunai_retur_beli = ?, kredit_retur_beli = ?, bayar_hutang_retur =?");
+$update->bind_param("sssssssss",
+	$pot_beli, $pajak_beli, $bayar_tunai, $bayar_kredit, $pot_retur_beli, $pajak_retur_beli, $bayar_retur_tunai, $bayar_retur_kredit, $bayar_hutang_retur);
 
 $update->execute();
 

@@ -6,12 +6,18 @@ include 'sanitasi.php';
   $total = 0;
 
 //UNTUK MERUBAH DATA BERUPA "ARRAY" MENJADI DATA BERUPA VARIABLE ($variable) GUNAKAN FITUR => foreach ($variable as $key => $value)
+if ($no_faktur_pembelian == "") {
+	$total = 0;
+}
+else{
 
-foreach ($no_faktur_pembelian as $nomor_faktur_pembelian ) {
+	foreach ($no_faktur_pembelian as $nomor_faktur_pembelian ) {
 
-	 $query = $db->query("SELECT kredit FROM pembelian WHERE no_faktur = '$nomor_faktur_pembelian'");
- 	 $data = mysqli_fetch_array($query);
- 	 $total = $total + $data['kredit'];
+		 $query = $db->query("SELECT kredit FROM pembelian WHERE no_faktur = '$nomor_faktur_pembelian'");
+	 	 $data = mysqli_fetch_array($query);
+	 	 $total = $total + $data['kredit'];
+	}
+	
 }
 
   echo rp($total);

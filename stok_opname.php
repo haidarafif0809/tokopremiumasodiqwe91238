@@ -139,6 +139,9 @@ echo '<button style="display:none" data-toggle="collapse tooltip" accesskey="k" 
      </div>
 </form>
 
+
+
+
             <span id="result">  
                   <div class="table-responsive">    
                   <table id="tabel_tbs_stok_opname" align="center" class="table table-bordered table-sm">
@@ -167,6 +170,20 @@ echo '<button style="display:none" data-toggle="collapse tooltip" accesskey="k" 
 
 </div>
 
+<br>
+<div class="card card-block" id="filter">
+<br>
+<form class="form-inline" role="form">
+                  <div class="form-group"> 
+                  <input type="text" name="dari_tanggal" id="dari_tanggal" class="form-control" placeholder="Dari Tanggal" required="">
+                  </div>
+
+                  <div class="form-group"> 
+                  <input type="text" name="sampai_tanggal" id="sampai_tanggal" class="form-control" placeholder="Sampai Tanggal" value="<?php echo date("Y-m-d"); ?>" required="">
+                  </div>
+                  <button type="submit" name="submit" id="submit_filter" class="btn btn-primary"> <i class="fa fa-eye"></i> Tampil </button>
+</form>
+</div>
 
 <div class="table-responsive">
 <span id="tabel_baru">
@@ -207,9 +224,86 @@ echo '<button style="display:none" data-toggle="collapse tooltip" accesskey="k" 
 		
 	</table>
 </span>
+
+<span id="tabel_filter" style="display:none;"">
+<table id="table_filter_stok_opname" class="table table-bordered table-sm">
+    <thead>
+      <th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
+      <th style='background-color: #4CAF50; color:white'> Kode Barang </th>
+      <th style='background-color: #4CAF50; color:white'> Nama Barang </th>
+      <th style='background-color: #4CAF50; color:white'> Stok Komputer </th>
+      <th style='background-color: #4CAF50; color:white'> Fisik </th>
+      <th style='background-color: #4CAF50; color:white'> Selisih Fisik </th>
+      <th style='background-color: #4CAF50; color:white'> Selisih Harga</th>
+      <th style='background-color: #4CAF50; color:white'> Status </th>
+      <th style='background-color: #4CAF50; color:white'> User </th>
+      <th style='background-color: #4CAF50; color:white'> Keterangan </th>
+      <th style='background-color: #4CAF50; color:white'> Tanggal </th>
+      <th style='background-color: #4CAF50; color:white'> Jam </th> 
+    </thead>
+    
+  </table>
+</span>
+
 </div>
 
+       <a href='download_filter_excel_stok_opname.php' class='btn btn-success' id="download"  style="display: none;" target='blank'><i class='fa fa-print'> </i> Download Excel </a>
+
+
 <br>
+
+
+
+  <button type="submit" id="submit_close" class="glyphicon glyphicon-remove btn btn-danger" style="display:none"></button> 
+</div><!--end of container-->
+    <span id="demo"> </span>
+
+
+<script type="text/javascript">
+  $(document).on('click','#submit_filter',function(e){
+      $('#table_filter_stok_opname').DataTable().destroy();
+          
+          var dari_tanggal = $("#dari_tanggal").val();
+          var sampai_tanggal = $("#sampai_tanggal").val();
+
+            $('#tabel_filter').show();
+            $('#tabel_baru').hide();
+            console.log(dari_tanggal);
+          var dataTable = $('#table_filter_stok_opname').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_filter_stok_opname.php", // json datasource
+            "data": function ( d ) {
+                      d.dari_tanggal = $("#dari_tanggal").val();
+                      d.sampai_tanggal = $("#sampai_tanggal").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_filter_stok_opname").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+      
+
+        });
+
+        $("#download").show(); 
+        $("#download").attr("href", "download_filter_excel_stok_opname.php?&dari_tanggal="+dari_tanggal+"&sampai_tanggal="+sampai_tanggal+"");
+
+
+        $("form").submit(function(){
+        return false;
+        });
+    
+    });
+    
+</script>
+
+
 
 
                  <script>
@@ -392,6 +486,10 @@ echo '<button style="display:none" data-toggle="collapse tooltip" accesskey="k" 
                   $("#kode_barang").show();
                   $("#nama_barang").show();
                   $("#jumlah_fisik").show();
+                  $("#tabel_baru").show();
+                  $("#filter").show();
+                  $("#download").hide();
+                  
 
                   $("#kode_barang").val('');
                   $("#nama_barang").val('');
@@ -404,7 +502,6 @@ echo '<button style="display:none" data-toggle="collapse tooltip" accesskey="k" 
                   $("#kembali").hide();
                   $("#filter_1").show();
                   $("#filter_2").show();
-
 
                   
                   });
@@ -421,6 +518,10 @@ echo '<button style="display:none" data-toggle="collapse tooltip" accesskey="k" 
 </script>
 
 
+
+
+
+
 <!--script disable hubungan pasien-->
 <script type="text/javascript">
 $(document).ready(function(){
@@ -434,7 +535,10 @@ $(document).ready(function(){
   $("#kode_barang").show();
   $("#nama_barang").show();
   $("#jumlah_fisik").show();
-
+  $("#tabel_baru").hide();
+  $("#filter").hide();
+  $("#tabel_filter").hide();
+  $("#download").hide();
   $("#kode_barang").val('');
   $("#nama_barang").val('');
   $("#jumlah_fisik").val('');
@@ -472,7 +576,10 @@ $(document).ready(function(){
   $("#kembali").hide();
   $("#filter_1").show();
   $("#filter_2").show();
-
+  $("#tabel_baru").show();
+  $("#filter").show();
+  $("#tabel_filter").hide();
+  $("#download").hide();
             $('#tabel_tbs_stok_opname').DataTable().destroy();
   //pembaruan datatable data tbs stok opname 
          var dataTable = $('#tabel_tbs_stok_opname').DataTable( {
@@ -617,10 +724,6 @@ $(function() {
 </script>
 
 
-	<button type="submit" id="submit_close" class="glyphicon glyphicon-remove btn btn-danger" style="display:none"></button> 
-</div><!--end of container-->
-		<span id="demo"> </span>
-
 <!--DATA TABLE MENGGUNAKAN AJAX-->
 <script type="text/javascript" language="javascript" >
       $(document).ready(function() {
@@ -757,7 +860,7 @@ $(function() {
 
 
 
-<script>
+    <script>
     $(function() {
     $( "#dari_tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
     });
@@ -770,18 +873,6 @@ $(function() {
     });
     </script>
 
-    <script>
-    $(function() {
-    $( "#dari_tanggal2" ).datepicker({dateFormat: "yy-mm-dd"});
-    });
-    </script>
-
-
-    <script>
-    $(function() {
-    $( "#sampai_tanggal2" ).datepicker({dateFormat: "yy-mm-dd"});
-    });
-    </script>
 
     <script type="text/javascript">
 //fil FAKTUR

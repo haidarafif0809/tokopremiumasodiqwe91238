@@ -4,9 +4,9 @@ include 'db.php';
 /* Database connection end */
 include 'sanitasi.php';
 
-$pilih_akses_stok_opname = $db->query("SELECT stok_opname_edit,
-stok_opname_hapus FROM otoritas_stok_opname WHERE id_otoritas = '$_SESSION[otoritas_id]'");
-$stok_opname = mysqli_fetch_array($pilih_akses_stok_opname);
+
+$dari_tanggal = stringdoang($_POST['dari_tanggal']); 
+$sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
 
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
@@ -34,7 +34,7 @@ $columns = array(
 
 // getting total number records without any search
 $sql = "SELECT COUNT(*) AS jumlah_data ";
-$sql.=" FROM stok_opname ";
+$sql.=" FROM stok_opname WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' ";
 $query=mysqli_query($conn, $sql) or die("datatable_stok_opname1.php: get employees");
 $query_data = mysqli_fetch_array($query);
 $totalData = $query_data['jumlah_data'];
@@ -42,7 +42,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 
 $sql = "SELECT so.no_faktur,so.tanggal,so.jam,so.status,so.total_selisih,so.user,so.id,so.keterangan,dso.kode_barang,dso.nama_barang,dso.stok_sekarang,dso.fisik,dso.selisih_fisik  ";
-$sql.=" FROM stok_opname so LEFT JOIN detail_stok_opname dso ON so.no_faktur = dso.no_faktur WHERE 1=1";
+$sql.=" FROM stok_opname so LEFT JOIN detail_stok_opname dso ON so.no_faktur = dso.no_faktur WHERE 1=1 AND so.tanggal >= '$dari_tanggal' AND so.tanggal <= '$sampai_tanggal' ";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 	$sql.=" AND ( so.no_faktur LIKE '".$requestData['search']['value']."%' ";  
 	$sql.=" OR dso.nama_barang LIKE '".$requestData['search']['value']."%' ";
@@ -67,48 +67,15 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	
 	$nestedData[] = $row["kode_barang"];
     $nestedData[] = $row["nama_barang"];
-
-
-
-    $nestedData[] = rp($row["stok_sekarang"]);
+	$nestedData[] = rp($row["stok_sekarang"]);
     $nestedData[] = rp($row["fisik"]);
     $nestedData[] = rp($row["selisih_fisik"]);
-
-
 	$nestedData[] = $row["total_selisih"];
-
-
 	$nestedData[] = $row["status"];
 	$nestedData[] = $row["user"];
 	$nestedData[] = $row["keterangan"];
-
-
 	$nestedData[] = $row["tanggal"];
 	$nestedData[] = $row["jam"];
-
-
-  if ($stok_opname['stok_opname_edit'] > 0) {
-      $nestedData[] = "<a href='proses_edit_stok_opname.php?no_faktur=". $row['no_faktur']."&tanggal=". $row['tanggal']."' class='btn btn-success'> <i class='fa fa-edit'></i>  </a>";
-  }
-
-  if ($stok_opname['stok_opname_hapus'] > 0) {
-
-      $hpp_keluar_stok_opname = $db->query("SELECT no_faktur_hpp_masuk FROM hpp_keluar WHERE no_faktur_hpp_masuk = '$row[no_faktur]' ");
-
-      $jumlah_hpp_keluar_stok_opname = mysqli_num_rows($hpp_keluar_stok_opname);
-
-        //jika hpp keluar stok opname nya lebih dari 0 maka stok opname tidak bisa di hapus
-        if ($jumlah_hpp_keluar_stok_opname > 0) {
-
-        $nestedData[] = "<button class='btn btn-danger btn-alert' data-id='". $row['id'] ."' data-faktur='". $row['no_faktur'] ."'> <i class='fa fa-trash'></i> </button>";
-        } 
-        else {
-          $nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."'  data-faktur='". $row['no_faktur'] ."'><i class='fa fa-trash'></i></button>";
-        }
-  }
-
- $nestedData[] = "<a href='download_stok_opname.php?no_faktur=". $row['no_faktur']."' class='btn btn-success'> <i class='fa fa-download'> </i> </a>";
-		
 	$nestedData[] = $row["id"];
 	$data[] = $nestedData;
 }

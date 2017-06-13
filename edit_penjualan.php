@@ -1735,8 +1735,8 @@ else{
         $("#nama_barang").val('');
         $("#jumlah_barang").val('');
         $("#potongan1").val('');
-
-
+        $("#kode_barcode").val('');
+        $("#kode_barcode").focus();
 //perhitungan form pembayaran (total & subtotal / biaya admin) 
 
  /*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
@@ -3610,15 +3610,14 @@ if (pesan_alert == true) {
 
             if (total_akhir1 == 0) {
               
-            $("#potongan_persen").val('0');
-                 $("#ppn").val('Non');
-                 $("#ppn").attr('disabled',false);
-             $("#tax1").attr("disabled", true);
+              $("#potongan_persen").val('0');
+              $("#ppn").val('Non');
+              $("#ppn").attr('disabled',false);
+              $("#tax1").attr("disabled", true);
 
             }
             else{
-
-            $("#potongan_persen").val(Math.round(potongaaan_per));
+              $("#potongan_persen").val(potongaaan_per);
             }
             /*
             $("#tax_rp").val(Math.round(tax_bener));*/

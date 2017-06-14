@@ -157,8 +157,8 @@ $status = $_GET['status'];
     <div class="form-group">
     <label>Kode Pelanggan :</label>
      <input type="text" id="kode_pelanggan" class="form-control" readonly=""> 
-     <input type="text" id="id_hapus" class="form-control" > 
-     <input type="text" id="kode_meja" class="form-control" > 
+     <input type="hidden" id="id_hapus" class="form-control" > 
+     <input type="hidden" id="kode_meja" class="form-control" > 
      <input type="text" id="faktur_hapus" class="form-control" > 
     </div>
    

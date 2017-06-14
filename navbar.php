@@ -152,20 +152,13 @@ if ($lihat['daftar_akun_lihat'] > 0){
 if ($lihat['grup_akun_lihat'] > 0){
                                 echo '<li><a href="daftar_group_akun.php" class="waves-effect">Group Akun</a></li>';
 }
-
-if ($lihat['set_akun_lihat'] > 0){
-                                echo '<li><a href="setting_akun_data_item.php" class="waves-effect">Setting Akun</a></li>';
-}
+ 
 ?>
-
-<li><a href="setting_antrian_pelanggan.php" class="waves-effect">Setting Antrian & Order </a></li>
+ 
 <li><a href="promo_alert.php" class="waves-effect">Promo Alert</a></li>
 
 
-<?php
-if ($lihat['set_perusahaan_lihat'] > 0){
-                                echo '<li><a href="setting_perusahaan.php" class="waves-effect">Data Perusahaan</a></li>';
-}
+<?php 
 
 if ($lihat['set_diskon_tax_lihat'] > 0){
                                 echo '<li><a href="set_diskon_tax.php" class="waves-effect">Default Diskon & Pajak</a></li>';

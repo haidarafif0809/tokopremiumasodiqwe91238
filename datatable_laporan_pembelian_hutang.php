@@ -7,6 +7,10 @@ include 'sanitasi.php';
 $dari_tanggal = stringdoang($_POST['dari_tanggal']);
 $sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
 
+
+$query_sum = $db->query("SELECT SUM(total) AS total_akhir, SUM(potongan) AS total_potongan, SUM(tax) AS total_pajak, SUM(kredit) AS total_kredit, SUM(nilai_kredit) AS total_nilai_kredit FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' AND kredit != 0");
+$data_sum = mysqli_fetch_array($query_sum);
+
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
 
@@ -46,8 +50,7 @@ if( !empty($requestData['search']['value']) ) {   // if there is a search parame
 	$sql.=" OR p.tanggal LIKE '".$requestData['search']['value']."%' ";
 	$sql.=" OR p.tanggal_jt LIKE '".$requestData['search']['value']."%' ";
 	$sql.=" OR p.jam LIKE '".$requestData['search']['value']."%' ";
-	$sql.=" OR s.nama LIKE '".$requestData['search']['value']."%' ";
-	$sql.=" OR g.nama_gudang LIKE '".$requestData['search']['value']."%' )";
+	$sql.=" OR s.nama LIKE '".$requestData['search']['value']."%'  )";
 
 }
 $query=mysqli_query($conn, $sql) or die("datatable_lap_pembelian.phpppp: get employees");
@@ -63,23 +66,40 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData=array(); 
 
-			//menampilkan data
 			$nestedData[] = $row['tanggal'];
 			$nestedData[] = $row['no_faktur'];
 			$nestedData[] = $row['nama'];
-			$nestedData[] = rp($row['total']);
 			$nestedData[] = $row['tanggal_jt'];
 			$nestedData[] = $row['jam'];
 			$nestedData[] = $row['user'];
 			$nestedData[] = $row['status'];
 			$nestedData[] = rp($row['potongan']);
 			$nestedData[] = rp($row['tax']);
-			$nestedData[] = rp($row['sisa']);
+			$nestedData[] = rp($row['total']);
 			$nestedData[] = rp($row['kredit']);
 			$nestedData[] = rp($row['nilai_kredit']);
-				$nestedData[] = $row["id"];
-				$data[] = $nestedData;
+			$nestedData[] = $row["id"];
+
+	$data[] = $nestedData;
 			}
+
+	$nestedData=array(); 
+
+			$nestedData[] = "<p style='color:red'>TOTAL</p>";
+			$nestedData[] = "<p style='color:red'>-</p>";
+			$nestedData[] = "<p style='color:red'>-</p>";
+			$nestedData[] = "<p style='color:red'>-</p>";
+			$nestedData[] = "<p style='color:red'>-</p>";
+			$nestedData[] = "<p style='color:red'>-</p>";
+			$nestedData[] = "<p style='color:red'>-</p>";
+			$nestedData[] = "<p style='color:red'>".rp($data_sum['total_potongan'])."</p>";
+			$nestedData[] = "<p style='color:red'>".rp($data_sum['total_pajak'])."</p>";
+			$nestedData[] = "<p style='color:red'>".rp($data_sum['total_akhir'])."</p>";
+			$nestedData[] = "<p style='color:red'>".rp($data_sum['total_kredit'])."</p>";
+			$nestedData[] = "<p style='color:red'>".rp($data_sum['total_nilai_kredit'])."</p>";
+			$nestedData[] = "<p style='color:red'>-</p>";
+
+	$data[] = $nestedData;
 
 
 

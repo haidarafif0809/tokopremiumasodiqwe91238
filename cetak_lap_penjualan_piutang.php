@@ -139,21 +139,18 @@ include 'db.php';
 
         $no_urut = 0;
 
-            $query5 = $db->query("SELECT * FROM detail_penjualan WHERE no_faktur = '$no_faktur' ");
+            $query5 = $db->query("SELECT dp.nama_barang, dp.jumlah_barang, dp.harga, dp.potongan, dp.subtotal, s.nama as satuan FROM detail_penjualan dp INNER JOIN satuan s ON dp.satuan = s.id WHERE dp.no_faktur = '$no_faktur' ");
             //menyimpan data sementara yang ada pada $perintah
             while ($data5 = mysqli_fetch_array($query5))
             {
 
               $no_urut ++;
-              $kode = $db->query("SELECT satuan FROM barang WHERE kode_barang = '$data5[kode_barang]' ");
-              $satuan_b = mysqli_fetch_array($kode);
-              $satuan = $satuan_b['satuan'];
 
             echo "<tr>
             <td class='table1' align='center'>".$no_urut."</td>
             <td class='table1'>". $data5['nama_barang'] ."</td>
             <td class='table1' align='right'>". rp($data5['jumlah_barang']) ."</td>
-            <td class='table1'>". $satuan ."</td>
+            <td class='table1'>". $data5['satuan'] ."</td>
             <td class='table1' align='right'>". rp($data5['harga']) ."</td>
             <td class='table1' align='right'>". rp($data5['potongan']) ."</td>
             <td class='table1' align='right'>". rp($data5['subtotal']) ."</td>

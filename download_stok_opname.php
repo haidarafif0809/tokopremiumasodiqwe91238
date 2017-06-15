@@ -51,7 +51,7 @@ $query_plus = $db->query ("SELECT no_faktur,kode_barang,nama_barang,stok_sekaran
 			<td>". $out_plus['fisik'] ."</td>
 			<td>". $out_plus['selisih_fisik'] ."</td>
 			<td>". $out_plus['hpp'] ."</td>
-			<td>". $out_plus['selisih_harga'] ."</td>
+			<td>". $out_plus['hpp'] ."</td>
 
 			</tr>";
 

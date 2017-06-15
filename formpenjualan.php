@@ -466,7 +466,7 @@ tr:nth-child(even){background-color: #f2f2f2}
       </div>
       <div class="modal-body">
       <div class="table-resposive">
-            <table id="table_order" align="center" class="table">
+            <table id="table_order" class="table table-bordered table-sm" align="center">
                 <thead>
                 <th> No Faktur Order  </th>
                 <th >Kode Pelanggan</th>

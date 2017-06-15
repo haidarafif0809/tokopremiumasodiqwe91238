@@ -149,11 +149,11 @@ include 'db.php';
             echo "<tr>
             <td class='table1' align='center'>".$no_urut."</td>
             <td class='table1'>". $data5['nama_barang'] ."</td>
-            <td class='table1' align='right'>". rp($data5['jumlah_barang']) ."</td>
+            <td class='table1' align='right'>". koma($data5['jumlah_barang'],2) ."</td>
             <td class='table1'>". $data5['satuan'] ."</td>
-            <td class='table1' align='right'>". rp($data5['harga']) ."</td>
-            <td class='table1' align='right'>". rp($data5['potongan']) ."</td>
-            <td class='table1' align='right'>". rp($data5['subtotal']) ."</td>
+            <td class='table1' align='right'>". koma($data5['harga'],2) ."</td>
+            <td class='table1' align='right'>". koma($data5['potongan'],2) ."</td>
+            <td class='table1' align='right'>". koma($data5['subtotal'],2) ."</td>
             <tr>";
 
             }
@@ -193,10 +193,10 @@ div.mix {border-style: dotted dashed solid double;}
  <table>
   <tbody>
 
-      <tr><td width="50%"><font class="satu">Sub Total</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo rp($t_subtotal); ?> </font></tr>
-      <tr><td width="50%"><font class="satu">Diskon</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo rp($data0['potongan']); ?></font> </tr>
-      <tr><td  width="50%"><font class="satu">Tax</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo rp($data0['tax']); ?> </font></td></tr>
-      <tr><td  width="50%"><font class="satu">Total Akhir</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo rp($data0['total']); ?></font>  </td></tr>
+      <tr><td width="50%"><font class="satu">Sub Total</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo koma($t_subtotal,2); ?> </font></tr>
+      <tr><td width="50%"><font class="satu">Diskon</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo koma($data0['potongan'],2); ?></font> </tr>
+      <tr><td  width="50%"><font class="satu">Tax</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo koma($data0['tax'],2); ?> </font></td></tr>
+      <tr><td  width="50%"><font class="satu">Total Akhir</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo koma($data0['total'],2); ?></font>  </td></tr>
 
   </tbody>
 </table>
@@ -208,9 +208,9 @@ div.mix {border-style: dotted dashed solid double;}
  <table>
   <tbody>
 
-      <tr><td  width="40%"><font class="satu">Bayar</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo rp($data0['tunai']); ?></font> </td></tr>
-      <tr><td  width="40%"><font class="satu">Piutang</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo rp($data0['kredit']); ?></font> </td></tr>
-      <tr><td  width="40%"><font class="satu">Jenis Bayar</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo $data0['nama_daftar_akun']; ?></font> </td></tr>   
+      <tr><td  width="40%"><font class="satu">Bayar</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo koma($data0['tunai'],2); ?></font> </td></tr>
+      <tr><td  width="40%"><font class="satu">Piutang</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo koma($data0['kredit'],2); ?></font> </td></tr>
+      <tr><td  width="40%"><font class="satu">Jenis Bayar</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo $data0['nama_daftar_akun'],2; ?></font> </td></tr>   
 
   </tbody>
 </table>

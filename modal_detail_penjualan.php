@@ -61,12 +61,12 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
     $nestedData[] = $row["no_faktur"];
     $nestedData[] = $row["kode_barang"];
     $nestedData[] = $row["nama_barang"];
-    $nestedData[] = rp($row["jumlah_barang"]);
+    $nestedData[] = koma($row["jumlah_barang"],2);
     $nestedData[] = $row["satuan_asal"];
-    $nestedData[] = rp($row["harga"]);
-    $nestedData[] = rp($row["subtotal"]);
-    $nestedData[] = rp($row["potongan"]);
-    $nestedData[] = rp($row["tax"]);
+    $nestedData[] = koma($row["harga"],2);
+    $nestedData[] = koma($row["subtotal"],2);
+    $nestedData[] = koma($row["potongan"],2);
+    $nestedData[] = koma($row["tax"],2);
 
     $nestedData[] = $row["id"]; 
 

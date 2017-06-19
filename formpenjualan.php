@@ -3637,11 +3637,9 @@ $("#formtambahproduk").submit(function(){
         var ppn = $("#ppn").val();
         
         
-        var sisa = parseFloat($("#pembayaran_penjualan").val(),2) - parseFloat($("#total1").val(),2);
+        var sisa = parseFloat(pembayaran) - parseFloat(total);
         
-        var sisa_kredit = parseFloat($("#total1").val(),2) - parseFloat($("#pembayaran_penjualan").val(),2);
-
-
+        var sisa_kredit = parseFloat(total) - parseFloat(pembayaran);
 
 
  

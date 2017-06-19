@@ -117,7 +117,7 @@ $no_faktur_pembayaran = $_GET['no_faktur_pembayaran'];
 <table>
   <tbody>
     <tr><td>Subtotal <td>:&nbsp;</td><td><?php echo rp($j_bayar); ?></td></td></tr>
-    <tr><td><i><b>Terbilang</b><td>:&nbsp;</td><td><?php echo kekata($data0['total']); ?></td></i></td></tr>
+    <tr><td><i><b>Terbilang</b><td>:&nbsp;</td><td><?php echo kekata($j_bayar); ?></td></i></td></tr>
   </tbody>
 </table>
 

@@ -474,7 +474,7 @@ $session_id = session_id();
 
           
           <div class="alert alert-success" id="alert_berhasil" style="display:none">
-          <strong>Success!</strong> Pembayaran Berhasil
+          <strong>Success!</strong> Order Berhasil
           </div>
      
 

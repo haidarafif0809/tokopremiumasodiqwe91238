@@ -342,7 +342,7 @@ echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> Data Penjua
             echo '<li><a href="lap_penjualan.php" class="waves-effect">Lap. Penjualan</a></li>';
 }
 
-
+echo '<li><a href="order_penjualan.php" class="waves-effect">Lap. Order Penjualan</a></li>';
 
 echo "<li><a href='lap_bucket_size.php' class='waves-effect'>Lap. Bucket Size</a></li>";
 

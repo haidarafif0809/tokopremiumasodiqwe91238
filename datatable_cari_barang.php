@@ -221,7 +221,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	value='".$row['harga_jual7']."' class='input_jual_7' data-beli='".$row['harga_beli']."' data-id-7='".$row['id']."' 
 	data-kode='".$row['kode_barang']."' autofocus=''></p>";
 
-	$nestedData[] = $total_hpp;
+	$nestedData[] = koma($total_hpp,2);
 
 	if ($row['berkaitan_dgn_stok'] == 'Jasa') {
 

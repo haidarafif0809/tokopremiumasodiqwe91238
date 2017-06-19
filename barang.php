@@ -548,7 +548,7 @@ th {
         //end perhitungan total hpp 
   
  ?>
-<h3 style="color:red">TOTAL HPP : <?php echo rp($total_hpp); ?></h3>
+<h3 style="color:red">TOTAL HPP : <?php echo koma($total_hpp,2); ?></h3>
 
 </div><!-- penutup tag div clas="container" -->
 

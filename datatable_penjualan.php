@@ -185,7 +185,7 @@ else{
 	
 }*/
 			$nestedData[] = $row["code_card"] ." - ". $row["nama_pelanggan"];
-			$nestedData[] = rp($row["total"]);
+			$nestedData[] = koma($row["total"],2);
 			$nestedData[] = $row["tanggal"];
 			$nestedData[] = $row["tanggal_jt"];
 			$nestedData[] = $row["jam"];

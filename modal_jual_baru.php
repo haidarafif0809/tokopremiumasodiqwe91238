@@ -78,31 +78,31 @@ while( $row=mysqli_fetch_array($query) ) {
 
 
 
-            $harga1 = $row['harga_jual'];
+            $harga1 = koma($row['harga_jual'],2);
             if ($harga1 == '') {
                 $harga1 =0;
             }
-            $harga2 = $row['harga_jual2'];
+            $harga2 = koma($row['harga_jual2'],2);
             if ($harga2 == '') {
                 $harga2 =0;
             }
-            $harga3 = $row['harga_jual3'];
+            $harga3 = koma($row['harga_jual3'],2);
             if ($harga3 == '') {
                 $harga3 =0;
             }
-            $harga4 = $row['harga_jual4'];
+            $harga4 = koma($row['harga_jual4'],2);
             if ($harga4 == '') {
                 $harga4 =0;
             }
-            $harga5 = $row['harga_jual5'];
+            $harga5 = koma($row['harga_jual5'],2);
             if ($harga5 == '') {
                 $harga5 =0;
             }
-            $harga6 = $row['harga_jual6'];
+            $harga6 = koma($row['harga_jual6'],2);
             if ($harga6 == '') {
                 $harga6 =0;
             }
-            $harga7 = $row['harga_jual7'];
+            $harga7 = koma($row['harga_jual7'],2);
             if ($harga7 == '') {
                 $harga7 =0;
             }
@@ -111,13 +111,13 @@ while( $row=mysqli_fetch_array($query) ) {
 
     $nestedData[] = $row["kode_barang"];
     $nestedData[] = $row["nama_barang"];
-    $nestedData[] = $row["harga_jual"];
-    $nestedData[] = $row["harga_jual2"];
-    $nestedData[] = $row["harga_jual3"];
-    $nestedData[] = $row["harga_jual4"];
-    $nestedData[] = $row["harga_jual5"];
-    $nestedData[] = $row["harga_jual6"];
-    $nestedData[] = $row["harga_jual7"];
+    $nestedData[] = koma($row["harga_jual"],2);
+    $nestedData[] = koma($row["harga_jual2"],2);
+    $nestedData[] = koma($row["harga_jual3"],2);
+    $nestedData[] = koma($row["harga_jual4"],2);
+    $nestedData[] = koma($row["harga_jual5"],2);
+    $nestedData[] = koma($row["harga_jual6"],2);
+    $nestedData[] = koma($row["harga_jual7"],2);
 
     if ($row["berkaitan_dgn_stok"] == "Jasa") {
         $nestedData[] = "0";

@@ -3030,25 +3030,31 @@ $('form').submit(function(){
     }
   
   var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
-    if (potongan == '')
+   if (potongan == '')
     {
       potongan = 0;
     }
-  var subtotal_produk = parseFloat(harga,2) * parseFloat(jumlah_barang.replace(',','.'),2);
+    else{
+          var pos = potongan.search("%");
+           if (pos > 0) 
+            {
+              var potongan_persen = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
 
-  var persen = potongan.search("%");
-  var diskon_persen = potongan;
-  var diskon_persen = diskon_persen.replace("%","");
-  var nilai_disc_persen = parseFloat(subtotal_produk,2) * parseFloat(diskon_persen.replace(',','.'),2) / 100;
+               potongan_persen = potongan_persen.replace("%","");
+                if(potongan_persen > 100){
+                  alert("Potongan Tidak Boleh Lebih 100%");
+                  $("#potongan1").val(0);
+                  $("#potongan1").focus();
+                }
+               potongan = parseFloat(gantiTitik(jumlah_barang)) * parseFloat(harga) * potongan_persen / 100 ;
+            };
+    }
 
-/*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
-    if (biaya_adm == '')
-    {
-      biaya_adm = 0;
-    }*/
+  var nilai_disc_persen = parseFloat(potongan);
 
-    var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax1").val()))));
-     if (tax == '')
+
+  var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax1").val()))));
+  if (tax == '')
     {
       tax = 0;
     }

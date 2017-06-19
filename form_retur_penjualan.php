@@ -16,7 +16,7 @@ $session_id = session_id();
  ?>
 
 <!--membuat tampilan form agar terlihat rapih dalam satu tempat-->
-<div class="container">
+<div style="padding-left: 5%; padding-right: 5%;">
 
 
           <h3> <u>FORM RETUR PENJUALAN</u> </h3><br> 
@@ -39,7 +39,7 @@ $session_id = session_id();
           <?php 
           
           // menampilkan seluruh data yang ada pada tabel suplier
-          $query = $db->query("SELECT * FROM pelanggan");
+          $query = $db->query("SELECT id, kode_pelanggan, nama_pelanggan FROM pelanggan");
           
           // menyimpan data sementara yang ada pada $query
           while($data = mysqli_fetch_array($query))
@@ -54,14 +54,14 @@ $session_id = session_id();
           </select>
     </div>
 
-    <div class="col-sm-2">
+    <div class="col-sm-2" style="display: none">
           <label> <b> User </b> </label><br>
           <input type="text" name="user" class="form-control" readonly="" style="height: 15px" value="<?php echo $_SESSION['user_name']; ?>" required="">
     </div>
 
         <div class="col-sm-2">
           <label>PPN</label> </label>
-          <select name="ppn" id="ppn" class="form-control">
+          <select name="ppn" id="ppn" class="form-control chosen">
             <option value="Include">Include</option>  
             <option value="Exclude">Exclude</option>
             <option value="Non">Non</option>          
@@ -70,7 +70,7 @@ $session_id = session_id();
     
     <div class="col-sm-2"> 
              <label> <b> Cara Bayar </b> </label><br>
-             <select type="text" name="cara_bayar" id="carabayar1" class="form-control" >
+             <select type="text" name="cara_bayar" id="carabayar1" class="form-control chosen" >
              <?php 
              
              
@@ -132,18 +132,17 @@ $session_id = session_id();
 
 <div class="table-responsive">
       <!-- membuat agar ada garis pada tabel, disetiap kolom-->
-        <table id="tableuser" class="table table-bordered">
+        <table id="tableuser" class="table table-bordered table-sm">
     <thead> <!-- untuk memberikan nama pada kolom tabel -->
       
       <th> Nomor Faktur </th>
-      <th> Kode Pelanggan </th>
       <th> Kode Barang </th>
       <th> Nama Barang </th>
       <!--
       <th> Jumlah Beli </th>
       -->
       <th> Satuan </th>
-      <th> Harga Barang  </th>
+      <th> Harga   </th>
       <th> Subtotal </th>
       <th> Potongan </th>
       <th> Tax </th>
@@ -207,22 +206,22 @@ $session_id = session_id();
   
 <div class="row">
 
-  <div class="form-group col-sm-3">
-    <input type="text" class="form-control" name="kode_barang" autocomplete="off" id="kode_barang" placeholder="Kode Produk" style="height: 30px">
+  <div class="form-group col-sm-2">
+    <input type="text" class="form-control" name="kode_barang" autocomplete="off" id="kode_barang" placeholder="Kode Produk" style="height: 20px">
     </div>
 
 
-  <div class="form-group col-sm-3"> <!-- agar tampilan berada pada satu group -->
+  <div class="form-group col-sm-2"> <!-- agar tampilan berada pada satu group -->
   <!-- memasukan teks pada kolom kode barang -->
-  <input type="text" class="form-control" readonly="" name="nama_barang" id="nama_barang" placeholder="Nama Barang" style="height: 30px">
+  <input type="text" class="form-control" readonly="" name="nama_barang" id="nama_barang" placeholder="Nama Barang" style="height: 20px">
   </div>
   
 
-  <div class="form-group col-sm-3">
-    <input type="text" class="form-control" name="jumlah_retur" id="jumlah_retur" autocomplete="off" placeholder="0"  style="height: 30px">
+  <div class="form-group col-sm-1">
+    <input type="text" class="form-control" name="jumlah_retur" id="jumlah_retur" autocomplete="off" placeholder="0"  style="height: 20px">
   </div>
  
- <div class="form-group col-sm-2">
+ <div class="form-group col-sm-1">
           
           <select name="satuan_konversi" id="satuan_konversi" class="form-control"  >
           
@@ -242,27 +241,23 @@ $session_id = session_id();
 
         </div>
 
-</div>
-    
-<div class="row">
   
-  <div class="form-group col-sm-3">
-  <input type="text" id="harga_produk" name="harga" class="form-control" autocomplete="off" value="" placeholder="Harga Barang"style="height: 30px">
+  <div class="form-group col-sm-2">
+  <input type="text" id="harga_produk" name="harga" class="form-control" autocomplete="off" value="" placeholder="Harga"style="height: 20px">
   </div>
 
-    <div class="form-group col-sm-3">
-  <input type="text" id="potongan1" name="potongan1" class="form-control" autocomplete="off" value="" placeholder="Potongan"style="height: 30px">
+    <div class="form-group col-sm-1">
+  <input type="text" id="potongan1" name="potongan1" class="form-control" autocomplete="off" value="" placeholder="Diskon"style="height: 20px">
+  </div>
+
+  <div class="form-group col-sm-1">
+  <input type="text" id="tax1" name="tax1" class="form-control" autocomplete="off" value="" placeholder="Pajak (%)"style="height: 20px">
   </div>
 
   <div class="form-group col-sm-2">
-  <input type="text" id="tax1" name="tax1" class="form-control" autocomplete="off" value="" placeholder="Pajak (%)"style="height: 30px">
+    <button type="submit" id="submit_produk" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah Produk</button>
   </div>
 
-
-  <div class="form-group col-sm-4">
-
-  <button type="submit" id="submit_produk" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah Produk</button>
-</div>
 </div>
   
 
@@ -290,9 +285,9 @@ $session_id = session_id();
 
   <div class="table-responsive"><!--tag untuk membuat garis pada tabel-->   
   <span id="result">      
-  <table id="table" class="table table-bordered">
+  <table id="table" class="table table-bordered table-sm">
     <thead>
-      <th> Nomor Faktur Penjualan </th>
+      <th> Faktur Penjualan </th>
       <th> Nama Barang</th>
       <th> Kode Barang </th>
       <th> Jumlah Jual </th>
@@ -326,7 +321,7 @@ $session_id = session_id();
       <td>". rp($data1['jumlah_beli']) ."</td>
       <td>". $data1['satuan_jual'] ."</td>
 
-      <td class='edit-jumlah' data-id='".$data1['id']."' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."'> <span id='text-jumlah-".$data1['id']."'> ".$data1['jumlah_retur']." </span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_retur']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."'> </td>
+      <td class='edit-jumlah' data-id='".$data1['id']."' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."'> <span id='text-jumlah-".$data1['id']."'> ".koma($data1['jumlah_retur'],3)." </span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".koma($data1['jumlah_retur'],3)."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."'> </td>
 
 
       <td>". $data1['satuan_retur'] ."</td>
@@ -355,37 +350,40 @@ $session_id = session_id();
 
 	</div><!-- end of col sm 8 --> <!--tag penutup col sm 8-->
 
-  <div class="col-sm-4"> <!--tag pembuka col sm 4-->
+<div class="col-sm-4"> <!--tag pembuka col sm 4-->
+
+<div class="card card-block">
 
   <form action="proses_bayar_retur_jual.php" id="form_beli" method="POST"><!--tag pembuka form-->
       
       <label> <b> Subtotal</b> </label><br>
-      <input type="text" name="total" id="total_retur_pembelian1" class="form-control" placeholder="Total" readonly="" style="height: 25px" >
+      <input type="text" name="total" id="total_retur_pembelian1" class="form-control" placeholder="Total" readonly="" style="height: 25px; font-size: 25px" >
 
-			<label> <b> Total Akhir</b> </label><br>
-      <!--readonly = agar tek yang ada kolom total tidak bisa diubah hanya bisa dibaca-->
-			<input type="text" name="total" id="total_retur_pembelian" class="form-control" placeholder="Total" readonly="" style="font-size: 25px">
+      <div class="row">
+        <div class="col-sm-4">
+            <label> <b> Potongan (Rp) </b> </label><br>
+            <input type="text" name="potongan" id="potongan_pembelian" class="form-control" data-diskon="" placeholder="Potongan" autocomplete="off"style="height: 25px" >
+        </div>
+        <div class="col-sm-4">
+            <label> <b> Potongan (%) </b> </label><br>
+            <input type="text" name="potongan_persen" id="potongan_persen" class="form-control" data-diskon="" placeholder="Potongan" autocomplete="off"style="height: 25px" >
+        </div>
+        <div class="col-sm-4">
+            <label> <b> Tax (%)</b> </label><br>
+            <input type="text" name="tax" id="tax" class="form-control" placeholder="Tax" data-pajak="" autocomplete="off"style="height: 25px" >
+        </div>
+      </div>
 
-
-      
-
-<div class="row">
-  <div class="col-sm-4">
-      <label> <b> Potongan (Rp) </b> </label><br>
-      <input type="text" name="potongan" id="potongan_pembelian" class="form-control" data-diskon="" placeholder="Potongan" autocomplete="off"style="height: 25px" >
-  </div>
-  <div class="col-sm-4">
-      <label> <b> Potongan (%) </b> </label><br>
-      <input type="text" name="potongan_persen" id="potongan_persen" class="form-control" data-diskon="" placeholder="Potongan" autocomplete="off"style="height: 25px" >
-  </div>
-  <div class="col-sm-4">
-      <label> <b> Tax </b> </label><br>
-      <input type="text" name="tax" id="tax" class="form-control" placeholder="Tax" data-pajak="" autocomplete="off"style="height: 25px" >
-  </div>
-</div>
-
-      <label> <b> Pembayaran </b> </label><br>
-      <input type="text" name="pembayaran" id="pembayaran_pembelian" autocomplete="off" class="form-control" placeholder="Pembayaran" style="font-size: 25px" style="height: 25px" >
+      <div class="row">
+        <div class="col-sm-6">
+            <label> <b> Total Akhir</b> </label><br>
+            <input type="text" name="total" id="total_retur_pembelian" class="form-control" placeholder="Total" readonly="" style="font-size: 25px">
+        </div>
+        <div class="col-sm-6">
+            <label> <b> Pembayaran </b> </label><br>
+            <input type="text" name="pembayaran" id="pembayaran_pembelian" autocomplete="off" class="form-control" placeholder="Pembayaran" style="font-size: 25px" style="height: 25px" >
+        </div>
+      </div>
 
       <label> <b> Kembalian </b> </label><br>
       <input type="text" name="sisa" id="sisa_pembayaran_pembelian" class="form-control" placeholder="Sisa Pembayaran" readonly="" style="height: 25px" >
@@ -413,9 +411,12 @@ $session_id = session_id();
       <a href='batal_retur_penjualan.php?session_id=<?php echo $session_id;?>' id="batal" class='btn btn-danger'><i class='fa fa-close'> </i> Batal </a>
 
       <a href='cetak_retur_penjualan.php' id="cetak_retur" style="display: none;" class="btn btn-success" target="blank"><i class="fa fa-print"> </i> Cetak Retur Penjualan </a>
-     
 
-					</form><!--tag penutup form-->
+  
+  </form><!--tag penutup form-->
+
+</div>
+
 <div class="alert alert-success" id="alert_berhasil" style="display:none">
   <strong>Success!</strong> Pembayaran Berhasil
 </div>
@@ -566,7 +567,7 @@ $session_id = session_id();
 
     var jumlah_retur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_retur").val()))));
     var jumlahbarang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlahbarang").val()))));
-    var harga = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_produk").val()))));
+    var harga = $("#harga_produk").val();
     var potongan1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
 
 
@@ -588,7 +589,7 @@ $session_id = session_id();
             };
           }
 
-          var subtotal = parseInt(jumlah_retur, 10) *  parseInt(harga, 10) - parseInt(potongan1, 10);
+          var subtotal = parseFloat(jumlah_retur, 10) *  parseFloat(harga, 10) - parseFloat(potongan1, 10);
           
           
           var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian").val()))));
@@ -597,7 +598,7 @@ $session_id = session_id();
           total = 0;
           };
 
-    var total_akhir = parseInt(total,10) + parseInt(subtotal,10);
+    var total_akhir = parseFloat(total,10) + parseFloat(subtotal,10);
 
 
   
@@ -826,12 +827,12 @@ $("#potongan_pembelian").keyup(function(){
              
              var sisa_potongan = total - potongan_pembelian;
              
-             var t_tax = ((parseInt(sisa_potongan,10) * parseInt(tax,10)) / 100);
-             var hasil_akhir = parseInt(sisa_potongan, 10) + parseInt(t_tax,10);
+             var t_tax = ((parseFloat(sisa_potongan,10) * parseFloat(tax,10)) / 100);
+             var hasil_akhir = parseFloat(sisa_potongan, 10) + parseFloat(t_tax,10);
 
         
-        $("#total_retur_pembelian").val(tandaPemisahTitik(parseInt(hasil_akhir)));
-        $("#potongan_persen").val(parseInt(potongan_persen));
+        $("#total_retur_pembelian").val(tandaPemisahTitik(parseFloat(hasil_akhir)));
+        $("#potongan_persen").val(parseFloat(potongan_persen));
 
       });
     });
@@ -866,8 +867,8 @@ $("#potongan_pembelian").keyup(function(){
 
       
              var sisa_potongan = total - potongan_rupiah;             
-             var t_tax = ((parseInt(sisa_potongan,10) * parseInt(tax,10)) / 100);
-             var hasil_akhir = parseInt(sisa_potongan, 10) + parseInt(t_tax,10);
+             var t_tax = ((parseFloat(sisa_potongan,10) * parseFloat(tax,10)) / 100);
+             var hasil_akhir = parseFloat(sisa_potongan, 10) + parseFloat(t_tax,10);
         
         if (potongan_persen > 100) {
           alert ("Potongan %, Tidak Boleh Lebih Dari 100%");
@@ -875,8 +876,8 @@ $("#potongan_pembelian").keyup(function(){
 
         
         
-        $("#total_retur_pembelian").val(tandaPemisahTitik(parseInt(hasil_akhir)));
-        $("#potongan_pembelian").val(tandaPemisahTitik(parseInt(potongan_rupiah)));
+        $("#total_retur_pembelian").val(tandaPemisahTitik(parseFloat(hasil_akhir)));
+        $("#potongan_pembelian").val(tandaPemisahTitik(parseFloat(potongan_rupiah)));
 
       });
 
@@ -909,9 +910,9 @@ $("#potongan_pembelian").keyup(function(){
                  $("#potongan_persen").val('');
               }
               
-              var t_tax = ((parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) * parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(tax,10)))))) / 100);
+              var t_tax = ((parseFloat(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) * parseFloat(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(tax,10)))))) / 100);
 
-              var total_akhir = parseInt(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) + Math.round(parseInt(t_tax,10));
+              var total_akhir = parseFloat(bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(t_total,10))))) + Math.round(parseFloat(t_tax,10));
               
               
               $("#total_retur_pembelian").val(tandaPemisahTitik(total_akhir));
@@ -938,13 +939,22 @@ $(document).ready(function(){
 
     var session_id = $("#session_id").val();
     
-$.post("cek_total_retur_penjualan.php",
-    {
-        session_id: session_id
-    },
-    function(data){
-        $("#total_retur_pembelian"). val(data);
-        $("#total_retur_pembelian1"). val(data);
+$.post("cek_total_retur_penjualan.php", {session_id: session_id},function(data){
+
+        if (data == "") {
+          var subtotal = 0.00;
+        }
+        else{
+          var subtotal = parseFloat(data);
+        }
+
+        
+        console.log(subtotal);
+        console.log(data)
+        
+
+        $("#total_retur_pembelian"). val(subtotal);
+        $("#total_retur_pembelian1"). val(subtotal);
     });
 
 });
@@ -1207,7 +1217,7 @@ $(document).on('click','.btn-hapus-tbs',function(e){
         {
           total = 0;
         };
-      var total_akhir = parseInt(total,10) - parseInt(subtotal_tbs,10);
+      var total_akhir = parseFloat(total,10) - parseFloat(subtotal_tbs,10);
 
       $("#total_retur_pembelian").val(tandaPemisahTitik(total_akhir));
       $("#total_retur_pembelian1").val(tandaPemisahTitik(total_akhir));
@@ -1366,11 +1376,11 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
                                     var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-tax-"+id+"").text()))));
 
-                                    var subtotal = parseInt(harga,10) * parseInt(jumlah_baru,10) - parseInt(potongan,10);
+                                    var subtotal = parseFloat(harga,10) * parseFloat(jumlah_baru,10) - parseFloat(potongan,10);
                                     
                                     var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_retur_pembelian").val()))));
                                     
-                                    subtotal_penjualan = parseInt(subtotal_penjualan,10) - parseInt(subtotal_lama,10) + parseInt(subtotal,10);
+                                    subtotal_penjualan = parseFloat(subtotal_penjualan,10) - parseFloat(subtotal_lama,10) + parseFloat(subtotal,10);
 
                                     var tax_tbs = tax / subtotal_lama * 100;
                                     var jumlah_tax = tax_tbs * subtotal / 100;

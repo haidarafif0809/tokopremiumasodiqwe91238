@@ -323,17 +323,17 @@ $nomor = 1 + $ambil_nomor ;
 
 
 //awal nya bonus
-$querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.harga_disc,tp.satuan FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id'");
-    while ($datatb = mysqli_fetch_array($querytb))
-      {
+$query_tbs_bonus_penjualan = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.harga_disc FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id'");
+    while($datatb = mysqli_fetch_array($query_tbs_bonus_penjualan)){
 
 //LOGIKA KETIKA ADA PRODUK PARCEL YANG AKAN DIJUAL, KARENA PARCEL TIDAK MASUK KE DALAM PRODUK BONUS
-        $query_cek_produk = $db->query("SELECT COUNT(kode_barang) FROM barang WHERE kode_barang = '$datatb[kode_barang]'");
+        $query_cek_produk = $db->query("SELECT COUNT(kode_barang) FROM barang WHERE kode_barang = '$datatb[kode_produk]'");
         $jumlah_cek_produk = mysqli_num_rows($query_cek_produk);
           
           if ($jumlah_cek_produk > 0 ) {
 
               $subtotal_bonusnya = $datatb['qty_bonus'] * $datatb['harga_disc'];
+
               $querybonus = "INSERT INTO bonus_penjualan (no_faktur_penjualan, kode_pelanggan, tanggal, jam, kode_produk, nama_produk, qty_bonus,keterangan,harga_disc,subtotal,satuan) VALUES ('$no_faktur', '$id_pelanggan', '$datatb[tanggal]', '$datatb[jam]', '$datatb[kode_produk]', '$datatb[nama_produk]', '$datatb[qty_bonus]', '$datatb[keterangan]', '$datatb[harga_disc]' ,'$subtotal_bonusnya','$datatb[satuan]' )";
 
                 if ($db->query($querybonus) === TRUE) {
@@ -345,14 +345,14 @@ $querytb = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.kete
 
 
 
-              // MENGAUPDATE KETERANGAN_PROMO_DISC DI TABLE PENJAUALAN 
+                // MENGAUPDATE KETERANGAN_PROMO_DISC DI TABLE PENJAUALAN 
                 $update_jual = "UPDATE penjualan SET keterangan_promo_disc = '$datatb[keterangan]' WHERE no_faktur = '$no_faktur'";
-                if ($db->query($update_jual) === TRUE) {
-                } 
+                    if ($db->query($update_jual) === TRUE) {
+                    } 
 
-                else {
-                echo "Error: " . $update_jual . "<br>" . $db->error;
-                }
+                    else {
+                    echo "Error: " . $update_jual . "<br>" . $db->error;
+                    }
 
           }
           else{

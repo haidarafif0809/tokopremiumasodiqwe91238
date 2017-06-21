@@ -6,7 +6,7 @@ include 'db.php';
 
 
 
-$no_faktur = $_SESSION['no_faktur'];
+$no_faktur = $_GET['no_faktur'];
 
 $perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.suplier,p.tanggal,p.tanggal_jt,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit,s.nama,g.nama_gudang FROM pembelian p INNER JOIN suplier s ON p.suplier = s.id INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang ORDER BY p.id DESC");
 
@@ -96,6 +96,7 @@ $data001 = mysqli_fetch_array($perintah);
            <th> Jumlah Barang </th>
            <th> Satuan </th>
            <th> Harga </th>
+           <th> Potongan </th>
            <th> Subtotal </th>
            
             
@@ -105,7 +106,7 @@ $data001 = mysqli_fetch_array($perintah);
         <?php
 
             
-$query5 = $db->query("SELECT s.nama,dp.id,dp.no_faktur,dp.kode_barang,dp.nama_barang,dp.jumlah_barang,dp.satuan,dp.harga,dp.subtotal FROM detail_pembelian dp INNER JOIN satuan s ON dp.satuan = s.id WHERE dp.no_faktur = '$no_faktur' ");
+$query5 = $db->query("SELECT s.nama,dp.id,dp.no_faktur,dp.kode_barang,dp.nama_barang,dp.jumlah_barang,dp.satuan,dp.harga,dp.subtotal,dp.potongan FROM detail_pembelian dp INNER JOIN satuan s ON dp.satuan = s.id WHERE dp.no_faktur = '$no_faktur' ");
             //menyimpan data sementara yang ada pada $perintah
             while ($data5 = mysqli_fetch_array($query5))
             {
@@ -117,6 +118,7 @@ $query5 = $db->query("SELECT s.nama,dp.id,dp.no_faktur,dp.kode_barang,dp.nama_ba
                 <td>". $data5['jumlah_barang'] ."</td>
                 <td>". $data5['nama'] ."</td>
                 <td>". rp($data5['harga']) ."</td>
+                <td>". rp($data5['potongan']) ."</td>
                 <td>". rp($data5['subtotal']) ."</td>
             <tr>";
 

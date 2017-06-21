@@ -283,16 +283,34 @@ if ($transfer_stok['transfer_stok_hapus'] > 0) {
     $(document).on('click','#btn_jadi_hapus',function(e){
 		
 		var no_faktur = $("#data_faktur").val();
-		var id = $(this).attr("data-id");
+    var id = $(this).attr("data-id");
+		var jenis_aksi = "Hapus Transfer Stok";
 
+    $.post("cek_hpp_transfer_stok.php",{no_faktur:no_faktur,jenis_aksi:jenis_aksi}, function(info){
 
-		$.post("hapus_transfer_stok.php",{no_faktur:no_faktur},function(data){
-				
-        $("#modal_hapus").modal('hide');
+      if (info == 0) {
 
-        var table_transfer_stok = $('#table_transfer_stok').DataTable();
-        table_transfer_stok.draw();
-		});
+            $.post("hapus_transfer_stok.php",{no_faktur:no_faktur},function(data){
+        
+            $("#modal_hapus").modal('hide');
+
+            var table_transfer_stok = $('#table_transfer_stok').DataTable();
+            table_transfer_stok.draw();
+            });
+
+      }
+      else{
+                $.post('modal_alert_hapus_data_item_masuk.php',{no_faktur:no_faktur},function(data){
+
+                $("#modal_hapus").modal('hide');
+                $("#modal_alert").modal('show');
+                $("#modal-alert").html(data);
+
+              });
+      };
+
+    })
+
 		
 		});
 // end fungsi hapus data

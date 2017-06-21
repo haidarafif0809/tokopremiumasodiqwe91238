@@ -17,22 +17,48 @@
     $harga = angkadoang($_POST['harga']);
     $subtotal = $harga * $jumlah;
 
-
-        $perintah = $db->prepare("INSERT INTO tbs_transfer_stok(session_id, kode_barang, nama_barang, kode_barang_tujuan, nama_barang_tujuan, jumlah, satuan, harga, subtotal, tanggal, jam) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-
-        $perintah->bind_param("sssssiiiiss",
-          $session_id, $kode_barang, $nama_barang, $barang_tujuan, $nama_barang_tujuan, $jumlah, $satuan,$harga,$subtotal,$tanggal_sekarang,$jam_sekarang);
+        if (isset($_POST['no_faktur'])) {
         
-        
-        $perintah->execute();
+        $no_faktur = stringdoang($_POST['no_faktur']);
 
-           if (!$perintah) {
-            die('Query Error : '.$db->errno.
-            ' - '.$db->error);
-            }
-            else {
-            
-            }
+                    $perintah = $db->prepare("INSERT INTO tbs_transfer_stok(no_faktur, kode_barang, nama_barang, kode_barang_tujuan, nama_barang_tujuan, jumlah, satuan, harga, subtotal, tanggal, jam) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+
+                    $perintah->bind_param("sssssiiiiss",
+                      $no_faktur, $kode_barang, $nama_barang, $barang_tujuan, $nama_barang_tujuan, $jumlah, $satuan,$harga,$subtotal,$tanggal_sekarang,$jam_sekarang);
+                    
+                    
+                    $perintah->execute();
+
+                       if (!$perintah) {
+                        die('Query Error : '.$db->errno.
+                        ' - '.$db->error);
+                        }
+                        else {
+                        
+                        }
+
+
+        }
+        else{
+                    $perintah = $db->prepare("INSERT INTO tbs_transfer_stok(session_id, kode_barang, nama_barang, kode_barang_tujuan, nama_barang_tujuan, jumlah, satuan, harga, subtotal, tanggal, jam) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+
+                    $perintah->bind_param("sssssiiiiss",
+                      $session_id, $kode_barang, $nama_barang, $barang_tujuan, $nama_barang_tujuan, $jumlah, $satuan,$harga,$subtotal,$tanggal_sekarang,$jam_sekarang);
+                    
+                    
+                    $perintah->execute();
+
+                       if (!$perintah) {
+                        die('Query Error : '.$db->errno.
+                        ' - '.$db->error);
+                        }
+                        else {
+                        
+                        }
+        }
+
+
+
 
 
 

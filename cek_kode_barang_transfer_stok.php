@@ -4,7 +4,6 @@ include 'sanitasi.php';
 
 
 $kode_barang = stringdoang($_POST['kode_barang']);
-$barang_tujuan = stringdoang($_POST['barang_tujuan']);
 $session_id = session_id();
 
 	if (isset($_POST['no_faktur'])) {
@@ -12,26 +11,23 @@ $session_id = session_id();
 		$no_faktur = stringdoang($_POST['no_faktur']);
 
 
-		$query = $db->query("SELECT kode_barang FROM tbs_transfer_stok WHERE (kode_barang = '$kode_barang' AND kode_barang_tujuan = '$barang_tujuan'  OR kode_barang = '$barang_tujuan')
+		$query = $db->query("SELECT kode_barang FROM tbs_transfer_stok WHERE kode_barang_tujuan = '$kode_barang' 
 		AND (session_id  = '' OR session_id IS NULL) AND no_faktur = '$no_faktur' ");
 
 	}
 	else{
 
-		$query = $db->query("SELECT kode_barang FROM tbs_transfer_stok WHERE  (kode_barang = '$kode_barang' AND kode_barang_tujuan = '$barang_tujuan'  OR kode_barang = '$barang_tujuan')
+		$query = $db->query("SELECT kode_barang FROM tbs_transfer_stok WHERE kode_barang_tujuan = '$kode_barang' 
 		AND (no_faktur  = '' OR no_faktur IS NULL) AND session_id = '$session_id' ");
 
 	}
 
 		$jumlah = mysqli_num_rows($query);
 
-		if ($jumlah > 0){
 
-		  echo 1;
-		}
-		else {
 
-		}
+		  echo $jumlah;
+
         //Untuk Memutuskan Koneksi Ke Database
 
         mysqli_close($db); 

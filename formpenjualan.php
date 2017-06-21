@@ -998,7 +998,6 @@ tr:nth-child(even){background-color: #f2f2f2}
    <div class="row">    
           <button type="submit" id="penjualan" class="btn btn-info" style="font-size:15px">Bayar (F8)</button>
           <button type="submit" id="transaksi_baru" style="display: none" class="btn btn-info" style="font-size:15px;"> Transaksi Baru (Ctrl + M)</button>
-          <a class="btn btn-info" href="formpenjualan.php" id="transaksi_baru" style="display: none">  Transaksi Baru </a>
           <button type="submit" id="piutang" class="btn btn-warning" style="font-size:15px">Piutang (F9)</button>
           <a href='cetak_penjualan_piutang.php' id="cetak_piutang" style="display: none;" class="btn btn-success" target="blank">Cetak Piutang  </a> 
           <button type="submit" id="simpan_sementara" class="btn btn-primary" style="font-size:15px">  Simpan (F10)</button>
@@ -5985,6 +5984,8 @@ $('#tabel_tbs_penjualan').DataTable().destroy();
             $("#cetak_piutang").hide();
             $("#cetak_tunai_kategori").hide(); 
             $('#span_tbs').show();
+            $("#ppn").attr("disabled", false);
+            $("#level_harga").attr("disabled", false);
 
             
      $("#level_harga").attr("disabled", false);

@@ -3616,9 +3616,8 @@ $("#formtambahproduk").submit(function(){
 
 
 <script>
-
-   //SKRIPT UNTUK START CLICK BAYAR PENJUALAN
-  $("#penjualan").click(function(){
+//SKRIPT UNTUK START CLICK BAYAR PENJUALAN
+$("#penjualan").click(function(){
 
         var session_id = $("#session_id").val();
         var no_faktur = $("#nomor_faktur_penjualan").val();
@@ -3641,60 +3640,28 @@ $("#formtambahproduk").submit(function(){
         var ber_stok = $("#ber_stok").val();   
         var ppn_input = $("#ppn_input").val();
         var ppn = $("#ppn").val();
-        
-        
         var sisa = parseFloat(pembayaran) - parseFloat(total);
-        
         var sisa_kredit = parseFloat(total) - parseFloat(pembayaran);
 
-
- 
- if (sisa_pembayaran < 0)
- {
-
+if (sisa_pembayaran < 0){
   alert("Jumlah Pembayaran Tidak Mencukupi");
-
- }
-
-
- else if (kode_pelanggan == "") 
- {
-
-alert("Kode Pelanggan Harus Di Isi");
-
- }
-else if (pembayaran == "") 
- {
-
-alert("Pembayaran Harus Di Isi");
-
- }
-
-   else if (kode_gudang == "")
- {
-
-alert(" Kode Gudang Harus Diisi ");
-
- }
- 
- else if ( sisa < 0) 
- {
-
-alert("Silakan Bayar Piutang");
-
-
-
- }
-   else if (total ==  0 || total == "") 
-        {
-        
-        alert("Anda Belum Melakukan Pemesanan");
-        
-        }
-
- else
-
- {
+}
+else if (kode_pelanggan == "") {
+  alert("Kode Pelanggan Harus Di Isi");
+}
+else if (pembayaran == "") {
+  alert("Pembayaran Harus Di Isi");
+}
+else if (kode_gudang == ""){
+  alert(" Kode Gudang Harus Diisi ");
+}
+else if ( sisa < 0) {
+  alert("Silakan Bayar Piutang");
+}
+else if (total ==  0 || total == "") {
+  alert("Anda Belum Melakukan Pemesanan");
+}
+else{
 
   $("#penjualan").hide();
   $("#cetak_langsung").hide();
@@ -3714,10 +3681,10 @@ alert("Silakan Bayar Piutang");
   }
   else{
 
-//JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
-     $.post("proses_bayar_jual.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
+  //JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
+  $.post("proses_bayar_jual.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
 
-      info = info.replace(/\s+/g, '');
+    //info = info.replace(/\s+/g, '');
 
      var no_faktur = info;
 
@@ -3731,13 +3698,10 @@ alert("Silakan Bayar Piutang");
      $("#cetak_tunai_besar").show('');
      $("#span_tbs").hide();
      $("#sss").collapse('hide');
-
-
      $("#kd_pelanggan").val('');
      $("#kd_pelanggan").trigger("chosen:open");
-     $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});    
-
-    $("#total1").val('');
+     $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
+     $("#total1").val('');
      $("#pembayaran_penjualan").val('');
      $("#sisa_pembayaran_penjualan").val('');
      $("#kredit").val('');

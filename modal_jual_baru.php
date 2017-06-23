@@ -124,10 +124,10 @@ while( $row=mysqli_fetch_array($query) ) {
         }
     else{
         if($row["nama"] == 'KG'){
-           $nestedData[] = koma(cekStokHpp($row["kode_barang"]),3);
+           $nestedData[] = koma(cekStokHpp($row["kode_barang"]),2);
         }
         else{
-            $nestedData[] = hapus_koma(cekStokHpp($row["kode_barang"]));
+            $nestedData[] = koma(cekStokHpp($row["kode_barang"]),2);
         }
         }
 

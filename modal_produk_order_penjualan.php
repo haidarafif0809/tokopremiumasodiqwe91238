@@ -122,7 +122,7 @@ while( $row=mysqli_fetch_array($query) ) {
         }
     else{
         
-        $nestedData[] = koma(cekStokHpp($row["kode_barang"]),3);
+        $nestedData[] = koma(cekStokHpp($row["kode_barang"]),2);
         }
 
     $nestedData[] = $row["nama"];

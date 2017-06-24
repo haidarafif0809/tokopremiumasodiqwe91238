@@ -998,10 +998,9 @@ tr:nth-child(even){background-color: #f2f2f2}
    <div class="row">    
           <button type="submit" id="penjualan" class="btn btn-info" style="font-size:15px">Bayar (F8)</button>
           <button type="submit" id="transaksi_baru" style="display: none" class="btn btn-info" style="font-size:15px;"> Transaksi Baru (Ctrl + M)</button>
-          <a class="btn btn-info" href="formpenjualan.php" id="transaksi_baru" style="display: none">  Transaksi Baru </a>
           <button type="submit" id="piutang" class="btn btn-warning" style="font-size:15px">Piutang (F9)</button>
           <a href='cetak_penjualan_piutang.php' id="cetak_piutang" style="display: none;" class="btn btn-success" target="blank">Cetak Piutang  </a> 
-          <button type="submit" id="simpan_sementara" class="btn btn-primary" style="font-size:15px">  Simpan (F10)</button>
+          <button type="submit" id="simpan_sementara" class="btn btn-primary" style="font-size:15px; display: none">  Simpan (F10)</button>
           <a href='cetak_penjualan_tunai.php' id="cetak_tunai" style="display: none;" class="btn btn-primary" target="blank"> Cetak Tunai  </a>
 
           <button type="submit" id="cetak_langsung" target="blank" class="btn btn-success" style="font-size:15px"> Bayar / Cetak (Ctrl + K) </button>
@@ -3030,25 +3029,31 @@ $('form').submit(function(){
     }
   
   var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
-    if (potongan == '')
+   if (potongan == '')
     {
       potongan = 0;
     }
-  var subtotal_produk = parseFloat(harga,2) * parseFloat(jumlah_barang.replace(',','.'),2);
+    else{
+          var pos = potongan.search("%");
+           if (pos > 0) 
+            {
+              var potongan_persen = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
 
-  var persen = potongan.search("%");
-  var diskon_persen = potongan;
-  var diskon_persen = diskon_persen.replace("%","");
-  var nilai_disc_persen = parseFloat(subtotal_produk,2) * parseFloat(diskon_persen.replace(',','.'),2) / 100;
+               potongan_persen = potongan_persen.replace("%","");
+                if(potongan_persen > 100){
+                  alert("Potongan Tidak Boleh Lebih 100%");
+                  $("#potongan1").val(0);
+                  $("#potongan1").focus();
+                }
+               potongan = parseFloat(gantiTitik(jumlah_barang)) * parseFloat(harga) * potongan_persen / 100 ;
+            };
+    }
 
-/*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
-    if (biaya_adm == '')
-    {
-      biaya_adm = 0;
-    }*/
+  var nilai_disc_persen = parseFloat(potongan);
 
-    var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax1").val()))));
-     if (tax == '')
+
+  var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax1").val()))));
+  if (tax == '')
     {
       tax = 0;
     }
@@ -3610,9 +3615,8 @@ $("#formtambahproduk").submit(function(){
 
 
 <script>
-
-   //SKRIPT UNTUK START CLICK BAYAR PENJUALAN
-  $("#penjualan").click(function(){
+//SKRIPT UNTUK START CLICK BAYAR PENJUALAN
+$("#penjualan").click(function(){
 
         var session_id = $("#session_id").val();
         var no_faktur = $("#nomor_faktur_penjualan").val();
@@ -3635,62 +3639,28 @@ $("#formtambahproduk").submit(function(){
         var ber_stok = $("#ber_stok").val();   
         var ppn_input = $("#ppn_input").val();
         var ppn = $("#ppn").val();
-        
-        
-        var sisa = parseFloat($("#pembayaran_penjualan").val(),2) - parseFloat($("#total1").val(),2);
-        
-        var sisa_kredit = parseFloat($("#total1").val(),2) - parseFloat($("#pembayaran_penjualan").val(),2);
+        var sisa = parseFloat(pembayaran) - parseFloat(total);
+        var sisa_kredit = parseFloat(total) - parseFloat(pembayaran);
 
-
-
-
- 
- if (sisa_pembayaran < 0)
- {
-
+if (sisa_pembayaran < 0){
   alert("Jumlah Pembayaran Tidak Mencukupi");
-
- }
-
-
- else if (kode_pelanggan == "") 
- {
-
-alert("Kode Pelanggan Harus Di Isi");
-
- }
-else if (pembayaran == "") 
- {
-
-alert("Pembayaran Harus Di Isi");
-
- }
-
-   else if (kode_gudang == "")
- {
-
-alert(" Kode Gudang Harus Diisi ");
-
- }
- 
- else if ( sisa < 0) 
- {
-
-alert("Silakan Bayar Piutang");
-
-
-
- }
-   else if (total ==  0 || total == "") 
-        {
-        
-        alert("Anda Belum Melakukan Pemesanan");
-        
-        }
-
- else
-
- {
+}
+else if (kode_pelanggan == "") {
+  alert("Kode Pelanggan Harus Di Isi");
+}
+else if (pembayaran == "") {
+  alert("Pembayaran Harus Di Isi");
+}
+else if (kode_gudang == ""){
+  alert(" Kode Gudang Harus Diisi ");
+}
+else if ( sisa < 0) {
+  alert("Silakan Bayar Piutang");
+}
+else if (total ==  0 || total == "") {
+  alert("Anda Belum Melakukan Pemesanan");
+}
+else{
 
   $("#penjualan").hide();
   $("#cetak_langsung").hide();
@@ -3710,10 +3680,10 @@ alert("Silakan Bayar Piutang");
   }
   else{
 
-//JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
-     $.post("proses_bayar_jual.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
+  //JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
+  $.post("proses_bayar_jual.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
 
-      info = info.replace(/\s+/g, '');
+    //info = info.replace(/\s+/g, '');
 
      var no_faktur = info;
 
@@ -3727,13 +3697,10 @@ alert("Silakan Bayar Piutang");
      $("#cetak_tunai_besar").show('');
      $("#span_tbs").hide();
      $("#sss").collapse('hide');
-
-
      $("#kd_pelanggan").val('');
      $("#kd_pelanggan").trigger("chosen:open");
-     $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});    
-
-    $("#total1").val('');
+     $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
+     $("#total1").val('');
      $("#pembayaran_penjualan").val('');
      $("#sisa_pembayaran_penjualan").val('');
      $("#kredit").val('');
@@ -5981,6 +5948,8 @@ $('#tabel_tbs_penjualan').DataTable().destroy();
             $("#cetak_piutang").hide();
             $("#cetak_tunai_kategori").hide(); 
             $('#span_tbs').show();
+            $("#ppn").attr("disabled", false);
+            $("#level_harga").attr("disabled", false);
 
             
      $("#level_harga").attr("disabled", false);

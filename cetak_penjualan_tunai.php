@@ -9,6 +9,7 @@ include 'db.php';
 
     $query0 = $db->query("SELECT no_faktur, potongan, tax, biaya_admin, total, tunai, sisa, tanggal, kode_pelanggan FROM penjualan WHERE no_faktur = '$no_faktur' ");
     $data0 = mysqli_fetch_array($query0);
+$kembalian = $data0['tunai'] - $data0['total'];
 
     $query1 = $db->query("SELECT nama_perusahaan, alamat_perusahaan, no_telp FROM perusahaan ");
     $data1 = mysqli_fetch_array($query1);
@@ -75,19 +76,22 @@ include 'db.php';
            echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. rp($data2['jumlah_barang']) .'</td>  <td style="padding:3px"> '. rp($data2['harga']) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
            }
            echo '<tr><td width:"50%"> '. $bonus['nama_produk'] .' </td> <td style="padding:3px"> '. $bonus['qty_bonus'] .'</td>'; 
-           if ($keterangan == 'Free Produk') {
+
+        if ($keterangan == 'Free Produk') {
               echo '<td style="padding:3px"> '. $bonus['harga_jual'] .'</td>';
-            }
-            else{
+        }
+        else{
               echo '<td style="padding:3px"> '. $bonus['harga_jual'] .'</td>';
-            } 
-            echo '<td style="padding:3px"> '.rp($subtotal_bonus) .'</td></tr>';          
-            if ($keterangan == 'Free Produk') {
+        } 
+            
+          echo '<td style="padding:3px"> '.rp($subtotal_bonus) .'</td></tr>';   
+
+        if ($keterangan == 'Free Produk') {
               echo '<td style="padding:3px"> </td><td style="padding:3px"> </td><td style="padding:3px"> Disc : </td><td style="padding:3px"> '.'-'.rp($subtotal_bonus) .'</td>';
-            }
-            else{
+        }
+        else{
               echo '<td style="padding:3px"> </td><td style="padding:3px"> </td><td style="padding:3px"> Disc : </td><td style="padding:3px"> '.'-'.rp($subtotal_bonus_disc) .'</td>';
-            }
+        }
 //Untuk Memutuskan Koneksi Ke Database
 
 mysqli_close($db);            
@@ -98,13 +102,14 @@ mysqli_close($db);
     ===================<br>
  <table>
   <tbody>
-      <tr><td width="50%">Diskon</td> <td> :</td> <td><?php echo rp($data0['potongan']);?> </tr>
-      <!--<tr><td  width="50%">Pajak</td> <td> :</td> <td> /* echo rp($data0['tax']);?>*/ </td></tr>-->
-      <tr><td  width="50%">Biaya Admin</td> <td> :</td> <td> <?php echo rp($data0['biaya_admin']);?> </td></tr>
-      <tr><td  width="50%">Total Item</td> <td> :</td> <td> <?php echo $total_item; ?> </td></tr>
-      <tr><td width="50%">Total Penjualan</td> <td> :</td> <td><?php echo rp($data0['total']); ?> </tr>
-      <tr><td  width="50%">Tunai</td> <td> :</td> <td> <?php echo rp($data0['tunai']); ?> </td></tr>
-      <tr><td  width="50%">Kembalian</td> <td> :</td> <td> <?php echo rp($data0['sisa']); ?>  </td></tr>
+    
+  <tr><td width="50%">Diskon</td> <td> :</td> <td><?php echo koma($data0['potongan'],2);?> </tr>
+  <!--<tr><td  width="50%">Pajak</td> <td> :</td> <td> /* echo rp($data0['tax']);?>*/ </td></tr>-->
+  <tr><td width="50%">Biaya Admin</td><td> :</td> <td> <?php echo koma($data0['biaya_admin'],2);?></td></tr>
+  <tr><td width="50%">Total Item</td> <td> :</td> <td> <?php echo gantiKoma($total_item); ?> </td></tr>
+  <tr><td width="50%">Total Penjualan</td> <td> :</td> <td><?php echo koma($data0['total'],2); ?> </tr>
+  <tr><td width="50%">Tunai</td> <td> :</td> <td> <?php echo koma($data0['tunai'],2); ?> </td></tr>
+  <tr><td width="50%">Kembalian</td> <td> :</td> <td> <?php echo koma($kembalian,2); ?>  </td></tr>
             
 
   </tbody>

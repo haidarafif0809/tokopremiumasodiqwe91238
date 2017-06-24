@@ -439,8 +439,6 @@
 
 </div><!--END COL_SM_4-->
 
-  <span id="demo"> </span>
-
 </div> <!--END ROW-->
 
 </div><!-- END CONTAINER -->
@@ -840,24 +838,27 @@ alert(" Kode Gudang Harus Diisi ");
  else
 
  {
-
-  $("#pembayaran").hide();
-  $("#hutang").hide();
-  $("#batal").hide();
-  $("#transaksi_baru").show();
+      
+      $("#pembayaran").hide();
+      $("#hutang").hide();
+      $("#batal").hide();
+      $("#transaksi_baru").show();
       $("#total_pembelian").val('');
-     $("#pembayaran_pembelian").val('');
-     $("#sisa_pembayaran_pembelian").val('');
-     $("#kredit").val('');
-     $("#potongan_pembelian").val('');
-     $("#potongan_persen").val('');
-     $("#nama_suplier").val('');
-     $("#nama_suplier").trigger('chosen:updated');
+      $("#pembayaran_pembelian").val('');
+      $("#sisa_pembayaran_pembelian").val('');
+      $("#kredit").val('');
+      $("#potongan_pembelian").val('');
+      $("#potongan_persen").val('');
+      $("#nama_suplier").val('');
+      $("#nama_suplier").trigger('chosen:updated');
 
  $.post("proses_bayar_beli.php",{total_1:total_1,kode_gudang:kode_gudang,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,suplier:suplier1,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,tax1:tax1,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,ppn:ppn,ppn_input:ppn_input},function(info) {
     
 
-    $("#result").html(info);
+    var no_faktur = info;
+
+    $("#cetak_tunai").attr('href', 'cetak_pembelian_tunai.php?no_faktur='+no_faktur);
+    $("#cetak_hutang").attr('href', 'cetak_pembelian_hutang.php?no_faktur='+no_faktur);    
     $("#tax").val('');
     $("#alert_berhasil").show();
     $("#cetak_tunai").show();
@@ -997,8 +998,10 @@ alert(" Kode Gudang Harus Diisi ");
 
        $.post("proses_bayar_beli.php",{total_1:total_1,kode_gudang:kode_gudang,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,suplier:suplier,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,tax1:tax1,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,ppn:ppn,ppn_input:ppn_input},function(info) {
 
-       $("#demo").html(info);
-       
+       var no_faktur = info;
+
+       $("#cetak_tunai").attr('href', 'cetak_pembelian_tunai.php?no_faktur='+no_faktur);
+       $("#cetak_hutang").attr('href', 'cetak_pembelian_hutang.php?no_faktur='+no_faktur);       
        $("#alert_berhasil").show();
        $("#cetak_hutang").show();
        $("#pembayaran_pembelian").val('');
@@ -2049,6 +2052,7 @@ $(document).ready(function(){
             $("#cetak_tunai").hide();
             $("#cetak_hutang").hide(); 
             $("#alert_berhasil").hide(); 
+            $("#ppn").attr("disabled", false);
 
     });
   });

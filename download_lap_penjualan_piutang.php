@@ -1,7 +1,12 @@
 <?php 
-include 'header.php';
-include 'sanitasi.php';
+// Fungsi header dengan mengirimkan raw data excel
+header("Content-type: application/vnd-ms-excel");
+ 
+// Mendefinisikan nama file ekspor "hasil-export.xls"
+header("Content-Disposition: attachment; filename=laporan_penjualan_piutang.xls");
+
 include 'db.php';
+include 'sanitasi.php';
 
 
 $dari_tanggal = stringdoang($_GET['dari_tanggal']);
@@ -19,16 +24,9 @@ $total_kredit = $cek02['total_kredit'];
 $total_bayar = $cek02['tunai_penjualan'] +  $cek02['ambil_total_bayar'];
 
 
-
-
  ?>
 <div class="container">
  <div class="row"><!--row1-->
-        <div class="col-sm-2">
-        <br><br>
-                <img src='save_picture/<?php echo $data1['foto']; ?>' class='img-rounded' alt='Cinque Terre' width='160' height='140`'> 
-        </div><!--penutup colsm2-->
-
         <div class="col-sm-6">
                  <h3> <b> LAPORAN PIUTANG PERIODE </b></h3>
                  <hr>
@@ -51,8 +49,6 @@ $total_bayar = $cek02['tunai_penjualan'] +  $cek02['ambil_total_bayar'];
                  
         </div><!--penutup colsm4-->
 
-
-        
     </div><!--penutup row1-->
     <br>
     <br>
@@ -94,6 +90,7 @@ $tot_bayar = $kel_bayar['total_bayar'] + $Dp;
                   $query_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE id = '$data11[kode_pelanggan]' ");
                   $data_pelanggan = mysqli_fetch_array($query_pelanggan);
 
+
                   echo "<tr>
                   <td>". $data11['no_faktur'] ."</td>
                   <td>". $data_pelanggan['nama_pelanggan'] ."</td>
@@ -123,9 +120,8 @@ $tot_bayar = $kel_bayar['total_bayar'] + $Dp;
       <td><p style='color:red' align='right'> - </p></td>
       <td><p style='color:red' align='right' > ".rp($total_akhir)." </p></td>
       <td><p style='color:red' align='right' > ".rp($total_bayar)." </p></td>
-      <td><p style='color:red' align='right' > ".rp($total_kredit)." </p></td>";              
-
-
+      <td><p style='color:red' align='right' > ".rp($total_kredit)." </p></td>";    
+      
 //Untuk Memutuskan Koneksi Ke Database
 
 mysqli_close($db); 
@@ -134,22 +130,11 @@ mysqli_close($db);
             </tbody>
 
       </table>
+      <hr>
 </div>
 </div>
 <br>
 
-<div class="col-sm-6">
-</div>
-
-
 
 
      </div>
-
- <script>
-$(document).ready(function(){
-  window.print();
-});
-</script>
-
-<?php include 'footer.php'; ?>

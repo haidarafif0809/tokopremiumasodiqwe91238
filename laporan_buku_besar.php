@@ -30,7 +30,8 @@ include 'db.php';
     <option value=""> </option>
     <?php 
 
-$ambil_kas = $db->query("SELECT kode_daftar_akun, nama_daftar_akun FROM daftar_akun");
+
+$ambil_kas = $db->query("SELECT da.kode_daftar_akun, da.nama_daftar_akun, jt.kode_akun_jurnal FROM daftar_akun da INNER JOIN jurnal_trans jt ON da.kode_daftar_akun = jt.kode_akun_jurnal GROUP BY da.kode_daftar_akun");
 
     while($data_kas = mysqli_fetch_array($ambil_kas))
     {
@@ -72,12 +73,21 @@ $("#btntgl").click(function() {
       var daftar_akun = $("#daftar_akun").val();
       var rekap = $("#rekap").val();
 
+      if (rekap == "") {
+        alert("Silakan Pilih");
+        $("#rekap").focus();
+      }
+      else{
+
+
+
     $.post("proses_buku_besar.php" ,{dari_tanggal:dari_tanggal,sampai_tanggal:sampai_tanggal,daftar_akun:daftar_akun,rekap:rekap},function(data){
 
 
     $("#result").html(data); 
 
   });  
+     }
 });
 
 $("#perhari").submit(function(){

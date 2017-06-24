@@ -10,7 +10,7 @@
     $kode_barang = stringdoang($_POST['kode_barang']);    
     $no_faktur_penjualan = stringdoang($_POST['no_faktur_penjualan']);
               $jumlah_retur = angkadoang($_POST['jumlah_retur']);
-              $harga = angkadoang($_POST['harga']);
+              $harga = stringdoang($_POST['harga']);
               
               $potongan = stringdoang($_POST['potongan1']);
               $pajak = angkadoang($_POST['tax1']);
@@ -85,7 +85,7 @@
     $nama_barang = stringdoang($_POST['nama_barang']);
     $kode_barang = stringdoang($_POST['kode_barang']);
     $jumlah_retur = angkadoang($_POST['jumlah_retur']);
-    $harga = angkadoang($_POST['harga']);
+    $harga = stringdoang($_POST['harga']);
      $satuan_produk = stringdoang($_POST['satuan_produk']);
      $satuan_jual = stringdoang($_POST['satuan_jual']);
 
@@ -120,7 +120,7 @@ else {
       <td>". rp($data1['jumlah_beli']) ."</td>
       <td>". $data1['satuan_jual'] ."</td>
 
-      <td class='edit-jumlah' data-id='".$data1['id']."' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."'> <span id='text-jumlah-".$data1['id']."'> ".$data1['jumlah_retur']." </span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_retur']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."'> </td>
+      <td class='edit-jumlah' data-id='".$data1['id']."' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."'> <span id='text-jumlah-".$data1['id']."'> ".koma($data1['jumlah_retur'],3)." </span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".koma($data1['jumlah_retur'],3)."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."'> </td>
 
 
       <td>". $data1['satuan_retur'] ."</td>

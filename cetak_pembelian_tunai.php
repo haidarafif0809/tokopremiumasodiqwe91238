@@ -1,23 +1,24 @@
 <?php session_start();
+
 include 'header.php';
 include 'sanitasi.php';
 include 'db.php';
 
 
 
-$no_faktur = $_SESSION['no_faktur'];
 
-$perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.suplier,p.tanggal,p.tanggal_jt,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit,s.nama,g.nama_gudang FROM pembelian p INNER JOIN suplier s ON p.suplier = s.id INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang ORDER BY p.id DESC");
+$no_faktur = $_GET['no_faktur'];
 
-$data001 = mysqli_fetch_array($perintah);
-
-    $query0 = $db->query("SELECT * FROM pembelian WHERE no_faktur = '$no_faktur' ");
+    $query0 = $db->query("SELECT p.suplier, p.no_faktur, p.tanggal, p.total, p.potongan, p.tax, p.tunai, s.nama AS suplier FROM pembelian p INNER JOIN suplier s ON p.suplier = s.id WHERE no_faktur = '$no_faktur' ");
     $data0 = mysqli_fetch_array($query0);
+
+    $suplier = $data0['suplier'];
+
 
     $query1 = $db->query("SELECT * FROM perusahaan ");
     $data1 = mysqli_fetch_array($query1);
 
-
+   
 
     $query3 = $db->query("SELECT SUM(jumlah_barang) as total_item FROM detail_pembelian WHERE no_faktur = '$no_faktur'");
     $data3 = mysqli_fetch_array($query3);
@@ -56,16 +57,16 @@ $data001 = mysqli_fetch_array($perintah);
 
         <div class="col-sm-4">
                           <br><br><br><br><br>
-<table>
+
+ <table>
   <tbody>
 
-      <tr><td width="50%">No Faktur</td> <td> : </td> <td> <?php echo $data0['no_faktur']; ?> </td></tr>
-      <tr><td  width="50%">Tanggal</td> <td> : </td> <td> <?php echo tanggal($data0['tanggal']); ?> </td>
+      <tr><td width="50%">No Faktur</td> <td> :&nbsp;</td>  <td>  <?php echo $data0['no_faktur']; ?> </td></tr>
+      <tr><td  width="50%">Tanggal</td> <td> :&nbsp;</td>  <td> <?php echo tanggal($data0['tanggal']);?> </td>
       </tr>
-      <tr><td  width="50%">Suplier</td> <td> : </td> <td> <?php echo $data001['nama']; ?></td></tr>
-            
-  </tbody>
-</table>           
+      <tr><td  width="50%">Suplier</td> <td> :&nbsp;</td>  <td> <?php echo $suplier; ?> </td></tr>
+</tbody>
+  </table>           
                  
         </div><!--penutup colsm4-->
 
@@ -93,6 +94,7 @@ $data001 = mysqli_fetch_array($perintah);
            <th> Jumlah Barang </th>
            <th> Satuan </th>
            <th> Harga </th>
+           <th> Potongan </th>
            <th> Subtotal </th>
            
             
@@ -101,27 +103,44 @@ $data001 = mysqli_fetch_array($perintah);
         <tbody>
         <?php
 
-$query5 = $db->query("SELECT s.nama,dp.id,dp.no_faktur,dp.kode_barang,dp.nama_barang,dp.jumlah_barang,dp.satuan,dp.harga,dp.subtotal FROM detail_pembelian dp INNER JOIN satuan s ON dp.satuan = s.id WHERE dp.no_faktur = '$no_faktur' ");
-                        //menyimpan data sementara yang ada pada $perintah
+            
+            $query5 = $db->query("SELECT s.nama,dp.id,dp.no_faktur,dp.kode_barang,dp.nama_barang,dp.jumlah_barang,dp.satuan,dp.harga,dp.subtotal,dp.potongan FROM detail_pembelian dp INNER JOIN satuan s ON dp.satuan = s.id WHERE dp.no_faktur = '$no_faktur'");
+            
+            //menyimpan data sementara yang ada pada $perintah
             while ($data5 = mysqli_fetch_array($query5))
             {
+
+              $pilih_konversi = $db->query("SELECT $data5[jumlah_barang] / sk.konversi AS jumlah_konversi, sk.harga_pokok / sk.konversi AS harga_konversi, sk.id_satuan, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.id_produk = b.id  WHERE sk.id_satuan = '$data5[satuan]' AND sk.kode_produk = '$data5[kode_barang]'");
+                $data_konversi = mysqli_fetch_array($pilih_konversi);
+
+                if ($data_konversi['harga_konversi'] != 0 || $data_konversi['harga_konversi'] != "") {
+                  
+                   $jumlah_barang = $data_konversi['jumlah_konversi'];
+                }
+                else{
+                  $jumlah_barang = $data5['jumlah_barang'];
+                }
+
+
                 //menampilkan data
             echo "<tr>
                 <td>". $data5['no_faktur'] ."</td>
                 <td>". $data5['kode_barang'] ."</td>
                 <td>". $data5['nama_barang'] ."</td>
-                <td>". $data5['jumlah_barang'] ."</td>
+                <td>". $jumlah_barang ."</td>
                 <td>". $data5['nama'] ."</td>
                 <td>". rp($data5['harga']) ."</td>
+                <td>". rp($data5['potongan']) ."</td>
                 <td>". rp($data5['subtotal']) ."</td>
             <tr>";
 
             }
 
-//Untuk Memutuskan Koneksi Ke Database
-
-mysqli_close($db); 
-
+                    //Untuk Memutuskan Koneksi Ke Database
+                    
+                    mysqli_close($db); 
+        
+        
         ?>
         </tbody>
 
@@ -140,10 +159,10 @@ mysqli_close($db);
  <table>
   <tbody>
 
-      <tr><td width="75%">Jumlah Item</td> <td> : </td> <td> <?php echo $total_item; ?> </td></tr>
-      <tr><td  width="75%">Potongan</td> <td> : </td> <td> <?php echo rp($data0['potongan']); ?> </td>
+      <tr><td width="75%">Jumlah Item</td> <td> :&nbsp;</td> <td> <?php echo $total_item; ?> </td></tr>
+      <tr><td  width="75%">Potongan</td> <td> :&nbsp;</td> <td> <?php echo rp($data0['potongan']); ?> </td>
       </tr>
-      <tr><td  width="75%">Pajak</td> <td> : </td> <td> <?php echo rp($data0['tax']); ?></td></tr>
+      <tr><td  width="75%">Pajak</td> <td> :&nbsp;</td> <td> <?php echo rp($data0['tax']); ?></td></tr>
             
   </tbody>
   </table>
@@ -155,11 +174,11 @@ mysqli_close($db);
 
  <table>
   <tbody>
-      <tr><td width="75%">Total Pembelian</td> <td> : </td> <td> <?php echo rp($total_subtotal); ?> </tr>
-      <tr><td  width="75%">Total Akhir</td> <td> : </td> <td> <?php echo rp($data0['total']); ?> </td></tr>
-      <tr><td  width="75%">Tunai</td> <td> : </td> <td> <?php echo rp($data0['tunai']); ?> </td></tr>
-      <tr><td  width="75%">Kredit</td> <td> : </td> <td> <?php echo rp($total_kredit); ?> </td></tr>
-      <tr><td  width="75%">Kembalian</td> <td> : </td> <td> <?php echo rp($total_kembalian); ?> </td></tr>
+      <tr><td width="75%">Total Pembelian</td> <td> :&nbsp;</td> <td> <?php echo rp($total_subtotal); ?> </tr>
+      <tr><td  width="75%">Total Akhir</td> <td> :&nbsp;</td> <td> <?php echo rp($data0['total']); ?> </td></tr>
+      <tr><td  width="75%">Tunai</td> <td> :&nbsp;</td> <td> <?php echo rp($data0['tunai']); ?> </td></tr>
+      <tr><td  width="75%">Kredit</td> <td> :&nbsp;</td> <td> <?php echo rp($total_kredit); ?> </td></tr>
+      <tr><td  width="75%">Kembalian</td> <td> :&nbsp;</td> <td> <?php echo rp($total_kembalian); ?> </td></tr>
             
 
   </tbody>
@@ -177,13 +196,13 @@ mysqli_close($db);
 
 
 
+
+
  <script>
 $(document).ready(function(){
   window.print();
 });
 </script>
-
-
 
 
 <?php include 'footer.php'; ?>

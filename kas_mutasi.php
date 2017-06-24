@@ -502,12 +502,13 @@ else{
 		            },
 		        })
 
-		$("#tanggal1").val('');
 		$("#tambah_faktur").val('');
-		$("#keterangan").val(dari_akun1);
+		$("#keterangan").val('');
 		$("#dari_akun1").val('');
 		$("#ke_akun1").val('');
 		$("#jumlah2").val('');
+
+		$("#jumlah_kas1").val('');
 		$(".alert").show('fast');
 
 		setTimeout(tutupalert, 100);

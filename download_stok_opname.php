@@ -39,7 +39,7 @@ $no_faktur = stringdoang($_GET['no_faktur']);
 
 $total_selisih_harga = 0;
 
-$query_plus = $db->query ("SELECT no_faktur,kode_barang,nama_barang,stok_sekarang,fisik,selisih_fisik,hpp FROM detail_stok_opname WHERE no_faktur = '$no_faktur'  ");
+$query_plus = $db->query ("SELECT no_faktur,kode_barang,nama_barang,stok_sekarang,fisik,selisih_fisik,hpp,selisih_harga FROM detail_stok_opname WHERE no_faktur = '$no_faktur'  ");
 		while ($out_plus = mysqli_fetch_array($query_plus))
 			{
 				//menampilkan data
@@ -51,7 +51,7 @@ $query_plus = $db->query ("SELECT no_faktur,kode_barang,nama_barang,stok_sekaran
 			<td>". $out_plus['fisik'] ."</td>
 			<td>". $out_plus['selisih_fisik'] ."</td>
 			<td>". $out_plus['hpp'] ."</td>
-			<td>". $out_plus['hpp'] ."</td>
+			<td>". $out_plus['selisih_harga'] ."</td>
 
 			</tr>";
 

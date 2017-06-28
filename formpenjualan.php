@@ -3052,6 +3052,8 @@ $('form').submit(function(){
   var nilai_disc_persen = parseFloat(potongan);
 
 
+var subtotal_murni = parseFloat(gantiTitik(jumlah_barang)) * parseFloat(harga);
+
   var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax1").val()))));
   if (tax == '')
     {
@@ -3219,7 +3221,13 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
   {
   alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
   }
-
+  else if (potongan > subtotal_murni){
+      alert("Anda Tidak Bisa Menambahkan Barang , Potongan telah melebihi subtotal !");
+      $("#jumlah_barang").val('');
+      $("#jumlah_barang").focus();
+      $("#potongan1").val('');
+      $("#tax1").val('')
+  }
   else if (jumlah_barang == '')
     {
       alert("Jumlah Barang Harus Diisi");
@@ -3376,27 +3384,9 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
         }
       });// end cek_id_program_promo
 
-        // show ajax tbs
-       $('#tabel_tbs_penjualan').DataTable().destroy();
-                var dataTable = $('#tabel_tbs_penjualan').DataTable( {
-                "processing": true,
-                "serverSide": true,
-                "info":     false,
-                "language": { "emptyTable":     "My Custom Message On Empty Table" },
-                "ajax":{
-                  url :"data_tbs_penjualan.php", // json datasource
-                 
-                      type: "post",  // method  , by default get
-                  error: function(){  // error handling
-                    $(".tbody").html("");
-                    $("#tabel_tbs_penjualan").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                    $("#tableuser_processing").css("display","none");
-                    
-                  }
-                }   
 
-          });
-    //end show ajax tbs
+      var tabel_tbs_penjualan = $('#tabel_tbs_penjualan').DataTable();
+      tabel_tbs_penjualan.draw();
 
      $("#ppn").attr("disabled", true);
      $("#level_harga").attr("disabled", true);
@@ -3565,8 +3555,10 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
      $("#level_harga").attr("disabled", true);
       $("#ppn").attr("disabled", true);
       $("#kd_pelanggan").attr("disabled", true);
-      $("#tbody").prepend(data);    
-      $("#kode_barang").trigger("chosen:open");
+      var tabel_tbs_penjualan = $('#tabel_tbs_penjualan').DataTable();
+      tabel_tbs_penjualan.draw();
+
+            $("#kode_barang").trigger("chosen:open");
       $("#kode_barang").val('');
      $("#nama_barang").val('');
      $("#harga_produk").val('');
@@ -3578,29 +3570,6 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
 
 
      });// POST KE TBS ALL PRODUK
-
-
-    // show ajax tbs
-   $('#tabel_tbs_penjualan').DataTable().destroy();
-            var dataTable = $('#tabel_tbs_penjualan').DataTable( {
-            "processing": true,
-            "serverSide": true,
-            "info":     false,
-            "language": { "emptyTable":     "My Custom Message On Empty Table" },
-            "ajax":{
-              url :"data_tbs_penjualan.php", // json datasource
-             
-                  type: "post",  // method  , by default get
-              error: function(){  // error handling
-                $(".tbody").html("");
-                $("#tabel_tbs_penjualan").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                $("#tableuser_processing").css("display","none");
-                
-              }
-            }   
-
-      });
-//end show ajax tbs
 
 }//end ber_stok != jasa )
 

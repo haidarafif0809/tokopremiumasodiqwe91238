@@ -7,42 +7,8 @@
     include 'db.php';
 
 $kategori = stringdoang($_GET['kategori']);
-$tipe = stringdoang($_GET['tipe']);
-
-$kategori = stringdoang($_GET['kategori']);
-$tipe = stringdoang($_GET['tipe']);
-
-
-
-if ($tipe == 'barang') {
-
-    if ($kategori == 'semua' AND $tipe = 'barang') {
-    
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
-    
-    }
-
-    else{
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kategori = '$kategori' AND b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
-    }
-
-    
-}
-
-else{
-
-
-    if ($kategori == 'semua') {
-    
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id ORDER BY b.id DESC");
-    
-    }
-    
-    else{
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kategori = '$kategori' ORDER BY b.id DESC");
-    }
-
-}
+$tipe = stringdoang($_GET['tipe']); 
+ 
 
 
     ?>
@@ -532,19 +498,40 @@ th {
 
         //perhitungan total hpp 
   
-        $hpp_masuk = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_masuk ");
-        $data_hpp_masuk = mysqli_fetch_array($hpp_masuk);
-            
-        $hpp_keluar = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar");
-        $data_hpp_keluar = mysqli_fetch_array($hpp_keluar);
+        
+        $teks_hpp = 'Total Hpp' ;
+ 
+        if ($kategori == 'semua') {
 
-        $total_hpp = $data_hpp_masuk['total_hpp'] - $data_hpp_keluar['total_hpp'];
+            $teks_hpp .= ' Keseluruhan';
+
+            $hpp_masuk = $db->query("SELECT SUM(total_nilai) AS total_hpp  FROM hpp_masuk");
+            $data_hpp_masuk = mysqli_fetch_array($hpp_masuk);
+                
+            $hpp_keluar = $db->query("SELECT SUM(total_nilai) AS  total_hpp  FROM hpp_keluar");
+            $data_hpp_keluar = mysqli_fetch_array($hpp_keluar);
+
+            $total_hpp = $data_hpp_masuk['total_hpp'] - $data_hpp_keluar['total_hpp'];
+        }
+        else {
+        
+            $teks_hpp .= ' ' .$kategori ;
+
+            $hpp_masuk = $db->query("SELECT SUM(hm.total_nilai) AS total_hpp  FROM hpp_masuk hm INNER JOIN barang b ON hm.kode_barang = b.kode_barang WHERE b.kategori = '$kategori'");
+            $data_hpp_masuk = mysqli_fetch_array($hpp_masuk);
+                
+            $hpp_keluar = $db->query("SELECT SUM(hk.total_nilai) AS  total_hpp  FROM hpp_keluar hk INNER JOIN barang b ON hk.kode_barang = b.kode_barang WHERE b.kategori = '$kategori'");
+            $data_hpp_keluar = mysqli_fetch_array($hpp_keluar);
+
+            $total_hpp = $data_hpp_masuk['total_hpp'] - $data_hpp_keluar['total_hpp'];
+        }
+
 
         
         //end perhitungan total hpp 
   
  ?>
-<h3 style="color:red">TOTAL HPP : <?php echo koma($total_hpp,2); ?></h3>
+<h3 style="color:red"><?php echo $teks_hpp ?> : <?php echo koma($total_hpp,2); ?></h3>
 
 </div><!-- penutup tag div clas="container" -->
 

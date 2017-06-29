@@ -596,6 +596,8 @@
             };
           }
 
+var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
+
 
     if (ppn == 'Exclude') {  
          var total1 = parseInt(jumlah_barang,10) * parseInt(harga,10) - parseInt(potongan,10);
@@ -651,11 +653,7 @@
      $("#jumlah_barang").val(''); 
      $("#potongan1").val('');   
      $("#tax1").val('');
-     $("#nama_barang").val('');
-     $("#kode_barang").val('');
-     $("#kode_barang").trigger('chosen:updated');
-     $("#harga_produk").val('');
-     $("#harga_baru").val('');
+
 
   if (kode_barang == ''){
   alert("Kode Barang Harus Diisi");
@@ -665,6 +663,13 @@
   }
   else if (jumlah_barang == 0){
   alert("Jumlah Barang Tidak Boleh 0");
+  }
+  else if (potongan > subtotal_murni){
+      alert("Anda Tidak Bisa Menambahkan Barang , Potongan telah melebihi subtotal !");
+      $("#jumlah_barang").val('');
+      $("#jumlah_barang").focus();
+      $("#potongan1").val('');
+      $("#tax1").val('')
   }
   else if (suplier == ''){
   alert("Suplier Harus Dipilih");
@@ -693,43 +698,19 @@
 
     $.post("prosestbspembelian.php",{session_id:session_id,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,tax:tax,satuan:satuan,ppn:ppn,tax:tax},function(data){
       
+      var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
+      tabel_tbs_pembelian.draw();
 
-      $("#tbody").prepend(data);
-      $("#kode_barang").trigger('chosen:updated');
       $("#ppn").attr("disabled", true);
       $("#kode_barang").val('');
       $("#kode_barang").trigger('chosen:updated');
       $("#jumlah_barang").val('');
       $("#harga_produk").val('');
+      $("#nama_barang").val('');
+      $("#harga_produk").val('');
+      $("#harga_baru").val('');
 
     });
-
-
-    $('#tabel_tbs_pembelian').DataTable().destroy();
-    var dataTable = $('#tabel_tbs_pembelian').DataTable( {
-      "processing": true,
-      "serverSide": true,
-      "ajax":{
-        url :"data_tbs_pembelian.php", // json datasource
-        "data": function ( d ) {
-          d.session_id = $("#session_id").val();
-          // d.custom = $('#myInput').val();
-          // etc
-        },
-         
-         type: "post",  // method  , by default get
-         error: function(){  // error handling
-           $(".employee-grid-error").html("");
-           $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-           $("#employee-grid_processing").css("display","none");
-           }
-      },
-        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-           $(nRow).attr('class','tr-id-'+aData[11]+'');
-         }
-    });
-
-        
 
 }
     

@@ -714,6 +714,9 @@
   else if (jumlah_barang == ''){
   alert("Jumlah Barang Harus Diisi");
   }
+  else if (jumlah_barang == 0){
+  alert("Jumlah Barang Tidak Boleh 0");
+  }
   else if (suplier == ''){
   alert("Suplier Harus Dipilih");
   $("#nama_suplier").trigger('chosen:open');
@@ -1373,6 +1376,7 @@ $.post('cek_kode_barang_tbs_pembelian_edit.php',{kode_barang:kode_barang,no_fakt
 if( over_stok < stok ){
 
       alert ("Persediaan Barang Ini Sudah Melebihi Batas Stok!");
+       $("#jumlah_barang").val(''); 
       
     }
 

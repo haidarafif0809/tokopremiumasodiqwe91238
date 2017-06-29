@@ -439,8 +439,6 @@
 
 </div><!--END COL_SM_4-->
 
-  <span id="demo"> </span>
-
 </div> <!--END ROW-->
 
 </div><!-- END CONTAINER -->
@@ -598,6 +596,8 @@
             };
           }
 
+var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
+
 
     if (ppn == 'Exclude') {  
          var total1 = parseInt(jumlah_barang,10) * parseInt(harga,10) - parseInt(potongan,10);
@@ -653,17 +653,23 @@
      $("#jumlah_barang").val(''); 
      $("#potongan1").val('');   
      $("#tax1").val('');
-     $("#nama_barang").val('');
-     $("#kode_barang").val('');
-     $("#kode_barang").trigger('chosen:updated');
-     $("#harga_produk").val('');
-     $("#harga_baru").val('');
+
 
   if (kode_barang == ''){
   alert("Kode Barang Harus Diisi");
   }
   else if (jumlah_barang == ''){
   alert("Jumlah Barang Harus Diisi");
+  }
+  else if (jumlah_barang == 0){
+  alert("Jumlah Barang Tidak Boleh 0");
+  }
+  else if (potongan > subtotal_murni){
+      alert("Anda Tidak Bisa Menambahkan Barang , Potongan telah melebihi subtotal !");
+      $("#jumlah_barang").val('');
+      $("#jumlah_barang").focus();
+      $("#potongan1").val('');
+      $("#tax1").val('')
   }
   else if (suplier == ''){
   alert("Suplier Harus Dipilih");
@@ -692,43 +698,19 @@
 
     $.post("prosestbspembelian.php",{session_id:session_id,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,tax:tax,satuan:satuan,ppn:ppn,tax:tax},function(data){
       
+      var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
+      tabel_tbs_pembelian.draw();
 
-      $("#tbody").prepend(data);
-      $("#kode_barang").trigger('chosen:updated');
       $("#ppn").attr("disabled", true);
       $("#kode_barang").val('');
       $("#kode_barang").trigger('chosen:updated');
       $("#jumlah_barang").val('');
       $("#harga_produk").val('');
+      $("#nama_barang").val('');
+      $("#harga_produk").val('');
+      $("#harga_baru").val('');
 
     });
-
-
-    $('#tabel_tbs_pembelian').DataTable().destroy();
-    var dataTable = $('#tabel_tbs_pembelian').DataTable( {
-      "processing": true,
-      "serverSide": true,
-      "ajax":{
-        url :"data_tbs_pembelian.php", // json datasource
-        "data": function ( d ) {
-          d.session_id = $("#session_id").val();
-          // d.custom = $('#myInput').val();
-          // etc
-        },
-         
-         type: "post",  // method  , by default get
-         error: function(){  // error handling
-           $(".employee-grid-error").html("");
-           $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-           $("#employee-grid_processing").css("display","none");
-           }
-      },
-        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-           $(nRow).attr('class','tr-id-'+aData[11]+'');
-         }
-    });
-
-        
 
 }
     
@@ -840,24 +822,27 @@ alert(" Kode Gudang Harus Diisi ");
  else
 
  {
-
-  $("#pembayaran").hide();
-  $("#hutang").hide();
-  $("#batal").hide();
-  $("#transaksi_baru").show();
+      
+      $("#pembayaran").hide();
+      $("#hutang").hide();
+      $("#batal").hide();
+      $("#transaksi_baru").show();
       $("#total_pembelian").val('');
-     $("#pembayaran_pembelian").val('');
-     $("#sisa_pembayaran_pembelian").val('');
-     $("#kredit").val('');
-     $("#potongan_pembelian").val('');
-     $("#potongan_persen").val('');
-     $("#nama_suplier").val('');
-     $("#nama_suplier").trigger('chosen:updated');
+      $("#pembayaran_pembelian").val('');
+      $("#sisa_pembayaran_pembelian").val('');
+      $("#kredit").val('');
+      $("#potongan_pembelian").val('');
+      $("#potongan_persen").val('');
+      $("#nama_suplier").val('');
+      $("#nama_suplier").trigger('chosen:updated');
 
  $.post("proses_bayar_beli.php",{total_1:total_1,kode_gudang:kode_gudang,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,suplier:suplier1,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,tax1:tax1,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,ppn:ppn,ppn_input:ppn_input},function(info) {
     
 
-    $("#result").html(info);
+    var no_faktur = info;
+
+    $("#cetak_tunai").attr('href', 'cetak_pembelian_tunai.php?no_faktur='+no_faktur);
+    $("#cetak_hutang").attr('href', 'cetak_pembelian_hutang.php?no_faktur='+no_faktur);    
     $("#tax").val('');
     $("#alert_berhasil").show();
     $("#cetak_tunai").show();
@@ -997,8 +982,10 @@ alert(" Kode Gudang Harus Diisi ");
 
        $.post("proses_bayar_beli.php",{total_1:total_1,kode_gudang:kode_gudang,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,suplier:suplier,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,tax1:tax1,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,ppn:ppn,ppn_input:ppn_input},function(info) {
 
-       $("#demo").html(info);
-       
+       var no_faktur = info;
+
+       $("#cetak_tunai").attr('href', 'cetak_pembelian_tunai.php?no_faktur='+no_faktur);
+       $("#cetak_hutang").attr('href', 'cetak_pembelian_hutang.php?no_faktur='+no_faktur);       
        $("#alert_berhasil").show();
        $("#cetak_hutang").show();
        $("#pembayaran_pembelian").val('');
@@ -1159,6 +1146,7 @@ else
 if( over_stok < stok ){
 
       alert ("Persediaan Barang Ini Sudah Melebihi Batas Stok!");
+       $("#jumlah_barang").val(''); 
       
     }
 
@@ -2049,6 +2037,7 @@ $(document).ready(function(){
             $("#cetak_tunai").hide();
             $("#cetak_hutang").hide(); 
             $("#alert_berhasil").hide(); 
+            $("#ppn").attr("disabled", false);
 
     });
   });

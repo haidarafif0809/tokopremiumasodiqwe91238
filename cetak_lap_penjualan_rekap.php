@@ -124,7 +124,7 @@ $t_barang = $cek011['total_barang'];
                   <td>". $data11['no_faktur'] ."</td>
                   <td>". $data11['tanggal'] ."</td>
                   <td>". $data11['code_card'] ." - ". $data11['nama_pelanggan'] ."</td>
-                  <td>". $total_barang ."</td>
+                  <td>". gantiKoma($cek0['total_barang']) ."</td>
                   <td>". rp($total_subtotal) ."</td>
                   <td>". rp($data11['potongan']) ."</td>
                   <td>". rp($data11['tax']) ."</td>
@@ -164,7 +164,7 @@ $t_barang = $cek011['total_barang'];
  <table>
   <tbody>
 
-      <tr><td width="70%">Jumlah Item</td> <td> :&nbsp; </td> <td> <?php echo $t_barang; ?> </td></tr>
+      <tr><td width="70%">Jumlah Item</td> <td> :&nbsp; </td> <td> <?php echo gantiKoma($t_barang); ?> </td></tr>
       <tr><td  width="70%">Total Subtotal</td> <td> :&nbsp; </td> <td> <?php echo rp($t_subtotal); ?> </td>
       </tr>
       <tr><td  width="70%">Total Potongan</td> <td> :&nbsp; </td> <td> <?php echo rp($total_potongan); ?></td></tr>

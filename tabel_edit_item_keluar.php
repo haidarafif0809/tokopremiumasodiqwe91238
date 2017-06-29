@@ -16,8 +16,6 @@ $perintah = $db->query("SELECT * FROM item_keluar");
       <th> Nama Barang </th>
       <th> Jumlah </th>
       <th> Satuan </th>
-      <th> Harga </th>
-      <th> Subtotal </th>
     
       <th> Hapus </th>
       
@@ -44,8 +42,6 @@ $perintah = $db->query("SELECT * FROM item_keluar");
       <td class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah']."' class='input_jumlah' data-subtotal='".$data1['subtotal']."' data-id='".$data1['id']."' autofocus='' data-harga='".$data1['harga']."' data-faktur='".$data1['no_faktur']."' data-kode='".$data1['kode_barang']."' > </td>
 
       <td>". $data1['satuan'] ."</td>
-      <td>". rp($data1['harga']) ."</td>
-      <td><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
 
       <td> <button class='btn btn-danger btn-hapus' id='btn-hapus-".$data1['id']."' data-id='". $data1['id'] ."' data-subtotal='".$data1['subtotal']."' data-nama-barang='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td> 
 

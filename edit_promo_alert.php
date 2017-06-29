@@ -8,6 +8,7 @@
 
 // mengirim data $id menggunakan metode GET
  $id = $_GET['id'];
+ $id_produk = $_GET['id_produk'];
  
  // menampilkan seluruh data dari tabel user berdasarkan id
  $query = $db->query("SELECT pa.id_promo_alert,b.id,b.kode_barang,b.nama_barang,pa.pesan_alert,pa.status FROM promo_alert pa INNER JOIN barang b ON pa.id_produk = b.id WHERE id_promo_alert = '$id'");
@@ -29,11 +30,43 @@
 			<form role="form" method="POST" action="update_pormo_alert.php">
 		<div class="form-group">
 					
-					<label> Nama Produk </label><br>
-					<input name="kode_barang" id="kode_barang" class="form-control ss"  value="<?php echo $data['kode_barang'];?>(<?php echo $data['nama_barang'];?>)" placeholder="Ketik Nama/Kode Produk (Promo)" autocomplete="off" required="" >
-<br>					
+   	   <label>Nama Produk</label> 			
+   	   <select style="font-size:15px; height:20px" type="text" name="kode_barang" id="kode_barang" class="form-control chosen" >
 
-					<input type="hidden" name="id_produk" id="id_produk" value="<?php echo $data['id'];?>">
+       <?php 
+        
+        include 'cache.class.php';
+          $c = new Cache();
+          $c->setCache('produk');
+          $data_c = $c->retrieveAll();
+
+          foreach ($data_c as $key) {
+          	if ($id_produk == $key['id']) {
+          		echo '<option selected id="opt-produk-'.$key['kode_barang'].'" value="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+          	}
+          	else{
+          		echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+          	}            
+          }
+
+          $cache_parcel = new Cache();
+          $cache_parcel->setCache('produk_parcel');
+          $data_parcel = $cache_parcel->retrieveAll();
+
+          foreach ($data_parcel as $key_parcel) {
+          	if ($id_produk == $key['id']) {
+          		echo '<option selected id="opt-produk-'.$key_parcel['kode_parcel'].'" value="'.$key_parcel['id'].'" > '. $key_parcel['kode_parcel'].' ( '.$key_parcel['nama_parcel'].' ) </option>';
+          	}
+          	else{
+          		echo '<option id="opt-produk-'.$key_parcel['kode_parcel'].'" value="'.$key_parcel['id'].'" > '. $key_parcel['kode_parcel'].' ( '.$key_parcel['nama_parcel'].' ) </option>';
+          	}            
+          }
+
+        ?>
+    </select>
+
+    				<br><br>
+					<input type="hidden" name="id_produk" id="id_produk" value="<?php echo $id_produk;?>">
 					<input type="hidden" name="id_promo_alert" id="id_promo_alert" value="<?php echo $id;?>">
 
 
@@ -112,7 +145,10 @@ $(function() {
                 // instance, using default configuration.
                 CKEDITOR.replace( 'pesan_alert' );
             </script>
+<script type="text/javascript">
+  $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});    
+</script>
 
 <?php
- include 'footer.php'; ?>
-
+ include 'footer.php';
+ ?>

@@ -30,7 +30,7 @@ if ($cek_jumlah_bulan == 1) {
  }
 //ambil bulan dari tanggal item_masuk terakhir
 
- $bulan_terakhir = $db->query("SELECT MONTH(tanggal) as bulan FROM item_masuk ORDER BY id DESC LIMIT 1");
+ $bulan_terakhir = $db->query("SELECT MONTH(waktu_input) as bulan FROM item_masuk ORDER BY id DESC LIMIT 1");
  $v_bulan_terakhir = mysqli_fetch_array($bulan_terakhir);
 
 //ambil nomor  dari item_masuk terakhir

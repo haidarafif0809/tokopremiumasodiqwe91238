@@ -435,12 +435,7 @@ mysqli_close($db);
         };
         var subtotal = parseInt(total,10) + parseInt(jumlah_bayar,10);
       
-      $("#totalbayar").val(jumlah_bayar);
-      $("#total").val(total_kredit);
-      $("#potongan1").val(potongan);
-      $("#faktur").val(no_faktur_penjualan);
-      $("#jumlah_bayar").val('');
-      $("#potongan_penjualan").val('');
+
       
       if (hasil > 0 )
       {

@@ -120,6 +120,8 @@ if ($lihat['item_lihat'] > 0){
                                 echo '<li><a href="barang.php?kategori=semua&tipe=barang_jasa" class="waves-effect" >Produk</a></li>';
                                 echo '<li><a href="data_parcel.php" class="waves-effect" >Produk Parcel</a></li>';
 }
+    
+    echo '<li><a href="master_poin.php" class="waves-effect">Master Point</a></li>';
 
 if ($lihat['satuan_lihat'] > 0){
                                 echo '<li><a href="satuan.php" class="waves-effect">Satuan</a></li>';
@@ -152,20 +154,13 @@ if ($lihat['daftar_akun_lihat'] > 0){
 if ($lihat['grup_akun_lihat'] > 0){
                                 echo '<li><a href="daftar_group_akun.php" class="waves-effect">Group Akun</a></li>';
 }
-
-if ($lihat['set_akun_lihat'] > 0){
-                                echo '<li><a href="setting_akun_data_item.php" class="waves-effect">Setting Akun</a></li>';
-}
+ 
 ?>
-
-<li><a href="setting_antrian_pelanggan.php" class="waves-effect">Setting Antrian & Order </a></li>
+ 
 <li><a href="promo_alert.php" class="waves-effect">Promo Alert</a></li>
 
 
-<?php
-if ($lihat['set_perusahaan_lihat'] > 0){
-                                echo '<li><a href="setting_perusahaan.php" class="waves-effect">Data Perusahaan</a></li>';
-}
+<?php 
 
 if ($lihat['set_diskon_tax_lihat'] > 0){
                                 echo '<li><a href="set_diskon_tax.php" class="waves-effect">Default Diskon & Pajak</a></li>';
@@ -347,7 +342,7 @@ echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> Data Penjua
             echo '<li><a href="lap_penjualan.php" class="waves-effect">Lap. Penjualan</a></li>';
 }
 
-
+echo '<li><a href="order_penjualan.php" class="waves-effect">Lap. Order Penjualan</a></li>';
 
 echo "<li><a href='lap_bucket_size.php' class='waves-effect'>Lap. Bucket Size</a></li>";
 
@@ -431,7 +426,7 @@ if ($lihat['set_setting_halaman_promo_lihat'] > 0){
 echo '<li><a href="setting_halaman_promo.php" class="waves-effect">Setting Halaman Promo </a></li>';
 }
 if ($lihat['set_hal_khusus_pelanggan_lihat'] > 0){
-echo '<li><a href="hal.khusus_pelanggan.php" target="blank" class="waves-effect">Halaman Khusus Pelanggan </a></li>';
+echo '<li><a href="hal.khusus_pelanggan.php" target="blank" class="waves-effect">Info Harga Produk</a></li>';
 }
 
 if ($lihat['set_timbangan'] > 0){
@@ -439,6 +434,9 @@ if ($lihat['set_timbangan'] > 0){
 echo '<li><a href="setting_timbangan.php" target="blank" class="waves-effect">Setting Flag Timbangan</a></li>';
 
 }
+
+echo '<li><a href="form_aturan_poin.php" target="blank" class="waves-effect">Setting Point</a></li>';
+
 if ($lihat['set_member'] > 0){
 echo '<li><a href="setting_member.php" target="blank" class="waves-effect">Setting Member</a></li>';
 }

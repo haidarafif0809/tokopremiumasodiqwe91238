@@ -52,11 +52,33 @@ include 'db.php';
 <div id="demo" class="collapse">
 <form role="form" method="POST" action="proses_pormo_alert.php">
 		<div class="form-group">
-					
-					<label> Nama Produk </label><br>
-					<input name="kode_barang" id="kode_barang" class="form-control "  placeholder="Ketik Nama/Kode Produk (Promo)" autocomplete="off" required="" >
-<br>					
+		
+   <label>Nama Produk</label> 			
+   <select style="font-size:15px; height:20px" type="text" name="kode_barang" id="kode_barang" class="form-control chosen" data-placeholder="SILAKAN PILIH...">
+    <option value="">SILAKAN PILIH...</option>
+       <?php 
 
+        include 'cache.class.php';
+          $c = new Cache();
+          $c->setCache('produk');
+          $data_c = $c->retrieveAll();
+
+          foreach ($data_c as $key) {
+            echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+          }
+
+          $cache_parcel = new Cache();
+          $cache_parcel->setCache('produk_parcel');
+          $data_parcel = $cache_parcel->retrieveAll();
+
+          foreach ($data_parcel as $key_parcel) {
+            echo '<option id="opt-produk-'.$key_parcel['kode_parcel'].'" value="'.$key_parcel['id'].'" > '. $key_parcel['kode_parcel'].' ( '.$key_parcel['nama_parcel'].' ) </option>';
+          }
+
+        ?>
+    </select>
+	
+          <br><br>
 					<input type="hidden" name="id_produk" id="id_produk">
 
 					<label> Pesan Alert </label><br>
@@ -152,16 +174,18 @@ tr:nth-child(even){background-color: #f2f2f2}
 $(document).ready(function(){
 
   $("#tambah").click(function(){
-  $("#demo").show();
-  $("#kembali").show();
-   $("#tambah").hide();
+    $(".chosen").chosen("destroy");
+    $("#demo").show();
+    $("#kembali").show();
+    $("#tambah").hide();
+    $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});
   });
 
   $("#kembali").click(function(){
-  $("#demo").hide();
-  $("#tambah").show();
-  $("#kembali").hide();
-
+    $("#demo").hide();
+    $("#tambah").show();
+    $("#kembali").hide();
+    $(".chosen").chosen("destroy");
   });
 });
 </script>
@@ -242,17 +266,7 @@ $(document).ready(function(){
 
 </script>
 
-
-
-<script>
-$(function() {
-    $( "#kode_barang" ).autocomplete({
-        source: 'kodebarang_promo_autocomplete.php'
-    });
-});
-</script>
-
-
+<!--
 <script type="text/javascript">
   
         $(document).ready(function(){
@@ -285,7 +299,21 @@ $(function() {
         });
         });     
 </script>
+-->
 
+
+<script type="text/javascript">
+// START script untuk pilih kode barang menggunakan chosen     
+  $(document).ready(function(){
+  $("#kode_barang").change(function(){
+    var id_barang = $(this).val();
+
+    $("#id_produk").val(id_barang);    
+
+  });
+  }); 
+  // end script untuk pilih kode barang menggunakan chosen   
+</script>
 
 
         <script type="text/javascript">
@@ -319,7 +347,9 @@ $(function() {
 					// end fungsi hapus data
 </script>
 
-
+<script type="text/javascript">
+  $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});    
+</script>
 
 <?php
  include 'footer.php'; ?>

@@ -19,6 +19,7 @@ $status = $_GET['status'];
 
 <!--hidden untuk no faktur buat kirim ke button detail-->
     <input type="hidden" name="no_faktur_detail" class="form-control " id="no_faktur_detail" placeholder="no_faktur  "/>
+    <input type="hidden" name="status" class="form-control " id="status" value="<?php echo $status ?>" "/>
 
 <!--MODAL VOID -->
 <div id="modal_void" class="modal fade" role="dialog">
@@ -157,8 +158,8 @@ $status = $_GET['status'];
     <div class="form-group">
     <label>Kode Pelanggan :</label>
      <input type="text" id="kode_pelanggan" class="form-control" readonly=""> 
-     <input type="text" id="id_hapus" class="form-control" > 
-     <input type="text" id="kode_meja" class="form-control" > 
+     <input type="hidden" id="id_hapus" class="form-control" > 
+     <input type="hidden" id="kode_meja" class="form-control" > 
      <input type="text" id="faktur_hapus" class="form-control" > 
     </div>
    
@@ -386,7 +387,6 @@ $penjualan_hapus = mysqli_num_rows($pilih_akses_penjualan_hapus);
 <script type="text/javascript" language="javascript" >
       $(document).ready(function() {
           $('#table_penjualan').DataTable().destroy();
-          var status = $("#status").val();
           var dataTable = $('#table_penjualan').DataTable( {
           "processing": true,
           "serverSide": true,
@@ -458,30 +458,8 @@ $penjualan_hapus = mysqli_num_rows($pilih_akses_penjualan_hapus);
 		$.post("hapus_data_penjualan.php",{id:id,no_faktur:no_faktur,kode_meja:kode_meja},function(data){
 
 
-                $('#table_penjualan').DataTable().destroy();
-
-      var dataTable = $('#table_penjualan').DataTable( {
-          "processing": true,
-          "serverSide": true,
-          "ajax":{
-            url :"datatable_penjualan.php", // json datasource
-            "data": function ( d ) {
-                      d.status = $("#status").val();
-                      // d.custom = $('#myInput').val();
-                      // etc
-                  },
-            type: "post",  // method  , by default get
-            error: function(){  // error handling
-              $(".employee-grid-error").html("");
-              $("#table_penjualan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-              $("#employee-grid_processing").css("display","none");
-            }
-        },
-            
-            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                $(nRow).attr('class','tr-id-'+aData[20]+'');
-            },
-        });
+      var table_penjualan = $('#table_penjualan').DataTable();
+          table_penjualan.draw();
 		
 		});
 		

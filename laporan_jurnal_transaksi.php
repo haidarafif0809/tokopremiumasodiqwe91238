@@ -10,6 +10,13 @@ include 'db.php';
 
  ?>
 
+<style type="text/css">
+  .hr{
+    border: 0;
+    border-top: 3px double #8c8c8c;
+  }
+</style>
+
 <div class="container">
 <h1>JURNAL UMUM </h1><hr>
 <form id="perhari" class="form-inline" action="proses_laporan_jurnal.php" method="POST" role="form">
@@ -34,16 +41,13 @@ include 'db.php';
 
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
-<table id="tableuser" class="table table-hover">
-            <thead>
+<table id="tableuser" class="table table-sm">
+    <thead>
       <th style='background-color: #4CAF50; color: white' style="font-size: 20px"> No Akun </th>
       <th style='background-color: #4CAF50; color: white' style="font-size: 20px"> Nama Akun </th>
       <th style='background-color: #4CAF50; color: white' style="font-size: 20px"> Debet </th>
       <th style='background-color: #4CAF50; color: white' style="font-size: 20px"> Kredit </th>
       <th style='background-color: #4CAF50; color: white' style="font-size: 20px"> Keterangan </th>
-
-
-      
     </thead>
     
   </table>
@@ -66,7 +70,7 @@ $(document).on('click','#btntgl',function(e) {
           var dataTable = $('#tableuser').DataTable( {
           "processing": true,
           "serverSide": true,
-          "info":     false,
+          "info":     true,
           "language": {
         "emptyTable":     "My Custom Message On Empty Table"
     },
@@ -118,3 +122,6 @@ $(document).on('click','#btntgl',function(e) {
 </script> 
 <!--end SCRIPT datepicker -->
 
+<?php 
+include 'footer.php';
+ ?>

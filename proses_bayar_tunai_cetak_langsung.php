@@ -168,7 +168,15 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
               $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
               $keterangan = stringdoang($_POST['keterangan']);
               $kode_gudang = stringdoang($_POST['kode_gudang']);
-              $total = angkadoang($_POST['total']);
+
+
+              $total = stringdoang($_POST['total']);
+              $total = str_replace(',','.',$total);
+              if ($total == '') {
+                $total = 0;
+              }  
+
+
               $total2 = angkadoang($_POST['total2']);
               $potongan = angkadoang($_POST['potongan']);
               $tax = angkadoang($_POST['tax']);
@@ -307,7 +315,15 @@ if ($potongan != "" || $potongan != 0 ) {
               $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
               $keterangan = stringdoang($_POST['keterangan']);
               $kode_gudang = stringdoang($_POST['kode_gudang']);
-              $total = angkadoang($_POST['total']);
+
+
+              $total = stringdoang($_POST['total']);
+              $total = str_replace(',','.',$total);
+              if ($total == '') {
+                $total = 0;
+              }  
+
+
               $total2 = angkadoang($_POST['total2']);
               $potongan = angkadoang($_POST['potongan']);
               $tax = angkadoang($_POST['tax']);

@@ -1,7 +1,7 @@
-<?php
+<?php session_start();
 include 'db.php';
 include 'sanitasi.php';
-session_start();
+
 
 $session_id = session_id();
 
@@ -232,7 +232,7 @@ if ($ber_stok == 'Barang' OR $ber_stok == 'barang'){
                           $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND no_faktur = ?");
 
                           $query1->bind_param("sssss",
-                          $jumlah_barang,$a, $potongan_tampil, $kode_barang, $no_faktur);
+                          $jumlah_barang,$subtotal, $potongan_tampil, $kode_barang, $no_faktur);
                           $query1->execute();
 
                           }
@@ -326,7 +326,7 @@ else{
                         $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND no_faktur = ?");
 
                           $query1->bind_param("sssss",
-                            $jumlah_barang,$a, $potongan_tampil, $kode_barang, $no_faktur);
+                            $jumlah_barang,$subtotal, $potongan_tampil, $kode_barang, $no_faktur);
 
 
                         $query1->execute();

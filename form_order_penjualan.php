@@ -672,16 +672,13 @@ else if (level_harga == "harga_7") {
   document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang');
 
 
-$.post("lihat_promo_alert.php",{id:$(this).attr('id-barang')},function(data){
+$.post("lihat_promo_alert.php",{id_barang:$(this).attr('id-barang')},function(data){
 
-    if (data == '')
+    if (data.promo != null)
     {
-
-    }
-    else{
       $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(data);
-    }
+      $("#tampil_alert").html(data.promo);
+    } 
 
 });
 
@@ -845,8 +842,7 @@ $(document).ready(function(){
 </script>
 
 
-<script>
-//untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
+<script> 
   $(document).on('click', '#submit_barcode', function (e) {
 
     var kode_barang = $("#kode_barcode").val();
@@ -915,18 +911,15 @@ $.post("barcode_order.php",{kode_barang:kode_barang,sales:sales,level_harga:leve
      });
 
 
-$.getJSON('lihat_nama_barang_order.php',{kode_barang:kode_barang}, function(json){
+$.get('lihat_nama_barang_order.php',{kode_barang:kode_barang}, function(data){
 
-$.post("lihat_promo_alert.php",{id:json},function(info){
+$.post("lihat_promo_alert.php",{id_barang:data},function(info){
 
-    if (info == '')
+    if (data.promo != null)
     {
-
-    }
-    else{
       $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(info);
-    }
+      $("#tampil_alert").html(data.promo);
+    } 
 
 });
 
@@ -1014,6 +1007,10 @@ $(document).on('click', '#submit_produk', function (e) {
   }
   else if (jumlah_barang == ''){
     alert("Jumlah Barang Harus Diisi");
+    $("#jumlah_barang").focus();
+  }
+  else if (jumlah_barang == 0){
+    alert("Jumlah Barang Tidak Boleh 0");
     $("#jumlah_barang").focus();
   }
   else if (kode_pelanggan == ''){
@@ -1533,118 +1530,7 @@ $('#tabel_tbs_order').DataTable().destroy();
 //end fungsi hapus data
 </script>
 
-
-<!-- 
-<script>
-$(function() {
-    $( "#kode_barang" ).autocomplete({
-        source: 'kode_barang_autocomplete.php'
-    });
-});
-</script>
--->
-
-
-<!--
-<script type="text/javascript">
-        $(document).ready(function(){
-        $("#kode_barang").blur(function(){
-
-          var kode_barang = $(this).val();
-          var level_harga = $("#level_harga").val();
-          var session_id = $("#session_id").val();
-          
-          
-          if (kode_barang != '')
-          {
-
-       
-       
-          $.post("cek_barang_penjualan.php",{kode_barang: kode_barang}, function(data){
-          $("#jumlahbarang").val(data);
-          });
-
-          $.post('cek_kode_barang_tbs_penjualan_order.php',{kode_barang:kode_barang,session_id:session_id}, function(data){
-          
-          if(data == 1){
-          alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
-
-          $("#kode_barang").val('');
-          $("#nama_barang").val('');
-          }//penutup if
-          
-          });////penutup function(data)
-
-      $.getJSON('lihat_nama_barang_order.php',{kode_barang:kode_barang}, function(json){
-      
-      if (json == null)
-      {
-        
-        $('#nama_barang').val('');
-        $('#limit_stok').val('');
-        $('#harga_produk').val('');
-        $('#harga_lama').val('');
-        $('#harga_baru').val('');
-        $('#satuan_produk').val('');
-        $('#satuan_konversi').val('');
-        $('#id_produk').val('');
-        $('#ber_stok').val('');
-
-      }
-
-      else 
-      {
-        if (level_harga == "Level 1") {
-
-        $('#harga_produk').val(json.harga_jual);
-        $('#harga_baru').val(json.harga_jual);
-        $('#harga_lama').val(json.harga_jual);
-        }
-        else if (level_harga == "Level 2") {
-
-        $('#harga_produk').val(json.harga_jual2);
-        $('#harga_baru').val(json.harga_jual2);
-        $('#harga_lama').val(json.harga_jual2);
-        }
-        else if (level_harga == "Level 3") {
-
-        $('#harga_produk').val(json.harga_jual3);
-        $('#harga_baru').val(json.harga_jual3);
-        $('#harga_lama').val(json.harga_jual3);
-        }
-
-        $('#nama_barang').val(json.nama_barang);
-        $('#limit_stok').val(json.limit_stok);
-        $('#satuan_produk').val(json.satuan);
-        $('#satuan_konversi').val(json.satuan);
-        $('#id_produk').val(json.id);
-        $('#ber_stok').val(json.berkaitan_dgn_stok);
-
-$.post("lihat_promo_alert.php",{id:json.id},function(data){
-
-    if (data == '')
-    {
-
-    }
-    else{
-      $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(data);
-    }
-
-});
-
-      }
-                                              
-        });
-        
-}
-
-        });
-        });
-
-      
-      
-</script>-->
+ 
 
 <script type="text/javascript">
 // START script untuk pilih kode barang menggunakan chosen     
@@ -1670,16 +1556,13 @@ $.post("lihat_promo_alert.php",{id:json.id},function(data){
     var id_barang = $('#opt-produk-'+kode_barang).attr("id-barang");
     var level_harga = $("#level_harga").val();
 
-$.post("lihat_promo_alert.php",{id:id_barang},function(data){
+$.post("lihat_promo_alert.php",{id_barang:id_barang},function(data){
 
-    if (data == '')
+    if (data.promo != null)
     {
-
-    }
-    else{
       $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(data);
-    }
+      $("#tampil_alert").html(data.promo);
+    } 
 
 });
 

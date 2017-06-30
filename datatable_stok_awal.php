@@ -61,6 +61,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 			
 			//menampilkan data
+			$nestedData[] = $row['no_faktur'];
 			$nestedData[] = $row['kode_barang'];
 			$nestedData[] = $row['nama_barang'];
 

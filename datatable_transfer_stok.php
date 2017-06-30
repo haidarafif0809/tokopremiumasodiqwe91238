@@ -60,11 +60,12 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 			$nestedData[] = "<button style='width:65px;' class='btn btn-info detail' no_faktur='". $row['no_faktur'] ."' ><i class='fa fa-th-list'></i> Detail </button>";
 
 			if ($transfer_stok['transfer_stok_edit'] > 0) {
-						 	$nestedData[] = "<a style='width:65px;' href='proses_edit_transfer_stok.php?no_faktur=". $row['no_faktur']."' class='btn btn-success'> <i class='fa fa-edit'></i> Edit </a>";
+						 	$nestedData[] = "<a style='width:65px;' href='proses_edit_transfer_stok.php?no_faktur=". $row['no_faktur']."' class='btn btn-success'> 
+						 	<i class='fa fa-edit'></i> Edit </a>";
 						 }
 
 
-			if ($transfer_stok['transfer_stok_tambah'] > 0) {// 
+			if ($transfer_stok['transfer_stok_hapus'] > 0) {// 
 
 			$hpp_keluar = $db->query ("SELECT no_faktur FROM hpp_keluar WHERE no_faktur_hpp_masuk = '$row[no_faktur]'");
 			$row_hpp_keluar = mysqli_num_rows($hpp_keluar);

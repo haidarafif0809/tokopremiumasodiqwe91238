@@ -3001,12 +3001,7 @@ $(".btn-alert-hapus").click(function(){
                                     }
     ////////////////////////PPN
                                     var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
-
-                                    /*var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
-                                    if(biaya_adm == '' || biaya_adm == 0,00)
-                                    {
-                                      biaya_adm = 0,00;
-                                    }*/
+ 
                                    
 
                                 subtotal_penjualan = parseFloat(subtotal_penjualan.replace(',','.'),2) - parseFloat(subtotal_lama.replace(',','.'),2) + parseFloat(subtotal,2);
@@ -3067,7 +3062,7 @@ $(".btn-alert-hapus").click(function(){
 
                                       else{
 
-                                     $.post("update_pesanan_barang.php",{jumlah_lama:jumlah_lama,tax:tax,id:id,jumlah_baru:jumlah_kirim,kode_barang:kode_barang,potongan:potongan,harga:harga_kirim,jumlah_tax:jumlah_tax,subtotal:subtotal},function(info){
+                                     $.post("update_pesanan_barang.php",{ppn:ppn,jumlah_lama:jumlah_lama,tax:tax,id:id,jumlah_baru:jumlah_kirim,kode_barang:kode_barang,potongan:potongan,harga:harga_kirim,jumlah_tax:jumlah_tax,subtotal:subtotal},function(info){
       
                                     $("#text-jumlah-"+id+"").show();
                                     $("#text-jumlah-"+id+"").text('');

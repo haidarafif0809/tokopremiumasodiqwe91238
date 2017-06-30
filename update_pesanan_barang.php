@@ -4,6 +4,8 @@ include 'sanitasi.php';
 include 'db.php';
 
 $kode_barang = stringdoang($_POST['kode_barang']);
+$ppn = stringdoang($_POST['ppn']);
+
 // pengubahan data dari form penjualan ketika ada pengeditan (mengubah koma menjadi titik agar diterima di MYSQL )
 $jumlah_baru = stringdoang($_POST['jumlah_baru']);
  $jumlah_baru = str_replace(',','.',$jumlah_baru);
@@ -47,12 +49,30 @@ $subtotal = stringdoang($_POST['subtotal']);
    $subtotal = 0;
  }
 
-$hasil_sub = $subtotal + $jumlah_tax;
+if ($ppn == 'Include') {
+  $hasil_sub = $subtotal;
+  $hasil_sub = str_replace(',','.',$hasil_sub);
+   if ($hasil_sub == '') 
+ {
+   $hasil_sub = 0;
+ }
+}
+elseif ($ppn == 'Exclude') {
+  $hasil_sub = $subtotal + $jumlah_tax;
+  $hasil_sub = str_replace(',','.',$hasil_sub);
+   if ($hasil_sub == '') 
+ {
+   $hasil_sub = 0;
+ }
+}elseif ($ppn == 'Non') {
+ $hasil_sub = $subtotal;
  $hasil_sub = str_replace(',','.',$hasil_sub);
    if ($hasil_sub == '') 
  {
    $hasil_sub = 0;
  }
+}
+
 // pengubahan data dari form penjualan ketika ada pengeditan (mengubah koma menjadi titik agar diterima di MYSQL )
 
 $user = $_SESSION['nama'];

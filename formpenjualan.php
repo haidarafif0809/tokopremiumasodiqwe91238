@@ -415,7 +415,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
 <!--tampilan modal-->
-<div id="myModal" class="modal fade" role="dialog">
+<div id="myModal" class="modal " role="dialog">
   <div class="modal-dialog modal-lg">
     <!-- isi modal-->
     <div class="modal-content">
@@ -438,8 +438,7 @@ tr:nth-child(even){background-color: #f2f2f2}
                         <th> Harga Jual Level 7</th>
                         <th> Jumlah Barang </th>
                         <th> Satuan </th>
-                        <th> Kategori </th>
-                        <th> Suplier </th>
+                        <th> Kategori </th>  
                   </thead> <!-- tag penutup tabel -->
                </table>
             </div>

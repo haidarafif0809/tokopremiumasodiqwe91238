@@ -438,8 +438,7 @@ tr:nth-child(even){background-color: #f2f2f2}
                         <th> Harga Jual Level 7</th>
                         <th> Jumlah Barang </th>
                         <th> Satuan </th>
-                        <th> Kategori </th>
-                        <th> Suplier </th>
+                        <th> Kategori </th>  
                   </thead> <!-- tag penutup tabel -->
                </table>
             </div>

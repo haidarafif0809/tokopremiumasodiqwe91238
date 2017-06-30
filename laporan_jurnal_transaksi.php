@@ -26,7 +26,7 @@ include 'db.php';
 </div>
 
 <div class="form-group">
-    <input type="text" class="form-control dsds" id="sampaitgl" autocomplete="off" name="sampaitanggal" placeholder="Sampai Tanggal ">
+    <input type="text" class="form-control dsds" id="sampaitgl" autocomplete="off" name="sampaitanggal" placeholder="Sampai Tanggal " value="<?php echo date('Y-m-d'); ?>">
 </div>
 
     

@@ -64,6 +64,15 @@ $laporan_fee_faktur = $db->query("DELETE FROM laporan_fee_faktur");
 $nomor_faktur_jurnal = $db->query("DELETE FROM nomor_faktur_jurnal");
 
 
+$transfer_stok = $db->query("DELETE FROM transfer_stok");
+$tbs_transfer_stok = $db->query("DELETE FROM tbs_transfer_stok");
+$detail_transfer_stok = $db->query("DELETE FROM detail_transfer_stok");
+
+$tukar_poin = $db->query("DELETE FROM tukar_poin");
+$tbs_tukar_poin = $db->query("DELETE FROM tbs_tukar_poin");
+$detail_tukar_poin = $db->query("DELETE FROM detail_tukar_poin");
+
+
 $hpp_masuk = $db->query("DELETE FROM hpp_masuk");
 $hpp_keluar = $db->query("DELETE FROM hpp_keluar");
 

@@ -59,7 +59,7 @@ $no_faktur = $nomor."/TS/".$data_bulan_terakhir."/".$tahun_terakhir;
 
 // siapkan "data" query
     $total = angkadoang($_POST['total']);
-    $user = $_SESSION['user_name'];
+    $user = $_SESSION['nama'];
     $keterangan = stringdoang($_POST['keterangan']);
 
   // buat prepared statements
@@ -98,25 +98,42 @@ $no_faktur = $nomor."/TS/".$data_bulan_terakhir."/".$tahun_terakhir;
 
 
 
+// hpp  keluar
 $sum_hpp_keluar = $db->query("SELECT SUM(total_nilai) AS total FROM hpp_keluar WHERE no_faktur = '$no_faktur'");
 $ambil_sum_hpp_keluar = mysqli_fetch_array($sum_hpp_keluar);
 $total_hpp_keluar = $ambil_sum_hpp_keluar['total'];
 
+// hpp masuk 
 $sum_hpp_masuk = $db->query("SELECT SUM(total_nilai) AS total FROM hpp_masuk WHERE no_faktur = '$no_faktur'");
 $ambil_sum_hpp_masuk = mysqli_fetch_array($sum_hpp_masuk);
 $total_hpp_masuk = $ambil_sum_hpp_masuk['total'];
 
-$total = $total_hpp_masuk - $total_hpp_keluar;
-
-$select_setting_akun = $db->query("SELECT persediaan FROM setting_akun");
+// setting akun
+$select_setting_akun = $db->query("SELECT persediaan , item_keluar, item_masuk FROM setting_akun");
 $ambil_setting = mysqli_fetch_array($select_setting_akun);
 
+          
+          // pencegah suapaya jurnal tidak doubel
+          $delete_jurnal = $db->query("DELETE  FROM jurnal_trans WHERE no_faktur = '$no_faktur' AND jenis_transaksi = 'Transfer Stok' ");
 
-  //PERSEDIAAN    
-        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Persediaan - ".$keterangan." ', '$ambil_setting[persediaan]', '0', '$total', 'Transfer Stok', '$no_faktur','1', '$user')");
+    
+    // jurnal masuk
+              //PERSEDIAAN    
+                $insert_jurnal_masuk1 = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) 
+                  VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Transfer Stok - $keterangan', '$ambil_setting[persediaan]', '$total_hpp_masuk', '0', 'Transfer Stok', '$no_faktur','1', '$user')");
 
-  //ITEM KELUAR    
-        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Persediaan - ".$keterangan." ', '$ambil_setting[persediaan]', '$total', '0', 'Transfer Stok', '$no_faktur','1', '$user')");
+          //ITEM MASUK    
+                $insert_jurnal_masuk2 = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) 
+                  VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Transfer Stok - $keterangan', '$ambil_setting[item_masuk]', '0', '$total_hpp_masuk', 'Transfer Stok', '$no_faktur','1', '$user')");
+
+    // jurnal keluar
+            //PERSEDIAAN    
+                $insert_jurnal_keluar1 = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) 
+                  VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Transfer Stok', '$ambil_setting[persediaan]', '0', '$total_hpp_keluar', 'Transfer Stok', '$no_faktur','1', '$user')");
+
+                //ITEM KELUAR    
+                $insert_jurnal_keluar2 = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) 
+                  VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Transfer Stok -', '$ambil_setting[item_keluar]', '$total_hpp_keluar', '0', 'Transfer Stok', '$no_faktur','1', '$user')");
 
 
   // INSERT HISTORY TBS TRANSFER STOK

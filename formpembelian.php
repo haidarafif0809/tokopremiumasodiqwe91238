@@ -661,6 +661,9 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
   else if (jumlah_barang == ''){
   alert("Jumlah Barang Harus Diisi");
   }
+  else if (jumlah_barang == 0){
+  alert("Jumlah Barang Tidak Boleh 0");
+  }
   else if (potongan > subtotal_murni){
       alert("Anda Tidak Bisa Menambahkan Barang , Potongan telah melebihi subtotal !");
       $("#jumlah_barang").val('');
@@ -1143,6 +1146,7 @@ else
 if( over_stok < stok ){
 
       alert ("Persediaan Barang Ini Sudah Melebihi Batas Stok!");
+       $("#jumlah_barang").val(''); 
       
     }
 

@@ -4,8 +4,7 @@
 if ($_SESSION['user_name'] == '')
 {
 
-header('location:index.php');
-
+   echo '<META HTTP-EQUIV="Refresh" Content="0; URL=index.php">';
 }
 
  ?>

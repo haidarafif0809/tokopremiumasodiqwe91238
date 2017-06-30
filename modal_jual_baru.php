@@ -111,23 +111,23 @@ while( $row=mysqli_fetch_array($query) ) {
 
     $nestedData[] = $row["kode_barang"];
     $nestedData[] = $row["nama_barang"];
-    $nestedData[] = koma($row["harga_jual"],2);
-    $nestedData[] = koma($row["harga_jual2"],2);
-    $nestedData[] = koma($row["harga_jual3"],2);
-    $nestedData[] = koma($row["harga_jual4"],2);
-    $nestedData[] = koma($row["harga_jual5"],2);
-    $nestedData[] = koma($row["harga_jual6"],2);
-    $nestedData[] = koma($row["harga_jual7"],2);
+    $nestedData[] = "<p align='right'> ". $row["harga_jual"] ." </p>" ;
+    $nestedData[] = "<p align='right'> ". $row["harga_jual2"] ." </p>" ;
+    $nestedData[] = "<p align='right'> ". $row["harga_jual3"] ." </p>" ;
+    $nestedData[] = "<p align='right'> ". $row["harga_jual4"] ." </p>" ;
+    $nestedData[] = "<p align='right'> ". $row["harga_jual5"] ." </p>" ;
+    $nestedData[] = "<p align='right'> ". $row["harga_jual6"] ." </p>" ;
+    $nestedData[] = "<p align='right'> ". $row["harga_jual7"] ." </p>" ;
 
     if ($row["berkaitan_dgn_stok"] == "Jasa") {
         $nestedData[] = "0";
         }
     else{
         if($row["nama"] == 'KG'){
-           $nestedData[] = koma(cekStokHpp($row["kode_barang"]),3);
+           $nestedData[] ="<p align='right'> ". koma(cekStokHpp($row["kode_barang"]),2) ." </p>" ;
         }
         else{
-            $nestedData[] = hapus_koma(cekStokHpp($row["kode_barang"]));
+            $nestedData[] ="<p align='right'> ". koma(cekStokHpp($row["kode_barang"]),2) ." </p>" ;
         }
         }
 

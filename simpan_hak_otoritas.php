@@ -188,6 +188,16 @@ $daftar_pajak_lihat = stringdoang(isset($_POST['daftar_pajak_lihat']));
 $daftar_pajak_tambah = stringdoang(isset($_POST['daftar_pajak_tambah']));
 $daftar_pajak_edit = stringdoang(isset($_POST['daftar_pajak_edit']));
 $daftar_pajak_hapus = stringdoang(isset($_POST['daftar_pajak_hapus']));
+$transfer_stok_lihat = stringdoang(isset($_POST['transfer_stok_lihat']));
+$transfer_stok_tambah = stringdoang(isset($_POST['transfer_stok_tambah']));
+$transfer_stok_edit = stringdoang(isset($_POST['transfer_stok_edit']));
+$transfer_stok_hapus = stringdoang(isset($_POST['transfer_stok_hapus']));
+$tukar_poin_lihat = stringdoang(isset($_POST['tukar_poin_lihat']));
+$tukar_poin_tambah = stringdoang(isset($_POST['tukar_poin_tambah']));
+$tukar_poin_edit = stringdoang(isset($_POST['tukar_poin_edit']));
+$tukar_poin_hapus = stringdoang(isset($_POST['tukar_poin_hapus']));
+
+
 
 // tiga pilihan
 $laporan_pemasukan_tanggal_lihat = stringdoang(isset($_POST['laporan_pemasukan_tanggal_lihat']));
@@ -384,6 +394,21 @@ $update_otoritas_transaksi_kas->bind_param("ii",
     $transaksi_kas_lihat, $id);
 
 $update_otoritas_transaksi_kas->execute();
+
+
+$update_otoritas_transfer_stok = $db->prepare("UPDATE otoritas_transfer_stok SET transfer_stok_lihat = ?, transfer_stok_tambah = ?, transfer_stok_edit = ?, transfer_stok_hapus = ? WHERE id_otoritas = ?");
+
+$update_otoritas_transfer_stok->bind_param("iiiii",
+    $transfer_stok_lihat,$transfer_stok_tambah,$transfer_stok_edit,$transfer_stok_hapus,$id);
+
+$update_otoritas_transfer_stok->execute();
+
+$update_otoritas_tukar_poin = $db->prepare("UPDATE otoritas_tukar_poin SET tukar_poin_lihat = ?, tukar_poin_tambah = ?, tukar_poin_edit = ?, tukar_poin_hapus = ? WHERE id_otoritas = ?");
+
+$update_otoritas_tukar_poin->bind_param("iiiii",
+    $tukar_poin_lihat,$tukar_poin_tambah,$tukar_poin_edit,$tukar_poin_hapus,$id);
+
+$update_otoritas_tukar_poin->execute();
 
 
 header('location: form_hak_akses.php?nama='.$nama.'&id='.$id.'');

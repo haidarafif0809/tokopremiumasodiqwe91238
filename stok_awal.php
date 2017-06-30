@@ -105,6 +105,7 @@ echo '<a href="form_stok_awal.php"  class="btn btn-info"> <i class="fa fa-plus">
 <span id="tabel_baru">
 <table id="table_stok_awal" class="table table-bordered">
 		<thead>
+      <th style='background-color: #4CAF50; color:white'> No Faktur </th>
       <th style='background-color: #4CAF50; color:white'> Kode Barang </th>
 			<th style='background-color: #4CAF50; color:white'> Nama Barang </th>
 			<th style='background-color: #4CAF50; color:white'> Jumlah </th>
@@ -151,7 +152,7 @@ if ($stok_awal['stok_awal_hapus'] > 0) {
         },
             
             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                $(nRow).attr('class','tr-id-'+aData[10]+'');
+                $(nRow).attr('class','tr-id-'+aData[11]+'');
             },
 
         });

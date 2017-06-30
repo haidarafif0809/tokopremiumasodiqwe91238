@@ -31,7 +31,7 @@ tr:nth-child(even){background-color: #f2f2f2}
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Edit Diskon dan Pajak</h4>
+        <h4 class="modal-title">Edit Diskon</h4>
       </div>
       <div class="modal-body">
   <form role="form" method="post">
@@ -75,7 +75,7 @@ tr:nth-child(even){background-color: #f2f2f2}
   </div>
 </div><!-- end of modal edit data  -->
 
-<h3><b> DEFAULT DISKON & PAJAK </b></h3><hr>
+<h3><b> DEFAULT DISKON</b></h3><hr>
 <div class="table-responsive">
 <span id="tabel_baru">
 <table id="tableuser" class="table table-bordered">

@@ -423,7 +423,7 @@ if ($lihat['set_perusahaan_lihat'] > 0){
 }
 
 if ($lihat['set_diskon_tax_lihat'] > 0){
-                                echo '<li><a href="set_diskon_tax.php" class="waves-effect">Default Diskon & Pajak</a></li>';
+                                echo '<li><a href="set_diskon_tax.php" class="waves-effect">Setting Diskon</a></li>';
 }
 if ($lihat['set_setting_halaman_promo_lihat'] > 0){
 echo '<li><a href="setting_halaman_promo.php" class="waves-effect">Setting Halaman Promo </a></li>';

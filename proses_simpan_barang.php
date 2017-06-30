@@ -34,7 +34,7 @@ if ($cek_jumlah_bulan == 1) {
  }
 //ambil bulan dari tanggal penjualan terakhir
 
- $bulan_terakhir = $db->query("SELECT MONTH(tanggal) as bulan FROM penjualan ORDER BY id DESC LIMIT 1");
+ $bulan_terakhir = $db->query("SELECT MONTH(waktu_input) as bulan FROM penjualan ORDER BY id DESC LIMIT 1");
  $v_bulan_terakhir = mysqli_fetch_array($bulan_terakhir);
 
 //ambil nomor  dari penjualan terakhir
@@ -73,6 +73,46 @@ $nomor = 1 + $ambil_nomor ;
     $select_kode_pelanggan = $db->query("SELECT id,nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$kode_pelanggan'");
     $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
     $id_pelanggan = $ambil_kode_pelanggan['id'];
+
+       // AMBIL  ATURAN POIN
+    $ambil_poin = $db->query("SELECT poin_rp, nilai_poin FROM aturan_poin ");
+    $data_poin = mysqli_fetch_array($ambil_poin);
+
+    $nilai_poin = $data_poin['nilai_poin'];
+    $poin_rp = $data_poin['poin_rp'];
+
+  // total penjualan dibagi dengan ketentuan poin / aturan poin / nilai poin RP
+    $hitung_poin = $total / $poin_rp;
+
+    // poin yang didapat = membulatkan hasil hitungan poin(kebwah) * nilai poin yg ada di aturan poin.
+    $poin_yg_didapat = floor($hitung_poin) * $nilai_poin;
+    // hitung jumlah poin yang didapat
+        
+  
+    // insert poin pelanggan
+    $poin_masuk = $db->prepare("INSERT INTO poin_masuk(no_faktur_penjualan, id_pelanggan, total_penjualan, nilai_poin_akhir, poin_rp_akhir, poin,tanggal, jam, waktu) 
+      VALUES (?,?,?,?,?,?,?,?,?)");
+        
+
+    // hubungkan "data" dengan prepared statements
+    $poin_masuk->bind_param("siiiiisss",
+    $no_faktur, $id_pelanggan,$total,$nilai_poin,$poin_rp, $poin_yg_didapat,$tanggal_sekarang,$jam_sekarang,$waktu);
+              
+    $poin_masuk->execute();
+
+        // cek query
+          if (!$poin_masuk) 
+          {
+          die('Query Error : '.$db->errno.
+          ' - '.$db->error);
+          }
+          
+          else 
+          {
+          
+          }
+    // end hitung poin pelanggan
+
     
     $perintah0 = $db->query("SELECT * FROM fee_faktur WHERE nama_petugas = '$sales'");
     $cek = mysqli_fetch_array($perintah0);

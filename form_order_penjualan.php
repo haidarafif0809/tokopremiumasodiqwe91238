@@ -19,7 +19,7 @@ $session_id = session_id();
  ?>
 
 <!-- Modal Untuk Confirm PESAN alert-->
-<div id="modal_promo_alert" class="modal fade" role="dialog">
+<div id="modal_promo_alert" class="modal" role="dialog">
   <div class="modal-dialog modal-lg">
     <!-- Modal content-->
     <div class="modal-content">
@@ -203,7 +203,7 @@ $session_id = session_id();
 
 
 <!--tampilan modal-->
-<div id="myModal" class="modal fade" role="dialog">
+<div id="myModal" class="modal " role="dialog">
   <div class="modal-dialog modal-lg">
 
     <!-- isi modal-->
@@ -247,7 +247,7 @@ $session_id = session_id();
 
 
 <!-- Modal Hapus data -->
-<div id="modal_hapus" class="modal fade" role="dialog">
+<div id="modal_hapus" class="modal " role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -605,7 +605,7 @@ $(document).ready(function(){
 
   document.getElementById("kode_barang").value = $(this).attr('data-kode');
   $("#kode_barang").trigger("chosen:updated");
-  $("#kode_barang").trigger("chosen:open");
+  //$("#kode_barang").trigger("chosen:open");
 
   document.getElementById("nama_barang").value = $(this).attr('nama-barang');
   document.getElementById("limit_stok").value = $(this).attr('limit_stok');
@@ -618,13 +618,13 @@ $(document).ready(function(){
 
 var level_harga = $("#level_harga").val();
 
-var harga_level_1 = $(this).attr('harga');
-var harga_level_2 = $(this).attr('harga_level_2');  
-var harga_level_3 = $(this).attr('harga_level_3');
-var harga_level_4 = $(this).attr('harga_level_4');  
-var harga_level_5 = $(this).attr('harga_level_5');
-var harga_level_6 = $(this).attr('harga_level_6');  
-var harga_level_7 = $(this).attr('harga_level_7');
+var harga_level_1 = $(this).attr('harga').replace(/[^\/\d]/g,'').replace("/","");
+var harga_level_2 = $(this).attr('harga_level_2').replace(/[^\/\d]/g,'').replace("/","");  
+var harga_level_3 = $(this).attr('harga_level_3').replace(/[^\/\d]/g,'').replace("/","");
+var harga_level_4 = $(this).attr('harga_level_4').replace(/[^\/\d]/g,'').replace("/","");  
+var harga_level_5 = $(this).attr('harga_level_5').replace(/[^\/\d]/g,'').replace("/","");
+var harga_level_6 = $(this).attr('harga_level_6').replace(/[^\/\d]/g,'').replace("/","");  
+var harga_level_7 = $(this).attr('harga_level_7').replace(/[^\/\d]/g,'').replace("/","");
 
 if (level_harga == "harga_1") {
   $("#harga_produk").val(harga_level_1);
@@ -668,7 +668,7 @@ else if (level_harga == "harga_7") {
   $("#harga_baru").val(harga_level_7);
 }
 
-  document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang');
+  document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang').replace(/[^\/\d]/g,'').replace("/","");
 
 
 $.post("lihat_promo_alert.php",{id_barang:$(this).attr('id-barang')},function(data){

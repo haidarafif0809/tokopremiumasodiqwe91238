@@ -50,7 +50,7 @@ $session_id = session_id();
 </div><!-- END OF MODAL PRODUK STOK HABIS  -->
 
 <!-- Modal Untuk Confirm PESAN alert-->
-<div id="modal_promo_alert" class="modal fade" role="dialog">
+<div id="modal_promo_alert" class="modal " role="dialog">
   <div class="modal-dialog modal-lg">
     <!-- Modal content-->
     <div class="modal-content">
@@ -237,11 +237,26 @@ Number.prototype.format = function(n, x, s, c) {
     ?>
     </select>
 </div>
-    
+     
+<button type="button" id="cari_produk_penjualan" class="btn btn-info " style="height:50px;"  data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
+<button type="button" id="daftar_order" class="btn btn-success" style="height:50px;" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
+
+<button class="btn btn-purple" style="height:50px;" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+Antrian  </button>
+ 
+<button class="btn btn-warning" style="height:50px;" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+Order </button>
+
+
+<button class="btn btn-deep-purple btn-sm"  style="height:50px;" type="button" id="tombol-warning"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+
+<button class="btn btn-indigo btn-sm" type="button" id="tombol-purpel" style="display: none; height:50px;"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+<div style="display: none" id="span-colapse">
+
 
 <div class="col-sm-2">
       <label class="gg" > Gudang </label><br>
-        <select style="font-size:13px; height:35px" name="kode_gudang" id="kode_gudang" class="form-control chosen" required="" >
+        <select style="font-size:13px; height:35px" name="kode_gudang" id="kode_gudang" class="form-control chosen span-chosen" required="" >
           <?php 
           
           // menampilkan seluruh data yang ada pada tabel suplier
@@ -272,7 +287,7 @@ Number.prototype.format = function(n, x, s, c) {
 
 <div class="col-sm-2">
     <label class="gg" >Sales</label>
-        <select style="font-size:13px; height:35px" name="sales" id="sales" class="form-control chosen" required="">
+        <select style="font-size:13px; height:35px" name="sales" id="sales" class="form-control chosen span-chosen" required="">
 
   <?php 
     
@@ -296,7 +311,7 @@ Number.prototype.format = function(n, x, s, c) {
 
 <div class="col-sm-2">
     <label> Level Harga </label><br>
-        <select style="font-size:13px; height:35px" type="text" name="level_harga" id="level_harga" class="form-control" required="" >
+        <select style="font-size:13px; height:35px" type="text" name="level_harga" id="level_harga" class="form-control chosen span-chosen" required="" >
         <option value="harga_1">Level 1</option>
         <option value="harga_2">Level 2</option>
         <option value="harga_3">Level 3</option>
@@ -312,22 +327,17 @@ Number.prototype.format = function(n, x, s, c) {
 
 <div class="col-sm-2">
     <label class="gg">PPN</label>
-      <select type="hidden" style="font-size:13px; height:35px" name="ppn" id="ppn" class="form-control cho">
+      <select type="hidden" style="font-size:13px; height:35px" name="ppn" id="ppn" class="form-control  chosen span-chosen">
           <option >Include</option>  
           <option >Exclude</option>
           <option >Non</option>          
     </select>
 </div>
-
-    </div>  <!-- END ROW dari kode pelanggan - ppn -->
+   </div> 
 </form><!--tag penutup form-->
   
 
   <form class="form-inline" method="post ">
-
-<button type="button" id="cari_produk_penjualan" class="btn btn-info " data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
-<button type="button" id="daftar_parcel" class="btn btn-primary" data-toggle="modal" data-target="#modal_parcel"><i class='fa  fa-search'></i> Cari Parcel (alt+p) </button>
-<button type="button" id="daftar_order" class="btn btn-success" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
 
 <?php 
 $hud = $db->query("SELECT setting_tampil FROM setting_antrian");
@@ -337,23 +347,14 @@ if ($my['setting_tampil'] == 'Tampil')
 {
 ?>
 
-
-
-<button class="btn btn-purple" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
-Antrian  </button>
-
-
-
-
-<button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
-Order </button>
-
 </p>  
 </form>
 
 <style>
 tr:nth-child(even){background-color: #f2f2f2}
 </style>
+
+</div>
 
 <div class="collapse" id="collapseExample">
  <table id="tableuser" class="table-border table-sm">
@@ -399,7 +400,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
 <!--MODAL OPEN CASH DRAWER -->
-<div class="modal fade modal-ext" id="modal_cash_drawer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal  modal-ext" id="modal_cash_drawer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <!--Content-->
         <div class="modal-content">
@@ -460,6 +461,22 @@ tr:nth-child(even){background-color: #f2f2f2}
         <h4 class="modal-title"><center><h3><b>Data Barang</b></h3></center></h4>
       </div>
       <div class="modal-body">
+ 
+<!-- Nav tabs -->
+<ul class="nav nav-tabs tabs-2 black" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Cari Barang</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#panel2" id="daftar_parcel" role="tab">Cari Parcel</a>
+    </li> 
+</ul>
+<!-- Tab panels -->
+<div class="tab-content card">
+
+    <!--Panel 1-->
+    <div class="tab-pane  in show active" id="panel1">
+        
             <div class="table-responsive">
               <table id="tabel_cari" class="table table-bordered table-sm">
                    <thead> <!-- untuk memberikan nama pada kolom tabel -->
@@ -478,6 +495,31 @@ tr:nth-child(even){background-color: #f2f2f2}
                   </thead> <!-- tag penutup tabel -->
                </table>
             </div>
+    </div>
+    <!--/.Panel 1-->
+
+    <!--Panel 2-->
+    <div class="tab-pane " id="panel2">
+      <div class="table-responsive">
+          <table id="table_parcel" align="center" class="table">
+                <thead>
+                        <th> Kode Parcel </th>
+                        <th> Nama Parcel </th>
+                        <th> Jumlah Parcel </th>
+                        <th> Harga Level 1</th>
+                        <th> Harga Level 2</th>
+                        <th> Harga Level 3</th>
+                        <th> Harga Level 4 </th>
+                        <th> Harga Level 5</th>
+                        <th> Harga Level 6</th>
+                        <th> Harga Level 7</th>
+                </thead>
+          </table>
+      </div>
+
+    </div>
+    <!--/.Panel 2--> 
+</div>
         <div class="table-resposive">
       <span class="modal_baru"></span>
       </div>
@@ -491,7 +533,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
 <!--tampilan modal-->
-<div id="modal_order" class="modal fade" role="dialog">
+<div id="modal_order" class="modal " role="dialog">
   <div class="modal-dialog modal-lg">
     <!-- isi modal-->
     <div class="modal-content">
@@ -520,47 +562,9 @@ tr:nth-child(even){background-color: #f2f2f2}
     </div>
   </div>
 </div><!-- end of modal data barang  -->
-
-
-
-<!-- START MODAL PARCEL-->
-<div id="modal_parcel" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <!-- isi modal-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Produk Parcel</h4>
-      </div>
-      <div class="modal-body">
-      <div class="table-responsive">
-            <table id="table_parcel" align="center" class="table">
-                <thead>
-                        <th> Kode Parcel </th>
-                        <th> Nama Parcel </th>
-                        <th> Jumlah Parcel </th>
-                        <th> Harga Level 1</th>
-                        <th> Harga Level 2</th>
-                        <th> Harga Level 3</th>
-                        <th> Harga Level 4 </th>
-                        <th> Harga Level 5</th>
-                        <th> Harga Level 6</th>
-                        <th> Harga Level 7</th>
-                </thead>
-        </table>
-    </div>
-  </div> <!-- tag penutup modal-body-->
-      <div class="modal-footer">
-        <button type="button" order="" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div><!-- END MODAL PARCEL  -->
-
-
-
+ 
 <!-- Modal Hapus data -->
-<div id="modal_hapus" class="modal fade" role="dialog">
+<div id="modal_hapus" class="modal " role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -596,7 +600,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 </div><!-- end of modal hapus data  -->
 
 <!-- Modal edit data -->
-<div id="modal_edit" class="modal fade" role="dialog">
+<div id="modal_edit" class="modal " role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -1637,8 +1641,9 @@ $(document).ready(function(){
               $("#employee-grid_processing").css("display","none");
               
             }
-          },
 
+          },
+ 
           "fnCreatedRow": function( nRow, aData, iDataIndex ) {
 
               $(nRow).attr('class', "pilih");
@@ -1872,9 +1877,9 @@ else if (level_harga == "harga_7") {
 }
 document.getElementById("jumlahbarang").value = $(this).attr('data-stok');
 
-
-  $('#modal_parcel').modal('hide'); 
+ 
   $("#jumlah_barang").focus();
+  $('#myModal').modal('hide'); 
 
 
 });
@@ -3705,8 +3710,26 @@ else{
                
            });//JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
 
-      }
-      else{
+     $("#cetak_tunai").attr('href', 'cetak_penjualan_tunai.php?no_faktur='+no_faktur);
+     $("#cetak_tunai_besar").attr('href', 'cetak_penjualan_tunai_besar.php?no_faktur='+no_faktur);
+     $("#alert_berhasil").show();
+     $("#pembayaran_penjualan").val('');
+     $("#sisa_pembayaran_penjualan").val('');
+     $("#kredit").val('');
+     $("#cetak_tunai").show();
+     $("#cetak_tunai_besar").show('');
+     $("#span_tbs").hide();
+     $("#sss").collapse('hide');
+     $("#kd_pelanggan").val('');
+     $("#kd_pelanggan").trigger("chosen:open");
+     $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
+     $("#total1").val('');
+     $("#pembayaran_penjualan").val('');
+     $("#sisa_pembayaran_penjualan").val('');
+     $("#kredit").val('');
+    
+     var table_tbs_bonus_penjualan = $('#table_tbs_bonus_penjualan').DataTable();
+     table_tbs_bonus_penjualan.draw();
 
              $("#penjualan").show();
              
@@ -3861,36 +3884,20 @@ alert("Silakan Bayar Piutang");
             $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true}); 
             $("#sss").collapse('hide');
 
-             var win = window.open('cetak_penjualan_tunai.php?no_faktur='+no_fak+'');
-             if (win) { win.focus(); }
-             else { 
-               alert('Mohon Izinkan PopUps Pada Website Ini !'); 
-             }    
-          
-             
-         });
-        }
-    else{
-            
-            $("#penjualan").show();
-            $("#cetak_langsung").show();
-            $("#batal_penjualan").show(); 
-            $("#piutang").show();
-            $("#transaksi_baru").hide();
+     var table_tbs_bonus_penjualan = $('#table_tbs_bonus_penjualan').DataTable();
+     table_tbs_bonus_penjualan.draw();
 
-            alert("Tidak Bisa Melakukan Penjualan, Ada Stok Produk Yang Habis");
 
-            $("#tbody-barang-jual").find("tr").remove();
-
-            $.each(result.barang, function(i, item) {
-              var tr_barang = "<tr><td>"+ result.barang[i].kode_barang+"</td><td>"+ result.barang[i].nama_barang+"</td><td>"+ result.barang[i].jumlah_jual+"</td><td>"+ result.barang[i].stok+"</td></tr>"
-              $("#tbody-barang-jual").prepend(tr_barang);
-            });
-
-            $("#modal_barang_tidak_bisa_dijual").modal('show');
-        }
-    });
-
+    var win = window.open('cetak_penjualan_tunai.php?no_faktur='+no_fak+'');
+     if (win) { 
+    
+    win.focus(); 
+  } else { 
+    
+    alert('Mohon Izinkan PopUps Pada Website Ini !'); }    
+    
+       
+   });
   }
 
  });
@@ -4005,6 +4012,13 @@ alert("Silakan Bayar Piutang");
                              $("#span_tbs").hide();
                              $("#sss").collapse('hide');
 
+          $("#kd_pelanggan").val('');
+          $("#kd_pelanggan").trigger("chosen:open");
+          $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"}); 
+              
+     var table_tbs_bonus_penjualan = $('#table_tbs_bonus_penjualan').DataTable();
+     table_tbs_bonus_penjualan.draw();
+             
 
                    
                    });
@@ -5448,6 +5462,9 @@ $(document).ready(function(){
 <!-- SHORTCUT -->
 
 <script> 
+
+
+
     shortcut.add("f2", function() {
         // Do something
 
@@ -5459,7 +5476,8 @@ $(document).ready(function(){
     shortcut.add("f1", function() {
         // Do something
 
-        $("#cari_produk_penjualan").click();
+        $("#cari_produk_penjualan").click(); 
+       $("div#tabel_cari_filter input").focus();
 
     }); 
 
@@ -5467,6 +5485,7 @@ $(document).ready(function(){
         // Do something
 
         $("#daftar_order").click();
+       $("div#table_order_filter input").focus();
 
     }); 
     
@@ -5910,6 +5929,8 @@ $('#tabel_tbs_penjualan').DataTable().destroy();
 </script>
 
 
+
+
 <script type="text/javascript">
 $(document).ready(function(){
     $(document).on('click','#openCashDrawer',function(){
@@ -5951,5 +5972,28 @@ $(document).ready(function(){
 
 </script>
 
-<!-- memasukan file footer.php -->
-<?php include 'footer.php'; ?>
+<script type="text/javascript">
+  $(document).ready(function(){
+      $(document).on('click','#tombol-warning',function(){
+        $(".span-chosen").chosen("destroy");
+        $("#tombol-warning").hide();
+        $("#tombol-purpel").show();
+        $("#span-colapse").show();
+        $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});   
+      });
+  });    
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+      $(document).on('click','#tombol-purpel',function(){
+        $(".span-chosen").chosen("destroy");
+        $("#tombol-warning").show();
+        $("#tombol-purpel").hide();
+        $("#span-colapse").hide();
+        $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});    
+      });
+  });    
+</script>
+
+<!-- memasukan file footer.php --> <?php include 'footer.php'; ?>

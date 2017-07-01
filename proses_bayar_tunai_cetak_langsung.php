@@ -527,6 +527,8 @@ else
 
     $query3 = $db->query("DELETE  FROM tbs_penjualan WHERE session_id = '$session_id'");
     $query30 = $db->query("DELETE  FROM tbs_fee_produk WHERE session_id = '$session_id'");
+        $query321 = $db->query("DELETE  FROM tbs_bonus_penjualan WHERE session_id = '$session_id'");
+
 
 
     // If we arrive here, it means that no exception was thrown

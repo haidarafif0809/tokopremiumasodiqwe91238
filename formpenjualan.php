@@ -3666,6 +3666,9 @@ else{
      $("#pembayaran_penjualan").val('');
      $("#sisa_pembayaran_penjualan").val('');
      $("#kredit").val('');
+    
+     var table_tbs_bonus_penjualan = $('#table_tbs_bonus_penjualan').DataTable();
+     table_tbs_bonus_penjualan.draw();
 
        
    });//JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
@@ -3806,6 +3809,9 @@ alert("Silakan Bayar Piutang");
       $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true}); 
      $("#sss").collapse('hide');
 
+     var table_tbs_bonus_penjualan = $('#table_tbs_bonus_penjualan').DataTable();
+     table_tbs_bonus_penjualan.draw();
+
 
     var win = window.open('cetak_penjualan_tunai.php?no_faktur='+no_fak+'');
      if (win) { 
@@ -3932,6 +3938,9 @@ alert("Silakan Bayar Piutang");
           $("#kd_pelanggan").val('');
           $("#kd_pelanggan").trigger("chosen:open");
           $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"}); 
+              
+     var table_tbs_bonus_penjualan = $('#table_tbs_bonus_penjualan').DataTable();
+     table_tbs_bonus_penjualan.draw();
              
 
                  $("#span_tbs").hide();

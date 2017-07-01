@@ -365,6 +365,7 @@ $query_tbs_bonus_penjualan = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp
 
     $query3 = $db->query("DELETE  FROM tbs_penjualan WHERE session_id = '$session_id'");
     $query30 = $db->query("DELETE  FROM tbs_fee_produk WHERE session_id = '$session_id'");
+    $query321 = $db->query("DELETE  FROM tbs_bonus_penjualan WHERE session_id = '$session_id'");
 
 
 

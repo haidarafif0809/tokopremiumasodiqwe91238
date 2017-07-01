@@ -67,8 +67,50 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
     $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
     $no_jurnal = no_jurnal();
     
-    $select_kode_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$kode_pelanggan'");
+
+    $select_kode_pelanggan = $db->query("SELECT id,nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$kode_pelanggan'");
     $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
+    $id_pelanggan = $ambil_kode_pelanggan['id'];
+    
+    
+    // AMBIL  ATURAN POIN
+    $ambil_poin = $db->query("SELECT poin_rp, nilai_poin FROM aturan_poin ");
+    $data_poin = mysqli_fetch_array($ambil_poin);
+
+    $nilai_poin = $data_poin['nilai_poin'];
+    $poin_rp = $data_poin['poin_rp'];
+
+  // total penjualan dibagi dengan ketentuan poin / aturan poin / nilai poin RP
+    $hitung_poin = $total / $poin_rp;
+
+    // poin yang didapat = membulatkan hasil hitungan poin(kebwah) * nilai poin yg ada di aturan poin.
+    $poin_yg_didapat = floor($hitung_poin) * $nilai_poin;
+    // hitung jumlah poin yang didapat
+        
+  
+    // insert poin pelanggan
+    $poin_masuk = $db->prepare("INSERT INTO poin_masuk(no_faktur_penjualan, id_pelanggan, total_penjualan, nilai_poin_akhir, poin_rp_akhir, poin,tanggal, jam, waktu) 
+      VALUES (?,?,?,?,?,?,?,?,?)");
+        
+
+    // hubungkan "data" dengan prepared statements
+    $poin_masuk->bind_param("siiiiisss",
+    $no_faktur, $id_pelanggan,$total,$nilai_poin,$poin_rp, $poin_yg_didapat,$tanggal_sekarang,$jam_sekarang,$waktu);
+              
+    $poin_masuk->execute();
+
+        // cek query
+          if (!$poin_masuk) 
+          {
+          die('Query Error : '.$db->errno.
+          ' - '.$db->error);
+          }
+          
+          else 
+          {
+          
+          }
+    // end hitung poin pelanggan
 
     
     $perintah0 = $db->query("SELECT * FROM fee_faktur WHERE nama_petugas = '$sales' ");
@@ -160,12 +202,11 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
               
     // hubungkan "data" dengan prepared statements
               $stmt->bind_param("sssissssiiisississ",
-              $no_faktur, $kode_gudang, $kode_pelanggan, $total, $tanggal_sekarang, $jam_sekarang,
+              $no_faktur, $kode_gudang, $id_pelanggan, $total, $tanggal_sekarang, $jam_sekarang,
               $user, $sales, $potongan, $tax, $sisa, $cara_bayar, $pembayaran, $keterangan,
               $ppn_input,$biaya_adm,$no_jurnal,$ket_jurnal);
               
               $biaya_adm = stringdoang($_POST['biaya_adm']);
-              $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
               $keterangan = stringdoang($_POST['keterangan']);
               $kode_gudang = stringdoang($_POST['kode_gudang']);
 
@@ -309,10 +350,9 @@ if ($potongan != "" || $potongan != 0 ) {
               
 
               $stmt->bind_param("sssisssssiiiisississ",
-              $no_faktur, $kode_gudang, $kode_pelanggan, $total , $tanggal_sekarang, $tanggal_jt, $jam_sekarang, $user, $sales, $potongan, $tax, $sisa_kredit, $sisa_kredit, $cara_bayar, $pembayaran, $keterangan, $ppn_input,$biaya_adm,$no_jurnal,$ket_jurnal);
+              $no_faktur, $kode_gudang, $id_pelanggan, $total , $tanggal_sekarang, $tanggal_jt, $jam_sekarang, $user, $sales, $potongan, $tax, $sisa_kredit, $sisa_kredit, $cara_bayar, $pembayaran, $keterangan, $ppn_input,$biaya_adm,$no_jurnal,$ket_jurnal);
               
               $biaya_adm = stringdoang($_POST['biaya_adm']);
-              $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
               $keterangan = stringdoang($_POST['keterangan']);
               $kode_gudang = stringdoang($_POST['kode_gudang']);
 
@@ -487,6 +527,8 @@ else
 
     $query3 = $db->query("DELETE  FROM tbs_penjualan WHERE session_id = '$session_id'");
     $query30 = $db->query("DELETE  FROM tbs_fee_produk WHERE session_id = '$session_id'");
+        $query321 = $db->query("DELETE  FROM tbs_bonus_penjualan WHERE session_id = '$session_id'");
+
 
 
     // If we arrive here, it means that no exception was thrown

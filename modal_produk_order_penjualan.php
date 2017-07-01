@@ -119,11 +119,11 @@ while( $row=mysqli_fetch_array($query) ) {
 
     if ($row["berkaitan_dgn_stok"] == "Jasa") {
         $nestedData[] = "0";
-        }
+    }
     else{
         
         $nestedData[] ="<p align='right'> ".  koma(cekStokHpp($row["kode_barang"]),2) ." </p>" ;
-        }
+    }
 
     $nestedData[] = $row["nama"];
     $nestedData[] = $row["kategori"]; 

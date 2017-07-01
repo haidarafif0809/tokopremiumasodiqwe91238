@@ -99,7 +99,7 @@ $session_id = session_id();
 <div id="modal_hapus_bonus_ditbs" class="modal" role="dialog">
   <div class="modal-dialog modal-lg"-->
     <!-- Modal content-->
-    <<div class="modal-content">
+    <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button> 
            

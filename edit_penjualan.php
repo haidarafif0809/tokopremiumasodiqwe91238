@@ -124,9 +124,25 @@ include 'sanitasi.php';
   </select>
 </div>
 
+
+<button type="button" style="height:50px;" id="cari_produk_penjualan" class="btn btn-info" data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i>  Cari (F1) </button>
+<button type="button" style="height:50px;" id="daftar_order" class="btn btn-success" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
+
+<button class="btn btn-primary" type="button" style="height:50px;" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+Antrian  </button>
+
+<button class="btn btn-warning" type="button" style="height:50px;" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+Order </button>
+
+
+<button class="btn btn-deep-purple btn-sm"  style="height:50px;" type="button" id="tombol-warning"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+
+<button class="btn btn-indigo btn-sm" type="button" id="tombol-purpel" style="display: none; height:50px;"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+
+<div style="display: none" id="span-colapse">
 <div class="form-group  col-sm-2">
     <label> Gudang </label><br>
-       <select name="kode_gudang" id="kode_gudang" class="form-control chosen" required="" >
+       <select name="kode_gudang" id="kode_gudang" class="form-control chosen span-chosen" required="" >
           <option value="<?php echo $kode_gudang; ?>"><?php echo $nama_gudang; ?></option>
           <?php 
           
@@ -147,7 +163,7 @@ include 'sanitasi.php';
 
 <div class="form-group  col-sm-2">
     <label>Sales</label>
-      <select name="sales" id="sales" class="form-control chosen" required="">
+      <select name="sales" id="sales" class="form-control chosen span-chosen" required="">
       <?php 
     
       //untuk menampilkan semua data pada tabel pelanggan dalam DB
@@ -164,7 +180,7 @@ include 'sanitasi.php';
 
 <div class="form-group col-sm-2">
   <label> Level Harga </label><br>
-  <select type="text" style="font-size:13px; height:35px" name="level_harga" id="level_harga" class="form-control " required="" >
+  <select type="text" style="font-size:13px; height:35px" name="level_harga" id="level_harga" class="form-control chosen span-chosen" required="" >
   <option value="harga_1">Level 1</option>
   <option value="harga_2">Level 2</option>
   <option value="harga_3">Level 3</option>
@@ -179,14 +195,14 @@ include 'sanitasi.php';
 
 <div class="form-group  col-sm-2">
       <label>PPN</label>
-          <select name="ppn" id="ppn"  style="font-size:13px; height:35px" class="form-control ">
+          <select name="ppn" id="ppn"  style="font-size:13px; height:35px" class="form-control chosen span-chosen">
             <option value="<?php echo $ppn; ?>"><?php echo $ppn; ?></option>  
             <option >Include</option>  
             <option >Exclude</option>
             <option >Non</option>          
      </select>
 </div>
-
+</div>
 </div><!--end div row data informasi pelanggan -->
 
 
@@ -202,6 +218,17 @@ include 'sanitasi.php';
       <input type="text" style="height:15px;font-size:15px" name="tanggal" id="tanggal"  value="<?php echo $tanggal_ganti; ?>" class="form-control tanggal" autocomplete="off" >
 </div>
 
+<!--form barcode barang -->
+<form id="form_barcode" class="form-inline"> 
+    <div class="form-group  col-sm-4">
+      <label> Scan / Ketik Barcode </label>
+        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" autocomplete="off" placeholder="Scan / Ketik Barcode" >
+    </div>     
+    <button type="submit" id="submit_barcode" class="btn btn-primary" style="font-size:15px;height:50px" ><i class="fa fa-barcode"></i> Submit Barcode</button>
+             
+</form>
+<!--end form barcode barang -->
+
 <input type="hidden" name="ppn_input" id="ppn_input" value="<?php echo $ppn; ?>" class="form-control" placeholder="ppn input">  
 <input type="hidden" name="tipe_produk" id="tipe_produk" class="form-control" >  
 
@@ -209,9 +236,6 @@ include 'sanitasi.php';
 
 </form><!--tag penutup form-->
 
-
-<button type="button" id="cari_produk_penjualan" class="btn btn-info" data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i>  Cari (F1) </button>
-<button type="button" id="daftar_order" class="btn btn-success" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
 
 <?php 
 $hud = $db->query("SELECT setting_tampil FROM setting_antrian");
@@ -223,12 +247,6 @@ if ($my['setting_tampil'] == 'Tampil')
 
 
 
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
-Antrian  </button>
-
-<button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
-Order </button>
-</p>  
 </form>
 
 <style>
@@ -292,7 +310,7 @@ tr:nth-child(even){background-color: #f2f2f2}
       </div>
         <div class="modal-body">
             <div class="table-resposive">
-                <table id="table_order" align="center" class="table">
+                <table id="table_order" align="center" class="table table-bordered table-sm">
                 <thead>
                 <th> No Faktur Order  </th>
                 <th >Kode Pelanggan</th>
@@ -316,41 +334,82 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
 <!--tampilan modal-->
-<div id="myModal" class="modal fade" role="dialog">
+<div id="myModal" class="modal " role="dialog">
   <div class="modal-dialog modal-lg">
-
     <!-- isi modal-->
     <div class="modal-content">
-
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <center><h4 class="modal-title"><b>Data Barang</b></h4></center>
+        <h4 class="modal-title"><center><h3><b>Data Barang</b></h3></center></h4>
       </div>
       <div class="modal-body">
-        <div class="table-responsive">
-          <table id="tabel_cari" class="table table-bordered table-sm">
-            <thead> <!-- untuk memberikan nama pada kolom tabel -->
-            <th> Kode Barang </th>
-            <th> Nama Barang </th>
-            <th> Harga Jual Level 1</th>
-            <th> Harga Jual Level 2</th>
-            <th> Harga Jual Level 3</th>
-            <th> Harga Jual Level 4 </th>
-            <th> Harga Jual Level 5</th>
-            <th> Harga Jual Level 6</th>
-            <th> Harga Jual Level 7</th>
-            <th> Jumlah Barang </th>
-            <th> Satuan </th>
-            <th> Kategori </th>
-            <th> Suplier </th>
-        </thead> <!-- tag penutup tabel -->
-      </table>
+ 
+<!-- Nav tabs -->
+<ul class="nav nav-tabs tabs-2 black" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Cari Barang</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#panel2" id="daftar_parcel" role="tab">Cari Parcel</a>
+    </li> 
+</ul>
+<!-- Tab panels -->
+<div class="tab-content card">
+
+    <!--Panel 1-->
+    <div class="tab-pane  in show active" id="panel1">
+        
+            <div class="table-responsive">
+              <table id="tabel_cari" class="table table-bordered table-sm">
+                   <thead> <!-- untuk memberikan nama pada kolom tabel -->
+                        <th> Kode Barang </th>
+                        <th> Nama Barang </th>
+                        <th> Harga Jual Level 1</th>
+                        <th> Harga Jual Level 2</th>
+                        <th> Harga Jual Level 3</th>
+                        <th> Harga Jual Level 4 </th>
+                        <th> Harga Jual Level 5</th>
+                        <th> Harga Jual Level 6</th>
+                        <th> Harga Jual Level 7</th>
+                        <th> Jumlah Barang </th>
+                        <th> Satuan </th>
+                        <th> Kategori </th>  
+                  </thead> <!-- tag penutup tabel -->
+               </table>
+            </div>
     </div>
+    <!--/.Panel 1-->
+
+    <!--Panel 2-->
+    <div class="tab-pane " id="panel2">
+      <div class="table-responsive">
+          <table id="table_parcel" align="center" class="table">
+                <thead>
+                        <th> Kode Parcel </th>
+                        <th> Nama Parcel </th>
+                        <th> Jumlah Parcel </th>
+                        <th> Harga Level 1</th>
+                        <th> Harga Level 2</th>
+                        <th> Harga Level 3</th>
+                        <th> Harga Level 4 </th>
+                        <th> Harga Level 5</th>
+                        <th> Harga Level 6</th>
+                        <th> Harga Level 7</th>
+                </thead>
+          </table>
+      </div>
+
+    </div>
+    <!--/.Panel 2--> 
+</div>
+        <div class="table-resposive">
+      <span class="modal_baru"></span>
+      </div>
 </div> <!-- tag penutup modal-body-->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
-  </div><!--     <div class="modal-content"> -->
+  </div>
   </div>
 </div><!-- end of modal data barang  -->
 
@@ -439,16 +498,6 @@ tr:nth-child(even){background-color: #f2f2f2}
 </div>
 
 
-<!--form barcode barang -->
-<form id="form_barcode" class="form-inline">
-  <br>
-    <div class="form-group">
-        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" autocomplete="off" placeholder="Scan / Ketik Barcode" >
-    </div>     
-    <button type="submit" id="submit_barcode" class="btn btn-primary" style="font-size:15px" ><i class="fa fa-barcode"></i> Submit Barcode</button>
-             
-</form>
-<!--end form barcode barang -->
 
 
 
@@ -848,6 +897,7 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
         // Do something
 
         $("#cari_produk_penjualan").click();
+       $("div#tabel_cari_filter input").focus();
 
     }); 
 
@@ -855,6 +905,7 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
         // Do something
 
         $("#daftar_order").click();
+        $("div#table_order_filter input").focus();
 
     }); 
     
@@ -967,6 +1018,53 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
     } );
     </script>
 <!--/DATA TABLE MENGGUNAKAN AJAX-->
+
+<!--DATA TABLE PRODUK PARCEL MENGGUNAKAN AJAX-->
+<script type="text/javascript" language="javascript" >
+  $(document).ready(function() {
+    $(document).on('click', '#daftar_parcel', function (e) {
+        $('#table_parcel').DataTable().destroy();
+
+          var dataTable = $('#table_parcel').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_daftar_parcel.php", // json datasource           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_parcel").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+              $(nRow).attr('class', "pilih-parcel");
+              $(nRow).attr('data-kode', aData[0]);
+              $(nRow).attr('data-nama', aData[1]);
+              $(nRow).attr('data-stok', aData[2]);
+              $(nRow).attr('data-harga1', aData[3]);
+              $(nRow).attr('data-harga2', aData[4]);
+              $(nRow).attr('data-harga3', aData[5]);
+              $(nRow).attr('data-harga4', aData[6]);
+              $(nRow).attr('data-harga5', aData[7]);
+              $(nRow).attr('data-harga6', aData[8]);
+              $(nRow).attr('data-harga7', aData[9]);
+              $(nRow).attr('data-faktur', aData[10]);
+              $(nRow).attr('data-id', aData[11]);
+
+          },
+        });
+
+      $("#form").submit(function(){
+        return false;
+      });
+        
+    });
+  });
+</script>
+<!--/DATA TABLE PRODUK PARCEL MENGGUNAKAN AJAX-->
 
 
 <!--untuk memasukkan perintah java script-->
@@ -1163,6 +1261,103 @@ else{
 <!--end javascript order all-->
 
 
+<!--START INPUT DARI MODAL PARCEL-->
+<script type="text/javascript">
+//AMBIL DAN INPUT KE FORM DARI CARI PARCEL
+$(document).on('click', '.pilih-parcel', function (e) {
+
+  document.getElementById("kode_barang").value = $(this).attr('data-kode');
+  $("#kode_barang").trigger('chosen:updated');
+
+  document.getElementById("nama_barang").value = $(this).attr('data-nama');
+  document.getElementById("ber_stok").value = "Barang";
+  document.getElementById("id_produk").value = $(this).attr('data-id');
+  document.getElementById("satuan_konversi").value = "125"
+  document.getElementById("satuan_produk").value = "125";
+
+  var kode_barang = $("#kode_barang").val();
+
+ $.post('cek_kode_barang_tbs_penjualan.php',{kode_barang:kode_barang}, function(data){
+  if(data == 1){
+    alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+
+    $("#kode_barang").val('');
+    $("#kode_barang").trigger('chosen:updated');
+    $("#kode_barang").trigger('chosen:open');
+    $("#nama_barang").val('');
+   }//penutup if
+
+    });////penutup function(cek_kode_barang_tbs_penjualan)
+
+var level_harga = $("#level_harga").val();
+
+var harga_level_1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga1')))));
+var harga_level_2 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga2')))));  
+var harga_level_3 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga3')))));
+var harga_level_4 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga4')))));
+var harga_level_5 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga5')))));  
+var harga_level_6 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga6')))));
+var harga_level_7 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($(this).attr('data-harga7')))));
+console.log(harga_level_1);
+
+if (level_harga == "harga_1") {
+  $("#harga_produk").val(harga_level_1);
+  $("#harga_lama").val(harga_level_1);
+  $("#harga_baru").val(harga_level_1);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_2") {
+  $("#harga_produk").val(harga_level_2);
+  $("#harga_baru").val(harga_level_2);
+  $("#harga_lama").val(harga_level_2);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_3") {
+  $("#harga_produk").val(harga_level_3);
+  $("#harga_lama").val(harga_level_3);
+  $("#harga_baru").val(harga_level_3);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_4") {
+  $("#harga_produk").val(harga_level_4);
+  $("#harga_lama").val(harga_level_4);
+  $("#harga_baru").val(harga_level_4);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_5") {
+  $("#harga_produk").val(harga_level_5);
+  $("#harga_lama").val(harga_level_5);
+  $("#harga_baru").val(harga_level_5);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_6") {
+  $("#harga_produk").val(harga_level_6);
+  $("#harga_lama").val(harga_level_6);
+  $("#harga_baru").val(harga_level_6);
+  $('#kolom_cek_harga').val('1');
+}
+
+else if (level_harga == "harga_7") {
+  $("#harga_produk").val(harga_level_7);
+  $("#harga_lama").val(harga_level_7);
+  $("#harga_baru").val(harga_level_7);
+  $('#kolom_cek_harga').val('1');
+}
+document.getElementById("jumlahbarang").value = $(this).attr('data-stok');
+
+ 
+  $("#jumlah_barang").focus();
+  $('#myModal').modal('hide'); 
+
+
+});
+
+</script>
 
 
 
@@ -3576,246 +3771,6 @@ else {
 });
  </script>
 
-
-<script type="text/javascript">
- /*  $(document).ready(function(){
-    
-  //START KEYUP BIAYA ADMIN RUPIAH
-
-    $("#biaya_adm").keyup(function(){
-      var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
-      if (biaya_adm == '') {
-        biaya_adm = 0,00;
-      }
-      var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
-      if (subtotal == '') {
-        subtotal = 0,00;
-      }
-      var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
-      if (potongan == '') {
-        potongan = 0,00;
-      }
-
-      var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
-      if (pembayaran == '') {
-        pembayaran = 0,00;
-      }  
-      /*    
-      var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
-      if (tax == '') {
-        tax = 0;
-      }
-
-       if (potongan == 0,00 || potongan == '')
-            {
-                   var t_total = parseFloat(subtotal.replace(',','.'));
-            }
-            else
-            {
-                var t_total = parseFloat(subtotal.replace(',','.')) - parseFloat(potongan.replace(',','.'));
-            }
-
-if (biaya_adm == 0,00 || biaya_adm == '')
-{
-      var biaya_admin_persen = 0.00;
-
-}
-else
-{
-      var biaya_admin_persen = parseFloat(biaya_adm.replace(',','.')) / parseFloat(subtotal.replace(',','.')) * 100;
- }     /*
-      var t_tax = parseFloat(t_total) * parseFloat(tax) / 100;
-      var total_akhir1 = parseFloat(t_total) + Math.round(parseFloat(t_tax));
-      
-
-if (biaya_adm == 0,00 || biaya_adm == '')
-{
-      var total_akhir = parseFloat(t_total);
-}
-else
-{
-        var total_akhir = parseFloat(t_total) + parseFloat(biaya_adm.replace(',','.'));
-}
-
-
-      $("#total1").val(total_akhir.format(2, 3, '.', ','));
-      $("#biaya_admin_persen").val(biaya_admin_persen.format(2, 3, '.', ','));
-
-      if (biaya_admin_persen > 100.00) {
-
-            if (potongan == 0,00 || potongan == '')
-            {
-              var total_akhir = parseFloat(subtotal.replace(',','.'));
-            }
-            else
-            {
-              var total_akhir = parseFloat(subtotal.replace(',','.')) - parseFloat(potongan.replace(',','.'));
-            }
-            alert ("Biaya Amin %, Tidak Boleh Lebih Dari 100%");
-            $("#biaya_admin_persen").val('');
-            $("#biaya_admin_select").val('0');            
-            $("#biaya_admin_select").trigger('chosen:updated');
-            $("#biaya_adm").val('');
-            $("#biaya_adm").val('');
-            $("#total1").val(total_akhir.format(2, 3, '.', ','));
-          }
-          
-        else 
-          {
-          }
-
-    });
-
-  //END KEYUP BIAYA ADMIN RUPIAH
-
-  //START KEYUP BIAYA ADMIN PERSEN
-
-    $("#biaya_admin_persen").keyup(function(){
-      var biaya_admin_persen = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_admin_persen").val()))));
-      if (biaya_admin_persen == '') {
-        biaya_admin_persen = 0;
-      }
-      var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
-      if (subtotal == '') {
-        subtotal = 0,00;
-      }
-      var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
-      if (potongan == '') {
-        potongan = 0,00;
-      }
-      var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
-      if (pembayaran == '') {
-        pembayaran = 0,00;
-      }  
-
-
-           if (potongan == 0,00 || potongan == '')
-            {
-                var t_total = parseFloat(subtotal.replace(',','.'));
-            }
-            else
-            {
-                var t_total = parseFloat(subtotal.replace(',','.'),2) - parseFloat(potongan.replace(',','.'),2);
-            }
-
-      var t_total = parseFloat(subtotal.replace(',','.'),2) - parseFloat(potongan,2);
-      var biaya_admin_rupiah = parseFloat(biaya_admin_persen,2) * parseFloat(subtotal.replace(',','.'),2) / 100;
- 
-
-      var total_akhir = parseFloat(t_total,2) + parseFloat(biaya_admin_rupiah,2);
-
-      $("#total1").val(total_akhir.format(2, 3, '.', ','));
-      $("#biaya_adm").val(biaya_admin_rupiah.format(2, 3, '.', ','));
-
-      if (biaya_admin_persen > 100.00) {
-            
-
-            if (potongan == 0,00 || potongan == '' )
-            {
-              var total_akhir = parseFloat(subtotal.replace(',','.'));
-            }
-            else
-            {
-              var total_akhir = parseFloat(subtotal.replace(',','.')) - parseFloat(potongan.replace(',','.'));
-            }
-            alert ("Biaya Amin %, Tidak Boleh Lebih Dari 100%");
-            $("#biaya_admin_persen").val('');
-            $("#biaya_admin_select").val('0');            
-            $("#biaya_admin_select").trigger('chosen:updated');
-            $("#biaya_adm").val('');
-            $("#total1").val(total_akhir.format(2, 3, '.', ','));
-          }
-          
-        else
-          {
-          }
-
-    });
-
-  //END KEYUP BIAYA ADMIN PERSEN
-  });
-  
-
-$(document).ready(function(){
-  //Hitung Biaya Admin
-
-  $("#biaya_admin_select").change(function(){
-  
-  var biaya_admin = $("#biaya_admin_select").val();  
-  var total2 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
-  var total1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total1").val()))));
-  var diskon = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
-      if(diskon == '')
-      {
-      diskon = 0,00
-      }
-
-
-  var data_admin = biaya_admin;
-
-  if (biaya_admin == 0) {
-
-    if (diskon == 0,00 || diskon == '' )
-      {
-         var hasilnya = parseFloat(total2.replace(',','.'));
-      }
-      else
-      {
-         var hasilnya = parseFloat(total2.replace(',','.')) - parseFloat(diskon.replace(',','.'));
-      }
-
-      $("#total1").val(hasilnya.format(2, 3, '.', ','));
-      $("#biaya_adm").val(0);
-
-      data_admin = data_admin.replace(',','.');
-
-      $("#biaya_admin_persen").val(data_admin);
-
-  }
-  else if (biaya_admin > 0) {
-
-      var hitung_biaya = parseFloat(total2.replace(',','.')) * parseFloat(data_admin) / 100;
-       if (total2 == "" || total2 == 0) {
-       hitung_biaya = 0;
-       }
-
-
-            $("#biaya_adm").val(hitung_biaya);
-
-      var biaya_admin = $("#biaya_adm").val();   
-
-
-if (diskon == 0,00 || diskon == '' )
-      {
-      var hasilnya = parseFloat(total2.replace(',','.')) + parseFloat(biaya_admin.replace(',','.'));
-      }
-      else
-      {
-      var hasilnya = parseFloat(total2.replace(',','.')) + parseFloat(biaya_admin.replace(',','.')) - parseFloat(diskon.replace(',','.'));
-      }
-
-        if (total2 == "" || total2 == 0) {
-        hasilnya = 0;
-        }
-
-
-   data_admin = data_admin.replace(',','.');
-
-      $("#total1").val(hasilnya.format(2, 3, '.', ','));
-      $("#biaya_adm").val(hitung_biaya.format(2, 3, '.', ','));
-      $("#biaya_admin_persen").val(data_admin);
-      
-
-
-  }
-      
-    });
-});
-//end Hitu8ng Biaya Admin */
-</script>
-
-
-
 <!--START CEK PPN-->
 <script type="text/javascript">
     $(document).ready(function(){
@@ -3869,5 +3824,30 @@ if (diskon == 0,00 || diskon == '' )
   });
 </script>
 <!--ENDING CEK PPN-->
+
+<script type="text/javascript">
+  $(document).ready(function(){
+      $(document).on('click','#tombol-warning',function(){
+        $(".span-chosen").chosen("destroy");
+        $("#tombol-warning").hide();
+        $("#tombol-purpel").show();
+        $("#span-colapse").show();
+        $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});   
+      });
+  });    
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+      $(document).on('click','#tombol-purpel',function(){
+        $(".span-chosen").chosen("destroy");
+        $("#tombol-warning").show();
+        $("#tombol-purpel").hide();
+        $("#span-colapse").hide();
+        $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});    
+      });
+  });    
+</script>
+
 <!-- memasukan file footer.php -->
 <?php include 'footer.php'; ?>

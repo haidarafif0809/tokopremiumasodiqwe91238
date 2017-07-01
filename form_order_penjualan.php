@@ -11,7 +11,10 @@ include 'sanitasi.php';
 $pilih_akses_tombol = $db->query("SELECT * FROM otoritas_form_order_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]' ");
 $otoritas_tombol = mysqli_fetch_array($pilih_akses_tombol);
 
-// menampilkan seluruh data yang ada pada tabel penjualan yang terdapt pada DB
+$query_default_ppn = $db->query("SELECT setting_ppn, nilai_ppn FROM perusahaan");
+$data_default_ppn = mysqli_fetch_array($query_default_ppn);
+$default_ppn = $data_default_ppn['setting_ppn'];
+$nilai_ppn = $data_default_ppn['nilai_ppn'];
 
 
 $session_id = session_id();
@@ -184,14 +187,27 @@ $session_id = session_id();
 </div>
 
 <div class="col-sm-2">
-          <label class="gg">PPN</label>
-          <select type="hidden" style="font-size:15px; height:35px" name="ppn" id="ppn" class="form-control gg">
-            <option value="Include">Include</option>  
-            <option value="Exclude">Exclude</option>
-            <option value="Non">Non</option>          
-          </select>
-</div>
+<label class="gg">PPN</label>
+<select type="hidden" style="font-size:15px; height:35px" name="ppn" id="ppn" class="form-control">
+  <?php if ($default_ppn == 'Include'): ?>    
+    <option selected>Include</option>  
+    <option>Exclude</option>  
+    <option>Non</option>
+  <?php endif ?>
 
+  <?php if ($default_ppn == 'Exclude'): ?>
+    <option selected>Exclude</option>  
+    <option>Non</option>
+    <option>Include</option>  
+  <?php endif ?>
+
+  <?php if ($default_ppn == 'Non'): ?>
+    <option selected>Non</option>
+    <option>Include</option>  
+    <option>Exclude</option>  
+  <?php endif ?>
+</select>
+</div>
 </div>  <!-- END ROW dari kode pelanggan - ppn -->
 
 
@@ -361,8 +377,12 @@ $session_id = session_id();
     <input style="height:15px;" type="text" class="form-control" name="potongan" autocomplete="off" id="potongan1" data-toggle="tooltip" data-placement="top" title="Jika Ingin Potongan Dalam Bentuk Persen (%), input : 10%" placeholder="Potongan">
   </div>
 
-   <div class="col-sm-1">
-    <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" placeholder="Tax%" >
+  <div class="col-sm-1">
+    <?php if ($default_ppn == 'Include'): ?>
+      <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" value="<?php echo $nilai_ppn ?>" placeholder="Tax%" >
+    <?php else: ?>
+      <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" placeholder="Tax%" >
+    <?php endif ?>      
   </div>
 
 
@@ -870,7 +890,7 @@ $.post("barcode_order.php",{kode_barang:kode_barang,sales:sales,level_harga:leve
         $("#nama_barang").val('');
         $("#jumlah_barang").val('');
         $("#potongan1").val('');
-        $("#tax1").val('');
+        
 
 
             $('#tabel_tbs_order').DataTable().destroy();
@@ -998,7 +1018,7 @@ $(document).on('click', '#submit_produk', function (e) {
 
   $("#jumlah_barang").val('');
   $("#potongan1").val('');
-  $("#tax1").val('');
+  
 
 
   if (a > 0){
@@ -1038,7 +1058,7 @@ $(document).on('click', '#submit_produk', function (e) {
           $("#ber_stok").val('');
           $("#jumlah_barang").val('');
           $("#potongan1").val('');
-          $("#tax1").val('');
+          
          
          });
 
@@ -1068,7 +1088,7 @@ $(document).on('click', '#submit_produk', function (e) {
           $("#ber_stok").val('');
           $("#jumlah_barang").val('');
           $("#potongan1").val('');
-          $("#tax1").val('');
+          
 
       });
     }
@@ -1098,7 +1118,7 @@ $(document).on('click', '#submit_produk', function (e) {
      $("#ber_stok").val('');
      $("#jumlah_barang").val('');
      $("#potongan1").val('');
-     $("#tax1").val('');
+     
 
 //pembaruan table otomatis
 $('#tabel_tbs_order').DataTable().destroy();
@@ -1154,7 +1174,7 @@ else{
      $("#ber_stok").val('');
      $("#jumlah_barang").val('');
      $("#potongan1").val('');
-     $("#tax1").val('');
+     
 
 //pembaruan table otomatis
 $('#tabel_tbs_order').DataTable().destroy();
@@ -1826,34 +1846,52 @@ $(document).ready(function(){
                              </script>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-
-      $("#tax").attr("disabled", true);
-
-
-    $("#ppn").change(function(){
+  $(document).ready(function(){
 
     var ppn = $("#ppn").val();
-    $("#ppn_input").val(ppn);
+      $("#ppn_input").val(ppn);
 
-  if (ppn == "Include"){
+      if (ppn == "Include"){
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+      }
+      else if (ppn == "Exclude") {
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", false);
+      }
+      else{
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", true);
+      }
+    });
+</script>
 
-      $("#tax").attr("disabled", true);
-      $("#tax1").attr("disabled", false);
-  }
+<script type="text/javascript">
+  $(document).ready(function(){
 
-  else if (ppn == "Exclude") {
-    $("#tax1").attr("disabled", true);
-      $("#tax").attr("disabled", false);
-  }
-  else{
+    $("#ppn").change(function(){
+      var ppn = $("#ppn").val();
+      $("#ppn_input").val(ppn);
 
-    $("#tax1").attr("disabled", true);
-      $("#tax").attr("disabled", true);
-  }
+      if (ppn == "Include"){
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+          $("#tax").val("");
+          $("#tax1").val("<?php echo $nilai_ppn ?>");
+      }
+      else if (ppn == "Exclude") {
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", false);
+        $("#tax1").val("");
+      }
+      else{
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", true);
+        $("#tax1").val("");
+        $("#tax").val("");
+      }
+    });
 
-
-  });
   });
 </script>
 

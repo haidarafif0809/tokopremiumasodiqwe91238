@@ -10,6 +10,11 @@
 
     $session_id = session_id();
 
+$query_default_ppn = $db->query("SELECT setting_ppn, nilai_ppn FROM perusahaan");
+$data_default_ppn = mysqli_fetch_array($query_default_ppn);
+$default_ppn = $data_default_ppn['setting_ppn'];
+$nilai_ppn = $data_default_ppn['nilai_ppn'];
+
 ?>
 
 
@@ -76,14 +81,28 @@
                 </select>
             </div>
 
-            <div class="col-sm-3">
-              <label>PPN</label>
-                <select name="ppn" id="ppn" class="form-control ">
-                  <option value="Include">Include</option>  
-                  <option value="Exclude">Exclude</option>
-                  <option value="Non">Non</option>          
-                </select>
-            </div>
+<div class="col-sm-3">
+<label class="gg">PPN</label>
+<select type="hidden" style="font-size:15px; height:35px" name="ppn" id="ppn" class="form-control chosen span-chosen">
+  <?php if ($default_ppn == 'Include'): ?>    
+    <option selected>Include</option>  
+    <option>Exclude</option>  
+    <option>Non</option>
+  <?php endif ?>
+
+  <?php if ($default_ppn == 'Exclude'): ?>
+    <option selected>Exclude</option>  
+    <option>Non</option>
+    <option>Include</option>  
+  <?php endif ?>
+
+  <?php if ($default_ppn == 'Non'): ?>
+    <option selected>Non</option>
+    <option>Include</option>  
+    <option>Exclude</option>  
+  <?php endif ?>
+</select>
+</div>
 
         </div> <!-- END ROW KOLOM SUPLIER -->
     
@@ -258,9 +277,13 @@
         <input  style="height:20px" type="text" class="form-control" name="potongan" autocomplete="off" id="potongan1" data-toggle="tooltip" data-placement="top" title="Jika Ingin Potongan Dalam Bentuk Persen (%), input : 10%" placeholder="Disc." >
       </div>
         
-      <div class="col-sm-2" style="width:90px">
-        <input  style="height:20px" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" placeholder="Pajak %" >
-      </div>
+  <div class="col-sm-1">
+    <?php if ($default_ppn == 'Include'): ?>
+      <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" value="<?php echo $nilai_ppn ?>" placeholder="Tax%" >
+    <?php else: ?>
+      <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" placeholder="Tax%" >
+    <?php endif ?>      
+  </div>
 
       <div class="col-sm-3">
         <button type="submit" id="submit_produk" class="btn btn-success"><i class='fa fa-plus'></i> Tambah (F3) </button>
@@ -652,7 +675,7 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
 
      $("#jumlah_barang").val(''); 
      $("#potongan1").val('');   
-     $("#tax1").val('');
+     
 
 
   if (kode_barang == ''){
@@ -1693,59 +1716,53 @@ $.post('cek_kode_barang_tbs_pembelian.php',{kode_barang:kode_barang,session_id:s
 </script>
 
 
-
 <script type="text/javascript">
-    $(document).ready(function(){
-
-
-      /*$("#tax").attr("disabled", true);*/
-
-    // cek ppn exclude 
-    var session_id = $("#session_id").val();
-    $.get("cek_ppn_ex.php",{session_id:session_id},function(data){
-      if (data == 1) {
-          $("#ppn").val('Exclude');
-     $("#ppn").attr("disabled", true);
-     $("#tax1").attr("disabled", false);
-      }
-      else if(data == 2){
-
-      $("#ppn").val('Include');
-     $("#ppn").attr("disabled", true);
-       $("#tax1").attr("disabled", false);
-      }
-      else
-      {
-
-     $("#ppn").val('Non');
-     $("#tax1").attr("disabled", true);
-
-      }
-
-    });
-
-
-    $("#ppn").change(function(){
+  $(document).ready(function(){
 
     var ppn = $("#ppn").val();
-    $("#ppn_input").val(ppn);
+      $("#ppn_input").val(ppn);
 
-  if (ppn == "Include"){
+      if (ppn == "Include"){
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+      }
+      else if (ppn == "Exclude") {
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", false);
+      }
+      else{
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", true);
+      }
+    });
+</script>
 
-      $("#tax1").attr("disabled", false);
+<script type="text/javascript">
+  $(document).ready(function(){
 
-  }
+    $("#ppn").change(function(){
+      var ppn = $("#ppn").val();
+      $("#ppn_input").val(ppn);
 
-  else if (ppn == "Exclude") {
-    $("#tax1").attr("disabled", false);
-  }
-  else{
+      if (ppn == "Include"){
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+          $("#tax").val("");
+          $("#tax1").val("<?php echo $nilai_ppn ?>");
+      }
+      else if (ppn == "Exclude") {
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", false);
+        $("#tax1").val("");
+      }
+      else{
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", true);
+        $("#tax1").val("");
+        $("#tax").val("");
+      }
+    });
 
-    $("#tax1").attr("disabled", true);
-  }
-
-
-  });
   });
 </script>
 

@@ -419,7 +419,7 @@ if ($lihat['setting_lihat'] > 0){
 }
 echo '<li><a href="setting_antrian_pelanggan.php" class="waves-effect">Setting Antrian & Order </a></li>';
 if ($lihat['set_perusahaan_lihat'] > 0){
-                                echo '<li><a href="setting_perusahaan.php" class="waves-effect">Data Perusahaan</a></li>';
+                                echo '<li><a href="setting_perusahaan.php" class="waves-effect">Setting Perusahaan</a></li>';
 }
 
 if ($lihat['set_diskon_tax_lihat'] > 0){

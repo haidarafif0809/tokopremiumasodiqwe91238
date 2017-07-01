@@ -10,6 +10,11 @@ include 'sanitasi.php';
 //menampilkan seluruh data yang ada pada tabel penjualan
 $perintah = $db->query("SELECT * FROM retur_penjualan");
 
+$query_default_ppn = $db->query("SELECT setting_ppn, nilai_ppn FROM perusahaan");
+$data_default_ppn = mysqli_fetch_array($query_default_ppn);
+$default_ppn = $data_default_ppn['setting_ppn'];
+$nilai_ppn = $data_default_ppn['nilai_ppn'];
+
 $session_id = session_id();
 
 
@@ -59,14 +64,28 @@ $session_id = session_id();
           <input type="text" name="user" class="form-control" readonly="" style="height: 15px" value="<?php echo $_SESSION['user_name']; ?>" required="">
     </div>
 
-        <div class="col-sm-2">
-          <label>PPN</label> </label>
-          <select name="ppn" id="ppn" class="form-control chosen">
-            <option value="Include">Include</option>  
-            <option value="Exclude">Exclude</option>
-            <option value="Non">Non</option>          
-          </select>
-    </div>
+<div class="col-sm-2">
+<label class="gg">PPN</label>
+<select type="hidden" style="font-size:15px; height:35px" name="ppn" id="ppn" class="form-control chosen">
+  <?php if ($default_ppn == 'Include'): ?>    
+    <option selected>Include</option>  
+    <option>Exclude</option>  
+    <option>Non</option>
+  <?php endif ?>
+
+  <?php if ($default_ppn == 'Exclude'): ?>
+    <option selected>Exclude</option>  
+    <option>Non</option>
+    <option>Include</option>  
+  <?php endif ?>
+
+  <?php if ($default_ppn == 'Non'): ?>
+    <option selected>Non</option>
+    <option>Include</option>  
+    <option>Exclude</option>  
+  <?php endif ?>
+</select>
+</div>
     
     <div class="col-sm-2"> 
              <label> <b> Cara Bayar </b> </label><br>
@@ -250,8 +269,12 @@ $session_id = session_id();
   <input type="text" id="potongan1" name="potongan1" class="form-control" autocomplete="off" value="" placeholder="Diskon"style="height: 20px">
   </div>
 
-  <div class="form-group col-sm-1">
-  <input type="text" id="tax1" name="tax1" class="form-control" autocomplete="off" value="" placeholder="Pajak (%)"style="height: 20px">
+  <div class="col-sm-1">
+    <?php if ($default_ppn == 'Include'): ?>
+      <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" value="<?php echo $nilai_ppn ?>" placeholder="Tax%" >
+    <?php else: ?>
+      <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" placeholder="Tax%" >
+    <?php endif ?>      
   </div>
 
   <div class="form-group col-sm-2">
@@ -1308,35 +1331,55 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 </script>
 
 
+
 <script type="text/javascript">
-    $(document).ready(function(){
-
-      $("#tax").attr("disabled", true);
-
-
-    $("#ppn").change(function(){
+  $(document).ready(function(){
 
     var ppn = $("#ppn").val();
-    $("#ppn_input").val(ppn);
+      $("#ppn_input").val(ppn);
 
-  if (ppn == "Include"){
+      if (ppn == "Include"){
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+      }
+      else if (ppn == "Exclude") {
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", false);
+      }
+      else{
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", true);
+      }
+    });
+</script>
 
-      $("#tax").attr("disabled", true);
-      $("#tax1").attr("disabled", false);
-  }
+<script type="text/javascript">
+  $(document).ready(function(){
 
-  else if (ppn == "Exclude") {
-    $("#tax1").attr("disabled", true);
-      $("#tax").attr("disabled", false);
-  }
-  else{
+    $("#ppn").change(function(){
+      var ppn = $("#ppn").val();
+      $("#ppn_input").val(ppn);
 
-    $("#tax1").attr("disabled", true);
-      $("#tax").attr("disabled", true);
-  }
+      if (ppn == "Include"){
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+          $("#tax").val("");
+          $("#tax1").val("<?php echo $nilai_ppn ?>");
+      }
+      else if (ppn == "Exclude") {
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", false);
+        $("#tax1").val("");
+        $("#tax").val("<?php echo $nilai_ppn ?>");
+      }
+      else{
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", true);
+        $("#tax1").val("");
+        $("#tax").val("");
+      }
+    });
 
-
-  });
   });
 </script>
 

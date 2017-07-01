@@ -8,6 +8,10 @@ include 'sanitasi.php';
 $pilih_akses_tombol = $db->query("SELECT tombol_cash_drawer FROM otoritas_setting WHERE id_otoritas = '$_SESSION[otoritas_id]' ");
 $otoritas_tombol = mysqli_fetch_array($pilih_akses_tombol);
 
+$query_default_ppn = $db->query("SELECT setting_ppn, nilai_ppn FROM perusahaan");
+$data_default_ppn = mysqli_fetch_array($query_default_ppn);
+$default_ppn = $data_default_ppn['setting_ppn'];
+$nilai_ppn = $data_default_ppn['nilai_ppn'];
 
 $session_id = session_id();
 
@@ -329,12 +333,26 @@ Order </button>
 
 
 <div class="col-sm-2">
-    <label class="gg">PPN</label>
-      <select type="hidden" style="font-size:13px; height:35px" name="ppn" id="ppn" class="form-control  chosen span-chosen">
-          <option >Include</option>  
-          <option >Exclude</option>
-          <option >Non</option>          
-    </select>
+<label class="gg">PPN</label>
+<select type="hidden" style="font-size:15px; height:35px" name="ppn" id="ppn" class="form-control chosen span-chosen">
+  <?php if ($default_ppn == 'Include'): ?>    
+    <option selected>Include</option>  
+    <option>Exclude</option>  
+    <option>Non</option>
+  <?php endif ?>
+
+  <?php if ($default_ppn == 'Exclude'): ?>
+    <option selected>Exclude</option>  
+    <option>Non</option>
+    <option>Include</option>  
+  <?php endif ?>
+
+  <?php if ($default_ppn == 'Non'): ?>
+    <option selected>Non</option>
+    <option>Include</option>  
+    <option>Exclude</option>  
+  <?php endif ?>
+</select>
 </div>
    </div> 
 </form><!--tag penutup form-->
@@ -725,7 +743,11 @@ tr:nth-child(even){background-color: #f2f2f2}
   </div>
 
   <div class="col-sm-1">
-    <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" placeholder="Tax%" >
+    <?php if ($default_ppn == 'Include'): ?>
+      <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" value="<?php echo $nilai_ppn ?>" placeholder="Tax%" >
+    <?php else: ?>
+      <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" placeholder="Tax%" >
+    <?php endif ?>      
   </div>
 
 <button type="submit" id="submit_produk" class="btn btn-success" style="font-size:15px" >Submit (F3)</button>
@@ -3014,7 +3036,7 @@ if (pesan_alert == true) {
             if (total_akhir1 == 0) {
               
             $("#potongan_persen").val('0');
-                 $("#ppn").val('Non');
+                 
                  $("#ppn").attr('disabled',false);
              $("#tax1").attr("disabled", true);
                  $("#level_harga").attr('disabled',false);
@@ -3250,7 +3272,7 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
     
      $("#jumlah_barang").val('');
      $("#potongan1").val('');
-     $("#tax1").val('');
+     
 
 
   if (a > 0)
@@ -3436,7 +3458,7 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
      $("#ber_stok").val('');
      $("#jumlah_barang").val('');
      $("#potongan1").val('');
-     $("#tax1").val('');
+     
 
      });
 
@@ -3601,7 +3623,7 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
      $("#ber_stok").val('');
      $("#jumlah_barang").val('');
      $("#potongan1").val('');
-     $("#tax1").val('');
+     
 
 
 
@@ -5363,90 +5385,55 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
-    $(document).ready(function(){
+  $(document).ready(function(){
 
+    var ppn = $("#ppn").val();
+      $("#ppn_input").val(ppn);
 
-      /*$("#tax").attr("disabled", true);*/
-
-    // cek ppn exclude 
-    var session_id = $("#session_id").val();
-    $.get("cek_ppn_ex_jual.php",{session_id:session_id},function(data){
-      if (data == 1) {
-          $("#ppn").val('Exclude');
-     $("#ppn").attr("disabled", true);
-     $("#tax1").attr("disabled", false);
+      if (ppn == "Include"){
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
       }
-      else if(data == 2){
-
-      $("#ppn").val('Include');
-     $("#ppn").attr("disabled", true);
-       $("#tax1").attr("disabled", false);
+      else if (ppn == "Exclude") {
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", false);
       }
-      else
-      {
-
-     $("#ppn").val('Non');
-     $("#tax1").attr("disabled", true);
-
+      else{
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", true);
       }
+    });
+</script>
 
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $("#ppn").change(function(){
+      var ppn = $("#ppn").val();
+      $("#ppn_input").val(ppn);
+
+      if (ppn == "Include"){
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+          $("#tax").val("");
+          $("#tax1").val("<?php echo $nilai_ppn ?>");
+      }
+      else if (ppn == "Exclude") {
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", false);
+        $("#tax1").val("");
+      }
+      else{
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", true);
+        $("#tax1").val("");
+        $("#tax").val("");
+      }
     });
 
-
-    $("#ppn").change(function(){
-
-    var ppn = $("#ppn").val();
-    $("#ppn_input").val(ppn);
-
-  if (ppn == "Include"){
-
-      $("#tax1").attr("disabled", false);
-
-  }
-
-  else if (ppn == "Exclude") {
-    $("#tax1").attr("disabled", false);
-  }
-  else{
-
-    $("#tax1").attr("disabled", true);
-  }
-
-
-  });
   });
 </script>
-<!--PPN LAMA<script type="text/javascript">
-    $(document).ready(function(){
 
-      $("#tax").attr("disabled", true);
-
-
-    $("#ppn").change(function(){
-
-    var ppn = $("#ppn").val();
-    $("#ppn_input").val(ppn);
-
-  if (ppn == "Include"){
-
-      $("#tax").attr("disabled", true);
-      $("#tax1").attr("disabled", false);
-  }
-
-  else if (ppn == "Exclude") {
-    $("#tax1").attr("disabled", false);
-      $("#tax").attr("disabled", false);
-  }
-  else{
-
-    $("#tax1").attr("disabled", true);
-      $("#tax").attr("disabled", true);
-  }
-
-
-  });
-  });
-</script>PPN LAMA-->
 
 <script type="text/javascript">
 $(document).ready(function(){

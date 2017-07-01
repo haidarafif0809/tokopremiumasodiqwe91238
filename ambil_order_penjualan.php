@@ -46,7 +46,7 @@ $perintah1 = $db->query("INSERT INTO tbs_penjualan (session_id, kode_barang, nam
 }
 
 
-$update_status_order = $db->query("UPDATE penjualan_order SET status_order = 'Masuk TBS' WHERE no_faktur_order = '$no_faktur' ");
+$update_status_order = $db->query("UPDATE penjualan_order SET status_order = 'Di Proses' WHERE no_faktur_order = '$no_faktur' ");
 
 $update_status_order = $db->query("UPDATE tbs_fee_produk SET session_id = '$session_id' WHERE no_faktur_order = '$no_faktur' ");
 

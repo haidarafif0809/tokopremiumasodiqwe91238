@@ -12,6 +12,9 @@ $otoritas_tombol = mysqli_fetch_array($pilih_akses_tombol);
 $session_id = session_id();
 
  ?>
+
+
+
 <!-- MODAL PRODUK STOK HABIS -->
 <div id="modal_barang_tidak_bisa_dijual" class="modal " role="dialog">
   <div class="modal-dialog">
@@ -238,19 +241,19 @@ Number.prototype.format = function(n, x, s, c) {
     </select>
 </div>
      
-<button type="button" id="cari_produk_penjualan" class="btn btn-info " style="height:50px;"  data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
-<button type="button" id="daftar_order" class="btn btn-success" style="height:50px;" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
+<button type="button" id="cari_produk_penjualan" class="btn btn-info " style="height:45px;"  data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
+<button type="button" id="daftar_order" class="btn btn-success" style="height:45px;" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
 
-<button class="btn btn-purple" style="height:50px;" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+<button class="btn btn-purple" style="height:45px;" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Antrian  </button>
  
-<button class="btn btn-warning" style="height:50px;" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+<button class="btn btn-warning" style="height:45px;" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Order </button>
 
 
-<button class="btn btn-deep-purple btn-sm"  style="height:50px;" type="button" id="tombol-warning"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+<button class="btn btn-deep-purple btn-sm"  style="height:45px; width: 45px" type="button" id="tombol-warning"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
 
-<button class="btn btn-indigo btn-sm" type="button" id="tombol-purpel" style="display: none; height:50px;"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+<button class="btn btn-indigo btn-sm" type="button" id="tombol-purpel" style="display: none; height:45px; width: 45px"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
 <div style="display: none" id="span-colapse">
 
 
@@ -1708,13 +1711,13 @@ $(document).on('click', '.pilih', function (e) {
 
 var level_harga = $("#level_harga").val();
 
-var harga_level_1 = $(this).attr('harga');
-var harga_level_2 = $(this).attr('harga_level_2');  
-var harga_level_3 = $(this).attr('harga_level_3');
-var harga_level_4 = $(this).attr('harga_level_4');
-var harga_level_5 = $(this).attr('harga_level_5');  
-var harga_level_6 = $(this).attr('harga_level_6');
-var harga_level_7 = $(this).attr('harga_level_7');
+var harga_level_1 = $(this).attr('harga').replace(/[^\/\d]/g,'').replace("/","");
+var harga_level_2 = $(this).attr('harga_level_2').replace(/[^\/\d]/g,'').replace("/","");  
+var harga_level_3 = $(this).attr('harga_level_3').replace(/[^\/\d]/g,'').replace("/","");
+var harga_level_4 = $(this).attr('harga_level_4').replace(/[^\/\d]/g,'').replace("/","");
+var harga_level_5 = $(this).attr('harga_level_5').replace(/[^\/\d]/g,'').replace("/","");  
+var harga_level_6 = $(this).attr('harga_level_6').replace(/[^\/\d]/g,'').replace("/","");
+var harga_level_7 = $(this).attr('harga_level_7').replace(/[^\/\d]/g,'').replace("/","");
 
 if (level_harga == "harga_1") {
   $("#harga_produk").val(harga_level_1);
@@ -1764,8 +1767,7 @@ else if (level_harga == "harga_7") {
   $("#harga_baru").val(harga_level_7);
   $('#kolom_cek_harga').val('1');
 }
-  document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang');
-
+  document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang').replace(/[^\/\d]/g,'').replace("/","");
 
 $.post("lihat_promo_alert.php",{id_barang:$(this).attr('id-barang')},function(data){
 
@@ -3683,6 +3685,7 @@ else{
   }
   else{
 
+
     $.getJSON("cek_status_stok_penjualan.php?session_id="+session_id, function(result){
       if (result.status == 0) {
           //JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
@@ -3707,29 +3710,15 @@ else{
              $("#sisa_pembayaran_penjualan").val('');
              $("#kredit").val('');
 
+    
+             var table_tbs_bonus_penjualan = $('#table_tbs_bonus_penjualan').DataTable();
+                 table_tbs_bonus_penjualan.draw();
+
                
            });//JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
 
-     $("#cetak_tunai").attr('href', 'cetak_penjualan_tunai.php?no_faktur='+no_faktur);
-     $("#cetak_tunai_besar").attr('href', 'cetak_penjualan_tunai_besar.php?no_faktur='+no_faktur);
-     $("#alert_berhasil").show();
-     $("#pembayaran_penjualan").val('');
-     $("#sisa_pembayaran_penjualan").val('');
-     $("#kredit").val('');
-     $("#cetak_tunai").show();
-     $("#cetak_tunai_besar").show('');
-     $("#span_tbs").hide();
-     $("#sss").collapse('hide');
-     $("#kd_pelanggan").val('');
-     $("#kd_pelanggan").trigger("chosen:open");
-     $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
-     $("#total1").val('');
-     $("#pembayaran_penjualan").val('');
-     $("#sisa_pembayaran_penjualan").val('');
-     $("#kredit").val('');
-    
-     var table_tbs_bonus_penjualan = $('#table_tbs_bonus_penjualan').DataTable();
-     table_tbs_bonus_penjualan.draw();
+      }
+      else{
 
              $("#penjualan").show();
              
@@ -3868,6 +3857,7 @@ alert("Silakan Bayar Piutang");
 
   }
   else{
+
     $.getJSON("cek_status_stok_penjualan.php?session_id="+session_id, function(result){
     if (result.status == 0) {
         // POST KE BAYAR LANGSUNG CETAK
@@ -3884,20 +3874,36 @@ alert("Silakan Bayar Piutang");
             $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true}); 
             $("#sss").collapse('hide');
 
-     var table_tbs_bonus_penjualan = $('#table_tbs_bonus_penjualan').DataTable();
-     table_tbs_bonus_penjualan.draw();
+             var win = window.open('cetak_penjualan_tunai.php?no_faktur='+no_fak+'');
+             if (win) { win.focus(); }
+             else { 
+               alert('Mohon Izinkan PopUps Pada Website Ini !'); 
+             }    
+          
+             
+         });
+        }
+    else{
+            
+            $("#penjualan").show();
+            $("#cetak_langsung").show();
+            $("#batal_penjualan").show(); 
+            $("#piutang").show();
+            $("#transaksi_baru").hide();
 
+            alert("Tidak Bisa Melakukan Penjualan, Ada Stok Produk Yang Habis");
 
-    var win = window.open('cetak_penjualan_tunai.php?no_faktur='+no_fak+'');
-     if (win) { 
-    
-    win.focus(); 
-  } else { 
-    
-    alert('Mohon Izinkan PopUps Pada Website Ini !'); }    
-    
-       
-   });
+            $("#tbody-barang-jual").find("tr").remove();
+
+            $.each(result.barang, function(i, item) {
+              var tr_barang = "<tr><td>"+ result.barang[i].kode_barang+"</td><td>"+ result.barang[i].nama_barang+"</td><td>"+ result.barang[i].jumlah_jual+"</td><td>"+ result.barang[i].stok+"</td></tr>"
+              $("#tbody-barang-jual").prepend(tr_barang);
+            });
+
+            $("#modal_barang_tidak_bisa_dijual").modal('show');
+        }
+    });
+
   }
 
  });
@@ -4012,13 +4018,6 @@ alert("Silakan Bayar Piutang");
                              $("#span_tbs").hide();
                              $("#sss").collapse('hide');
 
-          $("#kd_pelanggan").val('');
-          $("#kd_pelanggan").trigger("chosen:open");
-          $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"}); 
-              
-     var table_tbs_bonus_penjualan = $('#table_tbs_bonus_penjualan').DataTable();
-     table_tbs_bonus_penjualan.draw();
-             
 
                    
                    });
@@ -4031,7 +4030,6 @@ alert("Silakan Bayar Piutang");
                              $("#batal_penjualan").show(); 
                              $("#piutang").show();
                              $("#transaksi_baru").hide();
-
                              alert("Tidak Bisa Melakukan Penjualan, Ada Stok Produk Yang Habis");
 
                              $("#tbody-barang-jual").find("tr").remove();
@@ -4056,6 +4054,7 @@ alert("Silakan Bayar Piutang");
 
 
 </script>   
+
 
 
 

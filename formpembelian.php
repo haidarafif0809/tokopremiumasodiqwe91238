@@ -291,7 +291,7 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
       </div>
 
 <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN -->
-        <input type="text" class="form-control"  name="over_stok" id="over_stok" autocomplete="off" placeholder="Over Stok">
+        <input type="hidden" class="form-control"  name="over_stok" id="over_stok" autocomplete="off" placeholder="Over Stok">
         <input type="hidden" id="harga_produk" name="harga" class="form-control" placeholder="Harga Lama" required="">
         <input type="hidden" id="harga_lama" name="harga_lama" class="form-control" required="">
         <input type="hidden" class="form-control" name="jumlahbarang" id="jumlahbarang">
@@ -1166,7 +1166,7 @@ else
     var stok = parseInt(jumlah_barang) + parseInt(jumlahbarang);
 
 
-if( over_stok < stok ){
+if( over_stok < stok && over_stok != 0 ){
 
       alert ("Persediaan Barang Ini Sudah Melebihi Batas Stok!");
        $("#jumlah_barang").val(''); 

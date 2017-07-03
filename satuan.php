@@ -171,32 +171,11 @@ th {
 
 <div class="table-responsive">
 <span id="table-baru">
-<table id="table_satuan" class="table table-bordered">
+<table id="table_satuan" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color:white'> Satuan </th>
-
-
-<?php 
-$pilih_akses_satuan_hapus = $db->query("SELECT satuan_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND satuan_hapus = '1'");
-$satuan_hapus = mysqli_num_rows($pilih_akses_satuan_hapus);
-
-
-    if ($satuan_hapus > 0){
-			echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
-
-		}
-?>
-
-<?php
-$pilih_akses_satuan_edit = $db->query("SELECT satuan_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND satuan_edit = '1'");
-$satuan_edit = mysqli_num_rows($pilih_akses_satuan_edit);
-
-
-    if ($satuan_edit > 0){
-			echo "<th style='background-color: #4CAF50; color:white'> Edit </th>";
-		}
-?>
-			
+			<th style='background-color: #4CAF50; color:white'> Hapus </th>
+			<th style='background-color: #4CAF50; color:white'> Edit </th>		
 		</thead>
 	</table>
 </span>
@@ -296,11 +275,11 @@ $(document).on('click', '#btn_jadi_hapus', function (e) {
 		var id = $("#id_edit").val();
 
 		$.post("updatesatuan.php",{id:id,nama:nama},function(data){
-		if (data == 'sukses') {
+		if (data == 1) {
 		$(".alert").show('fast');
-		$("#table-baru").load('tabel-satuan.php');
-		setTimeout(tutupmodal, 2000);
-		setTimeout(tutupalert, 2000);
+		$("#modal_edit").modal('hide');
+		var table_satuan = $('#table_satuan').DataTable();
+     	 table_satuan.draw();
 		
 		}
 		});

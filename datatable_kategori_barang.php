@@ -50,17 +50,33 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 
 $pilih_akses_otoritas = $db->query("SELECT hak_otoritas_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_hapus = '1'");
-$otoritas = mysqli_num_rows($pilih_akses_otoritas);
+$otoritas_hapus = mysqli_num_rows($pilih_akses_otoritas);
 
-    if ($otoritas > 0) {
-$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-kategori='". $row['nama_kategori'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-}
+    if ($otoritas_hapus > 0){
+
+			$query_cek_kategori_barang = $db->query("SELECT kode_barang FROM barang WHERE kategori = '$row[nama_kategori]' ");
+			$jumlah_cek_kategori_barang = mysqli_num_rows($query_cek_kategori_barang);
+
+			 if ($jumlah_cek_kategori_barang == 0){
+
+				$nestedData[] = "<button class='btn btn-danger btn-hapus btn-sm' data-id='". $row['id'] ."' data-kategori='". $row['nama_kategori'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
+
+			}
+			else{
+			$nestedData[] = "<p style='color:red;'>Sudah Terpakai</p>";
+			}	
+
+		}
+		else{
+			$nestedData[] = "<p></p>";
+		}
+
 
 $pilih_akses_otoritas = $db->query("SELECT hak_otoritas_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_edit = '1'");
-$otoritas = mysqli_num_rows($pilih_akses_otoritas);
+$otoritas_edit = mysqli_num_rows($pilih_akses_otoritas);
 
-    if ($otoritas > 0) {
-$nestedData[] = "<button class='btn btn-info btn-edit' data-kategori='". $row['nama_kategori'] ."' data-id='". $row['id'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button>";
+    if ($otoritas_edit > 0) {
+$nestedData[] = "<button class='btn btn-warning btn-edit btn-sm' data-kategori='". $row['nama_kategori'] ."' data-id='". $row['id'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button>";
 }
 				$nestedData[] = $row["id"];
 				$data[] = $nestedData;

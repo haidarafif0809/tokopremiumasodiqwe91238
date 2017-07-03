@@ -383,15 +383,15 @@ $session_id = session_id();
       <input type="text" name="total" id="total_retur_pembelian1" class="form-control" placeholder="Total" readonly="" style="height: 25px; font-size: 25px" >
 
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <label> <b> Potongan (Rp) </b> </label><br>
             <input type="text" name="potongan" id="potongan_pembelian" class="form-control" data-diskon="" placeholder="Potongan" autocomplete="off"style="height: 25px" >
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <label> <b> Potongan (%) </b> </label><br>
             <input type="text" name="potongan_persen" id="potongan_persen" class="form-control" data-diskon="" placeholder="Potongan" autocomplete="off"style="height: 25px" >
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-4" style="display: none">
             <label> <b> Tax (%)</b> </label><br>
             <input type="text" name="tax" id="tax" class="form-control" placeholder="Tax" data-pajak="" autocomplete="off"style="height: 25px" >
         </div>
@@ -1370,7 +1370,6 @@ $(document).on('click','.btn-hapus-tbs',function(e){
         $("#tax1").attr("disabled", true);
         $("#tax").attr("disabled", false);
         $("#tax1").val("");
-        $("#tax").val("<?php echo $nilai_ppn ?>");
       }
       else{
         $("#tax1").attr("disabled", true);

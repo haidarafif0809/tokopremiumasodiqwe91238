@@ -291,7 +291,7 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
       </div>
 
 <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN -->
-        <input type="hidden" class="form-control"  name="over_stok" id="over_stok" autocomplete="off" placeholder="Over Stok">
+        <input type="text" class="form-control"  name="over_stok" id="over_stok" autocomplete="off" placeholder="Over Stok">
         <input type="hidden" id="harga_produk" name="harga" class="form-control" placeholder="Harga Lama" required="">
         <input type="hidden" id="harga_lama" name="harga_lama" class="form-control" required="">
         <input type="hidden" class="form-control" name="jumlahbarang" id="jumlahbarang">
@@ -552,10 +552,10 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
               $(nRow).attr('class', "pilih");
               $(nRow).attr('data-kode', aData[0]);
               $(nRow).attr('nama-barang', aData[1]);
-              $(nRow).attr('over_stok', aData[7]);
+              $(nRow).attr('over_stok', aData[8]);
               $(nRow).attr('satuan', aData[7]);
               $(nRow).attr('harga', aData[2]);
-              $(nRow).attr('id-barang', aData[8]);
+              $(nRow).attr('id-barang', aData[9]);
               $(nRow).attr('jumlah-barang', aData[3]);
               $(nRow).attr('kategori', aData[5]);
               $(nRow).attr('suplier', aData[6]);

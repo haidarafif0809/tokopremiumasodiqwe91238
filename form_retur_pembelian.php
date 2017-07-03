@@ -388,17 +388,17 @@ $session_id = session_id();
       <input style="height: 20px" type="text" name="potongan_persen" id="potongan_persen" class="form-control" data-diskon="" placeholder="Potongan" autocomplete="off">
   </div>
 
-  <div class="col-sm-3">
+  <div class="col-sm-3" style="display: none">
       <label><b> Tax (%) </b></label><br>
       <input style="height: 20px" type="text" name="tax" id="tax" class="form-control" placeholder="Tax" data-pajak="" autocomplete="off">
   </div>
 
-  <div class="col-sm-4">
+  <div class="col-sm-6">
       <label><b> Potong Hutang </b></label><br>
       <input style="height: 20px" type="text" name="potong_hutang" id="potong_hutang" class="form-control" placeholder="Nilai Hutang" readonly="">
   </div>
 
-  <div class="col-sm-5">
+  <div class="col-sm-6">
       <label><b> Total Akhir </b></label><br>
       <!--readonly = agar tek yang ada kolom total tidak bisa diubah hanya bisa dibaca-->
       <b> <input style="height: 20px; font-size: 25px;" type="text" name="total" id="total_retur_pembelian" class="form-control" placeholder="Total Akhir" readonly="" > </b>
@@ -1650,7 +1650,6 @@ $(document).on('click','.btn-hapus-tbs',function(e){
         $("#tax1").attr("disabled", true);
         $("#tax").attr("disabled", false);
         $("#tax1").val("");
-        $("#tax").val("<?php echo $nilai_ppn ?>");
       }
       else{
         $("#tax1").attr("disabled", true);

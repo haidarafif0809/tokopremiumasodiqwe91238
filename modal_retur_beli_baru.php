@@ -113,7 +113,7 @@ $data_sum_sisa = mysqli_fetch_array($sum_sisa);
     $nestedData[] = rp($row["potongan"]);
     $nestedData[] = rp($row["tax"]);
 
-    $nestedData[] = $data_sum_sisa["jumlah_sisa_produk"] ." ".$row["satuan_asli"];  
+    $nestedData[] = koma($data_sum_sisa["jumlah_sisa_produk"],2) ." ".$row["satuan_asli"];  
 
     $nestedData[] = $row["harga"];
     $nestedData[] = $row["asal_satuan"];

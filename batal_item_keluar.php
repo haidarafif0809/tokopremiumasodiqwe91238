@@ -10,11 +10,11 @@
     
     if ($query == TRUE)
     {
-         echo "1";
+          header('location:item_keluar.php');
     }
     else
     {
-        echo "0";
+        echo "failde";
     }
 
 

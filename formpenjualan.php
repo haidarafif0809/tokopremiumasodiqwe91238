@@ -1061,7 +1061,7 @@ tr:nth-child(even){background-color: #f2f2f2}
           <input type="hidden" name="ppn_input" id="ppn_input" value="Include" class="form-control" placeholder="ppn input">  
    <div class="row">    
           <button type="submit" id="penjualan" class="btn btn-info" style="font-size:15px">Bayar (F8)</button>
-          <button type="submit" id="transaksi_baru" style="display: none" class="btn btn-info" style="font-size:15px;"> Transaksi Baru (Ctrl + M)</button>
+          <button type="submit" id="transaksi_baru" style="display: none" default="0" class="btn btn-info" style="font-size:15px;"> Transaksi Baru (Ctrl + M)</button>
           <button type="submit" id="piutang" class="btn btn-warning" style="font-size:15px">Piutang (F9)</button>
           <a href='cetak_penjualan_piutang.php' id="cetak_piutang" style="display: none;" class="btn btn-success" target="blank">Cetak Piutang  </a> 
           <button type="submit" id="simpan_sementara" class="btn btn-primary" style="font-size:15px; display: none">  Simpan (F10)</button>
@@ -2011,6 +2011,18 @@ if (kode_barang != '')
       var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
       var id_produk = $("#id_produk").val();
       var prev = $("#satuan_produk").val();
+      var transaksi_baru = $("#transaksi_baru").attr('default');
+
+    if (transaksi_baru == 1){
+     var pesan_alert = confirm("Apakah Anda Ingin Melakukan Transaksi Baru ? ");
+          
+          if (pesan_alert == true) {
+            $("#transaksi_baru").click();
+          }
+          else{
+          window.location.href="penjualan.php?status=semua";       
+           } 
+    }
 
       $.post("cek_stok_konversi_penjualan.php",
         {jumlah_barang:jumlah_barang,satuan_konversi:satuan_konversi,kode_barang:kode_barang,
@@ -3107,7 +3119,7 @@ $('form').submit(function(){
             };
     }
 
-  var nilai_disc_persen = parseFloat(potongan);
+
 
 
 var subtotal_murni = parseFloat(gantiTitik(jumlah_barang)) * parseFloat(harga);
@@ -3117,7 +3129,7 @@ var subtotal_murni = parseFloat(gantiTitik(jumlah_barang)) * parseFloat(harga);
     {
       tax = 0;
     }
-    var jumlahbarang = $("#jumlahbarang").val();
+    var jumlahbarang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlahbarang").val()))));
     var satuan = $("#satuan_konversi").val();
     var sales = $("#sales").val();
     var a = $(".tr-kode-"+kode_barang+"").attr("data-kode-barang");    
@@ -3150,20 +3162,27 @@ var subtotal_murni = parseFloat(gantiTitik(jumlah_barang)) * parseFloat(harga);
   if (ppn == 'Exclude') 
     {
   
-         var total1 = parseFloat(jumlah_barang.replace(',','.'),2) * parseFloat(harga.replace(',','.'),2) - parseFloat(nilai_disc_persen.replace(',','.'),2);
+         var total1 = parseFloat(jumlah_barang.replace(',','.'),2) * parseFloat(harga.replace(',','.'),2) - parseFloat(potongan,2);
 
-         var total_tax_exclude = parseFloat(total1.replace(',','.'),2) * parseFloat(tax.replace(',','.'),2) / 100;
+         if (tax == 0){
+          var total_tax_exclude = 0;
+         }
+         else{
+          var total_tax_exclude = parseFloat(total1,2) * parseFloat(tax.replace(',','.'),2) / 100;
+         }
+         
 
          
-          var total = parseFloat(total1.replace(',','.'),2) + parseFloat(total_tax_exclude.replace(',','.'),2);
+          var total = parseFloat(total1,2) + parseFloat(total_tax_exclude,2);
 
     }
     else
     {
-        var total = parseFloat(jumlah_barang.replace(',','.'),2) * parseFloat(harga,2) - parseFloat(nilai_disc_persen,2);
+        var total = parseFloat(jumlah_barang.replace(',','.'),2) * parseFloat(harga,2) - parseFloat(potongan,2);
     }
   //PPN
    
+
 
     var total_akhir1 = parseFloat(subtotal.replace(',','.'),2) + parseFloat(total,2);
 
@@ -3695,6 +3714,7 @@ else{
   $("#batal_penjualan").hide();
   $("#piutang").hide();
   $("#transaksi_baru").show();
+  $("#transaksi_baru").attr('default','1');
 
 // CEK DULU SUBTOTAL SESUAI TIDAK DENGAN TOTAL AKHIR
  $.post("cek_subtotal_penjualan.php",{total2:total2,session_id:session_id},function(data) {
@@ -3748,6 +3768,7 @@ else{
              $("#batal_penjualan").show(); 
              $("#piutang").show();
              $("#transaksi_baru").hide();
+             $("#transaksi_baru").attr('default','0');
 
               alert("Tidak Bisa Melakukan Penjualan, Ada Stok Produk Yang Habis");
 
@@ -3868,6 +3889,7 @@ alert("Silakan Bayar Piutang");
   $("#batal_penjualan").hide();
   $("#piutang").hide();
   $("#transaksi_baru").show();
+  $("#transaksi_baru").attr('default','1');
 
  $.post("cek_subtotal_penjualan.php",{total2:total2,session_id:session_id},function(data) {
 
@@ -3912,6 +3934,7 @@ alert("Silakan Bayar Piutang");
             $("#batal_penjualan").show(); 
             $("#piutang").show();
             $("#transaksi_baru").hide();
+            $("#transaksi_baru").attr('default','0');
 
             alert("Tidak Bisa Melakukan Penjualan, Ada Stok Produk Yang Habis");
 
@@ -4006,6 +4029,7 @@ alert("Silakan Bayar Piutang");
           $("#batal_penjualan").hide();
           $("#penjualan").hide();
           $("#transaksi_baru").show();
+          $("#transaksi_baru").attr('default','1');
 
           $.post("cek_subtotal_penjualan.php",{total2:total2,session_id:session_id},function(data) {
 
@@ -4052,6 +4076,7 @@ alert("Silakan Bayar Piutang");
                              $("#batal_penjualan").show(); 
                              $("#piutang").show();
                              $("#transaksi_baru").hide();
+                             $("#transaksi_baru").attr('default','0');
                              alert("Tidak Bisa Melakukan Penjualan, Ada Stok Produk Yang Habis");
 
                              $("#tbody-barang-jual").find("tr").remove();
@@ -4085,6 +4110,19 @@ alert("Silakan Bayar Piutang");
 $(document).ready(function(){
 $("#cari_produk_penjualan").click(function(){
   var session_id = $("#session_id").val();
+  var transaksi_baru = $("#transaksi_baru").attr('default');
+
+if (transaksi_baru == 1){
+     var pesan_alert = confirm("Apakah Anda Ingin Melakukan Transaksi Baru ? ");
+          
+          if (pesan_alert == true) {
+            $("#transaksi_baru").click();
+          }
+          else{
+          window.location.href="penjualan.php?status=semua";       
+           } 
+}
+
 
   $.post("cek_tbs_penjualan.php",{session_id: "<?php echo $session_id; ?>"},function(data){
         if (data != "1") {
@@ -4736,6 +4774,7 @@ $(document).ready(function(){
         $("#batal_penjualan").hide();
         $("#penjualan").hide();
         $("#transaksi_baru").show();
+        $("#transaksi_baru").attr('default','1');
         $("#total1").val('');
 
        $.post("proses_simpan_barang.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
@@ -5598,6 +5637,20 @@ $(document).ready(function(){
     var tipe_produk = $('#opt-produk-'+kode_barang).attr("tipe_barang");
     var id_barang = $('#opt-produk-'+kode_barang).attr("id-barang");
     var level_harga = $("#level_harga").val();
+    var transaksi_baru = $("#transaksi_baru").attr('default');
+
+if (transaksi_baru == 1){
+     var pesan_alert = confirm("Apakah Anda Ingin Melakukan Transaksi Baru ? ");
+          
+          if (pesan_alert == true) {
+            $("#transaksi_baru").click();
+          }
+          else{
+          window.location.href="penjualan.php?status=semua";       
+           } 
+}
+
+
 
 $.post("lihat_promo_alert.php",{id_barang:id_barang},function(data){
 
@@ -5864,6 +5917,7 @@ $('#tabel_tbs_penjualan').DataTable().destroy();
             $("#piutang").show();
             $("#batal_penjualan").show(); 
             $("#transaksi_baru").hide();
+            $("#transaksi_baru").attr('default','0');
             $("#alert_berhasil").hide();
             $("#alert_simpan_berhasil").hide();
             $("#cetak_tunai").hide();

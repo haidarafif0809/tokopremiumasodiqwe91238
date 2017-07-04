@@ -552,10 +552,10 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
               $(nRow).attr('class', "pilih");
               $(nRow).attr('data-kode', aData[0]);
               $(nRow).attr('nama-barang', aData[1]);
-              $(nRow).attr('over_stok', aData[7]);
+              $(nRow).attr('over_stok', aData[8]);
               $(nRow).attr('satuan', aData[7]);
               $(nRow).attr('harga', aData[2]);
-              $(nRow).attr('id-barang', aData[8]);
+              $(nRow).attr('id-barang', aData[9]);
               $(nRow).attr('jumlah-barang', aData[3]);
               $(nRow).attr('kategori', aData[5]);
               $(nRow).attr('suplier', aData[6]);
@@ -1166,7 +1166,7 @@ else
     var stok = parseInt(jumlah_barang) + parseInt(jumlahbarang);
 
 
-if( over_stok < stok ){
+if( over_stok < stok && over_stok != 0 ){
 
       alert ("Persediaan Barang Ini Sudah Melebihi Batas Stok!");
        $("#jumlah_barang").val(''); 

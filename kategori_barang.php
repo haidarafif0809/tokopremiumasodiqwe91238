@@ -150,7 +150,7 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 
 <div class="table-responsive"><!-- membuat agar ada garis pada tabel, disetiap kolom -->
 <span id="table_baru">
-<table id="table_kategori_barang" class="table table-bordered">
+<table id="table_kategori_barang" class="table table-bordered table-sm">
 		<thead> 
 			
 			<th style="background-color: #4CAF50; color: white"> Nama Kategori </th>
@@ -213,7 +213,6 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 
 		if (data != '') {
 		$("#nama_kategori").val('');
-
 		$(".alert").show('fast');
 		$('#table_kategori_barang').DataTable().draw();
 		setTimeout(tutupalert, 2000);
@@ -235,7 +234,8 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 
 	
 //fungsi hapus data 
-		$(".btn-hapus").click(function(){
+		$(document).on('click', '.btn-hapus', function (e) {
+
 		var nama = $(this).attr("data-kategori");
 		var id = $(this).attr("data-id");
 		$("#data_kategori").val(nama);
@@ -265,7 +265,8 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 // end fungsi hapus data
 
 //fungsi edit data 
-		$(".btn-edit").click(function(){
+		$(document).on('click', '.btn-edit', function (e) {
+
 		
 		$("#modal_edit").modal('show');
 		var nama = $(this).attr("data-kategori"); 
@@ -285,11 +286,10 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 		}
 		else {
 
-					$.post("update_kategori.php",{id:id,nama:nama},function(data){
-		if (data != '') {
+		$.post("update_kategori.php",{id:id,nama:nama},function(data){
+		if (data == 1) {
 		$(".alert").show('fast');
-		$("#table_baru").load('tabel-kategori.php');
-		
+		$('#table_kategori_barang').DataTable().draw();
 		setTimeout(tutupalert, 2000);
 		$(".modal").modal("hide");
 		}
@@ -314,9 +314,6 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 		});
 		
 		});
-		
-		
-		
 
 		function tutupalert() {
 		$(".alert").hide("fast")

@@ -248,6 +248,11 @@ $select = $db->query("SELECT waktu_jurnal, no_faktur, keterangan_jurnal, debit, 
 <?php endif ?>
 
 </div>
-     
+ 
+<script>
+$(document).ready(function(){
+  window.print();
+});
+</script>     
 	
 <?php include 'footer.php'; ?>

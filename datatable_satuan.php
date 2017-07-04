@@ -80,6 +80,9 @@ $satuan_edit = mysqli_num_rows($pilih_akses_satuan_edit);
 
 			$nestedData[] = "<button class='btn btn-success btn-edit btn-sm' data-satuan='". $row['nama'] ."' data-id='". $row['id'] ."' > <span class='glyphicon glyphicon-edit'> </span> Edit </button>";
 		}
+		else{
+			$nestedData[] = "<p></p>";
+		}
 				$nestedData[] = $row["id"];
 				$data[] = $nestedData;
 			}

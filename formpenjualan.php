@@ -3141,8 +3141,11 @@ var subtotal_murni = parseFloat(gantiTitik(jumlah_barang)) * parseFloat(harga);
    var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
           if (subtotal == '') 
           {
-          subtotal = 0;
+          subtotal = 0.00;
           }
+
+
+    console.log(subtotal);
 
    var tax_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
 
@@ -3183,8 +3186,8 @@ var subtotal_murni = parseFloat(gantiTitik(jumlah_barang)) * parseFloat(harga);
   //PPN
    
 
+    var total_akhir1 = parseFloat(subtotal,2) + parseFloat(total,2);
 
-    var total_akhir1 = parseFloat(subtotal.replace(',','.'),2) + parseFloat(total,2);
 
  if (pot_fakt_per == 0.00) 
     {

@@ -34,7 +34,7 @@ mysqli_close($db);
 
           <div class="form-group">
           <label> Keterangan Promo </label><br>
-          <input type="text" name="keterangan_promo" class="form-control" value="<?php echo $data['keterangan_promo']; ?>" class="form-control" autocomplete="off" required="" placeholder="Keterangan Promo" >
+          <textarea name="keterangan_promo" id="keterangan_promo" style="height:250px" class="form-control"  placeholder="Pesan Alert Promo" required=""><?php echo $data['keterangan_promo']; ?></textarea>
           </div>
 
               
@@ -48,8 +48,11 @@ mysqli_close($db);
 </form>
 
 
-<?php 
+<script>
+     CKEDITOR.replace( 'keterangan_promo' );
+</script>
 
+<?php
 // memasukan file footer.php
 include 'footer.php'; 
 ?>

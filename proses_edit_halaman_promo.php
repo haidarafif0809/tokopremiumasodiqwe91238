@@ -15,7 +15,7 @@
            
          
            $nama_promo = stringdoang($_POST['nama_promo']);
-           $keterangan_promo = stringdoang($_POST['keterangan_promo']);
+           $keterangan_promo = $_POST['keterangan_promo'];
            $id = angkadoang($_POST['id']);
 
         $query->execute();

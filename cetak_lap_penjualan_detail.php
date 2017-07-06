@@ -139,8 +139,8 @@ $t_barang = $cek011['total_barang'];
                         
                         <td>". $data11['tanggal'] ." <br><br><u><i>Nama Barang</i></u><br>". $data11['nama_barang'] ."<br><br><br><b><br>". rp($data11['potongan']) ."</td>
                         
-                        <td>". $data123['kode_pelanggan'] ." <br><br><br><br><br><b><br><br>Pajak :</td>  <td>". $data1234['nama_pelanggan'] ." <br><br><i><u>Jumlah</u>&nbsp;&nbsp;<u>Satuan</u></i><br>". gantiKoma($jumlah_barang) ." &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ". $data11['nama'] ."<br>.........................<br> ". gantiKoma($total_barang) ."<b><br><b><br>". rp($data11['tax']) ."</td>
-                        <td><br><br><i><u>Harga</u>&nbsp;&nbsp;<u>Pot.</u><br>". rp($data11['harga']) ."&nbsp;&nbsp;&nbsp;". gantiKoma($data11['potongan']) ."<b><br><b><br><b><br><b><br>Total Akhir :</td>
+                        <td>". $data123['kode_pelanggan'] ." <br><br><br><br><br><b><br><br>Pajak :</td>  <td>". $data1234['nama_pelanggan'] ." <br><br><i><u>Jumlah</u>&nbsp;&nbsp;<u>Satuan</u></i><br>". koma($jumlah_barang,2) ." &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ". $data11['nama'] ."<br>.........................<br> ". koma($total_barang,2) ."<b><br><b><br>". rp($data11['tax']) ."</td>
+                        <td><br><br><i><u>Harga</u>&nbsp;&nbsp;<u>Pot.</u><br>". rp($data11['harga']) ."&nbsp;&nbsp;&nbsp;". koma($data11['potongan'],2) ."<b><br><b><br><b><br><b><br>Total Akhir :</td>
                         <td><br><br><i><u>Total</u><br>". rp($data11['subtotal']) ." <br>.........................<br> ". rp($total_subtotal) ."<b><br><b><br>". rp($total_subtotal) ."</td>
 
                   </tr>";
@@ -176,11 +176,11 @@ $t_barang = $cek011['total_barang'];
   <table>
   <tbody>
 
-      <tr><td width="70%">Jumlah Item</td> <td> :&nbsp; </td> <td> <?php echo gantiKoma($t_barang); ?> </td></tr>
+      <tr><td width="70%">Jumlah Item</td> <td> :&nbsp; </td> <td> <?php echo koma($t_barang,2); ?> </td></tr>
       <tr><td  width="70%">Total Subtotal</td> <td> :&nbsp;Rp. </td> <td> <?php echo rp($t_subtotal); ?> </td>
       </tr>
       <tr><td  width="70%">Total Potongan</td> <td> :&nbsp;Rp. </td> <td> <?php echo rp($total_potongan); ?></td></tr>
-      <tr><td width="70%">Total Pajak</td> <td> :&nbsp;Rp. </td> <td> <?php echo persen($total_tax); ?> </td></tr>
+      <tr><td width="70%">Total Pajak</td> <td> :&nbsp;Rp. </td> <td> <?php echo rp($total_tax); ?> </td></tr>
       <tr><td  width="70%">Total Akhir</td> <td> :&nbsp;Rp. </td> <td> <?php echo rp($t_subtotal); ?> </td>
       </tr>
       <tr><td  width="70%">Total Kredit</td> <td> :&nbsp;Rp. </td> <td> <?php echo rp($total_kredit); ?></td></tr>

@@ -8,8 +8,10 @@ include 'db.php';
 
   $no_faktur = $_GET['no_faktur'];
 
-    $query0 = $db->query("SELECT p.biaya_admin,p.id,p.no_faktur,p.total,p.kode_pelanggan,p.keterangan,p.cara_bayar,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,p.kode_gudang,p.tunai,pl.nama_pelanggan,pl.wilayah,dp.satuan,dp.jumlah_barang,dp.subtotal,dp.nama_barang,dp.harga, da.nama_daftar_akun FROM penjualan p INNER JOIN detail_penjualan dp ON p.no_faktur = dp.no_faktur INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id INNER JOIN daftar_akun da ON p.cara_bayar = da.kode_daftar_akun WHERE p.no_faktur = '$no_faktur' ORDER BY p.id DESC");
+    $query0 = $db->query("SELECT s.nama,p.ppn,p.biaya_admin,p.id,p.no_faktur,p.total,p.kode_pelanggan,p.keterangan,p.cara_bayar,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,p.kode_gudang,p.tunai,pl.nama_pelanggan,pl.wilayah,dp.satuan,dp.jumlah_barang,dp.subtotal,dp.nama_barang,dp.harga, da.nama_daftar_akun FROM penjualan p INNER JOIN detail_penjualan dp ON p.no_faktur = dp.no_faktur INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id INNER JOIN daftar_akun da ON p.cara_bayar = da.kode_daftar_akun INNER JOIN satuan s ON dp.satuan = s.id WHERE p.no_faktur = '$no_faktur' ORDER BY p.id DESC");
      $data0 = mysqli_fetch_array($query0);
+
+     $nama_ppn = $data0['ppn'];
 
     $query1 = $db->query("SELECT * FROM perusahaan ");
     $data1 = mysqli_fetch_array($query1);
@@ -128,12 +130,12 @@ include 'db.php';
 <table id="tableuser" class="table table-bordered table-sm">
         <thead>
             <th class="table1" style="width: 3%"> <center> No. </center> </th>
-            <th class="table1" style="width: 50%"> <center> Nama Barang </center> </th>
+            <th class="table1" style="width: 40%"> <center> Nama Barang </center> </th>
             <th class="table1" style="width: 5%"> <center> Qty </center> </th>
             <th class="table1" style="width: 5%"> <center> Satuan </center> </th>
             <th class="table1" style="width: 15%"> <center> Harga </center> </th>
             <th class="table1" style="width: 5%"> <center> Disc. </center> </th>
-            <th class="table1" style="width: 5%"> <center> Pajak </center> </th>
+            <th class="table1" style="width: 15%"> <center> Pajak (<?php echo $nama_ppn; ?>)</center> </th>
             <th class="table1" style="width: 12%"> <center> Subtotal </center> </th>
         
             
@@ -157,7 +159,7 @@ include 'db.php';
             <td class='table1' align='center'>".$no_urut."</td>
             <td class='table1'>". $data5['nama_barang'] ."</td>
             <td class='table1' align='right'>". koma($data5['jumlah_barang'],2) ."</td>
-            <td class='table1'>". $data0['satuan'] ."</td>
+            <td class='table1'>". $data0['nama'] ."</td>
             <td class='table1' align='right'>". koma($data5['harga'],2) ."</td>
             <td class='table1' align='right'>". koma($data5['potongan'],2) ."</td>
             <td class='table1' align='right'>". koma($data5['tax'],2) ."</td>

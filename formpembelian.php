@@ -709,7 +709,7 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
 
 
   else {
-
+        $("#ppn").attr("disabled", true).trigger('chosen:updated');
         $("#potongan_pembelian").val(Math.round(potongaaan,10));
         $("#potongan_persen").val(Math.round(pot_pers));
         $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
@@ -723,7 +723,6 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
       var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
       tabel_tbs_pembelian.draw();
 
-      $("#ppn").attr("disabled", true);
       $("#kode_barang").val('');
       $("#kode_barang").trigger('chosen:updated');
       $("#jumlah_barang").val('');
@@ -1502,8 +1501,8 @@ $(document).on('click', '.btn-hapus-tbs', function (e) {
       }
 
       $.post("cek_tbs_pembelian.php",{session_id:session_id},function(data){
-          if (data != 1) {
-               $('#ppn').attr('disabled', false);
+          if (data == 0) {
+               $("#ppn").attr("disabled", false).trigger('chosen:updated');
           }
       });
 

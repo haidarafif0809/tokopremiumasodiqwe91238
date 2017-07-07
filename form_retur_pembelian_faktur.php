@@ -833,29 +833,6 @@ $(document).ready(function(){
   </script>
 
 
-
-
- <script type="text/javascript">
-  $(document).ready(function(){
-$("#cari_produk_pembelian").click(function(){
-  var session_id = $("#session_id").val();
-
-  $.post("cek_tbs_retur_pembelian_faktur.php",{session_id: "<?php echo $session_id; ?>"},function(data){
-        if (data != "1") {
-
-
-             $("#ppn").attr("disabled", false);
-
-        }
-    });
-
-});
-});
-</script>
-
-
-
-
  <script>
    //perintah javascript yang diambil dari form proses_bayar_beli.php dengan id=form_beli
   $("#pembayaran").click(function(){
@@ -1496,6 +1473,12 @@ $(document).on('click','.btn-hapus-tbs',function(e){
     $(".tr-id-"+id+"").remove();
 
 
+    });
+
+    $.post("cek_tbs_retur_pembelian_faktur.php",{session_id: "<?php echo $session_id; ?>"},function(data){
+        if (data == 0) {
+             $("#ppn").attr("disabled", false);
+        }
     });
 
 

@@ -2579,7 +2579,7 @@ $.getJSON('lihat_nama_barang.php',{kode_barang:kode_barang}, function(json){
 
 
         $(".tr-kode-"+kode_barang+"").remove();
-        $("#ppn").attr("disabled", true);
+        $("#ppn").attr("disabled", true).trigger('chosen:updated');
         $("#nama_barang").val('');
         $("#jumlah_barang").val('');
         $("#potongan1").val('');
@@ -3021,6 +3021,14 @@ if (pesan_alert == true) {
           }); // end cek_total_bonus_promo
         }); // end cek_total_seluruh
 
+          $.post("cek_tbs_penjualan.php",{session_id: "<?php echo $session_id; ?>"},function(data){
+              if (data == 0) {
+
+                   $("#ppn").attr("disabled", false).trigger('chosen:updated');
+
+              }
+          });
+
 
           $('#tabel_tbs_penjualan').DataTable().destroy();
 
@@ -3064,6 +3072,9 @@ if (pesan_alert == true) {
 
 
         });
+
+
+
 }
 else {
     
@@ -3468,7 +3479,7 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
       var tabel_tbs_penjualan = $('#tabel_tbs_penjualan').DataTable();
       tabel_tbs_penjualan.draw();
 
-     $("#ppn").attr("disabled", true);
+     $("#ppn").attr("disabled", true).trigger('chosen:updated');
      $("#level_harga").attr("disabled", true);
      $("#kd_pelanggan").attr("disabled", true);
      $("#tbody").prepend(data);
@@ -3632,8 +3643,8 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
     } // end else nya cek_program_promo
   });// end cek_program_promo
 
-     $("#level_harga").attr("disabled", true);
-      $("#ppn").attr("disabled", true);
+      $("#level_harga").attr("disabled", true);
+      $("#ppn").attr("disabled", true).trigger('chosen:updated');
       $("#kd_pelanggan").attr("disabled", true);
       var tabel_tbs_penjualan = $('#tabel_tbs_penjualan').DataTable();
       tabel_tbs_penjualan.draw();
@@ -4125,16 +4136,6 @@ if (transaksi_baru == 1){
           window.location.href="penjualan.php?status=semua";       
            } 
 }
-
-
-  $.post("cek_tbs_penjualan.php",{session_id: "<?php echo $session_id; ?>"},function(data){
-        if (data != "1") {
-
-
-             $("#ppn").attr("disabled", false);
-
-        }
-    });
 
 });
 });
@@ -5928,13 +5929,10 @@ $('#tabel_tbs_penjualan').DataTable().destroy();
             $("#cetak_piutang").hide();
             $("#cetak_tunai_kategori").hide(); 
             $('#span_tbs').show();
-            $("#ppn").attr("disabled", false);
-            $("#level_harga").attr("disabled", false);
-
-            
-     $("#level_harga").attr("disabled", false);
-      $("#ppn").attr("disabled", false);
-           $("#kd_pelanggan").attr("disabled", false);
+            $("#ppn").attr("disabled", false).trigger('chosen:updated');
+            $("#level_harga").attr("disabled", false);            
+            $("#ppn").attr("disabled", false).trigger('chosen:updated');
+            $("#kd_pelanggan").attr("disabled", false);
 
             var url = window.location.href;
              url = getPathFromUrl(url);

@@ -1407,24 +1407,6 @@ $('#tabel_tbs_order').DataTable().destroy();
 </script>
 
 
-<script type="text/javascript">
-$(document).ready(function(){
-$("#cari_produk_penjualan").click(function(){
-  var session_id = $("#session_id").val();
-
-  $.post("cek_tbs_penjualan_order.php",{session_id: "<?php echo $session_id; ?>"},function(data){
-        if (data != "1") {
-
-             $("#ppn").attr("disabled", false);
-
-        }
-    });
-
-});
-});
-</script>
-
-
 
 <script>
 
@@ -1502,13 +1484,17 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
 
     $.post("hapustbs_penjualanorder.php",{id:id,kode_barang:kode_barang},function(data){
-    if (data == 'sukses') {
+      if (data == 'sukses') {
+        $(".tr-id-"+id+"").remove();
+        $("#pembayaran_penjualan").val('');
+      }
 
+      $.post("cek_tbs_penjualan_order.php",{session_id: "<?php echo $session_id; ?>"},function(data){
+        if (data == 0) {
+             $("#ppn").attr("disabled", false);
+          }
+      });
 
-    $(".tr-id-"+id+"").remove();
-    $("#pembayaran_penjualan").val('');
-    
-    }
     });
 
 

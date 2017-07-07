@@ -1,6 +1,4 @@
-<?php  include 'session_login.php';
-    // memasukan file login, header, navbar, dan db.
-    
+<?php    
     include 'header.php';
     include 'sanitasi.php';
     include 'db.php';

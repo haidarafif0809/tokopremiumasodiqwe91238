@@ -133,7 +133,7 @@ $session_id = session_id();
 <button type="button" class="btn btn-info" id="cari_produk_pembelian" data-toggle="modal" data-target="#myModal"><i class='fa fa-search'> </i> Cari</button>
 <br><br>
 <!-- Tampilan Modal -->
-<div id="myModal" class="modal fade" role="dialog">
+<div id="myModal" class="modal" role="dialog">
   <div class="modal-dialog modal-lg">
 
     <!-- Isi Modal-->
@@ -344,7 +344,7 @@ $session_id = session_id();
       <td>". rp($data1['jumlah_beli']) ."</td>
       <td>". $data1['satuan_jual'] ."</td>
 
-      <td class='edit-jumlah' data-id='".$data1['id']."' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."'> <span id='text-jumlah-".$data1['id']."'> ".koma($data1['jumlah_retur'],3)." </span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".koma($data1['jumlah_retur'],3)."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."'> </td>
+      <td class='edit-jumlah' data-id='".$data1['id']."' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."'> <span id='text-jumlah-".$data1['id']."'> ".koma($data1['jumlah_retur'],2)." </span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".koma($data1['jumlah_retur'],2)."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-faktur='".$data1['no_faktur_penjualan']."' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."'> </td>
 
 
       <td>". $data1['satuan_retur'] ."</td>
@@ -448,7 +448,7 @@ $session_id = session_id();
 
 
 <!-- Modal Hapus data -->
-<div id="modal_hapus" class="modal fade" role="dialog">
+<div id="modal_hapus" class="modal" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -489,7 +489,7 @@ $session_id = session_id();
 			
 
 <!-- Modal edit data -->
-<div id="modal_edit" class="modal fade" role="dialog">
+<div id="modal_edit" class="modal" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -1354,9 +1354,10 @@ $(document).on('click','.btn-hapus-tbs',function(e){
           $("#tax1").val("<?php echo $nilai_ppn ?>");
       }
       else if (ppn == "Exclude") {
-        $("#tax1").attr("disabled", true);
-        $("#tax").attr("disabled", false);
-        $("#tax1").val("");
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+          $("#tax").val("");
+          $("#tax1").val("<?php echo $nilai_ppn ?>");
       }
       else{
         $("#tax1").attr("disabled", true);

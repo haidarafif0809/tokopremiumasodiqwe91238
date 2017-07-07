@@ -1627,9 +1627,10 @@ $(document).on('click','.btn-hapus-tbs',function(e){
           $("#tax1").val("<?php echo $nilai_ppn ?>");
       }
       else if (ppn == "Exclude") {
-        $("#tax1").attr("disabled", true);
-        $("#tax").attr("disabled", false);
-        $("#tax1").val("");
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+          $("#tax").val("");
+          $("#tax1").val("<?php echo $nilai_ppn ?>");
       }
       else{
         $("#tax1").attr("disabled", true);

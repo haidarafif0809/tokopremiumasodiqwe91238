@@ -15,16 +15,16 @@ $columns = array(
 
 
 // getting total number records without any search
-$sql = "SELECT j.nama AS nama_jabatan ,u.id,u.username,u.nama,u.alamat,u.password,u.jabatan,u.otoritas,u.status,u.status_sales ";
-$sql.="FROM user u LEFT JOIN jabatan j ON u.jabatan = j.id ";
-$query=mysqli_query($conn, $sql) or die("datatable_user.php: get employees");
+$sql = "SELECT ho.nama AS otoritas_user,j.nama AS nama_jabatan ,u.id,u.username,u.nama,u.alamat,u.password,u.jabatan,u.otoritas,u.status,u.status_sales ";
+$sql.="FROM user u LEFT JOIN jabatan j ON u.jabatan = j.id LEFT JOIN hak_otoritas ho ON u.otoritas=  ho.id ";
+$query=mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
 
-$sql = "SELECT j.nama AS nama_jabatan ,u.id,u.username,u.nama,u.alamat,u.password,u.jabatan,u.otoritas,u.status,u.status_sales ";
-$sql.="FROM user u LEFT JOIN jabatan j ON u.jabatan = j.id WHERE 1=1";
+$sql = "SELECT ho.nama AS otoritas_user,j.nama AS nama_jabatan ,u.id,u.username,u.nama,u.alamat,u.password,u.jabatan,u.otoritas,u.status,u.status_sales ";
+$sql.="FROM user u LEFT JOIN jabatan j ON u.jabatan = j.id LEFT JOIN hak_otoritas ho ON u.otoritas = ho.id  WHERE 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
 
@@ -33,14 +33,14 @@ if( !empty($requestData['search']['value']) ) {   // if there is a search parame
 	$sql.=" OR u.alamat LIKE '".$requestData['search']['value']."%' )";
 
 }
-$query=mysqli_query($conn, $sql) or die("datatable_user.phpppp: get employees");
+$query=mysqli_query($conn, $sql) or die("eror 2");
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
 
 
 $sql.= " ORDER BY u.id DESC LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */	
-$query=mysqli_query($conn, $sql) or die("employee-grid-data.php: get employees");
+$query=mysqli_query($conn, $sql) or die("eror 3");
 
 $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
@@ -69,7 +69,7 @@ $user_edit = mysqli_num_rows($pilih_akses_user_edit);
 			$nestedData[] = $row['nama'];
 			$nestedData[] = $row['alamat'];
 			$nestedData[] = $row['nama_jabatan'];
-			$nestedData[] = $row['otoritas'];
+			$nestedData[] = $row['otoritas_user'];
 			$nestedData[] = $row['status'];
 
       if ($row['status_sales'] == "Iya") {

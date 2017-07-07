@@ -10,7 +10,8 @@
  $id = $_GET['id'];
  
  // menampilkan seluruh data dari tabel user berdasarkan id
- $query = $db->query("SELECT * FROM user WHERE id = '$id'");
+ $query = $db->query("SELECT ho.nama AS otoritas_user,j.nama AS nama_jabatan ,u.id,u.username,u.nama,u.alamat,u.password,u.jabatan,u.otoritas,u.status,u.status_sales
+FROM user u LEFT JOIN jabatan j ON u.jabatan = j.id LEFT JOIN hak_otoritas ho ON u.otoritas=  ho.id  WHERE  u.id = '$id'");
  
  // menyimpan data sementara yang ada pada $query
  $data = mysqli_fetch_array($query);
@@ -47,25 +48,25 @@
 					<div class="form-group">
 					<label>Jabatan </label><br>
 					<select type="text" name="jabatan" class="form-control" required="" >
-					<option value="<?php echo $data['jabatan']; ?>"><?php echo $data['jabatan']; ?></option>
+					<option value="<?php echo $data['jabatan']; ?>"><?php echo $data['nama_jabatan']; ?></option>
 
-<?php 
+					<?php 
 
-	// memasukan file db.php
-    include 'db.php';
-    
-    // menampilkan seluruh data yang ada di tabel satuan
-    $query = $db->query("SELECT * FROM jabatan ");
+						// memasukan file db.php
+					    include 'db.php';
+					    
+					    // menampilkan seluruh data yang ada di tabel satuan
+					    $query = $db->query("SELECT id, nama FROM jabatan ");
 
-    // menyimpan data sementara yang ada pada $query
-    while($data002 = mysqli_fetch_array($query))
-    {
-    
-    echo "<option>".$data002['nama'] ."</option>";
-    }
-    
-    
-    ?>
+					    // menyimpan data sementara yang ada pada $query
+					    while($data002 = mysqli_fetch_array($query))
+					    {
+					    
+					    echo "<option value=".$data002['id'].">".$data002['nama'] ."</option>";
+					    }
+					    
+					    
+					    ?>
 
     				</select>
 					</div>
@@ -74,22 +75,22 @@
 					<div class="form-group">
 					<label>Otoritas</label><br>
 					<select type="text" name="otoritas" id="otoritas" class="form-control" required="" >
-					<option value="<?php echo $data['otoritas']; ?>"><?php echo $data['otoritas']; ?></option>
-<?php 
+					<option value="<?php echo $data['otoritas']; ?>"><?php echo $data['otoritas_user']; ?></option>
+						<?php 
 
-$ambil_otoritas = $db->query("SELECT * FROM hak_otoritas");
+						$ambil_otoritas = $db->query("SELECT id, nama FROM hak_otoritas");
 
-    while($data_otoritas = mysqli_fetch_array($ambil_otoritas))
-    {
-    
-    echo "<option>".$data_otoritas['nama'] ."</option>";
+						    while($data_otoritas = mysqli_fetch_array($ambil_otoritas))
+						    {
+						    
+						    echo "<option value=".$data_otoritas['id'].">".$data_otoritas['nama'] ."</option>";
 
-    }
-    
-//Untuk Memutuskan Koneksi Ke Database
+						    }
+						    
+						//Untuk Memutuskan Koneksi Ke Database
 
-mysqli_close($db); 
- ?>
+						mysqli_close($db); 
+						 ?>
 					</select>
 					</div>
 

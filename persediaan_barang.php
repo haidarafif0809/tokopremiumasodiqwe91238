@@ -42,7 +42,6 @@ else{
 }
 
 
-$ambil_kategori = $db->query("SELECT id,nama_kategori FROM kategori");
 
 
 
@@ -88,7 +87,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
         <li class='nav-item'><a class='nav-link active' href='persediaan_barang.php?kategori=semua&tipe=barang_jasa'> Semua Item </a></li>";        
         }
 
-          
+          $pilih_kategori = $db->query("SELECT id,nama_kategori FROM kategori");
           while ($cek = mysqli_fetch_array($pilih_kategori)) 
           {
           
@@ -196,7 +195,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <option value=""> -- SILAHKAN PILIH -- </option>
                             <?php 
 
-
+                                $pilih_kategori = $db->query("SELECT id,nama_kategori FROM kategori");
                                 while($data_kategori = mysqli_fetch_array($ambil_kategori))
                                 {
     

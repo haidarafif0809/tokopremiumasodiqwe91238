@@ -1006,13 +1006,38 @@ $(document).on('click', '#submit_produk', function (e) {
     var subtotal = 0;
   }
   else{
-    var subtotal = parseInt(jumlah_barang, 10) *  parseInt(harga, 10) - parseInt(potongan, 10);
+    
+  //PPN
+        if (ppn == 'Exclude') 
+          {
+
+            var subtotal_tbs = parseInt(jumlah_barang, 10) *  parseInt(harga, 10) - parseInt(potongan, 10);
+
+            if (tax == 0){
+                var total_tax_exclude = 0;
+              }
+            else{
+                var total_tax_exclude = parseInt(subtotal_tbs) * parseInt(tax) / 100;
+              }              
+
+               
+              var subtotal = parseInt(subtotal_tbs) + parseInt(total_tax_exclude);
+
+          }
+          else
+          {
+              var subtotal = parseInt(jumlah_barang, 10) *  parseInt(harga, 10) - parseInt(potongan, 10);
+          }
+  //PPN
+  
   }
     
   var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
   if (total == ''){
     total = 0;
   }
+
+
    
   var total_akhir = parseInt(total,10) + parseInt(subtotal,10);
 
@@ -1046,7 +1071,7 @@ $(document).on('click', '#submit_produk', function (e) {
       if (pesan_alert == true){
           $("#total2").val(tandaPemisahTitik(total_akhir));
 
-          $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+          $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales,ppn:ppn},function(data){
          
           $("#ppn").attr("disabled", true);
           $("#tbody").prepend(data);
@@ -1076,7 +1101,7 @@ $(document).on('click', '#submit_produk', function (e) {
       
       $("#total2").val(tandaPemisahTitik(total_akhir));
 
-      $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+      $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales,ppn:ppn},function(data){
          
           $("#ppn").attr("disabled", true);
           $("#tbody").prepend(data);
@@ -1104,7 +1129,7 @@ $(document).on('click', '#submit_produk', function (e) {
     if (pesan_alert == true) {
         $("#total2").val(tandaPemisahTitik(total_akhir));
 
-    $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+    $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales,ppn:ppn},function(data){
      
 
       $("#ppn").attr("disabled", true);
@@ -1161,7 +1186,7 @@ $('#tabel_tbs_order').DataTable().destroy();
 
 else{
   $("#total2").val(tandaPemisahTitik(total_akhir));
-     $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+     $.post("proses_tbs_orderpenjualan.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,potongan:potongan,tax:tax,satuan:satuan,sales:sales, ppn:ppn},function(data){
      
 
       $("#ppn").attr("disabled", true);
@@ -1866,9 +1891,10 @@ $(document).ready(function(){
           $("#tax1").val("<?php echo $nilai_ppn ?>");
       }
       else if (ppn == "Exclude") {
-        $("#tax1").attr("disabled", true);
-        $("#tax").attr("disabled", false);
-        $("#tax1").val("");
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+          $("#tax").val("");
+          $("#tax1").val("<?php echo $nilai_ppn ?>");
       }
       else{
         $("#tax1").attr("disabled", true);

@@ -64,7 +64,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
       $jumlah_produk_tampil = koma($row["jumlah_produk"],3);
       $dibelakang_koma = substr($jumlah_produk_tampil, -4);
-      $total_hpp = hitungHargaUnitHpp($row['kode_barang']);
+      $total_hpp = hitungNilaiHpp($row['kode_barang']);
       
       if ($dibelakang_koma == ",000") {
           $jumlah_produk_tampil = hapus_koma($row["jumlah_produk"],3);

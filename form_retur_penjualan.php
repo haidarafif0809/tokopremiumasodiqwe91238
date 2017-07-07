@@ -642,7 +642,7 @@ if (jumlah_retur == ""){
     $.post("proses_tbs_retur_penjualan.php",{session_id:session_id,no_faktur_penjualan:no_faktur,kode_barang:kode_barang,jumlah_retur:jumlah_retur,satuan_produk:satuan_produk,nama_barang:nama_barang,harga:harga,potongan1:potongan1,tax1:tax1,satuan_jual:satuan_jual},function(info) {
 
 
-     $("#ppn").attr("disabled", true);
+     $("#ppn").attr("disabled", true).trigger("chosen:updated");
      $("#tbody").prepend(info);
      $("#kode_barang").val('');
      $("#nama_barang").val('');
@@ -694,25 +694,6 @@ $(".modal_retur_baru").html(info);
   
       
   </script>
-
-
- <script type="text/javascript">
-  $(document).ready(function(){
-$("#cari_produk_pembelian").click(function(){
-  var session_id = $("#session_id").val();
-
-  $.post("cek_tbs_retur_penjualan.php",{session_id: "<?php echo $session_id; ?>"},function(data){
-        if (data != "1") {
-
-
-             $("#ppn").attr("disabled", false);
-
-        }
-    });
-
-});
-});
-</script>
 
 
 
@@ -1245,13 +1226,19 @@ $(document).on('click','.btn-hapus-tbs',function(e){
       $("#total_retur_pembelian").val(tandaPemisahTitik(total_akhir));
       $("#total_retur_pembelian1").val(tandaPemisahTitik(total_akhir));
 
-    $.post("hapus_tbs_retur_penjualan.php",{id:id,kode_barang:kode_barang,no_faktur:no_faktur},function(data){
-    if (data != "") {
+      $.post("hapus_tbs_retur_penjualan.php",{id:id,kode_barang:kode_barang,no_faktur:no_faktur},function(data){
+          if (data != "") {
+            $(".tr-id-"+id).remove();          
+          }
 
-    $(".tr-id-"+id).remove();
-    
-    }
-    });
+
+          $.post("cek_tbs_retur_penjualan.php",{session_id: "<?php echo $session_id; ?>"},function(data){
+              if (data == 0) {
+                   $("#ppn").attr("disabled", false).trigger("chosen:updated");
+              }
+          });
+
+      });
     
     
     });

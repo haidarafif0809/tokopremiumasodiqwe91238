@@ -87,7 +87,7 @@ $session_id = session_id();
 
 
   <!-- Tampilan Modal DATA PARCEL
-  <div id="modalParcel" class="modal fade" role="dialog">
+  <div id="modalParcel" class="modal" role="dialog">
     <div class="modal-dialog ">
     Isi Modal
       <div class="modal-content">
@@ -139,7 +139,7 @@ $session_id = session_id();
   <button type="button" class="btn btn-info" id="cari_produk" data-toggle="modal" data-target="#myModal"> <i class='fa fa-search'> </i> Cari Produk (F3)</button>
 
   <!-- Tampilan Modal -->
-  <div id="myModal" class="modal fade" role="dialog">
+  <div id="myModal" class="modal" role="dialog">
     <div class="modal-dialog ">
       <!-- Isi Modal-->
       <div class="modal-content">

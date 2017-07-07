@@ -380,6 +380,7 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
   document.getElementById("kredit").value = $(this).attr('kredit');
   document.getElementById("total").value = $(this).attr('total');
   document.getElementById("tanggal_jt").value = $(this).attr('tanggal_jt');
+  document.getElementById("jumlah_bayar").value = $(this).attr('kredit');
   
   $('#myModal').modal('hide');
   });

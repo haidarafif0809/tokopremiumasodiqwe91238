@@ -8,7 +8,6 @@ include 'db.php';
 include 'sanitasi.php';
 
 //menampilkan seluruh data yang ada pada tabel pembelian
-$perintah = $db->query("SELECT * FROM retur_pembelian");
 
 $query_default_ppn = $db->query("SELECT setting_ppn, nilai_ppn FROM perusahaan");
 $data_default_ppn = mysqli_fetch_array($query_default_ppn);
@@ -841,29 +840,6 @@ $(document).ready(function(){
   </script>
 
 
-
-
- <script type="text/javascript">
-  $(document).ready(function(){
-$("#cari_produk_pembelian").click(function(){
-  var session_id = $("#session_id").val();
-
-  $.post("cek_tbs_retur_pembelian.php",{session_id: "<?php echo $session_id; ?>"},function(data){
-        if (data != "1") {
-
-
-             $("#ppn").attr("disabled", false);
-
-        }
-    });
-
-});
-});
-</script>
-
-
-
-
  <script>
    //perintah javascript yang diambil dari form proses_bayar_beli.php dengan id=form_beli
   $("#pembayaran").click(function(){
@@ -1501,13 +1477,17 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
 
     $.post("hapus_tbs_retur_pembelian.php",{id:id,kode_barang:kode_barang,no_faktur_pembelian:no_faktur_pembelian},function(data){
+        $("#kode_barang").focus();
+        $(".tr-id-"+id+"").remove();
 
-    $("#kode_barang").focus();
-    $(".tr-id-"+id+"").remove();
-    
-
-    
     });
+
+    
+          $.post("cek_tbs_retur_pembelian.php",{session_id: "<?php echo $session_id; ?>"},function(data){
+              if (data == 0) {
+                   $("#ppn").attr("disabled", false);
+              }
+          });
     
     
     });

@@ -762,23 +762,22 @@ $(document).ready(function(){
   
         $(document).ready(function(){
         $("#kode_barang").blur(function(){
-        
-        var no_faktur = $("#nomorfaktur").val();
-        var kode_barang = $("#kode_barang").val();
-var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
-        
-        $.post('cek_kode_barang_edit_tbs_item_masuk.php',{kode_barang:kode_barang,no_faktur:no_faktur}, function(data){
-        
-        if(data == 1){
-        alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
-        $("#kode_barang").val('');
-        $("#nama_barang").val('');
-        }//penutup if
-        
-        });////penutup function(data)
 
+          var kode_barang = $(this).val();
+          var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
+          var session_id = $("#session_id").val();
+          
+          $.post('cek_kode_barang_tbs_item_masuk.php',{kode_barang:kode_barang,session_id:session_id}, function(data){
+          
+          if(data == 1){
+          alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+          $("#kode_barang").val('');
+          $("#nama_barang").val('');
+          }//penutup if
+          
+          });////penutup function(data)        
 
-      $.getJSON('lihat_item_masuk.php',{kode_barang:$(this).val()}, function(json){
+      $.getJSON('lihat_item_masuk.php',{kode_barang:kode_barang}, function(json){
       
       if (json == null)
       {
@@ -802,8 +801,7 @@ var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
 
       
       
-</script>                       
-                     
+</script>
 
 <script>
 

@@ -54,7 +54,7 @@ $otoritas_hapus = mysqli_num_rows($pilih_akses_otoritas);
 
     if ($otoritas_hapus > 0){
 
-			$query_cek_kategori_barang = $db->query("SELECT kode_barang FROM barang WHERE kategori = '$row[nama_kategori]' ");
+			$query_cek_kategori_barang = $db->query("SELECT kode_barang FROM barang WHERE kategori = '$row[id]' ");
 			$jumlah_cek_kategori_barang = mysqli_num_rows($query_cek_kategori_barang);
 
 			 if ($jumlah_cek_kategori_barang == 0){
@@ -77,17 +77,7 @@ $otoritas_edit = mysqli_num_rows($pilih_akses_otoritas);
 
 if ($otoritas_edit > 0){
 
-			$query_cek_kategori_barang = $db->query("SELECT kode_barang FROM barang WHERE kategori = '$row[nama_kategori]' ");
-			$jumlah_cek_kategori_barang = mysqli_num_rows($query_cek_kategori_barang);
-
-			 if ($jumlah_cek_kategori_barang == 0){
-
 			$nestedData[] = "<button class='btn btn-warning btn-edit btn-sm' data-kategori='". $row['nama_kategori'] ."' data-id='". $row['id'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button>";
-
-			}
-			else{
-			$nestedData[] = "<p style='color:red;'>Sudah Terpakai</p>";
-			}	
 
 		}
 		else{

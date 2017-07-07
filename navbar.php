@@ -93,23 +93,49 @@ if ($lihat['master_data_lihat'] > 0){
 
 if ($lihat['biaya_admin_lihat'] > 0){
 
-        echo '<li><a href="biaya_admin.php" class="waves-effect">Biaya Admin</a></li>';
+                                echo '<li><a href="biaya_admin.php" class="waves-effect">Biaya Admin</a></li>';
 }
 
-if ($lihat['user_lihat'] > 0){
-                                echo '<li><a href="user.php" class="waves-effect">User</a></li>';
+if ($lihat['daftar_akun_lihat'] > 0){
+                                echo '<li><a href="daftar_akun.php?kategori=Aktiva" class="waves-effect">Daftar Akun</a></li>';
+}
+
+if ($lihat['daftar_pajak_lihat'] > 0){
+                                echo '<li><a href="daftar_pajak.php" class="waves-effect">Daftar Pajak</a></li>';
+}
+
+if ($lihat['set_diskon_tax_lihat'] > 0){
+                                echo '<li><a href="set_diskon_tax.php" class="waves-effect">Default Diskon </a></li>';
+}
+
+if ($lihat['gudang_lihat'] > 0){
+                                echo '<li><a href="gudang.php" class="waves-effect">Gudang</a></li>';
+}
+
+if ($lihat['grup_akun_lihat'] > 0){
+                                echo '<li><a href="daftar_group_akun.php" class="waves-effect">Group Akun</a></li>';
 }
 
 if ($lihat['jabatan_lihat'] > 0){                               
                                 echo '<li><a href="jabatan.php" class="waves-effect">Jabatan</a></li>';
 }
 
-if ($lihat['hak_otoritas_lihat'] > 0){
-                                echo '<li><a href="hak_otoritas.php" class="waves-effect">Otoritas</a></li>';
+if ($lihat['kategori_lihat'] > 0){
+                                echo '<li><a href="kategori_barang.php" class="waves-effect">Kategori</a></li>';
 }
 
-if ($lihat['suplier_lihat'] > 0){
-                                echo '<li><a href="suplier.php" class="waves-effect">Suplier</a></li>';
+if ($lihat['komisi_faktur_lihat'] > 0){
+                                echo '<li><a href="fee_faktur.php" class="waves-effect">Komisi Faktur</a></li>';
+}
+
+if ($lihat['komisi_produk_lihat'] > 0){
+                                echo '<li><a href="fee_produk.php" class="waves-effect">Komisi Produk</a></li>';
+}
+
+                                echo '<li><a href="master_poin.php" class="waves-effect">Master Point</a></li>';
+
+if ($lihat['hak_otoritas_lihat'] > 0){
+                                echo '<li><a href="hak_otoritas.php" class="waves-effect">Otoritas</a></li>';
 }
 
 if ($lihat['pelanggan_lihat'] > 0){
@@ -120,55 +146,26 @@ if ($lihat['item_lihat'] > 0){
                                 echo '<li><a href="barang.php?kategori=semua&tipe=barang_jasa" class="waves-effect" >Produk</a></li>';
                                 echo '<li><a href="data_parcel.php" class="waves-effect" >Produk Parcel</a></li>';
 }
-    
-    echo '<li><a href="master_poin.php" class="waves-effect">Master Point</a></li>';
+
+                                echo '<li><a href="program_promo.php" class="waves-effect">Program Promo</a></li>'; 
+                                echo '<li><a href="promo_alert.php" class="waves-effect">Promo Alert</a></li>';  
 
 if ($lihat['satuan_lihat'] > 0){
                                 echo '<li><a href="satuan.php" class="waves-effect">Satuan</a></li>';
 }
 
-if ($lihat['kategori_lihat'] > 0){
-                                echo '<li><a href="kategori_barang.php" class="waves-effect">Kategori</a></li>';
+if ($lihat['suplier_lihat'] > 0){
+                                echo '<li><a href="suplier.php" class="waves-effect">Suplier</a></li>';
 }
 
-//if ($lihat['program_promo_produk'] > 0){
-                                echo '<li><a href="program_promo.php" class="waves-effect">Program Promo</a></li>';
-//}
-
-if ($lihat['komisi_produk_lihat'] > 0){
-                                echo '<li><a href="fee_produk.php" class="waves-effect">Komisi Produk</a></li>';
-}
-
-if ($lihat['komisi_faktur_lihat'] > 0){
-                                echo '<li><a href="fee_faktur.php" class="waves-effect">Komisi Faktur</a></li>';
-}
-
-if ($lihat['gudang_lihat'] > 0){
-                                echo '<li><a href="gudang.php" class="waves-effect">Gudang</a></li>';
-}
-
-if ($lihat['daftar_akun_lihat'] > 0){
-                                echo '<li><a href="daftar_akun.php?kategori=Aktiva" class="waves-effect">Daftar Akun</a></li>';
-}
-
-if ($lihat['grup_akun_lihat'] > 0){
-                                echo '<li><a href="daftar_group_akun.php" class="waves-effect">Group Akun</a></li>';
+if ($lihat['user_lihat'] > 0){
+                                echo '<li><a href="user.php" class="waves-effect">User</a></li>';
 }
  
 ?>
  
-<li><a href="promo_alert.php" class="waves-effect">Promo Alert</a></li>
-
-
 <?php 
 
-if ($lihat['set_diskon_tax_lihat'] > 0){
-                                echo '<li><a href="set_diskon_tax.php" class="waves-effect">Default Diskon & Pajak</a></li>';
-}
-
-if ($lihat['daftar_pajak_lihat'] > 0){
-                                echo '<li><a href="daftar_pajak.php" class="waves-effect">Daftar Pajak</a></li>';
-}
  
   if ($lihat['master_data_lihat'] > 0){                           
                           echo ' </ul>
@@ -204,12 +201,12 @@ if ($lihat['pembayaran_hutang_lihat'] > 0){
                             <ul>';
 }
 
- if ($lihat['kas_masuk_lihat'] > 0){
-                                echo '<li><a href="kas_masuk.php" class="waves-effect">Kas Masuk</a></li>';
-}
-
  if ($lihat['kas_keluar_lihat'] > 0){
                                 echo '<li><a href="kas_keluar.php" class="waves-effect">Kas Keluar</a></li>';
+}
+
+ if ($lihat['kas_masuk_lihat'] > 0){
+                                echo '<li><a href="kas_masuk.php" class="waves-effect">Kas Masuk</a></li>';
 }
 
  if ($lihat['kas_mutasi_lihat'] > 0){
@@ -228,17 +225,29 @@ if ($lihat['pembayaran_hutang_lihat'] > 0){
                             <ul>';
 }
 
- if ($lihat['item_lihat'] > 0){
-                            echo '<li><a href="persediaan_barang.php?kategori=semua&tipe=barang" class="waves-effect" style="font-size: 16px">Persediaan Barang</a></li>';
-}
-
- if ($lihat['item_masuk_lihat'] > 0){
+if ($lihat['item_masuk_lihat'] > 0){
                             echo '<li><a href="item_masuk.php" class="waves-effect">Item Masuk</a></li>';
 }
 
- if ($lihat['item_keluar_lihat'] > 0){
+if ($lihat['item_keluar_lihat'] > 0){
                             echo '<li><a href="item_keluar.php" class="waves-effect">Item Keluar</a></li>';
 }
+
+                            echo '<li><a href="kartu_stok.php" class="waves-effect" style="font-size: 16px">Kartu Stok</a></li>';
+
+                            echo '<li><a href="kartu_stok_periode.php" class="waves-effect" style="font-size: 16px">Kartu Stok Per Periode</a></li>';
+
+if ($lihat['laporan_mutasi_stok_lihat'] > 0){
+                            echo '<li><a href="lap_mutasi_stok.php" class="waves-effect">Lap. Mutasi Stok</a></li>';
+}
+
+
+if ($lihat['item_lihat'] > 0){
+                            echo '<li><a href="persediaan_barang.php?kategori=semua&tipe=barang" class="waves-effect" style="font-size: 16px">Persediaan Barang</a></li>';
+}
+
+                            echo '<li><a href="perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Perubahan Harga Masal</a></li>';
+
 
  if ($lihat['stok_awal_lihat'] > 0){
                             echo '<li><a href="stok_awal.php" class="waves-effect">Stok Awal</a></li>';
@@ -253,20 +262,10 @@ if ($lihat['transfer_stok_lihat'] > 0){
 echo '<li><a href="transfer_stok.php" class="waves-effect" style="font-size: 16px">Transfer Stok</a></li>';
 
 }
-echo '<li><a href="kartu_stok.php" class="waves-effect" style="font-size: 16px">Kartu Stok</a></li>';
 
- echo '<li><a href="kartu_stok_periode.php" class="waves-effect" style="font-size: 16px">Kartu Stok Per Periode</a></li>';
+                            echo '<li><a href="cache_produk_penjualan.php" class="waves-effect" style="font-size: 16px">Update Cache Produk</a></li>';
 
-echo '<li><a href="cache_produk_penjualan.php" class="waves-effect" style="font-size: 16px">Update Cache Produk</a></li>';
-
-echo '<li><a href="cache_produk_parcel.php" class="waves-effect" style="font-size: 16px">Update Cache Parcel</a></li>';
-
-echo '<li><a href="perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Perubahan Harga Masal</a></li>';
-
-
- if ($lihat['laporan_mutasi_stok_lihat'] > 0){
-                            echo '<li><a href="lap_mutasi_stok.php" class="waves-effect">Lap. Mutasi Stok</a></li>';
-}
+                            echo '<li><a href="cache_produk_parcel.php" class="waves-effect" style="font-size: 16px">Update Cache Parcel</a></li>';
 
 if ($lihat['persediaan_lihat'] > 0){
                         echo '</ul>
@@ -280,13 +279,13 @@ if ($lihat['persediaan_lihat'] > 0){
                             <ul>';
 }
 
- if ($lihat['retur_penjualan_lihat'] > 0){
-                            echo '<li><a href="retur_penjualan.php" class="waves-effect">R. Penjualan</a></li>';
-}
-
  if ($lihat['retur_pembelian_lihat'] > 0){
                             echo '<li><a href="retur_pembelian_faktur.php" class="waves-effect">R. Pembelian / Faktur</a></li>';
                             echo '<li><a href="retur_pembelian.php" class="waves-effect">R. Pembelian Non Faktur</a></li>';
+}
+
+ if ($lihat['retur_penjualan_lihat'] > 0){
+                            echo '<li><a href="retur_penjualan.php" class="waves-effect">R. Penjualan</a></li>';
 }
 
 if ($lihat['retur_lihat'] > 0){
@@ -306,8 +305,12 @@ if ($lihat['retur_lihat'] > 0){
                             echo '<li><a href="laporan_buku_besar.php" class="waves-effect">Buku Besar</a></li>';
 }
 
- if ($lihat['laporan_neraca_lihat'] > 0){
-                            echo '<li><a href="laporan_neraca.php" class="waves-effect"> Neraca</a></li>';
+ if ($lihat['laporan_jurnal_lihat'] > 0){
+                            echo '<li><a href="laporan_jurnal_transaksi.php" class="waves-effect"> Jurnal Umum</a></li>';
+}
+
+ if ($lihat['transaksi_jurnal_manual_lihat'] > 0){
+                            echo '<li><a href="transaksi_jurnal_manual.php" class="waves-effect">Jurnal </a></li>';
 }
 
  if ($lihat['laporan_laba_rugi_lihat'] > 0){
@@ -318,12 +321,8 @@ if ($lihat['retur_lihat'] > 0){
                             echo '<li><a href="lap_laba_kotor_penjualan.php" class="waves-effect"> Laba Kotor </a></li>';
 }
 
- if ($lihat['laporan_jurnal_lihat'] > 0){
-                            echo '<li><a href="laporan_jurnal_transaksi.php" class="waves-effect"> Jurnal Umum</a></li>';
-}
-
- if ($lihat['transaksi_jurnal_manual_lihat'] > 0){
-                            echo '<li><a href="transaksi_jurnal_manual.php" class="waves-effect">Jurnal </a></li>';
+ if ($lihat['laporan_neraca_lihat'] > 0){
+                            echo '<li><a href="laporan_neraca.php" class="waves-effect"> Neraca</a></li>';
 }
 
 if ($lihat['akuntansi_lihat'] > 0){       
@@ -337,63 +336,65 @@ if ($lihat['akuntansi_lihat'] > 0){
                         <div class="collapsible-body">
                             <ul>';
 }
-
-echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> Data Penjualan </a></li>';
-
- if ($lihat['laporan_penjualan_lihat'] > 0)
- {
-            echo '<li><a href="lap_penjualan.php" class="waves-effect">Lap. Penjualan</a></li>';
-}
-
-echo '<li><a href="order_penjualan.php" class="waves-effect">Lap. Order Penjualan</a></li>';
-
-echo "<li><a href='lap_bucket_size.php' class='waves-effect'>Lap. Bucket Size</a></li>";
-
- if ($lihat['laporan_pembelian_lihat'] > 0){
-                            echo '<li><a href="lap_pembelian.php" class="waves-effect">Lap. Pembelian</a></li>';
-}
-
- if ($lihat['laporan_piutang_beredar_lihat'] > 0){
-                            echo '<li><a href="laporan_penjualan_piutang.php" class="waves-effect">Lap. Piutang Beredar </a></li>';
-}
+                            
+                            echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> Data Penjualan </a></li>';
+                            
+                            echo "<li><a href='lap_bucket_size.php' class='waves-effect'>Lap. Bucket Size</a></li>";
+                            
+                            echo '<li><a href="lap_history_suplier.php" class="waves-effect">Lap. History Suplier</a></li>';
 
  if ($lihat['laporan_hutang_beredar_lihat'] > 0){
                             echo '<li><a href="laporan_pembelian_hutang.php" class="waves-effect">Lap. Hutang Beredar</a></li>';
 }
 
- if ($lihat['laporan_retur_penjualan_lihat'] > 0){
-                            echo '<li><a href="lap_retur_penjualan.php" class="waves-effect">Lap. Retur Penjualan</a></li>';
-}
-
- if ($lihat['laporan_retur_pembelian_lihat'] > 0){
-                            echo '<li><a href="lap_retur_pembelian.php" class="waves-effect">Lap. Retur Pembelian</a></li>';
-}
-
- if ($lihat['laporan_pembayaran_piutang_lihat'] > 0){
-                            echo '<li><a href="lap_pembayaran_piutang.php" class="waves-effect" style="font-size: 15px">Lap. Pembayaran Piutang</a></li>';
-}
-
- if ($lihat['laporan_pembayaran_hutang_lihat'] > 0){
-                            echo '<li><a href="lap_pembayaran_hutang.php" class="waves-effect" style="font-size: 15px">Lap. Pembayaran Hutang</a></li>';
-}
-
-echo '<li><a href="laporan_perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Lap. Perubahan Harga Masal</a></li>';
-
  if ($lihat['laporan_komisi_lihat'] > 0){
                             echo '<li><a href="lap_jumlah_fee.php" class="waves-effect">Lap. Komisi </a></li>';
-}
-
- if ($lihat['laporan_komisi_produk_lihat'] > 0){
-                            echo '<li><a href="laporan_fee_produk.php" class="waves-effect">Lap. Komisi / Produk</a></li>';
 }
 
  if ($lihat['laporan_komisi_faktur_lihat'] > 0){
                             echo '<li><a href="laporan_fee_faktur.php" class="waves-effect">Lap. Komisi / Faktur </a></li>';
 }
 
-echo '<li><a href="loss_customer.php" class="waves-effect" style="font-size: 16px">Loss Customer</a></li>';
+ if ($lihat['laporan_komisi_produk_lihat'] > 0){
+                            echo '<li><a href="laporan_fee_produk.php" class="waves-effect">Lap. Komisi / Produk</a></li>';
+}
 
-echo '<li><a href="loss_item.php" class="waves-effect" style="font-size: 16px">Loss Item</a></li>';
+                            echo '<li><a href="order_penjualan.php" class="waves-effect">Lap. Order Penjualan</a></li>';
+    
+
+ if ($lihat['laporan_pembelian_lihat'] > 0){
+                            echo '<li><a href="lap_pembelian.php" class="waves-effect">Lap. Pembelian</a></li>';
+}
+
+ if ($lihat['laporan_pembayaran_hutang_lihat'] > 0){
+                            echo '<li><a href="lap_pembayaran_hutang.php" class="waves-effect" style="font-size: 15px">Lap. Pembayaran Hutang</a></li>';
+}
+
+ if ($lihat['laporan_pembayaran_piutang_lihat'] > 0){
+                            echo '<li><a href="lap_pembayaran_piutang.php" class="waves-effect" style="font-size: 15px">Lap. Pembayaran Piutang</a></li>';
+}
+
+                            echo '<li><a href="laporan_perubahan_harga_masal.php" class="waves-effect" style="font-size: 16px">Lap. Perubahan Harga Masal</a></li>';
+
+ if ($lihat['laporan_penjualan_lihat'] > 0){
+            echo '<li><a href="lap_penjualan.php" class="waves-effect">Lap. Penjualan</a></li>';
+}     
+
+ if ($lihat['laporan_piutang_beredar_lihat'] > 0){
+                            echo '<li><a href="laporan_penjualan_piutang.php" class="waves-effect">Lap. Piutang Beredar </a></li>';
+}
+
+ if ($lihat['laporan_retur_pembelian_lihat'] > 0){
+                            echo '<li><a href="lap_retur_pembelian.php" class="waves-effect">Lap. Retur Pembelian</a></li>';
+}
+
+ if ($lihat['laporan_retur_penjualan_lihat'] > 0){
+                            echo '<li><a href="lap_retur_penjualan.php" class="waves-effect">Lap. Retur Penjualan</a></li>';
+}
+
+                            echo '<li><a href="loss_customer.php" class="waves-effect" style="font-size: 16px">Loss Customer</a></li>';
+
+                            echo '<li><a href="loss_item.php" class="waves-effect" style="font-size: 16px">Loss Item</a></li>';
 
 
 if ($lihat['laporan_lihat'] > 0){

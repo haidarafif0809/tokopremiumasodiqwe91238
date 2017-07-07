@@ -2159,37 +2159,16 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
-  $("#batal").click(function(){
+  $(document).on('click', '#batal', function (e) {
     var no_faktur = $("#no_faktur").val();
 
     var pesan_alert = confirm("Apakah Anda Yakin Ingin Membatalkan Pembelian "+no_faktur+" ?");
     if (pesan_alert == true) {
         
-        $.get("batal_pembelian_edit.php",{no_faktur:no_faktur},function(data){
+        $.get("batal_pembelian.php",{no_faktur:no_faktur},function(data){
 
-          $('#tabel_tbs_pembelian').DataTable().destroy();
-            var dataTable = $('#tabel_tbs_pembelian').DataTable({
-              "processing": true,
-              "serverSide": true,
-              "ajax":{
-                url :"data_tbs_pembelian_edit.php", // json datasource
-                "data": function ( d ) {
-                  d.no_faktur = $("#no_faktur").val();
-                  // d.custom = $('#myInput').val();
-                  // etc
-                },
-                 
-                 type: "post",  // method  , by default get
-                 error: function(){  // error handling
-                   $(".employee-grid-error").html("");
-                   $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-                   $("#employee-grid_processing").css("display","none");
-                   }
-              },
-                "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                   $(nRow).attr('class','tr-id-'+aData[11]+'');
-                 }
-            });
+           var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
+           tabel_tbs_pembelian.draw();
 
         });
     } 

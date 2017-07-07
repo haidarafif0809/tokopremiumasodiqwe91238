@@ -2166,7 +2166,14 @@ $(document).ready(function(){
     if (pesan_alert == true) {
         
         $.get("batal_pembelian.php",{no_faktur:no_faktur},function(data){
-
+            
+            $("#total_pembelian1").val('0');
+            $("#potongan_pembelian").val('0');
+            $("#potongan_persen").val('0');
+            $("#total_pembelian").val('0');
+            $("#pembayaran_pembelian").val('0');
+            $("#sisa_pembayaran_pembelian").val('0');
+            $("#kredit").val('0');
            var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
            tabel_tbs_pembelian.draw();
 

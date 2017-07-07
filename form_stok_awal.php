@@ -16,9 +16,6 @@
                   $id = $data1['id'];
                   $kode_barang = $data1['kode_barang'];
 
-                  $perintah0 = $db->query("SELECT * FROM tbs_stok_awal");
-                  $data10 = mysqli_fetch_array($perintah0);
-                  $k_barang = $data10['kode_barang'];
                   ?>
                   
                   
@@ -263,7 +260,7 @@
 
                   <button type="submit" id="selesai" class="btn btn-info"> <i class='fa fa-send'> </i> Selesai</button>
                   
-                  <a href='batal_stok_awal.php?kode_barang=<?php echo $k_barang; ?>' id='batal_stok' class='btn btn-danger'><i class='fa fa-trash'></i> Hapus Stok Awal </a>
+                  <a href='batal_stok_awal.php' id='batal_stok' class='btn btn-danger'><i class='fa fa-trash'></i> Hapus Stok Awal </a>
 
                   <a class="btn btn-info" href="form_stok_awal.php" id="transaksi_baru" style="display: none"> <i class="fa fa-refresh"></i> Transaksi Baru</a>
                   

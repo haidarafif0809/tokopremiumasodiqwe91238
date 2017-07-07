@@ -9,6 +9,7 @@
 $kategori = stringdoang($_GET['kategori']);
 $tipe = stringdoang($_GET['tipe']); 
  
+$ambil_kategori = $db->query("SELECT id,nama_kategori FROM kategori");
 
 
     ?>
@@ -57,23 +58,22 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
         }
 
     
-          $pilih_kategori = $db->query("SELECT nama_kategori FROM kategori");
           
-          while ($cek = mysqli_fetch_array($pilih_kategori)) 
+          while ($cek = mysqli_fetch_array($ambil_kategori)) 
           {
           
 
         if ($tipe == 'barang') {
 
           echo "<li class='nav-item'>
-          <a class='nav-link active' href='barang.php?kategori=". $cek['nama_kategori'] ."&tipe=barang' > ". $cek['nama_kategori'] ." </a>
+          <a class='nav-link active' href='barang.php?kategori=". $cek['id'] ."&tipe=barang' > ". $cek['nama_kategori'] ." </a>
           </li>";
 
         }
 
         else{
             echo "<li class='nav-item'>
-          <a class='nav-link active' href='barang.php?kategori=". $cek['nama_kategori'] ."&tipe=barang_jasa' > ". $cek['nama_kategori'] ." </a>
+          <a class='nav-link active' href='barang.php?kategori=". $cek['id'] ."&tipe=barang_jasa' > ". $cek['nama_kategori'] ." </a>
           </li>";
         }
 
@@ -135,12 +135,11 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                                     <option value=""> -- SILAHKAN PILIH -- </option>
                                     <?php 
                                     
-                                    $ambil_kategori = $db->query("SELECT nama_kategori FROM kategori");
                                     
                                     while($data_kategori = mysqli_fetch_array($ambil_kategori))
                                     {
                                     
-                                    echo "<option>".$data_kategori['nama_kategori'] ."</option>";
+                                    echo "<option value='".$data_kategori['id']."'>".$data_kategori['nama_kategori'] ."</option>";
                                     
                                     }
                                     

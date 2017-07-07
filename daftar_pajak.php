@@ -225,31 +225,8 @@ th {
 			<th> Deskripsi </th>
 			<th> Nilai Persen </th>
 			<th> Jenis Pajak </th>
-
-<?php 
-include 'db.php';
-
-$pilih_akses_daftar_pajak_hapus = $db->query("SELECT daftar_pajak_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND daftar_pajak_hapus = '1'");
-$daftar_pajak_hapus = mysqli_num_rows($pilih_akses_daftar_pajak_hapus);
-
-
-    if ($daftar_pajak_hapus > 0){
-			echo "<th> Hapus </th>";
-
-		}
-
-
-$pilih_akses_daftar_pajak_edit = $db->query("SELECT daftar_pajak_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND daftar_pajak_edit = '1'");
-$daftar_pajak_edit = mysqli_num_rows($pilih_akses_daftar_pajak_edit);
-
-
-    if ($daftar_pajak_edit > 0){
-			echo "<th> Edit </th>";
-
-		}
-?>
-
-			
+			<th> Hapus </th>
+			<th> Edit </th>	
 		</thead>
 		
 		<tbody id="tbody">
@@ -275,14 +252,21 @@ $daftar_pajak_edit = mysqli_num_rows($pilih_akses_daftar_pajak_edit);
 			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-daftar-pajak='". $data['nama_pajak'] ."'> <i class='fa fa-trash'> </i> Hapus </button> </td>";
 
 			}
+			else{
+			echo "<td> </td>";
+
+			}
 
 			$pilih_akses_daftar_pajak_edit = $db->query("SELECT daftar_pajak_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND daftar_pajak_edit = '1'");
 			$daftar_pajak_edit = mysqli_num_rows($pilih_akses_daftar_pajak_edit);
 			
 			
 			if ($daftar_pajak_edit > 0){
-			echo "<td> <button class='btn btn-secondary btn-edit' data-id='". $data['id'] ."' data-daftar-pajak='". $data['nama_pajak'] ."' data-deskripsi='". $data['deskripsi'] ."' data-persen-pajak='". $data['persen_pajak'] ."' data-jenis-pajak='". $data['jenis_pajak'] ."'> <i class='fa fa-edit'> </i> Edit </button> </td>";
+				echo "<td> <button class='btn btn-secondary btn-edit' data-id='". $data['id'] ."' data-daftar-pajak='". $data['nama_pajak'] ."' data-deskripsi='". $data['deskripsi'] ."' data-persen-pajak='". $data['persen_pajak'] ."' data-jenis-pajak='". $data['jenis_pajak'] ."'> <i class='fa fa-edit'> </i> Edit </button> </td>";
 			
+			}
+			else{
+				echo "<td> </td>";
 			}
 
 			echo "</tr>";
@@ -486,7 +470,7 @@ $(document).on('click', '#btn_jadi_hapus', function (e) {
 <script type="text/javascript">
 	
   $(function () {
-  $(".table").dataTable({ordering :false });
+  $("#tableuser").dataTable({ordering :false });
   });
 
 </script>

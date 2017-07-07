@@ -145,12 +145,12 @@ else
     }
 
 
-            $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax,tanggal,jam) VALUES (?,?,
-            ?,?,?,?,?,?,?,?,?)");
+            $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax,tanggal,jam, tipe_barang) VALUES (?,?,
+            ?,?,?,?,?,?,?,?,?,?)");
             
             
-            $perintah->bind_param("sssssssssss",
-            $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotaljadi, $potongan_tampil, $tax_persen,$tanggal_sekarang,$jam_sekarang);
+            $perintah->bind_param("ssssssssssss",
+            $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotaljadi, $potongan_tampil, $tax_persen,$tanggal_sekarang,$jam_sekarang,$tipe_barang);
             
             
             $kode_barang = stringdoang($_POST['kode_barang']);
@@ -159,6 +159,7 @@ else
             $satuan = stringdoang($_POST['satuan']);
             $harga = stringdoang($_POST['harga']);
             $tax = stringdoang($_POST['tax']);
+            $tipe_barang = stringdoang($_POST['ber_stok']);
             if ($tax == '') {
               $tax = 0;
             }

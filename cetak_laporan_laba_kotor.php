@@ -9,11 +9,35 @@ $sampai_tanggal = $_GET['sampai_tanggal'];
 
 
 //menampilkan seluruh data yang ada pada tabel penjualan
-$penjualan = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,pl.nama_pelanggan FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'  ORDER BY p.id DESC");
+$penjualan = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,pl.nama_pelanggan FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal'  ORDER BY p.id DESC");
+
+      
+
+
+      $sum_subtotal_detail_penjualan = $db->query("SELECT SUM(subtotal) AS subtotal FROM detail_penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
+      $cek_sum_sub = mysqli_fetch_array($sum_subtotal_detail_penjualan);
+      
+      $sum_pajak_penjualan = $db->query("SELECT SUM(tax) AS pajak, SUM(potongan) AS diskon FROM penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
+      $cek_sum_pajak = mysqli_fetch_array($sum_pajak_penjualan);
+      
+      $subtotal = $cek_sum_sub['subtotal'] + $cek_sum_pajak['pajak'];
+      
+      $sum_hpp_penjualan = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' AND jenis_transaksi = 'Penjualan' ");
+      $cek_sum_hpp = mysqli_fetch_array($sum_hpp_penjualan);
+      
+      $laba_kotor = $subtotal - $cek_sum_hpp['total_hpp'];
+      
+      $laba_jual = $laba_kotor - $cek_sum_pajak['diskon'];
+      
+      $total_subtotal = $subtotal;
+      $total_total_pokok = $cek_sum_hpp['total_hpp'];
+      $total_laba_kotor = $laba_kotor;
+      $total_diskon = $cek_sum_pajak['diskon'];
+      $total_laba_jual = $laba_jual;
 
 
 
-    $query1 = $db->query("SELECT * FROM perusahaan ");
+    $query1 = $db->query("SELECT foto,nama_perusahaan,alamat_perusahaan,no_telp FROM perusahaan ");
     $data1 = mysqli_fetch_array($query1);
 
  ?>
@@ -96,39 +120,24 @@ $penjualan = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tang
 		
 		<tbody>
 		<?php
-
-			$total_subtotal = 0;
-			$total_total_pokok = 0;
-			$total_laba_kotor = 0;
-			$total_diskon = 0;
-			$total_laba_jual = 0;
 			//menyimpan data sementara yang ada pada $perintah
 			while ($data_penjualan = mysqli_fetch_array($penjualan))
 
 
 			{
 
-			$sum_subtotal_detail_penjualan = $db->query("SELECT SUM(subtotal) AS subtotal FROM detail_penjualan WHERE no_faktur = '$data_penjualan[no_faktur]'");
-			$cek_sum_sub = mysqli_fetch_array($sum_subtotal_detail_penjualan);
 
-			$sum_pajak_penjualan = $db->query("SELECT SUM(tax) AS pajak FROM penjualan WHERE no_faktur = '$data_penjualan[no_faktur]'");
-			$cek_sum_pajak = mysqli_fetch_array($sum_pajak_penjualan);
-
-			$subtotal = $cek_sum_sub['subtotal'] + $cek_sum_pajak['pajak'];
-
-			$sum_hpp_penjualan = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE no_faktur = '$data_penjualan[no_faktur]'");
-			$cek_sum_hpp = mysqli_fetch_array($sum_hpp_penjualan);
-
-			$laba_kotor = $subtotal - $cek_sum_hpp['total_hpp'];
-
-			$laba_jual = $laba_kotor - $data_penjualan['potongan'];
-			
-			$total_subtotal = $total_subtotal + $subtotal;
-			$total_total_pokok = $total_total_pokok + $cek_sum_hpp['total_hpp'];
-			$total_laba_kotor = $total_laba_kotor + $laba_kotor;
-			$total_diskon = $total_diskon + $data_penjualan['potongan'];
-			$total_laba_jual = $total_laba_jual + $laba_jual;
-			
+      $sum_subtotal_detail_penjualan = $db->query("SELECT SUM(subtotal) AS subtotal FROM detail_penjualan WHERE no_faktur = '$data_penjualan[no_faktur]'");
+      $cek_sum_sub = mysqli_fetch_array($sum_subtotal_detail_penjualan);
+      
+      $subtotal = $cek_sum_sub['subtotal'];
+      
+      $sum_hpp_penjualan = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE no_faktur = '$data_penjualan[no_faktur]' AND jenis_transaksi = 'Penjualan' ");
+      $cek_sum_hpp = mysqli_fetch_array($sum_hpp_penjualan);
+      
+      $laba_kotor = $subtotal - $cek_sum_hpp['total_hpp'];
+      
+      $laba_jual = $laba_kotor - $data_penjualan['potongan'];
 
 		//menampilkan data
 			echo "<tr>
@@ -167,7 +176,7 @@ $penjualan = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tang
 		<tr><td width="50%"><font class="satu"><b>Sub Total</b></font></td> <td><b> :&nbsp;</b></td> <td><?php echo rp($total_subtotal); ?></td></tr>
 		<tr><td width="50%"><font class="satu"><b>Total Pokok</b></font></td> <td><b> :&nbsp;</b></td> <td><?php echo rp($total_total_pokok); ?></td></tr>
 		<tr><td  width="50%"><font class="satu"><b>Laba Kotor</b></font></td> <td><b> :&nbsp;</b></td> <td><?php echo rp($total_laba_kotor); ?></td></tr>
-		<tr><td  width="50%"><font class="satu"><b>Potongan Faktur</b></font></td> <td><b> :&nbsp;</b></td> <td><?php echo rp($total_diskon); ?></td></tr>
+		<tr><td  width="50%"><font class="satu"><b>Diskon Faktur</b></font></td> <td><b> :&nbsp;</b></td> <td><?php echo rp($total_diskon); ?></td></tr>
 		<tr><td  width="50%"><font class="satu"><b>Laba Jual</b></font></td> <td><b> :&nbsp;</b></td> <td><?php echo rp($total_laba_jual); ?></td></tr>
 		
 		</tbody>

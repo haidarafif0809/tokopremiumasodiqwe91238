@@ -15,7 +15,7 @@ $sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
       
       $subtotal = $cek_sum_sub['subtotal'] + $cek_sum_pajak['pajak'];
       
-      $sum_hpp_penjualan = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
+      $sum_hpp_penjualan = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' AND jenis_transaksi = 'Penjualan' ");
       $cek_sum_hpp = mysqli_fetch_array($sum_hpp_penjualan);
       
       $laba_kotor = $subtotal - $cek_sum_hpp['total_hpp'];
@@ -85,7 +85,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
       
       $subtotal = $cek_sum_sub['subtotal'];
       
-      $sum_hpp_penjualan = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE no_faktur = '$row[no_faktur]'");
+      $sum_hpp_penjualan = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE no_faktur = '$row[no_faktur]' AND jenis_transaksi = 'Penjualan' ");
       $cek_sum_hpp = mysqli_fetch_array($sum_hpp_penjualan);
       
       $laba_kotor = $subtotal - $cek_sum_hpp['total_hpp'];

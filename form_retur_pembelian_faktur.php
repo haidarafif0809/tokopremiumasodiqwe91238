@@ -10,8 +10,12 @@ include 'sanitasi.php';
 //menampilkan seluruh data yang ada pada tabel pembelian
 $perintah = $db->query("SELECT * FROM retur_pembelian");
 
-$session_id = session_id();
+$query_default_ppn = $db->query("SELECT setting_ppn, nilai_ppn FROM perusahaan");
+$data_default_ppn = mysqli_fetch_array($query_default_ppn);
+$default_ppn = $data_default_ppn['setting_ppn'];
+$nilai_ppn = $data_default_ppn['nilai_ppn'];
 
+$session_id = session_id();
 
  ?>
 
@@ -60,14 +64,28 @@ $session_id = session_id();
       </div>
 
 
-      <div class="col-sm-2">
-            <label>PPN</label>
-            <select name="ppn" id="ppn" class="form-control">
-            <option value="Include">Include</option>
-            <option value="Exclude">Exclude</option>
-            <option value="Non">Non</option>
-            </select>
-      </div>
+<div class="col-sm-2">
+<label class="gg">PPN</label>
+<select type="hidden" style="font-size:15px; height:35px" name="ppn" id="ppn" class="form-control">
+  <?php if ($default_ppn == 'Include'): ?>    
+    <option selected>Include</option>  
+    <option>Exclude</option>  
+    <option>Non</option>
+  <?php endif ?>
+
+  <?php if ($default_ppn == 'Exclude'): ?>
+    <option selected>Exclude</option>  
+    <option>Non</option>
+    <option>Include</option>  
+  <?php endif ?>
+
+  <?php if ($default_ppn == 'Non'): ?>
+    <option selected>Non</option>
+    <option>Include</option>  
+    <option>Exclude</option>  
+  <?php endif ?>
+</select>
+</div>
 
       <div class="col-sm-2">
            <label> Cara Bayar </label><br>
@@ -234,8 +252,12 @@ $session_id = session_id();
     <input style="height: 15px" type="text" class="form-control" name="potongan2" data-toggle="tooltip" data-placement="top" id="potongan2" placeholder="Potongan (%)" autocomplete="off">
   </div>
 
-  <div class="form-group col-sm-2">
-    <input style="height: 15px" type="text" class="form-control" name="tax1"  id="tax1" placeholder="Pajak (%)" autocomplete="off">
+  <div class="col-sm-1">
+    <?php if ($default_ppn == 'Include'): ?>
+      <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" value="<?php echo $nilai_ppn ?>" placeholder="Tax%" >
+    <?php else: ?>
+      <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" placeholder="Tax%" >
+    <?php endif ?>      
   </div>
 
 
@@ -360,17 +382,17 @@ $session_id = session_id();
   </div>
 
 
-  <div class="col-sm-3">
+  <div class="col-sm-3" style="display: none">
       <label><b> Tax (%) </b></label><br>
       <input style="height: 20px" type="text" name="tax" id="tax" class="form-control" placeholder="Tax" data-pajak="" autocomplete="off">
   </div>
 
-    <div class="col-sm-4">
+    <div class="col-sm-6">
       <label><b> Potong Hutang </b></label><br>
       <input style="height: 20px" type="text" name="potong_hutang" id="potong_hutang" class="form-control" placeholder="Nilai Hutang" readonly="">
   </div>
 
-  <div class="col-sm-5">
+  <div class="col-sm-6">
       <label><b> Total Akhir </b></label><br>
       <!--readonly = agar tek yang ada kolom total tidak bisa diubah hanya bisa dibaca-->
       <b> <input style="height: 20px; font-size: 25px;" type="text" name="total" id="total_retur_pembelian" class="form-control" placeholder="Total Akhir" readonly="" > </b>
@@ -790,7 +812,7 @@ $(document).ready(function(){
       $("#jumlah_retur").val('');
       $("#no_faktur2").val('');
       $("#potongan1").val('');
-      $("#tax1").val('');
+      
       $("#potongan2").val('');
 
 
@@ -809,29 +831,6 @@ $(document).ready(function(){
 
 
   </script>
-
-
-
-
- <script type="text/javascript">
-  $(document).ready(function(){
-$("#cari_produk_pembelian").click(function(){
-  var session_id = $("#session_id").val();
-
-  $.post("cek_tbs_retur_pembelian_faktur.php",{session_id: "<?php echo $session_id; ?>"},function(data){
-        if (data != "1") {
-
-
-             $("#ppn").attr("disabled", false);
-
-        }
-    });
-
-});
-});
-</script>
-
-
 
 
  <script>
@@ -1476,6 +1475,12 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 
     });
 
+    $.post("cek_tbs_retur_pembelian_faktur.php",{session_id: "<?php echo $session_id; ?>"},function(data){
+        if (data == 0) {
+             $("#ppn").attr("disabled", false);
+        }
+    });
+
 
     });
 //end fungsi hapus data
@@ -1578,35 +1583,54 @@ $(document).on('click','.btn-hapus-tbs',function(e){
   });//penutup ready(function()
 </script>
 
+
 <script type="text/javascript">
-    $(document).ready(function(){
-
-      $("#tax").attr("disabled", true);
-
-
-    $("#ppn").change(function(){
+  $(document).ready(function(){
 
     var ppn = $("#ppn").val();
-    $("#ppn_input").val(ppn);
+      $("#ppn_input").val(ppn);
 
-  if (ppn == "Include"){
+      if (ppn == "Include"){
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+      }
+      else if (ppn == "Exclude") {
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", false);
+      }
+      else{
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", true);
+      }
+    });
+</script>
 
-      $("#tax").attr("disabled", true);
-      $("#tax1").attr("disabled", false);
-  }
+<script type="text/javascript">
+  $(document).ready(function(){
 
-  else if (ppn == "Exclude") {
-    $("#tax1").attr("disabled", true);
-      $("#tax").attr("disabled", false);
-  }
-  else{
+    $("#ppn").change(function(){
+      var ppn = $("#ppn").val();
+      $("#ppn_input").val(ppn);
 
-    $("#tax1").attr("disabled", true);
-      $("#tax").attr("disabled", true);
-  }
+      if (ppn == "Include"){
+          $("#tax").attr("disabled", true);
+          $("#tax1").attr("disabled", false);
+          $("#tax").val("");
+          $("#tax1").val("<?php echo $nilai_ppn ?>");
+      }
+      else if (ppn == "Exclude") {
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", false);
+        $("#tax1").val("");
+      }
+      else{
+        $("#tax1").attr("disabled", true);
+        $("#tax").attr("disabled", true);
+        $("#tax1").val("");
+        $("#tax").val("");
+      }
+    });
 
-
-  });
   });
 </script>
 

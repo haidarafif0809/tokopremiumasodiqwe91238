@@ -108,12 +108,12 @@
 							<option value="<?php echo $data['kategori']; ?>"> <?php echo $data['kategori']; ?> </option>
 							<?php 
 							
-							$ambil_kategori = $db->query("SELECT * FROM kategori");
+							$ambil_kategori = $db->query("SELECT id,nama_kategori FROM kategori");
 							
 							while($data_kategori = mysqli_fetch_array($ambil_kategori))
 							{
 							
-							echo "<option>".$data_kategori['nama_kategori'] ."</option>";
+							echo "<option value='".$data_kategori['id']."' >".$data_kategori['nama_kategori'] ."</option>";
 							
 							}
 							

@@ -61,12 +61,12 @@ $columns = array(
 
 
 // getting total number records without any search
-$sql = "SELECT no_faktur,jumlah_kuantitas,jenis_transaksi,tanggal,jenis_hpp,waktu, id, jam FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' UNION SELECT no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp,waktu, id, jam FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' ";
+$sql = "SELECT harga_unit,no_faktur,jumlah_kuantitas,jenis_transaksi,tanggal,jenis_hpp,waktu, id, jam FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' UNION SELECT harga_unit,no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp,waktu, id, jam FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' ";
 $query = mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
-$sql = "SELECT no_faktur,jumlah_kuantitas,jenis_transaksi,tanggal,jenis_hpp,waktu, id, jam FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' UNION SELECT no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp,waktu,id, jam FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' ";
+$sql = "SELECT harga_unit,no_faktur,jumlah_kuantitas,jenis_transaksi,tanggal,jenis_hpp,waktu, id, jam FROM hpp_masuk WHERE kode_barang = '$kode_barang' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' UNION SELECT harga_unit,no_faktur, jumlah_kuantitas,jenis_transaksi, tanggal, jenis_hpp,waktu,id, jam FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' ";
 if( !empty($requestData['search']['value']) ) { 
   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
@@ -136,64 +136,11 @@ if ($row['jenis_hpp'] == '1')
 //LOGIKA UNTUK MENAMPILKAN JENIS TRANSAKSI DARI MASING" TRANSAKSI (JUMLAH PRODUK BERTAMBAH)
 
 //LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERTAMBAH)
-			if ($row['jenis_transaksi'] == 'Pembelian') {
 
-				$ambil_harga_beli = $db->query("SELECT harga AS harga_beli FROM detail_pembelian  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
-				$data_beli = mysqli_fetch_array($ambil_harga_beli);
-				$harga_beli = $data_beli['harga_beli'];
 
-				$nestedData[] = "<p style='text-align:right'>".rp($harga_beli)."</p>";
+				$nestedData[] = "<p style='text-align:right'>".rp($row['harga_unit'])."</p>";
 				
-			}
-			else if ($row['jenis_transaksi'] == 'Retur Penjualan') {
-
-
-				$ambil_harga_retur_jual = $db->query("SELECT harga AS harga_retur_jual FROM detail_retur_penjualan  WHERE no_faktur_retur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
-				$data_retur_jual = mysqli_fetch_array($ambil_harga_retur_jual);
-				$harga_retur_jual = $data_retur_jual['harga_retur_jual'];
-
-				$nestedData[] = "<p style='text-align:right'>".rp($harga_retur_jual)."</p>";
-			}
-			else if ($row['jenis_transaksi'] == 'Item Masuk') {
-
-
-				$ambil_harga_masuk = $db->query("SELECT harga AS harga_masuk FROM detail_item_masuk  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
-				$data_masuk = mysqli_fetch_array($ambil_harga_masuk);
-				$harga_masuk = $data_masuk['harga_masuk'];
-
-				$nestedData[] = "<p style='text-align:right'>".rp($harga_masuk)."</p>";
-			}
-			else if ($row['jenis_transaksi'] == 'Stok Opname') {
-
-
-				$ambil_harga_opname = $db->query("SELECT harga AS harga_opname FROM detail_stok_opname  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
-				$data_opname = mysqli_fetch_array($ambil_harga_opname);
-				$harga_opname = $data_opname['harga_opname'];
-
-				$nestedData[] = "<p style='text-align:right'>".rp($harga_opname)."</p>";
-			}
-			else if ($row['jenis_transaksi'] == 'Stok Awal') {
-
-
-				$ambil_harga_awal = $db->query("SELECT harga AS harga_awal FROM stok_awal  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
-				$data_awal = mysqli_fetch_array($ambil_harga_awal);
-				$harga_awal = $data_awal['harga_awal'];
-
-				$nestedData[] = "<p style='text-align:right'>".rp($harga_awal)."</p>";
-			}
-
-
-			else if ($row['jenis_transaksi'] == 'Transfer Stok') {
-
-
-				$ambil_harga_transfer = $db->query("SELECT harga AS harga_transfer FROM detail_transfer_stok  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
-				$data_transfer = mysqli_fetch_array($ambil_harga_transfer);
-				$harga_transfer = $data_transfer['harga_transfer'];
-
-				$nestedData[] = "<p style='text-align:right'>".rp($harga_transfer)."</p>";
-			}
-
-
+		
 
 //LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERTAMBAH)
 //
@@ -239,54 +186,9 @@ else
 
 //LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERKURANG)
 
-			if ($row['jenis_transaksi'] == 'Penjualan') {
-
-				$ambil_harga_jual = $db->query("SELECT harga AS harga_jual FROM detail_penjualan  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
-				$data_jual = mysqli_fetch_array($ambil_harga_jual);
-				$harga_jual = $data_jual['harga_jual'];
-
-				$nestedData[] = "<p style='text-align:right'>".rp($harga_jual)."</p>";
+		$nestedData[] = "<p style='text-align:right'>".rp($row['harga_unit'])."</p>";
 				
-			}
-			else if ($row['jenis_transaksi'] == 'Retur Pembelian') {
-
-
-				$ambil_harga_retur_beli = $db->query("SELECT harga AS harga_retur_beli FROM detail_retur_pembelian  WHERE no_faktur_retur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
-				$data_retur_beli = mysqli_fetch_array($ambil_harga_retur_beli);
-				$harga_retur_beli = $data_retur_beli['harga_retur_beli'];
-
-				$nestedData[] = "<p style='text-align:right'>".rp($harga_retur_beli)."</p>";
-			}
-			else if ($row['jenis_transaksi'] == 'Item Keluar') {
-
-
-				$ambil_harga_keluar = $db->query("SELECT harga AS harga_keluar FROM detail_item_keluar  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
-				$data_keluar = mysqli_fetch_array($ambil_harga_keluar);
-				$harga_keluar = $data_keluar['harga_keluar'];
-
-				$nestedData[] = "<p style='text-align:right'>".rp($harga_keluar)."</p>";
-			}
-			else if ($row['jenis_transaksi'] == 'Stok Opname') {
-
-
-				$ambil_harga_opname = $db->query("SELECT harga AS harga_opname FROM detail_stok_opname  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
-				$data_opname = mysqli_fetch_array($ambil_harga_opname);
-				$harga_opname = $data_opname['harga_opname'];
-
-				$nestedData[] = "<p style='text-align:right'>".rp($harga_opname)."</p>";
-			}
-			else if ($row['jenis_transaksi'] == 'Transfer Stok') {
-
-
-				$ambil_harga_transfer = $db->query("SELECT harga AS harga_transfer FROM detail_transfer_stok  WHERE no_faktur = '$row[no_faktur]' AND kode_barang = '$kode_barang' ");
-				$data_transfer = mysqli_fetch_array($ambil_harga_transfer);
-				$harga_transfer = $data_transfer['harga_transfer'];
-
-				$nestedData[] = "<p style='text-align:right'>".rp($harga_transfer)."</p>";
-			}
-
-
-//LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERKURANG)
+		//LOGIKA UNTUK MENAMPILKAN HARGA DARI MASING" TRANSAKSI (JUMLAH PRODUK BERKURANG)
 
 		$nestedData[] = tanggal($row['tanggal']);
 

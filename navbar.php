@@ -305,20 +305,20 @@ if ($lihat['retur_lihat'] > 0){
                             echo '<li><a href="laporan_buku_besar.php" class="waves-effect">Buku Besar</a></li>';
 }
 
- if ($lihat['laporan_jurnal_lihat'] > 0){
-                            echo '<li><a href="laporan_jurnal_transaksi.php" class="waves-effect"> Jurnal Umum</a></li>';
-}
-
  if ($lihat['transaksi_jurnal_manual_lihat'] > 0){
                             echo '<li><a href="transaksi_jurnal_manual.php" class="waves-effect">Jurnal </a></li>';
 }
 
- if ($lihat['laporan_laba_rugi_lihat'] > 0){
-                            echo '<li><a href="lap_laba_rugi_penjualan.php" class="waves-effect"> Laba Rugi</a></li>';
+ if ($lihat['laporan_jurnal_lihat'] > 0){
+                            echo '<li><a href="laporan_jurnal_transaksi.php" class="waves-effect"> Jurnal Umum</a></li>';
 }
 
  if ($lihat['laporan_laba_kotor_lihat'] > 0){
                             echo '<li><a href="lap_laba_kotor_penjualan.php" class="waves-effect"> Laba Kotor </a></li>';
+}
+
+ if ($lihat['laporan_laba_rugi_lihat'] > 0){
+                            echo '<li><a href="lap_laba_rugi_penjualan.php" class="waves-effect"> Laba Rugi</a></li>';
 }
 
  if ($lihat['laporan_neraca_lihat'] > 0){

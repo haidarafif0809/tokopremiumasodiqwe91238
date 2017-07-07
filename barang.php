@@ -9,7 +9,6 @@
 $kategori = stringdoang($_GET['kategori']);
 $tipe = stringdoang($_GET['tipe']); 
  
-          $pilih_kategori = $db->query("SELECT id,nama_kategori FROM kategori");
 
 
     ?>
@@ -58,6 +57,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
         }
 
     
+          $pilih_kategori = $db->query("SELECT id,nama_kategori FROM kategori");
           
           while ($cek = mysqli_fetch_array($pilih_kategori)) 
           {
@@ -135,8 +135,9 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                                     <option value=""> -- SILAHKAN PILIH -- </option>
                                     <?php 
                                     
+                                    $ambil_kategori = $db->query("SELECT id,nama_kategori FROM kategori");
                                     
-                                    while($data_kategori = mysqli_fetch_array($pilih_kategori))
+                                    while($data_kategori = mysqli_fetch_array($ambil_kategori))
                                     {
                                     
                                     echo "<option value='".$data_kategori['id']."'>".$data_kategori['nama_kategori'] ."</option>";

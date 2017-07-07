@@ -15,12 +15,12 @@ if ($tipe == 'barang') {
 
     if ($kategori == 'semua' AND $tipe = 'barang') {
     
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,kt.nama_kategori AS kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id LEFT JOIN kategori kt ON b.kategori = kt.id WHERE b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
     
     }
 
     else{
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,kt.nama_kategori AS kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id LEFT JOIN kategori kt ON b.kategori = kt.id WHERE b.kategori = '$kategori' AND b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kategori = '$kategori' AND b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
     }
 
     
@@ -31,19 +31,15 @@ else{
 
     if ($kategori == 'semua') {
     
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,kt.nama_kategori AS kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id LEFT JOIN kategori kt ON b.kategori = kt.id ORDER BY b.id DESC");
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id ORDER BY b.id DESC");
     
     }
     
     else{
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,kt.nama_kategori AS kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id LEFT JOIN kategori kt ON b.kategori = kt.id WHERE b.kategori = '$kategori' ORDER BY b.id DESC");
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kategori = '$kategori' ORDER BY b.id DESC");
     }
 
 }
-
-
-$ambil_kategori = $db->query("SELECT id,nama_kategori FROM kategori");
-
 
 
     ?>
@@ -88,22 +84,24 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
         <li class='nav-item'><a class='nav-link active' href='persediaan_barang.php?kategori=semua&tipe=barang_jasa'> Semua Item </a></li>";        
         }
 
+          include 'db.php';
+          $pilih_kategori = $db->query("SELECT * FROM kategori");
           
-          while ($cek = mysqli_fetch_array($ambil_kategori)) 
+          while ($cek = mysqli_fetch_array($pilih_kategori)) 
           {
           
 
         if ($tipe == 'barang') {
 
           echo "<li class='nav-item'>
-          <a class='nav-link active' href='persediaan_barang.php?kategori=". $cek['id'] ."&tipe=barang' > ". $cek['nama_kategori'] ." </a>
+          <a class='nav-link active' href='persediaan_barang.php?kategori=". $cek['nama_kategori'] ."&tipe=barang' > ". $cek['nama_kategori'] ." </a>
           </li>";
 
         }
 
         else{
             echo "<li class='nav-item'>
-          <a class='nav-link active' href='persediaan_barang.php?kategori=". $cek['id'] ."&tipe=barang_jasa' > ". $cek['nama_kategori'] ." </a>
+          <a class='nav-link active' href='persediaan_barang.php?kategori=". $cek['nama_kategori'] ."&tipe=barang_jasa' > ". $cek['nama_kategori'] ." </a>
           </li>";
         }
 
@@ -196,6 +194,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <option value=""> -- SILAHKAN PILIH -- </option>
 <?php 
 
+$ambil_kategori = $db->query("SELECT * FROM kategori");
 
     while($data_kategori = mysqli_fetch_array($ambil_kategori))
     {

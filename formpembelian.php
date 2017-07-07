@@ -1532,43 +1532,23 @@ $(document).on('click', '.btn-hapus-tbs', function (e) {
 
 <script type="text/javascript">
 $(document).ready(function(){
-  $("#batal").click(function(){
-    var session_id = $("#session_id").val();
-
+  $(document).on('click', '#batal', function (e) {
     var pesan_alert = confirm("Apakah Anda Yakin Ingin Membatalkan Pembelian Ini ?");
     if (pesan_alert == true) {
 
-        $.get("batal_pembelian.php",{session_id:session_id},function(data){
-
-          $('#tabel_tbs_pembelian').DataTable().destroy();
-            var dataTable = $('#tabel_tbs_pembelian').DataTable({
-              "processing": true,
-              "serverSide": true,
-              "ajax":{
-                url :"data_tbs_pembelian.php", // json datasource
-                "data": function ( d ) {
-                  d.session_id = $("#session_id").val();
-                  // d.custom = $('#myInput').val();
-                  // etc
-                },
-
-                 type: "post",  // method  , by default get
-                 error: function(){  // error handling
-                   $(".employee-grid-error").html("");
-                   $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-                   $("#employee-grid_processing").css("display","none");
-                   }
-              },
-                "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                   $(nRow).attr('class','tr-id-'+aData[11]+'');
-                 }
-            });
+        $.get("batal_pembelian.php",function(data){
+           
+           $("#total_pembelian1").val('0');
+           $("#potongan_pembelian").val('0');
+           $("#potongan_persen").val('0');
+           $("#total_pembelian").val('0');
+           $("#pembayaran_pembelian").val('0');
+           $("#sisa_pembayaran_pembelian").val('0');
+           $("#kredit").val('0');    
+           var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
+           tabel_tbs_pembelian.draw();
 
         });
-    }
-
-    else {
-
     }
 
   });

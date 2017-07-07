@@ -9,8 +9,16 @@ include 'db.php';
 
     $query0 = $db->query("SELECT no_faktur, potongan, tax, biaya_admin, total, tunai, sisa, tanggal, kode_pelanggan FROM penjualan WHERE no_faktur = '$no_faktur' ");
     $data0 = mysqli_fetch_array($query0);
-$kembalian = $data0['tunai'] - $data0['total'];
+$sisa_uang = $data0['tunai'] - $data0['total'];
 
+if($sisa_uang < '0'){
+  $kembalian = 0;
+  $kredit = $sisa_uang * -1;
+}
+else{
+  $kembalian = $sisa_uang;
+  $kredit = 0;
+}
     $query1 = $db->query("SELECT nama_perusahaan, alamat_perusahaan, no_telp FROM perusahaan ");
     $data1 = mysqli_fetch_array($query1);
 
@@ -110,7 +118,8 @@ mysqli_close($db);
   <tr><td width="50%">Total Penjualan</td> <td> :</td> <td><?php echo koma($data0['total'],2); ?> </tr>
   <tr><td width="50%">Tunai</td> <td> :</td> <td> <?php echo koma($data0['tunai'],2); ?> </td></tr>
   <tr><td width="50%">Kembalian</td> <td> :</td> <td> <?php echo koma($kembalian,2); ?>  </td></tr>
-            
+  <tr><td width="50%">Kredit</td> <td> :</td> <td> <?php echo koma($kredit,2); ?>  </td></tr>
+
 
   </tbody>
 </table>

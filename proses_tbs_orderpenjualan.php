@@ -24,6 +24,7 @@ $otoritas_tombol = mysqli_fetch_array($pilih_akses_tombol);
     $tanggal_sekarang = date('Y-m-d');
     $jam_sekarang = date('H:i:s');
     $tahun_terakhir = substr($tahun_sekarang, 2);
+    $ppn = stringdoang($_POST['ppn']);
 
 
           if(strpos($potongan, "%") !== false)
@@ -38,15 +39,34 @@ $otoritas_tombol = mysqli_fetch_array($pilih_akses_tombol);
           }
 
 
-    $tax = stringdoang($_POST['tax']);
-    $satu = 1;
-    $x = $a - $potongan_tampil;
+          $tax = stringdoang($_POST['tax']);
+          $subtotal = $harga * $jumlah_barang;
+          if ($ppn == 'Exclude') {
+              $a = $harga * $jumlah_barang;
+              
+              $x = $a - $potongan_tampil;
 
-    $hasil_tax = $satu + ($tax / 100);
+              $hasil_tax = $x * ($tax / 100);
 
-    $hasil_tax2 = $x / $hasil_tax;
+              $tax_persen = round($hasil_tax);
+            }
+            else{
+              $a = $harga * $jumlah_barang;
 
-    $tax_persen = $x - $hasil_tax2;
+              $satu = 1;
+
+              $x = $a - $potongan_tampil;
+
+              $hasil_tax = $satu + ($tax / 100);
+
+              $hasil_tax2 = $x / $hasil_tax;
+
+              $tax_persen1 = $x - round($hasil_tax2);
+
+              $tax_persen = round($tax_persen1);
+            }
+
+
 
     $query9 = $db->query("SELECT jumlah_prosentase,jumlah_uang FROM fee_produk WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
     $cek9 = mysqli_fetch_array($query9);
@@ -148,7 +168,7 @@ $jumlah = mysqli_num_rows($cek);
             
             
             $perintah->bind_param("sssisiiisss",
-            $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotal, $potongan_tampil, $tax_persen,$tanggal_sekarang,$jam_sekarang);
+            $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotal_jadi, $potongan_tampil, $tax_persen,$tanggal_sekarang,$jam_sekarang);
             
             
             $kode_barang = stringdoang($_POST['kode_barang']);
@@ -157,7 +177,19 @@ $jumlah = mysqli_num_rows($cek);
             $satuan = stringdoang($_POST['satuan']);
             $harga = angkadoang($_POST['harga']);
             $tax = angkadoang($_POST['tax']);
-            $subtotal = $harga * $jumlah_barang - $potongan_jadi;
+
+            if ($ppn == 'Exclude') {
+
+                $abc = $subtotal - $potongan_tampil;
+                
+                $hasil_tax411 = $abc * ($tax / 100);
+                
+                $subtotal_jadi = $harga * $jumlah_barang - $potongan_tampil + round($hasil_tax411); 
+                
+              }
+            else{
+                $subtotal_jadi = $harga * $jumlah_barang - $potongan_tampil; 
+            }
             
             
             $perintah->execute();

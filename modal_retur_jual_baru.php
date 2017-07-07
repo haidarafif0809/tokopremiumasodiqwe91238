@@ -89,7 +89,7 @@ else{
       }
       else
       {
-        echo"<td>". koma($data1['sisa_barang'],3) ." ". $data1['satuan_asal'] ."</td>";
+        echo"<td>". koma($data1['sisa_barang'],2) ." ". $data1['satuan_asal'] ."</td>";
       }
 
       echo"</tr>";

@@ -251,7 +251,7 @@ Number.prototype.format = function(n, x, s, c) {
 <button class="btn btn-purple" style="height:45px; display: none" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Antrian  </button>
  
-<button class="btn btn-warning" style="height:45px;" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+<button class="btn btn-warning" id="btnOrder" style="height:45px;" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Order </button>
 
 
@@ -2098,7 +2098,27 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
 </script>
 
 
+ <script type="text/javascript">
+   $(document).on('click', '#btnOrder', function (e) {                
+// START DATATABLE AJAX START TBS PENJUALAN
+      $('#table_tbs_order').DataTable().destroy();
 
+          var dataTable = $('#table_tbs_order').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_order.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+          },
+        });
+});
+</script>
 
 
  <script type="text/javascript">

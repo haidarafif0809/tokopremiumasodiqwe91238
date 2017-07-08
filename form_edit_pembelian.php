@@ -1698,7 +1698,7 @@ $("#pembayaran_pembelian").keyup(function(){
               var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_pembelian").val()))));
               var cara_bayar = $("#carabayar1").val();
               var tax = $("#tax").val();
-              var pembayaran = $("#pembayaran_pembelian").val();
+              var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_pembelian").val()))));
               var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_pembelian1").val()))));
               var t_total = total - potongan;
 

@@ -255,7 +255,6 @@ $user_edit= mysqli_num_rows($pilih_akses_user_edit);
 
 			<th style='background-color: #4CAF50; color: white'> Reset Password </th>
 			<th style='background-color: #4CAF50; color: white'> Username </th>
-			<th style='background-color: #4CAF50; color: white'> Password </th>
 			<th style='background-color: #4CAF50; color: white'> Nama Lengkap </th>
 			<th style='background-color: #4CAF50; color: white'> Alamat </th>
 			<th style='background-color: #4CAF50; color: white'> Jabatan </th>

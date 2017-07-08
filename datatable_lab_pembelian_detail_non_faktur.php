@@ -11,6 +11,8 @@ $sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
 $data_sum_dari_detail_pembaelian = mysqli_fetch_array($query_sum_detail_pembaelian);
 $total_akhir = $data_sum_dari_detail_pembaelian['sum_subtotal'];
 $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
+$total_potongan = $data_sum_dari_detail_pembaelian['sum_potongan'];
+$total_tax = $data_sum_dari_detail_pembaelian['sum_tax'];
 
 
 // storing  request (ie, get/post) global array to a variable  
@@ -57,32 +59,29 @@ $query=mysqli_query($conn, $sql) or die("employee-grid-data.php: get employees")
 
 $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
-	$nestedData=array(); 
-
-	
+				$nestedData=array(); 
 
 					//menampilkan data
 					$nestedData[] = $row['kode_barang'];
 					$nestedData[] = $row['nama_barang'];
 					$nestedData[] = "<p align='right'>".$row['sum_jumlah']." ". $row['asal_satuan']." </p>";
+					$nestedData[] = "<p align='right'>".rp($row['sum_potongan'])." </p>";
+					$nestedData[] = "<p align='right'>".rp($row['sum_tax'])." </p>";
 					$nestedData[] = "<p align='right'>".rp($row['sum_subtotal'])." </p>";
-					$nestedData[] = rp($row['sum_potongan']);
-					$nestedData[] = rp($row['sum_tax']);
-					$nestedData[] = $row["id"];
+
 				$data[] = $nestedData;
 			}
 
+				$nestedData=array();      
 
-$nestedData=array();      
-
-      $nestedData[] = "<p style='color:red'> - </p>";
-      $nestedData[] = "<p style='color:red'> - </p>";
-      $nestedData[] = "<p style='color:red' align='right'> ".rp($total_jumlah)." </p>";
-      $nestedData[] = "<p style='color:red' align='right'> ".rp($total_akhir)." </p>";
-      $nestedData[] = "<p style='color:red'> - </p>";
-      $nestedData[] = "<p style='color:red'> - </p>";
-	
-	$data[] = $nestedData;		
+			      $nestedData[] = "<p style='color:red'> TOTAL </p>";
+			      $nestedData[] = "<p style='color:red'> </p>";
+			      $nestedData[] = "<p style='color:red' align='right'> ".rp($total_jumlah)." </p>";
+			      $nestedData[] = "<p style='color:red' align='right'> ".rp($total_potongan)." </p>";
+			      $nestedData[] = "<p style='color:red' align='right'> ".rp($total_tax)." </p>";
+			      $nestedData[] = "<p style='color:red' align='right'> ".rp($total_akhir)." </p>";
+				
+				$data[] = $nestedData;		
 
 
 

@@ -41,9 +41,9 @@ include 'db.php';
 					<th style="background-color: #4CAF50; color: white;"> Nama Barang </th>
 					<th style="background-color: #4CAF50; color: white;"> Jumlah Barang </th>
 					<th style="background-color: #4CAF50; color: white;"> Harga </th>
-					<th style="background-color: #4CAF50; color: white;"> Subtotal </th>
-					<th style="background-color: #4CAF50; color: white;"> Potongan </th>
+					<th style="background-color: #4CAF50; color: white;"> Disc. </th>
 					<th style="background-color: #4CAF50; color: white;"> Tax </th>
+					<th style="background-color: #4CAF50; color: white;"> Subtotal </th>
 					<th style="background-color: #4CAF50; color: white;"> Sisa Barang </th>
 
 					
@@ -69,22 +69,18 @@ include 'db.php';
 					<th style="background-color: #4CAF50; color: white;"> Nama Barang </th>
 					<th style="background-color: #4CAF50; color: white;"> Jumlah Barang </th>
 					<th style="background-color: #4CAF50; color: white;"> Harga </th>
-					<th style="background-color: #4CAF50; color: white;"> Subtotal </th>
-					<th style="background-color: #4CAF50; color: white;"> Potongan </th>
+					<th style="background-color: #4CAF50; color: white;"> Disc. </th>
 					<th style="background-color: #4CAF50; color: white;"> Tax </th>
+					<th style="background-color: #4CAF50; color: white;"> Subtotal </th>
 					<th style="background-color: #4CAF50; color: white;"> Sisa Barang </th>
 					</thead>
 
 		</table>
 </div>
 
-<br>
-<br>
-
+</div>
        <a href='cetak_lap_pembelian_detail.php'
        class='btn btn-success' id="cetak_lap" target='blank'><i class='fa fa-print'> </i> Cetak Pembelian </a>
-
-</div>
 </span>
 </div> <!--/ container-->
 

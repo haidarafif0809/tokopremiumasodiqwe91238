@@ -17,9 +17,8 @@ $sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
 $data_sum_dari_detail_pembaelian = mysqli_fetch_array($query_sum_detail_pembaelian);
 $total_akhir = $data_sum_dari_detail_pembaelian['sum_subtotal'];
 $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
-
-
-
+$total_potongan = $data_sum_dari_detail_pembaelian['sum_potongan'];
+$total_tax = $data_sum_dari_detail_pembaelian['sum_tax'];
 
 
  ?>
@@ -49,20 +48,16 @@ $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
       </div><!--penutup colsm4-->
         
     </div><!--penutup row1-->
-    <br>
-    <br>
-    <br>
+<br>
 
- <table id="tableuser" class="table table-hover table-sm">
+ <table id="tableuser" class="table table-bordered table-sm">
             <thead>
-          <th> Kode Barang </th>
-          <th> Nama Barang </th>
-          <th> Jumlah Barang </th>
-          <th> Total </th>
-          <th> Potongan </th>
-          <th> Tax </th>
-
-                  <th> </th>                                    
+          <th  style="background-color: #4CAF50; color: white;"> Kode Barang </th>
+          <th  style="background-color: #4CAF50; color: white;"> Nama Barang </th>
+          <th  style="background-color: #4CAF50; color: white;"> Jumlah Barang </th>
+          <th  style="background-color: #4CAF50; color: white;"> Potongan </th>
+          <th  style="background-color: #4CAF50; color: white;"> Tax </th>
+          <th  style="background-color: #4CAF50; color: white;"> Total </th>                                 
                 </thead>
                 <tbody>
             <?php
@@ -78,26 +73,27 @@ $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
           <td>".$data11['kode_barang']."</td>
           <td>".$data11['nama_barang']."</td>
           <td align='right'>".$data11['sum_jumlah'] ." ". $data11['asal_satuan']."</td>
+          <td align='right'>".rp($data11['sum_potongan'])."</td>
+          <td align='right'>".rp($data11['sum_tax'])."</td>
           <td align='right'>".rp($data11['sum_subtotal'])."</td>
-          <td>".rp($data11['sum_potongan'])."</td>
-          <td>".rp($data11['sum_tax'])."</td>
           </tr>";
 
-
-                  }
-         //Untuk Memutuskan Koneksi Ke Database       
-       mysqli_close($db); 
+          }
+          echo "
+          <tr>
+          <td style='color:red'>TOTAL</td>
+          <td style='color:red'></td>
+          <td style='color:red' align='right'>".rp($total_jumlah)."</td>
+          <td style='color:red' align='right'>".rp($total_potongan)."</td>
+          <td style='color:red' align='right'>".rp($total_tax)."</td>
+          <td style='color:red' align='right'>".rp($total_akhir)."</td>
+          </tr>";
+             //Untuk Memutuskan Koneksi Ke Database       
+              mysqli_close($db); 
             ?>
-        <td style='color:red'> - </td>
-        <td style='color:red'> - </td>
-        <td style='color:red' align='right'> <?php echo rp($total_jumlah); ?> </td>
-        <td style='color:red' align='right'> <?php echo rp($total_akhir); ?> </td>
-        <td style='color:red'> - </td>
-        <td style='color:red'> - </td>
             </tbody>
 
       </table>
-      <hr>
 </div>
 </div>
 <br>

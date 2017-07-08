@@ -77,16 +77,16 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 if ($requestData['tipe'] == 'barang') {
 	if ($requestData['kategori']  == 'semua' AND $tipe = 'barang') {
 
-		$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,kt.nama_kategori AS kategori ,b.gudang";
-		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id LEFT JOIN kategori kt ON b.kategori = kt.id WHERE 1=1 AND b.berkaitan_dgn_stok = '$requestData[tipe]' ";
+		$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE 1=1 AND b.berkaitan_dgn_stok = '$requestData[tipe]' ";
 
 
 	}
 
 	else{
-		$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,kt.nama_kategori AS kategori ,b.gudang";
-		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id LEFT JOIN kategori kt ON b.kategori = kt.id ";
-		$sql.=" WHERE 1=1 AND b.kategori = '$kategori' AND b.berkaitan_dgn_stok = '$requestData[tipe]' ";
+		$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id";
+		$sql.="WHERE 1=1 AND b.kategori = '$kategori' AND b.berkaitan_dgn_stok = '$requestData[tipe]' ";
     }
 
 }
@@ -94,14 +94,14 @@ if ($requestData['tipe'] == 'barang') {
 else
 {
 	if ($requestData['kategori'] == 'semua') {
-    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,kt.nama_kategori AS kategori,b.gudang";
-		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id LEFT JOIN kategori kt ON b.kategori = kt.id ";
+    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id";
     
     }
     
     else{
-    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,kt.nama_kategori AS kategori ,b.gudang";
-		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id LEFT JOIN kategori kt ON b.kategori = kt.id WHERE 1=1 AND b.kategori = '$requestData[kategori]'";
+    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE 1=1 AND b.kategori = '$requestData[kategori]'";
     }
 }
 
@@ -109,7 +109,8 @@ if( !empty($requestData['search']['value']) ) {   // if there is a search parame
 	$sql.=" AND ( kode_barang = '".$requestData['search']['value']."' ";    
 	$sql.=" OR nama_barang LIKE '".$requestData['search']['value']."%' )";
 
-} 
+}
+
 $query=mysqli_query($conn, $sql) or die("datatable_cari_barang.php: query 1");
 
 $totalFiltered = mysqli_num_rows($query); 
@@ -135,6 +136,9 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData=array(); 
 
+
+		 $query_kategori = $db->query("SELECT nama_kategori FROM kategori WHERE id = '$row[kategori]' ");
+		 $data_kategori = mysqli_fetch_array($query_kategori);
 
 		// perhitungan margin 
 		$margin = hitungMargin($row['harga_beli'],$row['harga_jual'],$row['berkaitan_dgn_stok']);
@@ -236,7 +240,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	//satuan konversi
 	$nestedData[] = "<a href='satuan_konversi.php?id=". $row['id']."&nama=". $row['nama']."&satuan=". $row['satuan']."&harga=". $row['harga_beli']."&kode_barang=". $row['kode_barang']."' class='btn btn-secondary'>Konversi</a> </td>";
 
-	$nestedData[] = $row["kategori"];
+	$nestedData[] = $data_kategori["nama_kategori"];
 	
 	$nestedData[] = $row["id"];
 

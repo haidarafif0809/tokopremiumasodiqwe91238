@@ -890,6 +890,7 @@ $.post("barcode_order.php",{kode_barang:kode_barang,sales:sales,level_harga:leve
         $("#nama_barang").val('');
         $("#jumlah_barang").val('');
         $("#potongan1").val('');
+        $("#kode_barcode").val('');
         
 
 

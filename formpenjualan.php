@@ -248,7 +248,7 @@ Number.prototype.format = function(n, x, s, c) {
 <button type="button" id="cari_produk_penjualan" class="btn btn-info " style="height:45px;"  data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
 <button type="button" id="daftar_order" class="btn btn-success" style="height:45px;" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
 
-<button class="btn btn-purple" style="height:45px;" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+<button class="btn btn-purple" style="height:45px; display: none" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Antrian  </button>
  
 <button class="btn btn-warning" style="height:45px;" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>

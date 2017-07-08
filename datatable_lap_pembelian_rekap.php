@@ -68,7 +68,7 @@ $query=mysqli_query($conn, $sql) or die("datatable_lap_pembelian.phpppp: get emp
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
 
 
-$sql.= " ORDER BY p.id ASC LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+$sql.= " ORDER BY p.id DESC LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */	
 $query=mysqli_query($conn, $sql) or die("employee-grid-data.php: get employees");

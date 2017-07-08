@@ -19,9 +19,9 @@ $jumlah_parcel = angkadoang($_POST['jumlah_parcel']);
 $nama_petugas = $_SESSION['nama'];
 $jam_sekarang = date('H:i:s');
 
-$update_perakitan_parcel = $db->prepare("UPDATE perakitan_parcel SET nama_parcel = ?, harga_parcel = ?, harga_parcel_2 = ?, harga_parcel_3 = ?, harga_parcel_4 = ?, harga_parcel_5 = ?, harga_parcel_6 = ?, harga_parcel_7 = ?, jumlah_parcel = ?, user_edit = ?, tanggal = ?, jam = ?");
-$update_perakitan_parcel->bind_param("siiiiiiiisss",
-$nama_parcel, $harga_parcel_1, $harga_parcel_2, $harga_parcel_3, $harga_parcel_4, $harga_parcel_5, $harga_parcel_6, $harga_parcel_7, $jumlah_parcel, $nama_petugas, $tanggal, $jam_sekarang);
+$update_perakitan_parcel = $db->prepare("UPDATE perakitan_parcel SET nama_parcel = ?, harga_parcel = ?, harga_parcel_2 = ?, harga_parcel_3 = ?, harga_parcel_4 = ?, harga_parcel_5 = ?, harga_parcel_6 = ?, harga_parcel_7 = ?, jumlah_parcel = ?, user_edit = ?, tanggal = ?, jam = ? WHERE no_faktur = ?");
+$update_perakitan_parcel->bind_param("siiiiiiiissss",
+$nama_parcel, $harga_parcel_1, $harga_parcel_2, $harga_parcel_3, $harga_parcel_4, $harga_parcel_5, $harga_parcel_6, $harga_parcel_7, $jumlah_parcel, $nama_petugas, $tanggal, $jam_sekarang, $no_faktur);
 
 
         

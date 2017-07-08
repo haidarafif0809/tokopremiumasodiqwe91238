@@ -2605,7 +2605,7 @@ var total_perorder = data;
        subtotal = 0;
      }
 
-var total_akhir1 = parseFloat(subtotal.replace(',','.')) + parseFloat(total_perorder);
+var total_akhir1 = parseFloat(subtotal) + parseFloat(total_perorder);
 
 
   var pot_fakt_per = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
@@ -2721,7 +2721,7 @@ else
 
     }
 
-
+console.log(total_akhir)
 //perhitungan form pembayaran (total & subtotal) 
  /*var biaya_adm_tampil = parseFloat(biaya_adm) / parseFloat(total_akhir1) * 100;*/
 
@@ -3682,7 +3682,7 @@ $("#penjualan").click(function(){
         var no_faktur = $("#nomor_faktur_penjualan").val();
         var sisa_pembayaran =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#sisa_pembayaran_penjualan").val()))));
         var kredit =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kredit").val())))); 
-        var kode_pelanggan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kd_pelanggan").val()))));
+        var kode_pelanggan = $("#kd_pelanggan").val();
         var tanggal_jt = $("#tanggal_jt").val();
         var total =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total1").val())))); 
         var total2 =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val())))) ; 

@@ -411,7 +411,7 @@ $update_otoritas_tukar_poin->bind_param("iiiii",
 $update_otoritas_tukar_poin->execute();
 
 
-header('location: form_hak_akses.php?nama='.$nama.'&id='.$id.'');
+header('location: hak_otoritas.php');
 
 
 //Untuk Memutuskan Koneksi Ke Database

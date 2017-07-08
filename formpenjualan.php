@@ -5917,7 +5917,7 @@ $('#tabel_tbs_penjualan').DataTable().destroy();
             $("#level_harga").val('harga_1');
             $("#keterangan").val('');
             $("#penjualan").show();
-            $("#cetak_langsung").hide();
+            $("#cetak_langsung").show();
             
             $("#piutang").show();
             $("#batal_penjualan").show(); 

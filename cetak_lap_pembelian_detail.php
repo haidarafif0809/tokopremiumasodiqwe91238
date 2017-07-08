@@ -32,7 +32,7 @@ $total_tax = $data_sum_dari_detail_pembaelian['sum_tax'];
         </div><!--penutup colsm2-->
 
         <div class="col-sm-6">
-                 <h3> <b> LAPORAN PEMBELIAN DETAIL </b></h3>
+                 <h3> <b> LAPORAN PEMBELIAN DETAIL PER FAKTUR</b></h3>
                  <hr>
                  <h4> <b> <?php echo $data_perusahaan['nama_perusahaan']; ?> </b> </h4> 
                  <p> <?php echo $data_perusahaan['alamat_perusahaan']; ?> </p> 
@@ -69,7 +69,7 @@ $total_tax = $data_sum_dari_detail_pembaelian['sum_tax'];
                 <tbody>
             <?php
 
-                  $perintah009 = $db->query(" SELECT s.nama,dp.id,dp.no_faktur,dp.kode_barang,dp.nama_barang,dp.jumlah_barang,dp.satuan,dp.harga,dp.subtotal,dp.potongan,dp.tax,dp.sisa, ss.nama AS asal_satuan FROM detail_pembelian dp INNER JOIN satuan s ON dp.satuan = s.id INNER JOIN satuan ss ON dp.asal_satuan = ss.id WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal' ");
+                  $perintah009 = $db->query(" SELECT s.nama,dp.id,dp.no_faktur,dp.kode_barang,dp.nama_barang,dp.jumlah_barang,dp.satuan,dp.harga,dp.subtotal,dp.potongan,dp.tax,dp.sisa, ss.nama AS asal_satuan FROM detail_pembelian dp INNER JOIN satuan s ON dp.satuan = s.id INNER JOIN satuan ss ON dp.asal_satuan = ss.id WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal' ORDER BY dp.id DESC ");
                   while ($data11 = mysqli_fetch_array($perintah009))
 
                   {

@@ -3846,9 +3846,8 @@ else{
         var ppn = $("#ppn").val();
         
         
-        var sisa = pembayaran - total;
-        
-        var sisa_kredit = total - pembayaran;
+        var sisa = parseFloat(pembayaran) - parseFloat(total);
+        var sisa_kredit = parseFloat(total) - parseFloat(pembayaran);
 
 
  

@@ -13,6 +13,7 @@ $tahun_terakhir = substr($tahun_sekarang, 2);
 
 $cek_jumlah_bulan = strlen($bulan_sekarang);
 
+
 //jika jumlah karakter dari bulannya sama dengan 1 maka di tambah 0 di depannya
 if ($cek_jumlah_bulan == 1) {
   # code...
@@ -47,13 +48,27 @@ jika tidak maka nomor terakhir ditambah dengan 1
 	echo $no_faktur = $nomor."/PP/".$data_bulan_terakhir."/".$tahun_terakhir;
  }
 
+$kode_parcel = stringdoang($_POST['kode_parcel']);
+
+$q_kode_parcel = $db->query("SELECT kode_parcel FROM perakitan_parcel WHERE kode_parcel = '$kode_parcel' ORDER BY id DESC LIMIT 1");
+$d_kode_parcel = mysqli_fetch_array($q_kode_parcel);
+$row_kode_parcel = mysqli_num_rows($q_kode_parcel);
+if ($row_kode_parcel > 0) {  
+		$kode_barang_terakhir = $d_kode_parcel['kode_parcel'];
+		$angka_barang_terakhir = angkadoang($kode_barang_terakhir);
+		$kode_produk_sekarang = 1 + $angka_barang_terakhir;
+		$kode_parcel = "PP".$kode_produk_sekarang."";
+}
+else{
+		$kode_parcel = stringdoang($_POST['kode_parcel']);
+}
 
 $insert_perakitan_parcel = $db->prepare("INSERT INTO perakitan_parcel (no_faktur, kode_parcel, nama_parcel, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, jumlah_parcel, user_input, tanggal, jam) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 $insert_perakitan_parcel->bind_param("sssiiiiiiiisss",
 $no_faktur, $kode_parcel, $nama_parcel, $harga_parcel_1, $harga_parcel_2, $harga_parcel_3, $harga_parcel_4, $harga_parcel_5, $harga_parcel_6, $harga_parcel_7, $jumlah_parcel, $nama_petugas, $tanggal_sekarang, $jam_sekarang);
 
-$kode_parcel = stringdoang($_POST['kode_parcel']);
+
 $nama_parcel = stringdoang($_POST['nama_parcel']);
 $harga_parcel_1 = angkadoang($_POST['harga_parcel_1']);
 $harga_parcel_2 = angkadoang($_POST['harga_parcel_2']);
@@ -75,8 +90,6 @@ else {
 
 }
 
-
-$kode_parcel = stringdoang($_POST['kode_parcel']);
 $jumlah_parcel = angkadoang($_POST['jumlah_parcel']);
 
 $query12 = $db->query("SELECT * FROM tbs_parcel WHERE kode_parcel = '$kode_parcel' AND session_id = '$session_id' ");

@@ -41,14 +41,13 @@ include 'db.php';
   			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
   			<th style="background-color: #4CAF50; color: white;"> Suplier </th>
   			<th style="background-color: #4CAF50; color: white;"> Tanggal JT </th>
-  			<th style="background-color: #4CAF50; color: white;"> Jam </th>
-  			<th style="background-color: #4CAF50; color: white;"> User </th>
-  			<th style="background-color: #4CAF50; color: white;"> Status </th>
-  			<th style="background-color: #4CAF50; color: white;"> Potongan </th>
-  			<th style="background-color: #4CAF50; color: white;"> Tax </th>
-        <th style="background-color: #4CAF50; color: white;"> Total </th>
-  			<th style="background-color: #4CAF50; color: white;"> Sisa Kredit </th>
-  			<th style="background-color: #4CAF50; color: white;"> Nilai Kredit </th>
+  			<th style="background-color: #4CAF50; color: white;"> Umur Hutang </th>
+  			<th style="background-color: #4CAF50; color: white;"> Petugas </th>
+  			<th style="background-color: #4CAF50; color: white;"> Total Beli </th>
+  			<th style="background-color: #4CAF50; color: white;"> Bayar Beli </th>
+  			<th style="background-color: #4CAF50; color: white;"> Hutang </th>
+        <th style="background-color: #4CAF50; color: white;"> Pembayaran Hutang </th>
+  			<th style="background-color: #4CAF50; color: white;"> Saldo Hutang </th>
   						
   		</thead>
   		<tbody>

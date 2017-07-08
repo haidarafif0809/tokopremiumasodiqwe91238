@@ -230,7 +230,7 @@ include 'db.php';
 			<th style='background-color: #4CAF50; color: white'> Harga Parcel 5</th>
 			<th style='background-color: #4CAF50; color: white'> Harga Parcel 6</th>
 			<th style='background-color: #4CAF50; color: white'> Harga Parcel 7</th>
-			<th style='background-color: #4CAF50; color: white'> Jumlah Parcel </th>
+			<th style='background-color: #4CAF50; color: white'> Stok Parcel </th>
 			<th style='background-color: #4CAF50; color: white'> Petugas Input</th>
 			<th style='background-color: #4CAF50; color: white'> Petugas Edit</th>
 			<th style='background-color: #4CAF50; color: white'> Detail Parcel </th>

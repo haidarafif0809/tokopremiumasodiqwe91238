@@ -293,7 +293,7 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
-  $(document).ready(function(){    
+  $(document).ready(function(){
     $.get("buat_kode_parcel.php",function(data){
       $("#kode_parcel").val(data);
 

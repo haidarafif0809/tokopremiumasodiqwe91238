@@ -8,7 +8,7 @@ $dari_tanggal = stringdoang($_POST['dari_tanggal']);
 $sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
 
 
-$query_sum = $db->query("SELECT SUM(total) AS total_akhir, SUM(potongan) AS total_potongan, SUM(tax) AS total_pajak, SUM(kredit) AS total_kredit, SUM(nilai_kredit) AS total_nilai_kredit FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' AND kredit != 0");
+$query_sum = $db->query("SELECT SUM(p.total) AS total_akhir, SUM(p.tunai) AS total_tunai, SUM(p.kredit) AS total_kredit, SUM(p.nilai_kredit) AS total_nilai_kredit, SUM(dph.jumlah_bayar) + SUM(dph.potongan) AS total_bayar FROM pembelian p LEFT JOIN detail_pembayaran_hutang dph ON p.no_faktur = dph.no_faktur_pembelian WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal' AND p.kredit != 0");
 $data_sum = mysqli_fetch_array($query_sum);
 
 // storing  request (ie, get/post) global array to a variable  
@@ -35,14 +35,14 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql ="SELECT p.id,p.no_faktur,p.total,p.suplier,p.tanggal,p.tanggal_jt,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit,p.nilai_kredit,s.nama,g.nama_gudang ";
+$sql ="SELECT p.id,p.no_faktur,p.total,p.suplier,p.tanggal,p.tanggal_jt,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit,p.nilai_kredit,s.nama,g.nama_gudang,p.tunai, DATEDIFF(DATE(NOW()), p.tanggal) AS usia_hutang ";
 $sql.="FROM pembelian p INNER JOIN suplier s ON p.suplier = s.id INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal' AND kredit != 0 ";
 $query=mysqli_query($conn, $sql) or die("datatable_lap_pembelian.php: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
-$sql ="SELECT p.id,p.no_faktur,p.total,p.suplier,p.tanggal,p.tanggal_jt,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit,p.nilai_kredit,s.nama,g.nama_gudang ";
+$sql ="SELECT p.id,p.no_faktur,p.total,p.suplier,p.tanggal,p.tanggal_jt,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit,p.nilai_kredit,s.nama,g.nama_gudang,p.tunai, DATEDIFF(DATE(NOW()), p.tanggal) AS usia_hutang ";
 $sql.="FROM pembelian p INNER JOIN suplier s ON p.suplier = s.id INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal' AND kredit != 0 AND 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
@@ -66,19 +66,20 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData=array(); 
 
+			$query_hutang = $db->query("SELECT SUM(jumlah_bayar) + SUM(potongan) AS total_bayar FROM detail_pembayaran_hutang WHERE no_faktur_pembelian = '$row[no_faktur]' ");
+			$data_hutang = mysqli_fetch_array($query_hutang);
+
 			$nestedData[] = $row['tanggal'];
 			$nestedData[] = $row['no_faktur'];
 			$nestedData[] = $row['nama'];
 			$nestedData[] = $row['tanggal_jt'];
-			$nestedData[] = $row['jam'];
+			$nestedData[] = $row['usia_hutang'];
 			$nestedData[] = $row['user'];
-			$nestedData[] = $row['status'];
-			$nestedData[] = rp($row['potongan']);
-			$nestedData[] = rp($row['tax']);
-			$nestedData[] = rp($row['total']);
-			$nestedData[] = rp($row['kredit']);
-			$nestedData[] = rp($row['nilai_kredit']);
-			$nestedData[] = $row["id"];
+			$nestedData[] = "<p align='right'>".rp($row['total'])."</p>";
+			$nestedData[] = "<p align='right'>".rp($row['tunai'])."</p>";
+			$nestedData[] = "<p align='right'>".rp($row['nilai_kredit'])."</p>";
+			$nestedData[] = "<p align='right'>".rp($data_hutang['total_bayar'])."</p>";
+			$nestedData[] = "<p align='right'>".rp($row['kredit'])."</p>";
 
 	$data[] = $nestedData;
 			}
@@ -91,13 +92,12 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 			$nestedData[] = "<p style='color:red'>-</p>";
 			$nestedData[] = "<p style='color:red'>-</p>";
 			$nestedData[] = "<p style='color:red'>-</p>";
-			$nestedData[] = "<p style='color:red'>-</p>";
-			$nestedData[] = "<p style='color:red'>".rp($data_sum['total_potongan'])."</p>";
-			$nestedData[] = "<p style='color:red'>".rp($data_sum['total_pajak'])."</p>";
-			$nestedData[] = "<p style='color:red'>".rp($data_sum['total_akhir'])."</p>";
-			$nestedData[] = "<p style='color:red'>".rp($data_sum['total_kredit'])."</p>";
-			$nestedData[] = "<p style='color:red'>".rp($data_sum['total_nilai_kredit'])."</p>";
-			$nestedData[] = "<p style='color:red'>-</p>";
+			$nestedData[] = "<p style='color:red' align='right'>".rp($data_sum['total_akhir'])."</p>";
+			$nestedData[] = "<p style='color:red' align='right'>".rp($data_sum['total_tunai'])."</p>";
+			$nestedData[] = "<p style='color:red' align='right'>".rp($data_sum['total_nilai_kredit'])."</p>";
+			$nestedData[] = "<p style='color:red' align='right'>".rp($data_sum['total_bayar'])."</p>";
+			$nestedData[] = "<p style='color:red' align='right'>".rp($data_sum['total_kredit'])."</p>";
+			$nestedData[] = "<p style='color:red' align='right'>-</p>";
 
 	$data[] = $nestedData;
 

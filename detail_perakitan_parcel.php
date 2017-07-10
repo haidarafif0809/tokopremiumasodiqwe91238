@@ -37,6 +37,11 @@ $session_id = session_id();
       </div>
 
       <div class="col-sm-2">
+        <label>Estimasi Hpp</label>
+        <input style="height:15px;" type="text" class="form-control" name="estimasi_hpp" autocomplete="off" id="estimasi_hpp" readonly="" placeholder="ESTIMASI HPP">
+      </div>
+
+      <div class="col-sm-2">
         <label>Harga 1</label>
         <input style="height:15px;" type="text" class="form-control" name="harga_parcel_1" autocomplete="off" id="harga_parcel_1" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 1">
       </div>
@@ -327,14 +332,23 @@ $(document).ready(function(){
   });
 </script>
 
-
 <script type="text/javascript">
 $(document).ready(function(){
-  $(document).on('keyup','#jumlah_parcel',function(e){
+  $(document).on('keyup','#jumlah_parcel',function(e){    
+
+    var kode_parcel = $("#kode_parcel").val();
+    var jumlah_parcel = $("#jumlah_parcel").val();
+    if (jumlah_parcel == "") {
+      jumlah_parcel = 0;
+    }
 
     var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
         tabel_tbs_parcel.draw();
     $("#span_tbs").show();
+
+    $.post("cek_estimasi_hpp.php", {kode_parcel:kode_parcel, jumlah_parcel:jumlah_parcel}, function(data){
+        $("#estimasi_hpp"). val(tandaPemisahTitik(data));
+    });
 
   });
 });
@@ -640,6 +654,10 @@ if (nama_parcel == "") {
 
             });
 
+            $.post("cek_estimasi_hpp.php", {kode_parcel:kode_parcel, jumlah_parcel:jumlah_parcel}, function(data){
+                $("#estimasi_hpp"). val(tandaPemisahTitik(data));
+            });
+
       }
 
     });
@@ -678,7 +696,8 @@ $("#simpan_produk").click(function(){
     var harga_parcel_5 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_5").val()))));
     var harga_parcel_6 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_6").val()))));
     var harga_parcel_7 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_7").val()))));
-
+    var estimasi_hpp = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#estimasi_hpp").val()))));
+    var range_estimasi = parseInt(harga_parcel_1) - parseInt(estimasi_hpp);
    
 
 if (nama_parcel == "") {
@@ -696,42 +715,85 @@ if (nama_parcel == "") {
    }                       
   else
   {
+    if (range_estimasi < 0) {
+
+      var pesan_alert = confirm("Harga Jual Lebih Rendah Dari Estimasi HPP, Tetap Lanjutkan ?");
+      if (pesan_alert == true) {
+
+              $("#span_tbs").hide();
+              $("#simpan_produk").hide();
+              $("#batal_produk").hide();
+              $("#alert_berhasil").show();
+              $("#transaksi_baru").show();
+
+              $.post("proses_simpan_parcel.php",{id_produk:id_produk,jumlah_barang:jumlah_barang,
+              kode_parcel:kode_parcel, nama_parcel:nama_parcel, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel},function(data) {
+
+                $("#nama_barang").val('');
+                $("#kode_barang").val('');
+                $("#kode_barang").trigger('chosen:updated');
+                $("#jumlah_barang").val('');
+                $("#id_produk").val('');              
+                $("#kode_parcel").val('');
+                $("#nama_parcel").val('');
+                $("#harga_parcel_1").val('');
+                $("#harga_parcel_2").val('');
+                $("#harga_parcel_3").val('');
+                $("#harga_parcel_4").val('');
+                $("#harga_parcel_5").val('');
+                $("#harga_parcel_6").val('');
+                $("#harga_parcel_7").val('');
+                $("#jumlah_parcel").val('');
+
+                var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                    tabel_tbs_parcel.draw();
+
+                $("#span_tbs").show();
+
+              });
+
+      }
+      else{
+        $("#harga_parcel_1").focus();
+      }
+
+    }
+    else{
+
+              $("#span_tbs").hide();
+              $("#simpan_produk").hide();
+              $("#batal_produk").hide();
+              $("#alert_berhasil").show();
+              $("#transaksi_baru").show();
+
+              $.post("proses_simpan_parcel.php",{id_produk:id_produk,jumlah_barang:jumlah_barang,
+              kode_parcel:kode_parcel, nama_parcel:nama_parcel, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel},function(data) {
+
+                $("#nama_barang").val('');
+                $("#kode_barang").val('');
+                $("#kode_barang").trigger('chosen:updated');
+                $("#jumlah_barang").val('');
+                $("#id_produk").val('');              
+                $("#kode_parcel").val('');
+                $("#nama_parcel").val('');
+                $("#harga_parcel_1").val('');
+                $("#harga_parcel_2").val('');
+                $("#harga_parcel_3").val('');
+                $("#harga_parcel_4").val('');
+                $("#harga_parcel_5").val('');
+                $("#harga_parcel_6").val('');
+                $("#harga_parcel_7").val('');
+                $("#jumlah_parcel").val('');
+
+                var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+                    tabel_tbs_parcel.draw();
+
+                $("#span_tbs").show();
+
+              });
+
+    }
             
-            $("#span_tbs").hide();
-            $("#simpan_produk").hide();
-            $("#batal_produk").hide();
-            $("#alert_berhasil").show();
-            $("#transaksi_baru").show();
-
-            $.post("proses_simpan_parcel.php",{id_produk:id_produk,jumlah_barang:jumlah_barang,
-            kode_parcel:kode_parcel, nama_parcel:nama_parcel, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel},function(data) {
-
-              $("#nama_barang").val('');
-              $("#kode_barang").val('');
-              $("#kode_barang").trigger('chosen:updated');
-              $("#jumlah_barang").val('');
-              $("#id_produk").val('');              
-              $("#kode_parcel").val('');
-              $("#nama_parcel").val('');
-              $("#harga_parcel_1").val('');
-              $("#harga_parcel_2").val('');
-              $("#harga_parcel_3").val('');
-              $("#harga_parcel_4").val('');
-              $("#harga_parcel_5").val('');
-              $("#harga_parcel_6").val('');
-              $("#harga_parcel_7").val('');
-              $("#jumlah_parcel").val('');
-
-              var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
-                  tabel_tbs_parcel.draw();
-
-              $("#span_tbs").show();
-
-            });
-
-
-
-
   }
                                 
       $("form").submit(function(){
@@ -891,6 +953,10 @@ $(document).on('blur','.input_jumlah',function(e){
             $("#span_tbs").show();
           });
 
+          $.post("cek_estimasi_hpp.php", {kode_parcel:kode_parcel, jumlah_parcel:jumlah_parcel}, function(data){
+              $("#estimasi_hpp"). val(tandaPemisahTitik(data));
+          });
+
       }
 
       });
@@ -927,6 +993,12 @@ $(document).on('click','.btn-hapus-tbs',function(e){
   var kode_barang = $(this).attr("data-kode");
   var nama_barang = $(this).attr("data-nama");
 
+  var kode_parcel = $("#kode_parcel").val();
+  var jumlah_parcel = $("#jumlah_parcel").val();
+  if (jumlah_parcel == "") {
+    jumlah_parcel = 0;
+  }
+
   var pesan_alert = confirm("Apakah Anda Yakin Ingin Menghapus '"+nama_barang+"' "+ "?");
   if (pesan_alert == true) {
 
@@ -938,6 +1010,10 @@ $(document).on('click','.btn-hapus-tbs',function(e){
           $("#span_tbs").show()
           $("#kode_barang").trigger('chosen:open')  ;
 
+          });
+
+          $.post("cek_estimasi_hpp.php", {kode_parcel:kode_parcel, jumlah_parcel:jumlah_parcel}, function(data){
+              $("#estimasi_hpp"). val(tandaPemisahTitik(data));
           });
   }
   else {

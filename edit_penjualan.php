@@ -28,7 +28,7 @@ include 'sanitasi.php';
 //perhitungan jumlah bayar (jumlah_bayar + potongan)
 
 //ambil data no_faktur yang di edit dari penjualan
-    $query_penjualan = $db->query("SELECT biaya_admin,potongan,tax,ppn,total,tanggal FROM penjualan WHERE no_faktur = '$nomor_faktur'");
+    $query_penjualan = $db->query("SELECT biaya_admin,potongan,tax,ppn,total,tanggal, tanggal_jt, tunai, sisa, nilai_kredit, keterangan FROM penjualan WHERE no_faktur = '$nomor_faktur'");
     $data_penjualan = mysqli_fetch_array($query_penjualan);
     $potongan = $data_penjualan['potongan'];
     $ppn = $data_penjualan['ppn'];
@@ -36,6 +36,9 @@ include 'sanitasi.php';
     $biaya_admin = $data_penjualan['biaya_admin'];
     $tanggal_ganti = $data_penjualan['tanggal'];
     $total_akhir = $data_penjualan['total'];
+    $tunai = $data_penjualan['tunai'];
+    $kembalian = $data_penjualan['sisa'];
+    $kredit = $data_penjualan['nilai_kredit'];
 //ambil data no_faktur yang di edit dari penjualan
 
 //ambil data untuk form pembayaran yang akan di edit diambil dari perhitunga berikut
@@ -741,7 +744,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
   <div class="form-group col-sm-6">
       <label> Tanggal </label><br>
-      <input type="text" name="tanggal_jt" id="tanggal_jt" style="height:15px;font-size:15px" placeholder="Tanggal JT" class="form-control tanggal" autocomplete="off">
+      <input type="text" name="tanggal_jt" id="tanggal_jt" style="height:15px;font-size:15px" placeholder="Tanggal JT" class="form-control tanggal" value="<?php echo $data_penjualan['tanggal_jt']; ?>" autocomplete="off">
   </div>
 
 
@@ -780,7 +783,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
     <div class="form-group col-sm-6">
         <label> Pembayaran </label><br>
-        <b><input type="text" name="pembayaran" id="pembayaran_penjualan" style="height: 20px; width:90%; font-size:20px;" autocomplete="off" class="form-control"   style="font-size: 20px"  ></b>
+        <b><input type="text" name="pembayaran" id="pembayaran_penjualan" style="height: 20px; width:90%; font-size:20px;" autocomplete="off" class="form-control" style="font-size: 20px" value="<?php echo $tunai ?>" ></b>
     </div>
 
 </div> <!--end <div class="row">-->
@@ -790,18 +793,18 @@ tr:nth-child(even){background-color: #f2f2f2}
 
       <div class="col-sm-6">
           <label> Kembalian </label><br>
-          <b><input type="text" name="sisa_pembayaran" id="sisa_pembayaran_penjualan" style="height:15px;font-size:15px" class="form-control"  readonly="" required=""  style="font-size: 20px" ></b>
+          <b><input type="text" name="sisa_pembayaran" id="sisa_pembayaran_penjualan" style="height:15px;font-size:15px" class="form-control"  readonly="" required=""  style="font-size: 20px" value="<?php echo $kembalian ?>" ></b>
       </div>
           
       <div class="col-sm-6">
           <label> Kredit </label><br>
-          <b><input type="text" name="kredit" id="kredit" class="form-control" style="height:15px;font-size:15px"  readonly="" required="" ></b>
+          <b><input type="text" name="kredit" id="kredit" class="form-control" style="height:15px;font-size:15px"  readonly="" required="" value="<?php echo $kredit ?>" ></b>
       </div>
 
 </div> <!--end <div class="row">-->
           
       <label> Keterangan </label><br>
-        <textarea type="text" name="keterangan" id="keterangan" class="form-control"> </textarea>
+        <textarea type="text" name="keterangan" id="keterangan" class="form-control"> <?php echo $data_penjualan['keterangan'] ?></textarea>
 
           <b><input type="hidden" name="zxzx" id="zxzx" class="form-control" style="height: 50px; width:90%; font-size:25px;"  readonly="" required="" ></b>
           <b><input type="hidden" name="jumlah_bayar_lama" id="jumlah_bayar_lama" value="<?php echo $jumlah_bayar_lama; ?>" class="form-control" style="height: 50px; width:90%; font-size:25px;"  readonly=""></b>

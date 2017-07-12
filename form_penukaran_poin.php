@@ -1070,7 +1070,7 @@ $(document).ready(function(){
 
     shortcut.add("ctrl+b", function() {
         // Do something
-        window.location.href="batal_transaksi_tukar_poin.php";
+       $("#batal_tukar").click();
 
 
     }); 
@@ -1136,9 +1136,30 @@ $(document).ready(function(){
             });
         });
 
-        
+
+        $(document).on('click','#batal_tukar',function(e){
+          
+          var pesan_alert = confirm("Apakah anda yakin ingin membatalkan transaksi ini??");
+          if (pesan_alert == true) {
+              $.get("batal_transaksi_tukar_poin.php",function(data){
+                 
+                 var tabel_tukar_poin = $('#tabel_tukar_poin').DataTable();
+                 tabel_tukar_poin.draw();
+                 $("#kd_pelanggan").val('');
+                $('#kode_barang').trigger("chosen:open");
+                $('#kd_pelanggan').prop('disabled', false).trigger("chosen:updated");
+                $('#kd_pelanggan').trigger("chosen:open");
+                $('#kode_barang').val('');
+                $("#jumlah_poin").val('');
+                $("#subtotal").val('');
+                $("#sisa_poin").val('');
+              });
+          };
+
+        });
     });
 </script>
+
 
 <script type="text/javascript">
 $(document).ready(function(){

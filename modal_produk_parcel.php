@@ -79,7 +79,7 @@ while( $row=mysqli_fetch_array($query) ) {
         $nestedData[] =  "0";
     }      
     else{
-        $nestedData[] =  gantiKoma($stok_barang);
+        $nestedData[] =  koma($stok_barang, 2);
     }    
 
     $nestedData[] =  $row["nama"];

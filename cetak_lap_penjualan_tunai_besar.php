@@ -158,7 +158,7 @@ include 'db.php';
             echo "<tr>
             <td class='table1' align='center'>".$no_urut."</td>
             <td class='table1'>". $data5['nama_barang'] ."</td>
-            <td class='table1' align='right'>". koma($data5['jumlah_barang'],2) ."</td>
+            <td class='table1' align='right'>". koma($data5['jumlah_barang'],3) ."</td>
             <td class='table1'>". $data0['nama'] ."</td>
             <td class='table1' align='right'>". koma($data5['harga'],2) ."</td>
             <td class='table1' align='right'>". koma($data5['potongan'],2) ."</td>

@@ -159,7 +159,7 @@ include 'db.php';
             echo "<tr>
             <td class='table1' align='center'>".$no_urut."</td>
             <td class='table1'>". $data5['nama_barang'] ."</td>
-            <td class='table1' align='right'>". rp($data5['jumlah_barang']) ."</td>
+            <td class='table1' align='right'>". koma($data5['jumlah_barang'],3) ."</td>
             <td class='table1'>". $data_inner['nama'] ."</td>
             <td class='table1' align='right'>". rp($data5['harga']) ."</td>
             <td class='table1' align='right'>". rp($data5['potongan']) ."</td>

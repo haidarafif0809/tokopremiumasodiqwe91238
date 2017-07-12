@@ -32,9 +32,9 @@ $columns = array(
 $sql_data = "SELECT count(*)  AS jumlah_data ";
 $sql_data.=" FROM detail_penjualan  WHERE tanggal >= '$dari_tgl' AND tanggal <= '$sampai_tgl' GROUP BY kode_barang";
                               
-$sql = "SELECT kode_barang , nama_barang , SUM(jumlah_barang) AS jumlah_barang, SUM(subtotal) AS total_penjualan , SUM(potongan) AS total_potongan,";
-$sql.=" (SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE kode_barang = detail_penjualan.kode_barang AND hpp_keluar.tanggal >= '$dari_tgl' AND hpp_keluar.tanggal <= '$sampai_tgl' AND hpp_keluar.jenis_transaksi = 'Penjualan') AS total_hpp, ";//total hpp
-$sql.=" SUM(subtotal) - (SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE kode_barang = detail_penjualan.kode_barang AND hpp_keluar.tanggal >= '$dari_tgl' AND hpp_keluar.tanggal <= '$sampai_tgl' AND hpp_keluar.jenis_transaksi = 'Penjualan') AS total_laba ";// total laba
+$sql = "SELECT kode_barang , nama_barang , SUM(jumlah_barang) AS jumlah_barang, SUM(subtotal) AS total_penjualan , IFNULL(SUM(potongan),0) AS total_potongan,";
+$sql.=" (SELECT IFNULL( SUM(total_nilai),0) AS total_hpp FROM hpp_keluar WHERE kode_barang = detail_penjualan.kode_barang AND hpp_keluar.tanggal >= '$dari_tgl' AND hpp_keluar.tanggal <= '$sampai_tgl' AND hpp_keluar.jenis_transaksi = 'Penjualan') AS total_hpp, ";//total hpp
+$sql.=" SUM(subtotal) - (SELECT IFNULL( SUM(total_nilai),0) AS total_hpp FROM hpp_keluar WHERE kode_barang = detail_penjualan.kode_barang AND hpp_keluar.tanggal >= '$dari_tgl' AND hpp_keluar.tanggal <= '$sampai_tgl' AND hpp_keluar.jenis_transaksi = 'Penjualan') AS total_laba ";// total laba
 $sql.=" FROM detail_penjualan WHERE tanggal >= '$dari_tgl' AND tanggal <= '$sampai_tgl'";
 
  

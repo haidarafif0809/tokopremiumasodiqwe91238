@@ -9,9 +9,9 @@ $sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
 
 
   //menampilkan seluruh data yang ada pada tabel penjualan
-  $penjualan = $db->query("SELECT kode_barang , nama_barang , SUM(jumlah_barang) AS jumlah_barang, SUM(subtotal) AS total_penjualan , SUM(potongan) 
-    AS total_potongan,(SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE kode_barang = detail_penjualan.kode_barang 
-      AND hpp_keluar.tanggal >= '$dari_tanggal' AND hpp_keluar.tanggal <= '$sampai_tanggal' AND hpp_keluar.jenis_transaksi = 'Penjualan') AS total_hpp,SUM(subtotal) - (SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE kode_barang = detail_penjualan.kode_barang AND hpp_keluar.tanggal >= '$dari_tanggal' AND hpp_keluar.tanggal <= '$sampai_tanggal' AND hpp_keluar.jenis_transaksi = 'Penjualan') AS total_laba FROM detail_penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' GROUP BY detail_penjualan.kode_barang ORDER BY SUM(subtotal) - total_hpp DESC");
+  $penjualan = $db->query("SELECT kode_barang , nama_barang , SUM(jumlah_barang) AS jumlah_barang, SUM(subtotal) AS total_penjualan , IFNULL(SUM(potongan),0) 
+    AS total_potongan,(SELECT IFNULL( SUM(total_nilai),0) AS total_hpp FROM hpp_keluar WHERE kode_barang = detail_penjualan.kode_barang 
+      AND hpp_keluar.tanggal >= '$dari_tanggal' AND hpp_keluar.tanggal <= '$sampai_tanggal' AND hpp_keluar.jenis_transaksi = 'Penjualan') AS total_hpp,SUM(subtotal) - (SELECT IFNULL( SUM(total_nilai),0) AS total_hpp FROM hpp_keluar WHERE kode_barang = detail_penjualan.kode_barang AND hpp_keluar.tanggal >= '$dari_tanggal' AND hpp_keluar.tanggal <= '$sampai_tanggal' AND hpp_keluar.jenis_transaksi = 'Penjualan') AS total_laba FROM detail_penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' GROUP BY detail_penjualan.kode_barang ORDER BY SUM(subtotal) - total_hpp DESC");
 
     $query1 = $db->query("SELECT foto,nama_perusahaan,alamat_perusahaan,no_telp FROM perusahaan ");
     $data1 = mysqli_fetch_array($query1);

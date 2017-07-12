@@ -12,11 +12,8 @@ include 'db.php';
 
 
 <div class="container">
-
-
-
         
-<table id="tableuser" class="table table-bordered">
+<table id="table-retur" class="table table-bordered table-sm">
 		<thead>
 			<th> Nomor Faktur Retur </th>
 			<th> Nomor Faktur Pembelian </th>
@@ -68,3 +65,10 @@ mysqli_close($db);
 
 
 </div><!--end of container-->
+
+
+<script>
+	$(document).ready(function(){
+		$('#table-retur').dataTable();
+	});
+</script>

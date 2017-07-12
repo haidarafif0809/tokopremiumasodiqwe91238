@@ -13,7 +13,7 @@ $query = $db->query("SELECT * FROM detail_pembayaran_hutang WHERE no_faktur_pemb
 					<div class="container">
 					
 					<div class="table-responsive">
-					<table id="tableuser" class="table table-bordered">
+					<table id="tableuser" class="table table-bordered table-sm">
 					<thead>
 					<th> Nomor Faktur Pembayaran</th>
 					<th> Nomor Faktur Pembelian </th>
@@ -54,3 +54,9 @@ $query = $db->query("SELECT * FROM detail_pembayaran_hutang WHERE no_faktur_pemb
 					</table>
 					</div>
 					</div>
+
+					<script>
+	$(document).ready(function(){
+		$('#tableuser').dataTable();
+	});
+</script>

@@ -43,6 +43,9 @@ while ($row = mysqli_fetch_array($sql)) {
 };
 
 
+          // pencegah suapaya jurnal tidak doubel
+          $delete_jurnal = $db->query("DELETE  FROM jurnal_trans WHERE no_faktur = '$no_faktur' AND jenis_transaksi = 'Penukaran Poin' ");
+
 
 
 

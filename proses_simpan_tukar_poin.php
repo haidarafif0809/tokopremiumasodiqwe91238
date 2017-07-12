@@ -124,6 +124,33 @@ echo $no_faktur = $nomor."/TRP/".$data_bulan_terakhir."/".$tahun_terakhir;
                     }
 
 
+        // setting akun
+        $select_setting_akun = $db->query("SELECT persediaan , item_keluar FROM setting_akun");
+        $ambil_setting = mysqli_fetch_array($select_setting_akun);
+
+          
+          // pencegah suapaya jurnal tidak doubel
+          $delete_jurnal = $db->query("DELETE  FROM jurnal_trans WHERE no_faktur = '$no_faktur' AND jenis_transaksi = 'Penukaran Poin' ");
+
+
+          // hpp  keluar
+          $sum_hpp_keluar = $db->query("SELECT SUM(total_nilai) AS total FROM hpp_keluar WHERE no_faktur = '$no_faktur'");
+          $ambil_sum_hpp_keluar = mysqli_fetch_array($sum_hpp_keluar);
+          $total_hpp_keluar = $ambil_sum_hpp_keluar['total'];
+
+
+
+         // jurnal keluar
+         //PERSEDIAAN    
+                $insert_jurnal_keluar1 = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) 
+                  VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Penukaran Poin', '$ambil_setting[persediaan]', '0', '$total_hpp_keluar', 'Penukaran Poin', '$no_faktur','1', '$user')");
+
+       //ITEM KELUAR    
+                $insert_jurnal_keluar2 = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) 
+                  VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Penukaran Poin -', '$ambil_setting[item_keluar]', '$total_hpp_keluar', '0', 'Penukaran Poin', '$no_faktur','1', '$user')");
+          
+
+
 
       $tbs_history_poin = $db->query("INSERT INTO history_tbs_tukar_poin(session_id, no_faktur, pelanggan, kode_barang, nama_barang, satuan, jumlah_barang, poin, subtotal_poin, tanggal, jam, waktu)  SELECT session_id, no_faktur, pelanggan, kode_barang, nama_barang, satuan, jumlah_barang, poin, subtotal_poin, tanggal, jam, waktu FROM tbs_tukar_poin WHERE session_id = '$session_id' AND no_faktur IS NULL ");
       

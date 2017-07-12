@@ -248,10 +248,10 @@ Number.prototype.format = function(n, x, s, c) {
 <button type="button" id="cari_produk_penjualan" class="btn btn-info " style="height:45px;"  data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
 <button type="button" id="daftar_order" class="btn btn-success" style="height:45px;" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
 
-<button class="btn btn-purple" style="height:45px;" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+<button class="btn btn-purple" style="height:45px; display: none" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Antrian  </button>
  
-<button class="btn btn-warning" style="height:45px;" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+<button class="btn btn-warning" id="btnOrder" style="height:45px;" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Order </button>
 
 
@@ -2098,7 +2098,27 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
 </script>
 
 
+ <script type="text/javascript">
+   $(document).on('click', '#btnOrder', function (e) {                
+// START DATATABLE AJAX START TBS PENJUALAN
+      $('#table_tbs_order').DataTable().destroy();
 
+          var dataTable = $('#table_tbs_order').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_tbs_order.php", // json datasource
+           
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+          },
+        });
+});
+</script>
 
 
  <script type="text/javascript">
@@ -2605,7 +2625,7 @@ var total_perorder = data;
        subtotal = 0;
      }
 
-var total_akhir1 = parseFloat(subtotal.replace(',','.')) + parseFloat(total_perorder);
+var total_akhir1 = parseFloat(subtotal) + parseFloat(total_perorder);
 
 
   var pot_fakt_per = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
@@ -2721,7 +2741,7 @@ else
 
     }
 
-
+console.log(total_akhir)
 //perhitungan form pembayaran (total & subtotal) 
  /*var biaya_adm_tampil = parseFloat(biaya_adm) / parseFloat(total_akhir1) * 100;*/
 
@@ -3682,7 +3702,7 @@ $("#penjualan").click(function(){
         var no_faktur = $("#nomor_faktur_penjualan").val();
         var sisa_pembayaran =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#sisa_pembayaran_penjualan").val()))));
         var kredit =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kredit").val())))); 
-        var kode_pelanggan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kd_pelanggan").val()))));
+        var kode_pelanggan = $("#kd_pelanggan").val();
         var tanggal_jt = $("#tanggal_jt").val();
         var total =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total1").val())))); 
         var total2 =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val())))) ; 
@@ -3846,9 +3866,8 @@ else{
         var ppn = $("#ppn").val();
         
         
-        var sisa = pembayaran - total;
-        
-        var sisa_kredit = total - pembayaran;
+        var sisa = parseFloat(pembayaran) - parseFloat(total);
+        var sisa_kredit = parseFloat(total) - parseFloat(pembayaran);
 
 
  
@@ -5006,7 +5025,7 @@ $(document).ready(function(){
                                     $("#total1").val(sub_akhir.format(2, 3, '.', ','));
                                     $("#tax_rp").val(pajak_faktur.format(2, 3, '.', ',')); 
 
-                      $.post("update_pesanan_barang.php",{jumlah_lama:jumlah_lama,tax:tax,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,potongan:potongan,harga:harga,jumlah_tax:jumlah_tax,subtotal:subtotal},function(info){
+                      $.post("update_pesanan_barang.php",{ppn:ppn,jumlah_lama:jumlah_lama,tax:tax,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,potongan:potongan,harga:harga,jumlah_tax:jumlah_tax,subtotal:subtotal},function(info){
 
                           //cek tbsbonus yang ada, tapi jumlah subtotal tbspenjualan sudah berubah syarat tidak terpenuhi
                           $.getJSON("cek_syarat_promo_ditbs.php",{kode_barang:kode_barang},function(syaratbonus){
@@ -5222,7 +5241,7 @@ $(document).ready(function(){
                                     $("#total1").val(sub_akhir.format(2, 3, '.', ','));    
                                     $("#tax_rp").val(pajak_faktur.format(2, 3, '.', ','));  
 
-                                     $.post("update_pesanan_barang.php",{jumlah_lama:jumlah_lama,tax:tax,id:id,jumlah_baru:jumlah_kirim,kode_barang:kode_barang,potongan:potongan,harga:harga_kirim,jumlah_tax:jumlah_tax,subtotal:subtotal},function(info){
+                                     $.post("update_pesanan_barang.php",{ppn:ppn,jumlah_lama:jumlah_lama,tax:tax,id:id,jumlah_baru:jumlah_kirim,kode_barang:kode_barang,potongan:potongan,harga:harga_kirim,jumlah_tax:jumlah_tax,subtotal:subtotal},function(info){
 
                                               //cek tbsbonus yang ada, tapi jumlah subtotal tbspenjualan sudah berubah syarat tidak terpenuhi
                                               $.getJSON("cek_syarat_promo_ditbs.php",{kode_barang:kode_barang},function(syaratbonus){
@@ -5917,7 +5936,7 @@ $('#tabel_tbs_penjualan').DataTable().destroy();
             $("#level_harga").val('harga_1');
             $("#keterangan").val('');
             $("#penjualan").show();
-            $("#cetak_langsung").hide();
+            $("#cetak_langsung").show();
             
             $("#piutang").show();
             $("#batal_penjualan").show(); 

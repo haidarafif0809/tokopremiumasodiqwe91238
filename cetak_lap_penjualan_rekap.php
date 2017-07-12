@@ -7,58 +7,29 @@ include 'db.php';
 $dari_tanggal = stringdoang($_GET['dari_tanggal']);
 $sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
 
-    $query1 = $db->query("SELECT * FROM perusahaan ");
-    $data1 = mysqli_fetch_array($query1);
+$query1 = $db->query("SELECT foto,nama_perusahaan,alamat_perusahaan,no_telp FROM perusahaan ");
+$data1 = mysqli_fetch_array($query1);
 
-
-
-
-//menampilkan seluruh data yang ada pada tabel penjualan
-$perintah0 = $db->query("SELECT * FROM detail_penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$data0 = mysqli_fetch_array($perintah0);
-
-
-
-$query01 = $db->query("SELECT SUM(potongan) AS total_potongan FROM penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek01 = mysqli_fetch_array($query01);
-$total_potongan = $cek01['total_potongan'];
-
-$query20 = $db->query("SELECT SUM(tax) AS total_tax FROM penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek20 = mysqli_fetch_array($query20);
-$total_tax = $cek20['total_tax'];
-
-$query02 = $db->query("SELECT SUM(total) AS total_akhir FROM penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek02 = mysqli_fetch_array($query02);
-$total_akhir = $cek02['total_akhir'];
-
-
-$query30 = $db->query("SELECT SUM(kredit) AS total_kredit FROM penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek30 = mysqli_fetch_array($query30);
-$total_kredit = $cek30['total_kredit'];
-
-$query15 = $db->query("SELECT SUM(subtotal) AS total_subtotal FROM 
-detail_penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek15 = mysqli_fetch_array($query15);
-$t_subtotal = $cek15['total_subtotal'];
-
-$query011 = $db->query("SELECT SUM(jumlah_barang) AS total_barang FROM
-detail_penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek011 = mysqli_fetch_array($query011);
-$t_barang = $cek011['total_barang'];
-
-
-
+$total_akhir_kotor = 0;
+$total_potongan = 0;
+$total_tax = 0;
+$total_jual = 0;
+$total_tunai = 0;
+$total_sisa = 0;
+$total_kredit = 0;
 
 
  ?>
 <div class="container">
-<center><h3> <b> LAPORAN PENJUALAN REKAP </b></h3><hr></center>
  <div class="row"><!--row1-->
         <div class="col-sm-2">
+        <br><br>
                 <img src='save_picture/<?php echo $data1['foto']; ?>' class='img-rounded' alt='Cinque Terre' width='160' height='140`'> 
         </div><!--penutup colsm2-->
 
         <div class="col-sm-6">
+                 <h3> <b> LAPORAN PENJUALAN REKAP </b></h3>
+                 <hr>
                  <h4> <b> <?php echo $data1['nama_perusahaan']; ?> </b> </h4> 
                  <p> <?php echo $data1['alamat_perusahaan']; ?> </p> 
                  <p> No.Telp:<?php echo $data1['no_telp']; ?> </p> 
@@ -86,52 +57,59 @@ $t_barang = $cek011['total_barang'];
     <br>
 
 
- <table id="tableuser" class="table table-bordered">
+ <table id="tableuser" class="table table-bordered table-sm">
             <thead>
-                  <th> Nomor Faktur </th>                  
-                  <th> Tanggal </th>
-                  <th> Kode Pelanggan</th>
-                  <th> Jumlah Barang </th>
-                  <th> Subtotal </th>
-                  <th> Potongan </th>
-                  <th> Pajak </th>
-                  <th> Total Akhir </th>
-                  <th> Bayar Tunai </th>
-                  <th> Bayar Kredit </th>
-                                    
+                <th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
+                <th style="background-color: #4CAF50; color: white;"> Kode Pelanggan</th>
+                <th style="background-color: #4CAF50; color: white;"> Tanggal </th> 
+                <th style="background-color: #4CAF50; color: white;"> Jam </th>
+                <th style="background-color: #4CAF50; color: white;"> User </th>
+                <th style="background-color: #4CAF50; color: white;"> Status </th>
+                <th style="background-color: #4CAF50; color: white;"> Total Kotor</th>
+                <th style="background-color: #4CAF50; color: white;"> Potongan </th>
+                <th style="background-color: #4CAF50; color: white;"> Tax </th>
+                <th style="background-color: #4CAF50; color: white;"> Total Bersih</th>
+                <th style="background-color: #4CAF50; color: white;"> Tunai </th>
+                <th style="background-color: #4CAF50; color: white;"> Kembalian </th>
+                <th style="background-color: #4CAF50; color: white;"> Kredit </th>                                   
             </thead>
             
             <tbody>
             <?php
 
-                  $perintah009 = $db->query("SELECT pel.kode_pelanggan AS code_card,pel.nama_pelanggan,dp.tanggal,dp.no_faktur,dp.kode_pelanggan,dp.total,dp.jam,dp.user,dp.status,dp.potongan,dp.tax,dp.sisa,dp.kredit FROM penjualan dp INNER JOIN pelanggan pel ON dp.kode_pelanggan = pel.id WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal'");
-                  while ($data11 = mysqli_fetch_array($perintah009))
+
+        $perintah_tampil = $db->query("SELECT pel.kode_pelanggan AS code_card,pel.nama_pelanggan,dp.tanggal,dp.no_faktur,dp.kode_pelanggan,dp.total,dp.jam,dp.user,dp.status,dp.potongan,dp.tax,dp.sisa,dp.kredit,dp.tunai FROM penjualan dp INNER JOIN pelanggan pel ON dp.kode_pelanggan = pel.id WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal'");
+      
+                  while ($data11 = mysqli_fetch_array($perintah_tampil))
 
                   {
-                        //menampilkan data
-                        $query0 = $db->query("SELECT SUM(jumlah_barang) AS total_barang FROM detail_penjualan WHERE no_faktur = '$data11[no_faktur]'");
-                        $cek0 = mysqli_fetch_array($query0);
-                        $total_barang = $cek0['total_barang'];
-                        
-                        
-                        $query10 = $db->query("SELECT SUM(subtotal) AS total_subtotal FROM detail_penjualan WHERE no_faktur = '$data11[no_faktur]'");
-                        $cek10 = mysqli_fetch_array($query10);
-                        $total_subtotal = $cek10['total_subtotal'];
 
-                        $bayar_tunai = $data11['total'] - $data11['kredit']; 
-                        
-                  echo "<tr>
-                  <td>". $data11['no_faktur'] ."</td>
-                  <td>". $data11['tanggal'] ."</td>
-                  <td>". $data11['code_card'] ." - ". $data11['nama_pelanggan'] ."</td>
-                  <td>". gantiKoma($cek0['total_barang']) ."</td>
-                  <td>". rp($total_subtotal) ."</td>
-                  <td>". rp($data11['potongan']) ."</td>
-                  <td>". rp($data11['tax']) ."</td>
-                  <td>". rp($data11['total']) ."</td>
-                  <td>". rp($bayar_tunai) ."</td>
-                  <td>". rp($data11['kredit']) ."</td>
-                  </tr>";
+                      $total_kotor_jual = $data11['total'] + $data11['potongan'];
+              
+                      echo "<tr>
+                      <td>". $data11['no_faktur'] ."</td>
+                      <td>". $data11['code_card'] ." - ". $data11['nama_pelanggan'] ."</td>
+                      <td>". $data11['tanggal'] ."</td>
+                      <td>". $data11['jam'] ."</td>
+                      <td>". $data11['user'] ."</td>
+                      <td>". $data11['status'] ."</td>
+                      <td align='right'>". rp($total_kotor_jual) ."</td>
+                      <td align='right'>". rp($data11['potongan']) ."</td>
+                      <td align='right'>". rp($data11['tax']) ."</td>
+                      <td align='right'>". rp($data11['total']) ."</td>
+                      <td align='right'>". rp($data11['tunai']) ."</td>
+                      <td align='right'>". rp($data11['sisa']) ."</td>
+                      <td align='right'>". rp($data11['kredit']) ."</td>
+                      </tr>";
+
+
+                       $total_akhir_kotor = $total_akhir_kotor + $total_kotor_jual;
+                       $total_potongan = $total_potongan + $data11['potongan'];
+                       $total_tax = $total_tax + $data11['tax'];
+                       $total_jual = $total_jual + $data11['total'];
+                       $total_tunai = $total_tunai + $data11['tunai'];
+                       $total_sisa = $total_sisa + $data11['sisa'];
+                       $total_kredit = $total_kredit + $data11['kredit'];
 
 
                   }
@@ -142,42 +120,29 @@ $t_barang = $cek011['total_barang'];
         
         
             ?>
+
+      <td style='color:red'> TOTAL </td>
+      <td style='color:red'> - </td>
+      <td style='color:red'> - </td>
+      <td style='color:red'> - </td>
+      <td style='color:red'> - </td>
+      <td style='color:red'> - </td>
+      <td style='color:red' align='right'> <?php echo rp($total_akhir_kotor);?> </td>
+      <td style='color:red' align='right'> <?php echo rp($total_potongan);?> </td>
+      <td style='color:red' align='right'> <?php echo rp($total_tax);?> </td> 
+      <td style='color:red' align='right'> <?php echo rp($total_jual);?> </td>
+      <td style='color:red' align='right'> <?php echo rp($total_tunai);?> </td>
+      <td style='color:red' align='right'> <?php echo rp($total_sisa);?> </td>
+      <td style='color:red' align='right'> <?php echo rp($total_kredit);?> </td> 
+
+
             </tbody>
 
       </table>
-      <hr>
 </div>
 </div>
-<br>
-
-<div class="col-sm-7">
-</div>
 
 
-<div class="col-sm-2">
-<h4><b>Total Keseluruhan :</b></h4>
-</div>
-
-
-<div class="col-sm-3">
-        
- <table>
-  <tbody>
-
-      <tr><td width="70%">Jumlah Item</td> <td> :&nbsp; </td> <td> <?php echo gantiKoma($t_barang); ?> </td></tr>
-      <tr><td  width="70%">Total Subtotal</td> <td> :&nbsp; </td> <td> <?php echo rp($t_subtotal); ?> </td>
-      </tr>
-      <tr><td  width="70%">Total Potongan</td> <td> :&nbsp; </td> <td> <?php echo rp($total_potongan); ?></td></tr>
-      <tr><td width="70%">Total Pajak</td> <td> :&nbsp; </td> <td> <?php echo rp($total_tax); ?> </td></tr>
-      <tr><td  width="70%">Total Akhir</td> <td> :&nbsp; </td> <td> <?php echo rp($total_akhir); ?> </td>
-      </tr>
-      <tr><td  width="70%">Total Kredit</td> <td> :&nbsp; </td> <td> <?php echo rp($total_kredit); ?></td></tr>
-            
-  </tbody>
-  </table>
-
-
-     </div>
 
  <script>
 $(document).ready(function(){

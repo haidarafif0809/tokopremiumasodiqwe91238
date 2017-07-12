@@ -74,12 +74,9 @@ include 'db.php';
 		</table>
 </div>
 
-
-  <br>
+</div>
 
        <a href='cetak_lap_pembelian_detail_non_faktur.php'class='btn btn-success' id="cetak_lap" target='blank'><i class='fa fa-print'> </i> Cetak Pembelian </a>
-
-</div>
 </span>
 </div> <!--/ container-->
 

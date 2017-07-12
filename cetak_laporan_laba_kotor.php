@@ -4,8 +4,8 @@ include 'sanitasi.php';
 include 'db.php';
 
 
-$dari_tanggal = $_GET['dari_tanggal'];
-$sampai_tanggal = $_GET['sampai_tanggal'];
+$dari_tanggal = stringdoang($_GET['dari_tanggal']);
+$sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
 
 
 //menampilkan seluruh data yang ada pada tabel penjualan

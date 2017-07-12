@@ -90,19 +90,20 @@ if ($lihat['master_data_lihat'] > 0){
                         <div class="collapsible-body">
                             <ul>';
 }
-
+/*
 if ($lihat['biaya_admin_lihat'] > 0){
 
                                 echo '<li><a href="biaya_admin.php" class="waves-effect">Biaya Admin</a></li>';
 }
-
+*/
 if ($lihat['daftar_akun_lihat'] > 0){
                                 echo '<li><a href="daftar_akun.php?kategori=Aktiva" class="waves-effect">Daftar Akun</a></li>';
 }
-
+/*
 if ($lihat['daftar_pajak_lihat'] > 0){
                                 echo '<li><a href="daftar_pajak.php" class="waves-effect">Daftar Pajak</a></li>';
 }
+*/
 
 if ($lihat['set_diskon_tax_lihat'] > 0){
                                 echo '<li><a href="set_diskon_tax.php" class="waves-effect">Default Diskon </a></li>';

@@ -220,7 +220,7 @@ $session_id = session_id();
 
 <!--tampilan modal-->
 <div id="myModal" class="modal " role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog ">
 
     <!-- isi modal-->
     <div class="modal-content">
@@ -231,7 +231,7 @@ $session_id = session_id();
       </div>
       <div class="modal-body">
 
-      <div class="table-resposive">
+      <div class="table-responsive">
 <table id="tabel_cari" class="table table-bordered table-sm">
   <thead> <!-- untuk memberikan nama pada kolom tabel -->
 
@@ -890,6 +890,7 @@ $.post("barcode_order.php",{kode_barang:kode_barang,sales:sales,level_harga:leve
         $("#nama_barang").val('');
         $("#jumlah_barang").val('');
         $("#potongan1").val('');
+        $("#kode_barcode").val('');
         
 
 

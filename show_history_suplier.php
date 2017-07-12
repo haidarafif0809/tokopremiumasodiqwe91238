@@ -32,6 +32,35 @@ $saldo_awal_hutang = $nilai_kredit - ($jumlah_bayar + $kredit_pembelian_lama);
 $requestData= $_REQUEST;
 
 
+if ($requestData['start'] > 0) 
+{	
+
+		// getting total number records without any search
+		$sql = $db->query("SELECT no_faktur, tanggal,jam,total,jenis,no_faktur_terkait,pembayaran,saldo_hutang
+		FROM (SELECT no_faktur AS no_faktur, tanggal AS tanggal,jam AS jam,total,CONCAT('Pembelian',' (',status_beli_awal,')') AS jenis,'' AS no_faktur_terkait,tunai AS pembayaran,nilai_kredit AS saldo_hutang
+      FROM pembelian WHERE suplier = '$suplier' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'
+      UNION SELECT rb.no_faktur_retur AS no_faktur,  rb.tanggal,rb.jam AS jam,rb.total,'Retur Pembelian' AS jenis ,'' AS no_faktur_terkait,rb.total_bayar AS pembayaran,rph.kredit_pembelian_lama AS saldo_hutang
+      FROM retur_pembelian rb LEFT JOIN retur_pembayaran_hutang rph ON rb.no_faktur_retur = rph.no_faktur_retur  WHERE rb.nama_suplier = '$suplier' AND rb.tanggal >= '$dari_tanggal' AND rb.tanggal <= '$sampai_tanggal' UNION SELECT dph.no_faktur_pembayaran AS no_faktur,  dph.tanggal,ph.jam AS jam, dph.jumlah_bayar AS total ,'Pembayaran Hutang' AS jenis,dph.no_faktur_pembelian AS no_faktur_terkait,dph.jumlah_bayar AS pembayaran,dph.jumlah_bayar AS saldo_hutang
+      FROM detail_pembayaran_hutang dph LEFT JOIN pembayaran_hutang ph ON dph.no_faktur_pembayaran = ph.no_faktur_pembayaran WHERE dph.suplier = '$suplier' AND dph.tanggal >= '$dari_tanggal' AND dph.tanggal <= '$sampai_tanggal' ) AS p ORDER BY CONCAT(tanggal,'',jam) ASC  LIMIT ".$requestData['start']."  ");
+		while($row = mysqli_fetch_array($sql))
+		{
+			if ($row["jenis"] == 'Pembelian (Kredit)' OR $row["jenis"] == 'Pembelian (Tunai)'){
+
+  			$saldo_awal_hutang = $saldo_awal_hutang + $row['saldo_hutang'];
+
+			}
+
+			else if ($row["jenis"] == 'Retur Pembelian' OR $row["jenis"] == 'Pembayaran Hutang'){
+
+			 $saldo_awal_hutang = $saldo_awal_hutang - $row['saldo_hutang'];
+
+			}
+
+		} 
+
+}
+
+
 $columns = array( 
 // datatable column index  => database column name
 
@@ -49,23 +78,23 @@ $columns = array(
 
 
 // getting total number records without any search
-$sql = "SELECT no_faktur, tanggal,total,jenis,no_faktur_terkait,pembayaran,saldo_hutang
-FROM (SELECT no_faktur AS no_faktur, tanggal AS tanggal,total,CONCAT('Pembelian',' (',status_beli_awal,')') AS jenis,'' AS no_faktur_terkait,tunai AS pembayaran,nilai_kredit AS saldo_hutang
+$sql = "SELECT no_faktur, tanggal,jam,total,jenis,no_faktur_terkait,pembayaran,saldo_hutang
+		FROM (SELECT no_faktur AS no_faktur, tanggal AS tanggal,jam AS jam,total,CONCAT('Pembelian',' (',status_beli_awal,')') AS jenis,'' AS no_faktur_terkait,tunai AS pembayaran,nilai_kredit AS saldo_hutang
       FROM pembelian WHERE suplier = '$suplier' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'
-      UNION SELECT rb.no_faktur_retur AS no_faktur,  rb.tanggal,rb.total,'Retur Pembelian' AS jenis ,'' AS no_faktur_terkait,rb.total_bayar AS pembayaran,rph.kredit_pembelian_lama AS saldo_hutang
-      FROM retur_pembelian rb LEFT JOIN retur_pembayaran_hutang rph ON rb.no_faktur_retur = rph.no_faktur_retur  WHERE rb.nama_suplier = '$suplier' AND rb.tanggal >= '$dari_tanggal' AND rb.tanggal <= '$sampai_tanggal' UNION SELECT no_faktur_pembayaran AS no_faktur,  tanggal,jumlah_bayar AS total ,'Pembayaran Hutang' AS jenis,no_faktur_pembelian AS no_faktur_terkait,jumlah_bayar AS pembayaran,jumlah_bayar AS saldo_hutang
-      FROM detail_pembayaran_hutang WHERE suplier = '$suplier' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' ) AS p";
+      UNION SELECT rb.no_faktur_retur AS no_faktur,  rb.tanggal,rb.jam AS jam,rb.total,'Retur Pembelian' AS jenis ,'' AS no_faktur_terkait,rb.total_bayar AS pembayaran,rph.kredit_pembelian_lama AS saldo_hutang
+      FROM retur_pembelian rb LEFT JOIN retur_pembayaran_hutang rph ON rb.no_faktur_retur = rph.no_faktur_retur  WHERE rb.nama_suplier = '$suplier' AND rb.tanggal >= '$dari_tanggal' AND rb.tanggal <= '$sampai_tanggal' UNION SELECT dph.no_faktur_pembayaran AS no_faktur,  dph.tanggal,ph.jam AS jam, dph.jumlah_bayar AS total ,'Pembayaran Hutang' AS jenis,dph.no_faktur_pembelian AS no_faktur_terkait,dph.jumlah_bayar AS pembayaran,dph.jumlah_bayar AS saldo_hutang
+      FROM detail_pembayaran_hutang dph LEFT JOIN pembayaran_hutang ph ON dph.no_faktur_pembayaran = ph.no_faktur_pembayaran WHERE dph.suplier = '$suplier' AND dph.tanggal >= '$dari_tanggal' AND dph.tanggal <= '$sampai_tanggal' ) AS p ";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
-$sql = "SELECT no_faktur, tanggal,total,jenis,no_faktur_terkait,pembayaran,saldo_hutang
-FROM (SELECT no_faktur AS no_faktur, tanggal AS tanggal,total,CONCAT('Pembelian',' (',status_beli_awal,')') AS jenis,'' AS no_faktur_terkait,tunai AS pembayaran,nilai_kredit AS saldo_hutang
+$sql = "SELECT no_faktur, tanggal,jam,total,jenis,no_faktur_terkait,pembayaran,saldo_hutang
+		FROM (SELECT no_faktur AS no_faktur, tanggal AS tanggal,jam AS jam,total,CONCAT('Pembelian',' (',status_beli_awal,')') AS jenis,'' AS no_faktur_terkait,tunai AS pembayaran,nilai_kredit AS saldo_hutang
       FROM pembelian WHERE suplier = '$suplier' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'
-      UNION SELECT rb.no_faktur_retur AS no_faktur,  rb.tanggal,rb.total,'Retur Pembelian' AS jenis ,'' AS no_faktur_terkait,rb.total_bayar AS pembayaran,rph.kredit_pembelian_lama AS saldo_hutang
-      FROM retur_pembelian rb LEFT JOIN retur_pembayaran_hutang rph ON rb.no_faktur_retur = rph.no_faktur_retur  WHERE rb.nama_suplier = '$suplier' AND rb.tanggal >= '$dari_tanggal' AND rb.tanggal <= '$sampai_tanggal' UNION SELECT no_faktur_pembayaran AS no_faktur,  tanggal,jumlah_bayar AS total ,'Pembayaran Hutang' AS jenis,no_faktur_pembelian AS no_faktur_terkait,jumlah_bayar AS pembayaran, jumlah_bayar AS saldo_hutang
-      FROM detail_pembayaran_hutang WHERE suplier = '$suplier' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' ) AS p ";
+      UNION SELECT rb.no_faktur_retur AS no_faktur,  rb.tanggal,rb.jam AS jam,rb.total,'Retur Pembelian' AS jenis ,'' AS no_faktur_terkait,rb.total_bayar AS pembayaran,rph.kredit_pembelian_lama AS saldo_hutang
+      FROM retur_pembelian rb LEFT JOIN retur_pembayaran_hutang rph ON rb.no_faktur_retur = rph.no_faktur_retur  WHERE rb.nama_suplier = '$suplier' AND rb.tanggal >= '$dari_tanggal' AND rb.tanggal <= '$sampai_tanggal' UNION SELECT dph.no_faktur_pembayaran AS no_faktur,  dph.tanggal,ph.jam AS jam, dph.jumlah_bayar AS total ,'Pembayaran Hutang' AS jenis,dph.no_faktur_pembelian AS no_faktur_terkait,dph.jumlah_bayar AS pembayaran,dph.jumlah_bayar AS saldo_hutang
+      FROM detail_pembayaran_hutang dph LEFT JOIN pembayaran_hutang ph ON dph.no_faktur_pembayaran = ph.no_faktur_pembayaran WHERE dph.suplier = '$suplier' AND dph.tanggal >= '$dari_tanggal' AND dph.tanggal <= '$sampai_tanggal' ) AS p ";
 
 if( !empty($requestData['search']['value']) ) { 
   // if there is a search parameter, $requestData['search']['value'] contains search parameter
@@ -77,9 +106,11 @@ if( !empty($requestData['search']['value']) ) {
 
 $query=mysqli_query($conn, $sql) or die("eror 2");
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
- $sql.="ORDER BY tanggal ASC LIMIT ".$requestData['start']." ,".$requestData['length']."  ";
+ $sql.="ORDER BY CONCAT(tanggal,'',jam) ASC LIMIT ".$requestData['start']." ,".$requestData['length']."  ";
  /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */	
+
 $query= mysqli_query($conn, $sql) or die("eror 3");
+
 
 
 $nestedData[] = "<p></p>";

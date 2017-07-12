@@ -21,35 +21,36 @@ $kode_program = stringdoang($_GET['kode']);
 <a href="program_promo.php" class="btn btn-primary" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Klik untuk kembali ke utama.'><i class="fa fa-reply"></i> <u>K</u>embali</a>
 
 <!--input untuk masuk ke data table-->
-<input type="hidden" name="id_nya" id="id_nya" autocomplete="off" class="form-control" readonly="" value="<?php echo $id; ?>" style="height: 5%; width: 95%;">
+<input type="hidden" name="id_nya" id="id_nya" autocomplete="off" class="form-control" readonly="" value="<?php echo $id; ?>" style="height: 15px;">
 <!--input untuk masuk ke data table-->
 
 <button type="submit" id="tambah_disc_produk" class="btn btn-success" style="background-color:#0277bd"><i class="fa fa-plus"> </i> Tambah</button>
 <span id="tambh_disc_produk" style="display: none;"><!--span untuk tambah free produk-->
-          <form class="form-inline" role="form" id="formdiscproduk">
+          <form class="form-group" role="form" id="formdiscproduk">
           <div class="row armun"><!--div class="row armun"-->
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="hidden" name="id_program" id="id_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $id ;?>" style="height: 5%; width: 95%;">
+                <input type="hidden" name="id_program" id="id_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $id ;?>" style="height: 15px;">
 
-                <b><input type="text" name="nama_program" id="nama_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 5%; width: 95%; font-size: 125%;" placeholder="Nama Program"></b>
+                <b><input type="text" name="nama_program" id="nama_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 15px; font-size: 125%;" placeholder="Nama Program"></b>
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="kode_produk" id="kode_produk" autocomplete="off" class="form-control" style="height: 5%; width: 95%;" placeholder="Kode Produk" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Ketikkan kode produk atau nama produk untuk memilih produk.'>
+                <input type="text" name="kode_produk" id="kode_produk" autocomplete="off" class="form-control" style="height: 15px;" placeholder="Kode Produk" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Ketikkan kode produk atau nama produk untuk memilih produk.'>
 
-                <input type="hidden" name="id_produk" id="id_produk" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;">
+                <input type="hidden" name="id_produk" id="id_produk" autocomplete="off" class="form-control" readonly="" style="height: 15px;">
+                <input type="hidden" name="nama_produk" id="nama_produk" autocomplete="off" class="form-control" readonly="" style="height: 15px;">
             </div><!--div class="col-sm-2 armun"-->
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="harga_disc" id="harga_disc" autocomplete="off" class="form-control" style="height: 5%; width: 65%;"  placeholder="Harga Promo">
+                <input type="text" name="harga_disc" id="harga_disc" autocomplete="off" class="form-control" style="height: 15px;"  placeholder="Harga Promo">
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="qty_max" id="qty_max" autocomplete="off" class="form-control" style="height: 5%; width: 45%;"  placeholder="Qty Max. Bonus">
+                <input type="text" name="qty_max" id="qty_max" autocomplete="off" class="form-control" style="height: 15px;"  placeholder="Qty Max. Bonus">
             </div><!--div class="col-sm-2 armun"-->
 
-            <div class="col-sm-2"><!--/div class="col-sm-2 armun"--><br>
+            <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
               <button type="submit" id="tambah_produk" class="btn btn-primary" style="background-color:#0277bd"><i class="fa fa-plus"> </i> Submit</button>
             </div><!--div class="col-sm-2 armun"-->
           </div><!--/div class="row armun"-->
@@ -59,32 +60,32 @@ $kode_program = stringdoang($_GET['kode']);
 
 <!--awal span untuk edit free produk-->
 <span id="edit_disc_produk" style="display: none;"><!--span untuk edit free produk-->
-          <form class="form-inline" role="form" id="formdiscproduk">
+          <form class="form-group" role="form" id="formdiscproduk">
           <div class="row armun"><!--div class="row armun"-->
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="hidden" name="id_program_edit" id="id_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $id ;?>" style="height: 5%; width: 95%;">
+                <input type="hidden" name="id_program_edit" id="id_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $id ;?>" style="height: 15px;">
 
-                <b><input type="text" name="nama_program_edit" id="nama_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 5%; width: 95%; font-size: 125%;" placeholder="Nama Program"></b>
+                <b><input type="text" name="nama_program_edit" id="nama_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 15px; font-size: 125%;" placeholder="Nama Program"></b>
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="kode_produk_edit" id="kode_produk_edit" autocomplete="off" class="form-control" style="height: 5%; width: 95%;" placeholder="Kode Produk" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Ketikkan kode produk atau nama produk untuk memilih dan merubah produk.'>
+                <input type="text" name="kode_produk_edit" id="kode_produk_edit" autocomplete="off" class="form-control" style="height: 15px;" placeholder="Kode Produk" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Ketikkan kode produk atau nama produk untuk memilih dan merubah produk.'>
 
-                <input type="hidden" name="id_produk_edit" id="id_produk_edit" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;">
+                <input type="hidden" name="id_produk_edit" id="id_produk_edit" autocomplete="off" class="form-control" readonly="" style="height: 15px;">
             </div><!--div class="col-sm-2 armun"-->
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="harga_disc_edit" id="harga_disc_edit" autocomplete="off" class="form-control" style="height: 5%; width: 65%;"  placeholder="Harga Promo">
+                <input type="text" name="harga_disc_edit" id="harga_disc_edit" autocomplete="off" class="form-control" style="height: 15px; width: 65%;"  placeholder="Harga Promo">
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="qty_max_edit" id="qty_max_edit" autocomplete="off" class="form-control" style="height: 5%; width: 45%;"  placeholder="Qty Max.">
+                <input type="text" name="qty_max_edit" id="qty_max_edit" autocomplete="off" class="form-control" style="height: 15px; width: 45%;"  placeholder="Qty Max.">
 
-                <input type="hidden" name="id_edit" id="id_edit" autocomplete="off" class="form-control" readonly="" style="height: 5%; width: 95%;">
+                <input type="hidden" name="id_edit" id="id_edit" autocomplete="off" class="form-control" readonly="" style="height: 15px;">
             </div><!--div class="col-sm-2 armun"-->
 
-            <div class="col-sm-2"><!--/div class="col-sm-2 armun"--><br>
+            <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
               <button type="submit" id="submit_edit" class="btn btn-primary" style="background-color:#0277bd"><i class="fa fa-edit"> </i> Edit</button>
             </div><!--div class="col-sm-2 armun"-->
           </div><!--/div class="row armun"-->
@@ -132,7 +133,7 @@ $kode_program = stringdoang($_GET['kode']);
   </div>
 </div><!-- end of modal hapus data  -->
 
-<br>
+
 <span id="table_le_kui">
   <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
   <table id="table_disc_produk" class="table table-bordered table-sm">
@@ -186,27 +187,43 @@ $kode_program = stringdoang($_GET['kode']);
                 {
                   
                   $('#id_produk').val('');
+                  $('#nama_produk').val('');
                  
                 }
 
                 else 
                 {
                   $('#id_produk').val(json.id);
+                  $('#nama_produk').val(json.nama_barang);
                   
                 }
 
                 var id_produk = $("#id_produk").val();
+                var nama_produk = $("#nama_produk").val();
+                var id_program = $("#id_program").val();
 
-                $.post('cek_kode_bonus_disc_produk.php',{id_produk:id_produk}, function(data){
+                  $.post('periksa_promo_produk.php',{id_produk:id_produk, id_program:id_program}, function(data){
+                    if (data == 1) {
+                      alert("Anda Tidak Bisa Menambahkan Produk '"+nama_produk+"', Karena Produk Tersebut Sudah Ada Di Promo Free Produk !");
+                       $("#kode_produk").val('');
+                       $("#nama_produk").val('');
+                       $("#kode_produk").focus();
+                    }
+                    else{
+
+                        $.post('cek_kode_bonus_disc_produk.php',{id_produk:id_produk}, function(data){
             
-              if(data == 1){
-              alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
-              $("#kode_produk").focus();
-              $("#kode_produk").val('');
-              $("#id_produk").val('');
-              }//penutup if
-              
-              });////penutup function(data)
+                        if(data == 1){
+                          alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+                          $("#kode_produk").focus();
+                          $("#kode_produk").val('');
+                          $("#id_produk").val('');
+                        }//penutup if
+                        
+                        });////penutup function(data)
+
+                    }
+                  });
                                                         
                 }); 
           }
@@ -299,6 +316,7 @@ $kode_program = stringdoang($_GET['kode']);
                 });
 
               $("#harga_disc").val('');
+              $("#kode_produk").val('');
               $("#nama_produk").val('');
               $("#qty_max").val('');
               $("#qty").val('');

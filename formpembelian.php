@@ -2031,7 +2031,8 @@ $(document).ready(function(){
             $("#cetak_tunai").hide();
             $("#cetak_hutang").hide();
             $("#alert_berhasil").hide();
-            $("#ppn").attr("disabled", false);
+            $("#ppn").attr("disabled", false).trigger('chosen:updated');
+
 
     });
   });

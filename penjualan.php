@@ -22,7 +22,7 @@ $status = $_GET['status'];
     <input type="hidden" name="status" class="form-control " id="status" value="<?php echo $status ?>" "/>
 
 <!--MODAL VOID -->
-<div id="modal_void" class="modal fade" role="dialog">
+<div id="modal_void" class="modal" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -83,7 +83,7 @@ $status = $_GET['status'];
 
 
 <!-- Modal pindah meja -->
-<div id="modal_meja_edit" class="modal fade" role="dialog">
+<div id="modal_meja_edit" class="modal" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -141,7 +141,7 @@ $status = $_GET['status'];
 </div><!-- end of modal pindah meja -->
 
 <!-- Modal Hapus data -->
-<div id="modal_hapus" class="modal fade" role="dialog">
+<div id="modal_hapus" class="modal" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -182,7 +182,7 @@ $status = $_GET['status'];
 </div><!-- end of modal hapus data  -->
 
 
-<div id="modal_detail" class="modal fade" role="dialog">
+<div id="modal_detail" class="modal" role="dialog">
   <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
@@ -227,7 +227,53 @@ $status = $_GET['status'];
   </div>
 </div>
 
-<div id="modal_alert" class="modal fade" role="dialog">
+
+<div id="modal_bonus" class="modal" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><center><h4><b>Bonus Penjualan</b></h4></center></h4>
+      </div>
+
+      <div class="modal-body">
+      <div class="table-responsive">
+      <span id="modal-detail"> </span>
+
+       
+  <table id="table_modal_bonus" class="table table-bordered table-sm">
+  <thead> <!-- untuk memberikan nama pada kolom tabel -->
+
+          <th> No Faktur </th>
+          <th> Kode Barang </th>
+          <th> Nama Barang </th>
+          <th> Jumlah Barang </th>
+          <th> Satuan </th>
+          <th> Harga </th>
+          <th> Subtotal </th>
+          <th> Potongan </th>
+          <th> Tax </th>
+
+  </thead> <!-- tag penutup tabel -->
+  </table>
+
+
+      </div>
+
+     </div>
+
+      <div class="modal-footer">
+        
+  <center><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></center>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="modal_alert" class="modal" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -357,6 +403,7 @@ $penjualan_hapus = mysqli_num_rows($pilih_akses_penjualan_hapus);
 			<th style='background-color: #4CAF50; color:white'> Cetak  Tunai </th>
 			<th style='background-color: #4CAF50; color:white'> Cetak Piutang </th>
 			<th style='background-color: #4CAF50; color:white'> Detail </th>
+      <th style='background-color: #4CAF50; color:white'> Bonus </th>
 			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
 			<th style='background-color: #4CAF50; color:white'> Gudang </th>
 			<!--<th style='background-color: #4CAF50; color:white'> Bayar </th>-->
@@ -667,6 +714,45 @@ $("#login").click(function(){
   });
  </script>
 <!--Ending Ajax Modal Detail-->
+
+<!--Start Ajax Modal Bonus-->
+<script type="text/javascript" language="javascript" >
+   $(document).ready(function() {
+    $(document).on('click', '.bonus', function (e) {
+    $("#modal_bonus").modal('show');
+
+    var no_faktur = $(this).attr("no_faktur");
+    $("#no_faktur_detail").val(no_faktur);
+      var no_faktur_detail = $("#no_faktur_detail").val();
+            $('#table_modal_bonus').DataTable().destroy();
+
+        var dataTable = $('#table_modal_bonus').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"modal_bonus_penjualan.php", // json datasource
+             "data": function ( d ) {
+                  d.no_faktur = $("#no_faktur_detail").val();
+                  // d.custom = $('#myInput').val();
+                  // etc
+              },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_modal_bonus").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+
+         
+
+        });  
+  
+     }); 
+  });
+ </script>
+<!--Ending Ajax Modal Bonus-->
 
 <!--Start Ajax Modal Cari-->
 <!--menampilkan detail penjualan-->

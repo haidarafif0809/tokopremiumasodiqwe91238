@@ -76,15 +76,15 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 
 
-      $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jumlah-jual' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_ganti."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_barang'],3)."' class='input_jumlah_jual' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_barang']."' data-harga='".koma($row['harga'],2)."' data-tipe='".$row['tipe_barang']."' data-satuan='".$row['satuan']."' data-berstok = '".$row['berkaitan_dgn_stok']."' data-nama-barang='".$row['nama_barang']."'> </p>";
+      $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jumlah-jual' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_ganti."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".$jumlah_ganti."' class='input_jumlah_jual' data-id='".$row['id']."' data-nama-satuan='".$row['nama']."' autofocus='' data-kode='".$row['kode_barang']."' data-harga='".koma($row['harga'],2)."' data-tipe='".$row['tipe_barang']."' data-satuan='".$row['satuan']."' data-berstok = '".$row['berkaitan_dgn_stok']."' data-nama-barang='".$row['nama_barang']."'> </p>";
 
       $nestedData[] = $row["nama"];
 
 
       $nestedData[] = "<p  align='right'>".koma($row["harga"],2)."</p>";
-      $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-subtotal-".$row['id']."'> ".koma($row["subtotal"],2)." </span> </p>";
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-potongan-".$row['id']."'> ".koma($row["potongan"],2)." </span> </p>";
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-tax-".$row['id']."'> ".koma($row["tax"],2)." </span> </p>";
+      $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-subtotal-".$row['id']."'> ".koma($row["subtotal"],2)." </span> </p>";
 
 
 

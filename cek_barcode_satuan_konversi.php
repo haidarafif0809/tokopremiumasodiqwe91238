@@ -5,9 +5,8 @@ include 'sanitasi.php';
 
 $barcode = stringdoang($_POST['barcode']);
 
-$query = $db->query("SELECT kode_barcode FROM satuan_konversi WHERE kode_barcode = '$barcode'");
+$query = $db->query("SELECT kode_barcode FROM satuan_konversi WHERE kode_barcode = '$barcode' OR kode_produk = '$barcode' ");
 $jumlah = mysqli_num_rows($query);
-
 
 if ($jumlah > 0){
 

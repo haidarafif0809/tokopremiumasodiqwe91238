@@ -59,7 +59,7 @@ while ($query_jumlah_data = mysqli_fetch_array($query_data)) {
 $totalData = $jumlah_data;
 
 $query=mysqli_query($conn, $sql) or die("eror 2");
-$totalFiltered = $jumlah_data;; // when there is a search parameter then we have to modify total number filtered rows as per search result. 
+$totalFiltered = $jumlah_data; // when there is a search parameter then we have to modify total number filtered rows as per search result. 
    
 
 $data = array();

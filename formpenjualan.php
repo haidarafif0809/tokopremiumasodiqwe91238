@@ -790,9 +790,9 @@ tr:nth-child(even){background-color: #f2f2f2}
                           <th> Jumlah </th>
                           <th> Satuan </th>
                           <th> Harga </th>
-                          <th> Subtotal </th>
                           <th> Potongan </th>
-                          <th> Pajak </th>
+                          <th> Pajak </th>                          
+                          <th> Subtotal </th>
                           <th> Hapus </th>     
                     </thead>
                 <tbody id="tbody">      
@@ -4907,6 +4907,7 @@ $(document).ready(function(){
 
                                     var satuan_konversi = $(this).attr("data-satuan");
                                     var ber_stok = $(this).attr("data-berstok");
+                                    var nama_satuan = $(this).attr("data-nama-satuan");
 
                                     var subtotal_lama = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-subtotal-"+id+"").text()))));
                                     var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-potongan-"+id+"").text()))));
@@ -5214,16 +5215,27 @@ $(document).ready(function(){
 
                           else{
 
-                              $.post("cek_stok_pesanan_barang.php",{kode_barang:kode_barang, jumlah_baru:jumlah_baru,satuan_konversi:satuan_konversi},function(data){
+                              $.post("cek_stok_pesanan_barang.php",{jumlah_lama:jumlah_lama,kode_barang:kode_barang, jumlah_baru:jumlah_baru,satuan_konversi:satuan_konversi},function(data){
                                        if (data < 0) {
 
-                                       alert ("Jumlah Yang Di Masukan Melebihi Stok !");
+                                       alert("Jumlah Yang Di Masukan Melebihi Stok !");
 
-                                    $("#input-jumlah-"+id+"").val(jumlah_lama.format(2, 3, '.', ','));
-                                    $("#text-jumlah-"+id+"").text(jumlah_lama.format(2, 3, '.', ','));
-                                    $("#text-jumlah-"+id+"").show();
-                                    $("#input-jumlah-"+id+"").attr("type", "hidden");
-                                    
+                                          if (nama_satuan == "KG") {
+
+                                              $("#text-jumlah-"+id+"").show();
+                                              $("#input-jumlah-"+id+"").attr("type", "hidden");
+                                              $("#input-jumlah-"+id+"").val(jumlah_lama.format(2, 3, '.', ','));
+                                              $("#text-jumlah-"+id+"").text(jumlah_lama.format(2, 3, '.', ','));
+
+                                          }else{
+
+                                              $("#text-jumlah-"+id+"").show();
+                                              $("#input-jumlah-"+id+"").attr("type", "hidden");
+                                              $("#input-jumlah-"+id+"").val(jumlah_lama);
+                                              $("#text-jumlah-"+id+"").text(jumlah_lama);
+
+                                          };
+                                      
                                      }
 
                                       else{

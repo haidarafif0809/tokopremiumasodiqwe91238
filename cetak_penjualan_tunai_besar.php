@@ -16,9 +16,6 @@ include 'db.php';
     $query1 = $db->query("SELECT * FROM perusahaan ");
     $data1 = mysqli_fetch_array($query1);
 
-    $query2 = $db->query("SELECT * FROM detail_penjualan WHERE no_faktur = '$no_faktur' ");
-    $data2 = mysqli_fetch_array($query2);
-
     $query3 = $db->query("SELECT SUM(jumlah_barang) as total_item FROM detail_penjualan WHERE no_faktur = '$no_faktur'");
     $data3 = mysqli_fetch_array($query3);
     $total_item = $data3['total_item'];
@@ -146,25 +143,31 @@ include 'db.php';
 
         $no_urut = 0;
 
-            $query5 = $db->query("SELECT * FROM detail_penjualan WHERE no_faktur = '$no_faktur' ");
+            $query5 = $db->query("SELECT sk.konversi,dp.kode_barang, dp.nama_barang, dp.jumlah_barang / IFNULL( sk.konversi,0) AS jumlah_produk, dp.jumlah_barang, 
+              dp.harga, dp.potongan, dp.subtotal, dp.tax, s.nama AS satuan_konversi, sa.nama AS satuan_dasar FROM detail_penjualan dp LEFT JOIN satuan_konversi sk ON dp.kode_barang = sk.kode_produk AND dp.satuan = sk.id_satuan
+            LEFT JOIN satuan s ON dp.satuan = s.id LEFT JOIN satuan sa ON dp.asal_satuan = sa.id WHERE dp.no_faktur = '$no_faktur' ");
             //menyimpan data sementara yang ada pada $perintah
             while ($data5 = mysqli_fetch_array($query5))
             {
 
               $no_urut ++;
-              $kode = $db->query("SELECT satuan FROM barang WHERE kode_barang = '$data5[kode_barang]' ");
-              $satuan_b = mysqli_fetch_array($kode);
-              $satuan = $satuan_b['satuan'];
 
             echo "<tr>
             <td class='table1' align='center'>".$no_urut."</td>
-            <td class='table1'>". $data5['nama_barang'] ."</td>
-            <td class='table1' align='right'>". koma($data5['jumlah_barang'],3) ."</td>
-            <td class='table1'>". $data_inner['nama'] ."</td>
-            <td class='table1' align='right'>". rp($data5['harga']) ."</td>
-            <td class='table1' align='right'>". rp($data5['potongan']) ."</td>
-            <td class='table1' align='right'>". rp($data5['tax']) ."</td>
-            <td class='table1' align='right'>". rp($data5['subtotal']) ."</td>
+            <td class='table1'>". $data5['nama_barang'] ."</td>";
+
+            if ($data5["konversi"] != 0) {
+            echo"<td class='table1' align='right'>". koma($data5['jumlah_produk'], 3) ."</td>
+            <td class='table1'>". $data5['satuan_konversi'] ."</td>";
+            }
+            else{
+            echo"<td class='table1' align='right'>". koma($data5['jumlah_barang'], 3) ."</td>
+            <td class='table1'>". $data5['satuan_dasar'] ."</td>";
+            }
+            echo"<<td class='table1' align='right'>". koma($data5['harga'], 2) ."</td>
+            <td class='table1' align='right'>". koma($data5['potongan'], 2) ."</td>
+            <td class='table1' align='right'>". koma($data5['tax'], 2) ."</td>
+            <td class='table1' align='right'>". koma($data5['subtotal'], 2) ."</td>
             <tr>";
 
             }

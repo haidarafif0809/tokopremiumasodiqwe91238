@@ -41,12 +41,12 @@ if ($data > 0){
 else
 {
 
-        $perintah = $db->prepare("INSERT INTO tbs_pembayaran_hutang (session_id,no_faktur_pembelian,tanggal,tanggal_jt,kredit,potongan,total,jumlah_bayar) 
-        VALUES (?,?,now(),?,?,?,?,?)");
+        $perintah = $db->prepare("INSERT INTO tbs_pembayaran_hutang (session_id,no_faktur_pembelian,tanggal,tanggal_jt,kredit,potongan,total,jumlah_bayar,suplier) 
+        VALUES (?,?,now(),?,?,?,?,?,?)");
          
          
-         $perintah->bind_param("sssiiii",
-         $session_id, $no_faktur_pembelian, $tanggal_jt, $kredit, $potongan, $total_kredit, $jumlah_bayar);
+         $perintah->bind_param("sssiiiii",
+         $session_id, $no_faktur_pembelian, $tanggal_jt, $kredit, $potongan, $total_kredit, $jumlah_bayar,$suplier);
          
            $session_id = $_POST['session_id'];
          $no_faktur_pembelian = stringdoang($_POST['no_faktur_pembelian']);
@@ -55,6 +55,8 @@ else
          $total_kredit = angkadoang($_POST['total']);            
          $jumlah_bayar = angkadoang($_POST['jumlah_bayar']);
          $potongan = angkadoang($_POST['potongan']);
+         $suplier = angkadoang($_POST['suplier']);
+
 
          $perintah->execute();
          

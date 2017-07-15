@@ -27,7 +27,7 @@ include 'db.php';
 
 
         
-        $perintah = $db->query("SELECT s.nama,kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.harga_jual,b.harga_jual2,b.harga_jual3,b.stok_barang,b.satuan,b.kategori,b.suplier FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.berkaitan_dgn_stok = 'Barang' || b.berkaitan_dgn_stok = '' ");
+        $perintah = $db->query("SELECT s.nama,kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.harga_jual,b.harga_jual2,b.harga_jual3,b.stok_barang,b.satuan,b.kategori,b.suplier, k.nama_kategori FROM barang b INNER JOIN satuan s ON b.satuan = s.id INNER JOIN kategori k ON b.kategori = k.id WHERE b.berkaitan_dgn_stok = 'Barang' || b.berkaitan_dgn_stok = '' ");
         
         //menyimpan data sementara yang ada pada $perintah
         while ($data1 = mysqli_fetch_array($perintah))
@@ -44,7 +44,7 @@ include 'db.php';
             <td>". rp($data1['harga_jual2']) ."</td>
             <td>". rp($data1['harga_jual3']) ."</td>
             <td>". $data1['nama'] ."</td>
-            <td>". $data1['kategori'] ."</td>
+            <td>". $data1['nama_kategori'] ."</td>
             <td>". $data1['suplier'] ."</td>
             
             </tr>";

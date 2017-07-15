@@ -28,7 +28,7 @@ include 'sanitasi.php';
 //perhitungan jumlah bayar (jumlah_bayar + potongan)
 
 //ambil data no_faktur yang di edit dari penjualan
-    $query_penjualan = $db->query("SELECT biaya_admin,potongan,tax,ppn,total,tanggal FROM penjualan WHERE no_faktur = '$nomor_faktur'");
+    $query_penjualan = $db->query("SELECT biaya_admin,potongan,tax,ppn,total,tanggal, tanggal_jt, tunai, sisa, nilai_kredit, keterangan FROM penjualan WHERE no_faktur = '$nomor_faktur'");
     $data_penjualan = mysqli_fetch_array($query_penjualan);
     $potongan = $data_penjualan['potongan'];
     $ppn = $data_penjualan['ppn'];
@@ -36,6 +36,9 @@ include 'sanitasi.php';
     $biaya_admin = $data_penjualan['biaya_admin'];
     $tanggal_ganti = $data_penjualan['tanggal'];
     $total_akhir = $data_penjualan['total'];
+    $tunai = $data_penjualan['tunai'];
+    $kembalian = $data_penjualan['sisa'];
+    $kredit = $data_penjualan['nilai_kredit'];
 //ambil data no_faktur yang di edit dari penjualan
 
 //ambil data untuk form pembayaran yang akan di edit diambil dari perhitunga berikut
@@ -125,19 +128,19 @@ include 'sanitasi.php';
 </div>
 
 
-<button type="button" style="height:50px;" id="cari_produk_penjualan" class="btn btn-info" data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i>  Cari (F1) </button>
-<button type="button" style="height:50px;" id="daftar_order" class="btn btn-success" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
+<button type="button" style="height:45px;" id="cari_produk_penjualan" class="btn btn-info" data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i>  Cari (F1) </button>
+<button type="button" style="height:45px;" id="daftar_order" class="btn btn-success" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
 
-<button class="btn btn-primary" type="button" style="height:50px;" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+<button class="btn btn-primary" type="button" style="height:45px; display: none" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Antrian  </button>
 
-<button class="btn btn-warning" type="button" style="height:50px;" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
+<button class="btn btn-warning" type="button" style="height:45px;" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Order </button>
 
 
-<button class="btn btn-deep-purple btn-sm"  style="height:50px;" type="button" id="tombol-warning"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+<button class="btn btn-deep-purple btn-sm"  style="height:45px; width: 45px;" type="button" id="tombol-warning"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
 
-<button class="btn btn-indigo btn-sm" type="button" id="tombol-purpel" style="display: none; height:50px;"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+<button class="btn btn-indigo btn-sm" type="button" id="tombol-purpel" style="display: none; height:45px; width: 45px;"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
 
 <div style="display: none" id="span-colapse">
 <div class="form-group  col-sm-2">
@@ -220,11 +223,12 @@ Order </button>
 
 <!--form barcode barang -->
 <form id="form_barcode" class="form-inline"> 
-    <div class="form-group  col-sm-4">
-      <label> Scan / Ketik Barcode </label>
-        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" autocomplete="off" placeholder="Scan / Ketik Barcode" >
-    </div>     
-    <button type="submit" id="submit_barcode" class="btn btn-primary" style="font-size:15px;height:50px" ><i class="fa fa-barcode"></i> Submit Barcode</button>
+  <br>
+    <div class="form-group col-sm-2">
+        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" autocomplete="off" placeholder="Scan / Ketik Barcode">
+    </div>
+        
+    <button type="submit" id="submit_barcode" class="btn btn-primary" style="font-size:15px" ><i class="fa fa-barcode"></i> Submit Barcode</button>
              
 </form>
 <!--end form barcode barang -->
@@ -741,7 +745,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
   <div class="form-group col-sm-6">
       <label> Tanggal </label><br>
-      <input type="text" name="tanggal_jt" id="tanggal_jt" style="height:15px;font-size:15px" placeholder="Tanggal JT" class="form-control tanggal" autocomplete="off">
+      <input type="text" name="tanggal_jt" id="tanggal_jt" style="height:15px;font-size:15px" placeholder="Tanggal JT" class="form-control tanggal" value="<?php echo $data_penjualan['tanggal_jt']; ?>" autocomplete="off">
   </div>
 
 
@@ -780,7 +784,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
     <div class="form-group col-sm-6">
         <label> Pembayaran </label><br>
-        <b><input type="text" name="pembayaran" id="pembayaran_penjualan" style="height: 20px; width:90%; font-size:20px;" autocomplete="off" class="form-control"   style="font-size: 20px"  ></b>
+        <b><input type="text" name="pembayaran" id="pembayaran_penjualan" style="height: 20px; width:90%; font-size:20px;" autocomplete="off" class="form-control" style="font-size: 20px" value="<?php echo $tunai ?>" ></b>
     </div>
 
 </div> <!--end <div class="row">-->
@@ -790,18 +794,18 @@ tr:nth-child(even){background-color: #f2f2f2}
 
       <div class="col-sm-6">
           <label> Kembalian </label><br>
-          <b><input type="text" name="sisa_pembayaran" id="sisa_pembayaran_penjualan" style="height:15px;font-size:15px" class="form-control"  readonly="" required=""  style="font-size: 20px" ></b>
+          <b><input type="text" name="sisa_pembayaran" id="sisa_pembayaran_penjualan" style="height:15px;font-size:15px" class="form-control"  readonly="" required=""  style="font-size: 20px" value="<?php echo $kembalian ?>" ></b>
       </div>
           
       <div class="col-sm-6">
           <label> Kredit </label><br>
-          <b><input type="text" name="kredit" id="kredit" class="form-control" style="height:15px;font-size:15px"  readonly="" required="" ></b>
+          <b><input type="text" name="kredit" id="kredit" class="form-control" style="height:15px;font-size:15px"  readonly="" required="" value="<?php echo $kredit ?>" ></b>
       </div>
 
 </div> <!--end <div class="row">-->
           
       <label> Keterangan </label><br>
-        <textarea type="text" name="keterangan" id="keterangan" class="form-control"> </textarea>
+        <textarea type="text" name="keterangan" id="keterangan" class="form-control"> <?php echo $data_penjualan['keterangan'] ?></textarea>
 
           <b><input type="hidden" name="zxzx" id="zxzx" class="form-control" style="height: 50px; width:90%; font-size:25px;"  readonly="" required="" ></b>
           <b><input type="hidden" name="jumlah_bayar_lama" id="jumlah_bayar_lama" value="<?php echo $jumlah_bayar_lama; ?>" class="form-control" style="height: 50px; width:90%; font-size:25px;"  readonly=""></b>
@@ -831,7 +835,7 @@ mysqli_close($db);
           
   <div class="row">
       <div class="col-sm-3">
-      <a href="penjualan.php?status=semua" id="transaksi_baru" class="btn btn-primary"  style="display: none;">Kembali Ke Laporan</a>
+      <a href="penjualan.php?status=semua" id="transaksi_baru" class="btn btn-primary"  style="display: none;">Kembali</a>
   </div>
     
   <div class="col-sm-3">
@@ -839,7 +843,7 @@ mysqli_close($db);
   </div>
 
   <div class="col-sm-3">
-      <a href='cetak_penjualan_tunai_besar.php?no_faktur=<?php echo $nomor_faktur; ?>' id="cetak_tunai_besar" style="display: none;"  class="btn btn-info" target="blank">Cetak Tunai Besar</a>
+      <a href='cetak_penjualan_tunai_besar.php?no_faktur=<?php echo $nomor_faktur; ?>' id="cetak_tunai_besar" style="display: none;"  class="btn btn-info" target="blank">Cetak Besar</a>
   </div>
     
   <div class="col-sm-3">
@@ -852,13 +856,13 @@ mysqli_close($db);
 </form>
 
 </div>
-
-</div><!-- end of row -->   
-          
         <br>
           <div class="alert alert-success" id="alert_berhasil" style="display:none">
           <strong>Success!</strong> Pembayaran Berhasil
       </div>
+</div><!-- end of row -->   
+          
+
 
 </div><!-- end of container -->
 
@@ -2871,8 +2875,8 @@ $("#potongan_persen").keyup(function(){
              var hasil_akhir = parseFloat(sisa_potongan) /*+ parseFloat(biaya_adm.replace(',','.'));/*parseFloat(tax_rp)*/
 
 
-         $("#total1").val(hasil_akhir.format(2, 3, '.', ','));
-        $("#potongan_penjualan").val(potongan_penjualan.format(2, 3, '.', ','));
+         $("#total1").val(round(hasil_akhir.format(2, 3, '.', ',')));
+        $("#potongan_penjualan").val(round(potongan_penjualan.format(2, 3, '.', ',')));
         
         if (potongan_persen > 100.00) {
 
@@ -3765,7 +3769,7 @@ else {
 
       });
         
-        $('#pembayaran_penjualan').val('');
+        
 
 // END DATATABLE AJAX END DATATABLE AJAX TBS PENJUALAN
 });

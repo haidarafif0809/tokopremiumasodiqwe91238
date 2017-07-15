@@ -42,7 +42,7 @@ $no_faktur = $_GET['no_faktur'];
            <?php 
            while ($data2 = mysqli_fetch_array($query2)){
            
-           echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. $data2['jumlah_barang'] .'</td>  <td style="padding:3px"> '. rp($data2['harga']) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
+           echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. koma($data2['jumlah_barang'],3) .'</td>  <td style="padding:3px"> '. rp($data2['harga']) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
            
            }
            
@@ -63,7 +63,7 @@ $no_faktur = $_GET['no_faktur'];
       <tr><td width="50%">Biaya Admin</td> <td> :</td> <td><?php echo koma($data0['biaya_admin'],2);?> </tr>
 
       <!--<tr><td  width="50%">Pajak</td> <td> :</td> <td> <?php echo koma($data0['tax']);?> </td></tr>-->
-      <tr><td  width="50%">Total Item</td> <td> :</td> <td> <?php echo gantiKoma($total_item); ?> </td></tr>
+      <tr><td  width="50%">Total Item</td> <td> :</td> <td> <?php echo koma($total_item,3); ?> </td></tr>
       <tr><td width="50%">Total Penjualan</td> <td> :</td> <td><?php echo koma($data0['total'],2); ?> </tr>
       <tr><td  width="50%">Tunai</td> <td> :</td> <td> <?php echo koma($data0['tunai'],2); ?> </td></tr>
       <tr><td  width="50%">Kembalian</td> <td> :</td> <td> <?php echo koma($data0['sisa'],2); ?>  </td></tr>

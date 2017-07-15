@@ -96,8 +96,8 @@ $no_faktur_pembayaran = $nomor."/PH/".$data_bulan_terakhir."/".$tahun_terakhir;
         {
 
         
-        $query2 = $db->query("INSERT INTO detail_pembayaran_hutang (no_faktur_pembayaran, no_faktur_pembelian, tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar) 
-        VALUES ('$no_faktur_pembayaran','$data[no_faktur_pembelian]', '$tanggal_sekarang','$data[tanggal_jt]','$data[kredit]','$data[potongan]','$data[total]','$data[jumlah_bayar]')");
+        $query2 = $db->query("INSERT INTO detail_pembayaran_hutang (no_faktur_pembayaran, no_faktur_pembelian, tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar,suplier) 
+        VALUES ('$no_faktur_pembayaran','$data[no_faktur_pembelian]', '$tanggal_sekarang','$data[tanggal_jt]','$data[kredit]','$data[potongan]','$data[total]','$data[jumlah_bayar]','$suplier')");
         }
 
    

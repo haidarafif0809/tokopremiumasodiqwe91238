@@ -144,6 +144,15 @@ function tanggal($tanggal){
  return $date_format;
 }
 
+
+function tgl($tanggal){
+
+ $date= date_create($tanggal);
+ $date_format =  date_format($date,"d-m-Y");
+ return $date_format;
+}
+
+
 function cek_stok($kode_barang){
 
 

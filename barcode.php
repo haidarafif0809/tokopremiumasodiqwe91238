@@ -2,6 +2,7 @@
 $session_id = session_id();
 include 'db.php';
 include 'sanitasi.php';
+include 'persediaan.function.php';
 
 
 
@@ -13,49 +14,81 @@ include 'sanitasi.php';
      // store a string
 
     $kode_cek = substr(stringdoang($_POST['kode_barang']),0,2);
+    $kode_barcode = stringdoang($_POST['kode_barang']);
 
 
     $sales = stringdoang($_POST['sales']);
     $level_harga = stringdoang($_POST['level_harga']);
 
+        // QUERY CEK BARCODE DI SATUAN KONVERSI
+                                    
+        $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data,kode_barcode,kode_produk,konversi , id_satuan FROM satuan_konversi WHERE kode_barcode = '$kode_barcode' ");
+        $data_satuan_konversi = mysqli_fetch_array($query_satuan_konversi);     
 
-$lihat_setting = $db->query("SELECT kode_flag FROM setting_timbangan");
-$kel_setting = mysqli_fetch_array($lihat_setting);
-$setting_flag = $kel_setting['kode_flag'];
+        // QUERY CEK BARCODE DI SATUAN KONVERSI
+
+        $lihat_setting = $db->query("SELECT kode_flag FROM setting_timbangan");
+        $kel_setting = mysqli_fetch_array($lihat_setting);
+        $setting_flag = $kel_setting['kode_flag'];
 
 
-if ($kode_cek == $setting_flag)
-{
-    $kode_barang = substr(stringdoang($_POST['kode_barang']),2,5);
-    $kilo = substr(stringdoang($_POST['kode_barang']),7,2);
-     $gram = substr(stringdoang($_POST['kode_barang']),9,3);
-     $jumlah_barang = $kilo.'.'.$gram;
-}
-else
-{
-  $kode_barang = stringdoang($_POST['kode_barang']);
-        $jumlah_barang = 1;
-}
+        if ($kode_cek == $setting_flag)
+        {
+             $kode_barang = substr(stringdoang($_POST['kode_barang']),2,5);
+             $kilo = substr(stringdoang($_POST['kode_barang']),7,2);
+             $gram = substr(stringdoang($_POST['kode_barang']),9,3);
+             $jumlah_barang = $kilo.'.'.$gram;
+        }
+        else
+        {           
 
+
+
+            // IF CEK BARCODE DI SATUAN KONVERSI
+                  if ($data_satuan_konversi['jumlah_data'] > 0) {//    if ($data_satuan_konversi['jumlah_data'] > 0) {
+                    
+                    $kode_barang = $data_satuan_konversi['kode_produk'];
+                    $jumlah_barang = 1;
+
+                                        
+                  }else{
+                      
+                      $kode_barang =  $kode_barcode;
+                      $jumlah_barang = 1;
+
+                  }
+
+            // IF CEK BARCODE DI SATUAN KONVERSI       
+          
+        }
+
+// UNTUK MENGETAHUI JUMLAAH TBS SEBENARNYA
+    $jumlah_tbs = 0;
+
+    $query_stok_tbs = $db->query("SELECT jumlah_barang,satuan FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
+    while($data_stok_tbs = mysqli_fetch_array($query_stok_tbs)){
+
+      $query_cek_satuan_konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE kode_produk = '$kode_barang' AND id_satuan = '$data_stok_tbs[satuan]' ");
+      $data_cek_satuan_konversi = mysqli_fetch_array($query_cek_satuan_konversi);
+
+        $konversi = $data_cek_satuan_konversi['konversi'];
+        if ($konversi == '') {
+          $konversi = 1;
+        }
+        $jumlah_tbs_penjualan = $data_stok_tbs['jumlah_barang'] * $konversi;
+
+        $jumlah_tbs = $jumlah_tbs_penjualan + $jumlah_tbs;
+
+    }
+  //  UNTUK MENGETAHUI JUMLAAH TBS SEBENARNYA
 
 
     $tipe = $db->query("SELECT berkaitan_dgn_stok FROM barang WHERE kode_barang = '$kode_barang'");
     $data_tipe = mysqli_fetch_array($tipe);
     $ber_stok = $data_tipe['berkaitan_dgn_stok'];
 
-    $select = $db->query("SELECT SUM(sisa) AS jumlah_barang FROM hpp_masuk WHERE kode_barang = '$kode_barang'");
-    $ambil_sisa = mysqli_fetch_array($select);
-
-    $query = $db->query("SELECT SUM(jumlah_barang) AS jumlah_barang FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
-    $jumlah = mysqli_fetch_array($query);
-    $jumlah_tbs = $jumlah['jumlah_barang'];
-    
-    if ($jumlah_tbs == ""){
-      $jumlah_tbs = 0;
-      }
-   
-
-
+    $ambil_sisa = cekStokHpp($kode_barang) - $jumlah_tbs;
+ 
     $tahun_sekarang = date('Y');
     $bulan_sekarang = date('m');
     $tanggal_sekarang = date('Y-m-d');
@@ -79,7 +112,18 @@ if($c->isCached($kode_barang)) {
     $harga_jual6 = angkadoang($result['harga_jual6']);
     $harga_jual7 = angkadoang($result['harga_jual7']);
 
-    $satuan = stringdoang($result['satuan']);
+            // IF CEK BARCODE DI SATUAN KONVERSI
+
+            if ($data_satuan_konversi['jumlah_data'] > 0) {
+
+                $satuan = $data_satuan_konversi['id_satuan']; // satuan dari satuan konversi
+                }else{
+
+                  $satuan = stringdoang($result['satuan']); // satuan dasar
+                }
+
+            // IF CEK BARCODE DI SATUAN KONVERSI
+
 }
 else {
 $query = $db->query("SELECT * FROM barang WHERE kode_barang = '$kode_barang'");
@@ -124,7 +168,18 @@ while ($data = $query->fetch_array()) {
 
     $jumlah_barang = angkadoang(1);
     
-    $satuan = stringdoang($result['satuan']);
+            // IF CEK BARCODE DI SATUAN KONVERSI
+
+            if ($data_satuan_konversi['jumlah_data'] > 0) {
+
+                $satuan = $data_satuan_konversi['id_satuan']; // satuan dari satuan konversi
+                }else{
+
+                  $satuan = stringdoang($result['satuan']); // satuan dasar
+                }
+
+            // IF CEK BARCODE DI SATUAN KONVERSI
+
 }
 
 if ($level_harga == 'harga_1')
@@ -156,7 +211,38 @@ else if ($level_harga == 'harga_7')
   $harga = $harga_jual7;
 }
 
-$stok_barang = $ambil_sisa['jumlah_barang'] - $jumlah_barang;
+            $query_tbs_penjualan = $db->query("SELECT COUNT(kode_barang) AS jumlah_data FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND session_id = '$session_id' AND satuan = '$satuan'");
+            $data_tbs_penjualan = mysqli_fetch_array($query_tbs_penjualan);
+
+            // IF CEK BARCODE DI SATUAN KONVERSI
+
+            if ($data_satuan_konversi['jumlah_data'] > 0) {
+
+                  $stok_barang = $ambil_sisa - $data_satuan_konversi['konversi'];
+
+                  // cari subtotal , langsung dikalikan dengan nilai konversinya
+                  
+                  $harga_fee = $harga;
+
+                  $harga = $data_satuan_konversi['konversi'] * $harga;
+                  $a = $harga;
+                  // cari subtotal
+                  $jumlah_fee = $data_satuan_konversi['konversi'];
+
+                }else{
+
+                  $stok_barang = $ambil_sisa - $jumlah_barang;
+                  // cari subtotal
+                  $a = $harga * $jumlah_barang;
+                  // cari subtotal
+                  
+                  $jumlah_fee = $jumlah_barang;                  
+                  $harga_fee = $harga;
+                  $harga = $harga;
+                }
+
+            // IF CEK BARCODE DI SATUAN KONVERSI
+
 
 
 // pengambilan data untuk logika insert / update laporan fee produk
@@ -166,129 +252,99 @@ $stok_barang = $ambil_sisa['jumlah_barang'] - $jumlah_barang;
     $nominal = $cek9['jumlah_uang'];
 // pengambilan data untuk logika insert / update laporan fee produk
 
-
+    // cek kode barang
+    // QUERY  UNTUK CEK APAKAH BARCODE YANg DIMASUKAN ADA DIDAFTAR KODE BARANG
     $ambil_row_barang = $db->query("SELECT id FROM barang WHERE kode_barang = '$kode_barang'");
     $cek_row_barang = mysqli_num_rows($ambil_row_barang);
 
 
 if ($ber_stok == 'Barang' OR $ber_stok == 'barang' ) {
     
-    if ($stok_barang <= 0 ) 
+    if ($stok_barang < 0 ) // APABILA STOK TIDAK CUKUP
     {
-      ECHO 1;
+      echo 1;// STOK TIDAK CUKUP
     }
+  else{  // STOK CUKUP
+
+          if ($cek_row_barang <= 0){  // DISINI IF UNTUK CEK APAKAH BARCODE YANF DIMASUKAN ADA DIDAFTAR KODE BARANG
+              echo 3;
+          }else  {//else kode barang adaa
+                  
+
+                          //masukan data denagn prosentase  
+                          if ($prosentase != 0){
+
+                                if ($jumlah_tbs != 0) {// apablla barang ini sudah ada di tbs
+                                              
+
+                                       $jumlahFeemasuk = $jumlah_fee + $jumlah_tbs;
+                                       
+                                       $subtotal_prosentase = $harga_fee * $jumlahFeemasuk;
+                                       
+                                       $fee_prosentase_produk = $prosentase * $subtotal_prosentase / 100;
+                                       
+                                       $komisi = $fee_prosentase_produk;
+
+                                     $query91 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi' WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
+
+                                }else{
+
+                                  $subtotal_prosentase = $harga_fee * $jumlah_fee;                                
+                                  $fee_prosentase_produk = $prosentase * $subtotal_prosentase / 100;
+                                  $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam) VALUES ('$sales', '$session_id', '$kode_barang',
+                                    '$nama_barang', '$fee_prosentase_produk', '$tanggal_sekarang', '$jam_sekarang')");
+                                }// apablla barang ini sudah ada di tbs
+
+                          }
+                      //end masukan data denagn prosentase  
+                      //masukan data denagn nominal  
+                          elseif ($nominal != 0) {
+
+                                if ($jumlah_tbs != 0) {// apablla barang ini sudah ada di tbs
+                                    
+                                    $jumlahFeemasuk = $jumlah_fee + $jumlah_tbs;
+
+                                    $fee_nominal_produk = $nominal * $jumlahFeemasuk;
+
+                                    $komisi_nominal = $fee_nominal_produk;
+                                  $query911 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi_nominal' WHERE nama_petugas = '$user' AND kode_produk = '$kode_barang'");
+                                }
+                                else{
+                                 $fee_nominal_produk = $nominal * $jumlah_fee;
+
+                                $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam) 
+                                  VALUES ('$user', '$session_id', '$kode_barang', '$nama_barang', '$fee_nominal_produk', '$tanggal_sekarang', '$jam_sekarang')");
+                                }// apablla barang ini sudah ada di tbs
 
 
 
-  else{
-  
-if ($cek_row_barang == 0)
-    {
-      echo 3;
-    }
-
-else
-    {
-// cari subtotal
-$a = $harga * $jumlah_barang;
-// cari subtotal
-
-//masukan data denagn prosentase  
-    if ($prosentase != 0){
-      
-      $query90 = $db->query("SELECT jumlah_barang FROM tbs_penjualan WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
-      $cek01 = mysqli_num_rows($query90);
-
-      $cek90 = mysqli_fetch_array($query90);
-      $jumlah1 = $cek90['jumlah_barang'];
-      $jumlah0 = $jumlah_barang + $jumlah1;
-
-          $subtotal_prosentase = $harga * $jumlah0;
-          
-          $fee_prosentase_produk = $prosentase * $subtotal_prosentase / 100;
-
-      $komisi = $fee_prosentase_produk;
-
-      if ($cek01 > 0) {
-        $query91 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi' WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
-      }
-
-      else
-      {
-
-          $subtotal_prosentase = $harga * $jumlah_barang;
-          
-          $fee_prosentase_produk = $prosentase * $subtotal_prosentase / 100;
-
-          $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam) VALUES ('$sales', '$session_id', '$kode_barang',
-            '$nama_barang', '$fee_prosentase_produk', '$tanggal_sekarang', '$jam_sekarang')");
-
-      }
+                          }
+                      //end masukan data denagn nominal  
 
 
-    }
-//end masukan data denagn prosentase  
+                        if ($data_tbs_penjualan['jumlah_data'] != 0) {// apablla barang ini sudah ada di tbs
+                              $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND session_id = ? AND satuan = ? ");
+                              $query1->bind_param("sssssi",$jumlah_barang,$a, $potongan_tampil, $kode_barang, $session_id,$satuan);
+                              $query1->execute();
+                        }else{
 
-//masukan data denagn nominal  
-        elseif ($nominal != 0) {
-
-              $query900 = $db->query("SELECT jumlah_barang FROM tbs_penjualan WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
-              $cek011 = mysqli_num_rows($query900);
-
-              $cek900 = mysqli_fetch_array($query900);
-              $jumlah1 = $cek900['jumlah_barang'];
-              $jumlah0 = $jumlah_barang + $jumlah1;
-
-              $fee_nominal_produk = $nominal * $jumlah0;
-
-              $komisi0 = $fee_nominal_produk;
-
-          if ($cek011 > 0) {
-
-                $query911 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi0' WHERE nama_petugas = '$user' AND kode_produk = '$kode_barang'");
-              }
-
-          else
-              {
-
-                $fee_nominal_produk = $nominal * $jumlah_barang;
-
-                $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam) VALUES ('$user', '$session_id', '$kode_barang', '$nama_barang', '$fee_nominal_produk', '$tanggal_sekarang', '$jam_sekarang')");
-              }
-
-        }
-//end masukan data denagn nominal  
+                              $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam) VALUES (?,?,?,?,?,?,?,?,?)");
+                              $perintah->bind_param("sssssssss",
+                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang);
+                                                 
+                              $perintah->execute();
+                        }//apablla barang ini sudah ada di tbs
 
 
 
-$cek = $db->query("SELECT no_faktur FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
-$jumlah = mysqli_num_rows($cek);
-    
-    if ($jumlah > 0)
-    {
-        # code...
-  $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND session_id = ?");
-  $query1->bind_param("sssss",$jumlah_barang,$a, $potongan_tampil, $kode_barang, $session_id);
-        $query1->execute();
 
-    }
-    else
-    {
-  $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam) VALUES (?,?,?,?,?,?,?,?,?)");
-  $perintah->bind_param("sssssssss",
-  $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang);
-                     
-  $perintah->execute();
-
-    }
+                          
+                      //untuk pengambilan data subttotal di form penjualan
+                      echo komarupiah($a,2);
+                      //untuk pengambilan data subttotal di form penjualan
 
 
-//untuk pengambilan data subttotal di form penjualan
-echo komarupiah($a,2);
-//untuk pengambilan data subttotal di form penjualan
-
-
-}//end else kode barang adaa
+              }//end else kode barang adaa
 
 
     } // END ELSE dari IF ($stok_barang < 0) {
@@ -305,107 +361,79 @@ if ($cek_row_barang == 0)
 
 else
     {
-// cari subtotal
-$a = $harga * $jumlah_barang;
-// cari subtotal
-
-//masukan data denagn prosentase  
-    if ($prosentase != 0){
-      
-      $query90 = $db->query("SELECT jumlah_barang FROM tbs_penjualan WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
-      $cek01 = mysqli_num_rows($query90);
-
-      $cek90 = mysqli_fetch_array($query90);
-      $jumlah1 = $cek90['jumlah_barang'];
-      $jumlah0 = $jumlah_barang + $jumlah1;
-
-          $subtotal_prosentase = $harga * $jumlah0;
           
-          $fee_prosentase_produk = $prosentase * $subtotal_prosentase / 100;
+                          //masukan data denagn prosentase  
+                          if ($prosentase != 0){
 
-      $komisi = $fee_prosentase_produk;
+                                if ($jumlah_tbs != 0) {// apablla barang ini sudah ada di tbs
+                                                        
+                                       $jumlahFeemasuk = $jumlah_fee + $jumlah_tbs;
+                                       
+                                       $subtotal_prosentase = $harga_fee * $jumlahFeemasuk;
+                                       
+                                       $fee_prosentase_produk = $prosentase * $subtotal_prosentase / 100;
+                                       
+                                       $komisi = $fee_prosentase_produk;
 
-      if ($cek01 > 0) {
-        $query91 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi' WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
-      }
+                                     $query91 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi' WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
 
-      else
-      {
+                                }else{
 
-          $subtotal_prosentase = $harga * $jumlah_barang;
+                                  $subtotal_prosentase = $harga_fee * $jumlah_fee;                                
+                                  $fee_prosentase_produk = $prosentase * $subtotal_prosentase / 100;
+                                  $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam) VALUES ('$sales', '$session_id', '$kode_barang',
+                                    '$nama_barang', '$fee_prosentase_produk', '$tanggal_sekarang', '$jam_sekarang')");
+                                }// apablla barang ini sudah ada di tbs
+
+                          }
+                      //end masukan data denagn prosentase  
+                      //masukan data denagn nominal  
+                          elseif ($nominal != 0) {
+
+                                if ($jumlah_tbs != 0) {// apablla barang ini sudah ada di tbs
+                                    
+                                    $jumlahFeemasuk = $jumlah_fee + $jumlah_tbs;
+
+                                    $fee_nominal_produk = $nominal * $jumlahFeemasuk;
+
+                                    $komisi_nominal = $fee_nominal_produk;
+                                  $query911 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi_nominal' WHERE nama_petugas = '$user' AND kode_produk = '$kode_barang'");
+                                }
+                                else{
+                                 $fee_nominal_produk = $nominal * $jumlah_fee;
+
+                                $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam) 
+                                  VALUES ('$user', '$session_id', '$kode_barang', '$nama_barang', '$fee_nominal_produk', '$tanggal_sekarang', '$jam_sekarang')");
+                                }// apablla barang ini sudah ada di tbs
+
+
+
+                          }
+                      //end masukan data denagn nominal  
+                    
+                 if ($data_tbs_penjualan['jumlah_data'] != 0) {// apablla barang ini sudah ada di tbs
+                                  
+                  $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND session_id = ? AND satuan = ?");
+                  $query1->bind_param("sssssi",$jumlah_barang,$a, $potongan_tampil, $kode_barang, $session_id,$satuan);
+                  $query1->execute();
+                    
+                   }
+                   else{
+
+                  $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam) VALUES (?,?,?,?,?,?,?,?,?)");
+                  $perintah->bind_param("sssssssss",
+                  $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang);
+                  $perintah->execute();
+
+                   }//apablla barang ini sudah ada di tbs
+
           
-          $fee_prosentase_produk = $prosentase * $subtotal_prosentase / 100;
 
-          $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam) VALUES ('$sales', '$session_id', '$kode_barang',
-            '$nama_barang', '$fee_prosentase_produk', '$tanggal_sekarang', '$jam_sekarang')");
+      //untuk pengambilan data subttotal di form penjualan
+      echo komarupiah($a,2);
+      //untuk pengambilan data subttotal di form penjualan
 
-      }
-
-
-    }
-//end masukan data denagn prosentase  
-
-//masukan data dengan nominal  
-        elseif ($nominal != 0) {
-
-              $query900 = $db->query("SELECT jumlah_barang FROM tbs_penjualan WHERE session_id = '$session_id' AND kode_barang = '$kode_barang'");
-              $cek011 = mysqli_num_rows($query900);
-
-              $cek900 = mysqli_fetch_array($query900);
-              $jumlah1 = $cek900['jumlah_barang'];
-              $jumlah0 = $jumlah_barang + $jumlah1;
-
-              $fee_nominal_produk = $nominal * $jumlah0;
-
-              $komisi0 = $fee_nominal_produk;
-
-          if ($cek011 > 0) {
-
-                $query911 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$komisi0' WHERE nama_petugas = '$user' AND kode_produk = '$kode_barang'");
-              }
-
-          else
-              {
-
-                $fee_nominal_produk = $nominal * $jumlah_barang;
-
-                $query10 = $db->query("INSERT INTO tbs_fee_produk (nama_petugas, session_id, kode_produk, nama_produk, jumlah_fee, tanggal, jam) VALUES ('$user', '$session_id', '$kode_barang', '$nama_barang', '$fee_nominal_produk', '$tanggal_sekarang', '$jam_sekarang')");
-              }
-
-        }
-
-        else
-        {
-
-        }
-
-
- 
-$cek = $db->query("SELECT no_faktur FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
-$jumlah = mysqli_num_rows($cek);
-    
-    if ($jumlah > 0)
-    {
-        # code...
-        $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND session_id = ?");
-        $query1->bind_param("sssss",$jumlah_barang,$a, $potongan_tampil, $kode_barang, $session_id);
-        $query1->execute();
-
-    }
-    else
-    {
-            $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam) VALUES (?,?,?,?,?,?,?,?,?)");
-            $perintah->bind_param("sssssssss",
-            $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang);
-            $perintah->execute();
-
-    }
-
-//untuk pengambilan data subttotal di form penjualan
-echo komarupiah($a,2);
-//untuk pengambilan data subttotal di form penjualan
-
-}//end else kode barang ada
+      }//end else kode barang ada
 
 }// END berkaitan dgn stok == Jasa
 

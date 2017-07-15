@@ -2,6 +2,7 @@
 include 'header.php';
 include 'sanitasi.php';
 include 'db.php';
+include 'persediaan.function.php';
 
 
 $dari_tanggal = stringdoang($_GET['dari_tanggal']);
@@ -17,9 +18,8 @@ $query_sum_detail_pembaelian = $db->query("SELECT SUM(jumlah_barang) as sum_juml
 $data_sum_dari_detail_pembaelian = mysqli_fetch_array($query_sum_detail_pembaelian);
 $total_akhir = $data_sum_dari_detail_pembaelian['sum_subtotal'];
 $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
-
-
-
+$total_potongan = $data_sum_dari_detail_pembaelian['sum_potongan'];
+$total_tax = $data_sum_dari_detail_pembaelian['sum_tax'];
 
 
  ?>
@@ -32,7 +32,7 @@ $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
         </div><!--penutup colsm2-->
 
         <div class="col-sm-6">
-                 <h3> <b> LAPORAN PEMBELIAN DETAIL </b></h3>
+                 <h3> <b> LAPORAN PEMBELIAN DETAIL PER FAKTUR</b></h3>
                  <hr>
                  <h4> <b> <?php echo $data_perusahaan['nama_perusahaan']; ?> </b> </h4> 
                  <p> <?php echo $data_perusahaan['alamat_perusahaan']; ?> </p> 
@@ -60,16 +60,16 @@ $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
           <th> Nama Barang </th>
           <th> Jumlah Barang </th>
           <th> Harga </th>
-          <th> Subtotal </th>
-          <th> Potongan </th>
+          <th> Disc </th>
           <th> Tax </th>
+          <th> Subtotal </th>
           <th> Sisa Barang </th>
                   <th> </th>                                    
                 </thead>
                 <tbody>
             <?php
 
-                  $perintah009 = $db->query(" SELECT s.nama,dp.id,dp.no_faktur,dp.kode_barang,dp.nama_barang,dp.jumlah_barang,dp.satuan,dp.harga,dp.subtotal,dp.potongan,dp.tax,dp.sisa, ss.nama AS asal_satuan FROM detail_pembelian dp INNER JOIN satuan s ON dp.satuan = s.id INNER JOIN satuan ss ON dp.asal_satuan = ss.id WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal' ");
+                  $perintah009 = $db->query(" SELECT s.nama,dp.id,dp.no_faktur,dp.kode_barang,dp.nama_barang,dp.jumlah_barang,dp.satuan,dp.harga,dp.subtotal,dp.potongan,dp.tax,dp.sisa, ss.nama AS asal_satuan FROM detail_pembelian dp INNER JOIN satuan s ON dp.satuan = s.id INNER JOIN satuan ss ON dp.asal_satuan = ss.id WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal' ORDER BY dp.id DESC ");
                   while ($data11 = mysqli_fetch_array($perintah009))
 
                   {
@@ -85,6 +85,7 @@ $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
                   $jumlah_barang = $data11['jumlah_barang'];
                 }
 
+                $sisa = cekStokHppProduk($data11['kode_barang'], $data11['no_faktur']);
           //menampilkan data
           echo "
           <tr>
@@ -93,26 +94,28 @@ $total_jumlah = $data_sum_dari_detail_pembaelian['sum_jumlah'];
           <td>".$data11['nama_barang']."</td>
           <td align='right'>".$jumlah_barang ." ". $data11['nama']."</td>
           <td align='right'>".rp($data11['harga'])."</td>
+          <td align='right'>".rp($data11['potongan'])."</td>
+          <td align='right'>".rp($data11['tax'])."</td>
           <td align='right'>".rp($data11['subtotal'])."</td>
-          <td>".rp($data11['potongan'])."</td>
-          <td>".rp($data11['tax'])."</td>
-          <td>".rp($data11['sisa']) ." ". $data11['asal_satuan']."</td>
+          <td align='right'>".rp($sisa) ." ". $data11['asal_satuan']."</td>
           </tr>";
-
-
-                  }
+        }
+          //menampilkan data
+          echo "
+          <tr>
+          <td style='color:red'>TOTAL</td>
+          <td style='color:red'></td>
+          <td style='color:red'></td>
+          <td style='color:red' align='right'>".rp($total_jumlah)."</td>
+          <td style='color:red' align='right'>-</td>
+          <td style='color:red' align='right'>".rp($total_potongan)."</td>
+          <td style='color:red' align='right'>".rp($total_tax)."</td>
+          <td style='color:red' align='right'>".($total_akhir)."</td>
+          <td style='color:red' align='right'>-</td>
+          </tr>";
          //Untuk Memutuskan Koneksi Ke Database       
        mysqli_close($db); 
             ?>
-        <td style='color:red'> - </td>
-        <td style='color:red'> - </td>
-        <td style='color:red'> - </td>
-        <td style='color:red' align='right'> <?php echo rp($total_jumlah); ?> </td>
-        <td style='color:red'> - </td>
-        <td style='color:red' align='right'> <?php echo rp($total_akhir); ?> </td>
-        <td style='color:red'> - </td>
-        <td style='color:red'> - </td>
-        <td style='color:red'> - </td>
             </tbody>
 
       </table>

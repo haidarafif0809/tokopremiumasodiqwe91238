@@ -29,8 +29,8 @@ $columns = array(
 
 
 // getting total number records without any search
-$sql ="SELECT s.nama,kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.stok_barang,b.satuan,b.kategori,b.suplier,b.harga_jual ";
-$sql.="FROM barang b INNER JOIN satuan s ON b.satuan = s.id ";
+$sql ="SELECT s.nama,kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.stok_barang,b.satuan,b.kategori,b.suplier,b.harga_jual, k.nama_kategori ";
+$sql.="FROM barang b INNER JOIN satuan s ON b.satuan = s.id INNER JOIN kategori k ON b.kategori = k.id ";
 $sql.="WHERE b.berkaitan_dgn_stok = 'Barang' || b.berkaitan_dgn_stok = '' ";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
@@ -38,13 +38,13 @@ $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql ="SELECT s.nama,kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.stok_barang,b.satuan,b.kategori,b.suplier,b.harga_jual ";
-$sql.="FROM barang b INNER JOIN satuan s ON b.satuan = s.id ";
+$sql ="SELECT s.nama,kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.stok_barang,b.satuan,b.kategori,b.suplier,b.harga_jual, k.nama_kategori ";
+$sql.="FROM barang b INNER JOIN satuan s ON b.satuan = s.id INNER JOIN kategori k ON b.kategori = k.id ";
 $sql.="WHERE b.berkaitan_dgn_stok = 'Barang' ";
 
     $sql.=" AND (b.kode_barang LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR b.nama_barang LIKE '".$requestData['search']['value']."%' ";
-    $sql.=" OR b.kategori LIKE '".$requestData['search']['value']."%'";   
+    $sql.=" OR k.nama_kategori LIKE '".$requestData['search']['value']."%'";   
     $sql.=" OR b.status LIKE '".$requestData['search']['value']."%' ) ";
 
 
@@ -80,7 +80,7 @@ while( $row=mysqli_fetch_array($query) ) {
             $nestedData[] = $row["kode_barang"];
             $nestedData[] = $row["nama_barang"];
             $nestedData[] = $row["nama"];
-            $nestedData[] = $row["kategori"];
+            $nestedData[] = $row["nama_kategori"];
             $nestedData[] = $row["suplier"];
             $nestedData[] = $row["harga_beli"];
             $nestedData[] = $row["satuan"];

@@ -52,7 +52,7 @@ $user_hapus = mysqli_num_rows($pilih_akses_user_hapus);
 
 
     if ($user_hapus > 0){
-			$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-user='". $row['username'] ."'><span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
+			$nestedData[] = "<button class='btn btn-sm btn-danger btn-hapus' data-id='". $row['id'] ."' data-user='". $row['username'] ."'><span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
 
 		}
 $pilih_akses_user_edit = $db->query("SELECT user_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND user_edit = '1'");
@@ -61,11 +61,10 @@ $user_edit = mysqli_num_rows($pilih_akses_user_edit);
 
     if ($user_edit > 0){
 
-			$nestedData[] = "<a href='edituser.php?id=". $row['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit </a>";
+			$nestedData[] = "<a href='edituser.php?id=". $row['id']."' class='btn btn-sm btn-success'><span class='glyphicon glyphicon-edit'></span> Edit </a>";
 		}
-			$nestedData[] = "<button class='btn btn-warning btn-reset' data-reset-id='". $row['id'] ."' data-reset-user='". $row['username'] ."'><span class='glyphicon glyphicon-refresh'> </span> Reset Password </button>";
+			$nestedData[] = "<button class='btn btn-sm btn-warning btn-reset' data-reset-id='". $row['id'] ."' data-reset-user='". $row['username'] ."'><span class='glyphicon glyphicon-refresh'> </span> Reset Password </button>";
 			$nestedData[] = $row['username'];
-			$nestedData[] = $row['password'];
 			$nestedData[] = $row['nama'];
 			$nestedData[] = $row['alamat'];
 			$nestedData[] = $row['nama_jabatan'];

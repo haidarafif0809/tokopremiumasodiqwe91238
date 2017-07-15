@@ -854,8 +854,6 @@ alert(" Kode Gudang Harus Diisi ");
       $("#kredit").val('');
       $("#potongan_pembelian").val('');
       $("#potongan_persen").val('');
-      $("#nama_suplier").val('');
-      $("#nama_suplier").trigger('chosen:updated');
 
  $.post("proses_bayar_beli.php",{total_1:total_1,kode_gudang:kode_gudang,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,suplier:suplier1,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,tax1:tax1,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,ppn:ppn,ppn_input:ppn_input},function(info) {
 
@@ -1148,28 +1146,31 @@ else
 </script>
 
 
+<!-- INPUT JUMLAH PRODUK -->
 <script>
-
-//untuk menampilkan sisa penjualan secara otomatis
   $(document).ready(function(){
+    $("#jumlah_barang").keyup(function(){
+      var nama_barang = $("#nama_barang").val(); 
+      var jumlah_barang = $("#jumlah_barang").val();        
+      if (jumlah_barang == "") {
+          jumlah_barang = 0;
+      }
 
-  $("#jumlah_barang").keyup(function(){
-
-    var jumlah_barang = $("#jumlah_barang").val();
-    if (jumlah_barang == "") {
-      jumlah_barang = 0;
-    }
-    var jumlahbarang =$("#jumlahbarang").val();
-     var over_stok = $("#over_stok").val();
-    var stok = parseInt(jumlah_barang) + parseInt(jumlahbarang);
+      var jumlahbarang =$("#jumlahbarang").val();
+      var over_stok = $("#over_stok").val();
+      var stok = parseFloat(jumlah_barang) + parseFloat(jumlahbarang);
 
 
-if( over_stok < stok && over_stok != 0 ){
+      if( over_stok < stok && over_stok != 0 ){
 
-      alert ("Persediaan Barang Ini Sudah Melebihi Batas Stok!");
-       $("#jumlah_barang").val('');
-
-    }
+          var pesan_alert = confirm("Persediaan Produk '"+nama_barang+"' Ini Melebihi Batas Over Stok. Apakah Anda Ingin Melanjutkan ?");
+          if (pesan_alert == true) {
+          }
+          else{
+            $("#jumlah_barang").val('');
+            $("#jumlah_barang").focus();
+          }
+      }
 
 
   });
@@ -2033,7 +2034,8 @@ $(document).ready(function(){
             $("#cetak_tunai").hide();
             $("#cetak_hutang").hide();
             $("#alert_berhasil").hide();
-            $("#ppn").attr("disabled", false);
+            $("#ppn").attr("disabled", false).trigger('chosen:updated');
+
 
     });
   });

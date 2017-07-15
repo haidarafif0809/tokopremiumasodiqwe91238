@@ -20,7 +20,7 @@
         LEFT JOIN otoritas_kas ok ON ho.id = ok.id_otoritas LEFT JOIN otoritas_laporan ol ON ho.id = ol.id_otoritas 
         LEFT JOIN otoritas_form_order_penjualan ofop ON ho.id = ofop.id_otoritas LEFT JOIN otoritas_order_penjualan oop ON ho.id = oop.id_otoritas 
         LEFT JOIN otoritas_setting os ON ho.id = os.id_otoritas LEFT JOIN otoritas_target_penjualan otp ON ho.id = otp.id_otoritas
-         LEFT JOIN otoritas_transfer_stok ots ON ho.id = ots.id_otoritas LEFT JOIN otoritas_tukar_poin otpoin ON ho.id = otpoin.id_otoritas WHERE ho.id = '$id'");
+         LEFT JOIN otoritas_transfer_stok ots ON ho.id = ots.id_otoritas LEFT JOIN otoritas_tukar_poin otpoin ON ho.id = otpoin.id_otoritas LEFT JOIN otoritas_form_order_pembelian ofopen ON ho.id = ofopen.id_otoritas LEFT JOIN otoritas_order_pembelian oopem ON ho.id = oopem.id_otoritas WHERE ho.id = '$id'");
     $data_otoritas = mysqli_fetch_array($otoritas_akses);
 
 
@@ -766,6 +766,133 @@ else{
 
 </div> <!-- / of otoritas pembelian -->
 
+
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas user -->
+<label>Form Order Pembelian</label><br>
+
+<?php 
+
+if ($data_otoritas['tombol_submit_order_pembelian'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="tombol_submit_order" name="tombol_submit_order_pembelian" checked="">
+    <label for="tombol_submit_order">Tombol Submit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="tombol_submit_order" name="tombol_submit_order_pembelian">
+    <label for="tombol_submit_order">Tombol Submit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['tombol_order_pembelian'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="tombol_order_order" name="tombol_order_pembelian" checked=""> 
+    <label for="tombol_order_order">Tombol Order</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="tombol_order_order" name="tombol_order_pembelian"> 
+    <label for="tombol_order_order">Tombol Order</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['edit_produk_order_pembelian'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="edit_produk_order" name="edit_produk_order_pembelian" checked="">
+    <label for="edit_produk_order">Edit Produk</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="edit_produk_order" name="edit_produk_order_pembelian">
+    <label for="edit_produk_order">Edit Produk</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['hapus_produk_order_pembelian'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="hapus_produk_order" name="hapus_produk_order_pembelian" checked="">
+    <label for="hapus_produk_order">Hapus Produk</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="hapus_produk_order" name="hapus_produk_order_pembelian">
+    <label for="hapus_produk_order">Hapus Produk</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas user -->
+
+
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas jabatan -->
+<label>Order Pembelian</label><br>
+
+<?php 
+
+if ($data_otoritas['order_pembelian_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="order_pembelian_lihat" name="order_pembelian_lihat" checked="">
+    <label for="order_pembelian_lihat">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="order_pembelian_lihat" name="order_pembelian_lihat">
+    <label for="order_pembelian_lihat">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['order_pembelian_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="order_pembelian_tambah" name="order_pembelian_tambah" checked=""> 
+    <label for="order_pembelian_tambah">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="order_pembelian_tambah" name="order_pembelian_tambah"> 
+    <label for="order_pembelian_tambah">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['order_pembelian_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="order_pembelian_edit" name="order_pembelian_edit" checked="">
+    <label for="order_pembelian_edit">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="order_pembelian_edit" name="order_pembelian_edit">
+    <label for="order_pembelian_edit">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['order_pembelian_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="order_pembelian_hapus" name="order_pembelian_hapus" checked="">
+    <label for="order_pembelian_hapus">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="order_pembelian_hapus" name="order_pembelian_hapus">
+    <label for="order_pembelian_hapus">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas jabatan -->
 
 
 

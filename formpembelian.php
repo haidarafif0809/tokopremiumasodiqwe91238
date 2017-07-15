@@ -1146,28 +1146,31 @@ else
 </script>
 
 
+<!-- INPUT JUMLAH PRODUK -->
 <script>
-
-//untuk menampilkan sisa penjualan secara otomatis
   $(document).ready(function(){
+    $("#jumlah_barang").keyup(function(){
+      var nama_barang = $("#nama_barang").val(); 
+      var jumlah_barang = $("#jumlah_barang").val();        
+      if (jumlah_barang == "") {
+          jumlah_barang = 0;
+      }
 
-  $("#jumlah_barang").keyup(function(){
-
-    var jumlah_barang = $("#jumlah_barang").val();
-    if (jumlah_barang == "") {
-      jumlah_barang = 0;
-    }
-    var jumlahbarang =$("#jumlahbarang").val();
-     var over_stok = $("#over_stok").val();
-    var stok = parseInt(jumlah_barang) + parseInt(jumlahbarang);
+      var jumlahbarang =$("#jumlahbarang").val();
+      var over_stok = $("#over_stok").val();
+      var stok = parseFloat(jumlah_barang) + parseFloat(jumlahbarang);
 
 
-if( over_stok < stok && over_stok != 0 ){
+      if( over_stok < stok && over_stok != 0 ){
 
-      alert ("Persediaan Barang Ini Sudah Melebihi Batas Stok!");
-       $("#jumlah_barang").val('');
-
-    }
+          var pesan_alert = confirm("Persediaan Produk '"+nama_barang+"' Ini Melebihi Batas Over Stok. Apakah Anda Ingin Melanjutkan ?");
+          if (pesan_alert == true) {
+          }
+          else{
+            $("#jumlah_barang").val('');
+            $("#jumlah_barang").focus();
+          }
+      }
 
 
   });

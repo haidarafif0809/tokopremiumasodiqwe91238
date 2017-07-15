@@ -18,7 +18,8 @@ $status = $_GET['status'];
 <div class="container"><!--start of container-->
 
 <!--hidden untuk no faktur buat kirim ke button detail-->
-    <input type="hidden" name="no_faktur_detail" class="form-control " id="no_faktur_detail" placeholder="no_faktur  "/>
+    <input type="hidden" name="no_faktur_detail" class="form-control " id="no_faktur_detail" placeholder="no_faktur"/>
+    <input type="hidden" name="no_faktur_bonus" class="form-control " id="no_faktur_bonus" placeholder="no_faktur Bonus"/>
     <input type="hidden" name="status" class="form-control " id="status" value="<?php echo $status ?>" "/>
 
 <!--MODAL VOID -->
@@ -251,10 +252,9 @@ $status = $_GET['status'];
           <th> Nama Barang </th>
           <th> Jumlah Barang </th>
           <th> Satuan </th>
-          <th> Harga </th>
+          <th> Harga Diskon</th>
           <th> Subtotal </th>
-          <th> Potongan </th>
-          <th> Tax </th>
+          <th> Keterangan </th>
 
   </thead> <!-- tag penutup tabel -->
   </table>
@@ -722,8 +722,8 @@ $("#login").click(function(){
     $("#modal_bonus").modal('show');
 
     var no_faktur = $(this).attr("no_faktur");
-    $("#no_faktur_detail").val(no_faktur);
-      var no_faktur_detail = $("#no_faktur_detail").val();
+    $("#no_faktur_bonus").val(no_faktur);
+      var no_faktur_bonus = $("#no_faktur_bonus").val();
             $('#table_modal_bonus').DataTable().destroy();
 
         var dataTable = $('#table_modal_bonus').DataTable( {
@@ -732,7 +732,7 @@ $("#login").click(function(){
           "ajax":{
             url :"modal_bonus_penjualan.php", // json datasource
              "data": function ( d ) {
-                  d.no_faktur = $("#no_faktur_detail").val();
+                  d.no_faktur = $("#no_faktur_bonus").val();
                   // d.custom = $('#myInput').val();
                   // etc
               },

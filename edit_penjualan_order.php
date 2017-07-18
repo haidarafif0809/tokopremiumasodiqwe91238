@@ -950,14 +950,15 @@ $("#kode_barcode").focus();
 $.post("barcode_edit_order.php",{kode_barang:kode_barang,sales:sales,level_harga:level_harga,no_faktur:no_faktur},function(data){
 
 
-        $(".tr-kode-"+kode_barang+"").remove();
         $("#ppn").attr("disabled", true);
-        $("#tbody").prepend(data);
         $("#kode_barang").val('');
         $("#nama_barang").val('');
         $("#jumlah_barang").val('');
         $("#potongan1").val('');
         $("#tax1").val('');
+
+        var tabel_tbs_editorder = $('#tabel_tbs_editorder').DataTable();
+        tabel_tbs_editorder.draw();
       
   var no_faktur = $("#no_faktur_order").val();
         
@@ -988,30 +989,6 @@ $.post("lihat_promo_alert.php",{id_barang:data},function(info){
 
 });
 
-
-    $('#tabel_tbs_editorder').DataTable().destroy();
-    var dataTable = $('#tabel_tbs_editorder').DataTable( {
-      "processing": true,
-      "serverSide": true,
-      "ajax":{
-        url :"data_tbs_edit_order_penjualan.php", // json datasource
-        "data": function ( d ) {
-          d.no_faktur_order = $("#no_faktur_order").val();
-          // d.custom = $('#myInput').val();
-          // etc
-        },
-         
-         type: "post",  // method  , by default get
-         error: function(){  // error handling
-           $(".employee-grid-error").html("");
-           $("#tabel_tbs_editorder").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-           $("#employee-grid_processing").css("display","none");
-           }
-      },
-        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-           $(nRow).attr('class','tr-id-'+aData[9]+'');
-         }
-    });
 
 
 

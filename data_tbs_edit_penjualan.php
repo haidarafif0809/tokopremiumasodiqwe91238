@@ -74,7 +74,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
       $nestedData[] = $row["kode_barang"];
       $nestedData[] = $row["nama_barang"];
 
-      $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jumlah-jual' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_ganti."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_barang'],3)."' class='input_jumlah_jual' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_barang']."' data-harga='".koma($row['harga'],2)."' data-tipe='".$row['tipe_barang']."' data-satuan='".$row['satuan']."' data-nama-barang='".$row['nama_barang']."'> </p>";
+      $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jumlah-jual' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_ganti."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_barang'],3)."' class='input_jumlah_jual' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_barang']."' data-harga='".koma($row['harga'],2)."' data-tipe='".$row['tipe_barang']."' data-satuan='".$row['satuan']."'  data-nama_satuan='".$row['nama']."' data-nama-barang='".$row['nama_barang']."'> </p>";
 
       $nestedData[] = $row["nama"];
 

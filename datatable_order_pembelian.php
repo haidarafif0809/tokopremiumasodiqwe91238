@@ -79,7 +79,12 @@ if ($otoritas_tombol['order_pembelian_hapus']) {
     $nestedData[] = $row['jam'];
     $nestedData[] = $row['user'];
     $nestedData[] = rp($row['total']);
-    $nestedData[] = $row['status_order'];
+    if ($row['status_order'] == 'Di Order') {
+      $nestedData[] = "<p style='color:blue;'>".$row['status_order']."</p>";
+    }
+    else{
+      $nestedData[] = "<p style='color:red;'>".$row['status_order']."</p>";
+    }
     $nestedData[] = $row['keterangan'];
     $nestedData[] = $row['id'];
 

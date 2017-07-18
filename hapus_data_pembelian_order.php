@@ -9,18 +9,24 @@ $no_faktur = $_POST['no_faktur'];
 $petugas =  $_SESSION['nama'];
 
 // INSERT HISTORY ORDER PEMBELIAN
-$penjualan = $db->query("SELECT kode_gudang, suplier, total, tanggal, jam, user, status_order, keterangan, user_edit FROM pembelian_order WHERE no_faktur_order = '$no_faktur'");
-$data_penjualan = mysqli_fetch_array($penjualan);
+$pembelian = $db->query("SELECT kode_gudang, suplier, total, tanggal, jam, user, status_order, keterangan, user_edit FROM pembelian_order WHERE no_faktur_order = '$no_faktur'");
+$data_pembelian = mysqli_fetch_array($pembelian);
 
 
-$insert_penjualan22 = $db->query("INSERT INTO history_pembelian_order (no_faktur_order, kode_gudang, suplier, total, tanggal, jam, user, status_order,keterangan, user_edit, user_hapus) VALUES ('$no_faktur','$data_penjualan[kode_gudang]', '$data_penjualan[suplier]', '$data_penjualan[total]','$data_penjualan[tanggal]','$data_penjualan[jam]','$data_penjualan[user]','$data_penjualan[status_order]','$data_penjualan[keterangan]', ,'$data_penjualan[user_edit]', '$petugas')");
+$insert_pembelian22 = "INSERT INTO history_pembelian_order (no_faktur_order, kode_gudang, suplier, total, tanggal, jam, user, status_order,keterangan, user_edit, user_hapus) VALUES ('$no_faktur','$data_pembelian[kode_gudang]', '$data_pembelian[suplier]', '$data_pembelian[total]','$data_pembelian[tanggal]','$data_pembelian[jam]','$data_pembelian[user]','$data_pembelian[status_order]','$data_pembelian[keterangan]','$data_pembelian[user_edit]', '$petugas')";
+if ($db->query($insert_pembelian22) === TRUE) {
+        } 
+
+        else {
+        echo "Error: " . $insert_pembelian22 . "<br>" . $db->error;
+        }
 
 
 // INSERT HISTORY DETAIL ORDER PEMBELIAN
-$detail_penjualan = $db->query("SELECT * FROM detail_pembelian_order WHERE no_faktur_order = '$no_faktur'");
-while($data_detail_penjualan = mysqli_fetch_array($detail_penjualan)){
+$detail_pembelian = $db->query("SELECT * FROM detail_pembelian_order WHERE no_faktur_order = '$no_faktur'");
+while($data_detail_pembelian = mysqli_fetch_array($detail_pembelian)){
 
-	$insert_penjualan33 = $db->query("INSERT INTO history_detail_pembelian_order (no_faktur_order,kode_barang, nama_barang, jumlah_barang,satuan, harga, subtotal, potongan, tax,tanggal,jam,asal_satuan, user_hapus) VALUES ('$no_faktur', '$data_detail_penjualan[kode_barang]', '$data_detail_penjualan[nama_barang]', '$data_detail_penjualan[jumlah_barang]', '$data_detail_penjualan[satuan]', '$data_detail_penjualan[harga]', '$data_detail_penjualan[subtotal]', '$data_detail_penjualan[potongan]', '$data_detail_penjualan[tax]', '$data_detail_penjualan[tanggal]', '$data_detail_penjualan[jam]', '$data_detail_penjualan[asal_satuan]', '$petugas')");
+	$insert_pembelian33 = $db->query("INSERT INTO history_detail_pembelian_order (no_faktur_order,kode_barang, nama_barang, jumlah_barang,satuan, harga, subtotal, potongan, tax,tanggal,jam,asal_satuan, user_hapus) VALUES ('$no_faktur', '$data_detail_pembelian[kode_barang]', '$data_detail_pembelian[nama_barang]', '$data_detail_pembelian[jumlah_barang]', '$data_detail_pembelian[satuan]', '$data_detail_pembelian[harga]', '$data_detail_pembelian[subtotal]', '$data_detail_pembelian[potongan]', '$data_detail_pembelian[tax]', '$data_detail_pembelian[tanggal]', '$data_detail_pembelian[jam]', '$data_detail_pembelian[asal_satuan]', '$petugas')");
 
 }
 

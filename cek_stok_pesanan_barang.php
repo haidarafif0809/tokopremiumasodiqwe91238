@@ -11,6 +11,7 @@ include 'sanitasi.php';
  $jumlah_lama = angkadoang($_POST['jumlah_lama']);
  $satuan_konversi = angkadoang($_POST['satuan_konversi']);
  $kode_barang = stringdoang($_POST['kode_barang']);
+ $jenis_penjualan = stringdoang($_POST['jenis_penjualan']);
 
  	// untuk mngetahui jumlah barang yang sbenarnya
  	  $query_satuan_konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE kode_produk = '$kode_barang' AND id_satuan = '$satuan_konversi' ");
@@ -31,7 +32,16 @@ include 'sanitasi.php';
  // UNTUK MENGETAHUI JUMLAAH TBS SEBENARNYA
     $jumlah_tbs = 0;
 
-    $query_stok_tbs = $db->query("SELECT jumlah_barang,satuan FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND session_id = '$session_id' AND no_faktur_order IS NULL ");
+    if ($jenis_penjualan == 'Order Penjualan') {
+          
+          $query_stok_tbs = $db->query("SELECT jumlah_barang,satuan FROM tbs_penjualan_order WHERE kode_barang = '$kode_barang' AND session_id = '$session_id' AND no_faktur_order IS NULL ");
+
+    }
+    else{
+          $query_stok_tbs = $db->query("SELECT jumlah_barang,satuan FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND session_id = '$session_id' AND no_faktur_order IS NULL ");
+    }
+    
+
     while($data_stok_tbs = mysqli_fetch_array($query_stok_tbs)){
 
       $query_cek_satuan_konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE kode_produk = '$kode_barang' AND id_satuan = '$data_stok_tbs[satuan]' ");

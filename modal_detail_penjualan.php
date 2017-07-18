@@ -26,32 +26,28 @@ $columns = array(
 
 // getting total number records without any search
 
+    $sql = "SELECT sk.konversi,dp.id, dp.no_faktur, dp.kode_barang, dp.nama_barang, dp.jumlah_barang / IFNULL( sk.konversi,0) AS jumlah_produk, dp.jumlah_barang, dp.satuan, 
+    dp.harga * IFNULL( sk.konversi,0) AS harga_produk, dp.harga,dp.potongan, dp.subtotal, dp.tax, dp.sisa, sk.id_satuan, s.nama AS satuan_konversi, sa.nama AS satuan_dasar ";
+    $sql.=" FROM detail_penjualan dp LEFT JOIN satuan_konversi sk ON dp.kode_barang = sk.kode_produk AND dp.satuan = sk.id_satuan "; 
+    $sql.=" LEFT JOIN satuan s ON dp.satuan = s.id LEFT JOIN satuan sa ON dp.asal_satuan = sa.id WHERE dp.no_faktur = '$no_faktur' ";
 
-$sql = "SELECT dp.id, dp.no_faktur, dp.kode_barang, dp.nama_barang, dp.jumlah_barang / sk.konversi AS jumlah_produk, dp.jumlah_barang, dp.satuan, dp.harga, dp.potongan, dp.subtotal, dp.tax, dp.sisa, sk.id_satuan, s.nama, sa.nama AS satuan_asal";
-$sql.=" FROM detail_penjualan dp LEFT JOIN satuan_konversi sk ON dp.satuan = sk.id_satuan LEFT JOIN satuan s ON dp.satuan = s.id LEFT JOIN satuan sa ON dp.asal_satuan = sa.id LEFT JOIN hpp_keluar hk ON dp.no_faktur = hk.no_faktur AND dp.kode_barang = hk.kode_barang ";
-$sql.=" WHERE dp.no_faktur = '$no_faktur'";
-
-$query=mysqli_query($conn, $sql) or die("1: get employees");
-$totalData = mysqli_num_rows($query);
-$totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
-
-$sql = "SELECT dp.id, dp.no_faktur, dp.kode_barang, dp.nama_barang, dp.jumlah_barang / sk.konversi AS jumlah_produk, dp.jumlah_barang, dp.satuan, dp.harga, dp.potongan, dp.subtotal, dp.tax, dp.sisa, sk.id_satuan, s.nama, sa.nama AS satuan_asal ";
-$sql.=" FROM detail_penjualan dp LEFT JOIN satuan_konversi sk ON dp.satuan = sk.id_satuan LEFT JOIN satuan s ON dp.satuan = s.id LEFT JOIN satuan sa ON dp.asal_satuan = sa.id LEFT JOIN hpp_keluar hk ON dp.no_faktur = hk.no_faktur AND dp.kode_barang = hk.kode_barang ";
-$sql.=" WHERE dp.no_faktur = '$no_faktur' ";
+    $query=mysqli_query($conn, $sql) or die("1: Eror ");
+    $totalData = mysqli_num_rows($query);
+    $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
     $sql.=" AND ( dp.kode_barang LIKE '".$requestData['search']['value']."%' "; 
     $sql.=" OR dp.nama_barang LIKE '".$requestData['search']['value']."%' ) ";
 } 
 
- $query=mysqli_query($conn, $sql) or die("2: get employees");
+ $query=mysqli_query($conn, $sql) or die("2: Eror 2");
  $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
 
 
  $sql.=" ORDER BY dp.id ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."  ";
 
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */    
-$query=mysqli_query($conn, $sql) or die("3: get employees");
+$query=mysqli_query($conn, $sql) or die("3: Eror 3");
 
 $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
@@ -61,12 +57,24 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
     $nestedData[] = $row["no_faktur"];
     $nestedData[] = $row["kode_barang"];
     $nestedData[] = $row["nama_barang"];
-    $nestedData[] = koma($row["jumlah_barang"],3);
-    $nestedData[] = $row["satuan_asal"];
-    $nestedData[] = koma($row["harga"],2);
-    $nestedData[] = koma($row["subtotal"],2);
-    $nestedData[] = koma($row["potongan"],2);
-    $nestedData[] = koma($row["tax"],2);
+
+    if ($row["konversi"] != 0) {
+    
+    $nestedData[] = "<p align='right'>".koma($row["jumlah_produk"],3)."</p>";
+    $nestedData[] = $row["satuan_konversi"];
+    $nestedData[] = "<p align='right'>".koma($row["harga_produk"],2)."</p>";
+
+    }
+    else{
+
+    $nestedData[] = "<p align='right'>".koma($row["jumlah_barang"],3)."</p>";
+    $nestedData[] = $row["satuan_dasar"];
+    $nestedData[] = "<p align='right'>".koma($row["harga"],2)."</p>";
+    }
+
+    $nestedData[] = "<p align='right'>".koma($row["potongan"],2)."</p>";
+    $nestedData[] = "<p align='right'>".koma($row["tax"],2)."</p>";
+    $nestedData[] = "<p align='right'>".koma($row["subtotal"],2)."</p>";
 
     $nestedData[] = $row["id"]; 
 

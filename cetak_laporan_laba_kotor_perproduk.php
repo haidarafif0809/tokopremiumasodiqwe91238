@@ -112,7 +112,7 @@ $sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
       $jumlah_barang = $data_penjualan['jumlah_barang'] + $jumlah_barang;
       $total_penjualan = $data_penjualan['total_penjualan'] + $total_penjualan;
       $total_hpp = $data_penjualan['total_hpp'] + $total_hpp;
-      $total_potongan = $data_penjualan['total_hpp'] + $total_potongan;
+      $total_potongan = $data_penjualan['total_potongan'] + $total_potongan;
       $total_laba = $data_penjualan['total_penjualan'] +  $total_laba;
 
 		//menampilkan data
@@ -124,7 +124,7 @@ $sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
 			<td class='table1' style='text-align: right'>". rp($data_penjualan['total_hpp']) ."</td>
 			<td class='table1' style='text-align: right'>". rp($data_penjualan['total_potongan']) ."</td>
 			<td class='table1' style='text-align: right'>". rp($data_penjualan['total_laba']) ."</td>
-			<td class='table1' style='text-align: right'>". rp($persentase_laba,2) ."%</td>
+			<td class='table1' style='text-align: right'>". round($persentase_laba,2) ."%</td>
 			</tr>";
 			}
 

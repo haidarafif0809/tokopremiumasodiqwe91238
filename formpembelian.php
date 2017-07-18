@@ -786,8 +786,7 @@ Order Penjualan</button>
               //end hitung pajak
               var total_akhir = parseInt(total_akhier) + parseInt(Math.round(hasil_tax));
 
-              console.log(potongaaan)
-
+  
 
           }//pot_fakt_rp != 0 && pot_fakt_per != 0
         
@@ -1227,6 +1226,9 @@ alert(" Kode Gudang Harus Diisi ");
          }
     });
 
+    var table_tbs_order = $('#table_tbs_order').DataTable();
+        table_tbs_order.draw();
+
  }
 
 
@@ -1369,6 +1371,9 @@ alert(" Kode Gudang Harus Diisi ");
                    $(nRow).attr('class','tr-id-'+aData[11]+'');
                  }
             });
+
+            var table_tbs_order = $('#table_tbs_order').DataTable();
+                table_tbs_order.draw();
 
        }
        //mengambil no_faktur pembelian agar berurutan
@@ -1978,9 +1983,7 @@ $(document).on('click', '.btn-hapus-tbs', function (e) {
           var total_akhir = parseInt(total_akhier) + parseInt(Math.round(hasil_tax));
 
       }
-      console.log(total_akhir);
-      console.log(total_perorder);
-      console.log(total_akhir1);
+
       $("#total_pembelian").val(tandaPemisahTitik(total_akhir));
       $("#tax_rp").val(hasil_tax);
       $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
@@ -2480,7 +2483,12 @@ $(document).ready(function(){
             }
 
         });
+            var table_tbs_order = $('#table_tbs_order').DataTable();
+                table_tbs_order.draw();
 
+            $("#OrderPembelian").hide();
+            $("#btnOrder").show();
+            $("#btnOrderClose").hide();
             $("#nama_suplier").val('');
             $("#nama_suplier").trigger('chosen;updated');
             $("#pembayaran_pembelian").val('');

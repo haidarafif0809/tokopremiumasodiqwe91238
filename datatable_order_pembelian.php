@@ -62,11 +62,21 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData=array(); 
 
 if ($otoritas_tombol['order_pembelian_edit']) {
-    $nestedData[] = "<a href='proses_edit_pembelian_order.php?no_faktur=". $row['no_faktur_order']."&suplier=". $row['suplier']."&suplier=". $row['suplier']."&nama_gudang=".$row['nama_gudang']."&kode_gudang=".$row['kode_gudang']."' class='btn btn-sm btn-success'>Edit</a>";  
+  if ($row['status_order'] == 'Di Order') {
+    $nestedData[] = "<a href='proses_edit_pembelian_order.php?no_faktur=". $row['no_faktur_order']."&suplier=". $row['suplier']."&suplier=". $row['suplier']."&nama_gudang=".$row['nama_gudang']."&kode_gudang=".$row['kode_gudang']."' class='btn btn-sm btn-success'>Edit</a>"; 
+  }
+  else{
+    $nestedData[] = "<p align='center'>x</p>";
+  }
 }
 
 if ($otoritas_tombol['order_pembelian_hapus']) {
+  if ($row['status_order'] == 'Di Order') {
     $nestedData[] = "<button class='btn btn-sm btn-danger btn-hapus' data-id='".$row['id']."' data-suplier='".$row['suplier']."' data-nama='".$row['nama']."' data-faktur='".$row['no_faktur_order']."' >Hapus</button>";
+  }
+  else{
+    $nestedData[] = "<p align='center'>x</p>";
+  }
 }
 
     $nestedData[] = "<a href='cetak_pembelian_order.php?no_faktur=".$row['no_faktur_order']."' class='btn btn-sm btn-primary ' target='blank'> Cetak  </a>";
@@ -79,7 +89,12 @@ if ($otoritas_tombol['order_pembelian_hapus']) {
     $nestedData[] = $row['jam'];
     $nestedData[] = $row['user'];
     $nestedData[] = rp($row['total']);
-    $nestedData[] = $row['status_order'];
+    if ($row['status_order'] == 'Di Order') {
+      $nestedData[] = "<p style='color:blue;'>".$row['status_order']."</p>";
+    }
+    else{
+      $nestedData[] = "<p style='color:red;'>".$row['status_order']."</p>";
+    }
     $nestedData[] = $row['keterangan'];
     $nestedData[] = $row['id'];
 
@@ -98,8 +113,3 @@ $json_data = array(
 echo json_encode($json_data);  // send data as json format
 
 ?>
-
-
-
-    
-

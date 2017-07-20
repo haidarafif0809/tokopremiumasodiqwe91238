@@ -152,22 +152,26 @@ echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
     while ($data = mysqli_fetch_array($query))
       {
 
-      $pilih_konversi = $db->query("SELECT  sk.konversi * $data[jumlah_barang] AS jumlah_konversi, $data[subtotal] / ($data[jumlah_barang] * sk.konversi) AS harga_konversi, sk.id_satuan, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.id_produk = b.id  WHERE sk.id_satuan = '$data[satuan]' AND sk.kode_produk = '$data[kode_barang]'");
+      $pilih_konversi = $db->query("SELECT COUNT(sk.konversi) AS jumlah_data,sk.konversi, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.kode_produk = b.kode_barang AND sk.id_produk = b.id WHERE sk.kode_produk = '$data[kode_barang]' AND sk.id_satuan = '$data[satuan]'");
       $data_konversi = mysqli_fetch_array($pilih_konversi);
 
-      if ($data_konversi['harga_konversi'] != 0 || $data_konversi['harga_konversi'] != "") {
-        $harga = $data_konversi['harga_konversi'];
-        $jumlah_barang = $data_konversi['jumlah_konversi'];
-        $satuan = $data_konversi['satuan'];
-      }
-      else{
-        $harga = $data['harga'];
-        $jumlah_barang = $data['jumlah_barang'];
-        $satuan = $data['satuan'];
-      }
+          if ($data_konversi['jumlah_data'] != 0) {
+                
+                $harga = $data['harga'] / $data_konversi['konversi'];
+                $jumlah_barang = $data['jumlah_barang'] * $data_konversi['konversi'];
+                $satuan = $data['satuan'];
+
+          }
+          else{
+
+                $harga = $data['harga'];
+                $jumlah_barang = $data['jumlah_barang'];
+                $satuan = $data['satuan'];
+          }
         
     
-        $query2 = "INSERT INTO detail_penjualan (no_faktur, tanggal, jam, kode_barang, nama_barang, jumlah_barang, asal_satuan,satuan, harga, subtotal, potongan, tax, sisa) VALUES ('$no_faktur', '$data[tanggal]', '$data[jam]', '$data[kode_barang]','$data[nama_barang]','$jumlah_barang','$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]', '$jumlah_barang')";
+        $query2 = "INSERT INTO detail_penjualan (no_faktur, tanggal, jam, kode_barang, nama_barang, jumlah_barang, asal_satuan,satuan, harga, subtotal, potongan, tax, sisa) 
+        VALUES ('$no_faktur', '$data[tanggal]', '$data[jam]', '$data[kode_barang]','$data[nama_barang]','$jumlah_barang','$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]', '$jumlah_barang')";
 
         if ($db->query($query2) === TRUE) {
         } 

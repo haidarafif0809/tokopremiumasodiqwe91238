@@ -73,7 +73,23 @@ include 'db.php';
 
       <div class="modal-body">
       <div class="table-responsive">
-      <span id="modal-detail"> </span>
+          <div class="table-responsive"> 
+            <table id="tabledetailorder" class="table table-bordered">
+              <thead>
+                <th> Nomor Faktur </th>
+                <th> Kode Barang </th>
+                <th> Nama Barang </th>
+                <th> Jumlah Barang </th>
+                <th> Satuan </th>
+                <th> Harga </th>
+                <th> Subtotal </th>
+                <th> Potongan </th>
+                <th> Tax </th>
+              </thead>
+                     
+            </table>
+          </div>
+
       </div>
 
      </div>
@@ -238,24 +254,43 @@ $penjualan_hapus = mysqli_num_rows($pilih_akses_penjualan_hapus);
 <!--/DATA TABLE MENGGUNAKAN AJAX-->
 
 
-		<script type="text/javascript">
-		
+<!--Start Ajax Modal DETAIL-->
+<script type="text/javascript" language="javascript" >
+   $(document).ready(function() {
     $(document).on('click', '.detail', function (e) {
-		var no_faktur = $(this).attr('no_faktur');
-		
-		
-		$("#modal_detail").modal('show');
-		
-		$.post('proses_detail_penjualan_order.php',{no_faktur:no_faktur},function(info) {
-		
-		$("#modal-detail").html(info);
-		
-		
-		});
-		
-		});
-		
-		</script>
+    $("#modal_detail").modal('show');
+
+    var no_faktur = $(this).attr("no_faktur");
+
+        $('#tabledetailorder').DataTable().destroy();
+
+        var dataTable = $('#tabledetailorder').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"proses_detail_penjualan_order.php", // json datasource
+             "data": function ( d ) {
+                  d.no_faktur = no_faktur;
+                  // d.custom = $('#myInput').val();
+                  // etc
+              },
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#tabledetailorder").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+              
+            }
+          },
+
+         
+
+        });  
+  
+     }); 
+  });
+ </script>
+<!--Ending Ajax Modal Detail-->
 
 
 		<script type="text/javascript">

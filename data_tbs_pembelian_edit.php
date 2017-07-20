@@ -35,7 +35,7 @@ $columns = array(
 // getting total number records without any search
 $sql =" SELECT tp.id, tp.no_faktur, tp.no_faktur, tp.kode_barang, tp.nama_barang, tp.jumlah_barang, tp.satuan, tp.harga, tp.subtotal, tp.potongan, tp.tax, s.nama";
 $sql.=" FROM tbs_pembelian tp INNER JOIN satuan s ON tp.satuan = s.id";
-$sql.=" WHERE tp.no_faktur = '$no_faktur'";
+$sql.=" WHERE tp.no_faktur = '$no_faktur' AND tp.no_faktur_order IS NULL";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
@@ -44,7 +44,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 $sql =" SELECT tp.id, tp.no_faktur, tp.no_faktur, tp.kode_barang, tp.nama_barang, tp.jumlah_barang, tp.satuan, tp.harga, tp.subtotal, tp.potongan, tp.tax, s.nama";
 $sql.=" FROM tbs_pembelian tp INNER JOIN satuan s ON tp.satuan = s.id";
-$sql.=" WHERE tp.no_faktur = '$no_faktur'";
+$sql.=" WHERE tp.no_faktur = '$no_faktur' AND tp.no_faktur_order IS NULL";
 
     $sql.=" AND (tp.kode_barang LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR tp.nama_barang LIKE '".$requestData['search']['value']."%' ";

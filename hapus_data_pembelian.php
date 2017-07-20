@@ -24,6 +24,8 @@ while($data_detail_pembelian = mysqli_fetch_array($detail_pembelian)){
 
 	$insert_pembelian = $db->query("INSERT INTO history_detail_pembelian (no_faktur, tanggal, jam, waktu, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax, status, sisa, user_hapus) VALUES ('$no_faktur', '$data_detail_pembelian[tanggal]', '$data_detail_pembelian[jam]', '$data_detail_pembelian[waktu]', '$data_detail_pembelian[kode_barang]', '$data_detail_pembelian[nama_barang]', '$data_detail_pembelian[jumlah_barang]', '$data_detail_pembelian[satuan]', '$data_detail_pembelian[harga]', '$data_detail_pembelian[subtotal]', '$data_detail_pembelian[potongan]', '$data_detail_pembelian[tax]', '$data_detail_pembelian[status]', '$data_detail_pembelian[sisa]', '$user')");
 
+	$hapus_order_pembelian = $db->query("DELETE FROM pembelian_order WHERE no_faktur_order = '$data_detail_pembelian[no_faktur_order]'");
+
 }
 
 

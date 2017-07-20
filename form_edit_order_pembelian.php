@@ -757,6 +757,33 @@ $(document).ready(function(){
   });
 </script>
 
+<!-- INPUT JUMLAH PRODUK -->
+<script>
+  $(document).ready(function(){
+    $("#jumlah_barang").keyup(function(){
+      var nama_barang = $("#nama_barang").val(); 
+      var jumlah_barang = $("#jumlah_barang").val();        
+      if (jumlah_barang == "") {
+          jumlah_barang = 0;
+      }
+
+      var jumlahbarang =$("#jumlahbarang").val();
+      var over_stok = $("#over_stok").val();
+      var stok = parseFloat(jumlah_barang) + parseFloat(jumlahbarang);
+
+
+      if( over_stok < stok && over_stok != 0 ){
+          alert("Persediaan Produk '"+nama_barang+"' Ini Melebihi Batas Over Stok.");
+            $("#jumlah_barang").val('');
+            $("#jumlah_barang").focus();
+      }
+
+
+  });
+});
+
+</script>
+
 <!--TRANSAKSI BARU-->
 <script type="text/javascript">
 

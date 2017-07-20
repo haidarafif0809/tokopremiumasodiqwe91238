@@ -209,11 +209,16 @@ else if ($level_harga == 'harga_6')
 else if ($level_harga == 'harga_7')
 {
   $harga = $harga_jual7;
-}
+} 
 
+
+            // qUERY UNTUK CEK APAKAH SUDAH ADA APA BELUM DI TBS PENJUALAN  
             $query_tbs_penjualan = $db->query("SELECT COUNT(kode_barang) AS jumlah_data FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND session_id = '$session_id' AND satuan = '$satuan'");
             $data_tbs_penjualan = mysqli_fetch_array($query_tbs_penjualan);
+            // qUERY UNTUK CEK APAKAH SUDAH ADA APA BELUM DI TBS PENJUALAN  
 
+
+            ##
             // IF CEK BARCODE DI SATUAN KONVERSI
 
             if ($data_satuan_konversi['jumlah_data'] > 0) {
@@ -328,9 +333,9 @@ if ($ber_stok == 'Barang' OR $ber_stok == 'barang' ) {
                               $query1->execute();
                         }else{
 
-                              $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam) VALUES (?,?,?,?,?,?,?,?,?)");
-                              $perintah->bind_param("sssssssss",
-                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang);
+                              $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam, tipe_barang) VALUES (?,?,?,?,?,?,?,?,?,?)");
+                              $perintah->bind_param("ssssssssss",
+                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang,$ber_stok);
                                                  
                               $perintah->execute();
                         }//apablla barang ini sudah ada di tbs
@@ -420,9 +425,9 @@ else
                    }
                    else{
 
-                  $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam) VALUES (?,?,?,?,?,?,?,?,?)");
-                  $perintah->bind_param("sssssssss",
-                  $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang);
+                  $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam, tipe_barang) VALUES (?,?,?,?,?,?,?,?,?,?)");
+                  $perintah->bind_param("ssssssssss",
+                  $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang,$ber_stok);
                   $perintah->execute();
 
                    }//apablla barang ini sudah ada di tbs

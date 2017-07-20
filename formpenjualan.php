@@ -868,9 +868,9 @@ tr:nth-child(even){background-color: #f2f2f2}
                       <th> Jumlah </th>
                       <th> Satuan </th>
                       <th> Harga </th>
-                      <th> Subtotal </th>
                       <th> Potongan </th>
                       <th> Pajak </th>
+                      <th> Subtotal </th>
                 </thead>
             </table>
       </div>  
@@ -3762,7 +3762,7 @@ else{
   else{
 
 
-    $.getJSON("cek_status_stok_penjualan.php?session_id="+session_id, function(result){
+    $.getJSON("cek_status_stok_penjualan.php", function(result){
       if (result.status == 0) {
           //JIKA SESUAI SUB DAN TOTAL AKHIR POST KE PROSES
           $.post("proses_bayar_jual.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
@@ -3935,7 +3935,7 @@ alert("Silakan Bayar Piutang");
   }
   else{
 
-    $.getJSON("cek_status_stok_penjualan.php?session_id="+session_id, function(result){
+    $.getJSON("cek_status_stok_penjualan.php", function(result){
     if (result.status == 0) {
         // POST KE BAYAR LANGSUNG CETAK
          $.post("proses_bayar_tunai_cetak_langsung.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,harga:harga,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
@@ -4072,7 +4072,7 @@ alert("Silakan Bayar Piutang");
             }
             else{
 
-              $.getJSON("cek_status_stok_penjualan.php?session_id="+session_id, function(result){
+              $.getJSON("cek_status_stok_penjualan.php", function(result){
                 if (result.status == 0) {
                     // POST KE PROSESNYA PIUTANGNYA
                    $.post("proses_bayar_jual.php",{biaya_adm:biaya_adm,total2:total2,session_id:session_id,no_faktur:no_faktur,sisa_pembayaran:sisa_pembayaran,kredit:kredit,kode_pelanggan:kode_pelanggan,tanggal_jt:tanggal_jt,total:total,potongan:potongan,potongan_persen:potongan_persen,tax:tax,cara_bayar:cara_bayar,pembayaran:pembayaran,sisa:sisa,sisa_kredit:sisa_kredit,total_hpp:total_hpp,sales:sales,kode_gudang:kode_gudang,keterangan:keterangan,ber_stok:ber_stok,ppn_input:ppn_input},function(info) {
@@ -5215,7 +5215,7 @@ $(document).ready(function(){
 
                           else{
 
-                              $.post("cek_stok_pesanan_barang.php",{jumlah_lama:jumlah_lama,kode_barang:kode_barang, jumlah_baru:jumlah_baru,satuan_konversi:satuan_konversi},function(data){
+                              $.post("cek_stok_pesanan_barang.php",{jenis_penjualan:"Penjualan",jumlah_lama:jumlah_lama,kode_barang:kode_barang, jumlah_baru:jumlah_baru,satuan_konversi:satuan_konversi},function(data){
                                        if (data < 0) {
 
                                        alert("Jumlah Yang Di Masukan Melebihi Stok !");

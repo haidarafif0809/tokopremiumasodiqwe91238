@@ -5,7 +5,7 @@ include 'db.php';
 $no_faktur = $_POST['no_faktur'];
 $kode_barang = $_POST['kode_barang'];
 
-$query = $db->query("SELECT * FROM tbs_pembelian WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur'");
+$query = $db->query("SELECT * FROM tbs_pembelian WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur' AND no_faktur_order IS NULL");
 $jumlah = mysqli_num_rows($query);
 
 

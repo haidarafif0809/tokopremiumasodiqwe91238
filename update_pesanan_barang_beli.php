@@ -18,10 +18,6 @@ $subtotal = angkadoang($_POST['sub_tampil']);
 $user = $_SESSION['nama'];
 $id = stringdoang($_POST['id']);
 
-$query00 = $db->query("SELECT * FROM tbs_pembelian WHERE id = '$id'");
-$data = mysqli_fetch_array($query00);
-$kode = $data['kode_barang'];
-$nomor = $data['no_faktur'];
 
 $query = $db->prepare("UPDATE tbs_pembelian SET jumlah_barang = ?, subtotal = ?, tax = ? WHERE id = ?");
 

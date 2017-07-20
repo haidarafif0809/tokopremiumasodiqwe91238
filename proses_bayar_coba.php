@@ -6,7 +6,7 @@
 $tahun_sekarang = date('Y');
 $bulan_sekarang = date('m');
 $tanggal_sekarang = date('Y-m-d');
-$jam_sekarang = date('H:i:sa');
+$jam_sekarang = date('H:i:s');
 $tahun_terakhir = substr($tahun_sekarang, 2);
 $tanggal = stringdoang($_POST['tanggal']);
 $waktu = $tanggal." ".$jam_sekarang;
@@ -300,16 +300,22 @@ if ($potongan != "" || $potongan != 0 ) {
             $sisa_barang = $jumlah_barang - $jumlah_keluar;
             }
 
-            $query2 = "INSERT INTO detail_pembelian (no_faktur, tanggal, jam, waktu, kode_barang, nama_barang, jumlah_barang, asal_satuan, satuan, harga, subtotal, potongan, tax, sisa) 
-            VALUES ('$nomor_faktur','$tanggal','$jam_sekarang','$waktu','$data[kode_barang]','$data[nama_barang]','$jumlah_barang', '$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]','$sisa_barang')";
+            $query2 = "INSERT INTO detail_pembelian (no_faktur, no_faktur_order, tanggal, jam, waktu, kode_barang, nama_barang, jumlah_barang, asal_satuan, satuan, harga, subtotal, potongan, tax, sisa) 
+            VALUES ('$nomor_faktur','$data[no_faktur_order]','$tanggal','$jam_sekarang','$waktu','$data[kode_barang]','$data[nama_barang]','$jumlah_barang', '$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]','$sisa_barang')";
 
+                if ($db->query($query2) === TRUE) {
+                } 
+                else {
+                     echo "Error: " . $query2 . "<br>" . $db->error;
+                 }
 
-                       if ($db->query($query2) === TRUE) {
-                       } 
-                       
-                       else {
-                       echo "Error: " . $query2 . "<br>" . $db->error;
-                       }
+            $update_order = "UPDATE pembelian_order SET status_order = 'Di Beli' WHERE no_faktur_order = '$data[no_faktur_order]'";
+
+                if ($db->query($update_order) === TRUE) {
+                }
+                else {
+                echo "Error: " . $update_order . "<br>" . $db->error;
+                }
             
             }
  

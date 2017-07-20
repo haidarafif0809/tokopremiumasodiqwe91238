@@ -612,14 +612,9 @@ $(document).ready(function(){
 
 
       if( over_stok < stok && over_stok != 0 ){
-
-          var pesan_alert = confirm("Persediaan Produk '"+nama_barang+"' Ini Melebihi Batas Over Stok. Apakah Anda Ingin Melanjutkan ?");
-          if (pesan_alert == true) {
-          }
-          else{
+          alert("Persediaan Produk '"+nama_barang+"' Ini Melebihi Batas Over Stok.");
             $("#jumlah_barang").val('');
             $("#jumlah_barang").focus();
-          }
       }
 
 

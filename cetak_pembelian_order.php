@@ -36,7 +36,7 @@ $no_faktur = $_GET['no_faktur'];
            $query_detail_order = $db->query("SELECT nama_barang, jumlah_barang, harga, subtotal FROM detail_pembelian_order WHERE no_faktur_order = '$no_faktur' ");
            while ($data_detail_order = mysqli_fetch_array($query_detail_order)){
            
-           echo '<tr><td width:"50%"> '. $data_detail_order['nama_barang'] .' </td> <td style="padding:3px"> '. $data_detail_order['jumlah_barang'] .'</td>  <td style="padding:3px"> '. rp($data_detail_order['harga']) .'</td>  <td style="padding:3px"> '. rp($data_detail_order['subtotal']) . ' </td></tr>';
+           echo '<tr><td width:"50%"> '. $data_detail_order['nama_barang'] .' </td> <td style="padding:3px" align="right"> '. $data_detail_order['jumlah_barang'] .'</td>  <td style="padding:3px" align="right"> '. rp($data_detail_order['harga']) .'</td>  <td style="padding:3px" align="right"> '. rp($data_detail_order['subtotal']) . ' </td></tr>';
            
            }
            
@@ -50,8 +50,8 @@ mysqli_close($db);
     ===================<br>
  <table>
   <tbody>
-      <tr><td  width="50%">Total Item</td> <td> :</td> <td> <?php echo $total_item; ?> </td></tr>
-      <tr><td width="50%">Total pembelian</td> <td> :</td> <td><?php echo rp($data_penjualan_order['total']); ?> </tr>         
+      <tr><td  width="50%">Total Item</td> <td> :</td> <td align='right'> <?php echo $total_item; ?> </td></tr>
+      <tr><td width="50%">Total pembelian</td> <td> :</td> <td align='right'><?php echo rp($data_penjualan_order['total']); ?> </tr>         
 
   </tbody>
 </table>

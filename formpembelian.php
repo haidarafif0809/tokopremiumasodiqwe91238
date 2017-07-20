@@ -364,10 +364,10 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
                 <h6 style="text-align: left ;"><i><b> * Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</b></i></h6>
 
 <button class="btn btn-warning" id="btnOrder" type="button" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
-Order Penjualan</button>
+Order Pembelian</button>
 
 <button class="btn btn-purple" id="btnOrderClose" type="button" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample" style="display: none"><i class='fa fa-list-ol'> </i>
-Order Penjualan</button>
+Order Pembelian</button>
 
 
 
@@ -1499,13 +1499,9 @@ else
 
       if( over_stok < stok && over_stok != 0 ){
 
-          var pesan_alert = confirm("Persediaan Produk '"+nama_barang+"' Ini Melebihi Batas Over Stok. Apakah Anda Ingin Melanjutkan ?");
-          if (pesan_alert == true) {
-          }
-          else{
+            alert("Persediaan Produk '"+nama_barang+"' Ini Melebihi Batas Over Stok.");
             $("#jumlah_barang").val('');
             $("#jumlah_barang").focus();
-          }
       }
 
 

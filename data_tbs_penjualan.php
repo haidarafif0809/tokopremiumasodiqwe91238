@@ -28,7 +28,7 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql =" SELECT bb.berkaitan_dgn_stok,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
+$sql =" SELECT tp.harga_konversi,bb.berkaitan_dgn_stok,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
 $sql.=" FROM tbs_penjualan tp LEFT JOIN satuan s ON tp.satuan = s.id LEFT JOIN barang bb ON tp.kode_barang = bb.kode_barang ";
 $sql.=" WHERE tp.session_id = '$session_id' AND tp.no_faktur IS NULL AND tp.no_faktur_order IS NULL ";
 
@@ -37,7 +37,7 @@ $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql =" SELECT bb.berkaitan_dgn_stok,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
+$sql =" SELECT tp.harga_konversi,bb.berkaitan_dgn_stok,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
 $sql.=" FROM tbs_penjualan tp LEFT JOIN satuan s ON tp.satuan = s.id  LEFT JOIN barang bb ON tp.kode_barang = bb.kode_barang  ";
 $sql.=" WHERE tp.session_id = '$session_id' AND tp.no_faktur IS NULL AND tp.no_faktur_order IS NULL ";
 
@@ -80,8 +80,16 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
       $nestedData[] = $row["nama"];
 
+      if ($row['harga_konversi'] != 0) {      
+
+      $nestedData[] = "<p  align='right'>".koma($row["harga_konversi"],2)."</p>";
+
+      }else{       
 
       $nestedData[] = "<p  align='right'>".koma($row["harga"],2)."</p>";
+      }
+
+
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-potongan-".$row['id']."'> ".koma($row["potongan"],2)." </span> </p>";
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-tax-".$row['id']."'> ".koma($row["tax"],2)." </span> </p>";
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-subtotal-".$row['id']."'> ".koma($row["subtotal"],2)." </span> </p>";

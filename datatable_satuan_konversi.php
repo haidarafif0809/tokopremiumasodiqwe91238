@@ -21,8 +21,9 @@ $columns = array(
     1=>'satuan',
     2=>'konversi',
     3=>'harga_pokok',
-    4=>'hapus',
-    5=>'id'
+    4=>'harga_jual',
+    5=>'hapus',
+    6=>'id'
    
 
 
@@ -58,9 +59,16 @@ $data = array();
 while($row=mysqli_fetch_array($query) ) {
 
     $nestedData=array(); 
+    if ($row['kode_barcode'] == '') {
+        $kode_barcode = 'Tidak Ada Barcode';
+    }else{
+         $kode_barcode = $row['kode_barcode'];
+    }
 
-    $nestedData[] = "<p class='edit_barcode' data-id='".$row['id']."'><span id='text-barcode-".$row['id']."'>".$row["kode_barcode"]."</span></p>
-					<input type='hidden' id='input-barcode-".$row['id']."' data-barcode='".$row['kode_barcode']."' value='".$row['kode_barcode']."' class='input_barcode' data-id='".$row['id']."' autofocus=''>";
+    $nestedData[] = "<p  style='color:black' class='edit_barcode' data-id='".$row['id']."'><span id='text-barcode-".$row['id']."'>".$kode_barcode."</span></p>
+                    <input type='hidden' id='input-barcode-".$row['id']."' data-barcode='".$row['kode_barcode']."' value='".$row['kode_barcode']."' class='input_barcode' data-id='".$row['id']."' autofocus=''>";
+    
+    
     
     $nestedData[] = "<p class='edit-satuan' data-id='".$row['id']."' data-nama='".$row['nama']."'><span id='text-satuan-".$row['id']."'>".$row["nama"]."</span></p>
                     <select style='display:none' id='select-satuan-".$row['id']."' class='select-satuan' data-id='".$row['id']."' autofocus=''>
@@ -69,11 +77,20 @@ while($row=mysqli_fetch_array($query) ) {
     $nestedData[] = "<p class='edit-konversi' data-id='".$row['id']."'><span id='text-konversi-".$row['id']."'>". rp($row['konversi'])." ".$ddd['nama']."</span></p>
                     <input type='hidden' id='input-konversi-".$row['id']."' data-satuan-dasar='".$ddd['nama']."' data-konversi='".$row['konversi']."' value='".$row['konversi']."' class='input_konversi' data-id='".$row['id']."' autofocus=''
                     onkeydown='return numbersonly(this, event);' onkeyup='javascript:tandaPemisahTitik(this);'>";
+
     $nestedData[] = "<p align='right'  class='edit-harga_pokok' data-id='".$row['id']."'><span id='text-harga_pokok-".$row['id']."'>".rp($row['harga_pokok'])."</span></p>
                     <input type='hidden' id='input-harga_pokok-".$row['id']."'  data-harga_pokok='".$row['harga_pokok']."' value='".$row['harga_pokok']."' class='input_harga_pokok' data-id='".$row['id']."' autofocus=''
                     onkeydown='return numbersonly(this, event);' onkeyup='javascript:tandaPemisahTitik(this);'>"; 
-    $nestedData[] = "<button class='btn btn-danger btn-sm btn-hapus' data-id='". $row['id'] ."' data-satuan='". $row['nama'] ."' data-satuan='". $row['id_satuan'] ."'> <i class='fa fa-trash'> </i> Hapus </button> ";         
-    $nestedData[] = $row['id'];
+
+    $nestedData[] = "<p align='right'  class='edit-harga_jual' data-id='".$row['id']."'><span id='text-harga_jual-".$row['id']."'>".rp($row['harga_jual_konversi'])."</span></p>
+                    <input type='hidden' id='input-harga_jual-".$row['id']."'  data-harga_jual='".$row['harga_jual_konversi']."' value='".$row['harga_jual_konversi']."' class='input_harga_jual' data-id='".$row['id']."' autofocus=''
+                    onkeydown='return numbersonly(this, event);' onkeyup='javascript:tandaPemisahTitik(this);'>"; 
+
+    $nestedData[] = "<button class='btn btn-danger' id='btn-hapus' data-id='". $row['id'] ."' data-satuan='". $row['nama'] ."' data-satuan='". $row['id_satuan'] ."'> 
+                    <i class='fa fa-trash'> </i> Hapus </button>";         
+    
+    $nestedData[] = $row['id']; 
+
     $data[] = $nestedData;
 
 }

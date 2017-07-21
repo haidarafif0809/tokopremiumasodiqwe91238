@@ -50,7 +50,7 @@ jika tidak maka nomor terakhir ditambah dengan 1
  */
  if ($v_bulan_terakhir['bulan'] != $bulan_sekarang) {
   # code...
- echo $no_faktur = "1/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
+  echo $no_faktur = "1/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
 
  }
 
@@ -59,7 +59,7 @@ jika tidak maka nomor terakhir ditambah dengan 1
 
 $nomor = 1 + $ambil_nomor ;
 
- echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
+  echo $no_faktur = $nomor."/JL/".$data_bulan_terakhir."/".$tahun_terakhir;
 
 
  }
@@ -219,32 +219,35 @@ $nomor = 1 + $ambil_nomor ;
 
     }
 
+    $query_delete_detail = $db->query("DELETE  FROM detail_penjualan WHERE no_faktur = '$no_faktur'");
+
+
     $query = $db->query("SELECT no_faktur_order,jumlah_barang ,subtotal,satuan,kode_barang,harga,nama_barang,potongan,tax,tanggal,jam FROM tbs_penjualan WHERE session_id = '$session_id' AND no_faktur IS NULL");
     while ($data = mysqli_fetch_array($query))
       {
 
 
-      $pilih_konversi = $db->query("SELECT COUNT(sk.konversi) AS jumlah_data,sk.konversi, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.kode_produk = b.kode_barang AND sk.id_produk = b.id WHERE sk.kode_produk = '$data[kode_barang]' AND sk.id_satuan = '$data[satuan]'");
+      $pilih_konversi = $db->query("SELECT COUNT(sk.konversi) AS jumlah_data,sk.konversi, b.satuan,sk.harga_jual_konversi FROM satuan_konversi sk INNER JOIN barang b ON sk.kode_produk = b.kode_barang AND sk.id_produk = b.id WHERE sk.kode_produk = '$data[kode_barang]' AND sk.id_satuan = '$data[satuan]'");
       $data_konversi = mysqli_fetch_array($pilih_konversi);
 
           if ($data_konversi['jumlah_data'] != 0) {
                 
-                $harga = $data['harga'] / $data_konversi['konversi'];
+                $harga_konversi = $data_konversi['harga_jual_konversi'];
                 $jumlah_barang = $data['jumlah_barang'] * $data_konversi['konversi'];
                 $satuan = $data['satuan'];
 
           }
           else{
 
-                $harga = $data['harga'];
+                $harga_konversi = 0;
                 $jumlah_barang = $data['jumlah_barang'];
                 $satuan = $data['satuan'];
           }
 
 
     
-        $query2 = "INSERT INTO detail_penjualan (no_faktur, tanggal, jam, kode_barang, nama_barang, jumlah_barang, asal_satuan,satuan, harga, subtotal, potongan, tax, sisa)
-         VALUES ('$no_faktur', '$data[tanggal]', '$data[jam]', '$data[kode_barang]','$data[nama_barang]','$jumlah_barang','$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]', '$jumlah_barang')";
+        $query2 = "INSERT INTO detail_penjualan (no_faktur, tanggal, jam, kode_barang, nama_barang, jumlah_barang, asal_satuan,satuan, harga, subtotal, potongan, tax, sisa,harga_konversi)
+         VALUES ('$no_faktur', '$data[tanggal]', '$data[jam]', '$data[kode_barang]','$data[nama_barang]','$jumlah_barang','$satuan','$data[satuan]','$data[harga]','$data[subtotal]','$data[potongan]','$data[tax]', '$jumlah_barang','$harga_konversi')";
 
         if ($db->query($query2) === TRUE) {
         } 
@@ -274,16 +277,19 @@ $nomor = 1 + $ambil_nomor ;
             {
               $ket_jurnal = "Penjualan "." Lunas ".$ambil_kode_pelanggan['nama_pelanggan']." ";
 
-              $stmt = $db->prepare("INSERT INTO penjualan (no_faktur, kode_gudang, kode_pelanggan, total, tanggal, jam, user, sales, status, potongan, tax, sisa, cara_bayar, tunai, status_jual_awal, keterangan, ppn, biaya_admin,no_faktur_jurnal,keterangan_jurnal) VALUES (?,?,?,?,?,?,?,?,'Lunas',?,?,?,?,?,'Tunai',?,?,?,?,?)");
-              
-    // hubungkan "data" dengan prepared statements
-              $stmt->bind_param("ssssssssssssssssss",
-              $no_faktur, $kode_gudang, $id_pelanggan, $total, $tanggal_sekarang, $jam_sekarang, $user, $sales, $potongan, $tax, $sisa, $cara_bayar, $pembayaran, $keterangan, $ppn_input, $biaya_adm,$no_jurnal,$ket_jurnal);
 
-             
-              
-    // jalankan query
-              $stmt->execute();
+              $stmt = "INSERT INTO penjualan (no_faktur, kode_gudang, kode_pelanggan, total, tanggal, jam, user, sales, status, potongan, tax, sisa, cara_bayar, 
+                    tunai, status_jual_awal, keterangan, ppn, biaya_admin,no_faktur_jurnal,keterangan_jurnal)
+               VALUES ('$no_faktur','$kode_gudang','$id_pelanggan','$total','$tanggal_sekarang','$jam_sekarang','$user','$sales','Lunas','$potongan','$tax','$sisa','$cara_bayar',
+                '$pembayaran','Tunai','$keterangan','$ppn_input','$biaya_adm','$no_jurnal','$ket_jurnal')";
+
+                if ($db->query($stmt) === TRUE) {
+                } 
+
+                else {
+                echo "Error: " . $stmt . "<br>" . $db->error;
+                }
+
                                           
  }
 // insert data penjualan lunas        
@@ -293,21 +299,18 @@ $nomor = 1 + $ambil_nomor ;
   else if ($sisa_kredit != 0)
             {
               
-              
              $ket_jurnal = "Penjualan "." Piutang ".$ambil_kode_pelanggan['nama_pelanggan']." ";
 
-              
-              $stmt = $db->prepare("INSERT INTO penjualan (no_faktur, kode_gudang, kode_pelanggan, total, tanggal, tanggal_jt, jam, user, sales, status, potongan, tax, kredit, nilai_kredit, cara_bayar, tunai, status_jual_awal, keterangan, ppn, biaya_admin, no_faktur_jurnal,keterangan_jurnal) VALUES (?,?,?,?,?,?,?,?,?,'Piutang',?,?,?,?,?,?,'Kredit',?,?,?,?,?)");
-              
+              $stmt = "INSERT INTO penjualan (no_faktur, kode_gudang, kode_pelanggan, total, tanggal, tanggal_jt, jam, user, sales, status, potongan, tax, kredit, nilai_kredit, cara_bayar, tunai, status_jual_awal, keterangan, ppn, biaya_admin, no_faktur_jurnal,keterangan_jurnal) 
+               VALUES ('$no_faktur', '$kode_gudang', '$id_pelanggan', '$total', '$tanggal_sekarang', '$tanggal_jt', '$jam_sekarang', '$user', '$sales','Piutang','$potongan', '$tax', '$sisa_kredit', '$sisa_kredit', '$cara_bayar',
+              '$pembayaran', 'Kredit','$keterangan', '$ppn_input','$biaya_adm','$no_jurnal','$ket_jurnal')";
 
-              $stmt->bind_param("ssssssssssssssssssss",
-              $no_faktur, $kode_gudang, $id_pelanggan, $total , $tanggal_sekarang, $tanggal_jt, 
-              $jam_sekarang, $user, $sales, $potongan, $tax, $sisa_kredit, $sisa_kredit, $cara_bayar,
-              $pembayaran, $keterangan, $ppn_input,$biaya_adm,$no_jurnal,$ket_jurnal);
+                if ($db->query($stmt) === TRUE) {
+                } 
 
-              // jalankan query
-              $stmt->execute();
-              
+                else {
+                echo "Error: " . $stmt . "<br>" . $db->error;
+                }              
             
    
 }
@@ -371,6 +374,7 @@ $query_tbs_bonus_penjualan = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp
     // We must rollback the transaction
     $db->rollback();
 }
+
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

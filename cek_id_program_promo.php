@@ -36,7 +36,7 @@ $syarat_promo_free = $data_tbs_penjualan_innerjoin['syarat_belanja'];
 $total_syarat_free = $subtotal_tbs_penjualan_difree - $syarat_promo_free;
 $total_syarat_disc = $subtotal_tbs_penjualan - $syarat_promo_disc_produk;
 
-if ($jumlah_data_query_tbs_bonus_penjualan_disc < 1 && $total_syarat_disc >= 0){
+if ($jumlah_data_query_tbs_bonus_penjualan_disc < 1 && $total_syarat_disc >= 0 && $total_syarat_disc != NULL){
 
   $promo_disc_produk = array(
     'harga_jual_normal' => $data_promo_disc_produk['harga_jual'],
@@ -51,7 +51,7 @@ if ($jumlah_data_query_tbs_bonus_penjualan_disc < 1 && $total_syarat_disc >= 0){
   echo json_encode($promo_disc_produk);
 }
  
-else if ($jumlah_data_query_tbs_bonus_penjualan < 1 && $jumlah_data_tbs_penjualan_innerjoin > 0 && $total_syarat_free >= 0 && $total_syarat_free != NULL){
+else if ($jumlah_data_query_tbs_bonus_penjualan < 1 && $jumlah_data_tbs_penjualan_innerjoin > 0 && $total_syarat_free >= 0){
 
   $promo_free_produk = array(
     'harga_jual' => $data_tbs_penjualan_innerjoin['harga_jual'],

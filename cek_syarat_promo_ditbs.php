@@ -71,11 +71,11 @@ $syarat_promo_disc_produk = $data_promo_disc_produk['syarat_belanja'];
 $subtotal_tbs_penjualan_difree = round($data_tbs_penjualan_innerjoin['sub_tp']);
 $syarat_promo_free = $data_tbs_penjualan_innerjoin['syarat_belanja'];
 
-$total_syarat_free = $subtotal_tbs_penjualan_difree - $syarat_promo_free;
-$total_syarat_disc = $subtotal_tbs_penjualan - $syarat_promo_disc_produk;
+/*$total_syarat_free = subtotal_tbs_penjualan_difree < syarat_promo_free;
+$total_syarat_disc = subtotal_tbs_penjualan < syarat_promo_disc_produk;*/
 
 
-if (($total_syarat_disc <= 0) || ($total_syarat_free <= 0)){
+if (($subtotal_tbs_penjualan_difree < $syarat_promo_free) || ($subtotal_tbs_penjualan < $syarat_promo_disc_produk)){
 
 	$promo_produk = array(
     'subtotal_tbs_penjualan' => round($data_tbs_penjualan['subto']),
@@ -89,7 +89,8 @@ if (($total_syarat_disc <= 0) || ($total_syarat_free <= 0)){
   echo json_encode($promo_produk);
 }
 else{
-	echo 0;
+	 $promo_produk = 'NULL';
+	echo json_encode($promo_produk);
 }
         //Untuk Memutuskan Koneksi Ke Database
 

@@ -26,7 +26,7 @@ $columns = array(
 
 // getting total number records without any search
 
-    $sql = "SELECT sk.konversi,dp.id, dp.no_faktur, dp.kode_barang, dp.nama_barang, dp.jumlah_barang / IFNULL( sk.konversi,0) AS jumlah_produk, dp.jumlah_barang, dp.satuan, 
+    $sql = "SELECT dp.harga_konversi,sk.konversi,dp.id, dp.no_faktur, dp.kode_barang, dp.nama_barang, dp.jumlah_barang / IFNULL( sk.konversi,0) AS jumlah_produk, dp.jumlah_barang, dp.satuan, 
     dp.harga * IFNULL( sk.konversi,0) AS harga_produk, dp.harga,dp.potongan, dp.subtotal, dp.tax, dp.sisa, sk.id_satuan, s.nama AS satuan_konversi, sa.nama AS satuan_dasar ";
     $sql.=" FROM detail_penjualan dp LEFT JOIN satuan_konversi sk ON dp.kode_barang = sk.kode_produk AND dp.satuan = sk.id_satuan "; 
     $sql.=" LEFT JOIN satuan s ON dp.satuan = s.id LEFT JOIN satuan sa ON dp.asal_satuan = sa.id WHERE dp.no_faktur = '$no_faktur' ";
@@ -62,14 +62,18 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
     
     $nestedData[] = "<p align='right'>".koma($row["jumlah_produk"],3)."</p>";
     $nestedData[] = $row["satuan_konversi"];
-    $nestedData[] = "<p align='right'>".koma($row["harga_produk"],2)."</p>";
 
     }
     else{
 
     $nestedData[] = "<p align='right'>".koma($row["jumlah_barang"],3)."</p>";
     $nestedData[] = $row["satuan_dasar"];
-    $nestedData[] = "<p align='right'>".koma($row["harga"],2)."</p>";
+    }
+
+    if ($row["harga_konversi"] != 0) {
+    $nestedData[] = "<p align='right'>".koma($row["harga_konversi"],2)."</p>";
+    }else{
+    $nestedData[] = "<p align='right'>".koma($row["harga"],2)."</p>";    
     }
 
     $nestedData[] = "<p align='right'>".koma($row["potongan"],2)."</p>";

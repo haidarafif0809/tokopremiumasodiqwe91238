@@ -38,17 +38,15 @@ while ($data = mysqli_fetch_array($perintah)){
         if ($data_satuan_konversi['jumlah_data'] > 0 ) {
         						
         	$jumlah_barang = $data['jumlah_barang'] / $data_satuan_konversi['konversi'];
-        	$harga = $data['harga'] * $data_satuan_konversi['konversi'];
 
         }else{
 
         	$jumlah_barang = $data['jumlah_barang'];
-        	$harga = $data['harga'];
         }
 
 
-		$perintah1 = $db->query("INSERT INTO tbs_penjualan (no_faktur, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax, hpp,tipe_barang) VALUES ( '$data[no_faktur]', '$data[kode_barang]', '$data[nama_barang]',
-			'$jumlah_barang', '$data[satuan]', '$harga', '$data[subtotal]','$data[potongan]', '$data[tax]', '$data[hpp]','$ber_stok')");
+		$perintah1 = $db->query("INSERT INTO tbs_penjualan (no_faktur, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax, hpp,tipe_barang,harga_konversi) VALUES ( '$data[no_faktur]', '$data[kode_barang]', '$data[nama_barang]',
+			'$jumlah_barang', '$data[satuan]', '$data[harga]', '$data[subtotal]','$data[potongan]', '$data[tax]', '$data[hpp]','$ber_stok','$data[harga_konversi]')");
 
 
 

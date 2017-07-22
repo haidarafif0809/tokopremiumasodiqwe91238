@@ -2746,25 +2746,8 @@ console.log(total_akhir)
 
 
 // datatable ajax pembaruan
-    $('#tabel_tbs_penjualan').DataTable().destroy();
-            var dataTable = $('#tabel_tbs_penjualan').DataTable( {
-            "processing": true,
-            "serverSide": true,
-            "info":     false,
-            "language": { "emptyTable":     "My Custom Message On Empty Table" },
-            "ajax":{
-              url :"data_tbs_penjualan.php", // json datasource
-             
-                  type: "post",  // method  , by default get
-              error: function(){  // error handling
-                $(".tbody").html("");
-                $("#tabel_tbs_penjualan").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
-                $("#tableuser_processing").css("display","none");
-                
-              }
-            }   
-
-      });
+    var tabel_tbs_penjualan = $('#tabel_tbs_penjualan').DataTable();
+    tabel_tbs_penjualan.draw();
   
 }// end else untuk stok tidak mencukupi
 

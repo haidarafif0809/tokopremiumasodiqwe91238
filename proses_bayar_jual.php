@@ -360,6 +360,17 @@ $query_tbs_bonus_penjualan = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp
 //end nya bonus
 
 
+        // coding untuk memasukan history_tbs dan menghapus tbs
+    $tbs_penjualan_masuk = "INSERT INTO history_tbs_penjualan (no_faktur,no_faktur_order,session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam, tipe_barang,harga_konversi) 
+    SELECT '$no_faktur',no_faktur_order,session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam, tipe_barang,harga_konversi FROM tbs_penjualan WHERE session_id = '$session_id' AND no_faktur IS NULL ";
+        if ($db->query($tbs_penjualan_masuk) === TRUE) {
+              
+        }
+        else{
+            echo "Error: " . $tbs_penjualan_masuk . "<br>" . $db->error;
+        }
+
+
     $query3 = $db->query("DELETE  FROM tbs_penjualan WHERE session_id = '$session_id'");
     $query30 = $db->query("DELETE  FROM tbs_fee_produk WHERE session_id = '$session_id'");
     $query321 = $db->query("DELETE  FROM tbs_bonus_penjualan WHERE session_id = '$session_id'");

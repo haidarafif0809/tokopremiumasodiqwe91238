@@ -422,13 +422,14 @@ $(document).on('blur', '#barcode', function (e) {
 
                                     var id = $(this).attr("data-id");
                                     var nama = $(this).attr("data-nama");
+                                    var satuan = $(this).attr("data-satuan");
 
                                     $("#text-satuan-"+id+"").hide();
 
                                     $.getJSON("cek_data_satuan.php", function(result){
 
                                             $("#option_satuan-"+id).remove();
-                                            var option_barang = "<option id='option_satuan-"+id+"' value='"+id+"' data-nama='"+nama+"'>"+nama+"</option>"
+                                            var option_barang = "<option id='option_satuan-"+id+"' value='"+satuan+"' data-nama='"+nama+"'>"+nama+"</option>"
                                             $("#select-satuan-"+id).show().append(option_barang);
 
                                             $.each(result.satuan, function(i, item) {//  $.each(result.barang, 

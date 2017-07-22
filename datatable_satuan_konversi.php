@@ -70,7 +70,7 @@ while($row=mysqli_fetch_array($query) ) {
     
     
     
-    $nestedData[] = "<p class='edit-satuan' data-id='".$row['id']."' data-nama='".$row['nama']."'><span id='text-satuan-".$row['id']."'>".$row["nama"]."</span></p>
+    $nestedData[] = "<p class='edit-satuan' data-id='".$row['id']."' data-nama='".$row['nama']."' data-satuan='".$row['id_satuan']."'><span id='text-satuan-".$row['id']."'>".$row["nama"]."</span></p>
                     <select style='display:none' id='select-satuan-".$row['id']."' class='select-satuan' data-id='".$row['id']."' autofocus=''>
                     </select>";
 

@@ -7,7 +7,16 @@
     $no_faktur  = stringdoang($_POST['no_faktur']);
 
     $kode_barang = stringdoang($_POST['kode_barang']);
-    $harga = angkadoang($_POST['harga']);
+    $harga_produk = stringdoang($_POST['harga_produk']);
+    $harga_konversi = stringdoang($_POST['harga_konversi']);
+    $ber_stok = stringdoang($_POST['ber_stok']);
+
+    if ($harga_konversi != 0) {
+      $harga = $harga_konversi;
+    }else{
+      $harga = $harga_produk;
+    }
+
     $jumlah_barang = angkadoang($_POST['jumlah_barang']);
     $nama_barang = stringdoang($_POST['nama_barang']);
     $sales = stringdoang($_POST['sales']);
@@ -139,19 +148,18 @@ $jumlah = mysqli_num_rows($cek);
     }
     else
     {
-            $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (no_faktur_order,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax) VALUES (?,?,
-            ?,?,?,?,?,?,?)");
+            $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (no_faktur_order,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax,harga_konversi,tipe_barang) VALUES (?,?,
+            ?,?,?,?,?,?,?,?,?)");
             
             
-            $perintah->bind_param("sssisiiis",
-            $no_faktur, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotal, $potongan_tampil, $tax_persen);
+            $perintah->bind_param("sssisiiisis",
+            $no_faktur, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga_produk, $subtotal, $potongan_tampil, $tax_persen,$harga_konversi,$ber_stok);
             
               $no_faktur = stringdoang($_POST['no_faktur']);
             $kode_barang = stringdoang($_POST['kode_barang']);
             $jumlah_barang = angkadoang($_POST['jumlah_barang']); 
             $nama_barang = stringdoang($_POST['nama_barang']);
             $satuan = stringdoang($_POST['satuan']);
-            $harga = angkadoang($_POST['harga']);
             $tax = angkadoang($_POST['tax']);
             $subtotal = $harga * $jumlah_barang - $potongan_jadi;
             
@@ -166,120 +174,3 @@ $jumlah = mysqli_num_rows($cek);
 
 
     ?>
-
-    <?php
-  //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
-                $perintah = $db->query("SELECT tp.id,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama FROM tbs_penjualan_order tp INNER JOIN satuan s ON tp.satuan = s.id WHERE tp.no_faktur_order = '$no_faktur' AND tp.kode_barang = '$kode_barang'");
-                
-                //menyimpan data sementara yang ada pada $perintah
-                
-               $data1 = mysqli_fetch_array($perintah);
-
-                //menampilkan data
-                echo "<tr class='tr-kode-". $data1['kode_barang'] ." tr-id-". $data1['id'] ."' data-kode-barang='".$data1['kode_barang']."'>
-                <td>". $data1['kode_barang'] ."</td>
-                <td>". $data1['nama_barang'] ."</td>
-                <td class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['jumlah_barang']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-kode='".$data1['kode_barang']."' data-harga='".$data1['harga']."' data-satuan='".$data1['satuan']."' > </td>
-                <td>". $data1['nama'] ."</td>
-                <td>". rp($data1['harga']) ."</td>
-                <td><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
-                <td><span id='text-potongan-".$data1['id']."'>". rp($data1['potongan']) ."</span></td>
-                <td><span id='text-tax-".$data1['id']."'>". rp($data1['tax']) ."</span></td>";
-
-                echo "<td style='font-size:15px'> <button class='btn btn-danger btn-hapus-tbs' id='hapus-tbs-".$data1['id']."' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-barang='". $data1['nama_barang'] ."' data-subtotal='". $data1['subtotal'] ."'>Hapus</button> </td> 
-
-                </tr>";
-
-
-
-//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-    ?>
-
-
-
-
-
-     
-                            <script type="text/javascript">
-                                 
-                                 $(".edit-jumlah").dblclick(function(){
-
-                                    var id = $(this).attr("data-id");
-
-                                    $("#text-jumlah-"+id+"").hide();
-
-                                    $("#input-jumlah-"+id+"").attr("type", "text");
-
-                                 });
-
-
-                                 $(".input_jumlah").blur(function(){
-
-                                    var id = $(this).attr("data-id");
-                                    var jumlah_baru = $(this).val();
-                                    var kode_barang = $(this).attr("data-kode");
-                                    var harga = $(this).attr("data-harga");
-                                    var jumlah_lama = $("#text-jumlah-"+id+"").text();
-                                    var satuan_konversi = $(this).attr("data-satuan");
-
-                                    var subtotal_lama = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-subtotal-"+id+"").text()))));
-                                    var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-potongan-"+id+"").text()))));
-
-                                    var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-tax-"+id+"").text()))));
-                                   
-                                    var subtotal = harga * jumlah_baru - potongan;
-
-                                    var subtotal_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
-
-                                    subtotal_penjualan = subtotal_penjualan - subtotal_lama + subtotal;
-                                    
-                                    var tax_tbs = tax / subtotal_lama * 100;
-                                    var jumlah_tax = Math.round(tax_tbs) * subtotal / 100;
-
-
-                                    $.post("cek_stok_pesanan_barang.php",{kode_barang:kode_barang, jumlah_baru:jumlah_baru,satuan_konversi:satuan_konversi},function(data){
-
-                                       if (data < 0) {
-
-                                       alert ("Jumlah Yang Di Masukan Melebihi Stok !");
-
-                                    $("#input-jumlah-"+id+"").val(jumlah_lama);
-                                    $("#text-jumlah-"+id+"").text(jumlah_lama);
-                                    $("#text-jumlah-"+id+"").show();
-                                    $("#input-jumlah-"+id+"").attr("type", "hidden");
-                                    
-                                     }
-
-                                      else{
-
-                                    $("#text-jumlah-"+id+"").show();
-                                    $("#text-jumlah-"+id+"").text(jumlah_baru);
-                                    $("#hapus-tbs-"+id+"").attr('data-subtotal', subtotal);
-                                    $("#text-subtotal-"+id+"").text(tandaPemisahTitik(subtotal));
-                                    $("#text-tax-"+id+"").text(Math.round(jumlah_tax));
-                                    $("#input-jumlah-"+id+"").attr("type", "hidden"); 
-                                    $("#total2").val(tandaPemisahTitik(subtotal_penjualan)); 
-
-                                     $.post("update_pesanan_barang_order.php",{jumlah_lama:jumlah_lama,tax:tax,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,potongan:potongan,harga:harga,jumlah_tax:jumlah_tax,subtotal:subtotal},function(info){
-
-
-                                    
-                                    
-        
-
-
-                                    });
-
-                                   }
-
-                                 });
-
-
-       
-                                    $("#kode_barang").focus();
-                                    
-
-                                 });
-
-                             </script>

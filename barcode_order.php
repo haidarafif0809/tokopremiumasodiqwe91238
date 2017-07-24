@@ -301,12 +301,12 @@ if ($ber_stok == 'Barang' OR $ber_stok == 'barang') {
                       }
                       else
                       {
-                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi) VALUES (?,?,
-                              ?,?,?,?,?,?,?,?)");
+                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi,tipe_barang) VALUES (?,?,
+                              ?,?,?,?,?,?,?,?,?)");
                               
                               
-                              $perintah->bind_param("sssisiissi",
-                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga_tbs, $a,$tanggal_sekarang,$jam_sekarang,$harga_konversi);
+                              $perintah->bind_param("sssisiissis",
+                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga_tbs, $a,$tanggal_sekarang,$jam_sekarang,$harga_konversi,$ber_stok);
                              
                               $perintah->execute();
 
@@ -387,12 +387,12 @@ else{
                       }
                       else
                       {
-                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi) VALUES (?,?,
-                              ?,?,?,?,?,?,?,?)");
+                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi,tipe_barang) VALUES (?,?,
+                              ?,?,?,?,?,?,?,?,?)");
                               
                               
-                              $perintah->bind_param("sssisiissi",
-                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang,$harga_konversi);
+                              $perintah->bind_param("sssisiissis",
+                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang,$harga_konversi,$harga_konversi);
                              
                               $perintah->execute();
 

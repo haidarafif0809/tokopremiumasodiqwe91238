@@ -5,6 +5,7 @@
     // mengirim data sesuai variabel yang ada dengan menggunakan metode POST
   $session_id = stringdoang($_POST['session_id']);
   $no_faktur_penjualan = stringdoang($_POST['no_faktur_penjualan']);
+  $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
 
 
    
@@ -29,10 +30,10 @@ $jumlah = mysqli_num_rows($cek);
   }
 
 else{
-  $perintah = $db->prepare("INSERT INTO tbs_pembayaran_piutang (session_id,no_faktur_penjualan,tanggal,tanggal_jt,kredit,potongan,total,jumlah_bayar) VALUES (?,?,now(),?,?,?,?,?)");
+  $perintah = $db->prepare("INSERT INTO tbs_pembayaran_piutang (session_id,no_faktur_penjualan,tanggal,tanggal_jt,kredit,potongan,total,jumlah_bayar,kode_pelanggan) VALUES (?,?,now(),?,?,?,?,?,?)");
 
-  $perintah->bind_param("sssiiii",
-    $session_id, $no_faktur_penjualan, $tanggal_jt, $kredit, $potongan, $total_kredit, $jumlah_bayar);
+  $perintah->bind_param("sssiiiis",
+    $session_id, $no_faktur_penjualan, $tanggal_jt, $kredit, $potongan, $total_kredit, $jumlah_bayar,$kode_pelanggan);
 
 
     $no_faktur_penjualan = stringdoang($_POST['no_faktur_penjualan']);

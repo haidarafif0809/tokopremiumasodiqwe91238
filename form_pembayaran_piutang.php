@@ -141,7 +141,7 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
           include 'db.php';
           
           // menampilkan data yang ada pada tabel suplier
-          $query = $db->query("SELECT * FROM pelanggan ");
+          $query = $db->query("SELECT id,kode_pelanggan,nama_pelanggan FROM pelanggan ");
           
           // menyimpan data sementara yang ada pada $query
           while($data = mysqli_fetch_array($query))

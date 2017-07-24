@@ -5,15 +5,25 @@
     include 'sanitasi.php';
 
     // mengirim data sesuai variabel yang ada dengan menggunakan metode POST
-    $nomor_faktur = $_POST['no_faktur'];
-    $kode_barang = $_POST['kode_barang'];
-    $nama_barang = $_POST['nama_barang'];
-    $jumlah_barang = $_POST['jumlah_barang'];
-    $ppn = $_POST['ppn'];
-    $satuan = $_POST['satuan'];
-    $harga = $_POST['harga'];
-    $potongan = $_POST['potongan'];
-    $tax = $_POST['tax'];
+    $nomor_faktur = stringdoang($_POST['no_faktur']);
+    $kode_barang = stringdoang($_POST['kode_barang']);
+    $nama_barang = stringdoang($_POST['nama_barang']);
+    $jumlah_barang = angkadoang($_POST['jumlah_barang']);
+    $ppn = stringdoang($_POST['ppn']);
+    $satuan = stringdoang($_POST['satuan']);
+    $harga_produk = angkadoang($_POST['harga_produk']);
+    $harga_konversi = angkadoang($_POST['harga_konversi']);
+
+    if ($harga_konversi != 0) {
+    $harga = $harga_konversi;
+    }else{
+    $harga = $harga_produk;
+
+    }
+
+
+    $potongan = angkadoang($_POST['potongan']);
+    $tax = stringdoang($_POST['tax']);
     $subtotal = $harga * $jumlah_barang - $potongan;
 
     $tax = stringdoang($_POST['tax']);
@@ -114,9 +124,9 @@ else
     else
 
     {
-        $perintah = "INSERT INTO tbs_penjualan (no_faktur,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax)VALUES ('$nomor_faktur','$kode_barang',
-        '$nama_barang','$jumlah_barang','$satuan','$harga','$subtotaljadi','$potongan',
-        '$tax_persen')";
+        $perintah = "INSERT INTO tbs_penjualan (no_faktur,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax,harga_konversi)VALUES ('$nomor_faktur','$kode_barang',
+        '$nama_barang','$jumlah_barang','$satuan','$harga_produk','$subtotaljadi','$potongan',
+        '$tax_persen','$harga_konversi')";
         
         if ($db->query($perintah) === TRUE)
         {

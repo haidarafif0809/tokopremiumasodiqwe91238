@@ -86,6 +86,26 @@ elseif ($jenis_edit == 'harga_pokok') {
         }
 
 }
+elseif ($jenis_edit == 'harga_jual') {
+
+
+        $harga_jual = angkadoang($_POST['harga_jual']);
+    
+        $query =$db->prepare("UPDATE satuan_konversi SET harga_jual_konversi = ?  WHERE id = ?");
+        
+        $query->bind_param("ii",
+        $harga_jual, $id);
+        
+        
+        $query->execute();
+        
+        if (!$query) 
+        {
+        die('Query Error : '.$db->errno.
+        ' - '.$db->error);
+        }
+
+}
 
 
 

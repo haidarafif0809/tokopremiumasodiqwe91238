@@ -116,7 +116,7 @@
                             <input type="text" placeholder="Harga Pokok" name="harga_pokok" id="harga_pokok" class="form-control" autocomplete="off"  onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
                         </div>
 
-                        <div style="display: none" class="form-group">
+                        <div class="form-group">
                             <label style="font-size: 20px"> Harga Jual Konversi  </label>
                             <input type="text" placeholder="Harga Jual Konversi" name="harga_jual_konversi" id="harga_jual_konversi" class="form-control" autocomplete="off"  onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
                         </div>
@@ -165,9 +165,9 @@
       <th> Satuan </th>
       <th> Konversi </th>
       <th> Harga Pokok </th>
-      <!--
+
       <th> Harga Jual Konversi </th>
-      -->
+
       <th> Hapus </th>
     </thead>
   </table>
@@ -212,7 +212,7 @@ $(document).ready(function(){
                           }
                         },
                           "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                          $(nRow).attr('class','tr-id-'+aData[5]);
+                          $(nRow).attr('class','tr-id-'+aData[6]);
                         },
                   
                   });
@@ -234,22 +234,28 @@ $(document).ready(function(){
     var harga_jual_konversi = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_jual_konversi").val()))));
     var id_produk = $("#id_produk").val();
     var kode_produk = $("#kode_produk").val();
+    var satuan_dasar = $("#satuan_dasar").val();
 
-    if (nama_satuan_konversi == ""){
-      alert("Nama Konversi Harus Diisi");
+    if (satuan_dasar == nama_satuan_konversi) {
+        alert("Nama Satuan  Konversi Tidak bisa sama dengan Satuan Dasar ");
       $("#nama_satuan_konversi").focus();
     }
-    else if (barcode == ""){
-      alert("Barcode Harus Diisi");
-       $("#barcode").focus();
-    }    
+    else if (nama_satuan_konversi == ""){
+      alert("Nama Satuan Konversi Harus Diisi");
+      $("#nama_satuan_konversi").focus();
+    }
+  
     else if (konversi == ""){
-      alert("Dari Satuan Harus Diisi");
+      alert("JUmlah Konversi Harus Diisi");
       $("#konversi").focus()
     }
     else if (harga_pokok == ""){
       alert("Harga Pokok Harus Diisi");
       $("#harga_pokok").focus();
+    }
+    else if (harga_jual_konversi == ""){
+      alert("Harga Jual Konversi Harus Diisi");
+      $("#harga_jual_konversi").focus();
     }
     else{
 
@@ -261,6 +267,7 @@ $(document).ready(function(){
     $("#barcode").val('');
     $("#konversi").val('');
     $("#harga_pokok").val('');
+    $("#harga_jual_konversi").val('')
     $("#myModal").modal("hide");
 
 
@@ -283,7 +290,7 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
   //fungsi hapus data 
-$(document).on('click', '.btn-hapus', function (e) {
+$(document).on('click', '#btn-hapus', function (e) {
 
     var id = $(this).attr("data-id");
     var satuan = $(this).attr("data-satuan");
@@ -308,14 +315,19 @@ $(document).on('blur', '#barcode', function (e) {
 
     var barcode = $(this).val();
 
-    $.post("cek_barcode_satuan_konversi.php",{barcode:barcode},function(data){
+    if (barcode != '') {
+      $.post("cek_barcode_satuan_konversi.php",{barcode:barcode},function(data){
 
-        if (data == 1) {
-          alert("Barcode yang anda masukan sudah ada!");
-          $("#barcode").focus();
-          $("#barcode").val('');
-          };
-    });
+          if (data == 1) {
+            alert("Barcode yang anda masukan sudah ada!");
+            $("#barcode").focus();
+            $("#barcode").val('');
+            };
+      });
+
+    };
+
+
     
     });
 // end fungsi hapus data
@@ -341,12 +353,22 @@ $(document).on('blur', '#barcode', function (e) {
                                     var barcode_lama = $(this).attr("data-barcode");
                                     var barcode = $("#input-barcode-"+id).val();
 
+
                                     if (barcode == barcode_lama) {
 
-                                                $("#text-barcode-"+id).text(barcode_lama);
-                                                $("#text-barcode-"+id).show();
-                                                $("#input-barcode-"+id).val(barcode_lama);
-                                                $("#input-barcode-"+id).attr("type", "hidden");
+                                                if (barcode_lama == '') {
+
+                                                  $("#text-barcode-"+id).text('Tidak Ada barcode');
+                                                  $("#text-barcode-"+id).show();
+                                                  $("#input-barcode-"+id).attr('value','');
+                                                  $("#input-barcode-"+id).attr("type", "hidden");
+                                                }else{
+
+                                                  $("#text-barcode-"+id).text(barcode_lama);
+                                                  $("#text-barcode-"+id).show();
+                                                  $("#input-barcode-"+id).val(barcode_lama);
+                                                  $("#input-barcode-"+id).attr("type", "hidden");
+                                                };
                                     }else{
 
 
@@ -361,16 +383,26 @@ $(document).on('blur', '#barcode', function (e) {
                                                 $("#input-barcode-"+id).attr("data-barcode",barcode_lama);
 
 
-
                                                 }else{
 
                                                     $.post("update_satuan_konveksi.php",{id:id, barcode:barcode,jenis_edit:"Barcode"},function(data){
 
-                                                  $("#text-barcode-"+id).text(barcode);
-                                                  $("#text-barcode-"+id).show();
-                                                  $("#input-barcode-"+id).val(barcode);
-                                                  $("#input-barcode-"+id).attr("type", "hidden");  
-                                                  $("#input-barcode-"+id).attr("data-barcode",barcode);       
+                                                      if (barcode == '') {
+
+                                                          $("#text-barcode-"+id).text('Tidak Ada Barcode');
+                                                          $("#text-barcode-"+id).show();
+                                                          $("#input-barcode-"+id).attr('value','');
+                                                          $("#input-barcode-"+id).attr("type", "hidden");  
+                                                          $("#input-barcode-"+id).attr("data-barcode",'');    
+                                                      }else{
+                                                          $("#text-barcode-"+id).text(barcode);
+                                                          $("#text-barcode-"+id).show();
+                                                          $("#input-barcode-"+id).val(barcode);
+                                                          $("#input-barcode-"+id).attr("type", "hidden");  
+                                                          $("#input-barcode-"+id).attr("data-barcode",barcode);    
+                                                      };
+
+   
 
                                                     });
 
@@ -390,13 +422,14 @@ $(document).on('blur', '#barcode', function (e) {
 
                                     var id = $(this).attr("data-id");
                                     var nama = $(this).attr("data-nama");
+                                    var satuan = $(this).attr("data-satuan");
 
                                     $("#text-satuan-"+id+"").hide();
 
                                     $.getJSON("cek_data_satuan.php", function(result){
 
                                             $("#option_satuan-"+id).remove();
-                                            var option_barang = "<option id='option_satuan-"+id+"' value='"+id+"' data-nama='"+nama+"'>"+nama+"</option>"
+                                            var option_barang = "<option id='option_satuan-"+id+"' value='"+satuan+"' data-nama='"+nama+"'>"+nama+"</option>"
                                             $("#select-satuan-"+id).show().append(option_barang);
 
                                             $.each(result.satuan, function(i, item) {//  $.each(result.barang, 
@@ -451,7 +484,7 @@ $(document).on('blur', '#barcode', function (e) {
 
                                     if (konversi == konversi_lama) {
 
-                                                $("#text-konversi-"+id).text(konversi_lama);
+                                                $("#text-konversi-"+id).text(konversi_lama +" "+ satuan_dasar);
                                                 $("#text-konversi-"+id).show();
                                                 $("#input-konversi-"+id).val(konversi_lama);
                                                 $("#input-konversi-"+id).attr("type", "hidden");
@@ -514,7 +547,48 @@ $(document).on('blur', '#barcode', function (e) {
                                  });                              
 
 
-                             // edit konversi
+                             // edit harga pokok
+                             
+
+                                                    // edit harga_pokok
+                                 $(document).on('dblclick','.edit-harga_jual',function(e){
+                                    var id = $(this).attr("data-id");
+
+                                    $("#text-harga_jual-"+id).hide();
+                                    $("#input-harga_jual-"+id).attr("type", "text");
+
+                                 });
+
+                                $(document).on('blur','.input_harga_jual',function(e){
+                                    var id = $(this).attr("data-id");
+                                    var harga_jual_lama = $(this).attr("data-harga_jual");
+                                    var harga_jual = $("#input-harga_jual-"+id).val();
+
+                                    if (harga_jual == harga_jual_lama) {
+
+                                                $("#text-harga_jual-"+id).text(harga_jual_lama);
+                                                $("#text-harga_jual-"+id).show();
+                                                $("#input-harga_jual-"+id).val(harga_jual_lama);
+                                                $("#input-harga_jual-"+id).attr("type", "hidden");
+                                    }else{
+
+                                                  $.post("update_satuan_konveksi.php",{id:id, harga_jual:harga_jual,jenis_edit:"harga_jual"},function(data){
+
+                                                  $("#text-harga_jual-"+id).text(harga_jual);
+                                                  $("#text-harga_jual-"+id).show();
+                                                  $("#input-harga_jual-"+id).val(harga_jual);
+                                                  $("#input-harga_jual-"+id).attr("type", "hidden");  
+                                                  $("#input-harga_jual-"+id).attr("data-harga_jual",harga_jual);       
+
+                                                    });
+                                          
+                                    }
+
+
+                                 });                              
+
+
+                             // edit harga pokok
 
                             });
 

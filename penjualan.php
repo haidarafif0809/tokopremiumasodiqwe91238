@@ -19,7 +19,7 @@ $status = $_GET['status'];
 
 <!--hidden untuk no faktur buat kirim ke button detail-->
     <input type="hidden" name="no_faktur_detail" class="form-control " id="no_faktur_detail" placeholder="no_faktur  "/>
-    <input type="hidden" name="status" class="form-control " id="status" value="<?php echo $status ?>" "/>
+    <input type="hidden" name="status" class="form-control " id="status" value="<?php echo $status ?>" />
 
 <!--MODAL VOID -->
 <div id="modal_void" class="modal fade" role="dialog">

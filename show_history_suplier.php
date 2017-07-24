@@ -1,4 +1,4 @@
-<?php 
+<?php include 'session_login.php';
 include 'db.php';
 include 'sanitasi.php';
 
@@ -116,10 +116,12 @@ $query= mysqli_query($conn, $sql) or die("eror 3");
 $nestedData[] = "<p></p>";
 $nestedData[] = "<p></p>";
 $nestedData[] = "<p></p>";
-$nestedData[] = "<p style='color:red;width:140px;'>Saldo Hutang Awal</p>";
+$nestedData[] = "<p style='color:red;width:140px;'>Saldo Awal</p>";
 $nestedData[] = "<p></p>";
 $nestedData[] = "<p></p>";
 $nestedData[] = "<p style='color:red;' align='right' >".rp($saldo_awal_hutang)."</p>";
+$nestedData[] = "<p></p>";
+$nestedData[] = "<p></p>";
 $nestedData[] = "<p></p>";
 
 		$data[] = $nestedData;	
@@ -146,10 +148,7 @@ $nestedData=array();
 
 		$nestedData[] = "<p align='right'>".rp($row["pembayaran"])."</p>";
 		
-		if($row["saldo_hutang"] == ""){
-		$nestedData[] = "<p style='color:red;width:110px;' align='right'>Tidak Ada Perubahan</p>";
-		}else{
-
+		
 
 		if ($row["jenis"] == 'Pembelian (Kredit)' OR $row["jenis"] == 'Pembelian (Tunai)'){
   			$saldo_awal_hutang = $saldo_awal_hutang + $row['saldo_hutang'];
@@ -165,18 +164,126 @@ $nestedData=array();
 
 		}
 
-		}
-
+		
 		if ($row["jenis"] == 'Pembelian (Kredit)' OR $row["jenis"] == 'Pembelian (Tunai)') {
 			# code...
-		$nestedData[] = "<button class='btn btn-info detail_pembelian' style='width:200px;' no_faktur='". $row['no_faktur'] ."'> <span class='glyphicon glyphicon-th-list'></span> Pembelian </button>";
-		}
-		else if($row["jenis"] == 'Retur Pembelian'){
-			$nestedData[] = "<button class='btn btn-warning detail' style='width:200px;' no_faktur_retur='". $row['no_faktur'] ."' ><span class='glyphicon glyphicon-th-list'></span> Retur Pembelian </button>";
+		$nestedData[] = "<button class='btn-floating detail_pembelian'  no_faktur='". $row['no_faktur'] ."'> <i class='fa fa-list'></i></button>";
+
+
+			$query_pembelian = $db->query("SELECT p.id,p.no_faktur,p.total,p.suplier,p.tanggal,p.tanggal_jt,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit,s.nama,g.nama_gudang, g.kode_gudang FROM pembelian p INNER JOIN suplier s ON p.suplier = s.id INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang WHERE p.no_faktur = '$row[no_faktur]' ");
+			$data_pembelian = mysqli_fetch_array($query_pembelian);
+
+
+			$pilih_akses_pembelian_edit = $db->query("SELECT pembelian_hapus,pembelian_edit FROM otoritas_pembelian WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+			$oto_pembelian_edit = mysqli_fetch_array($pilih_akses_pembelian_edit);
+
+
+			    if ($oto_pembelian_edit['pembelian_edit'] > 0){
+							$nestedData[] = "<a href='proses_edit_pembelian.php?no_faktur=". $data_pembelian['no_faktur']."&suplier=". $data_pembelian['suplier']."&nama_gudang=".$data_pembelian['nama_gudang']."&kode_gudang=".$data_pembelian['kode_gudang']."&nama_suplier=".$data_pembelian['nama']."' class='btn-floating'> <i class='fa fa-edit'></i>  </a>"; 
+				}
+				else{
+					$nestedData[] = "";
+				}
+
+
+			    if ($oto_pembelian_edit['pembelian_hapus'] > 0){
+
+			 $retur = $db->query ("SELECT no_faktur_pembelian FROM detail_retur_pembelian WHERE no_faktur_pembelian = '$data_pembelian[no_faktur]'");
+			 $row_retur = mysqli_num_rows($retur);
+
+			 $hpp_masuk_penjualan = $db->query ("SELECT no_faktur FROM hpp_masuk WHERE no_faktur = '$data_pembelian[no_faktur]' AND sisa != jumlah_kuantitas");
+			 $row_masuk = mysqli_num_rows($hpp_masuk_penjualan);
+
+			 $hutang = $db->query ("SELECT no_faktur_pembelian FROM detail_pembayaran_hutang WHERE no_faktur_pembelian = '$data_pembelian[no_faktur]'");
+			 $row_hutang = mysqli_num_rows($hutang);
+					
+					if ($row_retur > 0 || $row_masuk > 0 || $row_hutang > 0) {
+
+						$nestedData[] = "<button class='btn-floating btn-alert' data-id='".$data_pembelian['id']."' data-faktur='".$data_pembelian['no_faktur']."'><i class='fa fa-trash'></i></button>"; 
+
+					}
+					else{
+
+						$nestedData[] = "<button class='btn-floating btn-hapus' data-id='".$data_pembelian['id']."' data-suplier='".$data_pembelian['nama']."' data-faktur='".$data_pembelian['no_faktur']."'><i class='fa fa-trash'></i></button>"; 
+
+					} 
+						
+				}
+				else{
+					$nestedData[] = "";
+				}
+
 
 		}
+		else if($row["jenis"] == 'Retur Pembelian'){
+			$nestedData[] = "<button class='btn-floating detail'  no_faktur_retur='". $row['no_faktur'] ."' ><i class='fa fa-list'></i></button>";
+			// edit & hapus retur pembelian
+
+			$query_retur_pembelian = $db->query(" SELECT p.jenis_retur,p.id,p.no_faktur_retur,p.keterangan,p.total,p.nama_suplier,p.tanggal,p.tanggal_edit,p.jam,p.user_buat,p.user_edit,p.potongan,p.tax,p.tunai,p.sisa,p.cara_bayar,p.total_bayar,p.potongan_hutang,s.nama FROM retur_pembelian p INNER JOIN suplier s ON p.nama_suplier = s.id WHERE p.total_bayar IS NOT NULL AND p.no_faktur_retur = '$row[no_faktur]' ");
+			$data_retur_pembelian = mysqli_fetch_array($query_retur_pembelian);
+
+			$pilih_akses_retur_pembelian = $db->query("SELECT retur_pembelian_edit,retur_pembelian_hapus FROM otoritas_pembelian WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+			$retur_pembelian = mysqli_fetch_array($pilih_akses_retur_pembelian);
+
+			if ($retur_pembelian['retur_pembelian_edit'] > 0) {
+
+				if ($data_retur_pembelian['jenis_retur'] == "1"){
+				$nestedData[] = "<a href='proses_edit_retur_pembelian.php?no_faktur_retur=". $data_retur_pembelian['no_faktur_retur']."&nama=". $data_retur_pembelian['nama']."&cara_bayar=".$data_retur_pembelian['cara_bayar']."&suplier=".$data_retur_pembelian['nama_suplier']."' class='btn-floating'>  <i class='fa fa-edit'></i> </a> </td> ";
+				}
+				else{
+					$nestedData[] = "<a href='proses_edit_retur_pembelian_faktur.php?no_faktur_retur=". $data_retur_pembelian['no_faktur_retur']."&nama=". $data_retur_pembelian['nama']."&cara_bayar=".$data_retur_pembelian['cara_bayar']."&suplier=".$data_retur_pembelian['nama_suplier']."' class='btn-floating'>  <i class='fa fa-edit'></i> </a>";
+				}
+
+			}
+			else{
+				$nestedData[] = "";
+			}
+
+			if ($retur_pembelian['retur_pembelian_hapus'] > 0) {
+				if ($data_retur_pembelian['jenis_retur'] == "1"){
+					$nestedData[] = "<button class='btn-floating btn-hapus-r1' data-id='". $data_retur_pembelian['id'] ."' data-faktur='". $data_retur_pembelian['no_faktur_retur'] ."' data-suplier='". $data_retur_pembelian['nama'] ."'> <i class='fa fa-trash'></i> </button> ";
+				}
+				else{
+					$nestedData[] = "<button class='btn-floating btn-hapus-r2' data-id='". $data_retur_pembelian['id'] ."' data-faktur='". $data_retur_pembelian['no_faktur_retur'] ."' data-suplier='". $data_retur_pembelian['nama'] ."'> <i class='fa fa-trash'></i> </button>";
+					}
+			}
+			else{
+				$nestedData[] = "";
+			} 
+			// edit & hapus retur pembelian
+
+
+		}
+
 		else if($row["jenis"] == 'Pembayaran Hutang'){
-			$nestedData[] = "<button class=' btn btn-success detail_pembayaran_hutang' style='width:200px;' no_faktur_pembayaran='". $row['no_faktur'] ."'> Pembayaran Hutang  </button>";
+
+			$nestedData[] = "<button class='btn-floating detail_pembayaran_hutang'  no_faktur_pembayaran='". $row['no_faktur'] ."'><i class='fa fa-list'></i></button>";
+
+			$query_pembayaran_hutang = $db->query("SELECT p.id,p.no_faktur_pembayaran,p.keterangan,p.total,p.nama_suplier,p.tanggal,p.tanggal_edit,p.jam,p.user_buat,p.user_edit,p.dari_kas,s.nama,da.nama_daftar_akun FROM pembayaran_hutang p INNER JOIN suplier s ON p.nama_suplier = s.id INNER JOIN daftar_akun da ON p.dari_kas = da.kode_daftar_akun WHERE p.no_faktur_pembayaran = '$row[no_faktur]' ");
+			$data_pembayaran_hutang = mysqli_fetch_array($query_pembayaran_hutang);
+
+			$pilih_akses_pembayaran_hutang = $db->query("SELECT pembayaran_hutang_edit,pembayaran_hutang_hapus FROM otoritas_pembayaran WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+		$pembayaran_hutang = mysqli_fetch_array($pilih_akses_pembayaran_hutang);
+
+
+				if ($pembayaran_hutang['pembayaran_hutang_edit'] > 0) {
+
+					$nestedData[] = "<a href='proses_edit_pembayaran_hutang.php?no_faktur_pembayaran=". $data_pembayaran_hutang['no_faktur_pembayaran']."&nama=". $data_pembayaran_hutang['nama']."&cara_bayar=". $data_pembayaran_hutang['dari_kas']."' class='btn-floating'> <i class='fa fa-edit'></i>  </a>";
+
+				}
+				else{
+					$nestedData[] = "";
+				}
+
+
+
+				if ($pembayaran_hutang['pembayaran_hutang_hapus'] > 0) {
+
+					$nestedData[] = "<button class='btn-floating btn-hapus-ph' data-id='". $data_pembayaran_hutang['id'] ."' data-suplier='". $data_pembayaran_hutang['nama'] ."' data-no_faktur_pembayaran='". $data_pembayaran_hutang['no_faktur_pembayaran'] ."'> <i class='fa fa-trash'></i>  </button>";
+					}
+				else{
+					$nestedData[] = "";
+				} 
 
 		}
 		$data[] = $nestedData;	

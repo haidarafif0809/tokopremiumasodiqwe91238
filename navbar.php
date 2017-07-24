@@ -350,6 +350,11 @@ if ($lihat['akuntansi_lihat'] > 0){
                             
                             echo '<li><a href="lap_history_suplier.php" class="waves-effect">Lap. History Suplier</a></li>';
 
+                            echo '<li><a href="lap_history_harga_beli.php" class="waves-effect">Lap. History Harga Beli</a></li>';
+
+
+
+
  if ($lihat['laporan_hutang_beredar_lihat'] > 0){
                             echo '<li><a href="laporan_pembelian_hutang.php" class="waves-effect">Lap. Hutang Beredar</a></li>';
 }

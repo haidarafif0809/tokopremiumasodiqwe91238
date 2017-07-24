@@ -82,9 +82,9 @@ include 'db.php';
                 <th> Jumlah Barang </th>
                 <th> Satuan </th>
                 <th> Harga </th>
-                <th> Subtotal </th>
                 <th> Potongan </th>
                 <th> Tax </th>
+                <th> Subtotal </th>
               </thead>
                      
             </table>

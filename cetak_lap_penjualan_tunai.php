@@ -41,8 +41,32 @@ $no_faktur = $_GET['no_faktur'];
 
            <?php 
            while ($data2 = mysqli_fetch_array($query2)){
+
+                      // QUERY CEK BARCODE DI SATUAN KONVERSI
+                                    
+            $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data,konversi  FROM satuan_konversi WHERE kode_produk = '$data2[kode_barang]' AND id_satuan = '$data2[satuan]' ");
+            $data_satuan_konversi = mysqli_fetch_array($query_satuan_konversi);     
+
+            // QUERY CEK BARCODE DI SATUAN KONVERSI
+
+            if ($data2['harga_konversi'] != 0) {
+             $harga = $data2['harga_konversi'];
+            }else{
+              $harga = $data2['harga'];
+            }
+
+                        // IF CEK BARCODE DI SATUAN KONVERSI
+            if ($data_satuan_konversi['jumlah_data'] > 0) {//    if ($data_satuan_konversi['jumlah_data'] > 0) {
+                    
+                    $jumlah_barang = $data2['jumlah_barang'] / $data_satuan_konversi['konversi'];
+                                        
+                  }else{
+                      
+                     $jumlah_barang = $data2['jumlah_barang'];
+
+                  }
            
-           echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. koma($data2['jumlah_barang'],3) .'</td>  <td style="padding:3px"> '. rp($data2['harga']) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
+           echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. koma($jumlah_barang,3) .'</td>  <td style="padding:3px"> '. rp($harga) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
            
            }
            

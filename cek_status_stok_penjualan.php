@@ -7,7 +7,7 @@ include 'persediaan.function.php';
 
 $session_id = session_id();
 	
-$query_tbs_penjualan = $db->query("SELECT kode_barang,nama_barang,jumlah_barang,satuan FROM tbs_penjualan WHERE session_id = '$session_id' AND tipe_barang = 'Barang'");
+$query_tbs_penjualan = $db->query("SELECT kode_barang,nama_barang,jumlah_barang,satuan FROM tbs_penjualan WHERE session_id = '$session_id' AND tipe_barang = 'Barang' ");
 
 $arr = array();
 $status_jual = 0;
@@ -51,6 +51,8 @@ while ($data_tbs_penjualan = mysqli_fetch_array($query_tbs_penjualan)) {
 		$status_jual += 1;
 
 		array_push($arr, $temp);
+	}else{
+		$jumlah_barang = 0;
 	}
 
 } //endwhile

@@ -8,7 +8,7 @@ include 'db.php';
  $harga_produk = $_GET['harga_produk'];
  
 
- $query = $db->query("SELECT COUNT(*) AS jumlah_total, konversi * $harga_produk AS harga_pokok FROM satuan_konversi WHERE id_satuan = '$satuan_konversi' AND id_produk = '$id_produk'");
+ $query = $db->query("SELECT COUNT(*) AS jumlah_total, harga_jual_konversi AS harga_pokok FROM satuan_konversi WHERE id_satuan = '$satuan_konversi' AND id_produk = '$id_produk'");
  $data = mysqli_fetch_array($query);
 
 

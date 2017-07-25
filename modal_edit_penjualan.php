@@ -39,7 +39,7 @@ $columns = array(
 
 // getting total number records without any search
 $sql = "SELECT s.nama,b.kode_barang,b.tipe_barang,b.nama_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.kategori,b.status,b.suplier,b.limit_stok,b.satuan ,b.id,b.berkaitan_dgn_stok, k.nama_kategori";
-$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id INNER JOIN kategori k ON b.kategori = k.id ";
+$sql.=" FROM barang b LEFT JOIN satuan s ON b.satuan = s.id LEFT JOIN kategori k ON b.kategori = k.id ";
 $sql.=" ";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
@@ -48,7 +48,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 $sql = "SELECT s.nama,b.kode_barang,b.tipe_barang,b.nama_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.kategori,b.status,b.suplier,b.limit_stok,b.satuan,b.id,b.berkaitan_dgn_stok, k.nama_kategori";
-$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id INNER JOIN kategori k ON b.kategori = k.id ";
+$sql.=" FROM barang b LEFT JOIN satuan s ON b.satuan = s.id LEFT JOIN kategori k ON b.kategori = k.id ";
 $sql.=" WHERE ";
 
     $sql.=" b.kode_barang LIKE '".$requestData['search']['value']."%'";  

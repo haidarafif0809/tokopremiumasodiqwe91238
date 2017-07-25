@@ -1,13 +1,13 @@
 <?php 
 
-include 'sanitasi.php';
 include 'db.php';
+include 'sanitasi.php';
 
 
-$no_faktur = $_GET['no_faktur'];
-$kode_pelanggan = $_GET['kode_pelanggan'];
-$nama_gudang = $_GET['nama_gudang'];
-$kode_gudang = $_GET['kode_gudang'];
+$no_faktur = stringdoang($_GET['no_faktur']);
+$kode_pelanggan = stringdoang($_GET['kode_pelanggan']);
+$nama_gudang = stringdoang($_GET['nama_gudang']);
+$kode_gudang = stringdoang($_GET['kode_gudang']);
 
 $perintah3 = $db->query("SELECT * FROM tbs_penjualan WHERE no_faktur = '$no_faktur'");
 $data1 = mysqli_num_rows($perintah3);
@@ -22,25 +22,32 @@ $perintah2 = $db->query("DELETE FROM tbs_penjualan WHERE no_faktur = '$no_faktur
 $perintah = $db->query("SELECT * FROM detail_penjualan WHERE no_faktur = '$no_faktur'");
 while ($data = mysqli_fetch_array($perintah)){
 
-if ($data['satuan'] == $data['asal_satuan']) {
 
-$perintah1 = $db->query("INSERT INTO tbs_penjualan (no_faktur, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax, hpp) VALUES ( '$data[no_faktur]', '$data[kode_barang]', '$data[nama_barang]', '$data[jumlah_barang]', '$data[satuan]', '$data[harga]', '$data[subtotal]', '$data[potongan]', '$data[tax]', '$data[hpp]')");
 
-}
+        $tipe = $db->query("SELECT berkaitan_dgn_stok FROM barang WHERE kode_barang = '$data[kode_barang]'");
+        $data_tipe = mysqli_fetch_array($tipe);
+        $ber_stok = $data_tipe['berkaitan_dgn_stok'];
 
-else{
+	        // QUERY CEK BARCODE DI SATUAN KONVERSI
+                                    
+        $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data, konversi FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]' ");
+        $data_satuan_konversi = mysqli_fetch_array($query_satuan_konversi);     
 
-$konversi = $db->query("SELECT * FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]'");
-$data_konversi = mysqli_fetch_array($konversi);
+        // QUERY CEK BARCODE DI SATUAN KONVERSI
 
-$jumlah_produk = $data['jumlah_barang'] / $data_konversi['konversi'];
-$harga = $data['harga'] * $data['jumlah_barang'];
+        if ($data_satuan_konversi['jumlah_data'] > 0 ) {
+        						
+        	$jumlah_barang = $data['jumlah_barang'] / $data_satuan_konversi['konversi'];
 
-$perintah1 = $db->query("INSERT INTO tbs_penjualan (no_faktur, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax, hpp) VALUES ( '$data[no_faktur]', '$data[kode_barang]', '$data[nama_barang]',
-	'$jumlah_produk', '$data[satuan]', '$harga', '$data[subtotal]',
-	'$data[potongan]', '$data[tax]', '$data[hpp]')");
+        }else{
 
-}
+        	$jumlah_barang = $data['jumlah_barang'];
+        }
+
+
+		$perintah1 = $db->query("INSERT INTO tbs_penjualan (no_faktur, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax, hpp,tipe_barang,harga_konversi) VALUES ( '$data[no_faktur]', '$data[kode_barang]', '$data[nama_barang]',
+			'$jumlah_barang', '$data[satuan]', '$data[harga]', '$data[subtotal]','$data[potongan]', '$data[tax]', '$data[hpp]','$ber_stok','$data[harga_konversi]')");
+
 
 
 

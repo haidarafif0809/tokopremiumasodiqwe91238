@@ -28,7 +28,7 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql =" SELECT tp.no_faktur,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
+$sql =" SELECT tp.harga_konversi,tp.no_faktur,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
 $sql.=" FROM tbs_penjualan tp LEFT JOIN satuan s ON tp.satuan = s.id";
 $sql.=" WHERE tp.no_faktur = '$no_faktur' AND (tp.no_faktur_order = '' OR tp.no_faktur_order IS NULL)  ";
 
@@ -37,7 +37,7 @@ $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql =" SELECT tp.no_faktur,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
+$sql =" SELECT tp.harga_konversi,tp.no_faktur,tp.jam,tp.id,tp.tipe_barang,tp.kode_barang,tp.satuan,tp.nama_barang,tp.jumlah_barang,tp.harga,tp.subtotal,tp.potongan,tp.tax,s.nama";
 $sql.=" FROM tbs_penjualan tp LEFT JOIN satuan s ON tp.satuan = s.id";
 $sql.=" WHERE tp.no_faktur = '$no_faktur' AND (tp.no_faktur_order = '' OR tp.no_faktur_order IS NULL) ";
 
@@ -69,16 +69,28 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
           $jumlah_ganti = koma($row["jumlah_barang"],3);
         }
 
+     if ($row['harga_konversi'] != 0) {      
+
+      $harga = $row['harga_konversi'];
+
+      }else{       
+      $harga = $row['harga'];
+       }
+
 
 
       $nestedData[] = $row["kode_barang"];
       $nestedData[] = $row["nama_barang"];
 
-      $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jumlah-jual' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_ganti."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_barang'],3)."' class='input_jumlah_jual' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_barang']."' data-harga='".koma($row['harga'],2)."' data-tipe='".$row['tipe_barang']."' data-satuan='".$row['satuan']."' data-nama-barang='".$row['nama_barang']."'> </p>";
+      $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jumlah-jual' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> 
+      <span id='text-jumlah-".$row['id']."'>".$jumlah_ganti."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_barang'],3)."' 
+      class='input_jumlah_jual' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_barang']."' data-harga='".koma($harga,2)."' 
+      data-tipe='".$row['tipe_barang']."' data-satuan='".$row['satuan']."'  data-nama_satuan='".$row['nama']."' data-nama-barang='".$row['nama_barang']."'> </p>";
 
       $nestedData[] = $row["nama"];
 
-      $nestedData[] = "<p  align='right'>".koma($row["harga"],2)."</p>";
+      $nestedData[] = "<p  align='right'>".koma($harga,2)."</p>";
+      
   
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-potongan-".$row['id']."'> ".koma($row["potongan"],2)." </span> </p>";
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-tax-".$row['id']."'> ".koma($row["tax"],2)." </span> </p>";

@@ -18,9 +18,11 @@ $status = $_GET['status'];
 <div class="container"><!--start of container-->
 
 <!--hidden untuk no faktur buat kirim ke button detail-->
+
     <input type="hidden" name="no_faktur_detail" class="form-control " id="no_faktur_detail" placeholder="no_faktur"/>
     <input type="hidden" name="no_faktur_bonus" class="form-control " id="no_faktur_bonus" placeholder="no_faktur Bonus"/>
     <input type="hidden" name="status" class="form-control " id="status" value="<?php echo $status ?>" "/>
+
 
 <!--MODAL VOID -->
 <div id="modal_void" class="modal" role="dialog">
@@ -207,9 +209,9 @@ $status = $_GET['status'];
           <th> Jumlah Barang </th>
           <th> Satuan </th>
           <th> Harga </th>
-          <th> Subtotal </th>
           <th> Potongan </th>
           <th> Tax </th>
+          <th> Subtotal </th>
 
   </thead> <!-- tag penutup tabel -->
   </table>

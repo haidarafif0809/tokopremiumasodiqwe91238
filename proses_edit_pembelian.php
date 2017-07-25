@@ -10,12 +10,12 @@ $nama_suplier = $_GET['nama_suplier'];
 $kode_gudang = $_GET['kode_gudang'];
 $nama_gudang = $_GET['nama_gudang'];
 
-$perintah3 = $db->query("SELECT * FROM tbs_pembelian WHERE no_faktur = '$no_faktur'");
+$perintah3 = $db->query("SELECT no_faktur, no_faktur_order FROM tbs_pembelian WHERE no_faktur = '$no_faktur' AND no_faktur_order IS NULL");
 $data1 = mysqli_num_rows($perintah3);
 
 if ($data1 > 0){
 
-$perintah2 = $db->query("DELETE FROM tbs_pembelian WHERE no_faktur = '$no_faktur'");
+$perintah2 = $db->query("DELETE FROM tbs_pembelian WHERE no_faktur = '$no_faktur' AND no_faktur_order IS NULL");
 }
 
 

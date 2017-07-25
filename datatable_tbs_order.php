@@ -72,9 +72,9 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 
       $nestedData[] = "<p  align='right'>".koma($row["harga"],2)."</p>";
-      $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-subtotal-".$row['id']."'> ".koma($row["subtotal"],2)." </span> </p>";
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-potongan-".$row['id']."'> ".koma($row["potongan"],2)." </span> </p>";
       $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-tax-".$row['id']."'> ".koma($row["tax"],2)." </span> </p>";
+      $nestedData[] = "<p style='font-size:15px' align='right'><span id='text-subtotal-".$row['id']."'> ".koma($row["subtotal"],2)." </span> </p>";
 
       $nestedData[] = $row["id"];
 

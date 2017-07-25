@@ -11,11 +11,128 @@ include 'db.php';
  ?>
 
 
+<!-- Modal Hapus data -->
+<div id="modal_hapus_ph" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Konfirmsi Hapus Data Pembayaran Hutang</h4>
+      </div>
+
+      <div class="modal-body">
+   
+   <p>Apakah Anda yakin Ingin Menghapus Data ini ?</p>
+   <form >
+    <div class="form-group">
+    <label> Nama Suplier :</label>
+     <input type="text" id="ssuplier" class="form-control" readonly="">
+     <label> Nomor Faktur :</label>
+     <input type="text" id="no_faktur_hapus" class="form-control" readonly=""> 
+     <input type="hidden" id="id_hapus" class="form-control" > 
+    </div>
+   
+   </form>
+   
+  <div class="alert alert-success" style="display:none">
+   <strong>Berhasil!</strong> Data berhasil Di Hapus
+  </div>
+ 
+
+     </div>
+
+      <div class="modal-footer">
+        <button type="button" data-id="" class="btn btn-info" id="btn_jadi_hapus_ph"><span class='glyphicon glyphicon-ok-sign'> </span> Ya</button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal"><span class='glyphicon glyphicon-remove-sign'> </span> Batal</button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- end of modal hapus data  -->
+
+
+<!-- Modal Hapus data -->
+<div id="modal_hapus" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Konfirmasi Hapus Data Retur Pembelian</h4>
+      </div>
+
+      <div class="modal-body">
+   
+   <p>Apakah Anda yakin Ingin Menghapus Data ini ?</p>
+   <form >
+    <div class="form-group">
+    <label> Nama Suplier :</label>
+     <input type="text" id="data_suplier" class="form-control" readonly=""> 
+
+     <input type="hidden" id="data_faktur" class="form-control" readonly=""> 
+     <input type="hidden" id="id_hapus" class="form-control" > 
+    </div>
+   
+   </form>
+   
+  <div class="alert alert-success" style="display:none">
+   <strong>Berhasil!</strong> Data berhasil Di Hapus
+  </div>
+ 
+
+     </div>
+
+      <div class="modal-footer">
+        <button type="button" data-id="" class="btn btn-info" id="btn_jadi_hapus"> <span class='glyphicon glyphicon-ok-sign'> </span> Ya</button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal"> <span class='glyphicon glyphicon-remove-sign'> </span> Batal</button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- end of modal hapus data  -->
+
+
 <!-- js untuk tombol shortcut -->
  <script src="shortcut.js"></script>
 <!-- js untuk tombol shortcut -->
 
 <div class="container">
+
+<div id="modal_alert" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3 style="color:orange" class="modal-title"><span class="glyphicon glyphicon-info-sign">Info</span></h3>
+        
+      </div>
+
+      <div class="modal-body">
+      <div class="table-responsive">
+      <span id="modal-alert">
+       </span>
+      </div>
+
+     </div>
+
+      <div class="modal-footer">
+        <h6 style="text-align: left"><i> * jika ingin menghapus atau mengedit data,<br>
+        silahkan hapus terlebih dahulu Transaksi Pembayaran Hutang atau Retur Pembelian atau Penjualan</i></h6>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
 
 
 <!--tampilan modal-->
@@ -218,7 +335,9 @@ include 'db.php';
       <th style='background-color: #4CAF50; color:white'> Nilai Faktur</th>
       <th style='background-color: #4CAF50; color:white'> Pembayaran</th>
       <th style='background-color: #4CAF50; color:white'> Saldo Hutang</th>
-      <th style='background-color: #4CAF50; color:white'> Detail</th>      
+      <th style='background-color: #4CAF50; color:white'> Detail</th> 
+      <th style='background-color: #4CAF50; color:white'> Edit</th>
+      <th style='background-color: #4CAF50; color:white'> Hapus</th>     
            </thead>
 
      </table>
@@ -246,7 +365,6 @@ include 'db.php';
 
 
  <script type="text/javascript" language="javascript" >
-      $(document).ready(function() {
 $(document).on('click','#lihat_history_suplier',function(e) {
 
         var suplier = $("#suplier").val();      
@@ -348,9 +466,7 @@ $(document).on('click','#lihat_history_suplier',function(e) {
   $("form").submit(function(){
       return false;
   });
-
-  } );
-    </script>
+</script>
 
 
 <!--SCRIPT datepicker -->
@@ -437,6 +553,173 @@ $(document).on('click','.detail_pembayaran_hutang',function(e){
     });
 </script>
 
+<!--Tombol edit dan hapus pertransaksi-->
+
+    <script type="text/javascript">
+            $(document).ready(function(){
+            //fungsi hapus data 
+            $(document).on('click', '.btn-hapus', function (e) {
+            var suplier = $(this).attr("data-suplier");
+            var no_faktur = $(this).attr("data-faktur");
+            var id = $(this).attr("data-id");
+
+            $("#nama_suplier").val(suplier);
+            $("#faktur_hapus").val(no_faktur);
+            $("#id_hapus").val(id);
+            
+                var konfirmasi_hapus = confirm("Apakah Anda Yakin Ingin Menghapus Pembelian "+no_faktur+" dengan suplier " +suplier);
+
+                if (konfirmasi_hapus == true) {
+
+
+                    $.post("hapus_data_pembelian.php", {id:id, no_faktur:no_faktur}, function(data){  
+
+                    $(".tr-id-"+id).remove();
+                    
+                    
+                    });
+                }
+
+            });
+            
+          
+            
+            $('form').submit(function(){
+            
+            return false;
+            });
+            });
+
+    </script>
+
+
+<script type="text/javascript">
+  $(document).on('click', '.btn-alert', function (e) {
+      var no_faktur = $(this).attr("data-faktur");
+            
+      $.post('modal_alert_hapus_data_pembelian.php',{no_faktur:no_faktur},function(data){
+
+
+      $("#modal_alert").modal('show');
+      $("#modal-alert").html(data);
+
+      });
+  });
+</script>
+
+<!--Tombol edit dan hapus pertransaksi-->
+
+
+<script type="text/javascript">  
+        //fungsi hapus data 
+        $(document).on('click','.btn-hapus-r1',function(e){
+        var kode_suplier = $(this).attr("data-suplier");
+        var no_faktur_retur = $(this).attr("data-faktur");
+        var id = $(this).attr("data-id");
+        $("#data_suplier").val(kode_suplier);
+        $("#data_faktur").val(no_faktur_retur);
+        $("#id_hapus").val(id);
+        $("#modal_hapus").modal('show');
+        $("#btn_jadi_hapus").attr("data-id", id);
+        
+        
+        });
+        
+        $("#btn_jadi_hapus").click(function(){
+        
+        var id = $(this).attr("data-id");
+        var no_faktur_retur =  $("#data_faktur").val();
+
+        $.post("hapus_data_retur_pembelian.php",{no_faktur_retur:no_faktur_retur,id:id},function(data){
+        if (data != "") {
+
+        $("#modal_hapus").modal('hide');
+        $(".tr-id-"+id).remove();
+        
+        }
+        
+        });
+        
+        
+        });
+ </script>
+
+<script type="text/javascript">      
+        //fungsi hapus data 
+        $(document).on('click','.btn-hapus-r2',function(e){
+        var kode_suplier = $(this).attr("data-suplier");
+        var no_faktur_retur = $(this).attr("data-faktur");
+        var id = $(this).attr("data-id");
+        $("#data_suplier").val(kode_suplier);
+        $("#data_faktur").val(no_faktur_retur);
+        $("#id_hapus").val(id);
+        $("#modal_hapus").modal('show');
+        $("#btn_jadi_hapus").attr("data-id", id);
+        
+        
+        });
+        
+        $("#btn_jadi_hapus").click(function(){
+        
+        var id = $(this).attr("data-id");
+        var no_faktur_retur =  $("#data_faktur").val();
+
+        $.post("hapus_data_retur_pembelian_faktur.php",{no_faktur_retur:no_faktur_retur,id:id},function(data){
+        if (data != "") {
+
+        $("#modal_hapus").modal('hide');
+        $(".tr-id-"+id).remove();
+        
+        }
+        
+        });
+        
+        
+        });
+</script>
+
+
+
+ <script type="text/javascript">
+      
+//fungsi hapus data 
+    $(document).on('click','.btn-hapus-ph',function(e){
+    var suplier = $(this).attr("data-suplier");
+    var no_faktur_pembayaran = $(this).attr("data-no_faktur_pembayaran");
+    var id = $(this).attr("data-id");
+    $("#ssuplier").val(suplier);
+    $("#no_faktur_hapus").val(no_faktur_pembayaran);
+    $("#id_hapus").val(id);
+    $("#modal_hapus_ph").modal('show');
+    $("#btn_jadi_hapus_ph").attr("data-id", id);
+    
+    
+    });
+
+
+    $("#btn_jadi_hapus_ph").click(function(){
+    
+    var id = $(this).attr("data-id");
+    var no_faktur_pembayaran = $("#no_faktur_hapus").val();
+
+    $.post("hapus_data_pembayaran_hutang.php",{id:id,no_faktur_pembayaran:no_faktur_pembayaran},function(data){
+    if (data != "") {
+    
+    $("#modal_hapus_ph").modal('hide');
+    $(".tr-id-"+id).remove();
+    
+    }
+
+    
+    });
+    
+    
+    });
+
+
+
+
+    </script>
 
 <script type="text/javascript">
   //SELECT CHOSSESN    

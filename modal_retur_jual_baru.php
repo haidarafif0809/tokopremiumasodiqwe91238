@@ -30,7 +30,7 @@ include 'db.php';
       $kode_pelanggan = $_POST['kode_pelanggan'];
 
     // menampilkan seluruh data yang ada pada tabel barang yang terdapat pada DB
-    $perintah = $db->query("SELECT b.id AS id_produk , ss.nama AS satuan_asal ,dp.no_faktur, dp.tanggal, dp.kode_barang, dp.nama_barang, dp.jumlah_barang, dp.satuan, dp.harga, dp.subtotal, dp.potongan, dp.tax, dp.status, dp.sisa, p.kode_pelanggan, pl.nama_pelanggan, dp.asal_satuan, SUM(hk.sisa_barang) as sisa_barang ,s.nama FROM detail_penjualan dp LEFT JOIN hpp_keluar hk ON dp.no_faktur = hk.no_faktur AND dp.kode_barang = hk.kode_barang LEFT JOIN penjualan p ON dp.no_faktur = p.no_faktur LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan INNER JOIN satuan s ON dp.satuan = s.id
+    $perintah = $db->query("SELECT b.id AS id_produk , ss.nama AS satuan_asal ,dp.harga_konversi,dp.no_faktur, dp.tanggal, dp.kode_barang, dp.nama_barang, dp.jumlah_barang, dp.satuan, dp.harga, dp.subtotal, dp.potongan, dp.tax, dp.status, dp.sisa, p.kode_pelanggan, pl.nama_pelanggan, dp.asal_satuan, SUM(hk.sisa_barang) as sisa_barang ,s.nama FROM detail_penjualan dp LEFT JOIN hpp_keluar hk ON dp.no_faktur = hk.no_faktur AND dp.kode_barang = hk.kode_barang LEFT JOIN penjualan p ON dp.no_faktur = p.no_faktur LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan INNER JOIN satuan s ON dp.satuan = s.id
       INNER JOIN satuan ss ON dp.asal_satuan = ss.id  INNER JOIN barang b ON dp.kode_barang = b.kode_barang WHERE hk.sisa_barang > '0' AND p.kode_pelanggan = '$kode_pelanggan' GROUP BY dp.no_faktur, dp.kode_barang   ");
      
 
@@ -45,7 +45,7 @@ include 'db.php';
       if ($num_rows > 0) {
         
      $sisa = $data1['sisa_barang'] % $data_konversi['konversi'];
-     $harga = $data1['harga'] * $data_konversi['konversi'];
+     $harga = $data1['harga_konversi'];
 
       }
       else{

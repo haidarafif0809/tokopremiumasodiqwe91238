@@ -6,7 +6,16 @@
     //mengirim data sesuai dengan variabel denagn metode POST 
 
     $kode_barang = stringdoang($_POST['kode_barang']);
-    $harga = stringdoang($_POST['harga']);
+    $harga_produk = stringdoang($_POST['harga_produk']);
+    $harga_konversi = stringdoang($_POST['harga_konversi']);
+
+    if ($harga_konversi != 0) {
+      $harga = $harga_konversi;
+    }else{
+      $harga = $harga_produk;
+    }
+
+    
     $jumlah_barang = stringdoang($_POST['jumlah_barang']);
     $nama_barang = stringdoang($_POST['nama_barang']);
     $sales = stringdoang($_POST['sales']);
@@ -145,19 +154,18 @@ else
     }
 
 
-            $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax,tanggal,jam, tipe_barang) VALUES (?,?,
-            ?,?,?,?,?,?,?,?,?,?)");
+            $perintah = $db->prepare("INSERT INTO tbs_penjualan (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga_konversi,subtotal,potongan,tax,tanggal,jam, tipe_barang,harga) VALUES (?,?,
+            ?,?,?,?,?,?,?,?,?,?,?)");
             
             
-            $perintah->bind_param("ssssssssssss",
-            $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotaljadi, $potongan_tampil, $tax_persen,$tanggal_sekarang,$jam_sekarang,$tipe_barang);
+            $perintah->bind_param("sssisiiiisssi",
+            $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga_konversi, $subtotaljadi, $potongan_tampil, $tax_persen,$tanggal_sekarang,$jam_sekarang,$tipe_barang,$harga_produk);
             
             
             $kode_barang = stringdoang($_POST['kode_barang']);
             $jumlah_barang = stringdoang($_POST['jumlah_barang']); 
             $nama_barang = stringdoang($_POST['nama_barang']);
             $satuan = stringdoang($_POST['satuan']);
-            $harga = stringdoang($_POST['harga']);
             $tax = stringdoang($_POST['tax']);
             $tipe_barang = stringdoang($_POST['ber_stok']);
             if ($tax == '') {

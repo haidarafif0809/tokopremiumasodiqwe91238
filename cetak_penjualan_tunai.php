@@ -22,7 +22,7 @@ else{
     $query1 = $db->query("SELECT nama_perusahaan, alamat_perusahaan, no_telp FROM perusahaan ");
     $data1 = mysqli_fetch_array($query1);
 
-    $query2 = $db->query("SELECT nama_barang, jumlah_barang, harga, subtotal, no_faktur FROM detail_penjualan WHERE no_faktur = '$no_faktur' ");
+    $query2 = $db->query("SELECT harga_konversi,kode_barang,nama_barang, jumlah_barang, harga, subtotal, no_faktur, satuan FROM detail_penjualan WHERE no_faktur = '$no_faktur' ");
 
     $query3 = $db->query("SELECT SUM(jumlah_barang) as total_item FROM detail_penjualan WHERE no_faktur = '$no_faktur'");
     $data3 = mysqli_fetch_array($query3);
@@ -69,9 +69,36 @@ else{
            <?php 
            while ($data2 = mysqli_fetch_array($query2)){
             //untuk mengambil data bonus
-            $query_bonus_penjualan = $db->query("SELECT bp.nama_produk,bp.qty_bonus,b.harga_jual,bp.harga_disc,bp.keterangan,bp.subtotal FROM bonus_penjualan bp LEFT JOIN barang b ON  bp.kode_produk = b.kode_barang WHERE bp.no_faktur_penjualan = '$data2[no_faktur]'");
-            $data_bonus_penjualan = mysqli_fetch_array($query_bonus_penjualan);
-            $keterangan = $data_bonus_penjualan['keterangan'];
+            $queryb = $db->query("SELECT bp.nama_produk,bp.qty_bonus,b.harga_jual,bp.harga_disc,bp.keterangan FROM bonus_penjualan bp LEFT JOIN barang b ON  bp.kode_produk = b.kode_barang WHERE bp.no_faktur_penjualan = '$data2[no_faktur]'");
+            $bonus = mysqli_fetch_array($queryb);
+
+          // QUERY CEK BARCODE DI SATUAN KONVERSI
+                                    
+            $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data,konversi  FROM satuan_konversi WHERE kode_produk = '$data2[kode_barang]' AND id_satuan = '$data2[satuan]' ");
+            $data_satuan_konversi = mysqli_fetch_array($query_satuan_konversi);     
+
+            // QUERY CEK BARCODE DI SATUAN KONVERSI
+
+            if ($data2['harga_konversi'] != 0) {
+             $harga = $data2['harga_konversi'];
+            }else{
+              $harga = $data2['harga'];
+            }
+
+                        // IF CEK BARCODE DI SATUAN KONVERSI
+            if ($data_satuan_konversi['jumlah_data'] > 0) {//    if ($data_satuan_konversi['jumlah_data'] > 0) {
+                    
+                    $jumlah_barang = $data2['jumlah_barang'] / $data_satuan_konversi['konversi'];
+                                        
+                  }else{
+                      
+                     $jumlah_barang = $data2['jumlah_barang'];
+
+                  }
+
+
+
+            $keterangan = $bonus['keterangan'];
             if ($keterangan == 'Free Produk') {
               $subtotal_bonus = $data_bonus_penjualan['qty_bonus'] * $data_bonus_penjualan['harga_jual'];
             }
@@ -81,7 +108,7 @@ else{
               $subtotal_bonus_disc = $subtotal_bonus - $subtotal_bonusnya;
             }
            
-           echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. rp($data2['jumlah_barang']) .'</td>  <td style="padding:3px"> '. rp($data2['harga']) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
+           echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. rp($jumlah_barang) .'</td>  <td style="padding:3px"> '. rp($harga) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
            }
            echo '<tr><td width:"50%"> '. $data_bonus_penjualan['nama_produk'] .' </td> <td style="padding:3px"> '. $data_bonus_penjualan['qty_bonus'] .'</td>'; 
 

@@ -72,11 +72,12 @@ while($row=mysqli_fetch_array($query) ) {
     // persentase labe
     // (total laba / total penjualan) * 100
     $persentase_laba = ($row['total_laba'] / $row['total_penjualan']) * 100;
+    $total_penjualan = $row['total_penjualan'] + $row['total_potongan'];
 
     $nestedData[] = $row["kode_barang"];
     $nestedData[] = $row["nama_barang"];
     $nestedData[] = "<p align='right'>".rp($row["jumlah_barang"])."</p>";
-    $nestedData[] = "<p align='right'>".rp($row['total_penjualan'])."</p>";
+    $nestedData[] = "<p align='right'>".rp($total_penjualan)."</p>";
     $nestedData[] = "<p align='right'>".rp($row['total_hpp'])."</p>";
     $nestedData[] = "<p align='right'>".rp($row['total_potongan'])."</p>";
     $nestedData[] = "<p align='right'>".rp($row['total_laba'])."</p>";

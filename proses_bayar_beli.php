@@ -319,14 +319,21 @@ if ($potongan != "" || $potongan != 0 ) {
       }
        
 
-        $query2 = "INSERT INTO detail_pembelian (no_faktur, tanggal, jam, waktu, kode_barang, nama_barang, jumlah_barang, asal_satuan, satuan, harga, subtotal, potongan, tax, sisa) 
-		VALUES ('$no_faktur','$tanggal_sekarang','$jam_sekarang','$waktu','$data[kode_barang]','$data[nama_barang]','$jumlah_barang', '$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]','$jumlah_barang')";
+        $query2 = "INSERT INTO detail_pembelian (no_faktur, no_faktur_order, tanggal, jam, waktu, kode_barang, nama_barang, jumlah_barang, asal_satuan, satuan, harga, subtotal, potongan, tax, sisa) VALUES ('$no_faktur','$data[no_faktur_order]','$tanggal_sekarang','$jam_sekarang','$waktu','$data[kode_barang]','$data[nama_barang]','$jumlah_barang', '$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]','$jumlah_barang')";
 
         if ($db->query($query2) === TRUE) {
         } 
 
         else {
         echo "Error: " . $query2 . "<br>" . $db->error;
+        }
+
+        $update_order = "UPDATE pembelian_order SET status_order = 'Di Beli' WHERE no_faktur_order = '$data[no_faktur_order]'";
+
+        if ($db->query($update_order) === TRUE) {
+        }
+        else {
+        echo "Error: " . $update_order . "<br>" . $db->error;
         }
         
     }

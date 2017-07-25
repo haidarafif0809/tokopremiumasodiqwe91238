@@ -68,6 +68,17 @@ $tombol_order = stringdoang(isset($_POST['tombol_order']));
 $edit_produk_order = stringdoang(isset($_POST['edit_produk']));
 $hapus_produk_order = stringdoang(isset($_POST['hapus_produk']));
 
+$order_pembelian_lihat = stringdoang(isset($_POST['order_pembelian_lihat']));
+$order_pembelian_tambah = stringdoang(isset($_POST['order_pembelian_tambah']));
+$order_pembelian_edit = stringdoang(isset($_POST['order_pembelian_edit']));
+$order_pembelian_hapus = stringdoang(isset($_POST['order_pembelian_hapus']));
+
+
+$tombol_submit_order_pembelian = stringdoang(isset($_POST['tombol_submit_order_pembelian']));
+$tombol_order_pembelian = stringdoang(isset($_POST['tombol_order_pembelian']));
+$edit_produk_order_pembelian = stringdoang(isset($_POST['edit_produk_order_pembelian']));
+$hapus_produk_order_pembelian = stringdoang(isset($_POST['hapus_produk_order_pembelian']));
+
 $transaksi_jurnal_manual_lihat = stringdoang(isset($_POST['transaksi_jurnal_manual_lihat']));
 $transaksi_jurnal_manual_tambah = stringdoang(isset($_POST['transaksi_jurnal_manual_tambah']));
 $transaksi_jurnal_manual_edit = stringdoang(isset($_POST['transaksi_jurnal_manual_edit']));
@@ -410,6 +421,22 @@ $update_otoritas_tukar_poin->bind_param("iiiii",
 
 $update_otoritas_tukar_poin->execute();
 
+// order pembelian
+$update_otoritas_order_pembelian = $db->prepare("UPDATE otoritas_order_pembelian SET order_pembelian_lihat = ?, order_pembelian_tambah = ?, order_pembelian_edit = ?, order_pembelian_hapus = ? WHERE id_otoritas = ? ");
+
+$update_otoritas_order_pembelian->bind_param("iiiii",
+    $order_pembelian_lihat, $order_pembelian_tambah, $order_pembelian_edit, $order_pembelian_hapus, $id);
+
+$update_otoritas_order_pembelian->execute();
+// order pembelian
+//form order pembelian
+$update_otoritas_form_order_pembelian = $db->prepare("UPDATE otoritas_form_order_pembelian SET  tombol_submit_order_pembelian = ?, tombol_order_pembelian = ?, edit_produk_order_pembelian = ?, hapus_produk_order_pembelian = ? WHERE id_otoritas = ? ");
+
+$update_otoritas_form_order_pembelian->bind_param("iiiii",
+    $tombol_submit_order_pembelian, $tombol_order_pembelian, $edit_produk_order_pembelian, $hapus_produk_order_pembelian , $id);
+
+$update_otoritas_form_order_pembelian->execute();
+//form order pembelian
 
 header('location: hak_otoritas.php');
 

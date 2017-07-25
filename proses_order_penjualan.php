@@ -34,7 +34,7 @@ if ($cek_jumlah_bulan == 1) {
  }
 //ambil bulan dari tanggal penjualan terakhir
 
- $bulan_terakhir = $db->query("SELECT MONTH(tanggal) as bulan FROM penjualan_order ORDER BY id DESC LIMIT 1");
+ $bulan_terakhir = $db->query("SELECT MONTH(waktu_input) as bulan FROM penjualan_order ORDER BY id DESC LIMIT 1");
  $v_bulan_terakhir = mysqli_fetch_array($bulan_terakhir);
 
 //ambil nomor  dari penjualan terakhir
@@ -84,37 +84,31 @@ echo $no_faktur = $nomor."/OR/".$data_bulan_terakhir."/".$tahun_terakhir;
     }
 
 
-    $query = $db->query("SELECT * FROM tbs_penjualan_order WHERE session_id = '$session_id' ORDER BY kode_barang ");
+    $query = $db->query("SELECT * FROM tbs_penjualan_order WHERE session_id = '$session_id'  AND no_faktur_order IS NULL ORDER BY kode_barang ");
     while ($data = mysqli_fetch_array($query))
       {
 
-      $pilih_konversi = $db->query("SELECT  sk.konversi * $data[jumlah_barang] AS jumlah_konversi, $data[subtotal] / ($data[jumlah_barang] * sk.konversi) AS harga_konversi, sk.id_satuan, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.id_produk = b.id  WHERE sk.id_satuan = '$data[satuan]' AND sk.kode_produk = '$data[kode_barang]'");
+      $pilih_konversi = $db->query("SELECT COUNT(sk.konversi) AS jumlah_data,sk.konversi, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.kode_produk = b.kode_barang AND sk.id_produk = b.id WHERE sk.kode_produk = '$data[kode_barang]' AND sk.id_satuan = '$data[satuan]'");
       $data_konversi = mysqli_fetch_array($pilih_konversi);
-      $data_rows = mysqli_num_rows($pilih_konversi);
 
-      if ($data_rows > 0) {
+          if ($data_konversi['jumlah_data'] != 0) {
+                
+                $harga_konversi = $data['harga_konversi'];
+                $jumlah_barang = $data['jumlah_barang'] * $data_konversi['konversi'];
+                $satuan = $data['satuan'];
 
-            if ($data_konversi['harga_konversi'] != 0 || $data_konversi['harga_konversi'] != "") {
-              $harga = $data_konversi['harga_konversi'];
-              $jumlah_barang = $data_konversi['jumlah_konversi'];
-              $satuan = $data_konversi['satuan'];
-            }
-            else{
-              $harga = $data['harga'];
-              $jumlah_barang = $data['jumlah_barang'];
-              $satuan = $data['satuan'];
-            }
-        
-      }
-      
-      else{
-        $harga = $data['harga'];
-        $jumlah_barang = $data['jumlah_barang'];
-        $satuan = $data['satuan'];
-      }
+          }
+          else{
+
+                $harga_konversi = 0;
+                $jumlah_barang = $data['jumlah_barang'];
+                $satuan = $data['satuan'];
+          }
+
 
       
-        $query2 = "INSERT INTO detail_penjualan_order (no_faktur_order,kode_barang, nama_barang, jumlah_barang,satuan, harga, subtotal, potongan, tax,tanggal,jam,asal_satuan) VALUES ('$no_faktur','$data[kode_barang]','$data[nama_barang]','$jumlah_barang','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]','$data[tanggal]','$data[jam]','$satuan')";
+        $query2 = "INSERT INTO detail_penjualan_order (no_faktur_order,kode_barang, nama_barang, jumlah_barang,satuan, harga, subtotal, potongan, tax,tanggal,jam,asal_satuan,harga_konversi,tipe_barang) 
+        VALUES ('$no_faktur','$data[kode_barang]','$data[nama_barang]','$jumlah_barang','$data[satuan]','$data[harga]','$data[subtotal]','$data[potongan]','$data[tax]','$data[tanggal]','$data[jam]','$satuan','$harga_konversi','$data[tipe_barang]')";
 
         if ($db->query($query2) === TRUE) {
 
@@ -131,7 +125,7 @@ echo $no_faktur = $nomor."/OR/".$data_bulan_terakhir."/".$tahun_terakhir;
               
     // hubungkan "data" dengan prepared statements
               $stmt->bind_param("sssissss",
-              $no_faktur, $kode_gudang, $ambil_kode_pelanggan[id], $total, $tanggal_sekarang, $jam_sekarang, $sales, $keterangan);
+              $no_faktur, $kode_gudang, $ambil_kode_pelanggan['id'], $total, $tanggal_sekarang, $jam_sekarang, $sales, $keterangan);
               
               
               $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
@@ -146,9 +140,19 @@ echo $no_faktur = $nomor."/OR/".$data_bulan_terakhir."/".$tahun_terakhir;
     // jalankan query
               $stmt->execute();
               
+            // coding untuk memasukan history_tbs dan menghapus tbs
+    $tbs_penjualan_masuk = "INSERT INTO history_tbs_penjualan_order (no_faktur_order,session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax,tanggal,jam,harga_konversi,tipe_barang)
+    SELECT '$no_faktur',session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,potongan,tax,tanggal,jam,harga_konversi,tipe_barang FROM tbs_penjualan_order WHERE session_id = '$session_id' AND no_faktur_order IS NULL ";
+        if ($db->query($tbs_penjualan_masuk) === TRUE) {
+              
+        }
+        else{
+            echo "Error: " . $tbs_penjualan_masuk . "<br>" . $db->error;
+        }
 
 
-    $query3 = $db->query("DELETE  FROM tbs_penjualan_order WHERE session_id = '$session_id'");
+
+    $query3 = $db->query("DELETE  FROM tbs_penjualan_order WHERE session_id = '$session_id' AND no_faktur_order IS NULL ");
 
 
     // If we arrive here, it means that no exception was thrown

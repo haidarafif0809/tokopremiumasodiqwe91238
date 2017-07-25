@@ -23,23 +23,30 @@ $perintah2 = $db->query("DELETE FROM tbs_penjualan_order WHERE no_faktur_order =
 $perintah = $db->query("SELECT * FROM detail_penjualan_order WHERE no_faktur_order = '$no_faktur'");
 while ($data = mysqli_fetch_array($perintah)){
 
-if ($data['satuan'] == $data['asal_satuan']) {
+	    $tipe = $db->query("SELECT berkaitan_dgn_stok FROM barang WHERE kode_barang = '$data[kode_barang]'");
+        $data_tipe = mysqli_fetch_array($tipe);
+        $ber_stok = $data_tipe['berkaitan_dgn_stok'];
 
-$perintah1 = $db->query("INSERT INTO tbs_penjualan_order (no_faktur_order, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax,tanggal,jam) VALUES ( '$data[no_faktur_order]', '$data[kode_barang]', '$data[nama_barang]', '$data[jumlah_barang]', '$data[satuan]', '$data[harga]', '$data[subtotal]', '$data[potongan]', '$data[tax]', '$data[tanggal]', '$data[jam]')");
+	        // QUERY CEK BARCODE DI SATUAN KONVERSI
+                                    
+        $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data, konversi FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]' ");
+        $data_satuan_konversi = mysqli_fetch_array($query_satuan_konversi);     
 
-}
+        // QUERY CEK BARCODE DI SATUAN KONVERSI
 
-else{
+        if ($data_satuan_konversi['jumlah_data'] > 0 ) {
+        						
+        	$jumlah_barang = $data['jumlah_barang'] / $data_satuan_konversi['konversi'];
+        	$harga = $data['harga'] * $data_satuan_konversi['konversi'];
 
-$konversi = $db->query("SELECT * FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]'");
-$data_konversi = mysqli_fetch_array($konversi);
+        }else{
 
-$jumlah_produk = $data['jumlah_barang'] / $data_konversi['konversi'];
-$harga = $data['harga'] * $data['jumlah_barang'];
+        	$jumlah_barang = $data['jumlah_barang'];
+        	$harga = $data['harga'];
+        }
 
-$perintah1 = $db->query("INSERT INTO tbs_penjualan_order (no_faktur_order, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax,tanggal,jam) VALUES ( '$data[no_faktur_order]', '$data[kode_barang]', '$data[nama_barang]', '$jumlah_produk', '$data[satuan]', '$harga', '$data[subtotal]', '$data[potongan]', '$data[tax]', '$data[tanggal]', '$data[jam]')");
-
-}
+		$perintah1 = $db->query("INSERT INTO tbs_penjualan_order (no_faktur_order, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax,tanggal,jam,tipe_barang) 
+			VALUES ( '$data[no_faktur_order]', '$data[kode_barang]', '$data[nama_barang]', '$jumlah_barang', '$data[satuan]', '$harga', '$data[subtotal]', '$data[potongan]', '$data[tax]', '$data[tanggal]', '$data[jam]','$ber_stok')");
 
 
 

@@ -62,7 +62,7 @@ $data_promo_disc_produk = mysqli_fetch_array($query_promo_disc_produk);
 
 
 //mengambil / cek data ditbsbonus (disc produk/free) 
-$query_tbs_bonus = $db->query("SELECT kode_produk,keterangan,id, tanggal,jam,satuan,harga_disc,nama_produk,kode_pelanggan FROM tbs_bonus_penjualan WHERE session_id = '$session_id'");
+$query_tbs_bonus = $db->query("SELECT kode_produk,keterangan,id,nama_produk FROM tbs_bonus_penjualan WHERE session_id = '$session_id'");
 $jumlah_data_tbs_bonus = mysqli_num_rows($query_tbs_bonus);
 $data_tbs_bonus = mysqli_fetch_array($query_tbs_bonus);
 
@@ -71,19 +71,13 @@ $syarat_promo_disc_produk = $data_promo_disc_produk['syarat_belanja'];
 $subtotal_tbs_penjualan_difree = round($data_tbs_penjualan_innerjoin['sub_tp']);
 $syarat_promo_free = $data_tbs_penjualan_innerjoin['syarat_belanja'];
 
-$total_syarat_free = $subtotal_tbs_penjualan_difree - $syarat_promo_free;
-$total_syarat_disc = $subtotal_tbs_penjualan - $syarat_promo_disc_produk;
+/*$total_syarat_free = subtotal_tbs_penjualan_difree < syarat_promo_free;
+$total_syarat_disc = subtotal_tbs_penjualan < syarat_promo_disc_produk;*/
 
 
-if (($total_syarat_disc <= 0 && $total_syarat_disc != NULL) || ($total_syarat_free <= 0 && $total_syarat_free != NULL)){
+if (($subtotal_tbs_penjualan_difree < $syarat_promo_free) || ($subtotal_tbs_penjualan < $syarat_promo_disc_produk)){
 
-	/*$harga_jual_disc = $data_tbs_penjualan_innerjoin['harga_jual'];
-	$potongan = $data_tbs_penjualan['pot'];
-	$data_promo_disc_produk['nama_produk'] = $subtotal_tbs_penjualan;
-	$data_promo_disc_produk['id'] = $potongan;
-	$data_promo_disc_produk['batas_akhir'] = $harga_jual_disc;*/
-
-	$promo_disc_produk = array(
+	$promo_produk = array(
     'subtotal_tbs_penjualan' => round($data_tbs_penjualan['subto']),
 	'syarat_promo_disc_produk' => $data_promo_disc_produk['syarat_belanja'],
 	'subtotal_tbs_penjualan_difree' => round($data_tbs_penjualan_innerjoin['sub_tp']),
@@ -92,10 +86,11 @@ if (($total_syarat_disc <= 0 && $total_syarat_disc != NULL) || ($total_syarat_fr
 	'id' => $data_tbs_bonus['id'],
 	'nama_produk' =>$data_tbs_bonus['nama_produk']
    );
-  echo json_encode($promo_disc_produk);
+  echo json_encode($promo_produk);
 }
 else{
-	echo 0;
+	 $promo_produk = 'NULL';
+	echo json_encode($promo_produk);
 }
         //Untuk Memutuskan Koneksi Ke Database
 

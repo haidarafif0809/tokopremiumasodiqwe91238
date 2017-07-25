@@ -320,7 +320,7 @@ $nomor = 1 + $ambil_nomor ;
 
 
 //awal nya bonus
-$query_tbs_bonus_penjualan = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.harga_disc FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id'");
+$query_tbs_bonus_penjualan = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.satuan,tp.harga_disc FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id'");
     while($datatb = mysqli_fetch_array($query_tbs_bonus_penjualan)){
 
 //LOGIKA KETIKA ADA PRODUK PARCEL YANG AKAN DIJUAL, KARENA PARCEL TIDAK MASUK KE DALAM PRODUK BONUS

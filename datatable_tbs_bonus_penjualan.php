@@ -60,7 +60,13 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
       }
       $nestedData[] = $row["nama"];
       $nestedData[] = rp($row["harga_disc"]);
-      $nestedData[] = rp($row["subtotal"]);
+      if ($row['keterangan'] == 'Free Produk') {
+        # code...
+        $nestedData[] = "0";
+      }
+      else{
+        $nestedData[] = rp($row["subtotal"]);
+      }
       $nestedData[] =  $row["keterangan"];
       $nestedData[] = "<button class='btn btn-danger btn-sm btn-hapus-tbsbonus' id='hapus-tbs-". $row['id'] ."' data-id='". $row['id'] ."' data-kode-produk='". $row['kode_produk'] ."' data-produk='". $row['nama_produk'] ."' data-qty='". $row['qty_bonus'] ."'>Hapus</button>";
       $nestedData[] = $row["id"];

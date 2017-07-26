@@ -165,9 +165,6 @@ $session_id = session_id();
               <div class="col-sm-6">
                 <button type="submit" class="btn btn-danger" id="hapus_bonus_ditbs" data-dismiss="modal">Hapus</button>
               </div>
-              <div class="col-sm-6">
-                <button type="submit" class="btn btn-primary" data-dismiss="modal">close</button>
-              </div>
             </div>       
     </div>
     </div>
@@ -1570,7 +1567,9 @@ if (pesan_alert == true) {
           //cek total keseluruhan bonus disc
         var total_penj = data.total_penjualan;
         $.getJSON("cek_total_bonus_promo.php",function(tot){
-        
+        if (tot = 0) {
+          tbs_bonus_Penjualan
+        }
         var keterangan = tot.keterangan;
         if (keterangan == 'Disc Produk') {
             var qty = tot.qty_disc;
@@ -2891,43 +2890,43 @@ if (pesan_alert == true) {
         $.post("hapustbs_penjualan.php",{id:id,kode_barang:kode_barang},function(data){
           //cek tbsbonus yang ada, tapi jumlah subtotal tbspenjualan sudah berubah syarat tidak terpenuhi
           $.getJSON("cek_syarat_promo_ditbs.php",{kode_barang:kode_barang},function(syaratbonus){
-            /*var nama_produk = syaratbonus.nama_produk;
-            var kodenya = syaratbonus.kode_produk;
-            var idnya = syaratbonus.id;
+            
+             var keterangannya = syaratbonus.keterangannya;
+            if (syaratbonus == "NULL") {
+              var subtotal_tbs_penjualan = 0;
+              var syarat_promo_disc_produk = 0;
+              var subtotal_tbs_penjualan_difree = 0;
+              var syarat_promo_free = 0;
+              var total_syarat_disc = 0;
+              var kodenya = 0;
+              var idnya = 0;
+              var nama_produk = 0;
+              var keterangannya = 'ask';
+              var total_syarat_free =  syarat_promo_free - subtotal_tbs_penjualan_difree;
+              var total_syarat_disc = syarat_promo_disc_produk - subtotal_tbs_penjualan;
+            }
+            else if (keterangannya == 'Free Produk') {
+              var subtotal_tbs_penjualan_difree = syaratbonus.subtotal_tbs_penjualan_difree;
+              var syarat_promo_free = syaratbonus.syarat_promo_free;
+              var kodenya = syaratbonus.kode_produk;
+              var idnya = syaratbonus.id;
+              var nama_produk = syaratbonus.nama_produk;
 
-            var subtotal_tbspenjualan = parseFloat(syaratbonus.tanggal);
-            var idtbsnya = syaratbonus.jam;
-            var subtotal = parseFloat(syaratbonus.satuan);
-            var syarat_free = parseFloat(syaratbonus.harga_disc);
-            var syarat_disc = parseFloat(syaratbonus.kode_pelanggan);
-            var keterangan = syaratbonus.keterangan;*/
-            //if ((idtbsnya > 0 && subtotal_tbspenjualan > syarat_free  && keterangan != 'Free Produk'  || syaratbonus == 0) || (subtotal_tbspenjualan > syarat_disc && keterangan != 'Disc Produk' || syaratbonus == 0)) {}
-          if (syaratbonus == "NULL") {
+              var total_syarat_free =  syarat_promo_free - subtotal_tbs_penjualan_difree;
+            }
+            else{
+              var subtotal_tbs_penjualan = syaratbonus.subtotal_tbs_penjualan;
+              var syarat_promo_disc_produk = syaratbonus.syarat_promo_disc_produk;
+              var total_syarat_disc = syaratbonus.total_syarat_disc;
+              var kodenya = syaratbonus.kode_produk;
+              var idnya = syaratbonus.id;
+              var nama_produk = syaratbonus.nama_produk;
 
-            var subtotal_tbs_penjualan = 0;
-            var syarat_promo_disc_produk = 0;
-            var subtotal_tbs_penjualan_difree = 0;
-            var syarat_promo_free = 0;
-            var total_syarat_disc = 0;
-            var kodenya = 0;
-            var idnya = 0;
-            var nama_produk = 0;
-          }
-          else{
-            var subtotal_tbs_penjualan = syaratbonus.subtotal_tbs_penjualan;
-            var syarat_promo_disc_produk = syaratbonus.syarat_promo_disc_produk;
-            var subtotal_tbs_penjualan_difree = syaratbonus.subtotal_tbs_penjualan_difree;
-            var syarat_promo_free = syaratbonus.syarat_promo_free;
-            var total_syarat_disc = syaratbonus.total_syarat_disc;
-            var kodenya = syaratbonus.kode_produk;
-            var idnya = syaratbonus.id;
-            var nama_produk = syaratbonus.nama_produk;
-          }
-          var total_syarat_free = subtotal_tbs_penjualan_difree - syarat_promo_free;
-          var total_syarat_disc = subtotal_tbs_penjualan - syarat_promo_disc_produk;
+              var total_syarat_disc = syarat_promo_disc_produk - subtotal_tbs_penjualan;
+            }
     
 
-          if ((total_syarat_free < 0) || (total_syarat_disc < 0)){
+          if ((total_syarat_free > 0) || (total_syarat_disc > 0)){
             $("#modal_hapus_bonus_ditbs").modal('show');
               $("#kode_produk_bonus").val(kodenya);
             $("#nama_produk_bonus").val(nama_produk);
@@ -2970,7 +2969,12 @@ if (pesan_alert == true) {
               //cek total keseluruhan bonus disc
             var total_penj = data.total_penjualan;
             $.getJSON("cek_total_bonus_promo.php",function(tot){
-            
+            if (tot = 0) {
+              $("#tbs_bonus_Penjualan").hide();
+            }
+            else{
+              $("#tbs_bonus_Penjualan").show();
+            }
             var keterangan = tot.keterangan;
             if (keterangan == 'Disc Produk') {
                 var qty = tot.qty_disc;
@@ -4861,7 +4865,7 @@ $(document).ready(function(){
 <script type="text/javascript">
 
   $(document).ready(function(){
-    $(document).on('click','.edit-jumlah-jual',function(e){
+    $(document).on('dblclick','.edit-jumlah-jual',function(e){
       var kode_barang = $(this).attr("data-kode-barang-input");
       var tipe_produk = $('#opt-produk-'+kode_barang).attr("tipe_barang");
       
@@ -5018,44 +5022,45 @@ $(document).ready(function(){
 
                                         //cek tbsbonus yang ada, tapi jumlah subtotal tbspenjualan sudah berubah syarat tidak terpenuhi
                                         $.getJSON("cek_syarat_promo_ditbs.php",{kode_barang:kode_barang},function(syaratbonus){
-                                          /*var nama_produk = syaratbonus.nama_produk;
-                                          var kodenya = syaratbonus.kode_produk;
-                                          var idnya = syaratbonus.id;
-                                         
-                                        var subtotal_tbspenjualan = parseFloat(syaratbonus.tanggal);
-                                        var idtbsnya = parseFloat(syaratbonus.jam);
-                                        var subtotal = parseFloat(syaratbonus.satuan);
-                                        var syarat_free = parseFloat(syaratbonus.harga_disc);
-                                        var syarat_disc = parseFloat(syaratbonus.kode_pelanggan);
-                                        var keterangan = parseFloat(syaratbonus.keterangan);*/
                                        
-                                       if (syaratbonus == "NULL") {
+                                             var keterangannya = syaratbonus.keterangannya;
+                                            if (syaratbonus == "NULL") {
+                                              var subtotal_tbs_penjualan = 0;
+                                              var syarat_promo_disc_produk = 0;
+                                              var subtotal_tbs_penjualan_difree = 0;
+                                              var syarat_promo_free = 0;
+                                              var total_syarat_disc = 0;
+                                              var kodenya = 0;
+                                              var idnya = 0;
+                                              var nama_produk = 0;
+                                              var keterangannya = 'ask';
+                                              var total_syarat_free =  syarat_promo_free - subtotal_tbs_penjualan_difree;
+                                              var total_syarat_disc = syarat_promo_disc_produk - subtotal_tbs_penjualan;
+                                            }
+                                            else if (keterangannya == 'Free Produk') {
+                                              var subtotal_tbs_penjualan_difree = syaratbonus.subtotal_tbs_penjualan_difree;
+                                              var syarat_promo_free = syaratbonus.syarat_promo_free;
+                                              var kodenya = syaratbonus.kode_produk;
+                                              var idnya = syaratbonus.id;
+                                              var nama_produk = syaratbonus.nama_produk;
 
-                                          var subtotal_tbs_penjualan = 0;
-                                          var syarat_promo_disc_produk = 0;
-                                          var subtotal_tbs_penjualan_difree = 0;
-                                          var syarat_promo_free = 0;
-                                          var total_syarat_disc = 0;
-                                          var kodenya = 0;
-                                          var idnya = 0;
-                                          var nama_produk = 0;
+                                              var total_syarat_free =  syarat_promo_free - subtotal_tbs_penjualan_difree;
+                                            }
+                                            else{
+                                              var subtotal_tbs_penjualan = syaratbonus.subtotal_tbs_penjualan;
+                                              var syarat_promo_disc_produk = syaratbonus.syarat_promo_disc_produk;
+                                              var total_syarat_disc = syaratbonus.total_syarat_disc;
+                                              var kodenya = syaratbonus.kode_produk;
+                                              var idnya = syaratbonus.id;
+                                              var nama_produk = syaratbonus.nama_produk;
 
-                                        }
-                                        else{
-                                          var subtotal_tbs_penjualan = syaratbonus.subtotal_tbs_penjualan;
-                                          var syarat_promo_disc_produk = syaratbonus.syarat_promo_disc_produk;
-                                          var subtotal_tbs_penjualan_difree = syaratbonus.subtotal_tbs_penjualan_difree;
-                                          var syarat_promo_free = syaratbonus.syarat_promo_free;
-                                          var total_syarat_disc = syaratbonus.total_syarat_disc;
-                                          var kodenya = syaratbonus.kode_produk;
-                                          var idnya = syaratbonus.id;
-                                          var nama_produk = syaratbonus.nama_produk;
-                                        }
+                                              var total_syarat_disc = syarat_promo_disc_produk - subtotal_tbs_penjualan;
+                                            }
 
-                                          var total_syarat_free = subtotal_tbs_penjualan_difree - syarat_promo_free;
-                                          var total_syarat_disc = subtotal_tbs_penjualan - syarat_promo_disc_produk;
+                                          var total_syarat_free =  syarat_promo_free - subtotal_tbs_penjualan_difree;
+                                          var total_syarat_disc = syarat_promo_disc_produk - subtotal_tbs_penjualan;
 
-                                          if ((total_syarat_free < 0) || (total_syarat_disc < 0)) {
+                                          if ((total_syarat_free > 0) || (total_syarat_disc > 0)) {
                                             
                                               $("#modal_hapus_bonus_ditbs").modal('show');
                                               $("#kode_produk_bonus").val(kodenya);
@@ -5092,6 +5097,15 @@ $(document).ready(function(){
                                               });// end #modal_hapus_bonus_ditbs
                                         }// end else nya  (idtbsnya > 0 && subtotal > syarat_free || subtotal_tbspenjualan > syarat_disc)
                                       }); // end cek_syarat_promo_ditbs
+                                        
+                                        $.getJSON("cek_total_bonus_promo.php",function(total){
+                                            if (total = 0) {
+                                              $("#tbs_bonus_Penjualan").hide();
+                                            }
+                                            else{
+                                              $("#tbs_bonus_Penjualan").show();
+                                            }
+                                        });//end $.getJSON("cek_total_bonus_promo.php",
 
                                           // cek ada tidaknya promo hariini
                                           $.post("cek_program_promo.php",{kode_barang:kode_barang},function(program){
@@ -5259,46 +5273,42 @@ $(document).ready(function(){
 
                                               //cek tbsbonus yang ada, tapi jumlah subtotal tbspenjualan sudah berubah syarat tidak terpenuhi
                                               $.getJSON("cek_syarat_promo_ditbs.php",{kode_barang:kode_barang},function(syaratbonus){
-                                                /*var nama_produk = syaratbonus.nama_produk;
-                                                var kodenya = syaratbonus.kode_produk;
-                                                var idnya = syaratbonus.id;
-                                               
-                                              var subtotal_tbspenjualan = parseFloat(syaratbonus.tanggal);
-                                              var idtbsnya = parseFloat(syaratbonus.jam);
-                                              var subtotal = parseFloat(syaratbonus.satuan);
-                                              var syarat_free = parseFloat(syaratbonus.harga_disc);
-                                              var syarat_disc = parseFloat(syaratbonus.kode_pelanggan);
-                                              var keterangan = parseFloat(syaratbonus.keterangan);*/
-                                             
-                                        if (syaratbonus == "NULL") {
+                                              
+                                                    var keterangannya = syaratbonus.keterangannya;
+                                                      if (syaratbonus == "NULL") {
+                                                        var subtotal_tbs_penjualan = 0;
+                                                        var syarat_promo_disc_produk = 0;
+                                                        var subtotal_tbs_penjualan_difree = 0;
+                                                        var syarat_promo_free = 0;
+                                                        var total_syarat_disc = 0;
+                                                        var kodenya = 0;
+                                                        var idnya = 0;
+                                                        var nama_produk = 0;
+                                                        var keterangannya = 'ask';
+                                                        var total_syarat_free =  syarat_promo_free - subtotal_tbs_penjualan_difree;
+                                                        var total_syarat_disc = syarat_promo_disc_produk - subtotal_tbs_penjualan;
+                                                      }
+                                                      else if (keterangannya == 'Free Produk') {
+                                                        var subtotal_tbs_penjualan_difree = syaratbonus.subtotal_tbs_penjualan_difree;
+                                                        var syarat_promo_free = syaratbonus.syarat_promo_free;
+                                                        var kodenya = syaratbonus.kode_produk;
+                                                        var idnya = syaratbonus.id;
+                                                        var nama_produk = syaratbonus.nama_produk;
 
-                                          var subtotal_tbs_penjualan = 0;
-                                          var syarat_promo_disc_produk = 0;
-                                          var subtotal_tbs_penjualan_difree = 0;
-                                          var syarat_promo_free = 0;
-                                          var total_syarat_disc = 0;
-                                          var kodenya = 0;
-                                          var idnya = 0;
-                                          var nama_produk = 0;
+                                                        var total_syarat_free =  syarat_promo_free - subtotal_tbs_penjualan_difree;
+                                                      }
+                                                      else{
+                                                        var subtotal_tbs_penjualan = syaratbonus.subtotal_tbs_penjualan;
+                                                        var syarat_promo_disc_produk = syaratbonus.syarat_promo_disc_produk;
+                                                        var total_syarat_disc = syaratbonus.total_syarat_disc;
+                                                        var kodenya = syaratbonus.kode_produk;
+                                                        var idnya = syaratbonus.id;
+                                                        var nama_produk = syaratbonus.nama_produk;
 
-                                        }
-                                        else{
-                                          var subtotal_tbs_penjualan = syaratbonus.subtotal_tbs_penjualan;
-                                          var syarat_promo_disc_produk = syaratbonus.syarat_promo_disc_produk;
-                                          var subtotal_tbs_penjualan_difree = syaratbonus.subtotal_tbs_penjualan_difree;
-                                          var syarat_promo_free = syaratbonus.syarat_promo_free;
-                                          var total_syarat_disc = syaratbonus.total_syarat_disc;
-                                          var kodenya = syaratbonus.kode_produk;
-                                          var idnya = syaratbonus.id;
-                                          var nama_produk = syaratbonus.nama_produk;
-                                        }
-
-
-                                                 var total_syarat_free = subtotal_tbs_penjualan_difree - syarat_promo_free;
-                                                  var total_syarat_disc = subtotal_tbs_penjualan - syarat_promo_disc_produk;
-                                                console.log(total_syarat_free);
-console.log(total_syarat_disc);
-                                               if ((total_syarat_free < 0) || (total_syarat_disc < 0)){
+                                                        var total_syarat_disc = syarat_promo_disc_produk - subtotal_tbs_penjualan;
+                                                      }
+                                                 
+                                               if ((total_syarat_free > 0) || (total_syarat_disc > 0)){
                                                   
                                                     $("#modal_hapus_bonus_ditbs").modal('show');
                                                     $("#kode_produk_bonus").val(kodenya);
@@ -5335,6 +5345,16 @@ console.log(total_syarat_disc);
                                                     });// end #modal_hapus_bonus_ditbs
                                               }// end else nya  (idtbsnya > 0 && subtotal > syarat_free || subtotal_tbspenjualan > syarat_disc)
                                             }); // end cek_syarat_promo_ditbs
+
+                                        $.getJSON("cek_total_bonus_promo.php",function(total){
+                                            if (total = 0) {
+                                              $("#tbs_bonus_Penjualan").hide();
+                                            }
+                                            else{
+                                              $("#tbs_bonus_Penjualan").show();
+                                            }
+                                        });//end $.getJSON("cek_total_bonus_promo.php",
+
 
                                                 // cek ada tidaknya promo hariini
                                                 $.post("cek_program_promo.php",{kode_barang:kode_barang},function(program){

@@ -202,8 +202,16 @@ else if ($level_harga == 'harga_7')
                   
                   $harga_fee = $harga_tbs;
 
-                  $harga_konversi = $data_satuan_konversi['harga_jual_konversi'];
-                  $a = $data_satuan_konversi['harga_jual_konversi'];
+                  if ($data_satuan_konversi['harga_jual_konversi'] == 0) {   
+
+                    $harga_konversi = $harga_tbs * $data_satuan_konversi['konversi'];
+                    $a = $harga_tbs * $data_satuan_konversi['konversi'];
+                  }else{
+
+                    $harga_konversi = $data_satuan_konversi['harga_jual_konversi'];
+                    $a = $data_satuan_konversi['harga_jual_konversi'];
+                  }
+                  
                   // cari subtotal
                   $jumlah_fee = $data_satuan_konversi['konversi'];
 

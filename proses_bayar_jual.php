@@ -222,7 +222,7 @@ $nomor = 1 + $ambil_nomor ;
     $query_delete_detail = $db->query("DELETE  FROM detail_penjualan WHERE no_faktur = '$no_faktur'");
 
 
-    $query = $db->query("SELECT no_faktur_order,jumlah_barang ,subtotal,satuan,kode_barang,harga,nama_barang,potongan,tax,tanggal,jam FROM tbs_penjualan WHERE session_id = '$session_id' AND no_faktur IS NULL");
+    $query = $db->query("SELECT no_faktur_order,jumlah_barang ,subtotal,satuan,kode_barang,harga,nama_barang,potongan,tax,tanggal,jam,harga_konversi FROM tbs_penjualan WHERE session_id = '$session_id' AND no_faktur IS NULL");
     while ($data = mysqli_fetch_array($query))
       {
 
@@ -232,7 +232,7 @@ $nomor = 1 + $ambil_nomor ;
 
           if ($data_konversi['jumlah_data'] != 0) {
                 
-                $harga_konversi = $data_konversi['harga_jual_konversi'];
+                $harga_konversi = $data['harga_konversi'];
                 $jumlah_barang = $data['jumlah_barang'] * $data_konversi['konversi'];
                 $satuan = $data['satuan'];
 

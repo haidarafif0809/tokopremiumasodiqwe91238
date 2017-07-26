@@ -738,13 +738,13 @@ if (jumlah_barang == '')
 }
 else
 {
-  $.post("cek_level_harga_barang.php",
-        {level_harga:level_harga, kode_barang:kode_barang,jumlah_barang:jumlah_barang,id_produk:id_produk,satuan_konversi:satuan_konversi},function(data){
+    $.getJSON("cek_level_harga_barang.php?level_harga="+level_harga+"&kode_barang="+kode_barang+"&jumlah_barang="+jumlah_barang+"&id_produk="+id_produk+"&satuan_konversi="+satuan_konversi,function(data){
 
-          $("#harga_produk").val(data);
-          $("#harga_baru").val(data);
-           $("#harga_lama").val(data);
-        });
+            $("#harga_produk").val(data.harga_level);
+            $("#harga_baru").val(data.harga_level);
+            $("#harga_lama").val(data.harga_level);
+            $("#harga_konversi").val(data.harga_konversi);
+          });
 }
 
 
@@ -839,9 +839,16 @@ $(document).ready(function(){
         }
         else{
       
-          $("#harga_produk").val(harga_lama);
-          $("#harga_baru").val(harga_lama);
-          $("#harga_konversi").val(info.harga_pokok);
+          
+                if (info.harga_pokok == 0) {
+                
+                $("#harga_konversi").val(info.harga_konversi);
+                
+                }else{
+                
+                $("#harga_konversi").val(info.harga_pokok);
+
+                }
 
         }
 

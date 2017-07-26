@@ -33,12 +33,14 @@
 
     $jumlah_bayar_lama = $jumlah_bayar + $potongan_hutang;
 
-    $data_potongan = $db->query("SELECT total, potongan, tax, ppn FROM pembelian WHERE no_faktur = '$nomor_faktur'");
+    $data_potongan = $db->query("SELECT tunai, tanggal_jt, total, potongan, tax, ppn FROM pembelian WHERE no_faktur = '$nomor_faktur'");
     $ambil_potongan = mysqli_fetch_array($data_potongan);
     $potongan = $ambil_potongan['potongan'];
     $tax = $ambil_potongan['tax'];
     $ppn = $ambil_potongan['ppn'];
     $total = $ambil_potongan['total'];
+    $total_pembayaran = $ambil_potongan['tunai'];
+    $tanggal_tempo = $ambil_potongan['tanggal_jt'];
 
 
     $data_potongan_persen = $db->query("SELECT SUM(subtotal) AS subtotal FROM detail_pembelian WHERE no_faktur = '$nomor_faktur'");
@@ -549,7 +551,7 @@ Order Pembelian</button>
       <div class="row">
         <div class="col-sm-6">
           <label> Tanggal Jatuh Tempo </label><br>
-            <input type="text" name="tanggal_jt" id="tanggal_jt" placeholder="" style="height:15px;font-size:15px" value="" class="form-control tanggal" >
+            <input type="text" name="tanggal_jt" id="tanggal_jt" placeholder="" style="height:15px;font-size:15px" value="<?php echo $tanggal_tempo; ?>" class="form-control tanggal" >
         </div>
 
         <div class="col-sm-6">          
@@ -590,7 +592,7 @@ Order Pembelian</button>
           </div>   
           <div class="col-sm-6">
             <b><label> Pembayaran (F7) </label><br>
-              <input type="text" name="pembayaran" id="pembayaran_pembelian" autocomplete="off" class="form-control" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);"  style="font-size: 20px; height: 15px"></b>
+              <input type="text" name="pembayaran" value="<?php echo $total_pembayaran ?>" id="pembayaran_pembelian" autocomplete="off" class="form-control" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);"  style="font-size: 20px; height: 15px"></b>
           </div>          
         </div>
 
@@ -1505,6 +1507,25 @@ $.post("cek_total_coba.php",{no_faktur: no_faktur},function(data){
         $("#total_pembelian1"). val(tandaPemisahTitik(data));
         $("#total_pembelian"). val(tandaPemisahTitik(total_akhirr));
         $("#potongan_pembelian"). val(tandaPemisahTitik(Math.round(diskon_faktur)));
+        
+ var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_pembelian").val()))));
+    if(pembayaran == ''){
+      pembayaran = 0;
+    }
+  var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_pembelian").val()))));
+  var sisa = pembayaran - total;
+  var sisa_kredit = total - pembayaran;
+
+  if (sisa < 0  ){
+    $("#kredit").val(sisa_kredit);
+    $("#sisa_pembayaran_pembelian").val('0');
+    $("#tanggal_jt").attr("disabled", false);
+  }
+  else{
+    $("#sisa_pembayaran_pembelian").val(sisa);
+    $("#kredit").val('0');
+    $("#tanggal_jt").attr("disabled", true);
+  } 
 
     });
 
@@ -2815,6 +2836,7 @@ $(document).ready(function(){
     $("#btnOrderClose").hide();
   });
 </script>
+
 
 
 <!-- memasukan file footer.php -->

@@ -10,23 +10,26 @@ $requestData= $_REQUEST;
 
 $columns = array( 
 // datatable column index  => database column name
-	0 =>'kode_barang', 
-	1 => 'nama_barang',
-	2 => 'harga_beli',
-	3 => 'harga_jual',
-	4 => 'harga_jual2',
-	5 => 'harga_jual3',
-	6 => 'harga_jual4',
-	7 => 'harga_jual5',
-	8 => 'harga_jual6',
-	9 => 'harga_jual7',
-	10 => 'satuan',
-	11 => 'tipe_barang',
-	12 => 'kategori',
-	13 => 'berkaitan_dgn_stok',
+	0 =>'hapus', 
+	1 => 'edit',
+	2 => 'kode',
+	3 => 'nama',
+	4 => 'harga_beli',
+	5 => 'margin',
+	6 => 'harga_jual1',
+	7 => 'harga_jual2',
+	8 => 'harga_jual3',
+	9 => 'harga_jual4',
+	10 => 'harga_jual5',
+	11 => 'harga_jual6',
+	12 => 'harga_jual7',
+	13 => 'hpp',
 	14 => 'stok_barang',
-	15 => 'gudang',
-	16 => 'id_satuan'
+	15 => 'satuan',
+	16 => 'satuan_konversi',
+	17 => 'setting_diskon_jumlah',
+	18 => 'kategori',
+	19 => 'id'
 );
 
 
@@ -116,9 +119,8 @@ $query=mysqli_query($conn, $sql) or die("datatable_cari_barang.php: query 1");
 $totalFiltered = mysqli_num_rows($query); 
 
 // when there is a search parameter then we have to modify total number filtered rows as per search result. 
-$sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+$sql.=" ORDER BY b.id DESC LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */
-	
 $query=mysqli_query($conn, $sql) or die("employee-grid-data.php: query 2");
 
 
@@ -239,6 +241,10 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 	//satuan konversi
 	$nestedData[] = "<a href='satuan_konversi.php?id=". $row['id']."&nama=". $row['nama']."&satuan=". $row['satuan']."&harga=". $row['harga_beli']."&kode_barang=". $row['kode_barang']."' class='btn btn-secondary'>Konversi</a> </td>";
+
+	//Setting diskon
+	$nestedData[] = "<a href='setting_diskon_jumlah.php?id=". $row['id']."&kode_barang=". $row['kode_barang']."&nama_barang=". $row['nama_barang']."' class='btn btn-primary' target='blank'>Setting</a>";
+
 
 	$nestedData[] = $data_kategori["nama_kategori"];
 	

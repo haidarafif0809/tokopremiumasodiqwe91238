@@ -480,6 +480,7 @@ th {
             <th style='background-color: #4CAF50; color: white'> Jumlah Barang </th>
             <th style='background-color: #4CAF50; color: white'> Satuan </th>
             <th style='background-color: #4CAF50; color: white'> Satuan Konversi </th>
+            <th style='background-color: #4CAF50; color: white'> Setting Diskon </th>
             <th style='background-color: #4CAF50; color: white'> Kategori </th>
             <!--
             <th> Gudang </th>
@@ -1326,7 +1327,7 @@ if (harga_jual1 < harga_beli)
         },
             
             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                $(nRow).attr('class','tr-id-'+aData[18]+'');
+                $(nRow).attr('class','tr-id-'+aData[19]+'');
             },
         });
 

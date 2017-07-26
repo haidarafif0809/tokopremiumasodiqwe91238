@@ -58,10 +58,8 @@
     
     }
 
-        $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
-$select_id = $db->query("SELECT id FROM pelanggan WHERE id = '$kode_pelanggan'");
-$out_id = mysqli_fetch_array($select_id);
-$id_pelanggan = $out_id['id'];
+        $id_pelanggan = stringdoang($_POST['kode_pelanggan']);
+
 
         // buat prepared statements
         $stmt = $db->prepare("INSERT INTO pembayaran_piutang (no_faktur_pembayaran, tanggal, jam, nama_suplier,keterangan, total, user_buat, dari_kas) VALUES (?,?,?,?,?,?,?,?)");
@@ -89,7 +87,8 @@ $id_pelanggan = $out_id['id'];
     while ($data = mysqli_fetch_array($query))
     {
 
-       $query2 ="INSERT INTO detail_pembayaran_piutang (no_faktur_pembayaran, no_faktur_penjualan,tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar) VALUES ('$no_faktur_pembayaran','$data[no_faktur_penjualan]', '$tanggal_sekarang','$data[tanggal_jt]','$data[kredit]','$data[potongan]','$data[total]','$data[jumlah_bayar]')";
+       $query2 ="INSERT INTO detail_pembayaran_piutang (no_faktur_pembayaran, no_faktur_penjualan,tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar,kode_pelanggan) 
+       VALUES ('$no_faktur_pembayaran','$data[no_faktur_penjualan]', '$tanggal_sekarang','$data[tanggal_jt]','$data[kredit]','$data[potongan]','$data[total]','$data[jumlah_bayar]','$data[kode_pelanggan]')";
 
        if ($db->query($query2) === TRUE) {
        } else {

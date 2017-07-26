@@ -202,8 +202,16 @@ else if ($level_harga == 'harga_7')
                   
                   $harga_fee = $harga_tbs;
 
-                  $harga_konversi = $data_satuan_konversi['harga_jual_konversi'];
-                  $a = $data_satuan_konversi['harga_jual_konversi'];
+                  if ($data_satuan_konversi['harga_jual_konversi'] == 0) {   
+
+                    $harga_konversi = $harga_tbs * $data_satuan_konversi['konversi'];
+                    $a = $harga_tbs * $data_satuan_konversi['konversi'];
+                  }else{
+
+                    $harga_konversi = $data_satuan_konversi['harga_jual_konversi'];
+                    $a = $data_satuan_konversi['harga_jual_konversi'];
+                  }
+                  
                   // cari subtotal
                   $jumlah_fee = $data_satuan_konversi['konversi'];
 
@@ -301,12 +309,12 @@ if ($ber_stok == 'Barang' OR $ber_stok == 'barang') {
                       }
                       else
                       {
-                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi) VALUES (?,?,
-                              ?,?,?,?,?,?,?,?)");
+                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi,tipe_barang) VALUES (?,?,
+                              ?,?,?,?,?,?,?,?,?)");
                               
                               
-                              $perintah->bind_param("sssisiissi",
-                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga_tbs, $a,$tanggal_sekarang,$jam_sekarang,$harga_konversi);
+                              $perintah->bind_param("sssisiissis",
+                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga_tbs, $a,$tanggal_sekarang,$jam_sekarang,$harga_konversi,$ber_stok);
                              
                               $perintah->execute();
 
@@ -387,12 +395,12 @@ else{
                       }
                       else
                       {
-                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi) VALUES (?,?,
-                              ?,?,?,?,?,?,?,?)");
+                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi,tipe_barang) VALUES (?,?,
+                              ?,?,?,?,?,?,?,?,?)");
                               
                               
-                              $perintah->bind_param("sssisiissi",
-                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang,$harga_konversi);
+                              $perintah->bind_param("sssisiissis",
+                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang,$harga_konversi,$harga_konversi);
                              
                               $perintah->execute();
 

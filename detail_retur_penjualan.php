@@ -6,7 +6,9 @@ include 'db.php';
 
  $no_faktur_retur = $_POST['no_faktur_retur'];
 
- $query = $db->query ("SELECT dp.no_faktur_penjualan, dp.no_faktur_retur, dp.id, dp.nama_barang, dp.kode_barang, dp.jumlah_beli, dp.jumlah_retur, dp.harga, dp.potongan, dp.tax, dp.subtotal, sk.id_satuan, s.nama, dp.jumlah_retur / sk.konversi AS jumlah_produk, st.nama AS satuan_jual FROM detail_retur_penjualan dp LEFT JOIN satuan_konversi sk ON dp.satuan = sk.id_satuan LEFT JOIN satuan s ON dp.satuan = s.id LEFT JOIN detail_penjualan dpen ON dp.no_faktur_penjualan = dpen.no_faktur LEFT JOIN satuan st ON dpen.satuan = st.id WHERE dp.no_faktur_retur = '$no_faktur_retur'");
+ $query = $db->query ("SELECT dp.jumlah_retur / IFNULL( sk.konversi,0) AS jumlah_produk ,sa.nama AS satuan_jual ,sk.konversi,dp.no_faktur_penjualan, dp.no_faktur_retur, dp.id, dp.nama_barang, dp.kode_barang, dp.jumlah_beli, dp.jumlah_retur, dp.harga, dp.potongan, dp.tax,
+  dp.subtotal, sk.id_satuan, s.nama, dp.jumlah_retur FROM detail_retur_penjualan dp LEFT JOIN satuan_konversi sk ON dp.kode_barang = sk.kode_produk AND dp.satuan = sk.id_satuan 
+  LEFT JOIN satuan s ON dp.satuan = s.id LEFT JOIN satuan sa ON dp.asal_satuan = sa.id WHERE dp.no_faktur_retur = '$no_faktur_retur'");
 
  ?>
 
@@ -49,7 +51,7 @@ include 'db.php';
 			<td>". $data1['kode_barang'] ."</td>
 			<td>". rp($data1['jumlah_beli']) ." ". $data1['satuan_jual'] ."</td>";
 
-			if ($data1['jumlah_produk'] > 0) {
+			if ($data1['konversi'] != 0) {
 				echo "<td>". $data1['jumlah_produk'] ."</td>";
 			}
 			else{

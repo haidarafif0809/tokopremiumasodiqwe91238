@@ -114,19 +114,21 @@ else {
     {
 
 
-      $pilih_konversi = $db->query("SELECT  sk.konversi * $data[jumlah_retur] AS jumlah_konversi, $data[subtotal] / ($data[jumlah_retur] * sk.konversi) AS harga_konversi, sk.id_satuan, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.id_produk = b.id  WHERE sk.id_satuan = '$data[satuan]' AND sk.kode_produk = '$data[kode_barang]'");
+      $pilih_konversi = $db->query("SELECT COUNT(sk.konversi) AS jumlah_data,sk.konversi, b.satuan,sk.harga_jual_konversi FROM satuan_konversi sk INNER JOIN barang b ON sk.kode_produk = b.kode_barang AND sk.id_produk = b.id WHERE sk.kode_produk = '$data[kode_barang]' AND sk.id_satuan = '$data[satuan]'");
       $data_konversi = mysqli_fetch_array($pilih_konversi);
 
-      if ($data_konversi['harga_konversi'] != 0 || $data_konversi['harga_konversi'] != "") {
-        $harga = $data_konversi['harga_konversi'];
-        $jumlah_barang = $data_konversi['jumlah_konversi'];
+          if ($data_konversi['jumlah_data'] != 0) {
+        $harga = $data_konversi['harga_jual_konversi'];
+        $jumlah_barang = $data['jumlah_retur'] * $data_konversi['konversi'];
       }
       else{
         $harga = $data['harga'];
         $jumlah_barang = $data['jumlah_retur'];
       }
 
-        $query2 = "INSERT INTO detail_retur_penjualan (no_faktur_retur, no_faktur_penjualan, tanggal, jam, nama_barang, kode_barang, jumlah_beli, jumlah_retur, harga, subtotal, potongan, tax,asal_satuan,satuan) VALUES ('$no_faktur_retur','$data[no_faktur_penjualan]','$tanggal_sekarang','$jam_sekarang','$data[nama_barang]','$data[kode_barang]','$data[jumlah_beli]','$jumlah_barang','$harga','$data[subtotal]','$data[potongan]','$data[tax]','$data[satuan_jual]','$data[satuan]')";
+
+        $query2 = "INSERT INTO detail_retur_penjualan (no_faktur_retur, no_faktur_penjualan, tanggal, jam, nama_barang, kode_barang, jumlah_beli, jumlah_retur, harga, subtotal, potongan, tax,asal_satuan,satuan) 
+        VALUES ('$no_faktur_retur','$data[no_faktur_penjualan]','$tanggal_sekarang','$jam_sekarang','$data[nama_barang]','$data[kode_barang]','$data[jumlah_beli]','$jumlah_barang','$harga','$data[subtotal]','$data[potongan]','$data[tax]','$data[satuan_jual]','$data[satuan]')";
 
             if ($db->query($query2) === TRUE) {
                 

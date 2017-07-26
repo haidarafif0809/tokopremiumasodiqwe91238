@@ -17,9 +17,8 @@ $no_faktur = $_GET['no_faktur'];
 
     $query2 = $db->query("SELECT * FROM detail_penjualan_order WHERE no_faktur_order = '$no_faktur' ");
 
-    $query3 = $db->query("SELECT SUM(jumlah_barang) as total_item FROM detail_penjualan_order WHERE no_faktur_order = '$no_faktur'");
-    $data3 = mysqli_fetch_array($query3);
-    $total_item = $data3['total_item'];
+
+    $total_item = 0;
     
  ?>
 
@@ -60,6 +59,8 @@ $no_faktur = $_GET['no_faktur'];
                      $jumlah_barang = $data2['jumlah_barang'];
 
                   }
+
+            $total_item = $total_item + $jumlah_barang;
            
            echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. $jumlah_barang .'</td>  <td style="padding:3px"> '. rp($harga) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
            

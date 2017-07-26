@@ -23,7 +23,7 @@ $perintah2 = $db->query("DELETE FROM tbs_penjualan_order WHERE no_faktur_order =
 $perintah = $db->query("SELECT * FROM detail_penjualan_order WHERE no_faktur_order = '$no_faktur'");
 while ($data = mysqli_fetch_array($perintah)){
 
-	    $tipe = $db->query("SELECT berkaitan_dgn_stok FROM barang WHERE kode_barang = '$data[kode_barang]'");
+	$tipe = $db->query("SELECT berkaitan_dgn_stok FROM barang WHERE kode_barang = '$data[kode_barang]'");
         $data_tipe = mysqli_fetch_array($tipe);
         $ber_stok = $data_tipe['berkaitan_dgn_stok'];
 
@@ -37,16 +37,16 @@ while ($data = mysqli_fetch_array($perintah)){
         if ($data_satuan_konversi['jumlah_data'] > 0 ) {
         						
         	$jumlah_barang = $data['jumlah_barang'] / $data_satuan_konversi['konversi'];
-        	$harga = $data['harga'] * $data_satuan_konversi['konversi'];
+        	$harga_konversi = $data['harga_konversi'];
 
         }else{
 
         	$jumlah_barang = $data['jumlah_barang'];
-        	$harga = $data['harga'];
+        	$harga_konversi = 0;
         }
 
-		$perintah1 = $db->query("INSERT INTO tbs_penjualan_order (no_faktur_order, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax,tanggal,jam,tipe_barang) 
-			VALUES ( '$data[no_faktur_order]', '$data[kode_barang]', '$data[nama_barang]', '$jumlah_barang', '$data[satuan]', '$harga', '$data[subtotal]', '$data[potongan]', '$data[tax]', '$data[tanggal]', '$data[jam]','$ber_stok')");
+		$perintah1 = $db->query("INSERT INTO tbs_penjualan_order (no_faktur_order, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax,tanggal,jam,tipe_barang,harga_konversi) 
+		VALUES ( '$data[no_faktur_order]', '$data[kode_barang]', '$data[nama_barang]', '$jumlah_barang', '$data[satuan]', '$data[harga]', '$data[subtotal]', '$data[potongan]', '$data[tax]', '$data[tanggal]', '$data[jam]','$ber_stok','$harga_konversi')");
 
 
 

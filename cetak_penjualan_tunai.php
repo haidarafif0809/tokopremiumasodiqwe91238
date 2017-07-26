@@ -24,9 +24,8 @@ else{
 
     $query2 = $db->query("SELECT harga_konversi,kode_barang,nama_barang, jumlah_barang, harga, subtotal, no_faktur, satuan FROM detail_penjualan WHERE no_faktur = '$no_faktur' ");
 
-    $query3 = $db->query("SELECT SUM(jumlah_barang) as total_item FROM detail_penjualan WHERE no_faktur = '$no_faktur'");
-    $data3 = mysqli_fetch_array($query3);
-    $total_item = $data3['total_item'];
+
+    $total_item = 0;
 
 
         // AMBIL  ATURAN POIN
@@ -96,6 +95,7 @@ else{
 
                   }
 
+            $total_item = $total_item + $jumlah_barang;
 
 
             $keterangan = $bonus['keterangan'];

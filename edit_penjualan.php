@@ -1839,7 +1839,23 @@ else if (level_harga == "harga_7") {
 }
   document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang');
 
+         $.getJSON("cek_data_satuan_konversi.php?kode_barang="+kode_barang, function(result){
 
+                $(".span-satuan").remove();  
+                //satuan dasar
+                $("#option_satuan-"+result.id_satuan_dasar).remove();
+                var option_barang = "<option class='span-satuan' id='option_satuan-"+result.id_satuan_dasar+"' value='"+result.id_satuan_dasar+"' data-nama='"+result.nama_satuan_dasar+"'>"+result.nama_satuan_dasar+"</option>"
+                $("#satuan_konversi").show().append(option_barang);
+                   
+                //satuan konversi
+                $.each(result.satuan, function(i, item) {//  $.each(result.satuan, 
+                $("#option_satuan-"+result.satuan[i].id).remove();
+                var option_barang = "<option class='span-satuan' id='option_satuan-"+result.satuan[i].id+"' value='"+result.satuan[i].id+"' data-nama='"+result.satuan[i].nama+"'>"+result.satuan[i].nama+"</option>"
+                $("#satuan_konversi").show().append(option_barang);
+
+           });//  $.each(result.satuan, 
+                                              
+       });
 
 $.post("lihat_promo_alert.php",{id_barang:$(this).attr('id-barang')},function(data){
 
@@ -1872,12 +1888,12 @@ $(document).ready(function(){
   var jumlah_barang = $("#jumlah_barang").val();
   var id_produk = $("#id_produk").val();
 
-$.post("cek_level_harga_barang.php",
-        {level_harga:level_harga, kode_barang:kode_barang,jumlah_barang:jumlah_barang,id_produk:id_produk,satuan_konversi:satuan_konversi},function(data){
+    $.getJSON("cek_level_harga_barang.php?level_harga="+level_harga+"&kode_barang="+kode_barang+"&jumlah_barang="+jumlah_barang+"&id_produk="+id_produk+"&satuan_konversi="+satuan_konversi,function(data){
 
-          $("#harga_produk").val(data);
-          $("#harga_baru").val(data);
-        });
+            $("#harga_produk").val(data.harga_level);
+            $("#harga_baru").val(data.harga_level);
+            $("#harga_konversi").val(data.harga_konversi);
+          });
     });
 });
 //end cek level harga
@@ -1967,7 +1983,16 @@ $(document).ready(function(){
         else{
           $("#harga_produk").val(harga_lama);
           $("#harga_baru").val(harga_lama);
-          $("#harga_konversi").val(info.harga_pokok);
+          
+                if (info.harga_pokok == 0) {
+                
+                $("#harga_konversi").val(info.harga_konversi);
+                
+                }else{
+                
+                $("#harga_konversi").val(info.harga_pokok);
+
+                }
         }
 
       });
@@ -2206,37 +2231,11 @@ var total_akhir1 = parseFloat(subtotal.replace(',','.')) + parseFloat(total_pero
       $("#tax_rp").val(hasil_tax.format(2, 3, '.', ','));
 //perhitungan form pembayaran (total & subtotal / biaya admin) 
 
-                  $('#tabel_tbs_penjualan').DataTable().destroy();//Pembaruan datatable baru 
-                        var dataTable = $('#tabel_tbs_penjualan').DataTable( {
-                          "processing": true,
-                          "serverSide": true,
-                          "ajax":{
-                            url :"data_tbs_edit_penjualan.php", // json datasource
-                              "data": function ( d ) {
-                                d.no_faktur = $("#nomor_faktur_penjualan").val();
-                                // d.custom = $('#myInput').val();
-                                // etc
-                            },
-                             
-                              type: "post",  // method  , by default get
-                            error: function(){  // error handling
-                              $(".employee-grid-error").html("");
-                              $("#tabel_tbs_penjualan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-                              $("#employee-grid_processing").css("display","none");
-                              }
-                          },
-                             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-
-                              $(nRow).attr('class','tr-id-'+aData[11]+'');         
-
-                          }
-                        });//Pembaruan datatable baru 
-     
-
       }// end else untuk stok tidak mencukupi
   
 
-
+               var tabel_tbs_penjualan = $('#tabel_tbs_penjualan').DataTable();//Pembaruan datatable baru 
+                    tabel_tbs_penjualan.draw();
 });
 /// JAVASCRIPT BARCODE
 

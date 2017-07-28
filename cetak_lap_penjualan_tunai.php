@@ -87,7 +87,7 @@ $no_faktur = $_GET['no_faktur'];
       <tr><td width="50%">Biaya Admin</td> <td> :</td> <td><?php echo koma($data0['biaya_admin'],2);?> </tr>
 
       <!--<tr><td  width="50%">Pajak</td> <td> :</td> <td> <?php echo koma($data0['tax']);?> </td></tr>-->
-      <tr><td  width="50%">Total Item</td> <td> :</td> <td> <?php echo koma($total_item,3); ?> </td></tr>
+      <tr><td  width="50%">Total Item</td> <td> :</td> <td> <?php echo koma($total_item,2); ?> </td></tr>
       <tr><td width="50%">Total Penjualan</td> <td> :</td> <td><?php echo koma($data0['total'],2); ?> </tr>
       <tr><td  width="50%">Tunai</td> <td> :</td> <td> <?php echo koma($data0['tunai'],2); ?> </td></tr>
       <tr><td  width="50%">Kembalian</td> <td> :</td> <td> <?php echo koma($data0['sisa'],2); ?>  </td></tr>

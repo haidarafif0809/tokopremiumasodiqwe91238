@@ -227,7 +227,11 @@ $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
 
   $perintah2 = $db->query("DELETE FROM tbs_penjualan WHERE no_faktur = '$nomor_faktur'");
 
-//LOGIKA KETIKA ADA PRODUK PARCEL YANG AKAN DIJUAL, KARENA PARCEL TIDAK MASUK KE DALAM PRODUK BONUS
+        //awal nya bonus
+    $query_tbs_bonus_penjualan = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.satuan,tp.harga_disc FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.no_faktur_penjualan = '$nomor_faktur'");
+    while($datatb = mysqli_fetch_array($query_tbs_bonus_penjualan)){
+
+        //LOGIKA KETIKA ADA PRODUK PARCEL YANG AKAN DIJUAL, KARENA PARCEL TIDAK MASUK KE DALAM PRODUK BONUS
         $query_cek_produk = $db->query("SELECT COUNT(kode_barang) FROM barang WHERE kode_barang = '$datatb[kode_produk]'");
         $jumlah_cek_produk = mysqli_num_rows($query_cek_produk);
           

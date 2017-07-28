@@ -1567,9 +1567,7 @@ if (pesan_alert == true) {
           //cek total keseluruhan bonus disc
         var total_penj = data.total_penjualan;
         $.getJSON("cek_total_bonus_promo.php",function(tot){
-        if (tot = 0) {
-          tbs_bonus_Penjualan
-        }
+        
         var keterangan = tot.keterangan;
         if (keterangan == 'Disc Produk') {
             var qty = tot.qty_disc;
@@ -2969,7 +2967,7 @@ if (pesan_alert == true) {
               //cek total keseluruhan bonus disc
             var total_penj = data.total_penjualan;
             $.getJSON("cek_total_bonus_promo.php",function(tot){
-            if (tot = 0) {
+            if (tot == 0) {
               $("#tbs_bonus_Penjualan").hide();
             }
             else{
@@ -5033,7 +5031,7 @@ $(document).ready(function(){
                                               var kodenya = 0;
                                               var idnya = 0;
                                               var nama_produk = 0;
-                                              var keterangannya = 'ask';
+                                              var keterangannya = '';
                                               var total_syarat_free =  syarat_promo_free - subtotal_tbs_penjualan_difree;
                                               var total_syarat_disc = syarat_promo_disc_produk - subtotal_tbs_penjualan;
                                             }

@@ -6008,7 +6008,6 @@
               $("#biaya_admin_select").trigger("chosen:updated");
               $("#biaya_admin_persen").val(''); 
               $("#kode_barang").val('');
-              $("#kd_pelanggan").val('');
               $("#kd_pelanggan").trigger("chosen:open");
               $("#biaya_adm").val('');
               $("#level_harga").val('harga_1');

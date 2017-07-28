@@ -730,6 +730,7 @@ tr:nth-child(even){background-color: #f2f2f2}
     <input style="height:15px;" type="text" class="form-control" name="potongan" autocomplete="off" id="potongan1" data-toggle="tooltip" data-placement="top" title="Jika Ingin Potongan Dalam Bentuk Persen (%), input : 10%" placeholder="Potongan">
   </div>
 
+
   <div class="col-sm-1">
     <?php if ($default_ppn == 'Include'): ?>
       <input style="height:15px;" type="text" class="form-control" name="tax" autocomplete="off" id="tax1" value="<?php echo $nilai_ppn ?>" placeholder="Tax%" >
@@ -738,6 +739,29 @@ tr:nth-child(even){background-color: #f2f2f2}
     <?php endif ?>      
   </div>
 
+  <!-- input untuk ngambil id program promo(memilih barang yang ada di program itu yang tampil-->
+  <input type="hidden" name="id_program" id="id_program">
+  <!--end input untuk ngambil id program promo(memilih barang yang ada di program itu yang tampil-->
+
+  <!--untuk melihat disc di tbs-->
+  <input type="hidden" class="form-control" name="disc_tbs" autocomplete="off" id="disc_tbs" placeholder="DISKON TBS" >
+  <input type="hidden" class="form-control" name="subtotal_jual_disc" autocomplete="off" id="subtotal_jual_disc" placeholder="subtotal disc Harga PROMO" >
+
+  <!--hidden data produk yang ingin ditambahkan ke tbs -->
+  <input type="hidden" class="form-control" name="limit_stok" autocomplete="off" id="limit_stok" placeholder="Limit Stok" >
+      <input type="hidden" class="form-control" name="ber_stok" id="ber_stok" placeholder="Ber Stok" >
+      <input type="hidden" class="form-control"  placeholder="Lama" name="harga_lama" id="harga_lama">
+      <input type="hidden" class="form-control"  placeholder="Baru" name="harga_baru" id="harga_baru">
+      <input type="hidden" class="form-control" name="jumlahbarang" id="jumlahbarang">
+      <input type="hidden" id="satuan_produk" name="satuan" class="form-control" value="" required="" placeholder="satuan">
+      <input type="hidden" id="harga_produk" name="harga" class="form-control" value="" required="" placeholder="harga produk">
+      <input type="hidden" id="harga_konversi" name="harga_konversi" class="form-control" value="" required="">
+      <input type="hidden" id="id_produk" name="id_produk" class="form-control" value="" required="" placeholder="id produk">        
+  <input type="hidden" id="total_barcode" name="total_barcode" class="form-control" value="" required=""> 
+  <!--end hidden data produk yang ingin ditambahkan ke tbs -->
+
+  </form> <!-- tag penutup form -->
+                 
 <button type="submit" id="submit_produk" class="btn btn-success" style="font-size:15px" >Submit (F3)</button>
 
 </div>

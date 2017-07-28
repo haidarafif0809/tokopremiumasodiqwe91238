@@ -20,7 +20,7 @@ $session_id = session_id();
 
         // QUERY CEK BARCODE DI SATUAN KONVERSI
                                     
-    $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data,kode_barcode,kode_produk,konversi , id_satuan , harga_jual_konversi FROM satuan_konversi WHERE kode_barcode = '$kode' ");
+    $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data,kode_barcode,kode_produk,konversi , id_satuan , harga_jual_konversi FROM satuan_konversi WHERE kode_barcode = '$kode'  AND kode_barcode != '' ");
     $data_satuan_konversi = mysqli_fetch_array($query_satuan_konversi);     
 
         // QUERY CEK BARCODE DI SATUAN KONVERSI

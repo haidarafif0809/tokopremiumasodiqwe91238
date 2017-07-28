@@ -761,6 +761,7 @@
       <input type="hidden" class="form-control" name="jumlahbarang" id="jumlahbarang">
       <input type="hidden" id="satuan_produk" name="satuan" class="form-control" value="" required="" placeholder="satuan">
       <input type="hidden" id="harga_produk" name="harga" class="form-control" value="" required="" placeholder="harga produk">
+      <input type="hidden" id="harga_konversi" name="harga_konversi" class="form-control" value="" required="">
       <input type="hidden" id="id_produk" name="id_produk" class="form-control" value="" required="" placeholder="id produk">        
   <input type="hidden" id="total_barcode" name="total_barcode" class="form-control" value="" required=""> 
   <!--end hidden data produk yang ingin ditambahkan ke tbs -->

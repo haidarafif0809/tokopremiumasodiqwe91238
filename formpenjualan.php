@@ -1732,6 +1732,24 @@ $(document).on('click', '.pilih', function (e) {
 
   var kode_barang = $("#kode_barang").val();
 
+         $.getJSON("cek_data_satuan_konversi.php?kode_barang="+kode_barang, function(result){
+
+                $(".span-satuan").remove();  
+                //satuan dasar
+                $("#option_satuan-"+result.id_satuan_dasar).remove();
+                var option_barang = "<option class='span-satuan' id='option_satuan-"+result.id_satuan_dasar+"' value='"+result.id_satuan_dasar+"' data-nama='"+result.nama_satuan_dasar+"'>"+result.nama_satuan_dasar+"</option>"
+                $("#satuan_konversi").show().append(option_barang);
+                   
+                //satuan konversi
+                $.each(result.satuan, function(i, item) {//  $.each(result.satuan, 
+                $("#option_satuan-"+result.satuan[i].id).remove();
+                var option_barang = "<option class='span-satuan' id='option_satuan-"+result.satuan[i].id+"' value='"+result.satuan[i].id+"' data-nama='"+result.satuan[i].nama+"'>"+result.satuan[i].nama+"</option>"
+                $("#satuan_konversi").show().append(option_barang);
+
+           });//  $.each(result.satuan, 
+                                              
+       });
+
  $.post('cek_kode_barang_tbs_penjualan.php',{kode_barang:kode_barang}, function(data){
   if(data == 1){
     alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");

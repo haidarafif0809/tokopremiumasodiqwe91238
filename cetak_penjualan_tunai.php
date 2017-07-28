@@ -100,23 +100,23 @@ else{
 
             $keterangan = $bonus['keterangan'];
             if ($keterangan == 'Free Produk') {
-              $subtotal_bonus = $bonus['qty_bonus'] * $bonus['harga_jual'];
+              $subtotal_bonus = $data_bonus_penjualan['qty_bonus'] * $data_bonus_penjualan['harga_jual'];
             }
             else{
-              $subtotal_bonus = $bonus['qty_bonus'] * $bonus['harga_jual'];
-              $subtotal_bonusnya = $bonus['qty_bonus'] * $bonus['harga_disc'];
+              $subtotal_bonus = $data_bonus_penjualan['qty_bonus'] * $data_bonus_penjualan['harga_jual'];
+              $subtotal_bonusnya = $data_bonus_penjualan['subtotal'];
               $subtotal_bonus_disc = $subtotal_bonus - $subtotal_bonusnya;
             }
            
            echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. rp($jumlah_barang) .'</td>  <td style="padding:3px"> '. rp($harga) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
            }
-           echo '<tr><td width:"50%"> '. $bonus['nama_produk'] .' </td> <td style="padding:3px"> '. $bonus['qty_bonus'] .'</td>'; 
+           echo '<tr><td width:"50%"> '. $data_bonus_penjualan['nama_produk'] .' </td> <td style="padding:3px"> '. $data_bonus_penjualan['qty_bonus'] .'</td>'; 
 
         if ($keterangan == 'Free Produk') {
-              echo '<td style="padding:3px"> '. $bonus['harga_jual'] .'</td>';
+              echo '<td style="padding:3px"> '. $data_bonus_penjualan['harga_jual'] .'</td>';
         }
         else{
-              echo '<td style="padding:3px"> '. $bonus['harga_jual'] .'</td>';
+              echo '<td style="padding:3px"> '. $data_bonus_penjualan['harga_jual'] .'</td>';
         } 
             
           echo '<td style="padding:3px"> '.rp($subtotal_bonus) .'</td></tr>';   

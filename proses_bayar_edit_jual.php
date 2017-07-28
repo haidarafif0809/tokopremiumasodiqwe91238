@@ -35,11 +35,10 @@ $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
 
 
             $delete_detail_penjualan = $db->query("DELETE FROM detail_penjualan WHERE no_faktur = '$nomor_faktur' ");
+            $delete_detail_penjualan = $db->query("DELETE FROM bonus_penjualan WHERE no_faktur_penjualan = '$nomor_faktur' ");
 
             $query12 = $db->query("SELECT * FROM tbs_penjualan WHERE no_faktur = '$nomor_faktur' ");
-            while ($data = mysqli_fetch_array($query12))
-            
-            {
+            while ($data = mysqli_fetch_array($query12)){
   
 
                 $pilih_konversi = $db->query("SELECT COUNT(sk.konversi) AS jumlah_data,sk.konversi, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.kode_produk = b.kode_barang AND sk.id_produk = b.id WHERE sk.kode_produk = '$data[kode_barang]' AND sk.id_satuan = '$data[satuan]'");
@@ -227,6 +226,44 @@ $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
 
 
   $perintah2 = $db->query("DELETE FROM tbs_penjualan WHERE no_faktur = '$nomor_faktur'");
+
+        //awal nya bonus
+    $query_tbs_bonus_penjualan = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.satuan,tp.harga_disc FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.no_faktur_penjualan = '$nomor_faktur'");
+    while($datatb = mysqli_fetch_array($query_tbs_bonus_penjualan)){
+
+        //LOGIKA KETIKA ADA PRODUK PARCEL YANG AKAN DIJUAL, KARENA PARCEL TIDAK MASUK KE DALAM PRODUK BONUS
+        $query_cek_produk = $db->query("SELECT COUNT(kode_barang) FROM barang WHERE kode_barang = '$datatb[kode_produk]'");
+        $jumlah_cek_produk = mysqli_num_rows($query_cek_produk);
+          
+          if ($jumlah_cek_produk > 0 ) {
+
+              $subtotal_bonusnya = $datatb['qty_bonus'] * $datatb['harga_disc'];
+
+              $query_insert_bonus_penjualan = "INSERT INTO bonus_penjualan (no_faktur_penjualan, kode_pelanggan, tanggal, jam, kode_produk, nama_produk, qty_bonus,keterangan,harga_disc,subtotal,satuan) VALUES ('$no_faktur', '$id_pelanggan', '$datatb[tanggal]', '$datatb[jam]', '$datatb[kode_produk]', '$datatb[nama_produk]', '$datatb[qty_bonus]', '$datatb[keterangan]', '$datatb[harga_disc]' ,'$subtotal_bonusnya','$datatb[satuan]' )";
+
+                if ($db->query($query_insert_bonus_penjualan) === TRUE) {
+                } 
+
+                else {
+                echo "Error: " . $query_insert_bonus_penjualan . "<br>" . $db->error;
+                }
+
+
+
+                // MENGAUPDATE KETERANGAN_PROMO_DISC DI TABLE PENJAUALAN 
+                $update_jual = "UPDATE penjualan SET keterangan_promo_disc = '$datatb[keterangan]' WHERE no_faktur = '$nomor_faktur'";
+                    if ($db->query($update_jual) === TRUE) {
+                    } 
+
+                    else {
+                    echo "Error: " . $update_jual . "<br>" . $db->error;
+                    }
+
+          }
+      }// end while
+//end nya bonus
+  $query_delete_tbs_penjualan = $db->query("DELETE FROM tbs_penjualan WHERE no_faktur = '$nomor_faktur'");
+  $query_delete_tbs_bonus_penjualan = $db->query("DELETE  FROM tbs_bonus_penjualan WHERE no_faktur = '$nomor_faktur'");
 
  echo "Success";
 

@@ -157,11 +157,11 @@ include 'db.php';
             <td class='table1'>". $data5['nama_barang'] ."</td>";
 
             if ($data5["konversi"] != 0) {
-            echo"<td class='table1' align='right'>". koma($data5['jumlah_produk'], 3) ."</td>
+            echo"<td class='table1' align='right'>". koma($data5['jumlah_produk'], 2) ."</td>
             <td class='table1'>". $data5['satuan_konversi'] ."</td>";
             }
             else{
-            echo"<td class='table1' align='right'>". koma($data5['jumlah_barang'], 3) ."</td>
+            echo"<td class='table1' align='right'>". koma($data5['jumlah_barang'], 2) ."</td>
             <td class='table1'>". $data5['satuan_dasar'] ."</td>";
             }
 

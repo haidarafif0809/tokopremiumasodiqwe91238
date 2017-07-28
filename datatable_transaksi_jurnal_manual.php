@@ -47,7 +47,7 @@ if( !empty($requestData['search']['value']) ) {   // if there is a search parame
 $sql.="GROUP BY no_faktur";
 $query=mysqli_query($conn, $sql) or die("datatable_stok_awal.php2: get employees");
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
-$sql.=" ORDER BY id  ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+$sql.=" ORDER BY waktu_jurnal  DESC  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */	
 $query=mysqli_query($conn, $sql) or die("employee-grid-data.php: get employees");
 

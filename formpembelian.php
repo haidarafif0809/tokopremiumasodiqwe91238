@@ -293,13 +293,7 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
 
       <div class="col-sm-2" style="width:90px">
         <select type="text" name="satuan_konversi" id="satuan_konversi" class="form-control"  required="" style="font-size:13px;">
-          <!--<?php
-              $query = $db->query("SELECT id, nama  FROM satuan");
-              while($data = mysqli_fetch_array($query))
-              {
-               echo "<option value='".$data['id']."'>".$data['nama'] ."</option>";
-              }
-            ?>-->
+         
         </select>
       </div>
 

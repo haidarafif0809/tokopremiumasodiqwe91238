@@ -799,6 +799,22 @@ if (kode_barang != '')
             $("#jumlah_barang").val('');
           $("#satuan_konversi").val(prev);
 
+          }else{
+
+                        $.getJSON("cek_setting_diskon_jumlah.php?jumlah_barang="+jumlah_barang+"&kode_barang="+kode_barang+"&id_produk="+id_produk+"&satuan_konversi="+satuan_konversi, function(data){
+                            
+                          if (data.potongan == 0) {
+
+                          $("#potongan1").val('');                       
+                                 
+                          }else{
+
+                          $("#potongan1").val(data.potongan);                       
+                                 
+                          };
+
+                        });
+
           }
 
       });
@@ -824,7 +840,23 @@ if (kode_barang != '')
           if (data < 0) {
             alert("Jumlah Melebihi Stok");
             $("#jumlah_barang").val('');
-          $("#satuan_konversi").val(prev);
+            $("#satuan_konversi").val(prev);
+
+          }else{
+
+                        $.getJSON("cek_setting_diskon_jumlah.php?jumlah_barang="+jumlah_barang+"&kode_barang="+kode_barang+"&id_produk="+id_produk+"&satuan_konversi="+satuan_konversi, function(data){
+                            
+                          if (data.potongan == 0) {
+
+                          $("#potongan1").val('');                       
+                                 
+                          }else{
+
+                          $("#potongan1").val(data.potongan);                       
+                                 
+                          };
+
+                        });
 
           }
 
@@ -955,7 +987,6 @@ alert("Barang Yang Anda Pesan Tidak Tersedia !!")
 
 else{
 
-
 $("#kode_barcode").focus();
 
 
@@ -1033,6 +1064,8 @@ $.post("barcode_edit_order.php",{kode_barang:kode_barang,sales:sales,level_harga
     var level_harga = $("#level_harga").val();    
     var harga_produk = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_produk").val()))));
     var harga_konversi = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_konversi").val()))));
+    var id_produk = $("#id_produk").val();
+    var satuan_konversi = $("#satuan_konversi").val();
 
     if (harga_konversi != 0) {
       var harga = harga_konversi;
@@ -1040,7 +1073,18 @@ $.post("barcode_edit_order.php",{kode_barang:kode_barang,sales:sales,level_harga
       var harga = harga_produk;
     };
 
-    var potongan = $("#potongan1").val();
+    $.getJSON("cek_setting_diskon_jumlah.php?jumlah_barang="+jumlah_barang+"&kode_barang="+kode_barang+"&id_produk="+id_produk+"&satuan_konversi="+satuan_konversi, function(info){                                  
+
+      if (info.potongan == 0) {
+
+          var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
+          
+          }else{
+          var potongan = info.potongan;
+          }
+
+
+
     if (potongan == '') 
           {
           potongan = 0;
@@ -1087,22 +1131,22 @@ $.post("barcode_edit_order.php",{kode_barang:kode_barang,sales:sales,level_harga
   else if (ber_stok == 'Jasa' ){
 
 
-    $("#total2").val(tandaPemisahTitik(total_akhir));
- $.post("proses_edit_tbs_orderpenjualan.php",{ber_stok:ber_stok,no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga_konversi:harga_konversi,harga_produk:harga_produk,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
+     $("#total2").val(tandaPemisahTitik(total_akhir));
+     $.post("proses_edit_tbs_orderpenjualan.php",{ber_stok:ber_stok,no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga_konversi:harga_konversi,harga_produk:harga_produk,potongan:potongan,tax:tax,satuan:satuan,sales:sales},function(data){
      
   
 
-     $("#ppn").attr("disabled", true);
-     $("#kode_barang").chosen().val('');
-     $('#kode_barang').trigger("chosen:updated");
-     $("#kode_barang").trigger('chosen:open'); 
-     $("#nama_barang").val('');
+      $("#ppn").attr("disabled", true);
+      $("#kode_barang").chosen().val('');
+      $('#kode_barang').trigger("chosen:updated");
+      $("#kode_barang").trigger('chosen:open'); 
+      $("#nama_barang").val('');
       $("#harga_produk").val('');
       $("#harga_konversi").val('');
-     $("#ber_stok").val('');
-     $("#jumlah_barang").val('');
-     $("#potongan1").val('');
-     $("#tax1").val('');
+      $("#ber_stok").val('');
+      $("#jumlah_barang").val('');
+      $("#potongan1").val('');
+      $("#tax1").val('');
 
 
      
@@ -1145,15 +1189,16 @@ $.post("barcode_edit_order.php",{kode_barang:kode_barang,sales:sales,level_harga
 
   var tabel_tbs_editorder = $('#tabel_tbs_editorder').DataTable();
   tabel_tbs_editorder.draw();
-    
+
+
+
+    });
 });
 
     $("#formtambahproduk").submit(function(){
     return false;
     
     });
-
-
 
 //menampilkan no urut faktur setelah tombol click di pilih
 
@@ -1619,7 +1664,7 @@ $(document).ready(function(){
 
 
 
-                                 $(document).on('blur','.input-jumlah',function(e){
+                                 $(document).on('blur','.input_jumlah',function(e){
 
                                     var id = $(this).attr("data-id");
                                     var jumlah_baru = $(this).val();
@@ -1627,9 +1672,14 @@ $(document).ready(function(){
                                     var harga = $(this).attr("data-harga");
                                     var jumlah_lama = $("#text-jumlah-"+id+"").text();
                                     var satuan_konversi = $(this).attr("data-satuan");
+                                    var id_produk = $(this).attr("data-id_produk");
+
 
                                     var subtotal_lama = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-subtotal-"+id+"").text()))));
-                                    var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-potongan-"+id+"").text()))));
+
+                                    $.getJSON("cek_setting_diskon_jumlah.php?jumlah_barang="+jumlah_baru+"&kode_barang="+kode_barang+"&id_produk="+id_produk+"&satuan_konversi="+satuan_konversi, function(info){                                  
+
+                                    var potongan = info.potongan;                                   
 
                                     var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-tax-"+id+"").text()))));
                                    
@@ -1662,28 +1712,21 @@ $(document).ready(function(){
                                     $("#text-jumlah-"+id+"").text(jumlah_baru);
                                     $("#hapus-tbs-"+id+"").attr('data-subtotal', subtotal);
                                     $("#text-subtotal-"+id+"").text(tandaPemisahTitik(subtotal));
+                                    $("#text-potongan-"+id+"").text(tandaPemisahTitik(potongan));
                                     $("#text-tax-"+id+"").text(Math.round(jumlah_tax));
                                     $("#input-jumlah-"+id+"").attr("type", "hidden"); 
                                     $("#total2").val(tandaPemisahTitik(subtotal_penjualan)); 
 
                                      $.post("update_pesanan_barang_order.php",{jumlah_lama:jumlah_lama,tax:tax,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,potongan:potongan,harga:harga,jumlah_tax:jumlah_tax,subtotal:subtotal},function(info){
 
+                                        });
 
-                                    
-                                    
-        
+                                       }
 
+                                     });
+                                   });
 
-                                    });
-
-                                   }
-
-                                 });
-
-
-       
-                                    $("#kode_barang").trigger("chosen:open");
-                                    
+                                          
 
                                  });
 

@@ -24,11 +24,11 @@ $data = mysqli_fetch_array($query00);
 $kode = $data['kode_barang'];
 $nomor = $data['no_faktur'];
 
-$query = $db->prepare("UPDATE tbs_penjualan_order SET jumlah_barang = ?, subtotal = ?, tax = ? WHERE id = ?");
+$query = $db->prepare("UPDATE tbs_penjualan_order SET jumlah_barang = ?, subtotal = ?, tax = ?, potongan = ? WHERE id = ?");
 
 
-$query->bind_param("iiii",
-    $jumlah_baru, $subtotal, $jumlah_tax, $id);
+$query->bind_param("iiiii",
+    $jumlah_baru, $subtotal, $jumlah_tax,$potongan, $id);
 
 $query->execute();
 

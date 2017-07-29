@@ -9,7 +9,7 @@
 
     $tanggal_sekarang = date('Y-m-d');
 
-    $ambil_jatuh_tempo = $db->query("SELECT p.tanggal_jt, p.suplier, p.kredit, s.nama, p.no_faktur, p.tanggal, p.tanggal_jt AS nama_suplier FROM pembelian p INNER JOIN suplier s ON p.suplier = s.id WHERE p.kredit != '0' AND p.tanggal_jt = '$tanggal_sekarang'");
+    $ambil_jatuh_tempo = $db->query("SELECT p.tanggal_jt, p.suplier, p.kredit, s.nama AS nama_suplier, p.no_faktur, p.tanggal, p.tanggal_jt FROM pembelian p INNER JOIN suplier s ON p.suplier = s.id WHERE p.kredit != '0' AND p.tanggal_jt = '$tanggal_sekarang'");
     $row_tanggal_jt = mysqli_num_rows($ambil_jatuh_tempo);
     
 

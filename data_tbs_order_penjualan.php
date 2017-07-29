@@ -83,14 +83,14 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
         $nestedData[] = "<p style='font-size:15px' align='right' class='edit-jumlah' data-id='".$row['id']."'><span id='text-jumlah-".$row['id']."'>". $row['jumlah_barang'] ."
         </span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".$row['jumlah_barang']."' class='input_jumlah' data-id='".$row['id']."' autofocus='' 
-        data-kode='".$row['kode_barang']."' data-berstok = '".$row['berkaitan_dgn_stok']."'  data-harga='".$row['harga']."' data-satuan='".$row['satuan']."' data-id_produk='".$row['id_produk']."'> </p>";
+        data-kode='".$row['kode_barang']."' data-berstok = '".$row['berkaitan_dgn_stok']."'  data-harga='".$harga."' data-satuan='".$row['satuan']."' data-id_produk='".$row['id_produk']."'> </p>";
 
       }
       else{
 
       $nestedData[] = "<p style='font-size:15px' align='right' class='tidak_punya_otoritas' data-id='".$row['id']."'><span id='text-jumlah-".$row['id']."'>". $row['jumlah_barang'] ."
       </span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".$row['jumlah_barang']."' class='input_jumlah' data-id='".$row['id']."' autofocus='' 
-      data-kode='".$row['kode_barang']."' data-berstok = '".$row['berkaitan_dgn_stok']."'  data-harga='".$row['harga']."' data-satuan='".$row['satuan']."' data-id_produk='".$row['id_produk']."' > </p>";
+      data-kode='".$row['kode_barang']."' data-berstok = '".$row['berkaitan_dgn_stok']."'  data-harga='".$harga."' data-satuan='".$row['satuan']."' data-id_produk='".$row['id_produk']."' > </p>";
       }
 
 

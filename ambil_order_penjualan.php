@@ -8,7 +8,7 @@ $session_id = session_id();
 $no_faktur = stringdoang($_POST['no_faktur_order']);
 
 
-$perintah3 = $db->query("SELECT * FROM tbs_penjualan WHERE no_faktur_order = '$no_faktur' ");
+$perintah3 = $db->query("SELECT no_faktur_order FROM tbs_penjualan WHERE no_faktur_order = '$no_faktur' ");
 $data1 = mysqli_num_rows($perintah3);
 
 if ($data1 > 0){

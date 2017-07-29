@@ -58,13 +58,12 @@ else{
 
 
   <?php echo $data1['nama_perusahaan']; ?><br>
-  <?php echo $data1['alamat_perusahaan']; ?><br><br>
+  <?php echo $data1['alamat_perusahaan']; ?><hr><br><br>
   ===================<br>
   No Faktur : <?php echo $no_faktur; ?> || Kasir : <?php echo $_SESSION['nama']; ?><br>
   ===================<br>
- <table>
-
-  <tbody>
+ <table rules="all"  style="border-color:gray;">
+ 
            <?php 
            while ($data2 = mysqli_fetch_array($query2)){
             //untuk mengambil data bonus
@@ -100,23 +99,23 @@ else{
 
             $keterangan = $bonus['keterangan'];
             if ($keterangan == 'Free Produk') {
-              $subtotal_bonus = $data_bonus_penjualan['qty_bonus'] * $data_bonus_penjualan['harga_jual'];
+              $subtotal_bonus = $bonus['qty_bonus'] * $bonus['harga_jual'];
             }
             else{
-              $subtotal_bonus = $data_bonus_penjualan['qty_bonus'] * $data_bonus_penjualan['harga_jual'];
-              $subtotal_bonusnya = $data_bonus_penjualan['subtotal'];
+              $subtotal_bonus = $bonus['qty_bonus'] * $bonus['harga_jual'];
+              $subtotal_bonusnya = $bonus['subtotal'];
               $subtotal_bonus_disc = $subtotal_bonus - $subtotal_bonusnya;
             }
            
            echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. rp($jumlah_barang) .'</td>  <td style="padding:3px"> '. rp($harga) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
            }
-           echo '<tr><td width:"50%"> '. $data_bonus_penjualan['nama_produk'] .' </td> <td style="padding:3px"> '. $data_bonus_penjualan['qty_bonus'] .'</td>'; 
+           echo '<tr><td width:"50%"> '. $bonus['nama_produk'] .' </td> <td style="padding:3px"> '. $bonus['qty_bonus'] .'</td>'; 
 
         if ($keterangan == 'Free Produk') {
-              echo '<td style="padding:3px"> '. $data_bonus_penjualan['harga_jual'] .'</td>';
+              echo '<td style="padding:3px"> '. $bonus['harga_jual'] .'</td>';
         }
         else{
-              echo '<td style="padding:3px"> '. $data_bonus_penjualan['harga_jual'] .'</td>';
+              echo '<td style="padding:3px"> '. $bonus['harga_jual'] .'</td>';
         } 
             
           echo '<td style="padding:3px"> '.rp($subtotal_bonus) .'</td></tr>';   
@@ -131,8 +130,7 @@ else{
 
 mysqli_close($db);            
            
-           ?> 
- </tbody>
+           ?>  
 </table>
     ===================<br>
  <table>

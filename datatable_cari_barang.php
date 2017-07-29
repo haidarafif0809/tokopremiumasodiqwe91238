@@ -161,7 +161,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	elseif ($data_otoritas_item['item_hapus'] > 0 AND $stok_barang != '0') {
 	 	# code...
 
-	 	$nestedData[] = "Tidak Bisa Di Hapus";
+	 	$nestedData[] = "<p style='color:red;' align='center'>X</p>";
 	 } 
 
 			          

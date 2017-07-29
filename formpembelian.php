@@ -914,6 +914,13 @@ Order Pembelian</button>
     var jumlah_barang = $("#jumlah_barang").val();
     var harga = $("#harga_produk").val();
     var harga_baru = $("#harga_baru").val();
+    if (harga == harga_baru) {
+      harga = harga;
+
+    }
+    else{
+      harga = harga_baru;
+    }
     var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
     var jumlahbarang = $("#jumlahbarang").val();
     var satuan = $("#satuan_konversi").val();

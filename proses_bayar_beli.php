@@ -304,6 +304,14 @@ if ($potongan != "" || $potongan != 0 ) {
     while ($data = mysqli_fetch_array($query))
     {
 
+      $query_barang = ("SELECT harga FROM barang WHERE kode_barang = '$data[kode_barang]' ");
+      $data_barang = mysqli_fetch_array($query_barang);
+
+
+      if ($data['harga'] != $data_barang['harga']){
+         $query_update_harga_beli  = $db->query("UPDATE barang SET harga_beli = '$data[harga]' WHERE kode_barang = '$data[kode_barang]'");
+      }
+
       $pilih_konversi = $db->query("SELECT sk.konversi * $data[jumlah_barang] AS jumlah_konversi, sk.harga_pokok / sk.konversi AS harga_konversi, sk.id_satuan, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.id_produk = b.id  WHERE sk.id_satuan = '$data[satuan]' AND sk.kode_produk = '$data[kode_barang]'");
       $data_konversi = mysqli_fetch_array($pilih_konversi);
 
@@ -337,6 +345,8 @@ if ($potongan != "" || $potongan != 0 ) {
         }
         
     }
+
+
 
 
     $query3 = $db->query("DELETE FROM tbs_pembelian WHERE session_id = '$session_id'");

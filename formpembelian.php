@@ -293,13 +293,13 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
 
       <div class="col-sm-2" style="width:90px">
         <select type="text" name="satuan_konversi" id="satuan_konversi" class="form-control"  required="" style="font-size:13px;">
-          <?php
+          <!--<?php
               $query = $db->query("SELECT id, nama  FROM satuan");
               while($data = mysqli_fetch_array($query))
               {
                echo "<option value='".$data['id']."'>".$data['nama'] ."</option>";
               }
-            ?>
+            ?>-->
         </select>
       </div>
 
@@ -571,6 +571,30 @@ Order Pembelian</button>
   document.getElementById("id_produk").value = $(this).attr('id-barang');
   document.getElementById("harga_baru").value = $(this).attr('harga');
   document.getElementById("jumlahbarang").value = $(this).attr('jumlah-barang');
+
+
+  //JSON SATUAN PRODUK
+  var kode_barang = $("#kode_barang").val();
+
+  $.getJSON("cek_data_satuan_konversi.php?kode_barang="+kode_barang, function(result){
+
+                $(".span-satuan").remove();  
+                //satuan dasar
+                $("#option_satuan-"+result.id_satuan_dasar).remove();
+                var option_barang = "<option class='span-satuan' id='option_satuan-"+result.id_satuan_dasar+"' value='"+result.id_satuan_dasar+"' data-nama='"+result.nama_satuan_dasar+"'>"+result.nama_satuan_dasar+"</option>"
+                $("#satuan_konversi").show().append(option_barang);
+                   
+                //satuan konversi
+            $.each(result.satuan, function(i, item) {//  $.each(result.satuan, 
+                $("#option_satuan-"+result.satuan[i].id).remove();
+                var option_barang = "<option class='span-satuan' id='option_satuan-"+result.satuan[i].id+"' value='"+result.satuan[i].id+"' data-nama='"+result.satuan[i].nama+"'>"+result.satuan[i].nama+"</option>"
+                $("#satuan_konversi").show().append(option_barang);
+
+            });//  $.each(result.satuan, 
+                                              
+  });
+  //AKHIR JSON SATUAN PRODUK
+
 
 
   $('#myModal').modal('hide');
@@ -2155,7 +2179,25 @@ $.post('cek_kode_barang_tbs_pembelian.php',{kode_barang:kode_barang,session_id:s
           $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});
    }//penutup if
 
+  //JSON SATUAN PRODUK
+  $.getJSON("cek_data_satuan_konversi.php?kode_barang="+kode_barang, function(result){
 
+                $(".span-satuan").remove();  
+                //satuan dasar
+                $("#option_satuan-"+result.id_satuan_dasar).remove();
+                var option_barang = "<option class='span-satuan' id='option_satuan-"+result.id_satuan_dasar+"' value='"+result.id_satuan_dasar+"' data-nama='"+result.nama_satuan_dasar+"'>"+result.nama_satuan_dasar+"</option>"
+                $("#satuan_konversi").show().append(option_barang);
+                   
+                //satuan konversi
+            $.each(result.satuan, function(i, item) {//  $.each(result.satuan, 
+                $("#option_satuan-"+result.satuan[i].id).remove();
+                var option_barang = "<option class='span-satuan' id='option_satuan-"+result.satuan[i].id+"' value='"+result.satuan[i].id+"' data-nama='"+result.satuan[i].nama+"'>"+result.satuan[i].nama+"</option>"
+                $("#satuan_konversi").show().append(option_barang);
+
+            });//  $.each(result.satuan, 
+                                              
+  });
+  //AKHIR JSON SATUAN PRODUK
 
   });
 

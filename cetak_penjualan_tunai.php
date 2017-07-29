@@ -58,13 +58,12 @@ else{
 
 
   <?php echo $data1['nama_perusahaan']; ?><br>
-  <?php echo $data1['alamat_perusahaan']; ?><br><br>
+  <?php echo $data1['alamat_perusahaan']; ?><hr><br><br>
   ===================<br>
   No Faktur : <?php echo $no_faktur; ?> || Kasir : <?php echo $_SESSION['nama']; ?><br>
   ===================<br>
- <table>
-
-  <tbody>
+ <table rules="all"  style="border-color:gray;">
+ 
            <?php 
            while ($data2 = mysqli_fetch_array($query2)){
             //untuk mengambil data bonus
@@ -131,8 +130,7 @@ else{
 
 mysqli_close($db);            
            
-           ?> 
- </tbody>
+           ?>  
 </table>
     ===================<br>
  <table>

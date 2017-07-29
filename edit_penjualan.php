@@ -604,6 +604,24 @@ tr:nth-child(even){background-color: #f2f2f2}
                 <h6 style="text-align: left ;"><i>* Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</i></h6>
                 <h6 style="text-align: left ;"><i><b> * Data Order yang lama (Sudah tergabung). Silakan di Edit table di atas </b></i></h6>
 
+<span id="tbs_bonus_penjualan"><!--start table_tbs_bnus_penjualan-->
+<h5><b>Produk Promo</b></h5>
+  <div class="table-responsive"> <!--tag untuk membuat garis pada tabel--> 
+            <table id="table_tbs_bonus_penjualan" class="table table-sm">
+                <thead>
+                  <th> Kode  </th>
+                  <th> Nama </th>
+                  <th> Jumlah </th>
+                  <th> satuan </th>
+                  <th> Harga Promo </th>
+                  <th> Subtotal </th>
+                  <th> Keterangan </th>
+                  <th> Hapus </th>
+                </thead>
+            </table>
+   </div>
+</span><!--end span table tbs_bonus_Penjualan-->
+
 
 <div class="collapse" id="sss">
 
@@ -775,7 +793,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
     <div class="form-group col-sm-6">
         <label> Pembayaran </label><br>
-        <b><input type="text" name="pembayaran" id="pembayaran_penjualan" style="height: 20px; width:90%; font-size:20px;" autocomplete="off" class="form-control" style="font-size: 20px" value="<?php echo $tunai ?>" ></b>
+        <b><input type="text" name="pembayaran" id="pembayaran_penjualan" style="height: 20px; width:90%; font-size:20px;" autocomplete="off" class="form-control" style="font-size: 20px" value="<?php echo rp($tunai) ?>" ></b>
     </div>
 
 </div> <!--end <div class="row">-->
@@ -785,7 +803,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
       <div class="col-sm-6">
           <label> Kembalian </label><br>
-          <b><input type="text" name="sisa_pembayaran" id="sisa_pembayaran_penjualan" style="height:15px;font-size:15px" class="form-control"  readonly="" required=""  style="font-size: 20px" value="<?php echo $kembalian ?>" ></b>
+          <b><input type="text" name="sisa_pembayaran" id="sisa_pembayaran_penjualan" style="height:15px;font-size:15px" class="form-control"  readonly="" required=""  style="font-size: 20px" value="<?php echo rp($kembalian) ?>" ></b>
       </div>
           
       <div class="col-sm-6">
@@ -1011,7 +1029,7 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
 
       } );
     } );
-    </script>
+</script>
 <!--/DATA TABLE MENGGUNAKAN AJAX-->
 
 <!--DATA TABLE PRODUK PARCEL MENGGUNAKAN AJAX-->
@@ -1539,6 +1557,130 @@ else
 });
 
 </script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    // show ajax tbs bonus
+   $('#table_tbs_bonus_penjualan').DataTable().destroy();
+            var dataTable = $('#table_tbs_bonus_penjualan').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "info":     false,
+            "language": { "emptyTable":     "My Custom Message On Empty Table" },
+            "ajax":{
+              url :"datatable_edit_tbs_bonus_penjualan.php", // json datasource
+              "data": function ( d ) {
+                    d.no_faktur = $("#nomor_faktur_penjualan").val();
+                                // d.custom = $('#myInput').val();
+                                // etc
+            },
+                  type: "post",  // method  , by default get
+              error: function(){  // error handling
+                $(".tbody").html("");
+                $("#table_tbs_bonus_penjualan").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                $("#tableuser_processing").css("display","none");
+                
+              }
+            }   
+
+      });
+//end show ajax tbs
+  });
+</script>
+
+<script type="text/javascript"><!--AWAL PUNYYA HAPUS PROMO PENJUALAN-->
+$(document).ready(function(){
+  var no_faktur = $("#nomor_faktur_penjualan").val();
+//fungsi hapus data TBS BONUS PENJUALAN
+      $(document).on('click','.btn-hapus-tbsbonus',function(e){
+
+          
+            var idnya = $(this).attr("data-id");
+            var kodenya = $(this).attr("data-kode-produk");
+            var nama_barang = $(this).attr("data-produk");
+            var qty = $(this).attr("data-qty");
+
+            /*var total_disc_promo = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#subtotal_jual_disc").val()))));
+            var subtotal_tbs = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+            var total_akhir = parseFloat(subtotal_tbs - total_disc_promo);*/
+
+            // start hapus ajax TBS PENJUALAN
+            var pesan_alert = confirm("Apakah Anda Yakin Ingin Menghapus "+nama_barang+""+ "?");
+            if (pesan_alert == true) {
+
+                    $.post("hapus_tbs_bonus_penjualan.php",{idnya:idnya,kodenya:kodenya},function(data){
+                      
+                      $('#table_tbs_bonus_penjualan').DataTable().destroy();
+
+                                    var dataTable = $('#table_tbs_bonus_penjualan').DataTable( {
+                                      "processing": true,
+                                      "serverSide": true,
+                                      "ajax":{
+                                        url :"datatable_tbs_bonus_penjualan.php", // json datasource
+                                       
+                                         
+                                          type: "post",  // method  , by default get
+                                        error: function(){  // error handling
+                                          $(".employee-grid-error").html("");
+                                          $("#table_tbs_bonus_penjualan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                                          $("#employee-grid_processing").css("display","none");
+                                          }
+                                      },
+                                         "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+
+                                          $(nRow).attr('class','tr-id-'+aData[11]+'');         
+
+                                      }
+                                    });// end var dataTable = $('#table_tbs_bonus_penjualan').DataTable
+                              //cek total keseluruhan tbs penjualan
+                              $.getJSON("cek_total_edit_penjualan.php",{no_faktur:no_faktur},function(total_seluruhnya){
+                                    //cek total keseluruhan bonus disc
+                                    var total_penjualannya = total_seluruhnya.total_penjualan;
+
+                                  $.getJSON("cek_total_bonus_promo_edit_penjualan.php",{no_faktur:no_faktur},function(total_subtotal_promo){
+                                    console.log(total_subtotal_promo);
+                                    console.log(total_penjualannya);
+                                      if (total_subtotal_promo < 1) {
+                                        var subtotal_promo = 0;
+                                      }
+                                      else{
+                                        var subtotal_promo = total_subtotal_promo;
+                                      }
+                                      
+                                      var subtotal_tampil = parseFloat(total_penjualannya) + parseFloat(subtotal_promo);
+                                  //jika tbs ada maka
+                                  if (total_seluruhnya != 0) {
+                                    $("#total2").val(subtotal_tampil.format(2, 3, '.', ','));
+                                  $("#total1").val(subtotal_tampil.format(2, 3, '.', ','));
+                                  }
+                                  else{
+                                    $("#total2").val('0');
+                                  $("#total1").val('0');
+                                  }
+                                  //jika tbs bonus ada maka 
+                                  if (total_subtotal_promo < 1) {
+                                    $("#tbs_bonus_penjualan").hide();
+                                  }
+                                  else{
+                                    $("#tbs_bonus_penjualan").show();
+                                  }
+                                  // end if (tot == 0)
+                                }); // end cek_total_bonus_promo
+                              }); // end cek_total_seluruh
+
+                    }); // end $.post("hapus_tbs_bonus_penjualan.php",{idnya:idnya,kodenya:kodenya},function(data)
+            }// end if (pesan_alert == true)
+
+      //end hapus ajax
+
+      }); // end $(document).on('click','.btn-hapus-tbsbonus',function(e)
+      $('form').submit(function(){
+        return false;
+      });// end $('form').submit(function()
+
+
+  });// end $(document).ready(function()
+  
+</script><!--AKHIR PUNYYA HAPUS PROMO PENJUALAN-->
 
 <script type="text/javascript">
    $(document).on('ready', function (e) {                
@@ -2744,31 +2886,59 @@ else{
 
         var no_faktur = $("#nomor_faktur_penjualan").val();
         
-        $.post("cek_total_edit_penjualan.php",{no_faktur: "<?php echo $nomor_faktur ?>"},function(data){
-        $("#total2").val(data);
+        $.getJSON("cek_total_edit_penjualan.php",{no_faktur:no_faktur},function(data){
+                
+                var total_penjualannya = data.total_penjualan;
 
-var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+                                $.getJSON("cek_total_bonus_promo_edit_penjualan.php",{no_faktur:no_faktur},function(total_promo){
+                                  console.log(total_promo);
+                                  console.log(total_penjualannya);
+                                  var sub_promo = total_promo;
+                                      if (sub_promo < 1) {
+                                        var subtotal_promo = 0;
+                                      }
+                                      else{
+                                        var subtotal_promo = sub_promo;
+                                      }
 
- var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
-if (biaya_adm == '' || biaya_adm == 0,00 || biaya_adm == 0)
-{
-  biaya_adm = 0.00;
-}
+                                      var biaya_adm = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#biaya_adm").val()))));
+                                      if (biaya_adm == '' || biaya_adm == 0,00 || biaya_adm == 0)
+                                      {
+                                        biaya_adm = 0.00;
+                                      }
 
-var potongan_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
-if (potongan_penjualan == '' || potongan_penjualan == 0,00 || potongan_penjualan == 0)
-{
-  potongan_penjualan = 0.00;
-}
+                                      var potongan_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
+                                      if (potongan_penjualan == '' || potongan_penjualan == 0,00 || potongan_penjualan == 0)
+                                      {
+                                        potongan_penjualan = 0.00;
+                                      }
+                                      
+                                      var subtotal_tampil = parseFloat(total_penjualannya) + parseFloat(subtotal_promo);
+                                  //jika tbs ada maka
+                                  if (data != 0) {
+                                    $("#total2").val(tandaPemisahTitik(subtotal_tampil));
+                                  $("#total1").val(tandaPemisahTitik(subtotal_tampil));
+                                  }
+                                  else{
+                                    $("#total2").val('0');
+                                  $("#total1").val('0');
+                                  }
+                                  //jika tbs bonus ada maka 
+                                  if (total_promo < 1) {
+                                    $("#tbs_bonus_penjualan").hide();
+                                  }
+                                  else{
+                                    $("#tbs_bonus_penjualan").show();
+                                  }
+                                  // end if (tot == 0)
+                                }); // end cek_total_bonus_promo
 
+                                var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+                                var total = parseFloat(subtotal.replace(',','.')) - parseFloat(potongan_penjualan);
+                                $("#total1").val(total.format(2, 3, '.', ','));
 
-
-var total = parseFloat(subtotal.replace(',','.')) - parseFloat(potongan_penjualan);
-        $("#total1").val(total.format(2, 3, '.', ','));
-
-
-        });
-      });
+        });// end $.getJSON("cek_total_edit_penjualan.php",
+      });// end $(document).ready(function()
 </script>
 
 

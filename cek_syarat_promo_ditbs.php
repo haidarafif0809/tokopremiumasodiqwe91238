@@ -70,26 +70,37 @@ $subtotal_tbs_penjualan = $data_tbs_penjualan['subto'];
 $syarat_promo_disc_produk = $data_promo_disc_produk['syarat_belanja'];
 $subtotal_tbs_penjualan_difree = round($data_tbs_penjualan_innerjoin['sub_tp']);
 $syarat_promo_free = $data_tbs_penjualan_innerjoin['syarat_belanja'];
+$keterangan = $data_tbs_bonus['keterangan'];
+$total_syarat_free = $syarat_promo_free - $subtotal_tbs_penjualan_difree;
+$total_syarat_disc = $syarat_promo_disc_produk - $subtotal_tbs_penjualan;
 
-/*$total_syarat_free = subtotal_tbs_penjualan_difree < syarat_promo_free;
-$total_syarat_disc = subtotal_tbs_penjualan < syarat_promo_disc_produk;*/
 
-
-if (($subtotal_tbs_penjualan_difree < $syarat_promo_free) || ($subtotal_tbs_penjualan < $syarat_promo_disc_produk)){
+if ($total_syarat_free > 0  && $keterangan = 'Free Produk' && $keterangan != '' ){
 
 	$promo_produk = array(
     'subtotal_tbs_penjualan' => round($data_tbs_penjualan['subto']),
-	'syarat_promo_disc_produk' => $data_promo_disc_produk['syarat_belanja'],
 	'subtotal_tbs_penjualan_difree' => round($data_tbs_penjualan_innerjoin['sub_tp']),
 	'syarat_promo_free' => $data_tbs_penjualan_innerjoin['syarat_belanja'],
     'kode_produk' =>$data_tbs_bonus['kode_produk'],
 	'id' => $data_tbs_bonus['id'],
-	'nama_produk' =>$data_tbs_bonus['nama_produk']
+	'nama_produk' =>$data_tbs_bonus['nama_produk'],
+	'keterangannya' =>$data_tbs_bonus['keterangan']
+   );
+  echo json_encode($promo_produk);
+}else if ($total_syarat_disc > 0 && $keterangan = 'Disc Produk' && $keterangan != '' ) {
+	# code...
+	$promo_produk = array(
+    'subtotal_tbs_penjualan' => round($data_tbs_penjualan['subto']),
+	'syarat_promo_disc_produk' => $data_promo_disc_produk['syarat_belanja'],
+    'kode_produk' =>$data_tbs_bonus['kode_produk'],
+	'id' => $data_tbs_bonus['id'],
+	'nama_produk' =>$data_tbs_bonus['nama_produk'],
+	'keterangannya' =>$data_tbs_bonus['keterangan']
    );
   echo json_encode($promo_produk);
 }
 else{
-	 $promo_produk = 'NULL';
+	$promo_produk = 'NULL';
 	echo json_encode($promo_produk);
 }
         //Untuk Memutuskan Koneksi Ke Database

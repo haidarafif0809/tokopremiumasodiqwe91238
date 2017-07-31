@@ -1644,14 +1644,19 @@ $(document).ready(function(){
                                     var jumlah_lama = $("#text-jumlah-"+id+"").text();
                                     var satuan_konversi = $(this).attr("data-satuan");
                                     var id_produk = $(this).attr("data-id_produk");
-                                    var no_faktur = $("#no_faktur_order").val()
-
+                                    var no_faktur = $("#no_faktur_order").val();
 
                                     var subtotal_lama = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-subtotal-"+id+"").text()))));
 
                                     $.getJSON("cek_setting_diskon_jumlah_edit_order.php?no_faktur_order="+no_faktur+"&id="+id+"&jumlah_barang="+jumlah_baru+"&kode_barang="+kode_barang+"&id_produk="+id_produk+"&satuan_konversi="+satuan_konversi, function(data){                                  
 
-                                    var potongan = data;                                   
+                                    if (data == 0) {
+
+                                    var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-potongan-"+id+"").text()))));
+                                    }else{
+
+                                    var potongan = data;
+                                    };                                 
 
                                     var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-tax-"+id+"").text()))));
                                    

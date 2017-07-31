@@ -1801,7 +1801,13 @@ $(document).ready(function(){
 
                                     $.getJSON("cek_setting_diskon_jumlah_edit.php?id="+id+"&jumlah_barang="+jumlah_baru+"&kode_barang="+kode_barang+"&id_produk="+id_produk+"&satuan_konversi="+satuan_konversi, function(data){                                  
 
+                                    if (data == 0) {
+
+                                    var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-potongan-"+id+"").text()))));
+                                    }else{
+
                                     var potongan = data;
+                                    };
 
                                     var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-tax-"+id+"").text()))));
                                    

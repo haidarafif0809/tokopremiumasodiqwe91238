@@ -102,19 +102,22 @@
 
 							
 							<div class="form-group">
-							<label> Kategori </label>
+							<label> Kategori aaa</label>
 							<br>
 							<select type="text" name="kategori" class="form-control" >
-							<option value="<?php echo $data['kategori']; ?>"> <?php echo $data['kategori']; ?> </option>
 							<?php 
 							
 							$ambil_kategori = $db->query("SELECT id,nama_kategori FROM kategori");
 							
 							while($data_kategori = mysqli_fetch_array($ambil_kategori))
 							{
-							
-							echo "<option value='".$data_kategori['id']."' >".$data_kategori['nama_kategori'] ."</option>";
-							
+								if ($data['kategori'] == $data_kategori['id']) {
+									echo "<option selected value='".$data_kategori['id']."' >".$data_kategori['nama_kategori'] ."</option>";
+								}
+								else{
+									echo "<option value='".$data_kategori['id']."' >".$data_kategori['nama_kategori'] ."</option>";
+								}					
+												
 							}
 							
 							?>

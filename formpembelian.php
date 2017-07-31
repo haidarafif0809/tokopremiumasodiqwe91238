@@ -54,6 +54,7 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
             <div class="col-sm-3">
               <label> Suplier (Alt+P) </label><br>
                 <select name="suplier" id="nama_suplier" class="form-control chosen" required="" data-placeholder="SILAKAN PILIH...">
+                 <option value="">-Silakan Pilih-</option>
                   <?php
                     // menampilkan seluruh data yang ada pada tabel suplier
                     $query = $db->query("SELECT * FROM suplier");
@@ -1156,7 +1157,6 @@ $(document).ready(function(){
  {
 
 alert("Suplier Harus Di Isi");
-
   $("#nama_suplier").trigger('chosen:updated');
   $("#nama_suplier").trigger('chosen:open');
 

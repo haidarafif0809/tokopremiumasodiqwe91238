@@ -35,8 +35,7 @@ $session_id = session_id();
           <label> Suplier </label><br>
 
           <select data-placeholder="--SILAHKAN PILIH--" name="suplier" id="nama_suplier" class="form-control chosen" required="" >
-
-
+          <option value="">--Silakan Pilih--</option>
           <?php
 
           // menampilkan seluruh data yang ada pada tabel suplier
@@ -550,6 +549,7 @@ $(document).ready(function(){
 <!-- cek stok satuan konversi change-->
 <script type="text/javascript">
   $(document).ready(function(){
+
     $("#satuan_konversi").change(function(){
       var jumlah_retur = $("#jumlah_retur").val();
       var satuan_konversi = $("#satuan_konversi").val();
@@ -868,7 +868,10 @@ if (total == "")
  else if (suplier == "") 
  {
 
-alert("Suplier Harus Di Isi");
+    alert("Suplier Harus Di Isi");
+    $("#nama_suplier").val("");
+        $("#nama_suplier").trigger("chosen:updated");
+    $("#nama_suplier").trigger("chosen:open");
 
  }
 

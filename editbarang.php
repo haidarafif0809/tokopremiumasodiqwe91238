@@ -102,7 +102,7 @@
 
 							
 							<div class="form-group">
-							<label> Kategori aaa</label>
+							<label> Kategori </label>
 							<br>
 							<select type="text" name="kategori" class="form-control" >
 							<?php 

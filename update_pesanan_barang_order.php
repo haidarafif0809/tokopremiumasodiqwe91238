@@ -5,6 +5,7 @@ include 'sanitasi.php';
 include 'db.php';
 
 
+    $session_id = session_id();
 
 $kode_barang = stringdoang($_POST['kode_barang']);
 $jumlah_baru = angkadoang($_POST['jumlah_baru']);
@@ -22,7 +23,7 @@ $id = stringdoang($_POST['id']);
 $query00 = $db->query("SELECT * FROM tbs_penjualan_order WHERE id = '$id'");
 $data = mysqli_fetch_array($query00);
 $kode = $data['kode_barang'];
-$nomor = $data['no_faktur'];
+$nomor = $data['no_faktur_order'];
 
 $query = $db->prepare("UPDATE tbs_penjualan_order SET jumlah_barang = ?, subtotal = ?, tax = ?, potongan = ? WHERE id = ?");
 
@@ -69,7 +70,20 @@ $query->execute();
 
             }
 
-                //Untuk Memutuskan Koneksi Ke Database
+
+
+
+
+// menampilakn hasil penjumlah subtotal ALIAS total penjualan dari tabel tbs_penjualan berdasarkan data no faktur
+ $query_total = $db->query("SELECT SUM(subtotal) AS total_penjualan FROM tbs_penjualan_order WHERE session_id = '$session_id'");
+ 
+ // menyimpan data sementara yg ada pada $query
+ $data_total = mysqli_fetch_array($query_total);
+ $total = $data_total['total_penjualan'];
+
+
+echo$total;
+      //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   
 
 ?>

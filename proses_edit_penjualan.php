@@ -44,7 +44,10 @@ while ($data_detail_penjualan = mysqli_fetch_array($query_detail_penjualan)){
         }
 
 
-		$perintah1 = $db->query("INSERT INTO tbs_penjualan (no_faktur, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax, hpp,tipe_barang,harga_konversi) VALUES ( '$data_detail_penjualan[no_faktur]', '$data_detail_penjualan[kode_barang]', '$data_detail_penjualan[nama_barang]','$jumlah_barang', '$data_detail_penjualan[satuan]', '$data_detail_penjualan[harga]', '$data_detail_penjualan[subtotal]','$data_detail_penjualan[potongan]', '$data_detail_penjualan[tax]', '$data_detail_penjualan[hpp]','$ber_stok','$data_detail_penjualan[harga_konversi]')");
+		$perintah1 = $db->query("INSERT INTO tbs_penjualan (no_faktur, kode_barang, nama_barang, jumlah_barang, satuan, harga, subtotal, potongan, tax, hpp,tipe_barang,harga_konversi) 
+                        VALUES ( '$data_detail_penjualan[no_faktur]', '$data_detail_penjualan[kode_barang]', '$data_detail_penjualan[nama_barang]','$jumlah_barang', '$data_detail_penjualan[satuan]', 
+                                '$data_detail_penjualan[harga]', '$data_detail_penjualan[subtotal]','$data_detail_penjualan[potongan]', '$data_detail_penjualan[tax]', '$data_detail_penjualan[hpp]',
+                                '$ber_stok','$data_detail_penjualan[harga_konversi]')");
                
 }//end while
 

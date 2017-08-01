@@ -15,7 +15,10 @@ $session_id = session_id();
      // store a string
     $array_potongan = array();
     $i = 0;
-    $kode = stringdoang($_POST['kode_barang']);
+    $kode_cek = substr(stringdoang($_POST['kode_barang']),0,2);
+    $kode_barcode = stringdoang($_POST['kode_barang']);
+
+
     $sales = stringdoang($_POST['sales']);
     $level_harga = stringdoang($_POST['level_harga']);
 
@@ -26,20 +29,41 @@ $session_id = session_id();
 
         // QUERY CEK BARCODE DI SATUAN KONVERSI
      
-     // IF APABILA ADA SATUAN KONVERSINYA 
-      if ($data_satuan_konversi['jumlah_data'] != 0) { 
-          
-          $kode_barang = $data_satuan_konversi['kode_produk'];
-      }
-      else{
 
-          $kode_barang = $kode;
-      }
-      // IF APABILA ADA SATUAN KONVERSINYA
+
+     $lihat_setting = $db->query("SELECT kode_flag FROM setting_timbangan");
+        $kel_setting = mysqli_fetch_array($lihat_setting);
+        $setting_flag = $kel_setting['kode_flag'];
+
+
+        if ($kode_cek == $setting_flag)
+        {
+              $kode_barang = substr(stringdoang($_POST['kode_barang']),2,5);
+             $kilo = substr(stringdoang($_POST['kode_barang']),7,2);
+             $gram = substr(stringdoang($_POST['kode_barang']),9,3);
+             $jumlah_barang = $kilo.'.'.$gram;
+        }
+        else{
+              // IF APABILA ADA SATUAN KONVERSINYA 
+              if ($data_satuan_konversi['jumlah_data'] != 0) { 
+          
+                  $kode_barang = $data_satuan_konversi['kode_produk'];
+              }
+              else{
+
+                  $kode_barang = $kode;
+              }
+              // IF APABILA ADA SATUAN KONVERSINYA
+        }
+
+     
 
     $tipe = $db->query("SELECT berkaitan_dgn_stok FROM barang WHERE kode_barang = '$kode_barang'");
     $data_tipe = mysqli_fetch_array($tipe);
     $ber_stok = $data_tipe['berkaitan_dgn_stok'];
+
+
+
 
     // UNTUK MENGETAHUI JUMLAAH TBS SEBENARNYA
     $jumlah_tbs = 0;

@@ -118,7 +118,7 @@
 
                         <div class="form-group">
                             <label style="font-size: 20px"> Harga Jual Konversi  </label>
-                            <input type="text" placeholder="Harga Jual Konversi" name="harga_jual_konversi" id="harga_jual_konversi" class="form-control" autocomplete="off"  onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
+                            <input type="text" placeholder="Harga Jual Konversi" name="harga_jual_konversi" id="harga_jual_konversi" class="form-control" autocomplete="off" >
                         </div>
 
                         <div class="form-group">
@@ -253,11 +253,12 @@ $(document).ready(function(){
       alert("Harga Pokok Harus Diisi");
       $("#harga_pokok").focus();
     }
-    else if (harga_jual_konversi == ""){
-      alert("Harga Jual Konversi Harus Diisi");
-      $("#harga_jual_konversi").focus();
-    }
+  
     else{
+
+      if (harga_jual_konversi == ""){
+      var harga_jual_konversi = 0;
+      }
 
     $.post('proses_tambah_satuan_konversi.php',{barcode:barcode,nama_satuan_konversi:nama_satuan_konversi,konversi:konversi,harga_pokok:harga_pokok,id_produk:id_produk,kode_produk:kode_produk,harga_jual_konversi:harga_jual_konversi},function(data){
     

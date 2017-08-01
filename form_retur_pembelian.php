@@ -875,6 +875,11 @@ alert("Suplier Harus Di Isi");
 
  }
 
+ else if (pembayaran_pembelian == "" || pembayaran_pembelian == 0){
+  alert("Pembayaran / Kas Tidak Boleh Koosong");
+
+ }
+
 
  else
 

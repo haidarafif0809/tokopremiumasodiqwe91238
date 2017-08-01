@@ -109,8 +109,8 @@ else
 }
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-	$sql.=" AND ( kode_barang = '".$requestData['search']['value']."' ";    
-	$sql.=" OR nama_barang LIKE '".$requestData['search']['value']."%' )";
+	$sql.=" AND ( b.kode_barang LIKE '".$requestData['search']['value']."' ";    
+	$sql.=" OR b.nama_barang LIKE '".$requestData['search']['value']."%' )";
 
 }
 

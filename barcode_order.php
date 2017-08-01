@@ -24,7 +24,7 @@ $session_id = session_id();
 
         // QUERY CEK BARCODE DI SATUAN KONVERSI
                                     
-    $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data,kode_barcode,kode_produk,konversi , id_satuan , harga_jual_konversi FROM satuan_konversi WHERE kode_barcode = '$kode'  AND kode_barcode != '' ");
+    $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data,kode_barcode,kode_produk,konversi , id_satuan , harga_jual_konversi FROM satuan_konversi WHERE kode_barcode = '$kode_barcode'  AND kode_barcode != '' ");
     $data_satuan_konversi = mysqli_fetch_array($query_satuan_konversi);     
 
         // QUERY CEK BARCODE DI SATUAN KONVERSI
@@ -51,7 +51,7 @@ $session_id = session_id();
               }
               else{
 
-                  $kode_barang = $kode;
+                  $kode_barang = $kode_barcode;
               }
               // IF APABILA ADA SATUAN KONVERSINYA
         }
@@ -67,7 +67,7 @@ $session_id = session_id();
 
     // UNTUK MENGETAHUI JUMLAAH TBS SEBENARNYA
     $jumlah_tbs = 0;
-    $query_stok_tbs = $db->query("SELECT jumlah_barang,satuan, subtotal, potongan FROM tbs_penjualan_order WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
+    $query_stok_tbs = $db->query("SELECT jumlah_barang,satuan FROM tbs_penjualan_order WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
     while($data_stok_tbs = mysqli_fetch_array($query_stok_tbs)){
 
       $query_cek_satuan_konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE kode_produk = '$kode_barang' AND id_satuan = '$data_stok_tbs[satuan]' ");
@@ -504,7 +504,6 @@ else{
 }// END berkaitan dgn stok == Jasa
 
 
-echo$subtotal_tbs_order;
 
     ?>
 

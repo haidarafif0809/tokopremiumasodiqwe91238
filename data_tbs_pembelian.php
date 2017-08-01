@@ -2,6 +2,7 @@
 /* Database connection start */
 include 'sanitasi.php';
 include 'db.php';
+include 'persediaan.function.php';
 
 /* Database connection end */
 
@@ -66,13 +67,15 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
   $nestedData=array(); 
 
+      $query_produk = $db->query("SELECT over_stok FROM barang WHERE kode_barang = '$row[kode_barang]' ");
+      $data_produk = mysqli_fetch_array($query_produk);
 
       $nestedData[] = $row["kode_barang"];
       $nestedData[] = $row["nama_barang"];
 
       if ($otoritas_tombol['pembelian_edit'] > 0){
 
-        $nestedData[] = "<p class='edit-jumlah' data-id='".$row['id']."' data-faktur='".$row['no_faktur']."' data-nama='".$row['nama_barang']."' data-kode='".$row['kode_barang']."'><span id='text-jumlah-".$row['id']."'>". $row['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".$row['jumlah_barang']."' class='input_jumlah' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_barang']."' data-harga='".$row['harga']."' > </p>";
+        $nestedData[] = "<p class='edit-jumlah' data-id='".$row['id']."' data-faktur='".$row['no_faktur']."' data-nama='".$row['nama_barang']."' data-kode='".$row['kode_barang']."'><span id='text-jumlah-".$row['id']."'>". $row['jumlah_barang'] ."</span> <input type='hidden' id='input-jumlah-".$row['id']."' data-nama='".$row['nama_barang']."' value='".$row['jumlah_barang']."' data-stok='".cekStokHpp($row['kode_barang'])."' data-over='".$data_produk['over_stok']."' class='input_jumlah' data-id='".$row['id']."' autofocus='' data-kode='".$row['kode_barang']."' data-harga='".$row['harga']."' > </p>";
 
       }
       else{

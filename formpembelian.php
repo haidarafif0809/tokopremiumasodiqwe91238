@@ -267,9 +267,6 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
         <button type="button" id="daftar_order" class="btn btn-purple" data-toggle="modal"><i class='fa  fa-search'></i> Cari Order (F6) </button>  
   </form>
 
-          <div class="alert alert-danger" id="alert_stok" style="display:none">
-          <strong>Perhatian!</strong> Persediaan Barang Tidak Cukup!
-          </div>
 
   <!--START FORM id="formtambahproduk" -->
   <form class="form-group" role="form" id="formtambahproduk">
@@ -654,7 +651,11 @@ Order Pembelian</button>
                 "serverSide": true,
                 "ajax":{
                   url :"datatable_daftar_order_pembelian.php", // json datasource
-                 
+                  "data": function ( d ) {
+                        d.suplier = $("#nama_suplier").val();
+                        // d.custom = $('#myInput').val();
+                        // etc
+                      },                 
                   type: "post",  // method  , by default get
                   error: function(){  // error handling
                     $(".employee-grid-error").html("");
@@ -940,14 +941,12 @@ $(document).on('click', '#submit_barcode', function (e) {
   $("#nama_suplier").trigger('chosen:open');
   }
   else{
-    
+
   // JAVASCRIPT BARCODE
   $.post("barcode_pembelian.php",{kode_barang:kode_barang},function(data){
-    if (data == 1){
-      alert("Stok Tidak Mencukupi ,Segera Lakukan Pembelian");
-    }
-    else if (data == 3){
+    if (data == 3){
       alert("Kode Barang Yang Anda Masukan Tidak Ada , Silakan Periksa Kembali ");
+      $("#kode_barcode").val('');
       $("#kode_barcode").focus();
     }
     else{
@@ -2429,6 +2428,10 @@ $.post('cek_kode_barang_tbs_pembelian.php',{kode_barang:kode_barang,session_id:s
                                     var sub_akhir = parseInt(subtotal_penjualan,10) - parseInt(Math.round(diskon_faktur,10));
                                     }
 
+                                    var nama_barang = $(this).attr("data-nama");
+                                    var jumlahbarang = $(this).attr("data-stok");
+                                    var over_stok = $(this).attr("data-over");
+                                    var stok = parseFloat(jumlah_baru) + parseFloat(jumlahbarang);
 
                                 if (jumlah_baru == 0) {
                                     alert("Jumlah Barang Tidak Boleh Nol (0) atau Kosong");
@@ -2440,26 +2443,43 @@ $.post('cek_kode_barang_tbs_pembelian.php',{kode_barang:kode_barang,session_id:s
                                 }
                                 else
                                 {
+                                    if( over_stok < stok && over_stok != 0 ){
 
-                                    $("#text-jumlah-"+id+"").show();
-                                    $("#text-jumlah-"+id+"").text(jumlah_baru);
-                                    $("#text-subtotal-"+id+"").text(tandaPemisahTitik(sub_tampil));
-                                    $("#hapus-tbs-"+id+"").attr('data-subtotal', sub_tampil);
-                                    $("#text-tax-"+id+"").text(Math.round(jumlah_tax));
-                                    $("#input-jumlah-"+id+"").attr("type", "hidden");
-                                    $("#total_pembelian").val(tandaPemisahTitik(sub_akhir));
-                                    $("#total_pembelian1").val(tandaPemisahTitik(subtotal_penjualan));
-                                    $("#potongan_pembelian").val(Math.round(diskon_faktur));
+                                      alert("Persediaan Produk '"+nama_barang+"' Ini Melebihi Batas Over Stok.");
+                                      $("#jumlah_barang").val('');
+                                      $("#jumlah_barang").focus();
+                                      $("#input-jumlah-"+id+"").val(jumlah_lama);
+                                      $("#text-jumlah-"+id+"").text(jumlah_lama);
+                                      $("#text-jumlah-"+id+"").show();
+                                      $("#input-jumlah-"+id+"").attr("type", "hidden");
+
+                                    }
+                                    else{
+                                      
+
+                                      $("#text-jumlah-"+id+"").show();
+                                      $("#text-jumlah-"+id+"").text(jumlah_baru);
+                                      $("#text-subtotal-"+id+"").text(tandaPemisahTitik(sub_tampil));
+                                      $("#hapus-tbs-"+id+"").attr('data-subtotal', sub_tampil);
+                                      $("#text-tax-"+id+"").text(Math.round(jumlah_tax));
+                                      $("#input-jumlah-"+id+"").attr("type", "hidden");
+                                      $("#total_pembelian").val(tandaPemisahTitik(sub_akhir));
+                                      $("#total_pembelian1").val(tandaPemisahTitik(subtotal_penjualan));
+                                      $("#potongan_pembelian").val(Math.round(diskon_faktur));
 
 
-                                     $.post("update_pesanan_barang_beli.php",{harga:harga,jumlah_lama:jumlah_lama,jumlah_tax:jumlah_tax,potongan:potongan,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,sub_tampil:sub_tampil},function(){
+                                       $.post("update_pesanan_barang_beli.php",{harga:harga,jumlah_lama:jumlah_lama,jumlah_tax:jumlah_tax,potongan:potongan,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,sub_tampil:sub_tampil},function(){
 
-                                    });
+                                      });
 
-                                  }
+                                    }
+
+                                    
 
                                     $("#kode_barang").trigger('chosen:open');
                                     $("#pembayaran_pembelian").val("");
+
+                                  }
 
                                  });
 
@@ -2558,6 +2578,12 @@ $(document).ready(function(){
         // Do something
 
         $("#hutang").click();
+
+    });
+    shortcut.add("f6", function() {
+        // Do something
+
+        $("#daftar_order").click();
 
     });
     shortcut.add("f10", function() {

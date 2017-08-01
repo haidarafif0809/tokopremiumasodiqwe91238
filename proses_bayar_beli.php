@@ -2,6 +2,7 @@
 
     include 'sanitasi.php';
     include 'db.php';
+    include 'cache_folder/cache.class.php';
 
     $session_id = session_id();
 
@@ -309,7 +310,47 @@ if ($potongan != "" || $potongan != 0 ) {
 
 
       if ($data['harga'] != $data_barang['harga']){
+
+      //UPDATE CACHE 
+        // membuat objek cache
+      $cache = new Cache();
+      // setting default cache 
+      $cache->setCache('produk');
+      // hapus cache
+      $cache->eraseAll();
+
          $query_update_harga_beli  = $db->query("UPDATE barang SET harga_beli = '$data[harga]' WHERE kode_barang = '$data[kode_barang]'");
+    
+    $query_update_barang_cache = $db->query("SELECT * FROM barang ");
+    while ($data_update = $query_update_barang_cache->fetch_array()) {
+      # code...
+    // store an array
+        $cache->store($data_update['kode_barang'], array(
+      'kode_barang' => $data_update['kode_barang'],
+      'nama_barang' => $data_update['nama_barang'],
+      'harga_beli' => $data_update['harga_beli'],
+      'harga_jual' => $data_update['harga_jual'],
+      'harga_jual2' => $data_update['harga_jual2'],
+      'harga_jual3' => $data_update['harga_jual3'],
+      'harga_jual4' => $data_update['harga_jual4'],
+      'harga_jual5' => $data_update['harga_jual5'],
+      'harga_jual6' => $data_update['harga_jual6'],
+      'harga_jual7' => $data_update['harga_jual7'],
+      'kategori' => $data_update['kategori'],
+      'suplier' => $data_update['suplier'],
+      'limit_stok' => $data_update['limit_stok'],
+      'over_stok' => $data_update['over_stok'],
+      'berkaitan_dgn_stok' => $data_update['berkaitan_dgn_stok'],
+      'tipe_barang' => $data_update['tipe_barang'],
+      'status' => $data_update['status'],
+      'satuan' => $data_update['satuan'],
+      'id' => $data_update['id'],
+          ));
+      }
+  $cache->retrieveAll();
+  //UPDATE CACHE 
+
+
       }
 
       $pilih_konversi = $db->query("SELECT sk.konversi * $data[jumlah_barang] AS jumlah_konversi, sk.harga_pokok / sk.konversi AS harga_konversi, sk.id_satuan, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.id_produk = b.id  WHERE sk.id_satuan = '$data[satuan]' AND sk.kode_produk = '$data[kode_barang]'");

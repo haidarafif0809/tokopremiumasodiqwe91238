@@ -923,6 +923,31 @@ $.post("barcode_order.php",{kode_barang:kode_barang,sales:sales,level_harga:leve
         alert("Stok barang tidak mencukupi !!")
       }
       else{
+
+                            $('#tabel_tbs_order').DataTable().destroy();
+                    var dataTable = $('#tabel_tbs_order').DataTable( {
+                      "processing": true,
+                      "serverSide": true,
+                      "ajax":{
+                        url :"data_tbs_order_penjualan.php", // json datasource
+                        "data": function ( d ) {
+                          d.session_id = $("#session_id").val();
+                          // d.custom = $('#myInput').val();
+                          // etc
+                        },
+                         
+                         type: "post",  // method  , by default get
+                         error: function(){  // error handling
+                           $(".employee-grid-error").html("");
+                           $("#tabel_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                           $("#employee-grid_processing").css("display","none");
+                           }
+                      },
+                        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                           $(nRow).attr('class','tr-id-'+aData[9]+'');
+                         }
+                    });
+
                      
                      $(".tr-kode-"+kode_barang+"").remove();
                      $("#ppn").attr("disabled", true);
@@ -931,32 +956,6 @@ $.post("barcode_order.php",{kode_barang:kode_barang,sales:sales,level_harga:leve
                      $("#potongan1").val('');
                      $("#kode_barcode").focus();
                      $("#kode_barcode").val('');
-                     
-
-
-                    $('#tabel_tbs_order').DataTable().destroy();
-            var dataTable = $('#tabel_tbs_order').DataTable( {
-              "processing": true,
-              "serverSide": true,
-              "ajax":{
-                url :"data_tbs_order_penjualan.php", // json datasource
-                "data": function ( d ) {
-                  d.session_id = $("#session_id").val();
-                  // d.custom = $('#myInput').val();
-                  // etc
-                },
-                 
-                 type: "post",  // method  , by default get
-                 error: function(){  // error handling
-                   $(".employee-grid-error").html("");
-                   $("#tabel_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-                   $("#employee-grid_processing").css("display","none");
-                   }
-              },
-                "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                   $(nRow).attr('class','tr-id-'+aData[9]+'');
-                 }
-            });
 
 
           var session_id = $("#session_id").val();

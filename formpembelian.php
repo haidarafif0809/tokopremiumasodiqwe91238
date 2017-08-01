@@ -54,7 +54,7 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
             <div class="col-sm-3">
               <label> Suplier (Alt+P) </label><br>
                 <select name="suplier" id="nama_suplier" class="form-control chosen" required="" data-placeholder="SILAKAN PILIH...">
-                 <option value="">-Silakan Pilih-</option>
+                 <option value="">--SILAHKAN PILIH--</option>
                   <?php
                     // menampilkan seluruh data yang ada pada tabel suplier
                     $query = $db->query("SELECT * FROM suplier");
@@ -67,7 +67,7 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
                 </select>
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-sm-2">
               <label> Gudang </label><br>
                 <select name="kode_gudang" id="kode_gudang" class="form-control chosen" required="" data-placeholder="SILAKAN PILIH...">
                   <?php
@@ -82,7 +82,7 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
                 </select>
             </div>
 
-<div class="col-sm-3">
+<div class="col-sm-2">
 <label class="gg">PPN</label>
 <select type="hidden" style="font-size:15px; height:35px" name="ppn" id="ppn" class="form-control chosen span-chosen">
   <?php if ($default_ppn == 'Include'): ?>
@@ -104,7 +104,6 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
   <?php endif ?>
 </select>
 </div>
-
         </div> <!-- END ROW KOLOM SUPLIER -->
 
     </form> <!-- tag penutup form -->
@@ -259,15 +258,25 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
 
 
   <br>
+  <form id="form_barcode" class="form-inline">
+    <div class="form-group">
+        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" autocomplete="off" placeholder="Scan / Ketik Barcode">
+    </div>
+        <button type="submit" id="submit_barcode" class="btn btn-primary" style="font-size:15px" ><i class="fa fa-barcode"></i> Submit Barcode</button> ||  
+        <button type="button" class="btn btn-info" id="cari_produk_pembelian" accesskey="s" data-toggle="modal" data-target="#myModal"><i class='fa fa-search'> </i> Cari Produk (F1)</button>
+        <button type="button" id="daftar_order" class="btn btn-purple" data-toggle="modal"><i class='fa  fa-search'></i> Cari Order (F6) </button>  
+  </form>
+
+          <div class="alert alert-danger" id="alert_stok" style="display:none">
+          <strong>Perhatian!</strong> Persediaan Barang Tidak Cukup!
+          </div>
+
   <!--START FORM id="formtambahproduk" -->
   <form class="form-group" role="form" id="formtambahproduk">
 
     <div class="row"><!--ROW id="formtambahproduk" -->
 
       <!--BUTTON TAMPIL MODAL PRODUK-->
-      <button type="button" class="btn btn-info" id="cari_produk_pembelian" accesskey="s" data-toggle="modal" data-target="#myModal"><i class='fa fa-search'> </i> Cari Produk (F1)</button>
-      <button type="button" id="daftar_order" class="btn btn-primary" data-toggle="modal"><i class='fa  fa-search'></i> Cari Order (F6) </button>
-      <br>
 
       <div class="col-sm-3"><br>
         <select style="font-size:15px; height:30px" type="text" name="kode_barang" id="kode_barang" class="form-control chosen" data-placeholder="SILAKAN PILIH...">
@@ -919,6 +928,114 @@ Order Pembelian</button>
  </script>
 
 <!-- SCRIPT AJAX -->
+
+<script>
+//SCRIPT BARCODE INPUT
+$(document).on('click', '#submit_barcode', function (e) {
+  var kode_barang = $("#kode_barcode").val();
+  var suplier = $("#nama_suplier").val();
+
+  if (suplier == ''){
+  alert("Suplier Harus Dipilih");
+  $("#nama_suplier").trigger('chosen:open');
+  }
+  else{
+    
+  // JAVASCRIPT BARCODE
+  $.post("barcode_pembelian.php",{kode_barang:kode_barang},function(data){
+    if (data == 1){
+      alert("Stok Tidak Mencukupi ,Segera Lakukan Pembelian");
+    }
+    else if (data == 3){
+      alert("Kode Barang Yang Anda Masukan Tidak Ada , Silakan Periksa Kembali ");
+      $("#kode_barcode").focus();
+    }
+    else{
+
+                    $(".tr-kode-"+kode_barang+"").remove();
+                    $("#ppn").attr("disabled", true).trigger('chosen:updated');
+                    $("#nama_barang").val('');
+                    $("#jumlah_barang").val('');
+                    $("#potongan1").val('');
+                    $("#kode_barcode").val('');
+
+            //perhitungan form pembayaran (total & subtotal / biaya admin) 
+
+            var total_perorder = data;
+
+                if (total_perorder == '') {
+                  total_perorder = 0;
+                }
+
+            var pot_fakt_per = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
+            var pot_fakt_rp = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_pembelian").val()))));
+            var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_pembelian1").val()))));
+
+            if (subtotal == ''){
+                subtotal = 0;
+              }
+
+            var total_akhir1 = parseInt(subtotal,10) + parseInt(total_perorder,10);
+
+              if (pot_fakt_per == '0%') {
+                  var potongaaan = pot_fakt_rp;
+                  var potongaaan = parseInt(potongaaan,10) / parseInt(total_akhir1,10) * 100;
+                  var pot_pers = parseInt(pot_fakt_rp,10) / parseInt(total_akhir1,10) * 100;
+                  var total_akhir = parseInt(total_akhir1,10) - parseInt(pot_fakt_rp,10);
+                }
+
+              else if(pot_fakt_rp == 0){
+                  var potongaaan = pot_fakt_per;
+                  var pos = potongaaan.search("%");
+                  var potongan_persen = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(potongaaan))));
+                      potongan_persen = potongan_persen.replace("%","");
+                      potongaaan = total_akhir1 * potongan_persen / 100;
+
+                 var total_akhir = parseInt(total_akhir1,10) - parseInt(Math.round(potongaaan,10));
+                 var pot_pers = parseInt(potongaaan,10) / parseInt(total_akhir1,10) * 100;
+              }
+
+              else if(pot_fakt_rp != 0 && pot_fakt_rp != 0){
+                 var potongaaan = pot_fakt_per;
+                 var pos = potongaaan.search("%");
+                 var potongan_persen = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(potongaaan))));
+                     potongan_persen = potongan_persen.replace("%","");
+                    
+                    if(potongan_persen != 0 ) {
+                      potongaaan = total_akhir1 * potongan_persen / 100;
+                    }
+                    else {
+                      potongaaan = 0;
+                    }
+
+                var total_akhir = parseInt(total_akhir1,10) - parseInt(Math.round(potongaaan,10));
+                var pot_pers = parseInt(potongaaan,10) / parseInt(total_akhir1,10) * 100;
+              }
+
+        $("#potongan_pembelian").val(Math.round(potongaaan,10));
+        $("#potongan_persen").val(Math.round(pot_pers));
+        $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
+        $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
+
+            // datatable ajax pembaruan
+                var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
+                    tabel_tbs_pembelian.draw();
+    
+    }// end else untuk stok tidak mencukupi
+
+  });
+  }
+
+  /// JAVASCRIPT BARCODE
+
+
+$("#form_barcode").submit(function(){
+    return false;
+    
+    });
+});
+ </script> 
+
 
 <script>
    //perintah javascript yang diambil dari form tbs pembelian dengan id=form tambah produk
@@ -2530,6 +2647,7 @@ $(document).ready(function(){
             $("#btnOrderClose").hide();
             $("#nama_suplier").val('');
             $("#nama_suplier").trigger('chosen;updated');
+            $("#nama_suplier").trigger('chosen:open');
             $("#pembayaran_pembelian").val('');
             $("#sisa_pembayaran_pembelian").val('');
             $("#kredit").val('');

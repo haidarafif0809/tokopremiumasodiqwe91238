@@ -87,9 +87,9 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
           $nestedData[] = $jumlah_barang;
           $nestedData[] = $row['nama'];
           $nestedData[] = rp($row['harga']);
-          $nestedData[] = rp($row['subtotal']);
           $nestedData[] = rp($row['potongan']);
           $nestedData[] = rp($row['tax']);
+          $nestedData[] = rp($row['subtotal']);
           $nestedData[] = koma($data_hpp['sisa_hpp'],2) ." ".$row['satuan_asal'];
 
   $data[] = $nestedData;

@@ -87,13 +87,14 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 			 $retur = $db->query ("SELECT no_faktur_pembelian FROM detail_retur_pembelian WHERE no_faktur_pembelian = '$row[no_faktur]'");
 			 $row_retur = mysqli_num_rows($retur);
 
-			 $hpp_masuk_penjualan = $db->query ("SELECT no_faktur FROM hpp_masuk WHERE no_faktur = '$row[no_faktur]' AND sisa != jumlah_kuantitas");
-			 $row_masuk = mysqli_num_rows($hpp_masuk_penjualan);
+
+			 $hpp_keluar_penjualan = $db->query ("SELECT no_faktur FROM hpp_keluar WHERE no_faktur_hpp_masuk = '$row[no_faktur]'");
+			 $row_keluar = mysqli_num_rows($hpp_keluar_penjualan);
 
 			 $hutang = $db->query ("SELECT no_faktur_pembelian FROM detail_pembayaran_hutang WHERE no_faktur_pembelian = '$row[no_faktur]'");
 			 $row_hutang = mysqli_num_rows($hutang);
 					
-					if ($row_retur > 0 || $row_masuk > 0 || $row_hutang > 0) {
+					if ($row_retur > 0 || $row_keluar > 0 || $row_hutang > 0) {
 
 						$nestedData[] = "<button class='btn btn-danger btn-alert' data-id='".$row['id']."' data-faktur='".$row['no_faktur']."'><span class='glyphicon glyphicon-trash'></span> Hapus  </button>"; 
 

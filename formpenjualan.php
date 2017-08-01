@@ -1137,7 +1137,11 @@ tr:nth-child(even){background-color: #f2f2f2}
           "serverSide": true,
           "ajax":{
             url :"datatable_daftar_order.php", // json datasource
-           
+            "data": function ( d ) {
+                      d.kode_pelanggan = $("#kd_pelanggan").val();
+                      // d.custom = $('#myInput').val();
+                      // etc
+                  },
             type: "post",  // method  , by default get
             error: function(){  // error handling
               $(".employee-grid-error").html("");

@@ -44,8 +44,24 @@ include 'persediaan.function.php';
                       $jumlah_barang = 1;                                        
                   }
                   else{
-                      $kode_barang =  $kode_barcode;
-                      $jumlah_barang = 1;
+                                                         // QUERY CEK BARCODE DI MASTER DATA PRODUK
+                                            
+                        $querybarang = $db->query("SELECT COUNT(*) AS jumlah_data,kode_barcode,kode_barang FROM barang WHERE kode_barcode = '$kode_barcode' AND kode_barcode != '' ");
+                        $databarang = mysqli_fetch_array($querybarang);     
+
+                        // QUERY CEK BARCODE DI MASTER DATA PRODUK
+
+                                        // IF CEK BARCODE DI BARCODE
+                             if ($databarang['jumlah_data'] > 0) {
+                             
+                            $kode_barang =  $databarang['kode_barang'];
+                            $jumlah_barang = 1;
+
+                            }else{
+
+                              $kode_barang =  $kode_barcode;
+                              $jumlah_barang = 1;
+                            }
                   }
           // IF CEK BARCODE DI SATUAN KONVERSI
 

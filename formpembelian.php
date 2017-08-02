@@ -351,9 +351,9 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
             <th> Jumlah Barang </th>
             <th> Satuan </th>
             <th> Harga </th>
-            <th> Subtotal </th>
             <th> Potongan </th>
             <th> Tax </th>
+            <th> Subtotal </th>
             <th> Hapus </th>
 
           </thead> <!-- tag penutup tabel -->
@@ -945,7 +945,7 @@ $(document).on('click', '#submit_barcode', function (e) {
   // JAVASCRIPT BARCODE
   $.post("barcode_pembelian.php",{kode_barang:kode_barang},function(data){
     if (data == 3){
-      alert("Kode Barang Yang Anda Masukan Tidak Ada , Silakan Periksa Kembali ");
+      alert("Barcode Yang Anda Masukan Tidak Ada , Silakan Periksa Kembali ");
       $("#kode_barcode").val('');
       $("#kode_barcode").focus();
     }

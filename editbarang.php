@@ -11,7 +11,8 @@
  $id = angkadoang($_GET['id']);
  
  // perintah untuk menampilkan data yang ada pada tabel barang berdasarkan id
- $query = $db->query("SELECT b.kode_barcode,b.nama_barang,b.kode_barang, b.harga_beli, b.harga_jual, b.harga_jual2, b.harga_jual3, b.satuan, b.gudang, b.gudang, b.kategori, b.status, b.berkaitan_dgn_stok, b.suplier, b.limit_stok, b.over_stok, s.nama FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.id = '$id'");
+ $query = $db->query("SELECT b.kode_barcode,b.nama_barang,b.kode_barang, b.harga_beli, b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.harga_jual, b.harga_jual2, b.harga_jual3, b.satuan, b.gudang, 
+ 	b.gudang, b.kategori, b.status, b.berkaitan_dgn_stok, b.suplier, b.limit_stok, b.over_stok, s.nama FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.id = '$id'");
  
  // perintah untuk menyimpan data sementara yang ada pada $query
  $data = mysqli_fetch_array($query);
@@ -195,6 +196,10 @@
 
 					<input type="hidden" name="id" value="<?php echo $id; ?>">
 					<input type="hidden" name="kode_barang" value="<?php echo $data['kode_barang']; ?>">
+					<input type="hidden" name="harga_jual_4" value="<?php echo $data['harga_jual4'];?>">
+					<input type="hidden" name="harga_jual_5" value="<?php echo $data['harga_jual5']; ?>">
+					<input type="hidden" name="harga_jual_6" value="<?php echo $data['harga_jual6']; ?>">
+					<input type="hidden" name="harga_jual_7" value="<?php echo $data['harga_jual7']; ?>">
 					<!-- membuat tombol Edit -->
 					<button type="submit" class="btn btn-info">Simpan</button>
 

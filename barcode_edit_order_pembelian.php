@@ -18,6 +18,11 @@ include 'persediaan.function.php';
     $no_faktur_order = stringdoang($_POST['no_faktur_order']);
 
         // QUERY CEK BARCODE DI SATUAN KONVERSI
+                                    
+        $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data,kode_barcode,kode_produk,konversi , id_satuan, harga_pokok FROM satuan_konversi WHERE kode_barcode = '$kode_barcode' AND kode_barcode != '' ");
+        $data_satuan_konversi = mysqli_fetch_array($query_satuan_konversi);     
+
+        // QUERY CEK BARCODE DI SATUAN KONVERSI
 
         $lihat_setting = $db->query("SELECT kode_flag FROM setting_timbangan");
         $kel_setting = mysqli_fetch_array($lihat_setting);
@@ -33,8 +38,16 @@ include 'persediaan.function.php';
         }
         else
         {
-             $kode_barang =  $kode_barcode;
-             $jumlah_barang = 1;
+          // IF CEK BARCODE DI SATUAN KONVERSI
+                  if ($data_satuan_konversi['jumlah_data'] > 0) { //    if ($data_satuan_konversi['jumlah_data'] > 0) {                    
+                      $kode_barang = $data_satuan_konversi['kode_produk'];
+                      $jumlah_barang = 1;                                        
+                  }
+                  else{
+                      $kode_barang =  $kode_barcode;
+                      $jumlah_barang = 1;
+                  }
+          // IF CEK BARCODE DI SATUAN KONVERSI
 
         // UNTUK MENGETAHUI JUMLAAH TBS SEBENARNYA
             $jumlah_tbs = 0;
@@ -70,7 +83,15 @@ include 'persediaan.function.php';
                 // grab array entry
                 $nama_barang = stringdoang($result['nama_barang']);
                 $harga_beli = angkadoang($result['harga_beli']);
-                $satuan = stringdoang($result['satuan']);
+
+            // IF CEK BARCODE DI SATUAN KONVERSI
+              if ($data_satuan_konversi['jumlah_data'] > 0) {
+                  $satuan = $data_satuan_konversi['id_satuan']; // satuan dari satuan konversi
+                }
+              else{
+                  $satuan = stringdoang($result['satuan']); // satuan dasar
+                }
+            // IF CEK BARCODE DI SATUAN KONVERSI
 
             }
             else {
@@ -106,24 +127,41 @@ include 'persediaan.function.php';
               // grab array entry
                 $nama_barang = stringdoang($result['nama_barang']);
                 $harga_beli = angkadoang($result['harga_beli']);
-
                 $jumlah_barang = angkadoang(1);
-                $satuan = stringdoang($result['satuan']); // satuan dasar
+
+            // IF CEK BARCODE DI SATUAN KONVERSI
+              if ($data_satuan_konversi['jumlah_data'] > 0) {
+                  $satuan = $data_satuan_konversi['id_satuan']; // satuan dari satuan konversi
+                }
+              else{
+                  $satuan = stringdoang($result['satuan']); // satuan dasar
+                }
+            // IF CEK BARCODE DI SATUAN KONVERSI
+
             }
-                $harga_tbs = $harga_beli;
+
 
             // QUERY UNTUK CEK APAKAH SUDAH ADA APA BELUM DI TBS PENJUALAN
                 $query_tbs_pembelian_order = $db->query("SELECT COUNT(kode_barang) AS jumlah_data FROM tbs_pembelian_order WHERE kode_barang = '$kode_barang' AND no_faktur_order = '$no_faktur_order' AND satuan = '$satuan'");
                 $data_tbs_pembelian_order = mysqli_fetch_array($query_tbs_pembelian_order);
             // QUERY UNTUK CEK APAKAH SUDAH ADA APA BELUM DI TBS PENJUALAN
 
-                $stok_barang = $ambil_sisa - $jumlah_barang;
-            // cari subtotal
-                $a = $harga_tbs * $jumlah_barang;
+                if ($data_satuan_konversi['jumlah_data'] > 0) {
 
-                $jumlah_fee = $jumlah_barang;                  
-                $harga_fee = $harga_tbs;
-                $harga_konversi = 0;
+                  if ($data_satuan_konversi['harga_pokok'] == 0) {
+                      $harga_tbs = $harga_beli;
+                      $a = $harga_tbs * $data_satuan_konversi['konversi'];
+                    }
+                    else{
+                      $harga_tbs = $data_satuan_konversi['harga_pokok'];
+                      $a = $data_satuan_konversi['harga_pokok'];
+                    }
+
+                }
+                else{
+                    $harga_tbs = $harga_beli;
+                    $a = $harga_tbs * $jumlah_barang;
+                }
 
             // QUERY  UNTUK CEK APAKAH BARCODE YANg DIMASUKAN ADA DIDAFTAR KODE BARANG
                 $ambil_row_barang = $db->query("SELECT id FROM barang WHERE kode_barang = '$kode_barang'");

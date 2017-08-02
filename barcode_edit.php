@@ -17,7 +17,8 @@ $session_id = session_id();
         $kode_cek = substr(stringdoang($_POST['kode_barang']),0,2);
 
 
-
+    $array_potongan = array();
+    $i = 0;
     $sales = stringdoang($_POST['sales']);
     $level_harga = stringdoang($_POST['level_harga']);
     $no_faktur = stringdoang($_POST['no_faktur']);
@@ -203,19 +204,23 @@ else if ($level_harga == 'harga_6'){
 else if ($level_harga == 'harga_7'){
   $harga_tbs = $harga_jual7;
 }
-
+              $query_potongan = $db->query("SELECT SUM(potongan) AS potongan FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur'  AND satuan != '$satuan' ");
+              $data_potongan = mysqli_fetch_array($query_potongan);
+               $potongan_tbs_order = $data_potongan['potongan'];
 
        
             // qUERY UNTUK CEK APAKAH SUDAH ADA APA BELUM DI TBS PENJUALAN  
-            $query_tbs_penjualan = $db->query("SELECT COUNT(kode_barang) AS jumlah_data FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur' AND satuan = '$satuan'");
+            $query_tbs_penjualan = $db->query("SELECT COUNT(kode_barang) AS jumlah_data, SUM(subtotal) AS subtotal, SUM(potongan) AS potongan FROM tbs_penjualan WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur' AND satuan = '$satuan'");
             $data_tbs_penjualan = mysqli_fetch_array($query_tbs_penjualan);
-            // qUERY UNTUK CEK APAKAH SUDAH ADA APA BELUM DI TBS PENJUALAN           
+            // qUERY UNTUK CEK APAKAH SUDAH ADA APA BELUM DI TBS PENJUALAN      
+            $subtotal_tbs_jual = $data_tbs_penjualan['subtotal'] + $data_tbs_penjualan['potongan'];     
 
             ##
             // IF CEK BARCODE DI SATUAN KONVERSI
 
             if ($data_satuan_konversi['jumlah_data'] > 0) {
 
+                  $jumlah_produk = $data_satuan_konversi['konversi'];
                   $stok_barang = $ambil_sisa - $data_satuan_konversi['konversi'];
 
                   // cari subtotal , langsung dikalikan dengan nilai konversinya
@@ -239,6 +244,8 @@ else if ($level_harga == 'harga_7'){
 
                 }else{
 
+                  $jumlah_produk = $jumlah_barang;
+
                   $stok_barang = $ambil_sisa - $jumlah_barang;
                   // cari subtotal
                   $subtotal = $harga_tbs * $jumlah_barang;
@@ -251,6 +258,61 @@ else if ($level_harga == 'harga_7'){
 
             // IF CEK BARCODE DI SATUAN KONVERSI
 
+
+                                              // untuk cek potongan produk
+        
+                           // ambil setting_diskon_jumlah yang selisih antara jumlah produk dan syarat jumlah lebih dari nol
+                $query = $db->query("SELECT potongan,  syarat_jumlah FROM setting_diskon_jumlah WHERE kode_barang = '$kode_barang' ");
+                while ($data = mysqli_fetch_array($query)) {// while
+                      
+                      $i = $i + 1;
+
+                      $hitung = ($jumlah_tbs + $jumlah_produk) - $data['syarat_jumlah'];
+
+                      if ($hitung >= 0) {
+                                // masukan data ke dalam array
+                        $array = array("syarat_jumlah" => $data['syarat_jumlah'],"potongan" => $data['potongan']);
+
+                        array_push($array_potongan, $array);
+                      }else{
+                                  // masukan data ke dalam array
+                        $array = array("syarat_jumlah" => 0,"potongan" => 0);
+
+                        array_push($array_potongan, $array);
+                      }   
+                  
+                }// while                  
+
+                if ($i == 0) {
+                    // ambil data yang paling besar
+                    $potongan_tampil = 0;
+                }else{
+                    // ambil data yang paling besar
+                    $max = max($array_potongan);  
+                    // ubah data dalam ventuk json encode
+                    $json_encode = json_encode($max);
+                    // ingin membaca format JSON di PHP maka JSON harus di convert ke Array Object dengan menggunakan json_decode
+                    $data = json_decode($json_encode);   
+                    // akan tampil potongan                
+                    $potongan_tampil = $data->potongan;
+                }
+
+                if ($potongan_tbs_order == $potongan_tampil) {
+                    $potongan_tampil = 0;
+                    $subtotal_jual = ($subtotal_tbs_jual + $subtotal) - $potongan_tampil; 
+
+                }else{
+
+                                              # code...
+                          $query1 = $db->prepare("UPDATE tbs_penjualan SET subtotal = subtotal + potongan, potongan = 0 WHERE kode_barang = ? AND no_faktur = ? ");
+
+                          $query1->bind_param("ss",
+                          $kode_barang, $no_faktur);
+
+                          $query1->execute();
+
+                    $subtotal_jual = ($subtotal_tbs_jual + $subtotal) - $potongan_tampil; 
+                }
 
     $ambil_row_barang = $db->query("SELECT id FROM barang WHERE kode_barang = '$kode_barang'");
     $cek_row_barang = mysqli_num_rows($ambil_row_barang);
@@ -322,21 +384,30 @@ if ($ber_stok == 'Barang' OR $ber_stok == 'barang'){
     
                           if ($data_tbs_penjualan['jumlah_data'] != 0) {// apablla barang ini sudah ada di tbs
                             # code...
-                          $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND no_faktur = ?  AND satuan = ?");
+                          $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal = ?, potongan = ? WHERE kode_barang = ? AND no_faktur = ?  AND satuan = ?");
 
                           $query1->bind_param("sssssi",
-                          $jumlah_barang,$subtotal, $potongan_tampil, $kode_barang, $no_faktur,$satuan);
+                          $jumlah_barang,$subtotal_jual, $potongan_tampil, $kode_barang, $no_faktur,$satuan);
                           $query1->execute();
 
                           }
                           else{
-                              $perintah = $db->prepare("INSERT INTO tbs_penjualan (no_faktur,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam, tipe_barang,harga_konversi) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-                              $perintah->bind_param("ssssssssssi",
-                              $no_faktur, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga_tbs, $subtotal,$tanggal_sekarang,$jam_sekarang,$ber_stok,$harga_konversi);
+                              $perintah = $db->prepare("INSERT INTO tbs_penjualan (no_faktur,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam, tipe_barang,harga_konversi,potongan) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+                              $perintah->bind_param("ssssssssssii",
+                              $no_faktur, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga_tbs, $subtotal_jual,$tanggal_sekarang,$jam_sekarang,$ber_stok,$harga_konversi,$potongan_tampil);
                               $perintah->execute();
                           }
 
+                                  
+                  // menampilakn hasil penjumlah subtotal ALIAS total penjualan dari tabel tbs_penjualan berdasarkan data no faktur
+                  $query_total = $db->query("SELECT SUM(subtotal) AS total_penjualan FROM tbs_penjualan WHERE no_faktur = '$no_faktur' ");
+                  // menyimpan data sementara yg ada pada $query_total
+                  $data_total = mysqli_fetch_array($query_total);
+                  
+                  $subtotal = $data_total['total_penjualan'];
+                  //untuk pengambilan data subttotal di form penjualan
                   echo komarupiah($subtotal,2);
+                  //untuk pengambilan data subttotal di form penjualan
 
             }//end else kode barang adaa
 
@@ -402,10 +473,10 @@ else{
     
                     if ($data_tbs_penjualan['jumlah_data'] != 0) {// apablla barang ini sudah ada di tbs
                         # code...
-                        $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND no_faktur = ?  AND satuan = ?");
+                        $query1 = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = jumlah_barang + ?, subtotal =  ?, potongan = ? WHERE kode_barang = ? AND no_faktur = ?  AND satuan = ?");
 
                           $query1->bind_param("sssssi",
-                            $jumlah_barang,$subtotal, $potongan_tampil, $kode_barang, $no_faktur,$satuan);
+                            $jumlah_barang,$subtotal_jual, $potongan_tampil, $kode_barang, $no_faktur,$satuan);
 
 
                         $query1->execute();
@@ -413,22 +484,30 @@ else{
                     }
                     else
                     {//insert data ke tbs fee penjualan (jasa)
-                            $perintah = $db->prepare("INSERT INTO tbs_penjualan (no_faktur,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,tipe_barang,harga_konversi) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-                            $perintah->bind_param("ssssssssssi",
-                            $no_faktur, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotal,$tanggal_sekarang,$jam_sekarang,$ber_stok,$harga_konversi);
+                            $perintah = $db->prepare("INSERT INTO tbs_penjualan (no_faktur,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,tipe_barang,harga_konversi,potongan) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+                            $perintah->bind_param("ssssssssssii",
+                            $no_faktur, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotal_jual,$tanggal_sekarang,$jam_sekarang,$ber_stok,$harga_konversi,$potongan_tampil);
                             $perintah->execute();
 
                     }
   
-            echo komarupiah($subtotal,2);
+                  
+                  // menampilakn hasil penjumlah subtotal ALIAS total penjualan dari tabel tbs_penjualan berdasarkan data no faktur
+                  $query_total = $db->query("SELECT SUM(subtotal) AS total_penjualan FROM tbs_penjualan WHERE no_faktur = '$no_faktur' ");
+                  // menyimpan data sementara yg ada pada $query_total
+                  $data_total = mysqli_fetch_array($query_total);
+                  
+                  $subtotal = $data_total['total_penjualan'];
+                  //untuk pengambilan data subttotal di form penjualan
+                  echo komarupiah($subtotal,2);
+                  //untuk pengambilan data subttotal di form penjualan
 
         }// end if ($cek_row_barang == 0){
 
 }// END berkaitan dgn stok == Jasa
 
 
-
-
+  
     ?>
 
 

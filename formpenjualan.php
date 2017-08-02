@@ -1936,8 +1936,6 @@ else if (level_harga == "harga_7") {
 }
 document.getElementById("jumlahbarang").value = $(this).attr('data-stok');
 
-  document.getElementById("satuan_konversi").value = "125"
-
          $.getJSON("cek_data_satuan_konversi_parcel.php", function(result){
 
                 $(".span-satuan").remove();  

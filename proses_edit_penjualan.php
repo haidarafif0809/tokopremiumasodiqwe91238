@@ -36,7 +36,7 @@ while ($data_detail_penjualan = mysqli_fetch_array($query_detail_penjualan)){
 
         if ($data_satuan_konversi['jumlah_data'] > 0 ) {
         						
-        	$jumlah_barang = $data['jumlah_barang'] / $data_satuan_konversi['konversi'];
+        	$jumlah_barang = $data_detail_penjualan['jumlah_barang'] / $data_satuan_konversi['konversi'];
 
         }else{
 

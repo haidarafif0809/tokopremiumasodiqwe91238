@@ -1,6 +1,7 @@
 <?php session_start();
 //memasukan file db.php
 include 'db.php';
+include 'sanitasi.php';
 
 //mengirimkan $id menggunakan metode GET
 $session_id = session_id();

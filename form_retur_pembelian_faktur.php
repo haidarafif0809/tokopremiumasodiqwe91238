@@ -845,18 +845,20 @@ $(document).ready(function(){
   var potongan_pembelian = $("#potongan_pembelian").val();
   var tax = $("#tax").val();
   var pembayaran_pembelian = $("#pembayaran_pembelian").val();
+  if (pembayaran_pembelian == '') {
+    pembayaran_pembelian = 0;
+  };
   var session_id = $("#session_id").val();
   var supplier = $("#supplier").val();
   var ppn_input = $("#ppn_input"). val();
   var total1 = $("#total_retur_pembelian1"). val();
   var satuan_dasar = $("#satuan_pcs"). val();
   var potong_hutang = $("#potong_hutang"). val();
+  if (potong_hutang == '') {
+    potong_hutang = 0;
+  };
   var no_faktur_hutang = $("#no_faktur_hutang"). val();
   var no_faktur_hutang_hidden = $("#no_faktur_hutang_hidden"). val();
-
-
-
-
 
 if (total == "")
  {
@@ -872,6 +874,14 @@ if (total == "")
     $("#nama_suplier").val("");
         $("#nama_suplier").trigger("chosen:updated");
     $("#nama_suplier").trigger("chosen:open");
+
+ } 
+ else if (pembayaran_pembelian == 0 && potong_hutang == 0) 
+ {
+
+        alert("Kas Tidak Boleh Nol Atau Kosong");
+        $("#pembayaran_pembelian").focus();
+
 
  }
 

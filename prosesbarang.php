@@ -15,14 +15,15 @@ die('Koneksi gagal: ' .$db->connect_errno.
 
  
 // buat prepared statements
-$stmt = $db->prepare("INSERT INTO barang (kode_barang, nama_barang, harga_beli, harga_jual, harga_jual2, harga_jual3,harga_jual4, harga_jual5,harga_jual6, harga_jual7, satuan, kategori, gudang, status, suplier, limit_stok, over_stok,tipe_barang,berkaitan_dgn_stok)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+$stmt = $db->prepare("INSERT INTO barang (kode_barcode,kode_barang, nama_barang, harga_beli, harga_jual, harga_jual2, harga_jual3,harga_jual4, harga_jual5,harga_jual6, harga_jual7, satuan, kategori, gudang, status, suplier, limit_stok, over_stok,tipe_barang,berkaitan_dgn_stok)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
   
 // hubungkan "data" dengan prepared statements
-$stmt->bind_param("ssiiiiiiiisssssiiss", 
-$kode_barang, $nama_barang, $harga_beli, $harga_jual, $harga_jual_2, $harga_jual_3,$harga_jual_4, $harga_jual_5,$harga_jual_6, $harga_jual_7, $satuan, $kategori, $gudang, $status, $suplier, $limit_stok, $over_stok, $golongan,$golongan);
+$stmt->bind_param("sssiiiiiiiisssssiiss", 
+$barcode,$kode_barang, $nama_barang, $harga_beli, $harga_jual, $harga_jual_2, $harga_jual_3,$harga_jual_4, $harga_jual_5,$harga_jual_6, $harga_jual_7, $satuan, $kategori, $gudang, $status, $suplier, $limit_stok, $over_stok, $golongan,$golongan);
  
 // siapkan "data" query
+    $barcode = stringdoang($_POST['barcode']);
     $kode_barang = stringdoang($_POST['kode_barang']);
     $nama_barang = stringdoang($_POST['nama_barang']);
     $harga_beli = angkadoang($_POST['harga_beli']);
@@ -56,6 +57,7 @@ $data_id_barang = mysqli_fetch_array($query_id_barang);
     $c->setCache('produk');  
   
     $c->store($kode_barang, array(  
+      'kode_barcode' => $barcode,  
       'kode_barang' => $kode_barang,  
       'nama_barang' => $nama_barang,  
       'harga_beli' => $harga_beli,  

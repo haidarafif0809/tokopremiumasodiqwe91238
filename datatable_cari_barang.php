@@ -12,24 +12,25 @@ $columns = array(
 // datatable column index  => database column name
 	0 =>'hapus', 
 	1 => 'edit',
-	2 => 'kode',
-	3 => 'nama',
-	4 => 'harga_beli',
-	5 => 'margin',
-	6 => 'harga_jual1',
-	7 => 'harga_jual2',
-	8 => 'harga_jual3',
-	9 => 'harga_jual4',
-	10 => 'harga_jual5',
-	11 => 'harga_jual6',
-	12 => 'harga_jual7',
-	13 => 'hpp',
-	14 => 'stok_barang',
-	15 => 'satuan',
-	16 => 'satuan_konversi',
-	17 => 'setting_diskon_jumlah',
-	18 => 'kategori',
-	19 => 'id'
+	2 => 'barcode',
+	3 => 'kode',
+	4 => 'nama',
+	5 => 'harga_beli',
+	6 => 'margin',
+	7 => 'harga_jual1',
+	8 => 'harga_jual2',
+	9 => 'harga_jual3',
+	10 => 'harga_jual4',
+	11 => 'harga_jual5',
+	12 => 'harga_jual6',
+	13 => 'harga_jual7',
+	14 => 'hpp',
+	15 => 'stok_barang',
+	16 => 'satuan',
+	17 => 'satuan_konversi',
+	18 => 'setting_diskon_jumlah',
+	19 => 'kategori',
+	20 => 'id'
 );
 
 
@@ -80,14 +81,14 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 if ($requestData['tipe'] == 'barang') {
 	if ($requestData['kategori']  == 'semua' AND $tipe = 'barang') {
 
-		$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+		$sql = "SELECT s.id AS id_satuan,s.nama,b.kode_barcode,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
 		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE 1=1 AND b.berkaitan_dgn_stok = '$requestData[tipe]' ";
 
 
 	}
 
 	else{
-		$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+		$sql = "SELECT s.id AS id_satuan,s.nama,b.kode_barcode,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
 		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id";
 		$sql.="WHERE 1=1 AND b.kategori = '$kategori' AND b.berkaitan_dgn_stok = '$requestData[tipe]' ";
     }
@@ -97,13 +98,13 @@ if ($requestData['tipe'] == 'barang') {
 else
 {
 	if ($requestData['kategori'] == 'semua') {
-    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.kode_barcode,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
 		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id";
     
     }
     
     else{
-    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.kode_barcode,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
 		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE 1=1 AND b.kategori = '$requestData[kategori]'";
     }
 }
@@ -179,6 +180,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	
 	
 
+	$nestedData[] = $row["kode_barcode"];
 	$nestedData[] = $row["kode_barang"];
 	$nestedData[] = $row["nama_barang"];
 

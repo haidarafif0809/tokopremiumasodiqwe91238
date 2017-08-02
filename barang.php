@@ -101,6 +101,12 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                     <form enctype="multipart/form-data" role="form" action="prosesbarang.php" method="post">
 
                          <div class="form-group">
+                            <label>Barcode </label>
+                            <br>
+                            <input type="text" placeholder="Barcode" name="barcode" id="barcode" class="form-control" autocomplete="off" required="">
+                        </div>
+
+                         <div class="form-group">
                             <label>Kode Barang </label>
                             <br>
                             <input type="text" placeholder="Kode Barang" name="kode_barang" id="kode_barang" class="form-control" autocomplete="off" required="">
@@ -465,6 +471,7 @@ th {
 
                         }
              ?>
+            <th style='background-color: #4CAF50; color: white'> Barcode </th>
             <th style='background-color: #4CAF50; color: white'> Kode Barang </th>
             <th style='background-color: #4CAF50; color: white'> Nama Barang </th>
             <th style='background-color: #4CAF50; color: white'> Harga Beli </th>
@@ -535,6 +542,29 @@ th {
 <h3 style="color:red"><?php echo $teks_hpp ?> : <?php echo koma($total_hpp,2); ?></h3>
 
 </div><!-- penutup tag div clas="container" -->
+
+    <script type="text/javascript">
+            $(document).on('blur', '#barcode', function (e) {
+
+                var barcode = $(this).val();
+
+                if (barcode != '') {
+                  $.post("cek_barcode_satuan_konversi.php",{barcode:barcode},function(data){
+
+                      if (data == 1) {
+                        alert("Barcode yang anda masukan sudah ada!");
+                        $("#barcode").focus();
+                        $("#barcode").val('');
+                        };
+                  });
+
+                };
+
+
+                
+                });
+    </script>
+
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -1333,7 +1363,7 @@ if (harga_jual1 < harga_beli)
         },
             
             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                $(nRow).attr('class','tr-id-'+aData[19]+'');
+                $(nRow).attr('class','tr-id-'+aData[20]+'');
             },
         });
 
@@ -1345,6 +1375,7 @@ if (harga_jual1 < harga_beli)
       } );
     </script>
             
+
 
 
 <?php  include 'footer.php'; ?>

@@ -15,7 +15,7 @@ include 'db.php';
 
  <div class="container">
 
-<h3> LAPORAN PEMBELIAN DETAIL NON FAKTUR</h3><hr>
+<h3> LAPORAN PEMBELIAN REKAP /BARANG</h3><hr>
 
 <form class="form-inline" role="form">
 				
@@ -33,7 +33,6 @@ include 'db.php';
 
 </form>
 
- <br>
  <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="result">
 					<table id="tableuser" class="table table-bordered table-sm">

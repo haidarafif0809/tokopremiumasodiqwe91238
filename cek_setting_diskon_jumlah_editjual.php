@@ -82,7 +82,7 @@
 
 			// ambil data yang paling besar
      $potongan_tampil = 0;
-		echo komarupiah($potongan_tampil,2);
+		komarupiah($potongan_tampil,2);
 
 	}else{
 			                    // ambil data yang paling besar
@@ -93,16 +93,15 @@
                     $data = json_decode($json_encode);   
                     // akan tampil potongan                
                     $potongan_tampil = $data->potongan;
-	}
+	           }
 
                 if ($potongan_tbs_order == $potongan_tampil) {
                 	 
                     $potongan_tampil = 0;
-                   echo komarupiah($potongan_tampil,2);
+                   komarupiah($potongan_tampil,2);
 
 
                 }else{
-
                                               # code...
                           $query1 = $db->prepare("UPDATE tbs_penjualan SET subtotal = subtotal + potongan, potongan = 0 WHERE kode_barang = ? AND session_id = ? ");
 
@@ -111,9 +110,12 @@
 
                           $query1->execute();  
                           
-                          echo komarupiah($potongan_tampil,2);
+                          komarupiah($potongan_tampil,2);
                                   
                 }
+
+echo '{ "status": "'.$i.'" ,"potongan": "'.komarupiah($potongan_tampil,2).'"}';
+
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

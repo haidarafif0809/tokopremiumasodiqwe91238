@@ -3360,6 +3360,8 @@ $(".btn-alert-hapus").click(function(){
                                     var ber_stok = $(this).attr("data-berstok");
                                     var no_faktur = $("#nomor_faktur_penjualan").val();
                                     var id_produk = $(this).attr("data-id_produk");
+                                    var pembayaran =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+   
 
                                     var subtotal_lama = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-subtotal-"+id+"").text()))));
 
@@ -3369,13 +3371,13 @@ $(".btn-alert-hapus").click(function(){
                                     }
                                      $.getJSON("setting_diskon_jumlah_editjual.php?no_faktur="+no_faktur+"&id="+id+"&jumlah_barang="+jumlah_baru+"&kode_barang="+kode_barang+"&id_produk="+id_produk+"&satuan_konversi="+satuan_konversi, function(data){                                  
 
-                                    if (data == 0) {
+                                    if (data.status == 0) {
 
                                     var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-potongan-"+id+"").text()))));
                                     var potongan = parseFloat(potongan.replace(',','.'),2);
                                     }else{
 
-                                    var potongan = data;
+                                    var potongan = data.potongan;
                                     };  
 
                                     var tax_tbs = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-tax-"+id+"").text()))));
@@ -3513,6 +3515,27 @@ $(".btn-alert-hapus").click(function(){
                                     {
                                     var sub_akhir = parseFloat(subtotal_penjualan,2)  - parseFloat(potongaaan,2);
                                     }      
+
+                                    var sisa = parseFloat(pembayaran.replace(',','.')) - sub_akhir;
+                                    var sisa_kredit = sub_akhir - parseFloat(pembayaran.replace(',','.')); 
+                                    
+                                    
+                                    if (sisa < 0 )
+                                    {
+                                    $("#kredit").val(sisa_kredit.format(2, 3, '.', ','));
+                                    $("#sisa_pembayaran_penjualan").val('0');
+                                    $("#tanggal_jt").attr("disabled", false);
+                                    
+                                    }
+                                    
+                                    else  
+                                    {
+                                    $("#sisa_pembayaran_penjualan").val(sisa.format(2, 3, '.', ','));
+                                    $("#kredit").val('0');
+                                    $("#tanggal_jt").attr("disabled", true);
+                                    
+                                    } 
+                                    
 
                                     var tabel_tbs_penjualan = $('#tabel_tbs_penjualan').DataTable();
                                     tabel_tbs_penjualan.draw();

@@ -981,7 +981,7 @@ $(document).on('click', '#submit_barcode', function (e) {
   // JAVASCRIPT BARCODE
   $.post("barcode_edit_pembelian.php",{kode_barang:kode_barang, no_faktur:no_faktur},function(data){
     if (data == 3){
-      alert("Kode Barang Yang Anda Masukan Tidak Ada , Silakan Periksa Kembali ");
+      alert("Barcode Yang Anda Masukan Tidak Ada , Silakan Periksa Kembali ");
       $("#kode_barcode").val('');
       $("#kode_barcode").focus();
     }

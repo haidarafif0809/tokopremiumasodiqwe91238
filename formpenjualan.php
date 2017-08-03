@@ -4950,15 +4950,15 @@ $(document).ready(function(){
                                     }
                                     $.getJSON("cek_setting_diskon_jumlah_editjual.php?id="+id+"&jumlah_barang="+jumlah_baru+"&kode_barang="+kode_barang+"&id_produk="+id_produk+"&satuan_konversi="+satuan_konversi, function(data){                                  
 
-                                    if (data == 0) {
+                                    if (data.status == 0) {
 
                                     var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-potongan-"+id+"").text()))));
                                     var potongan = parseFloat(potongan.replace(',','.'),2);
                                     }else{
 
-                                    var potongan = data;
+                                    var potongan = data.potongan;
                                     };                  
-
+                                    var pembayaran =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
 
 
                                     var tax_tbs = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-tax-"+id+"").text()))));
@@ -5084,6 +5084,27 @@ $(document).ready(function(){
 
                                     $("#total1").val(sub_akhir.format(2, 3, '.', ','));
                                     $("#tax_rp").val(pajak_faktur.format(2, 3, '.', ',')); 
+
+
+                                  var sisa = parseFloat(pembayaran.replace(',','.')) - sub_akhir;
+                                  var sisa_kredit = sub_akhir - parseFloat(pembayaran.replace(',','.')); 
+
+
+                                  if (sisa < 0 )
+                                  {
+                                  $("#kredit").val(sisa_kredit.format(2, 3, '.', ','));
+                                  $("#sisa_pembayaran_penjualan").val('0');
+                                  $("#tanggal_jt").attr("disabled", false);
+                                  
+                                  }
+                                  
+                                  else  
+                                  {
+                                  $("#sisa_pembayaran_penjualan").val(sisa.format(2, 3, '.', ','));
+                                  $("#kredit").val('0');
+                                  $("#tanggal_jt").attr("disabled", true);
+                                  
+                                  } 
 
 
 
@@ -5380,6 +5401,27 @@ $(document).ready(function(){
                                         $("#total2").val(subtotal_penjualan.format(2, 3, '.', ','));       
                                         $("#total1").val(sub_akhir.format(2, 3, '.', ','));    
                                         $("#tax_rp").val(pajak_faktur.format(2, 3, '.', ','));  
+                                        
+                                        var sisa = parseFloat(pembayaran.replace(',','.')) - sub_akhir;
+                                        var sisa_kredit = sub_akhir - parseFloat(pembayaran.replace(',','.')); 
+                                        
+                                        
+                                        if (sisa < 0 )
+                                        {
+                                        $("#kredit").val(sisa_kredit.format(2, 3, '.', ','));
+                                        $("#sisa_pembayaran_penjualan").val('0');
+                                        $("#tanggal_jt").attr("disabled", false);
+                                        
+                                        }
+                                        
+                                        else  
+                                        {
+                                        $("#sisa_pembayaran_penjualan").val(sisa.format(2, 3, '.', ','));
+                                        $("#kredit").val('0');
+                                        $("#tanggal_jt").attr("disabled", true);
+                                        
+                                        } 
+
                                               //cek tbsbonus yang ada, tapi jumlah subtotal tbspenjualan sudah berubah syarat tidak terpenuhi
                                               $.getJSON("cek_syarat_promo_ditbs.php",{kode_barang:kode_barang},function(syaratbonus){
                                               

@@ -28,6 +28,7 @@ include 'persediaan.function.php';
 
         // QUERY CEK BARCODE DI SATUAN KONVERSI
 
+
         $lihat_setting = $db->query("SELECT kode_flag FROM setting_timbangan");
         $kel_setting = mysqli_fetch_array($lihat_setting);
         $setting_flag = $kel_setting['kode_flag'];
@@ -41,10 +42,7 @@ include 'persediaan.function.php';
              $jumlah_barang = $kilo.'.'.$gram;
         }
         else
-        {           
-
-
-
+        {  
             // IF CEK BARCODE DI SATUAN KONVERSI
                   if ($data_satuan_konversi['jumlah_data'] > 0) {//    if ($data_satuan_konversi['jumlah_data'] > 0) {
                     
@@ -53,9 +51,26 @@ include 'persediaan.function.php';
 
                                         
                   }else{
-                      
-                      $kode_barang =  $kode_barcode;
+                                    
+                // QUERY CEK BARCODE DI MASTER DATA PRODUK
+                                            
+                $querybarang = $db->query("SELECT COUNT(*) AS jumlah_data,kode_barcode,kode_barang FROM barang WHERE kode_barcode = '$kode_barcode' AND kode_barcode != '' ");
+                $databarang = mysqli_fetch_array($querybarang);     
+
+                // QUERY CEK BARCODE DI MASTER DATA PRODUK
+
+                                  // IF CEK BARCODE DI BARCODE
+                       if ($databarang['jumlah_data'] > 0) {
+                       
+                      $kode_barang =  $databarang['kode_barang'];
                       $jumlah_barang = 1;
+
+                      }else{
+
+                        $kode_barang =  $kode_barcode;
+                        $jumlah_barang = 1;
+                      }
+                      
 
                   }
 

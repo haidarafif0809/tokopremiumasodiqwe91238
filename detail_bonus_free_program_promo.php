@@ -250,7 +250,7 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
                     }
                     else{  
 
-               $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data){
+               $.post('cek_kode_bonus_free_produk.php',{id_produk:id_produk}, function(data){
                   if(data == 1){
                     alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
                     $("#kode_barang").val('');
@@ -460,7 +460,7 @@ $(document).on('click', '.edit', function (e) {
                     }
                     else{  
 
-               $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data){
+               $.post('cek_kode_bonus_free_produk.php',{id_produk:id_produk}, function(data){
                   if(data == 1){
                     alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
                     $("#kode_barang_edit").val('');

@@ -446,14 +446,16 @@ $(document).ready(function(){
       
       var nama_program_edit = $(this).attr("data-nama_program");
       var id_program_edit = $(this).attr("data-id_program");
-      var kode_produk_edit = $(this).attr("data-nama_produk");
+      var kode_barang_edit = $(this).attr("data-nama_produk");
       var id_produk_edit = $(this).attr("data-id_produk");
       var id_edit = $(this).attr("data-id");
 
 
       $("#nama_program_edit").val(nama_program_edit);
       $("#id_program_edit").val(id_program_edit);
-      $("#kode_produk_edit").val(kode_produk_edit);
+      $("#kode_barang_edit").val(kode_barang_edit);
+      $("#kode_barang_edit").trigger('chosen:updated');
+
       $("#id_produk_edit").val(id_produk_edit);
       $("#id_edit").val(id_edit);
 

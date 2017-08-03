@@ -150,16 +150,28 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
         $total_hpp = hitungNilaiHpp($row['kode_barang']);
 
+
+
+          $query_hpp_masuk = $db->query("SELECT no_faktur FROM hpp_masuk WHERE kode_barang = '$row[kode_barang]' AND jenis_transaksi != 'Penjualan' ");
+ 			$data_hpp_masuk = mysqli_num_rows($query_hpp_masuk);
+
+ 			$query_hpp_keluar = $db->query("SELECT no_faktur FROM hpp_keluar WHERE kode_barang = '$row[kode_barang]'");
+ 			$data_hpp_keluar = mysqli_num_rows($query_hpp_keluar);
+
+
+ 			$query_detail_penjualan = $db->query("SELECT no_faktur FROM detail_penjualan WHERE kode_barang = '$row[kode_barang]' ");
+ 			$data_detail_penjualan = mysqli_num_rows($query_detail_penjualan);
+
         	//otoritas hapus
                 
 
-	if ($data_otoritas_item['item_hapus'] > 0 AND $stok_barang == '0')  {
+	if ($data_otoritas_item['item_hapus'] > 0 AND $data_hpp_masuk == 0 AND $data_hpp_keluar == 0 AND $data_detail_penjualan == 0 )  {
 
 		$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."'  data-nama='". $row['nama_barang'] ."' data-kode='". $row['kode_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> ";
 			 
 
 	}
-	elseif ($data_otoritas_item['item_hapus'] > 0 AND $stok_barang != '0') {
+	else {
 	 	# code...
 
 	 	$nestedData[] = "<p style='color:red;' align='center'>X</p>";

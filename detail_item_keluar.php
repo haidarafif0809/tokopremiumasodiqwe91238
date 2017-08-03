@@ -6,7 +6,7 @@ include 'db.php';
 
  $no_faktur = $_POST['no_faktur'];
 
- $query = $db->query ("SELECT * FROM detail_item_keluar WHERE no_faktur = '$no_faktur'");
+ $query = $db->query ("SELECT *,st.nama as nama_satuan FROM detail_item_keluar dik LEFT JOIN satuan st ON dik.satuan = st.id  WHERE dik.no_faktur = '$no_faktur'");
 
  ?>
 
@@ -15,7 +15,7 @@ include 'db.php';
 
 
 <div class="table-responsive">      
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th> Nomor Faktur </th>
 			<th> Kode Barang </th>
@@ -43,7 +43,7 @@ include 'db.php';
 			<td>". $data1['kode_barang'] ."</td>
 			<td>". $data1['nama_barang'] ."</td>
 			<td>". rp($data1['jumlah']) ."</td>
-			<td>". $data1['satuan'] ."</td>
+			<td>". $data1['nama_satuan'] ."</td>
 			<td>". rp($data1['harga']) ."</td>
 			<td>". rp($subtotal) ."</td>
 			

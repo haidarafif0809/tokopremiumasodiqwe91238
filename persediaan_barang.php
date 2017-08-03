@@ -5,6 +5,8 @@
     include 'navbar.php';
     include 'sanitasi.php';
     include 'db.php';
+    include 'persediaan.function.php';
+
 
 $kategori = $_GET['kategori'];
 $tipe = $_GET['tipe'];
@@ -443,7 +445,7 @@ th {
 <div class="table-responsive">
           
 <span id="table_baru">
-    <table id="tableuser" class="table table-bordered">
+    <table id="tableuser" class="table table-bordered table-sm">
 
         <!-- membuat nama kolom tabel -->
         <thead>
@@ -508,25 +510,12 @@ $f = round($e, 2);
         $select_gudang = $db->query("SELECT nama_gudang FROM gudang WHERE kode_gudang = '$data1[gudang]'");
         $ambil_gudang = mysqli_fetch_array($select_gudang);
 
-        $select1 = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah_masuk FROM hpp_masuk WHERE kode_barang = '$data1[kode_barang]'");
-        $masuk = mysqli_fetch_array($select1);
 
-        $select2 = $db->query("SELECT SUM(jumlah_kuantitas) AS jumlah_keluar FROM hpp_keluar WHERE kode_barang = '$data1[kode_barang]'");
-        $keluar = mysqli_fetch_array($select2);
+            $jumlah_barang = cekStokHpp($data1['kode_barang']);
 
-        $jumlah_barang = $masuk['jumlah_masuk'] - $keluar['jumlah_keluar'];
+            $total_hpp = hitungNilaiHpp($data1['kode_barang']);
 
-
-
-            $hpp_masuk = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_masuk WHERE kode_barang = '$data1[kode_barang]'");
-            $cek_awal_masuk = mysqli_fetch_array($hpp_masuk);
-            
-            $hpp_keluar = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE kode_barang = '$data1[kode_barang]'");
-            $cek_awal_keluar = mysqli_fetch_array($hpp_keluar);
-
-            $total_hpp = $cek_awal_masuk['total_hpp'] - $cek_awal_keluar['total_hpp'];
-
-$total_akhir_hpp = $total_akhir_hpp + $total_hpp;
+                $total_akhir_hpp = $total_akhir_hpp + $total_hpp;
 
         echo "<tr class='tr-id-".$data1['id']."' data-kode='".$data1['kode_barang']."'>
             <td>". $data1['kode_barang'] ."</td>
@@ -551,21 +540,20 @@ $total_akhir_hpp = $total_akhir_hpp + $total_hpp;
             echo "<td>". $total_hpp ."</td>";
 
             
-if ($data1['berkaitan_dgn_stok'] == 'Jasa') {
+        if ($data1['berkaitan_dgn_stok'] == 'Jasa') {
+         echo "<td>0</td>";
+        }   
+        else {
+            echo "<td>". $jumlah_barang ."</td>";
+        }
 
-    echo "<td>0</td>";
-}
-else {
-    echo "<td>". $jumlah_barang ."</td>";
-}
-
-// SATUAN
+        // SATUAN
             echo "<td class='edit-satuan' data-id='".$data1['id']."'><span id='text-satuan-".$data1['id']."'>". $data1['nama'] ."</span> 
             <select style='display:none' id='select-satuan-".$data1['id']."' value='".$data1['id']."' class='select-satuan' data-id='".$data1['id']."' 
             data-kode='".$data1['kode_barang']."' autofocus=''>";
 
 
-echo '<option value="'. $data1['satuan'] .'"> '. $data1['nama'] .'</option>';
+            echo '<option value="'. $data1['satuan'] .'"> '. $data1['nama'] .'</option>';
 
      $query2 = $db->query("SELECT id, nama FROM satuan");
 
@@ -631,7 +619,15 @@ $pilih_akses_barang_hapus = $db->query("SELECT item_hapus FROM otoritas_master_d
 $barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
 
 
-    if ($barang_hapus > 0 AND ($jumlah_barang == '0' OR $jumlah_barang == ''))      
+            $query_hpp_masuk = $db->query("SELECT no_faktur FROM hpp_masuk WHERE kode_barang = '$data1[kode_barang]'  ");
+            $data_hpp_masuk = mysqli_num_rows($query_hpp_masuk);
+
+            $query_hpp_keluar = $db->query("SELECT no_faktur FROM hpp_keluar WHERE kode_barang = '$data1[kode_barang]'");
+            $data_hpp_keluar = mysqli_num_rows($query_hpp_keluar);
+
+
+
+    if ($barang_hapus > 0 AND $data_hpp_masuk == 0 AND $data_hpp_keluar == 0 )      
 
             {
          
@@ -640,7 +636,7 @@ $barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
             }
         else
         {
-            echo "<td>Tidak Bisa dihapus</td>";
+            echo "<td style='color:red;' align='center'>X</td>";
         }
 
 

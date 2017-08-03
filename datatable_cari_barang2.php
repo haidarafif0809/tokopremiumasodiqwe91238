@@ -97,7 +97,7 @@ if( !empty($requestData['search']['value']) ) {   // if there is a search parame
 }
 $query=mysqli_query($conn, $sql) or die("datatable_cari_barang.php: get employees");
 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
-$sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+$sql.=" ORDER BY id DESC  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */	
 $query=mysqli_query($conn, $sql) or die("employee-grid-data.php: get employees");
 
@@ -119,6 +119,15 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
        $stok_barang = cekStokHpp($row['kode_barang']);	
        // menampilkan file yang ada di masing-masing data dibawah ini
 
+            $query_hpp_masuk = $db->query("SELECT no_faktur FROM hpp_masuk WHERE kode_barang = '$row[kode_barang]' AND jenis_transaksi != 'Penjualan' ");
+ 			$data_hpp_masuk = mysqli_num_rows($query_hpp_masuk);
+
+ 			$query_hpp_keluar = $db->query("SELECT no_faktur FROM hpp_keluar WHERE kode_barang = '$row[kode_barang]'");
+ 			$data_hpp_keluar = mysqli_num_rows($query_hpp_keluar);
+
+ 			$query_detail_penjualan = $db->query("SELECT no_faktur FROM detail_penjualan WHERE kode_barang = '$row[kode_barang]' ");
+ 			$data_detail_penjualan = mysqli_num_rows($query_detail_penjualan);
+
        $nestedData[] = $row['kode_barang'];
        $nestedData[] = $row['nama_barang'];
        //harusnya klik 2x untuk edit
@@ -138,17 +147,16 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 		$nestedData[] = $row['over_stok'];
 		$nestedData[] = $row['status'];
 
-			// jika barang nya tidak sama dengan 0 maka barang tidak dapat di hapus
-		    if ($data_otoritas_item['item_hapus'] > 0 AND ( $stok_barang  == '0' OR  $stok_barang  == ''))        
+			if ($data_otoritas_item['item_hapus'] > 0 AND $data_hpp_masuk == 0 AND $data_hpp_keluar == 0 AND $data_detail_penjualan == 0 )  {
 
-		            {
-		         
-		            $nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."'  data-nama='". $row['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-		        }
-		        else
-		        {
-		            $nestedData[] = "Tidak Bisa Di Hapus";
-		        }
+			$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."'  data-nama='". $row['nama_barang'] ."' data-kode='". $row['kode_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> ";	 
+
+			}
+			else{
+	 			# code...
+
+	 			$nestedData[] = "<p style='color:red;' align='center'>X</p>";
+	 		} 
 
   
 

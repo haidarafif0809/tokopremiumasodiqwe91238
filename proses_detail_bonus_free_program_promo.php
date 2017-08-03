@@ -12,11 +12,13 @@ die('Koneksi gagal: ' .$db->connect_errno.
 	$id_program = angkadoang($_POST['id_program']);
     $id_produk = angkadoang($_POST['id_produk']);
     $qty = angkadoang($_POST['qty']);
-$insert_produk = $db->prepare("INSERT INTO promo_free_produk (nama_program,nama_produk,qty) VALUES (?,?,?)");
+    $satuan = angkadoang($_POST['satuan']);
+
+$insert_produk = $db->prepare("INSERT INTO promo_free_produk (nama_program,nama_produk,qty,satuan) VALUES (?,?,?,?)");
   
 // hubungkan "data" dengan prepared statements
-$insert_produk->bind_param("iii",
-$id_program,$id_produk,$qty);
+$insert_produk->bind_param("iiii",
+$id_program,$id_produk,$qty,$satuan);
        
   
 

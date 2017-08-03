@@ -31,7 +31,7 @@ $total_tax = $data_sum_dari_detail_pembaelian['sum_tax'];
         </div><!--penutup colsm2-->
 
         <div class="col-sm-6">
-                 <h3> <b> LAPORAN PEMBELIAN DETAIL NON FAKTUR </b></h3>
+                 <h3> <b> LAPORAN PEMBELIAN REKAP /BARANG </b></h3>
                  <hr>
                  <h4> <b> <?php echo $data_perusahaan['nama_perusahaan']; ?> </b> </h4> 
                  <p> <?php echo $data_perusahaan['alamat_perusahaan']; ?> </p> 

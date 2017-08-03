@@ -62,7 +62,7 @@ $data_promo_disc_produk = mysqli_fetch_array($query_promo_disc_produk);
 
 
 //mengambil / cek data ditbsbonus (disc produk/free) 
-$query_tbs_bonus = $db->query("SELECT kode_produk,keterangan,id, tanggal,jam,satuan,harga_disc,nama_produk,kode_pelanggan FROM tbs_bonus_penjualan WHERE session_id = '$session_id'");
+$query_tbs_bonus = $db->query("SELECT kode_produk,keterangan,id,nama_produk FROM tbs_bonus_penjualan WHERE session_id = '$session_id'");
 $jumlah_data_tbs_bonus = mysqli_num_rows($query_tbs_bonus);
 $data_tbs_bonus = mysqli_fetch_array($query_tbs_bonus);
 
@@ -70,32 +70,38 @@ $subtotal_tbs_penjualan = $data_tbs_penjualan['subto'];
 $syarat_promo_disc_produk = $data_promo_disc_produk['syarat_belanja'];
 $subtotal_tbs_penjualan_difree = round($data_tbs_penjualan_innerjoin['sub_tp']);
 $syarat_promo_free = $data_tbs_penjualan_innerjoin['syarat_belanja'];
+$keterangan = $data_tbs_bonus['keterangan'];
+$total_syarat_free = $syarat_promo_free - $subtotal_tbs_penjualan_difree;
+$total_syarat_disc = $syarat_promo_disc_produk - $subtotal_tbs_penjualan;
 
-$total_syarat_free = $subtotal_tbs_penjualan_difree - $syarat_promo_free;
-$total_syarat_disc = $subtotal_tbs_penjualan - $syarat_promo_disc_produk;
 
+if ($total_syarat_free > 0 && $jumlah_data_tbs_bonus > 0 && $keterangan == 'Free Produk') {
 
-if (($total_syarat_disc <= 0 && $total_syarat_disc != NULL) || ($total_syarat_free <= 0 && $total_syarat_free != NULL)){
-
-	/*$harga_jual_disc = $data_tbs_penjualan_innerjoin['harga_jual'];
-	$potongan = $data_tbs_penjualan['pot'];
-	$data_promo_disc_produk['nama_produk'] = $subtotal_tbs_penjualan;
-	$data_promo_disc_produk['id'] = $potongan;
-	$data_promo_disc_produk['batas_akhir'] = $harga_jual_disc;*/
-
-	$promo_disc_produk = array(
-    'subtotal_tbs_penjualan' => round($data_tbs_penjualan['subto']),
-	'syarat_promo_disc_produk' => $data_promo_disc_produk['syarat_belanja'],
+	$promo_produk = array(
+    //'subtotal_tbs_penjualan' => round($data_tbs_penjualan['subto']),
 	'subtotal_tbs_penjualan_difree' => round($data_tbs_penjualan_innerjoin['sub_tp']),
 	'syarat_promo_free' => $data_tbs_penjualan_innerjoin['syarat_belanja'],
     'kode_produk' =>$data_tbs_bonus['kode_produk'],
 	'id' => $data_tbs_bonus['id'],
-	'nama_produk' =>$data_tbs_bonus['nama_produk']
+	'nama_produk' =>$data_tbs_bonus['nama_produk'],
+	'keterangannya' =>$data_tbs_bonus['keterangan']
    );
-  echo json_encode($promo_disc_produk);
+  echo json_encode($promo_produk);
+}else if ($total_syarat_disc > 0 && $jumlah_data_tbs_bonus > 0 && $keterangan == 'Disc Produk') {
+	# code...
+	$promo_produk = array(
+    'subtotal_tbs_penjualan' => round($data_tbs_penjualan['subto']),
+	'syarat_promo_disc_produk' => $data_promo_disc_produk['syarat_belanja'],
+    'kode_produk' =>$data_tbs_bonus['kode_produk'],
+	'id' => $data_tbs_bonus['id'],
+	'nama_produk' =>$data_tbs_bonus['nama_produk'],
+	'keterangannya' =>$data_tbs_bonus['keterangan']
+   );
+  echo json_encode($promo_produk);
 }
 else{
-	echo 0;
+	$promo_produk = 0;
+	echo json_encode($promo_produk);
 }
         //Untuk Memutuskan Koneksi Ke Database
 

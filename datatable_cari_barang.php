@@ -10,23 +10,27 @@ $requestData= $_REQUEST;
 
 $columns = array( 
 // datatable column index  => database column name
-	0 =>'kode_barang', 
-	1 => 'nama_barang',
-	2 => 'harga_beli',
-	3 => 'harga_jual',
-	4 => 'harga_jual2',
-	5 => 'harga_jual3',
-	6 => 'harga_jual4',
-	7 => 'harga_jual5',
-	8 => 'harga_jual6',
-	9 => 'harga_jual7',
-	10 => 'satuan',
-	11 => 'tipe_barang',
-	12 => 'kategori',
-	13 => 'berkaitan_dgn_stok',
-	14 => 'stok_barang',
-	15 => 'gudang',
-	16 => 'id_satuan'
+	0 =>'hapus', 
+	1 => 'edit',
+	2 => 'barcode',
+	3 => 'kode',
+	4 => 'nama',
+	5 => 'harga_beli',
+	6 => 'margin',
+	7 => 'harga_jual1',
+	8 => 'harga_jual2',
+	9 => 'harga_jual3',
+	10 => 'harga_jual4',
+	11 => 'harga_jual5',
+	12 => 'harga_jual6',
+	13 => 'harga_jual7',
+	14 => 'hpp',
+	15 => 'stok_barang',
+	16 => 'satuan',
+	17 => 'satuan_konversi',
+	18 => 'setting_diskon_jumlah',
+	19 => 'kategori',
+	20 => 'id'
 );
 
 
@@ -77,14 +81,14 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 if ($requestData['tipe'] == 'barang') {
 	if ($requestData['kategori']  == 'semua' AND $tipe = 'barang') {
 
-		$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+		$sql = "SELECT s.id AS id_satuan,s.nama,b.kode_barcode,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
 		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE 1=1 AND b.berkaitan_dgn_stok = '$requestData[tipe]' ";
 
 
 	}
 
 	else{
-		$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+		$sql = "SELECT s.id AS id_satuan,s.nama,b.kode_barcode,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
 		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id";
 		$sql.="WHERE 1=1 AND b.kategori = '$kategori' AND b.berkaitan_dgn_stok = '$requestData[tipe]' ";
     }
@@ -94,20 +98,20 @@ if ($requestData['tipe'] == 'barang') {
 else
 {
 	if ($requestData['kategori'] == 'semua') {
-    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.kode_barcode,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
 		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id";
     
     }
     
     else{
-    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
+    	$sql = "SELECT s.id AS id_satuan,s.nama,b.id,b.kode_barcode,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang";
 		$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE 1=1 AND b.kategori = '$requestData[kategori]'";
     }
 }
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-	$sql.=" AND ( kode_barang = '".$requestData['search']['value']."' ";    
-	$sql.=" OR nama_barang LIKE '".$requestData['search']['value']."%' )";
+	$sql.=" AND ( b.kode_barang LIKE '".$requestData['search']['value']."' ";    
+	$sql.=" OR b.nama_barang LIKE '".$requestData['search']['value']."%' )";
 
 }
 
@@ -116,9 +120,8 @@ $query=mysqli_query($conn, $sql) or die("datatable_cari_barang.php: query 1");
 $totalFiltered = mysqli_num_rows($query); 
 
 // when there is a search parameter then we have to modify total number filtered rows as per search result. 
-$sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+$sql.=" ORDER BY b.id DESC LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 /* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */
-	
 $query=mysqli_query($conn, $sql) or die("employee-grid-data.php: query 2");
 
 
@@ -159,7 +162,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	elseif ($data_otoritas_item['item_hapus'] > 0 AND $stok_barang != '0') {
 	 	# code...
 
-	 	$nestedData[] = "Tidak Bisa Di Hapus";
+	 	$nestedData[] = "<p style='color:red;' align='center'>X</p>";
 	 } 
 
 			          
@@ -177,6 +180,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	
 	
 
+	$nestedData[] = $row["kode_barcode"];
 	$nestedData[] = $row["kode_barang"];
 	$nestedData[] = $row["nama_barang"];
 
@@ -239,6 +243,10 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 	//satuan konversi
 	$nestedData[] = "<a href='satuan_konversi.php?id=". $row['id']."&nama=". $row['nama']."&satuan=". $row['satuan']."&harga=". $row['harga_beli']."&kode_barang=". $row['kode_barang']."' class='btn btn-secondary'>Konversi</a> </td>";
+
+	//Setting diskon
+	$nestedData[] = "<a href='setting_diskon_jumlah.php?id=". $row['id']."&kode_barang=". $row['kode_barang']."&nama_barang=". $row['nama_barang']."' class='btn btn-primary' target='blank'>Setting</a>";
+
 
 	$nestedData[] = $data_kategori["nama_kategori"];
 	

@@ -5,12 +5,14 @@
  include 'header.php';
  include 'navbar.php';
  include 'db.php';
+ include 'sanitasi.php';
 
 // mengirim data id dengan metode GET
- $id = $_GET['id'];
+ $id = angkadoang($_GET['id']);
  
  // perintah untuk menampilkan data yang ada pada tabel barang berdasarkan id
- $query = $db->query("SELECT b.nama_barang, b.harga_beli, b.harga_jual, b.harga_jual2, b.harga_jual3, b.satuan, b.gudang, b.gudang, b.kategori, b.status, b.berkaitan_dgn_stok, b.suplier, b.limit_stok, b.over_stok, s.nama FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.id = '$id'");
+ $query = $db->query("SELECT b.kode_barcode,b.nama_barang,b.kode_barang, b.harga_beli, b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.harga_jual, b.harga_jual2, b.harga_jual3, b.satuan, b.gudang, 
+ 	b.gudang, b.kategori, b.status, b.berkaitan_dgn_stok, b.suplier, b.limit_stok, b.over_stok, s.nama FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.id = '$id'");
  
  // perintah untuk menyimpan data sementara yang ada pada $query
  $data = mysqli_fetch_array($query);
@@ -24,6 +26,11 @@
 
 				
 					<!-- membuat agar tampilan form berada dalam satu group-->
+					<div class="form-group">
+					<label>Barcode</label><br>
+					<input type="text" name="barcode" value="<?php echo $data['kode_barcode']; ?>" class="form-control" autocomplete="off"  >
+					</div>
+
 					<div class="form-group">
 					<label>Nama Barang </label><br>
 					<input type="text" name="nama_barang" value="<?php echo $data['nama_barang']; ?>" class="form-control" autocomplete="off"  >
@@ -105,16 +112,19 @@
 							<label> Kategori </label>
 							<br>
 							<select type="text" name="kategori" class="form-control" >
-							<option value="<?php echo $data['kategori']; ?>"> <?php echo $data['kategori']; ?> </option>
 							<?php 
 							
 							$ambil_kategori = $db->query("SELECT id,nama_kategori FROM kategori");
 							
 							while($data_kategori = mysqli_fetch_array($ambil_kategori))
 							{
-							
-							echo "<option value='".$data_kategori['id']."' >".$data_kategori['nama_kategori'] ."</option>";
-							
+								if ($data['kategori'] == $data_kategori['id']) {
+									echo "<option selected value='".$data_kategori['id']."' >".$data_kategori['nama_kategori'] ."</option>";
+								}
+								else{
+									echo "<option value='".$data_kategori['id']."' >".$data_kategori['nama_kategori'] ."</option>";
+								}					
+												
 							}
 							
 							?>
@@ -185,6 +195,11 @@
 
 
 					<input type="hidden" name="id" value="<?php echo $id; ?>">
+					<input type="hidden" name="kode_barang" value="<?php echo $data['kode_barang']; ?>">
+					<input type="hidden" name="harga_jual_4" value="<?php echo $data['harga_jual4'];?>">
+					<input type="hidden" name="harga_jual_5" value="<?php echo $data['harga_jual5']; ?>">
+					<input type="hidden" name="harga_jual_6" value="<?php echo $data['harga_jual6']; ?>">
+					<input type="hidden" name="harga_jual_7" value="<?php echo $data['harga_jual7']; ?>">
 					<!-- membuat tombol Edit -->
 					<button type="submit" class="btn btn-info">Simpan</button>
 

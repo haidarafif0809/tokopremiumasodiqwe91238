@@ -42,7 +42,7 @@
         <div class="row">
 
             <div class="col-sm-5">
-                <label> Suplier (F4)</label><br>
+                <label> Suplier (F4)</label>
                 <select name="suplier" id="nama_suplier" class="form-control chosen" required="" data-placeholder="SILAKAN PILIH...">
                   <?php
                     // menampilkan seluruh data yang ada pada tabel suplier
@@ -62,7 +62,7 @@
             </div>    
 
             <div class="col-sm-2">
-              <label> Gudang </label><br>
+              <label> Gudang </label>
               <select style="font-size:15px; height:35px" name="kode_gudang" id="kode_gudang" class="form-control chosen" required="" >
                 <?php
                   $query = $db->query("SELECT kode_gudang, nama_gudang FROM gudang");
@@ -106,7 +106,7 @@
 
             <div class="col-sm-2">
               <label>Tanggal</label>
-              <input type="text" style="font-size:15px; height:10" value="<?php echo $data_order['tanggal'];?>" name="tanggal" id="tanggal" class="form-control">
+              <input type="text" style="font-size:15px; height:13" value="<?php echo $data_order['tanggal'];?>" name="tanggal" id="tanggal" class="form-control">
             </div>
 
         </div>  <!-- END ROW -->
@@ -114,7 +114,14 @@
       </form><!--tag penutup form-->
 
       <!-- TOMOBOL CARI PRODUK-->
-      <button type="button" id="cari_produk_pembelian" class="btn btn-info " data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'> Cari (F1)</i>  </button>
+
+  <form id="form_barcode" class="form-inline">
+    <div class="form-group">
+        <input type="text" style="height:15px" name="kode_barcode" id="kode_barcode" class="form-control" autocomplete="off" placeholder="Scan / Ketik Barcode">
+    </div>
+        <button type="submit" id="submit_barcode" class="btn btn-primary" style="font-size:15px" ><i class="fa fa-barcode"></i> Submit Barcode</button> ||  
+        <button type="button" class="btn btn-info" id="cari_produk_pembelian" accesskey="s" data-toggle="modal" data-target="#myModal"><i class='fa fa-search'> </i> Cari Produk (F1)</button>
+  </form>
 
       <!--MODAL PRODUK-->
       <div id="myModal" class="modal" role="dialog">
@@ -257,10 +264,10 @@
            <!-- CARD-BLOCK -->
            <div class="card card-block">
 
-            <label style="font-size:15px"> <b> Subtotal </b></label><br>
+            <label style="font-size:15px"> <b> Subtotal </b></label>
             <input style="height:30px;font-size:30px" type="text" name="total" id="total2" class="form-control" placeholder="Subtotal" readonly="" >
 
-            <label> Keterangan (F8)</label><br>
+            <label> Keterangan (F8)</label>
             <textarea style="height:40px;font-size:15px" type="text" name="keterangan" id="keterangan" class="form-control"> <?php echo $data_order['keterangan'] ?> </textarea>
 
           </div>
@@ -421,6 +428,73 @@
 });//penutup ready(function()
 </script>
 
+<script>
+//SCRIPT BARCODE INPUT
+$(document).on('click', '#submit_barcode', function (e) {
+  var kode_barang = $("#kode_barcode").val();
+  var suplier = $("#nama_suplier").val();
+  var no_faktur_order = $("#no_faktur").val();
+
+  if (suplier == ''){
+  alert("Suplier Harus Dipilih");
+  $("#nama_suplier").trigger('chosen:open');
+  }
+  else{
+
+  // JAVASCRIPT BARCODE
+  $.post("barcode_edit_order_pembelian.php",{kode_barang:kode_barang, no_faktur_order:no_faktur_order},function(data){
+    if (data == 3){
+      alert("Barcode Yang Anda Masukan Tidak Ada , Silakan Periksa Kembali ");
+      $("#kode_barcode").val('');
+      $("#kode_barcode").focus();
+    }
+    else{
+
+      $(".tr-kode-"+kode_barang+"").remove();
+      $("#ppn").attr("disabled", true).trigger('chosen:updated');
+      $("#nama_barang").val('');
+      $("#jumlah_barang").val('');
+      $("#potongan1").val('');
+      $("#kode_barcode").val('');
+
+            //perhitungan form pembayaran (total & subtotal / biaya admin) 
+
+            var total_perorder = data;
+
+                if (total_perorder == '') {
+                  total_perorder = 0;
+                }
+
+
+            var subtotal = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+
+            if (subtotal == ''){
+                subtotal = 0;
+              }
+
+            var total_akhir1 = parseInt(subtotal,10) + parseInt(total_perorder,10);
+
+            $("#total2").val(tandaPemisahTitik(Math.round(total_akhir1)));
+
+            // datatable ajax pembaruan
+                var tabel_tbs_order = $('#tabel_tbs_order').DataTable();
+                    tabel_tbs_order.draw();
+    
+    }// end else untuk stok tidak mencukupi
+
+  });
+  }
+
+  /// JAVASCRIPT BARCODE
+
+
+$("#form_barcode").submit(function(){
+    return false;
+    
+    });
+});
+ </script> 
+
 <!-- INPUT PRODUK VIA NODAL -->
 <script type="text/javascript">
   $("#submit_produk").click(function(){
@@ -573,6 +647,7 @@ $(document).ready(function(){
     $("#over_stok").val(over_stok);
     $("#id_produk").val(id_barang);
 
+
     $.post('cek_produk_edit_order_pembelian.php',{kode_barang:kode_barang,no_faktur:no_faktur}, function(data){
 
       if(data == 1){
@@ -669,6 +744,23 @@ $(document).ready(function(){
         var tax_tbs = tax / subtotal_lama * 100;
         var jumlah_tax = Math.round(tax_tbs) * subtotal / 100;
 
+        var nama_barang = $(this).attr("data-nama");
+        var jumlahbarang = $(this).attr("data-stok");
+        var over_stok = $(this).attr("data-over");
+        var stok = parseFloat(jumlah_baru) + parseFloat(jumlahbarang);
+
+        if( over_stok < stok && over_stok != 0 ){
+
+            alert("Persediaan Produk '"+nama_barang+"' Ini Melebihi Batas Over Stok.");
+            $("#jumlah_barang").val('');
+            $("#jumlah_barang").focus();
+            $("#input-jumlah-"+id+"").val(jumlah_lama);
+            $("#text-jumlah-"+id+"").text(jumlah_lama);
+            $("#text-jumlah-"+id+"").show();
+            $("#input-jumlah-"+id+"").attr("type", "hidden");
+        }
+        else{
+
             $("#text-jumlah-"+id+"").show();
             $("#text-jumlah-"+id+"").text(jumlah_baru);
             $("#btn-hapus-"+id+"").attr('data-subtotal', subtotal);
@@ -680,6 +772,8 @@ $(document).ready(function(){
             $.post("update_tbs_edit_order_pembelian.php",{jumlah_lama:jumlah_lama,tax:tax,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,potongan:potongan,harga:harga,jumlah_tax:jumlah_tax,subtotal:subtotal},function(info){
                 $("#kode_barang").trigger('chosen:open');
             });
+
+        }
 
     });
 

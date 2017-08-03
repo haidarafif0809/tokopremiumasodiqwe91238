@@ -7,7 +7,7 @@
     // mengrim data dengan menggunakan metode POST
     $id = angkadoang($_POST['id']);
     $jenis_edit = stringdoang($_POST['jenis_edit']);
-    echo $kode_barang = stringdoang($_POST['kode_barang']);
+    $kode_barang = stringdoang($_POST['kode_barang']);
 
     // membuat objek cache
       $cache = new Cache();
@@ -16,7 +16,7 @@
       $cache->setCache('produk');
 
     // hapus cache
-      $cache->erase($kode_barang);
+      $cache->eraseAll();
 
 
 
@@ -350,7 +350,7 @@ while ($data = $query->fetch_array()) {
 
 }
 
-      $cache->retrieve($kode_barang);
+      $cache->retrieveAll();
 
 
 

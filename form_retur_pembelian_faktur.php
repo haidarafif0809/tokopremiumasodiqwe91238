@@ -35,8 +35,7 @@ $session_id = session_id();
           <label> Suplier </label><br>
 
           <select data-placeholder="--SILAHKAN PILIH--" name="suplier" id="nama_suplier" class="form-control chosen" required="" >
-
-
+          <option value="">--Silakan Pilih--</option>
           <?php
 
           // menampilkan seluruh data yang ada pada tabel suplier
@@ -400,7 +399,7 @@ $session_id = session_id();
 
   <div class="col-sm-12">
       <label><b> KAS </b></label><br>
-      <input style="height: 20px; font-size: 20px;" type="text" name="pembayaran" id="pembayaran_pembelian" autocomplete="off" class="form-control" placeholder="KAS" >
+      <input style="height: 20px; font-size: 20px;" type="text" name="pembayaran" id="pembayaran_pembelian" autocomplete="off" class="form-control" placeholder="KAS" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
   </div>
 
   <div class="col-sm-6" style="display: none">
@@ -550,6 +549,7 @@ $(document).ready(function(){
 <!-- cek stok satuan konversi change-->
 <script type="text/javascript">
   $(document).ready(function(){
+
     $("#satuan_konversi").change(function(){
       var jumlah_retur = $("#jumlah_retur").val();
       var satuan_konversi = $("#satuan_konversi").val();
@@ -845,18 +845,20 @@ $(document).ready(function(){
   var potongan_pembelian = $("#potongan_pembelian").val();
   var tax = $("#tax").val();
   var pembayaran_pembelian = $("#pembayaran_pembelian").val();
+  if (pembayaran_pembelian == '') {
+    pembayaran_pembelian = 0;
+  };
   var session_id = $("#session_id").val();
   var supplier = $("#supplier").val();
   var ppn_input = $("#ppn_input"). val();
   var total1 = $("#total_retur_pembelian1"). val();
   var satuan_dasar = $("#satuan_pcs"). val();
   var potong_hutang = $("#potong_hutang"). val();
+  if (potong_hutang == '') {
+    potong_hutang = 0;
+  };
   var no_faktur_hutang = $("#no_faktur_hutang"). val();
   var no_faktur_hutang_hidden = $("#no_faktur_hutang_hidden"). val();
-
-
-
-
 
 if (total == "")
  {
@@ -868,7 +870,18 @@ if (total == "")
  else if (suplier == "") 
  {
 
-alert("Suplier Harus Di Isi");
+    alert("Suplier Harus Di Isi");
+    $("#nama_suplier").val("");
+        $("#nama_suplier").trigger("chosen:updated");
+    $("#nama_suplier").trigger("chosen:open");
+
+ } 
+ else if (pembayaran_pembelian == 0 && potong_hutang == 0) 
+ {
+
+        alert("Kas Tidak Boleh Nol Atau Kosong");
+        $("#pembayaran_pembelian").focus();
+
 
  }
 

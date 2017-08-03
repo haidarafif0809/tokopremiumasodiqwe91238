@@ -34,7 +34,7 @@ $columns = array(
 
 if ($status == 'semua') {
 // getting total number records without any search
-$sql = "SELECT pl.kode_pelanggan AS code_card, p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,ser.nama AS sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan ";
+$sql = "SELECT pl.kode_pelanggan AS code_card, p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.keterangan_promo_disc,ser.nama AS sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan ";
 $sql.="FROM penjualan p LEFT JOIN gudang g ON p.kode_gudang = g.kode_gudang LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.id LEFT JOIN user ser ON p.sales = ser.id";
 $query=mysqli_query($conn, $sql) or die("datatable_item_keluar.php: get employees");
 $totalData = mysqli_num_rows($query);
@@ -42,7 +42,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 }
 else{
 	// getting total number records without any search
-$sql = "SELECT pl.kode_pelanggan AS code_card, p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,ser.nama AS sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan ";
+$sql = "SELECT pl.kode_pelanggan AS code_card, p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.keterangan_promo_disc,ser.nama AS sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan ";
 $sql.="FROM penjualan p LEFT JOIN gudang g ON p.kode_gudang = g.kode_gudang LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.id LEFT JOIN user ser ON p.sales = ser.id WHERE p.status = '$status'";
 $query=mysqli_query($conn, $sql) or die("datatable_item_keluar.php: get employees");
 $totalData = mysqli_num_rows($query);
@@ -52,7 +52,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 if ($status == 'semua') {
 // getting total number records without any search
-$sql = "SELECT pl.kode_pelanggan AS code_card, p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,ser.nama AS sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan ";
+$sql = "SELECT pl.kode_pelanggan AS code_card, p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.keterangan_promo_disc,ser.nama AS sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan ";
 $sql.="FROM penjualan p LEFT JOIN gudang g ON p.kode_gudang = g.kode_gudang LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.id LEFT JOIN user ser ON p.sales = ser.id WHERE 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 	$sql.=" AND ( p.no_faktur LIKE '".$requestData['search']['value']."%' ";  
@@ -67,7 +67,7 @@ if( !empty($requestData['search']['value']) ) {   // if there is a search parame
 }
 else{
 // getting total number records without any search
-$sql = "SELECT pl.kode_pelanggan AS code_card, p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,ser.nama AS sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan ";
+$sql = "SELECT pl.kode_pelanggan AS code_card, p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.keterangan_promo_disc,ser.nama AS sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,g.nama_gudang,p.kode_gudang,pl.nama_pelanggan ";
 $sql.="FROM penjualan p INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id INNER JOIN user ser ON p.sales = ser.id WHERE p.status = '$status'";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
@@ -100,7 +100,7 @@ $penjualan_edit = mysqli_num_rows($pilih_akses_penjualan_edit);
 
     if ($penjualan_edit > 0){
 
-			$nestedData[] = "<a href='proses_edit_penjualan.php?no_faktur=". $row['no_faktur']."&kode_pelanggan=". $row['kode_pelanggan']."&nama_gudang=".$row['nama_gudang']."&kode_gudang=".$row['kode_gudang']."' class='btn btn-success'>Edit</a>";	
+			$nestedData[] = "<a href='proses_edit_penjualan.php?no_faktur=". $row['no_faktur']."&kode_pelanggan=". $row['kode_pelanggan']."&nama_gudang=".$row['nama_gudang']."&kode_gudang=".$row['kode_gudang']."' class='btn btn-sm btn-success'>Edit</a>";	
 
 
 		}
@@ -121,13 +121,13 @@ $row_piutang = mysqli_num_rows($pilih);
 
 if ($row_retur > 0 || $row_piutang > 0) {
 
-			$nestedData[] = "<button class='btn btn-danger btn-alert' data-id='".$row['id']."' data-faktur='".$row['no_faktur']."'>Hapus</button>";
+			$nestedData[] = "<button class='btn btn-sm btn-danger btn-alert' data-id='".$row['id']."' data-faktur='".$row['no_faktur']."'>Hapus</button>";
 
 } 
 
 else {
 
-			$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='".$row['id']."' data-pelanggan='".$row['nama_pelanggan']."' data-faktur='".$row['no_faktur']."' kode_meja='".$row['kode_meja']."'>Hapus</button>";
+			$nestedData[] = "<button class='btn btn-sm btn-danger btn-hapus' data-id='".$row['id']."' data-pelanggan='".$row['nama_pelanggan']."' data-faktur='".$row['no_faktur']."' kode_meja='".$row['kode_meja']."'>Hapus</button>";
 }
 
 
@@ -141,7 +141,7 @@ else {
 if ($row['status'] == 'Lunas') {
 
 	$nestedData[] ="<div class='dropdown'>
-				<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' style='width:150px'> Cetak Penjualan <span class='caret'></span></button>
+				<button class='btn btn-sm btn-primary dropdown-toggle' type='button' data-toggle='dropdown' style='width:150px'> Cetak Penjualan <span class='caret'></span></button>
 				
 				<ul class='dropdown-menu'>
 				<li><a href='cetak_lap_penjualan_tunai.php?no_faktur=".$row['no_faktur']."' target='blank'> Cetak Penjualan </a></li> 
@@ -158,7 +158,7 @@ else{
 
 
 if ($row['status'] == 'Piutang') {
-	$nestedData[] = "<a href='cetak_lap_penjualan_piutang.php?no_faktur=".$row['no_faktur']."' id='cetak_piutang' class='btn btn-warning' target='blank'>Cetak Piutang</a>";
+	$nestedData[] = "<a href='cetak_lap_penjualan_piutang.php?no_faktur=".$row['no_faktur']."' id='cetak_piutang' class='btn btn-sm btn-warning' target='blank'>Cetak Piutang</a>";
 }
 
 else{
@@ -167,13 +167,19 @@ else{
 	
 }
 
-			$nestedData[] = "<button class='btn btn-info detail' no_faktur='". $row['no_faktur'] ."' >Detail</button>";
+			$nestedData[] = "<button class='btn btn-sm btn-info detail' no_faktur='". $row['no_faktur'] ."' >Detail</button>";
+			if ($row['keterangan_promo_disc'] != '') {
+				$nestedData[] = "<button class='btn btn-sm btn-purple bonus' no_faktur='". $row['no_faktur'] ."' >Bonus</button>";
+			}
+			else {
+				$nestedData[] = "";	
+			}
 			$nestedData[] = $row["no_faktur"];
 			$nestedData[] = $row["nama_gudang"];
 			
 
 /*if ($row['status'] == 'Simpan Sementara') {
-	$nestedData[] = "<a href='proses_pesanan_barang.php?no_faktur=".$row['no_faktur']."&kode_pelanggan=".$row['kode_pelanggan']."&nama_pelanggan=".$row['nama_pelanggan']."&nama_gudang=".$row['nama_gudang']."&kode_gudang=".$row['kode_gudang']."' class='btn btn-primary'>Bayar</a>";
+	$nestedData[] = "<a href='proses_pesanan_barang.php?no_faktur=".$row['no_faktur']."&kode_pelanggan=".$row['kode_pelanggan']."&nama_pelanggan=".$row['nama_pelanggan']."&nama_gudang=".$row['nama_gudang']."&kode_gudang=".$row['kode_gudang']."' class='btn btn-sm btn-primary'>Bayar</a>";
 }
 
 else{

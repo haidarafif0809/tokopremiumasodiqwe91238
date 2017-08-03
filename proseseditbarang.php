@@ -2,23 +2,30 @@
 	// memasukan file db.php
     include 'sanitasi.php';
     include 'db.php';
+     include 'cache.class.php'; 
     // mengrim data dengan menggunakan metode POST
     $id = stringdoang($_POST['id']);
 
 
 
-       $query =$db->prepare("UPDATE barang SET nama_barang = ?, harga_beli = ?, harga_jual = ?, harga_jual2 = ?, harga_jual3 = ?, satuan = ?, gudang = ?, kategori = ?, status = ?, berkaitan_dgn_stok = ?, suplier = ?, limit_stok = ?, over_stok = ?  WHERE id = ?");
+       $query =$db->prepare("UPDATE barang SET kode_barcode = ?,nama_barang = ?, harga_beli = ?, harga_jual = ?, harga_jual2 = ?, harga_jual3 = ?, satuan = ?, gudang = ?, kategori = ?, status = ?, berkaitan_dgn_stok = ?, suplier = ?, limit_stok = ?, over_stok = ?  WHERE id = ?");
 
-       $query->bind_param("siiiissssssiis",
-        $nama_barang, $harga_beli, $harga_jual, $harga_jual_2, $harga_jual_3, $satuan, $gudang, $kategori, $status, $tipe, $suplier,$limit_stok, $over_stok, $id);
+       $query->bind_param("ssiiiissssssiis",
+        $barcode,$nama_barang, $harga_beli, $harga_jual, $harga_jual_2, $harga_jual_3, $satuan, $gudang, $kategori, $status, $tipe, $suplier,$limit_stok, $over_stok, $id);
 
            
          
+           $barcode = stringdoang($_POST['barcode']);
+           $kode_barang = stringdoang($_POST['kode_barang']);
            $nama_barang = stringdoang($_POST['nama_barang']);
            $harga_beli = angkadoang($_POST['harga_beli']);
            $harga_jual = angkadoang($_POST['harga_jual']);
            $harga_jual_2 = angkadoang($_POST['harga_jual_2']);
            $harga_jual_3 = angkadoang($_POST['harga_jual_3']);
+           $harga_jual_4 = angkadoang($_POST['harga_jual_4']);
+           $harga_jual_5 = angkadoang($_POST['harga_jual_5']);
+           $harga_jual_6 = angkadoang($_POST['harga_jual_6']);
+           $harga_jual_7 = angkadoang($_POST['harga_jual_7']);
            $satuan = stringdoang($_POST['satuan']);
            $kategori = stringdoang($_POST['kategori']);
            $status = stringdoang($_POST['status']);
@@ -31,6 +38,43 @@
 
         $query->execute();
 
+
+
+
+
+$query_id_barang = $db->query("SELECT id FROM barang WHERE kode_barang = '$kode_barang'");  
+$data_id_barang = mysqli_fetch_array($query_id_barang);  
+  
+ // setup 'default' cache  
+    $c = new Cache();  
+    $c->setCache('produk');  
+  
+    $c->store($kode_barang, array(     
+      'kode_barcode' => $barcode,   
+      'kode_barang' => $kode_barang,
+      'nama_barang' => $nama_barang,  
+      'harga_beli' => $harga_beli,  
+      'harga_jual' => $harga_jual,  
+      'harga_jual2' => $harga_jual_2,  
+      'harga_jual3' => $harga_jual_3,  
+      'harga_jual4' => $harga_jual_4,  
+      'harga_jual5' => $harga_jual_5,  
+      'harga_jual6' => $harga_jual_6,  
+      'harga_jual7' => $harga_jual_7,     
+      'kategori' => $kategori,  
+      'suplier' => $suplier,  
+      'limit_stok' => $limit_stok,  
+      'over_stok' => $over_stok,  
+      'berkaitan_dgn_stok' => $golongan,  
+      'tipe_barang' => $tipe,  
+      'status' => $status,  
+      'gudang' => $gudang, 
+      'satuan' => $satuan,  
+      'id' => $data_id_barang['id'] ,  
+  
+  
+    ));  
+
 if (!$query) 
 {
  die('Query Error : '.$db->errno.
@@ -38,7 +82,7 @@ if (!$query)
 }
 else 
 {
-   header('location:barang.php?kategori=semua&tipe=barang');
+   header('location:barang.php?kategori=semua&tipe=barang_jasa');
 }
 
 

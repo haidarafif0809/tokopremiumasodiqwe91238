@@ -27,18 +27,15 @@ $no_faktur = $_GET['no_faktur'];
 
 
  	<?php echo $data1['nama_perusahaan']; ?><br>
- 	<?php echo $data1['alamat_perusahaan']; ?><br><br>
+ 	<?php echo $data1['alamat_perusahaan']; ?> <hr><br><br>
  	===================<br>
  	No Faktur : <?php echo $data0['no_faktur']; ?> || Kasir : <?php echo $_SESSION['nama']; ?><br>
  	===================<br>
 
 </font>
  
- <table>
-
-  <tbody>
-
-
+ <table rules="all" style="border-color:gray;">
+ 
            <?php 
            while ($data2 = mysqli_fetch_array($query2)){
 
@@ -66,7 +63,7 @@ $no_faktur = $_GET['no_faktur'];
 
                   }
            
-           echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. koma($jumlah_barang,3) .'</td>  <td style="padding:3px"> '. rp($harga) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
+           echo '<tr><td style="width:50%;"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. koma($jumlah_barang,2) .'</td>  <td style="padding:3px"> '. rp($harga) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
            
            }
            
@@ -76,8 +73,7 @@ $no_faktur = $_GET['no_faktur'];
         
            
            
-           ?> 
- </tbody>
+           ?>  
 </table>
  	
     ===================<br>
@@ -87,7 +83,7 @@ $no_faktur = $_GET['no_faktur'];
       <tr><td width="50%">Biaya Admin</td> <td> :</td> <td><?php echo koma($data0['biaya_admin'],2);?> </tr>
 
       <!--<tr><td  width="50%">Pajak</td> <td> :</td> <td> <?php echo koma($data0['tax']);?> </td></tr>-->
-      <tr><td  width="50%">Total Item</td> <td> :</td> <td> <?php echo koma($total_item,3); ?> </td></tr>
+      <tr><td  width="50%">Total Item</td> <td> :</td> <td> <?php echo koma($total_item,2); ?> </td></tr>
       <tr><td width="50%">Total Penjualan</td> <td> :</td> <td><?php echo koma($data0['total'],2); ?> </tr>
       <tr><td  width="50%">Tunai</td> <td> :</td> <td> <?php echo koma($data0['tunai'],2); ?> </td></tr>
       <tr><td  width="50%">Kembalian</td> <td> :</td> <td> <?php echo koma($data0['sisa'],2); ?>  </td></tr>

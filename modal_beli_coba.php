@@ -30,7 +30,7 @@ $columns = array(
 // getting total number records without any search
 $sql =" SELECT b.id, b.kode_barang, b.nama_barang, b.harga_beli, b.satuan, b.kategori, b.suplier, b.over_stok, b.stok_barang, sk.harga_pokok, s.nama, k.nama_kategori ";
 $sql.=" FROM barang b LEFT JOIN satuan_konversi sk ON b.id = sk.id_produk LEFT JOIN satuan s ON b.satuan = s.id INNER JOIN kategori k ON b.kategori = k.id ";
-$sql.=" WHERE b.berkaitan_dgn_stok = 'Barang' OR b.berkaitan_dgn_stok = '' ";
+$sql.=" WHERE b.berkaitan_dgn_stok = 'Barang'";
 
 $query = mysqli_query($conn, $sql) or die("Salahnya Disini 1");
 $totalData = mysqli_num_rows($query);
@@ -42,7 +42,7 @@ if( !empty($requestData['search']['value']) ) {
    
 $sql =" SELECT b.id, b.kode_barang, b.nama_barang, b.harga_beli, b.satuan, b.kategori, b.suplier, b.over_stok, b.stok_barang, sk.harga_pokok, s.nama, k.nama_kategori ";
 $sql.=" FROM barang b LEFT JOIN satuan_konversi sk ON b.id = sk.id_produk LEFT JOIN satuan s ON b.satuan = s.id INNER JOIN kategori k ON b.kategori = k.id ";
-$sql.=" WHERE b.berkaitan_dgn_stok = 'Barang' OR b.berkaitan_dgn_stok = ''";
+$sql.=" WHERE b.berkaitan_dgn_stok = 'Barang'";
 
     $sql.=" AND (b.kode_barang LIKE '".$requestData['search']['value']."%' ";    
     $sql.=" OR b.nama_barang LIKE '".$requestData['search']['value']."%' ";
@@ -51,7 +51,6 @@ $sql.=" WHERE b.berkaitan_dgn_stok = 'Barang' OR b.berkaitan_dgn_stok = ''";
     $sql.=" OR s.nama LIKE '".$requestData['search']['value']."%' ) ";
 
 }
-
 
 
 $query=mysqli_query($conn, $sql) or die("Salahnya Disini 2");

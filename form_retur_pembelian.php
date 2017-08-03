@@ -405,7 +405,7 @@ $session_id = session_id();
 
   <div class="col-sm-12">
       <label><b> KAS </b></label><br>
-      <input style="height: 20px; font-size: 20px;" type="text" name="pembayaran" id="pembayaran_pembelian" autocomplete="off" class="form-control" placeholder="KAS" >
+      <input style="height: 20px; font-size: 20px;" type="text" name="pembayaran" id="pembayaran_pembelian" autocomplete="off" class="form-control" placeholder="KAS" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
   </div>
 
   <div class="col-sm-6" style="display: none">
@@ -872,6 +872,11 @@ if (total == "")
  {
 
 alert("Suplier Harus Di Isi");
+
+ }
+
+ else if (pembayaran_pembelian == "" || pembayaran_pembelian == 0){
+  alert("Pembayaran / Kas Tidak Boleh Koosong");
 
  }
 

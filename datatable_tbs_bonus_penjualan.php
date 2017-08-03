@@ -22,14 +22,14 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql =" SELECT s.nama,tbp.kode_produk, tbp.nama_produk, tbp.keterangan, tbp.qty_bonus, tbp.harga_disc, tbp.qty_bonus, tbp.harga_disc, tbp.id ";
+$sql =" SELECT s.nama,tbp.kode_produk, tbp.subtotal, tbp.nama_produk, tbp.keterangan, tbp.qty_bonus, tbp.harga_disc, tbp.qty_bonus, tbp.harga_disc, tbp.id ";
 $sql.=" FROM tbs_bonus_penjualan tbp LEFT JOIN satuan s ON tbp.satuan = s.id WHERE tbp.session_id = '$session_id' AND tbp.kode_pelanggan IS NULL ";
 $query = mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql =" SELECT s.nama,tbp.kode_produk, tbp.nama_produk, tbp.keterangan, tbp.qty_bonus, tbp.harga_disc, tbp.qty_bonus, tbp.harga_disc, tbp.id ";
+$sql =" SELECT s.nama,tbp.kode_produk, tbp.subtotal, tbp.nama_produk, tbp.keterangan, tbp.qty_bonus, tbp.harga_disc, tbp.qty_bonus, tbp.harga_disc, tbp.id ";
 $sql.=" FROM tbs_bonus_penjualan tbp LEFT JOIN satuan s ON tbp.satuan = s.id WHERE tbp.session_id = '$session_id' AND tbp.kode_pelanggan IS NULL AND 1=1 ";
 
     $sql.=" AND (tbp.kode_produk LIKE '".$requestData['search']['value']."%'";  
@@ -60,7 +60,13 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
       }
       $nestedData[] = $row["nama"];
       $nestedData[] = rp($row["harga_disc"]);
-      $nestedData[] = rp($row["qty_bonus"] * $row["harga_disc"]);
+      if ($row['keterangan'] == 'Free Produk') {
+        # code...
+        $nestedData[] = "0";
+      }
+      else{
+        $nestedData[] = rp($row["subtotal"]);
+      }
       $nestedData[] =  $row["keterangan"];
       $nestedData[] = "<button class='btn btn-danger btn-sm btn-hapus-tbsbonus' id='hapus-tbs-". $row['id'] ."' data-id='". $row['id'] ."' data-kode-produk='". $row['kode_produk'] ."' data-produk='". $row['nama_produk'] ."' data-qty='". $row['qty_bonus'] ."'>Hapus</button>";
       $nestedData[] = $row["id"];

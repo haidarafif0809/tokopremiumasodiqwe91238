@@ -60,13 +60,13 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
     if ($row["konversi"] != 0) {
     
-    $nestedData[] = "<p align='right'>".koma($row["jumlah_produk"],3)."</p>";
+    $nestedData[] = "<p align='right'>".koma($row["jumlah_produk"],2)."</p>";
     $nestedData[] = $row["satuan_konversi"];
 
     }
     else{
 
-    $nestedData[] = "<p align='right'>".koma($row["jumlah_barang"],3)."</p>";
+    $nestedData[] = "<p align='right'>".koma($row["jumlah_barang"],2)."</p>";
     $nestedData[] = $row["satuan_dasar"];
     }
 

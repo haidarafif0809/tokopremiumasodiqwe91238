@@ -222,7 +222,7 @@ $nomor = 1 + $ambil_nomor ;
     $query_delete_detail = $db->query("DELETE  FROM detail_penjualan WHERE no_faktur = '$no_faktur'");
 
 
-    $query = $db->query("SELECT no_faktur_order,jumlah_barang ,subtotal,satuan,kode_barang,harga,nama_barang,potongan,tax,tanggal,jam FROM tbs_penjualan WHERE session_id = '$session_id' AND no_faktur IS NULL");
+    $query = $db->query("SELECT no_faktur_order,jumlah_barang ,subtotal,satuan,kode_barang,harga,nama_barang,potongan,tax,tanggal,jam,harga_konversi FROM tbs_penjualan WHERE session_id = '$session_id' AND no_faktur IS NULL");
     while ($data = mysqli_fetch_array($query))
       {
 
@@ -232,7 +232,7 @@ $nomor = 1 + $ambil_nomor ;
 
           if ($data_konversi['jumlah_data'] != 0) {
                 
-                $harga_konversi = $data_konversi['harga_jual_konversi'];
+                $harga_konversi = $data['harga_konversi'];
                 $jumlah_barang = $data['jumlah_barang'] * $data_konversi['konversi'];
                 $satuan = $data['satuan'];
 
@@ -320,7 +320,7 @@ $nomor = 1 + $ambil_nomor ;
 
 
 //awal nya bonus
-$query_tbs_bonus_penjualan = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.harga_disc FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id'");
+$query_tbs_bonus_penjualan = $db->query("SELECT tp.kode_produk,tp.nama_produk,tp.qty_bonus,tp.keterangan,tp.tanggal,tp.jam,b.id as baranga,tp.satuan,tp.harga_disc FROM tbs_bonus_penjualan tp LEFT JOIN barang b ON tp.kode_produk = b.kode_barang WHERE tp.session_id = '$session_id'");
     while($datatb = mysqli_fetch_array($query_tbs_bonus_penjualan)){
 
 //LOGIKA KETIKA ADA PRODUK PARCEL YANG AKAN DIJUAL, KARENA PARCEL TIDAK MASUK KE DALAM PRODUK BONUS

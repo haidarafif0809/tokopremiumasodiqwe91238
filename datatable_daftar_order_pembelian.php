@@ -4,9 +4,7 @@ include 'db.php';
 /* Database connection end */
 include 'sanitasi.php';
 
-    
-
-
+$suplier = stringdoang($_POST['suplier']);
 
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
@@ -25,19 +23,30 @@ $columns = array(
    
 );
 
-
-
-
 // getting total number records without any search
-$sql =" SELECT po.id, po.no_faktur_order, po.suplier, po.kode_gudang, po.tanggal, po.user, po.jam, po.total, po.status_order, po.keterangan, s.nama";
-$sql.=" FROM pembelian_order po INNER JOIN suplier s ON po.suplier = s.id WHERE po.status_order = 'Di Order' ";
+if ($suplier == "") {
+    $sql =" SELECT po.id, po.no_faktur_order, po.suplier, po.kode_gudang, po.tanggal, po.user, po.jam, po.total, po.status_order, po.keterangan, s.nama";
+    $sql.=" FROM pembelian_order po INNER JOIN suplier s ON po.suplier = s.id WHERE po.status_order = 'Di Order' ";
+}
+else{
+    $sql =" SELECT po.id, po.no_faktur_order, po.suplier, po.kode_gudang, po.tanggal, po.user, po.jam, po.total, po.status_order, po.keterangan, s.nama";
+    $sql.=" FROM pembelian_order po INNER JOIN suplier s ON po.suplier = s.id WHERE po.status_order = 'Di Order' AND po.suplier = $suplier ";  
+}
+
+
 $query=mysqli_query($conn, $sql) or die("1.php: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
-
-$sql =" SELECT po.id, po.no_faktur_order, po.suplier, po.kode_gudang, po.tanggal, po.user, po.jam, po.total, po.status_order, po.keterangan, s.nama";
-$sql.=" FROM pembelian_order po INNER JOIN suplier s ON po.suplier = s.id WHERE po.status_order = 'Di Order' AND 1=1 ";
+// getting total number records without any search
+if ($suplier == "") {
+    $sql =" SELECT po.id, po.no_faktur_order, po.suplier, po.kode_gudang, po.tanggal, po.user, po.jam, po.total, po.status_order, po.keterangan, s.nama";
+    $sql.=" FROM pembelian_order po INNER JOIN suplier s ON po.suplier = s.id WHERE po.status_order = 'Di Order' AND 1=1";
+}
+else{
+    $sql =" SELECT po.id, po.no_faktur_order, po.suplier, po.kode_gudang, po.tanggal, po.user, po.jam, po.total, po.status_order, po.keterangan, s.nama";
+    $sql.=" FROM pembelian_order po INNER JOIN suplier s ON po.suplier = s.id WHERE po.status_order = 'Di Order' AND po.suplier = $suplier AND 1=1";
+}
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
   $sql.=" AND ( po.no_faktur_order LIKE '".$requestData['search']['value']."%' ";    

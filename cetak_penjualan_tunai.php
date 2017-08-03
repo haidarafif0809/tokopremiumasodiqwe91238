@@ -24,9 +24,8 @@ else{
 
     $query2 = $db->query("SELECT harga_konversi,kode_barang,nama_barang, jumlah_barang, harga, subtotal, no_faktur, satuan FROM detail_penjualan WHERE no_faktur = '$no_faktur' ");
 
-    $query3 = $db->query("SELECT SUM(jumlah_barang) as total_item FROM detail_penjualan WHERE no_faktur = '$no_faktur'");
-    $data3 = mysqli_fetch_array($query3);
-    $total_item = $data3['total_item'];
+
+    $total_item = 0;
 
 
         // AMBIL  ATURAN POIN
@@ -59,13 +58,12 @@ else{
 
 
   <?php echo $data1['nama_perusahaan']; ?><br>
-  <?php echo $data1['alamat_perusahaan']; ?><br><br>
+  <?php echo $data1['alamat_perusahaan']; ?><hr><br><br>
   ===================<br>
   No Faktur : <?php echo $no_faktur; ?> || Kasir : <?php echo $_SESSION['nama']; ?><br>
   ===================<br>
- <table>
-
-  <tbody>
+ <table rules="all"  style="border-color:gray;">
+ 
            <?php 
            while ($data2 = mysqli_fetch_array($query2)){
             //untuk mengambil data bonus
@@ -96,6 +94,7 @@ else{
 
                   }
 
+            $total_item = $total_item + $jumlah_barang;
 
 
             $keterangan = $bonus['keterangan'];
@@ -104,11 +103,11 @@ else{
             }
             else{
               $subtotal_bonus = $bonus['qty_bonus'] * $bonus['harga_jual'];
-              $subtotal_bonusnya = $bonus['qty_bonus'] * $bonus['harga_disc'];
+              $subtotal_bonusnya = $bonus['subtotal'];
               $subtotal_bonus_disc = $subtotal_bonus - $subtotal_bonusnya;
             }
            
-           echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. rp($jumlah_barang) .'</td>  <td style="padding:3px"> '. rp($harga) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
+           echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. koma($jumlah_barang,2) .'</td>  <td style="padding:3px"> '. rp($harga) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
            }
            echo '<tr><td width:"50%"> '. $bonus['nama_produk'] .' </td> <td style="padding:3px"> '. $bonus['qty_bonus'] .'</td>'; 
 
@@ -131,8 +130,7 @@ else{
 
 mysqli_close($db);            
            
-           ?> 
- </tbody>
+           ?>  
 </table>
     ===================<br>
  <table>
@@ -141,7 +139,7 @@ mysqli_close($db);
   <tr><td width="50%">Diskon</td> <td> :</td> <td><?php echo koma($data0['potongan'],2);?> </tr>
   <!--<tr><td  width="50%">Pajak</td> <td> :</td> <td> /* echo rp($data0['tax']);?>*/ </td></tr>-->
   <tr><td width="50%">Biaya Admin</td><td> :</td> <td> <?php echo koma($data0['biaya_admin'],2);?></td></tr>
-  <tr><td width="50%">Total Item</td> <td> :</td> <td> <?php echo gantiKoma($total_item); ?> </td></tr>
+  <tr><td width="50%">Total Item</td> <td> :</td> <td> <?php echo koma($total_item,2); ?> </td></tr>
   <tr><td width="50%">Total Penjualan</td> <td> :</td> <td><?php echo koma($data0['total'],2); ?> </tr>
   <tr><td width="50%">Tunai</td> <td> :</td> <td> <?php echo koma($data0['tunai'],2); ?> </td></tr>
   <tr><td width="50%">Kembalian</td> <td> :</td> <td> <?php echo koma($kembalian,2); ?>  </td></tr>

@@ -103,8 +103,8 @@ include 'db.php';
                   <th> Satuan </th>
                   <th> Harga </th>
                   <th> Potongan </th>
-                  <th> Subtotal </th>
                   <th> Tax </th>
+                  <th> Subtotal </th>
                   <th> Sisa Barang </th>
 
                 </thead> <!-- tag penutup tabel -->

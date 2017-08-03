@@ -13,36 +13,75 @@ $session_id = session_id();
     $c = new Cache();
 
      // store a string
+    $array_potongan = array();
+    $i = 0;
+    $kode_cek = substr(stringdoang($_POST['kode_barang']),0,2);
+    $kode_barcode = stringdoang($_POST['kode_barang']);
 
-    $kode = stringdoang($_POST['kode_barang']);
+
     $sales = stringdoang($_POST['sales']);
     $level_harga = stringdoang($_POST['level_harga']);
 
         // QUERY CEK BARCODE DI SATUAN KONVERSI
                                     
-    $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data,kode_barcode,kode_produk,konversi , id_satuan , harga_jual_konversi FROM satuan_konversi WHERE kode_barcode = '$kode' ");
+    $query_satuan_konversi = $db->query("SELECT COUNT(*) AS jumlah_data,kode_barcode,kode_produk,konversi , id_satuan , harga_jual_konversi FROM satuan_konversi WHERE kode_barcode = '$kode_barcode'  AND kode_barcode != '' ");
     $data_satuan_konversi = mysqli_fetch_array($query_satuan_konversi);     
 
         // QUERY CEK BARCODE DI SATUAN KONVERSI
      
-     // IF APABILA ADA SATUAN KONVERSINYA 
-      if ($data_satuan_konversi['jumlah_data'] != 0) { 
-          
-          $kode_barang = $data_satuan_konversi['kode_produk'];
-      }
-      else{
 
-          $kode_barang = $kode;
-      }
-      // IF APABILA ADA SATUAN KONVERSINYA
+
+     $lihat_setting = $db->query("SELECT kode_flag FROM setting_timbangan");
+        $kel_setting = mysqli_fetch_array($lihat_setting);
+        $setting_flag = $kel_setting['kode_flag'];
+
+
+        if ($kode_cek == $setting_flag)
+        {
+              $kode_barang = substr(stringdoang($_POST['kode_barang']),2,5);
+             $kilo = substr(stringdoang($_POST['kode_barang']),7,2);
+             $gram = substr(stringdoang($_POST['kode_barang']),9,3);
+             $jumlah_barang = $kilo.'.'.$gram;
+        }
+        else{
+              // IF APABILA ADA SATUAN KONVERSINYA 
+              if ($data_satuan_konversi['jumlah_data'] != 0) { 
+          
+                  $kode_barang = $data_satuan_konversi['kode_produk'];
+              }
+              else{
+
+
+                  // QUERY CEK BARCODE DI MASTER DATA PRODUK
+                                              
+                  $querybarang = $db->query("SELECT COUNT(*) AS jumlah_data,kode_barcode,kode_barang FROM barang WHERE kode_barcode = '$kode_barcode' AND kode_barcode != '' ");
+                  $databarang = mysqli_fetch_array($querybarang);     
+
+              // QUERY CEK BARCODE DI MASTER DATA PRODUK
+
+                      // IF CEK BARCODE DI BARCODE
+                    if ($databarang['jumlah_data'] > 0) {
+                                   
+                     $kode_barang =  $databarang['kode_barang'];
+                    }else{
+
+                    $kode_barang =  $kode_barcode;
+                    }
+              }
+              // IF APABILA ADA SATUAN KONVERSINYA
+        }
+
+     
 
     $tipe = $db->query("SELECT berkaitan_dgn_stok FROM barang WHERE kode_barang = '$kode_barang'");
     $data_tipe = mysqli_fetch_array($tipe);
     $ber_stok = $data_tipe['berkaitan_dgn_stok'];
 
+
+
+
     // UNTUK MENGETAHUI JUMLAAH TBS SEBENARNYA
     $jumlah_tbs = 0;
-
     $query_stok_tbs = $db->query("SELECT jumlah_barang,satuan FROM tbs_penjualan_order WHERE kode_barang = '$kode_barang' AND session_id = '$session_id'");
     while($data_stok_tbs = mysqli_fetch_array($query_stok_tbs)){
 
@@ -59,7 +98,7 @@ $session_id = session_id();
 
     }
   //  UNTUK MENGETAHUI JUMLAAH TBS SEBENARNYA
-   
+
    $ambil_sisa = cekStokHpp($kode_barang) - $jumlah_tbs;
 
 
@@ -185,29 +224,49 @@ else if ($level_harga == 'harga_7')
 }
 
 
+
+            $query_potongan = $db->query("SELECT SUM(potongan) AS potongan FROM tbs_penjualan_order WHERE kode_barang = '$kode_barang' AND session_id = '$session_id' AND satuan != '$satuan' ");
+            $data_potongan = mysqli_fetch_array($query_potongan);
+                $potongan_tbs_order = $data_potongan['potongan'];
+          //  UNTUK MENGETAHUI JUMLAAH TBS SEBENARNYA
+           
+
             // qUERY UNTUK CEK APAKAH SUDAH ADA APA BELUM DI TBS PENJUALAN    
-            $query_tbs_penjualan = $db->query("SELECT COUNT(kode_barang) AS jumlah_data FROM tbs_penjualan_order WHERE kode_barang = '$kode_barang' AND session_id = '$session_id' AND satuan = '$satuan'");
+            $query_tbs_penjualan = $db->query("SELECT COUNT(kode_barang) AS jumlah_data,SUM(subtotal) AS subtotal, SUM(potongan) AS potongan FROM tbs_penjualan_order WHERE kode_barang = '$kode_barang' AND session_id = '$session_id' AND satuan = '$satuan'");
             $data_tbs_penjualan = mysqli_fetch_array($query_tbs_penjualan);
             // qUERY UNTUK CEK APAKAH SUDAH ADA APA BELUM DI TBS PENJUALAN  
 
+            $subtotal_tbs_order = $data_tbs_penjualan['subtotal'] + $data_tbs_penjualan['potongan'];
 
                            ##
             // IF CEK BARCODE DI SATUAN KONVERSI
 
             if ($data_satuan_konversi['jumlah_data'] > 0) {
 
+                  $jumlah_produk = $data_satuan_konversi['konversi'];
                   $stok_barang = $ambil_sisa - $data_satuan_konversi['konversi'];
 
                   // cari subtotal , langsung dikalikan dengan nilai konversinya
                   
                   $harga_fee = $harga_tbs;
 
-                  $harga_konversi = $data_satuan_konversi['harga_jual_konversi'];
-                  $a = $data_satuan_konversi['harga_jual_konversi'];
+                  if ($data_satuan_konversi['harga_jual_konversi'] == 0) {   
+
+                    $harga_konversi = $harga_tbs * $data_satuan_konversi['konversi'];
+                    $a = $harga_tbs * $data_satuan_konversi['konversi'];
+                  }else{
+
+                    $harga_konversi = $data_satuan_konversi['harga_jual_konversi'];
+                    $a = $data_satuan_konversi['harga_jual_konversi'];
+                  }
+                  
                   // cari subtotal
                   $jumlah_fee = $data_satuan_konversi['konversi'];
 
                 }else{
+
+       
+                  $jumlah_produk = $jumlah_barang;
 
                   $stok_barang = $ambil_sisa - $jumlah_barang;
                   // cari subtotal
@@ -221,6 +280,64 @@ else if ($level_harga == 'harga_7')
 
 
         // display the cached array
+        
+
+                               // untuk cek potongan produk
+        
+                           // ambil setting_diskon_jumlah yang selisih antara jumlah produk dan syarat jumlah lebih dari nol
+                $query = $db->query("SELECT potongan,  syarat_jumlah FROM setting_diskon_jumlah WHERE kode_barang = '$kode_barang' ");
+                while ($data = mysqli_fetch_array($query)) {// while
+                      
+                      $i = $i + 1;
+
+                      $hitung = ($jumlah_tbs + $jumlah_produk) - $data['syarat_jumlah'];
+
+                      if ($hitung >= 0) {
+                                // masukan data ke dalam array
+                        $array = array("syarat_jumlah" => $data['syarat_jumlah'],"potongan" => $data['potongan']);
+
+                        array_push($array_potongan, $array);
+                      }else{
+                                  // masukan data ke dalam array
+                        $array = array("syarat_jumlah" => 0,"potongan" => 0);
+
+                        array_push($array_potongan, $array);
+                      }   
+                  
+                }// while                  
+
+                if ($i == 0) {
+                    // ambil data yang paling besar
+                    $potongan_tampil = 0;
+                }else{
+                    // ambil data yang paling besar
+                    $max = max($array_potongan);  
+                    // ubah data dalam ventuk json encode
+                    $json_encode = json_encode($max);
+                    // ingin membaca format JSON di PHP maka JSON harus di convert ke Array Object dengan menggunakan json_decode
+                    $data = json_decode($json_encode);   
+                    // akan tampil potongan                
+                    $potongan_tampil = $data->potongan;
+                }
+
+                if ($potongan_tbs_order == $potongan_tampil) {
+                    $potongan_tampil = 0;
+                    $subtotal_order = ($subtotal_tbs_order + $a) - $potongan_tampil; 
+
+                }else{
+
+                                              # code...
+                          $query1 = $db->prepare("UPDATE tbs_penjualan_order SET subtotal = subtotal + potongan, potongan = 0 WHERE kode_barang = ? AND session_id = ? ");
+
+                          $query1->bind_param("ss",
+                          $kode_barang, $session_id);
+
+                          $query1->execute();
+
+                    $subtotal_order = ($subtotal_tbs_order + $a) - $potongan_tampil; 
+                }
+
+        // untuk cek potongan produk
 
         $query9 = $db->query("SELECT jumlah_prosentase,jumlah_uang FROM fee_produk WHERE nama_petugas = '$sales' AND kode_produk = '$kode_barang'");
         $cek9 = mysqli_fetch_array($query9);
@@ -290,23 +407,22 @@ if ($ber_stok == 'Barang' OR $ber_stok == 'barang') {
                       if ($data_tbs_penjualan['jumlah_data'] != 0) {
                       
                           # code...
-                          $query1 = $db->prepare("UPDATE tbs_penjualan_order SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND session_id = ? AND satuan = ? ");
+                          $query1 = $db->prepare("UPDATE tbs_penjualan_order SET jumlah_barang = jumlah_barang + ?, subtotal = ?, potongan = ? WHERE kode_barang = ? AND session_id = ? AND satuan = ? ");
 
-                          $query1->bind_param("iisssi",
-                              $jumlah_barang,$a, $potongan_tampil, $kode_barang, $session_id,$satuan);
-
+                          $query1->bind_param("iiissi",
+                              $jumlah_barang,$subtotal_order, $potongan_tampil, $kode_barang, $session_id,$satuan);
 
                           $query1->execute();
 
                       }
                       else
                       {
-                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi) VALUES (?,?,
-                              ?,?,?,?,?,?,?,?)");
+                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi,tipe_barang,potongan) VALUES (?,?,
+                              ?,?,?,?,?,?,?,?,?,?)");
                               
                               
-                              $perintah->bind_param("sssisiissi",
-                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga_tbs, $a,$tanggal_sekarang,$jam_sekarang,$harga_konversi);
+                              $perintah->bind_param("sssisiissisi",
+                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga_tbs, $subtotal_order,$tanggal_sekarang,$jam_sekarang,$harga_konversi,$ber_stok,$potongan_tampil);
                              
                               $perintah->execute();
 
@@ -376,10 +492,10 @@ else{
                       if ($data_tbs_penjualan['jumlah_data'] != 0) {
                       
                           # code...
-                          $query1 = $db->prepare("UPDATE tbs_penjualan_order SET jumlah_barang = jumlah_barang + ?, subtotal = subtotal + ?, potongan = ? WHERE kode_barang = ? AND session_id = ? AND satuan = ? ");
+                          $query1 = $db->prepare("UPDATE tbs_penjualan_order SET jumlah_barang = jumlah_barang + ?, subtotal =  ?, potongan = ? WHERE kode_barang = ? AND session_id = ? AND satuan = ? ");
 
-                          $query1->bind_param("iisssi",
-                              $jumlah_barang,$a, $potongan_tampil, $kode_barang, $session_id,$satuan);
+                          $query1->bind_param("iiissi",
+                              $jumlah_barang,$subtotal_order, $potongan_tampil, $kode_barang, $session_id,$satuan);
 
 
                           $query1->execute();
@@ -387,12 +503,12 @@ else{
                       }
                       else
                       {
-                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi) VALUES (?,?,
-                              ?,?,?,?,?,?,?,?)");
+                              $perintah = $db->prepare("INSERT INTO tbs_penjualan_order (session_id,kode_barang,nama_barang,jumlah_barang,satuan,harga,subtotal,tanggal,jam,harga_konversi,tipe_barang,potongan) VALUES (?,?,
+                              ?,?,?,?,?,?,?,?,?,?)");
                               
                               
-                              $perintah->bind_param("sssisiissi",
-                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $a,$tanggal_sekarang,$jam_sekarang,$harga_konversi);
+                              $perintah->bind_param("sssisiissisi",
+                              $session_id, $kode_barang, $nama_barang, $jumlah_barang, $satuan, $harga, $subtotal_order,$tanggal_sekarang,$jam_sekarang,$harga_konversi,$harga_konversi,$potongan_tampil);
                              
                               $perintah->execute();
 
@@ -401,7 +517,6 @@ else{
 
 
 }// END berkaitan dgn stok == Jasa
-
 
 
 

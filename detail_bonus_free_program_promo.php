@@ -35,27 +35,53 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
 }
 ?>
 <span id="tambh_free_produk" style="display: none;"><!--span untuk tambah produk-->
-          <form class="form-group" role="form" id="formfreeproduk">
+          <form class="form-group" role="form-horizontal" id="formfreeproduk" >
           <div class="row armun"><!--div class="row armun"-->
             
-            <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
+            <div class="col-sm-3"><!--/div class="col-sm-2 armun"-->
                 <input type="hidden" name="id_program" id="id_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $id ;?>" style="height: 15px;">
-
-                <b><input type="text" name="nama_program" id="nama_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 15px; font-size: 125%;" placeholder="Nama Program"></b>
+                <label>Nama Program</label>
+                <input type="text" name="nama_program" id="nama_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 15px; font-size: 120%;" placeholder="Nama Program">
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="kode_produk" id="kode_produk" autocomplete="off" class="form-control" style="height: 15px;" placeholder="Kode Produk" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Ketikkan kode produk atau nama produk untuk memilih produk.'>
+               <label>Kode Free Produk</label>
+                 <select style="font-size:15px; height:24px;" type="text" name="kode_barang" id="kode_barang" class="form-control chosen">
+                  <option value="">SILAKAN PILIH...</option>
+                    <?php 
+                      include 'cache.class.php';
+                        $c = new Cache();
+                        $c->setCache('produk');
+                        $data_c = $c->retrieveAll();
+
+                        foreach ($data_c as $key) {
+                          echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+                        }
+
+                        $cache_parcel = new Cache();
+                        $cache_parcel->setCache('produk_parcel');
+                        $data_parcel = $cache_parcel->retrieveAll();
+
+                        foreach ($data_parcel as $key_parcel) {
+                          echo '<option id="opt-produk-'.$key_parcel['kode_parcel'].'" value="'.$key_parcel['kode_parcel'].'" data-kode="'.$key_parcel['kode_parcel'].'"> '. $key_parcel['kode_parcel'].' ( '.$key_parcel['nama_parcel'].' ) </option>';
+                        }
+
+                    ?>
+                </select>
 
                 <input type="hidden" name="id_produk" id="id_produk" autocomplete="off" class="form-control" readonly="" style="height: 15px;">
                 <input type="hidden" name="nama_produk" id="nama_produk" autocomplete="off" class="form-control" readonly="" style="height: 15px;">
+                <input type="hidden" name="satuan" id="satuan" autocomplete="off" class="form-control" readonly="" style="height: 15px;">
+
             </div><!--div class="col-sm-2 armun"-->
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="qty" id="qty" autocomplete="off" class="form-control" style="height: 15px;"  placeholder="Qty Free">
+            <label>Jumlah Fee Produk</label>
+                <input type="text" name="qty" id="qty" autocomplete="off" class="form-control" style="height: 15px;"  placeholder="Qty Free Produk">
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
+            <br>
               <button type="submit" id="tambah_produk" class="btn btn-primary" style="background-color:#0277bd"><i class="fa fa-plus"> </i> Submit</button>
             </div><!--div class="col-sm-2 armun"-->
           </div><!--/div class="row armun"-->
@@ -69,25 +95,52 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
           <form class="form-group" role="form" id="formfreeproduk">
           <div class="row armun"><!--div class="row armun"-->
             
-            <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
+            <div class="col-sm-3"><!--/div class="col-sm-2 armun"-->
                 <input type="hidden" name="id_program_edit" id="id_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $id ;?>" style="height: 15px;">
-
-                <b><input type="text" name="nama_program_edit" id="nama_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 15px; font-size: 125%;" placeholder="Nama Program"></b>
+                <label>Nama Program</label>
+                <input type="text" name="nama_program_edit" id="nama_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 15px; font-size: 120%;" placeholder="Nama Program">
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <input type="text" name="kode_produk_edit" id="kode_produk_edit" autocomplete="off" class="form-control" style="height: 15px;" placeholder="Kode Produk" data-toggle="tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Ketikkan kode produk atau nama produk untuk memilih produk.'>
+                <label>Kode Free Produk</label>
+                 <select style="font-size:15px; height:24px;" type="text" name="kode_barang_edit" id="kode_barang_edit" class="form-control chosen">
+                  <option value="">SILAKAN PILIH...</option>
+                    <?php 
+                      include_once 'cache.class.php';
+                        $c = new Cache();
+                        $c->setCache('produk');
+                        $data_c = $c->retrieveAll();
+
+                        foreach ($data_c as $key) {
+                          echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+                        }
+
+                        $cache_parcel = new Cache();
+                        $cache_parcel->setCache('produk_parcel');
+                        $data_parcel = $cache_parcel->retrieveAll();
+
+                        foreach ($data_parcel as $key_parcel) {
+                          echo '<option id="opt-produk-'.$key_parcel['kode_parcel'].'" value="'.$key_parcel['kode_parcel'].'" data-kode="'.$key_parcel['kode_parcel'].'"> '. $key_parcel['kode_parcel'].' ( '.$key_parcel['nama_parcel'].' ) </option>';
+                        }
+
+                    ?>
+                </select>
 
                 <input type="hidden" name="id_produk_edit" id="id_produk_edit" autocomplete="off" class="form-control" readonly="" style="height: 15px;">
             </div><!--div class="col-sm-2 armun"-->
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
+                <label>Jumlah Free Produk</label>
                 <input type="text" name="qty_edit" id="qty_edit" autocomplete="off" class="form-control" style="height: 15px; width: 45%;"  placeholder="Qty Free">
 
                 <input type="hidden" name="id_edit" id="id_edit" autocomplete="off" class="form-control" readonly="" style="height: 15px;">
+
+                <input type="hidden" name="satuan_edit" id="satuan_edit" autocomplete="off" class="form-control" readonly="" style="height: 15px;">
+
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
+            <br>
               <button type="submit" id="submit_edit" class="btn btn-primary" style="background-color:#0277bd"><i class="fa fa-edit"> </i> EDIT</button>
             </div><!--div class="col-sm-2 armun"-->
           </div><!--/div class="row armun"-->
@@ -140,15 +193,15 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
   <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
   <table id="table_free_produk" class="table table-bordered table-sm">
     <thead>
+      <th style="background-color: #4CAF50; color: white;"> Nama Program </th>
       <th style="background-color: #4CAF50; color: white;"> Nama Produk</th>
       <th style="background-color: #4CAF50; color: white;"> Qty </th>
-      <th style="background-color: #4CAF50; color: white;"> Nama Program </th>
 <?php 
       if ($produk_promo['program_promo_free_edit'] > 0) {
         echo '<th style="background-color: #4CAF50; color: white;"> Edit </th>';
       }
      if ($produk_promo['program_promo_free_hapus'] > 0) {
-       echo '<th style="background-color: #4CAF50; color: white;"> hapus </th>';
+       echo '<th style="background-color: #4CAF50; color: white;"> Hapus </th>';
       }
  ?>
       
@@ -160,86 +213,65 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
 
 </div> <!--/ container-->
 
-<script type="text/javascript">
-    $(document).ready(function(){
-    // Tooltips Initialization
-    $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-    });
-    });
-</script>
 
-<!--====AWAL TAMBAH =====-->
 
 <script type="text/javascript">
-//untuk memasukan perintah javascript autocomplete tambah
-  $(function() {
-    $( "#kode_produk" ).autocomplete({
-        source: 'kode_produk_program_promo_autocomplete.php'
-    });
-});
-  //untuk memasukan perintah javascript autocomplete tambah
-</script>
+// START script untuk pilih kode barang menggunakan chosen     
+  $("#kode_barang").change(function(){
 
-<script type="text/javascript">
-        $(document).ready(function(){
-        $("#kode_produk").blur(function(){
-
-          var kode_produk = $(this).val();
-          var kode_produk = kode_produk.substr(0, kode_produk.indexOf('('));
-          
-          if (kode_produk != '')
-          {
-                $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json){
-                
-                if (json == null)
-                {
-                  
-                  $('#id_produk').val('');
-                  $('#nama_produk').val('');
-                 
-                }
-
-                else 
-                {
-                  $('#id_produk').val(json.id);
-                  $('#nama_produk').val(json.nama_barang);
-                  
-                }
+    var kode_produk = $(this).val();
+    $("#kode_barang").val(kode_produk);
+    
+    if (kode_produk != '') {
+            $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json){
+                    
+              if (json == null){
+                $('#id_produk').val('');
+                $('#nama_produk').val('');
+              }
+              else {
+                $('#id_produk').val(json.id);
+                $('#nama_produk').val(json.nama_barang);
+                $('#satuan').val(json.satuan)
+              }
+                                                  
 
                 var id_produk = $("#id_produk").val();
                 var nama_produk = $("#nama_produk").val();
+                var satuan = $("#satuan").val();
                 var id_program = $("#id_program").val();
 
-                $.post('periksa_promo_disc_produk.php',{id_produk:id_produk, id_program:id_program}, function(data){
+               $.post('periksa_promo_disc_produk.php',{id_produk:id_produk,id_program:id_program}, function(data){
                     if (data == 1) {
                       alert("Anda Tidak Bisa Menambahkan Produk '"+nama_produk+"', Karena Produk Tersebut Sudah Ada Di Promo Diskon Produk !");
-                       $("#kode_produk").val('');
+                       $("#kode_barang_edit").val('');
                        $("#nama_produk").val('');
-                       $("#kode_produk").focus();
+                       $("#kode_barang_edit").focus();
                     }
-                    else{
-                        
-                        $.post('cek_kode_bonus_free_produk.php',{id_produk:id_produk}, function(data){
-              
-                          if(data == 1){
-                            alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
-                            $("#kode_produk").focus();
-                            $("#kode_produk").val('');
-                            $("#id_produk").val('');
-                          }//penutup if
-                        
-                        });////penutup function(data)
+                    else{  
 
-                    }
-                });
-                                                        
-              }); 
-          }
+               $.post('cek_kode_bonus_free_produk.php',{id_produk:id_produk}, function(data){
+                  if(data == 1){
+                    alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+                    $("#kode_barang").val('');
+                    $("#kode_barang").trigger('chosen:updated');
+                    $("#kode_barang").trigger('chosen:open');
+                    $("#id_produk").val('');
+                  }//penutup if
+                          
+                });////penutup $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data)
 
-        });
-        });     
+             }
+
+            }); // penutup $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json)
+      });// END if (kode_produk != '')
+  }
+
+});
+
+// end script untuk pilih kode barang menggunakan chosen   
 </script>
+
 
 <!-- untuk memasukan perintah javascript -->
 <script type="text/javascript">
@@ -261,7 +293,9 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
   $(document).ready(function(){
     $("#tambah_free_produk").click(function(){
       $("#tambh_free_produk").show();
-      $("#tambah_free_produk").hide();
+        $('#kode_barang').chosen('destroy');
+        $("#kode_barang").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});    
+         $("#tambah_free_produk").hide();
     });
   });
 // /MENAMPILKAN FORM
@@ -269,11 +303,12 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
 
 <script type="text/javascript">
 // MENAMPILKAN FORM
-  $(document).ready(function(){
+
     $("#tambah_produk").click(function(){
 
      var id_program = $("#id_program").val();
      var id_produk = $("#id_produk").val();
+     var satuan = $("#satuan").val();
      var qty = $("#qty").val();
       if (id_program == '') {
         alert("Silakan isikan program promo terlebih dahulu.");
@@ -290,33 +325,12 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
       } 
       else
       {
-        $.post("proses_detail_bonus_free_program_promo.php",{id_program:id_program,id_produk:id_produk,qty:qty},function(info) {
+        $.post("proses_detail_bonus_free_program_promo.php",{id_program:id_program,id_produk:id_produk,qty:qty,satuan:satuan},function(info) {
           $("#tambh_free_produk").hide();
           $("#tambah_free_produk").show();
 
-          $('#table_free_produk').DataTable().destroy();
-                  
-                  var dataTable = $('#table_free_produk').DataTable( {
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax":{
-                      url :"datatable_free_produk.php", // json datasource
-                      "data": function ( d ) {
-                      d.id_nya = $("#id_nya").val();
-                    },
-                      type: "post",  // method  , by default get
-                      error: function(){  // error handling
-                        $(".tbody").html("");
-                        $("#table_free_produk").append('<tbody class="tbody"><tr ><td colspan="3">No data found in the server</td></tr></tbody>');
-                        $("#table_ri_processing").css("display","none");
-                        
-                      }
-                    },
-
-                     "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                        $(nRow).attr('class','tr-id-'+aData[5]+'');
-                },
-                });
+          var table_free_produk = $('#table_free_produk').DataTable();
+            table_free_produk.draw();
 
               $("#nama_produk").val('');
               $("#qty").val('');
@@ -328,8 +342,6 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
       }); 
 
     });// end $("#tambh_program_promo").click(function()
-  });// end $(document).ready(function()
-
 // /MENAMPILKAN FORM
 </script>
 <!--====AKHIR TAMBAH =====-->
@@ -338,20 +350,23 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
 <!--========AWAL EDIT ====-->
 <script type="text/javascript">
 // MENAMPILKAN FORM Edit
-  $(document).ready(function(){
 $(document).on('click', '.edit', function (e) {
 
       var nama_program_edit = $(this).attr("data-kode_program");
       var id_program_edit = $(this).attr("data-id_program");
-      var kode_produk_edit = $(this).attr("data-nama_produk");
+      var kode_barang_edit = $(this).attr("data-nama_produk");
       var id_produk_edit = $(this).attr("data-id_produk");
+      var satuan_edit = $(this).attr("data-satuan");      
       var id_edit = $(this).attr("data-id");
       var qty_edit = $(this).attr("data-qty");
 
     $("#nama_program_edit").val(nama_program_edit);
     $("#id_program_edit").val(id_program_edit);
-    $("#kode_produk_edit").val(kode_produk_edit);
+    $("#kode_barang_edit").chosen('destroy');
+    $("#kode_barang_edit").val(kode_barang_edit);
+
     $("#id_produk_edit").val(id_produk_edit);
+    $("#satuan_edit").val(satuan_edit);    
     $("#id_edit").val(id_edit);
     $("#qty_edit").val(qty_edit);
 
@@ -360,6 +375,9 @@ $(document).on('click', '.edit', function (e) {
       $("#judul_bofree").hide();
       $("#tambah_free_produk").hide();
       $("#table_le_kui").hide();
+      $("#tambh_free_produk").hide();
+      $("#kode_barang_edit").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});
+
 
 
     });
@@ -369,6 +387,7 @@ $(document).on('click', '.edit', function (e) {
     var id_program = $("#id_program_edit").val();
     var id_produk = $("#id_produk_edit").val();
     var id = $("#id_edit").val();
+    var satuan = $("#satuan_edit").val();
     var qty = $("#qty_edit").val();
     if (id_program == '') {
         alert("Silakan isikan program promo terlebih dahulu.");
@@ -384,36 +403,15 @@ $(document).on('click', '.edit', function (e) {
       } 
       else
       {
-        $.post("edit_detail_bonus_free_program_promo.php",{id:id,id_program:id_program,id_produk:id_produk,qty:qty},function(info) {
+        $.post("edit_detail_bonus_free_program_promo.php",{id:id,id_program:id_program,id_produk:id_produk,qty:qty,satuan:satuan},function(info) {
           $("#edit_free_produk").hide();
           $("#tambah_free_produk").show();
           $("#table_le_kui").show();
 
-          $('#table_free_produk').DataTable().destroy();
-                  
-                  var dataTable = $('#table_free_produk').DataTable( {
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax":{
-                      url :"datatable_free_produk.php", // json datasource
-                      "data": function ( d ) {
-                      d.id_nya = $("#id_nya").val();
-                    },
-                      type: "post",  // method  , by default get
-                      error: function(){  // error handling
-                        $(".tbody").html("");
-                        $("#table_free_produk").append('<tbody class="tbody"><tr ><td colspan="3">No data found in the server</td></tr></tbody>');
-                        $("#table_ri_processing").css("display","none");
-                        
-                      }
-                    },
+            var table_free_produk = $('#table_free_produk').DataTable();
+            table_free_produk.draw();
 
-                     "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                        $(nRow).attr('class','tr-id-'+aData[6]+'');
-                },
-                });
-
-              $("#kode_produk_edit").val('');
+              $("#kode_barang_edit").val('');
               $("#qty_max_edit").val('');
               $("#id_produk_edit").val('');
        });
@@ -422,65 +420,69 @@ $(document).on('click', '.edit', function (e) {
       return false;
       }); 
   });
-  });
+
 // /MENAMPILKAN FORM Edt
 </script>
 
-<!---->
+
 <script type="text/javascript">
-//untuk memasukan perintah javascript autocomplete saat edit
-  $(function() {
-    $( "#kode_produk_edit" ).autocomplete({
-        source: 'kode_produk_program_promo_autocomplete.php'
-    });
+// START script untuk pilih kode barang menggunakan chosen     
+  $("#kode_barang_edit").change(function(){
+    var kode_produk = $(this).val();
+    $("#kode_barang_edit").val(kode_produk);
+    
+    if (kode_produk != '') {
+            $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json){
+                    
+              if (json == null){
+                $('#id_produk_edit').val('');
+                $('#nama_produk_edit').val('');
+                $('#satuan_edit').val('');
+              }
+              else {
+                $('#id_produk_edit').val(json.id);
+                $('#nama_produk_edit').val(json.nama_barang);
+                $('#satuan_edit').val(json.satuan);
+              }
+                                                  
+
+                var id_produk = $("#id_produk_edit").val();
+                var nama_produk = $("#nama_produk_edit").val();
+                var satuan = $("#satuan_edit").val();
+                var id_program = $("#id_program_edit").val();
+
+               $.post('periksa_promo_disc_produk.php',{id_produk:id_produk,id_program:id_program}, function(data){
+                    if (data == 1) {
+                      alert("Anda Tidak Bisa Menambahkan Produk '"+nama_produk+"', Karena Produk Tersebut Sudah Ada Di Promo Diskon Produk !");
+                       $("#kode_barang_edit").val('');
+                       $("#nama_produk").val('');
+                       $("#kode_barang_edit").focus();
+                    }
+                    else{  
+
+               $.post('cek_kode_bonus_free_produk.php',{id_produk:id_produk}, function(data){
+                  if(data == 1){
+                    alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+                    $("#kode_barang_edit").val('');
+                    $("#kode_barang_edit").trigger('chosen:updated');
+                    $("#kode_barang_edit").trigger('chosen:open');
+                    $("#id_produk").val('');
+                  }//penutup if
+                          
+                });////penutup $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data)
+
+             }
+
+            }); // penutup $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json)
+      });// END if (kode_produk != '')
+  }
+
 });
-  // /untuk memasukan perintah javascript autocomplete saat edit
+
+// end script untuk pilih kode barang menggunakan chosen   
 </script>
 
-<script type="text/javascript">
-        $(document).ready(function(){
-        $("#kode_produk_edit").blur(function(){
 
-          var kode_produk = $(this).val();
-          var kode_produk = kode_produk.substr(0, kode_produk.indexOf('('));
-          
-          if (kode_produk != '')
-          {
-                $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json){
-                
-                if (json == null)
-                {
-                  
-                  $('#id_produk').val('');
-                 
-                }
-
-                else 
-                {
-                  $('#id_produk').val(json.id);
-                  
-                }
-
-                var id_produk = $("#id_produk").val();
-
-                $.post('cek_kode_bonus_free_produk.php',{id_produk:id_produk}, function(data){
-            
-              if(data == 1){
-              alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
-              $("#kode_produk").focus();
-              $("#kode_produk_edit").val('');
-              $("#id_produk_edit").val('');
-              }//penutup if
-              
-              });////penutup function(data)
-                                                        
-                }); 
-          }
-
-        });
-        });     
-</script>
-<!--========AKHIR EDIT ====-->
 
 <script type="text/javascript">
   //fungsi hapus data 
@@ -497,40 +499,18 @@ $(document).on('click', '.delete', function (e) {
     
     var id = $("#id_hapus").val();
     $.post("detail_free_produk_hapus.php",{id:id},function(data){
-    if (data != "") {
+      if (data != "") {
     
-    $("#modal_hapus").modal('hide');
+            $("#modal_hapus").modal('hide');
+            var table_free_produk = $('#table_free_produk').DataTable();
+            table_free_produk.draw();
 
-        $('#table_free_produk').DataTable().destroy();
-        
-        var dataTable = $('#table_free_produk').DataTable( {
-          "processing": true,
-          "serverSide": true,
-          "ajax":{
-            url :"datatable_free_produk.php", // json datasource
-            "data": function ( d ) {
-                      d.id_nya = $("#id_nya").val();
-                    },
-            type: "post",  // method  , by default get
-            error: function(){  // error handling
-              $(".tbody").html("");
-              $("#table_free_produk").append('<tbody class="tbody"><tr ><td colspan="3">No data found in the server</td></tr></tbody>');
-              $("#table_ri_processing").css("display","none");
-              
-            }
-          },
-
-           "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-              $(nRow).attr('class','tr-id-'+aData[5]+'');
-      },
-       });
-    }
+      }
 
     });
     
-    });
-
-    });
+  });
+});
 </script>
 
 
@@ -568,5 +548,10 @@ $(document).on('click', '.delete', function (e) {
       } );
 </script>
 
+
+<script type="text/javascript">
+  //SELECT CHOSSESN    
+  $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});    
+</script>
 
 <?php include 'footer.php'; ?>

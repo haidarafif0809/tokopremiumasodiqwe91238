@@ -80,21 +80,21 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
       $nestedData[] = "<p>".$jenis_bonus."</p>";
 
 	 if ($row["jenis_bonus"] == 'Free Produk') {
-      $nestedData[] = "<a href='detail_program_promo.php?id=".$row['id']."&kode=". $row['kode_program']."&nama=". $row['nama_program']."' class='btn btn-success'></span> Detail Program </a>";
+      $nestedData[] = "<a href='detail_program_promo.php?id=".$row['id']."&kode=". $row['kode_program']."&nama=". $row['nama_program']."' class='btn btn-success btn-sm'></span> Detail Program </a>";
       }
       else{
       	$nestedData[] = "";
       }
 
       if ($row["jenis_bonus"] == 'Free Produk') {
-      	$nestedData[] = "<a href='detail_bonus_free_program_promo.php?id=".$row['id']."&kode=". $row['kode_program']."&nama=". $row['nama_program']."' class='btn btn-success'>Free Produk </a>";
+      	$nestedData[] = "<a href='detail_bonus_free_program_promo.php?id=".$row['id']."&kode=". $row['kode_program']."&nama=". $row['nama_program']."' class='btn btn-success btn-sm'>Free Produk </a>";
       }
       else{
-      	$nestedData[] = "<a href='detail_bonus_disc_program_promo.php?id=".$row['id']."&kode=". $row['kode_program']."&nama=". $row['nama_program']."' class='btn btn-success'> Disc Harga </a>";
+      	$nestedData[] = "<a href='detail_bonus_disc_program_promo.php?id=".$row['id']."&kode=". $row['kode_program']."&nama=". $row['nama_program']."' class='btn btn-success btn-sm'> Disc Harga </a>";
       }
 
      if ($program_promo['program_promo_hapus'] > 0) {
-        $nestedData[] = "<td><button data-id='".$row['id']."' data-kode='".$row['kode_program']."' data-nama='".$row['nama_program']."' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'></span> Hapus </button></td>";
+        $nestedData[] = "<td><button data-id='".$row['id']."' data-kode='".$row['kode_program']."' data-nama='".$row['nama_program']."' class='btn btn-danger delete btn-sm'><span class='glyphicon glyphicon-trash'></span> Hapus </button></td>";
       }
       $nestedData[] = $row["id"];
 	$data[] = $nestedData;

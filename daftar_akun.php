@@ -53,6 +53,7 @@ $grup_akun = mysqli_fetch_array($pilih_akses_akun);
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=lain-lain' > Lain Lain </a></li>
         
        <?php endif ?>
 
@@ -67,6 +68,7 @@ $grup_akun = mysqli_fetch_array($pilih_akses_akun);
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=lain-lain' > Lain Lain </a></li>
         
        <?php endif ?>
 
@@ -81,6 +83,7 @@ $grup_akun = mysqli_fetch_array($pilih_akses_akun);
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=lain-lain' > Lain Lain </a></li>
         
        <?php endif ?>
 
@@ -95,6 +98,7 @@ $grup_akun = mysqli_fetch_array($pilih_akses_akun);
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=lain-lain' > Lain Lain </a></li>
         
        <?php endif ?>
 
@@ -109,6 +113,7 @@ $grup_akun = mysqli_fetch_array($pilih_akses_akun);
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=lain-lain' > Lain Lain </a></li>
         
        <?php endif ?>
 
@@ -123,6 +128,7 @@ $grup_akun = mysqli_fetch_array($pilih_akses_akun);
         <li class='nav-item'><a class='nav-link active' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=lain-lain' > Lain Lain </a></li>
         
        <?php endif ?>
 
@@ -137,6 +143,7 @@ $grup_akun = mysqli_fetch_array($pilih_akses_akun);
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link active' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=lain-lain' > Lain Lain </a></li>
         
        <?php endif ?>
 
@@ -151,24 +158,58 @@ $grup_akun = mysqli_fetch_array($pilih_akses_akun);
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
         <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
         <li class='nav-item'><a class='nav-link active' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=lain-lain' > Lain Lain </a></li>
+        
+       <?php endif ?>
+
+
+       <?php if ($kategori == 'lain-lain'): ?>
+
+        <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Aktiva' >  Aktiva </a></li>
+        <li class='nav-item'><a class='nav-link' href ='daftar_akun.php?kategori=Kewajiban' >  Kewajiban </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Modal' >  Modal </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan' >  Pendapatan </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=HPP' >  HPP </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya' >  Biaya </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Pendapatan Lain' >  Pendapatan Lain </a></li>
+        <li class='nav-item'><a class='nav-link' href='daftar_akun.php?kategori=Biaya Lain' >  Biaya Lain </a></li>
+        <li class='nav-item'><a class='nav-link active' href='daftar_akun.php?kategori=lain-lain' > Lain Lain </a></li>
         
        <?php endif ?>
     </ul>
 
-<br><br>
-<?php 
+<br>
 
-if ($daftar_akun['daftar_akun_tambah'] > 0){
-  echo '<a href="form_tambah_daftar_akun.php" class="btn btn-info"><i class="fa fa-plus"> </i> DAFTAR AKUN</a>';
-}
+<div class="row">
+  <div class="col-sm-8">
+      <ul class="nav nav-tabs md-pills nav-justified pills-secondary" role='tablist'>
+        <li class='nav-item'>
+          <?php if ($daftar_akun['daftar_akun_tambah'] > 0): ?>
+            <a href="form_tambah_daftar_akun.php" class="btn btn-info nav-link"><i class="fa fa-plus"> </i> DAFTAR AKUN</a>
+          <?php endif ?>            
+        </li>
+        <li class='nav-item'>
+          <?php if ($grup_akun['grup_akun_tambah'] > 0): ?>
+            <a href="form_tambah_grup_akun.php" class="btn btn-primary nav-link"><i class="fa fa-plus"> </i> GROUP AKUN</a>
+          <?php endif ?>            
+        </li>
+    </ul>
 
-if ($grup_akun['grup_akun_tambah'] > 0){
-  echo '<a href="form_tambah_grup_akun.php" class="btn btn-primary"><i class="fa fa-plus"> </i> GROUP AKUN</a>';
-}
+  </div>
+  <div class="col-sm-4">
+    <?php if ($kategori == "lain-lain"): ?>
+      <ul class="nav nav-tabs md-pills nav-justified pills-secondary" role='tablist'>
+        <li class='nav-item'>
+            <a class="nav-link active" data-toggle="tab" href="#panel4" role="tab" id="g_akun">Grup Akun</a>
+        </li>
+        <li class='nav-item'>
+            <a class="nav-link" data-toggle="tab" href="#panel11" role="tab" id="d_akun">Daftar Akun</a>
+        </li>
+    </ul>
+    <?php endif ?>
+  </div>
+</div>
 
-?>
-
-                <br><br>
                 <span id="span_daftar_akun">            
                   <div class="table-responsive">
                     <table id="tabel_daftar_akun" class="table table-bordered table-sm">
@@ -191,8 +232,9 @@ if ($grup_akun['grup_akun_tambah'] > 0){
 <script type="text/javascript">
   $(document).ready(function(){
     // Daftar Akun
-
       $('#tabel_daftar_akun').DataTable().destroy();
+      var kategori = $("#kategori").val();
+
             var dataTable = $('#tabel_daftar_akun').DataTable( {
             "processing": true,
             "serverSide": true,
@@ -202,6 +244,10 @@ if ($grup_akun['grup_akun_tambah'] > 0){
               url :"datatable_daftar_akun.php", // json datasource
                "data": function ( d ) {
                   d.kategori = $("#kategori").val();
+
+                  if (kategori == 'lain-lain') {
+                    d.jenis_akun = "grup_akun";
+                  }
                   // d.custom = $('#myInput').val();
                   // etc
               },
@@ -215,6 +261,72 @@ if ($grup_akun['grup_akun_tambah'] > 0){
             }   
 
       });
+  });
+</script>
+
+<!-- LAIN LAIN G Akun -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(document).on("click", "#g_akun", function(){
+
+      $('#tabel_daftar_akun').DataTable().destroy();
+            var dataTable = $('#tabel_daftar_akun').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "info":     false,
+            "language": { "emptyTable":     "My Custom Message On Empty Table" },
+            "ajax":{
+              url :"datatable_daftar_akun.php", // json datasource
+               "data": function ( d ) {
+                  d.kategori = $("#kategori").val();
+                  d.jenis_akun = "grup_akun";
+                  // d.custom = $('#myInput').val();
+                  // etc
+              },
+                  type: "post",  // method  , by default get
+              error: function(){  // error handling
+                $(".tbody").html("");
+                $("#tabel_daftar_akun").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                $("#tableuser_processing").css("display","none");
+                
+              }
+            }   
+
+      });
+    });
+  });
+</script>
+
+<!-- LAIN LAIN D Akun -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(document).on("click", "#d_akun", function(){
+
+      $('#tabel_daftar_akun').DataTable().destroy();
+            var dataTable = $('#tabel_daftar_akun').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "info":     false,
+            "language": { "emptyTable":     "My Custom Message On Empty Table" },
+            "ajax":{
+              url :"datatable_daftar_akun.php", // json datasource
+               "data": function ( d ) {
+                  d.kategori = $("#kategori").val();
+                  d.jenis_akun = "daftar_akun";
+                  // d.custom = $('#myInput').val();
+                  // etc
+              },
+                  type: "post",  // method  , by default get
+              error: function(){  // error handling
+                $(".tbody").html("");
+                $("#tabel_daftar_akun").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                $("#tableuser_processing").css("display","none");
+                
+              }
+            }   
+
+      });
+    });
   });
 </script>
 

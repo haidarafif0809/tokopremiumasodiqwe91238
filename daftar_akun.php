@@ -554,7 +554,8 @@ $grup_akun = mysqli_fetch_array($pilih_akses_akun);
 
           });
       });
-
+/*
+DIMATIKAN KARENA GRUP AKUN (TIPE AKUNNYA) DEFAULT AKUN HEADER
     //TIPE AKUN
       $(document).on("dblclick",".edit-tipe",function(){
 
@@ -585,6 +586,8 @@ $grup_akun = mysqli_fetch_array($pilih_akses_akun);
 
           });
       });
+DIMATIKAN KARENA GRUP AKUN (TIPE AKUNNYA) DEFAULT AKUN HEADER
+*/
 
   });
 </script>

@@ -444,7 +444,7 @@ $(document).on('click', '#submit_barcode', function (e) {
   // JAVASCRIPT BARCODE
   $.post("barcode_edit_order_pembelian.php",{kode_barang:kode_barang, no_faktur_order:no_faktur_order},function(data){
     if (data == 3){
-      alert("Kode Barang Yang Anda Masukan Tidak Ada , Silakan Periksa Kembali ");
+      alert("Barcode Yang Anda Masukan Tidak Ada , Silakan Periksa Kembali ");
       $("#kode_barcode").val('');
       $("#kode_barcode").focus();
     }

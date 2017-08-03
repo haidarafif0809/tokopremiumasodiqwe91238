@@ -40,12 +40,12 @@ if ($produk_promo['produk_promo_tambah'] > 0) {
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
                 <input type="hidden" name="id_program" id="id_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $id ;?>" style="height: 5%; width: 95%;">
-
-                <b><input type="text" name="nama_program" id="nama_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 5%; width: 95%; font-size: 125%;" placeholder="Nama Program"></b>
+                <label>Nama Program Promo</label>
+                <b><input type="text" name="nama_program" id="nama_program" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 15px; font-size: 125%;" placeholder="Nama Program"></b>
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <label></label>
+                <label>Kode Barang Promo</label>
                 <select style="font-size:15px; height:24px;" type="text" name="kode_barang" id="kode_barang" class="form-control chosen">
                   <option value="">SILAKAN PILIH...</option>
                     <?php 
@@ -73,6 +73,7 @@ if ($produk_promo['produk_promo_tambah'] > 0) {
             </div><!--div class="col-sm-2 armun"-->
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
+            <br>
               <button type="submit" id="tambah_produk" class="btn btn-primary" style="background-color:#0277bd"><i class="fa fa-plus"> </i> Submit</button>
             </div><!--div class="col-sm-2 armun"-->
           </div><!--/div class="row armun"-->
@@ -90,12 +91,12 @@ if ($produk_promo['produk_promo_tambah'] > 0) {
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
                 <input type="hidden" name="id_program_edit" id="id_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $id ;?>" style="height: 5%; width: 95%;">
-
-                <b><input type="text" name="nama_program_edit" id="nama_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 5%; width: 95%; font-size: 125%;" placeholder="Nama Program"></b>
+                <label>Nama Program Promo</label>
+                <b><input type="text" name="nama_program_edit" id="nama_program_edit" autocomplete="off" class="form-control" readonly="" value="<?php echo $nama_program ;?>" style="height: 15px; font-size: 125%;" placeholder="Nama Program"></b>
             </div><!--div class="col-sm-2 armun"-->
 
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
-                <label></label>
+                <label>Kode Barang Promo</label>
                 <select style="font-size:15px; height:24px;" type="text" name="kode_barang_edit" id="kode_barang_edit" class="form-control chosen">
                   <option value="">SILAKAN PILIH...</option>
                     <?php 
@@ -127,6 +128,7 @@ if ($produk_promo['produk_promo_tambah'] > 0) {
 
             
             <div class="col-sm-2"><!--/div class="col-sm-2 armun"-->
+            <br>
               <button type="submit" id="submit_edit" class="btn btn-primary" style="background-color:#0277bd"><i class="fa fa-edit"> </i> EDIT</button>
             </div><!--div class="col-sm-2 armun"-->
           </div><!--/div class="row armun"-->
@@ -444,14 +446,16 @@ $(document).ready(function(){
       
       var nama_program_edit = $(this).attr("data-nama_program");
       var id_program_edit = $(this).attr("data-id_program");
-      var kode_produk_edit = $(this).attr("data-nama_produk");
+      var kode_barang_edit = $(this).attr("data-nama_produk");
       var id_produk_edit = $(this).attr("data-id_produk");
       var id_edit = $(this).attr("data-id");
 
 
       $("#nama_program_edit").val(nama_program_edit);
       $("#id_program_edit").val(id_program_edit);
-      $("#kode_produk_edit").val(kode_produk_edit);
+      $("#kode_barang_edit").val(kode_barang_edit);
+      $("#kode_barang_edit").trigger('chosen:updated');
+
       $("#id_produk_edit").val(id_produk_edit);
       $("#id_edit").val(id_edit);
 

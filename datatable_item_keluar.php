@@ -56,15 +56,15 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 					$nestedData[] = $row['keterangan'];
 					$nestedData[] = rp($row['total']);
 
-					$nestedData[] = "<button class='btn btn-info detail' no_faktur='". $row['no_faktur'] ."' ><span class='glyphicon glyphicon-th-list'></span> Detail </button> </td>";
+					$nestedData[] = "<button class='btn btn-info detail btn-sm' no_faktur='". $row['no_faktur'] ."' ><span class='glyphicon glyphicon-th-list'></span> Detail </button> </td>";
 
 		if ($item_keluar['item_keluar_edit'] > 0) {
-					 	$nestedData[] = "<a href='proses_edit_item_keluar.php?no_faktur=". $row['no_faktur']."' class='btn btn-success'> Edit  </a> </td>";
+					 	$nestedData[] = "<a href='proses_edit_item_keluar.php?no_faktur=". $row['no_faktur']."' class='btn btn-sm btn-success'> Edit  </a> </td>";
 					 }
 
 		if ($item_keluar['item_keluar_hapus'] > 0) {
 
-					$nestedData[] = "<button class='btn btn-danger btn-hapus' data-item='". $row['no_faktur'] ."' data-id='". $row['id'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
+					$nestedData[] = "<button class='btn btn-danger btn-hapus btn-sm'  data-item='". $row['no_faktur'] ."' data-id='". $row['id'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
 					 } 
 				$nestedData[] = $row["id"];
 				$data[] = $nestedData;

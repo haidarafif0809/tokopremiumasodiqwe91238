@@ -96,7 +96,7 @@
 
                 if ($potongan_tbs_order == $potongan_tampil) {
                 	
-                   echo $potongan_tampil = 0;
+                    $potongan_tampil = 0;
 
                 }else{
 
@@ -108,9 +108,13 @@
 
                           $query1->execute();  
                           
-                         echo$potongan_tampil;  
+                         $potongan_tampil;  
                                   
                 }
+
+
+
+echo '{ "status": "'.$i.'" ,"potongan": "'.$potongan_tampil.'"}';
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

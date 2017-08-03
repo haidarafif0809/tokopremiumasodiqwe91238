@@ -49,10 +49,10 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData[] = $row["napro"] . "(" . $row["kode_program"] .")";
 
 	 if ($produk_promo['produk_promo_edit'] > 0) {
-        $nestedData[] = "<td><button data-id='".$row['id']."' data-nama_produk='".$row['nama_barang']."' data-kode_barang='".$row['kode_barang']."' data-id_produk='".$row['id_barang']."' data-nama_program='".$row['napro']."' data-kode_program='".$row['kode_program']."' data-id_program='".$row['id_program']."' class='btn btn-warning edit'><span class='glyphicon glyphicon-edit'></span> Edit </button></td>";
+        $nestedData[] = "<td><button data-id='".$row['id']."' data-nama_produk='".$row['kode_barang']."' data-kode_barang='".$row['kode_barang']."' data-id_produk='".$row['id_barang']."' data-nama_program='".$row['napro']."' data-kode_program='".$row['kode_program']."' data-id_program='".$row['id_program']."' class='btn btn-warning edit btn-sm'><span class='glyphicon glyphicon-edit'></span> Edit </button></td>";
       }
      if ($produk_promo['produk_promo_hapus'] > 0) {
-        $nestedData[] = "<td><button data-id='".$row['id']."' data-nama_produk='".$row['nama_barang']."' data-nama_program='".$row['napro']."' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'></span> Hapus </button></td>";
+        $nestedData[] = "<td><button data-id='".$row['id']."' data-nama_produk='".$row['nama_barang']."' data-nama_program='".$row['napro']."' class='btn btn-danger delete btn-sm'><span class='glyphicon glyphicon-trash '></span> Hapus </button></td>";
       }
       $nestedData[] = $row["id"];
 	$data[] = $nestedData;

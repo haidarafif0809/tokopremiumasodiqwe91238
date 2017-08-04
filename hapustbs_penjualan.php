@@ -129,13 +129,13 @@ if (isset($_POST['no_faktur'])) {
   
     $no_faktur = stringdoang($_POST['no_faktur']);
 // menampilakn hasil penjumlah subtotal ALIAS total penjualan dari tabel tbs_penjualan berdasarkan data no faktur
- $query_total = $db->query("SELECT SUM(subtotal) AS total_penjualan FROM tbs_penjualan WHERE no_faktur = '$no_faktur'");
+ $query_total = $db->query("SELECT IFNULL(SUM(subtotal),0) AS total_penjualan FROM tbs_penjualan WHERE no_faktur = '$no_faktur'");
 
 }else{
 
 
 // menampilakn hasil penjumlah subtotal ALIAS total penjualan dari tabel tbs_penjualan berdasarkan data no faktur
- $query_total = $db->query("SELECT SUM(subtotal) AS total_penjualan FROM tbs_penjualan WHERE session_id = '$session_id'");
+ $query_total = $db->query("SELECT IFNULL(SUM(subtotal),0) AS total_penjualan FROM tbs_penjualan WHERE session_id = '$session_id'");
 }
  
  // menyimpan data sementara yg ada pada $query

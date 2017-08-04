@@ -22,15 +22,15 @@ $columns = array(
 );
 
 // getting total number records without any search
-$sql = "SELECT pfp.id,pfp.qty,pfp.nama_program,pfp.nama_produk,b.kode_barang, b.nama_barang,b.id AS id_barang, pro2.kode_program, pro2.nama_program AS napro, pro2.id AS id_program ";
-$sql.=" FROM promo_free_produk pfp INNER JOIN barang b ON pfp.nama_produk = b.id INNER JOIN program_promo pro2 ON pfp.nama_program = pro2.id WHERE pfp.nama_program = '$id'";
+$sql = "SELECT pfp.id,pfp.qty,pfp.nama_program,pfp.nama_produk,b.kode_barang, b.nama_barang,b.id AS id_barang, pro2.kode_program, pro2.nama_program AS napro, pro2.id AS id_program, ss.nama AS nama_satuan ";
+$sql.=" FROM promo_free_produk pfp LEFT JOIN barang b ON pfp.nama_produk = b.id LEFT JOIN program_promo pro2 ON pfp.nama_program = pro2.id LEFT JOIN satuan ss ON pfp.satuan = ss.id WHERE pfp.nama_program = '$id'";
 $query=mysqli_query($conn, $sql) or die("datatable_free_produk.php: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
-$sql = "SELECT pfp.id,pfp.qty,pfp.nama_program,pfp.nama_produk,b.kode_barang, b.nama_barang, b.id AS id_barang, pro2.kode_program, pro2.nama_program AS napro, pro2.id AS id_program ";
-$sql.=" FROM promo_free_produk pfp INNER JOIN barang b  ON pfp.nama_produk = b.id INNER JOIN program_promo pro2 ON pfp.nama_program = pro2.id WHERE pfp.nama_program = '$id' AND 1=1";
+$sql = "SELECT pfp.id,pfp.qty,pfp.nama_program,pfp.nama_produk,b.kode_barang, b.nama_barang, b.id AS id_barang, pro2.kode_program, pro2.nama_program AS napro, pro2.id AS id_program, ss.nama AS nama_satuan ";
+$sql.=" FROM promo_free_produk pfp LEFT JOIN barang b  ON pfp.nama_produk = b.id LEFT JOIN program_promo pro2 ON pfp.nama_program = pro2.id LEFT JOIN satuan ss ON pfp.satuan = ss.id WHERE pfp.nama_program = '$id' AND 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 	$sql.=" AND ( b.nama_barang LIKE '".$requestData['search']['value']."%' ";
 	$sql.=" OR pro2.nama_program LIKE '".$requestData['search']['value']."%' ";
@@ -46,15 +46,16 @@ $query=mysqli_query($conn, $sql) or die("employee-grid-data.php: get employees")
 $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData=array(); 
+	$nestedData[] = "<p style='color:red;'>".$row["napro"] . "(" . $row["kode_program"] .")</p>";
 	$nestedData[] = $row["nama_barang"] . "(" . $row["kode_barang"] .")";
-	$nestedData[] = rp($row["qty"]);
-	$nestedData[] = $row["napro"] . "(" . $row["kode_program"] .")";
+	$nestedData[] = rp($row["qty"])." ".$row["nama_satuan"];
+	
 
 	 if ($produk_promo['program_promo_free_edit'] > 0) {
-        $nestedData[] = "<button data-id='".$row['id']."' data-nama_produk='".$row['nama_barang']."' data-id_produk='".$row['id_barang']."' data-kode_program='".$row['napro'] ."' data-id_program='".$row['id_program']."' data-qty='".$row['qty']."' class='btn btn-warning edit'><span class='fa fa-edit'></span> Edit </button>";
+        $nestedData[] = "<button data-id='".$row['id']."' data-nama_produk='".$row['kode_barang']."' data-id_produk='".$row['id_barang']."' data-kode_program='".$row['napro'] ."' data-id_program='".$row['id_program']."' data-qty='".$row['qty']."' data-satuan='".$row['nama_satuan']."' class='btn btn-warning edit btn-sm'><span class='fa fa-edit'></span> Edit </button>";
       }
      if ($produk_promo['program_promo_free_hapus'] > 0) {
-        $nestedData[] = "<td><button data-id='".$row['id']."' data-nama_produk='".$row['nama_barang']."' data-nama_program='".$row['napro']."' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'></span> Hapus </button></td>";
+        $nestedData[] = "<td><button data-id='".$row['id']."' data-nama_produk='".$row['nama_barang']."' data-nama_program='".$row['napro']."' class='btn btn-danger delete btn-sm'><span class='glyphicon glyphicon-trash'></span> Hapus </button></td>";
       }
       $nestedData[] = $row["id"];
 	$data[] = $nestedData;

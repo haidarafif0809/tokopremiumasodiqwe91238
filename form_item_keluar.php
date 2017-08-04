@@ -37,6 +37,44 @@ $session_id = session_id();
           <input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
           
          </form>
+
+         <!-- Modal modal_barang_tidak_bisa_dijual -->
+<div id="modal_barang_tidak_bisa_dijual" class="modal " role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Produk Yang Tidak Bisa Di Transfer</h4>
+      </div>
+      <div class="modal-body">
+            <center>
+            <table class="table table-bordered table-sm">
+                  <thead> <!-- untuk memberikan nama pada kolom tabel -->
+                  
+                      <th>Kode Produk</th>
+                      <th>Nama Produk</th>
+                      <th>Jumlah Yang Akan Di Transfer</th>
+                      <th>Stok Saat Ini</th>
+                  
+                  
+                  </thead> <!-- tag penutup tabel -->
+                  <tbody id="tbody-barang-jual">
+                    
+                  </tbody>
+            </table>
+            </center>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- end of modal modal_barang_tidak_bisa_dijual  -->
+
   
 <!-- Tampilan Modal -->
 <div id="myModal" class="modal fade" role="dialog">
@@ -411,40 +449,55 @@ $("#nomorfaktur1").val(data);
 
 var total = $("#total_item_masuk").val();
 var keterangan = $("#keterangan").val();
-var session_id = $("#session_id").val();
+var session_id = $("#session_id").val();  
 
+    $.getJSON("cek_status_item_keluar.php", function(result){//$.getJSON("cek_status_stok_penjualan_inap.php
 
+             if (result.status == 0) {// if (result.status == 0) {               
 
+                        if (total == ""){
+                        alert("Tidak Ada Total Item Keluar");
+                        }
+                        else
+                        {
+                           
+                             $("#pembayaran_item_keluar").hide();
+                             $("#batal").hide();
+                             $("#transaksi_baru").show();
 
-if (total == ""){
-alert("Tidak Ada Total Item Masuk");
-}
-else
-{
-    
-     $("#pembayaran_item_keluar").hide();
-     $("#batal").hide();
-     $("#transaksi_baru").show();
+                                 $.post($("#form_item_keluar").attr("action"), $("#form_item_keluar :input").serializeArray(), function(info) {
+                                 $("#demo").html(info);
+                                 
+                             $("#alert_berhasil").show();
+                             
+                             $("#result").html("");
+                             $("#pembayaran_item_keluar").val('');
+                             $("#keterangan").val();
+                             $("#total_item_keluar").val('');
+                             
+                               
+                           });
+                        }
 
- $.post($("#form_item_keluar").attr("action"), $("#form_item_keluar :input").serializeArray(), function(info) {
-$("#demo").html(info);
-     
-     $("#alert_berhasil").show();
-     
-     $("#result").html("");
-     $("#pembayaran_item_keluar").val('');
-     $("#keterangan").val();
-     $("#total_item_keluar").val('');
-     
-  
-    
+              }// if (result.status == 0) {
+              else
+              {// else if (result.status == 0) {
+             alert("Tidak Bisa Di Keluarkan, ada stok yang habis");
        
-   });
-}
+                 $("#tbody-barang-jual").find("tr").remove();
 
-// #result didapat dari tag span id=result
+                $.each(result.barang, function(i, item) {//  $.each(result.barang, 
 
-//mengambil session_id pembelian agar berurutan
+   
+                  var tr_barang = "<tr><td>"+ result.barang[i].kode_barang+"</td><td>"+ result.barang[i].nama_barang+"</td><td>"+ result.barang[i].jumlah_jual+"</td><td>"+ result.barang[i].stok+"</td></tr>"
+                  $("#tbody-barang-jual").prepend(tr_barang);
+
+                });//  $.each(result.barang, 
+
+                $("#modal_barang_tidak_bisa_dijual").modal('show');
+             }// else if (result.status == 0) {
+            
+              });
 
  $("#form_item_keluar").submit(function(){
     return false;

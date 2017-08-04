@@ -565,13 +565,18 @@ $.post("cek_total_item_keluar.php",
           var jumlah_baru = $(this).val();
           var harga = $(this).attr("data-harga");
           var kode_barang = $(this).attr("data-kode");
-          $.post("cek_stok_pesanan_barang.php",{kode_barang:kode_barang, jumlah_baru:jumlah_baru},function(data){
+          var jumlah_lama = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-jumlah-"+id+"").text()))));
 
-             if (data == "ya") {
+          $.post("cek_stok_item_keluar_barang.php",{kode_barang:kode_barang, jumlah_baru:jumlah_baru},function(data){
+
+             if (data == 1) {
 
              alert ("Jumlah Yang Di Masukan Melebihi Stok !");
 
-             $(this).val($(".text-jumlah-"+id+"").text());
+              $("#input-jumlah-"+id+"").attr("type", "hidden");
+              $("#input-jumlah-"+id+"").val(jumlah_lama);
+              $("#text-jumlah-"+id+"").text(jumlah_lama);
+              $("#text-jumlah-"+id+"").show();
 
            }
 

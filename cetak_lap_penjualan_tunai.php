@@ -8,7 +8,7 @@ include 'db.php';
 
 $no_faktur = $_GET['no_faktur'];
 
-    $query0 = $db->query("SELECT * FROM penjualan WHERE no_faktur = '$no_faktur' ");
+    $query0 = $db->query("SELECT p.no_faktur, p.potongan,p.tax,p.total,p.tunai,p.sisa,p.tanggal, p.biaya_admin,pl.nama_pelanggan FROM penjualan p LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE p.no_faktur = '$no_faktur' ");
     $data0 = mysqli_fetch_array($query0);
 
     $query1 = $db->query("SELECT * FROM perusahaan ");
@@ -30,6 +30,7 @@ $no_faktur = $_GET['no_faktur'];
  	<?php echo $data1['alamat_perusahaan']; ?> <hr><br><br>
  	===================<br>
  	No Faktur : <?php echo $data0['no_faktur']; ?> || Kasir : <?php echo $_SESSION['nama']; ?><br>
+  Nama Pelangan : <?php echo $data0['nama_pelanggan']; ?> <br>
  	===================<br>
 
 </font>

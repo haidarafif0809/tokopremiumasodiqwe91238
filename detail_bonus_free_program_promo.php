@@ -244,9 +244,11 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
                $.post('periksa_promo_disc_produk.php',{id_produk:id_produk,id_program:id_program}, function(data){
                     if (data == 1) {
                       alert("Anda Tidak Bisa Menambahkan Produk '"+nama_produk+"', Karena Produk Tersebut Sudah Ada Di Promo Diskon Produk !");
-                       $("#kode_barang_edit").val('');
+                       $("#kode_barang").val('');
                        $("#nama_produk").val('');
-                       $("#kode_barang_edit").focus();
+                       $("#kode_barang").trigger('chosen:updated');
+                       $("#kode_barang").trigger('chosen:open');
+                       $("#kode_barang").focus();
                     }
                     else{  
 
@@ -310,6 +312,35 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
      var id_produk = $("#id_produk").val();
      var satuan = $("#satuan").val();
      var qty = $("#qty").val();
+
+                
+                var nama_produk = $("#nama_produk").val();
+                var satuan = $("#satuan").val();
+                var id_program = $("#id_program").val();
+
+        $.post('periksa_promo_disc_produk.php',{id_produk:id_produk,id_program:id_program}, function(data){
+                    if (data == 1) {
+                      alert("Anda Tidak Bisa Menambahkan Produk '"+nama_produk+"', Karena Produk Tersebut Sudah Ada Di Promo Diskon Produk !");
+                       $("#kode_barang").val('');
+                       $("#kode_barang").trigger('chosen:updated');
+                       $("#kode_barang").trigger('chosen:open');
+                       $("#nama_produk").val('');
+                       $("#kode_barang").focus();
+                    }
+                    else{  
+                    $.post('cek_kode_bonus_free_produk.php',{id_produk:id_produk}, function(data){
+                    if(data == 1){
+                    alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+                    $("#kode_barang").val('');
+                    $("#kode_barang").trigger('chosen:updated');
+                    $("#kode_barang").trigger('chosen:open');
+                    $("#id_produk").val('');
+                  }//penutup if
+                          
+                });////penutup $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data)
+            }
+        });
+
       if (id_program == '') {
         alert("Silakan isikan program promo terlebih dahulu.");
         $("#nama_program").val('');
@@ -325,6 +356,7 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
       } 
       else
       {
+
         $.post("proses_detail_bonus_free_program_promo.php",{id_program:id_program,id_produk:id_produk,qty:qty,satuan:satuan},function(info) {
           $("#tambh_free_produk").hide();
           $("#tambah_free_produk").show();
@@ -389,6 +421,35 @@ $(document).on('click', '.edit', function (e) {
     var id = $("#id_edit").val();
     var satuan = $("#satuan_edit").val();
     var qty = $("#qty_edit").val();
+    var nama_produk = $("#nama_produk_edit").val();
+                
+
+               $.post('periksa_promo_disc_produk.php',{id_produk:id_produk,id_program:id_program}, function(data){
+                    if (data == 1) {
+                      alert("Anda Tidak Bisa Menambahkan Produk '"+nama_produk+"', Karena Produk Tersebut Sudah Ada Di Promo Diskon Produk !");
+                       $("#kode_barang_edit").val('');
+                       $("#nama_produk_edit").val('');
+                       $("#kode_barang_edit").trigger('chosen:updated');
+                       $("#kode_barang_edit").trigger('chosen:open');
+                       $("#kode_barang_edit").focus();
+                    }
+                    else{  
+
+               $.post('cek_kode_bonus_free_produk.php',{id_produk:id_produk}, function(data){
+                  if(data == 1){
+                    alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+                    $("#kode_barang_edit").val('');
+                    $("#kode_barang_edit").trigger('chosen:updated');
+                    $("#kode_barang_edit").trigger('chosen:open');
+                    $("#id_produk").val('');
+                  }//penutup if
+                          
+                });////penutup $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data)
+
+             }
+
+            }); // penutup $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json)
+
     if (id_program == '') {
         alert("Silakan isikan program promo terlebih dahulu.");
         $("#id_program_edit").val('');
@@ -403,6 +464,8 @@ $(document).on('click', '.edit', function (e) {
       } 
       else
       {
+
+
         $.post("edit_detail_bonus_free_program_promo.php",{id:id,id_program:id_program,id_produk:id_produk,qty:qty,satuan:satuan},function(info) {
           $("#edit_free_produk").hide();
           $("#tambah_free_produk").show();
@@ -415,6 +478,7 @@ $(document).on('click', '.edit', function (e) {
               $("#qty_max_edit").val('');
               $("#id_produk_edit").val('');
        });
+
       }
       $("#formfreeproduk").submit(function(){
       return false;
@@ -455,7 +519,9 @@ $(document).on('click', '.edit', function (e) {
                     if (data == 1) {
                       alert("Anda Tidak Bisa Menambahkan Produk '"+nama_produk+"', Karena Produk Tersebut Sudah Ada Di Promo Diskon Produk !");
                        $("#kode_barang_edit").val('');
-                       $("#nama_produk").val('');
+                       $("#nama_produk_edit").val('');
+                       $("#kode_barang_edit").trigger('chosen:updated');
+                       $("#kode_barang_edit").trigger('chosen:open');
                        $("#kode_barang_edit").focus();
                     }
                     else{  
@@ -474,6 +540,7 @@ $(document).on('click', '.edit', function (e) {
              }
 
             }); // penutup $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json)
+
       });// END if (kode_produk != '')
   }
 

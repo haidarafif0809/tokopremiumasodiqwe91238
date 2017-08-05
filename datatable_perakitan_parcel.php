@@ -29,14 +29,14 @@ $columns = array(
 // getting total number records without any search
 
 
-$sql = "SELECT id, no_faktur, jumlah_parcel, kode_parcel, nama_parcel, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, user_input, user_edit ";
+$sql = "SELECT id, no_faktur, jumlah_parcel, kode_parcel, nama_parcel, estimasi_hpp, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, user_input, user_edit ";
 $sql.=" FROM perakitan_parcel";
 $query=mysqli_query($conn, $sql) or die("Salahnya Disini 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
-$sql = "SELECT id, no_faktur, jumlah_parcel, kode_parcel, nama_parcel, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, user_input, user_edit ";
+$sql = "SELECT id, no_faktur, jumlah_parcel, kode_parcel, nama_parcel, estimasi_hpp, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, user_input, user_edit ";
 $sql.=" FROM perakitan_parcel WHERE 1=1";
 
 
@@ -63,6 +63,7 @@ $stok_parcel = cekStokHpp($row['kode_parcel']);
 
   $nestedData[] = $row["kode_parcel"];
   $nestedData[] = $row["nama_parcel"];
+  $nestedData[] = rp($row["estimasi_hpp"]);
   $nestedData[] = rp($row["harga_parcel"]); 
   $nestedData[] = rp($row["harga_parcel_2"]); 
   $nestedData[] = rp($row["harga_parcel_3"]); 

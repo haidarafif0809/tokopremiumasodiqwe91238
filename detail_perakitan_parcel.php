@@ -37,6 +37,11 @@ $session_id = session_id();
       </div>
 
       <div class="col-sm-2">
+        <label>Jumlah Parcel</label>
+        <input style="height:15px;" type="text" class="form-control" name="jumlah_parcel" autocomplete="off" id="jumlah_parcel" placeholder="JUMLAH PARCEL">
+      </div>
+
+      <div class="col-sm-2">
         <label>Estimasi Hpp</label>
         <input style="height:15px;" type="text" class="form-control" name="estimasi_hpp" autocomplete="off" id="estimasi_hpp" readonly="" placeholder="ESTIMASI HPP">
       </div>
@@ -76,11 +81,6 @@ $session_id = session_id();
       <div class="col-sm-2">
         <label>Harga 7</label>
         <input style="height:15px;" type="text" class="form-control" name="harga_parcel_7" autocomplete="off" id="harga_parcel_7" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 7">
-      </div>
-
-      <div class="col-sm-2">
-        <label>Jumlah Parcel</label>
-        <input style="height:15px;" type="text" class="form-control" name="jumlah_parcel" autocomplete="off" id="jumlah_parcel" placeholder="JUMLAH PARCEL">
       </div>
 
 
@@ -727,7 +727,7 @@ if (nama_parcel == "") {
               $("#transaksi_baru").show();
 
               $.post("proses_simpan_parcel.php",{id_produk:id_produk,jumlah_barang:jumlah_barang,
-              kode_parcel:kode_parcel, nama_parcel:nama_parcel, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel},function(data) {
+              kode_parcel:kode_parcel, nama_parcel:nama_parcel, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel,estimasi_hpp:estimasi_hpp},function(data) {
 
                 $("#nama_barang").val('');
                 $("#kode_barang").val('');
@@ -767,7 +767,7 @@ if (nama_parcel == "") {
               $("#transaksi_baru").show();
 
               $.post("proses_simpan_parcel.php",{id_produk:id_produk,jumlah_barang:jumlah_barang,
-              kode_parcel:kode_parcel, nama_parcel:nama_parcel, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel},function(data) {
+              kode_parcel:kode_parcel, nama_parcel:nama_parcel, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel,estimasi_hpp:estimasi_hpp},function(data) {
 
                 $("#nama_barang").val('');
                 $("#kode_barang").val('');

@@ -223,6 +223,7 @@ include 'db.php';
 
 			<th style='background-color: #4CAF50; color: white'> Kode Parcel </th>
 			<th style='background-color: #4CAF50; color: white'> Nama Parcel</th>
+			<th style='background-color: #4CAF50; color: white'> Estimasi Hpp</th>
 			<th style='background-color: #4CAF50; color: white'> Harga Parcel 1</th>
 			<th style='background-color: #4CAF50; color: white'> Harga Parcel 2</th>
 			<th style='background-color: #4CAF50; color: white'> Harga Parcel 3</th>

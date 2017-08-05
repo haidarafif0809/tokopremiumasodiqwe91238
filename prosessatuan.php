@@ -25,10 +25,7 @@ if (!$perintah)
  die('Query Error : '.$db->errno.
  ' - '.$db->error);
 }
-else 
-{
-   echo '1';
-}
+
 
 
 //Untuk Memutuskan Koneksi Ke Database

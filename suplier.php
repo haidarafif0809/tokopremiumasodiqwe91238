@@ -221,10 +221,10 @@ $("#suplier").blur(function(){
 
 var nama = $("#suplier").val();
 // cek namanya
- $.post('cek_suplier.php',{nama:nama}, function(data){
+ $.post('cek_nama_suplier.php',{nama:nama}, function(data){
 
         if(data == 1){
-          alert('Nama suplier yang anda masukkan sudah ada!');
+          alert('Nama Suplier '+nama+' Sudah Ada!');
           $("#suplier").val('');
           $("#suplier").focus();
         }
@@ -297,37 +297,48 @@ var nama = $("#suplier").val();
 								else {
 
 									$.post('prosessuplier.php', {nama:suplier,alamat:alamat,no_telp:nomor}, function(data){
-									$("#suplier").val('');
-									$("#alamat").val('');
-									$("#nomor").val('');
 
-				$('#table_suplier').DataTable().destroy();
-		      	var dataTable = $('#table_suplier').DataTable( {
-		          "processing": true,
-		          "serverSide": true,
-		          "ajax":{
-		            url :"datatable_suplier.php", // json datasource
-		            type: "post",  // method  , by default get
-		            error: function(){  // error handling
-		              $(".employee-grid-error").html("");
-		              $("#table_suplier").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-		              $("#employee-grid_processing").css("display","none");
-		              
-		            }
-		          },
-		            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-		              $(nRow).attr('class','tr-id-'+aData[5]+'');
-		            },
-		        })
+										if (data == 1) {
+
+												alert ("Nama Suplier "+suplier+" Sudah Ada, Silakan Input Nama Lain !");
+												$("#suplier").val('');
+												$("#suplier").focus();
+
+										}
+										else{
+
+												$("#suplier").val('');
+												$("#alamat").val('');
+												$("#nomor").val('');
+
+													$('#table_suplier').DataTable().destroy();
+											      	var dataTable = $('#table_suplier').DataTable( {
+											          "processing": true,
+											          "serverSide": true,
+											          "ajax":{
+											            url :"datatable_suplier.php", // json datasource
+											            type: "post",  // method  , by default get
+											            error: function(){  // error handling
+											              $(".employee-grid-error").html("");
+											              $("#table_suplier").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+											              $("#employee-grid_processing").css("display","none");
+											              
+											            }
+											          },
+											            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+											              $(nRow).attr('class','tr-id-'+aData[5]+'');
+											            },
+											        })
 
 
-								$(".alert").show('fast');
-								setTimeout(tutupalert, 100);
-								$(".modal").modal("hide");
-								
-								
-								
-								});
+												$(".alert").show('fast');
+												setTimeout(tutupalert, 100);
+												$(".modal").modal("hide");
+
+										}							
+									
+									
+									});
 								}
 								
 
@@ -400,10 +411,10 @@ var nama = $("#suplier").val();
 								else {
 
 												// cek namanya
-			 $.post('cek_suplier.php',{nama:nama}, function(data){
+			 $.post('cek_nama_suplier.php',{nama:nama}, function(data){
 
 			 if(data == 1){
-			 alert('Nama suplier yang anda masukkan sudah ada!');
+			 alert('Nama Suplier '+nama+' Sudah Ada!');
 			    $("#edit_suplier").focus();
 			    $("#edit_suplier").val(as);
 

@@ -2487,6 +2487,25 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
 
     }//end else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
 
+        var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+        if(pembayaran == ''){
+        pembayaran = 0;
+        }
+        var sisa = pembayaran - total_akhir1;
+        var sisa_kredit = total_akhir1 - pembayaran;
+
+
+      if (sisa < 0  ){
+        $("#kredit").val(sisa_kredit);
+        $("#sisa_pembayaran_penjualan").val('0');
+        $("#tanggal_jt").attr("disabled", false);
+      }
+      else{
+        $("#sisa_pembayaran_penjualan").val(sisa);
+        $("#kredit").val('0');
+        $("#tanggal_jt").attr("disabled", true);
+      }
+      
 
   if (jumlah_barang == ''){
   alert("Jumlah Barang Harus Diisi");
@@ -2497,6 +2516,7 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
   else if (stok < 0 ){
   alert("Jumlah Barang Melebihi Stok");
   }
+
   
  else if (ber_stok == 'Jasa' ){
 
@@ -2511,8 +2531,7 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
       {
         $("#potongan_penjualan").val(potongaaan.format(2, 3, '.', ','));
       }
-      $("#tax_rp").val(hasil_tax.format(2, 3, '.', ','));
- //pengambilan data form pembayaran
+      $("#tax_rp").val(hasil_tax.format(2, 3, '.', ',')); //pengambilan data form pembayaran
 
 
 
@@ -3499,6 +3518,7 @@ $(".btn-alert-hapus").click(function(){
                                       {    
                                       $("#potongan_penjualan").val(potongaaan.format(2, 3, '.', ','));
                                       }
+
                                     
                                   
                                     var sub_total = parseFloat(subtotal_penjualan,2) - parseFloat(potongaaan,2);
@@ -3518,7 +3538,7 @@ $(".btn-alert-hapus").click(function(){
 
                                     var sisa = parseFloat(pembayaran.replace(',','.')) - sub_akhir;
                                     var sisa_kredit = sub_akhir - parseFloat(pembayaran.replace(',','.')); 
-                                    
+
                                     
                                     if (sisa < 0 )
                                     {
@@ -3959,16 +3979,35 @@ if (pesan_alert == true) {
         $("#total2").val('0');  
         $("#total1").val('0');
       }
-        if (pot_fakt_rp == 0.00){
+
+        
+
+
+      var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+        if(pembayaran == ''){
+        pembayaran = 0;
+        }
+        var sisa = pembayaran - total_akhir1;
+        var sisa_kredit = total_akhir1 - pembayaran;
+
+
+      if (sisa < 0  ){
+        $("#kredit").val(sisa_kredit);
+        $("#sisa_pembayaran_penjualan").val('0');
+        $("#tanggal_jt").attr("disabled", false);
+      }
+      else{
+        $("#sisa_pembayaran_penjualan").val(sisa);
+        $("#kredit").val('0');
+        $("#tanggal_jt").attr("disabled", true);
+      }        if (pot_fakt_rp == 0.00){
         $("#potongan_penjualan").val();
         }
       else{
         $("#potongan_penjualan").val(potongaaan.format(2, 3, '.', ','));
       }
         
-        $("#pembayaran_penjualan").val('');
-        $("#kredit").val('');
-        $("#sisa_pembayaran_penjualan").val('');
+
         $("#kode_barang").val('');
         $("#kode_barang").val('').trigger("chosen:updated");
         $("#kode_barang").trigger("chosen:open");

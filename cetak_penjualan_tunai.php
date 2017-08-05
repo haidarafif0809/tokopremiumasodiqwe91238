@@ -7,7 +7,7 @@ include 'db.php';
 
     $no_faktur = stringdoang($_GET['no_faktur']);
 
-    $query0 = $db->query("SELECT no_faktur, potongan, tax, biaya_admin, total, tunai, sisa, tanggal, kode_pelanggan FROM penjualan WHERE no_faktur = '$no_faktur' ");
+    $query0 = $db->query("SELECT p.no_faktur, p.potongan,p.tax,p.total,p.tunai,p.sisa,p.tanggal, p.biaya_admin,pl.nama_pelanggan FROM penjualan p LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE p.no_faktur = '$no_faktur' "); 
     $data0 = mysqli_fetch_array($query0);
 $sisa_uang = $data0['tunai'] - $data0['total'];
 
@@ -61,6 +61,7 @@ else{
   <?php echo $data1['alamat_perusahaan']; ?><hr><br><br>
   ===================<br>
   No Faktur : <?php echo $no_faktur; ?> || Kasir : <?php echo $_SESSION['nama']; ?><br>
+  Nama Pelangan : <?php echo $data0['nama_pelanggan']; ?> <br> 
   ===================<br>
  <table rules="all"  style="border-color:gray;">
  

@@ -39,7 +39,7 @@ $session_id = session_id();
           <?php
 
           // menampilkan seluruh data yang ada pada tabel suplier
-          $query = $db->query("SELECT * FROM suplier");
+          $query = $db->query("SELECT id,nama FROM suplier");
 
           // menyimpan data sementara yang ada pada $query
           while($data = mysqli_fetch_array($query))
@@ -800,7 +800,8 @@ $(document).ready(function(){
     $("#total_retur_pembelian1").val(tandaPemisahTitik(total_akhir));
     $("#potongan_pembelian").val(tandaPemisahTitik(Math.round(nilai_diskon)));
     $("#pembayaran_pembelian").val(tandaPemisahTitik(jumlah_kas_masuk));
-      $("#kode_barang").focus();
+    $("#kode_barang").focus();
+    $('#nama_suplier').prop('disabled', true).trigger("chosen:updated");
 
     $.post("proses_tbs_retur_pembelian_faktur.php",{kode_barang:kode_barang,jumlah_retur:jumlah_retur,satuan_produk:satuan_produk,nama_barang:nama_barang,no_faktur_pembelian:no_faktur2,harga:harga,potongan1:potongan1,tax1:tax1,satuan_beli:satuan_beli},function(info) {
 
@@ -921,10 +922,10 @@ $.post("proses_bayar_retur_beli_faktur.php",{session_id:session_id,sisa:sisa,nam
 
                  $("#pembayaran").mouseleave(function(){
 
-               $.get('no_faktur_rb.php', function(data) {
-               /*optional stuff to do after getScript */
+                 $.get('no_faktur_rb.php', function(data) {
+                 /*optional stuff to do after getScript */
 
-               $("#nofaktur_rb").val(data);
+                 $("#nofaktur_rb").val(data);
 
                });
                });
@@ -1480,6 +1481,12 @@ $(document).on('click','.btn-hapus-tbs',function(e){
       $("#potongan_pembelian").val(tandaPemisahTitik(Math.round(nilai_diskon)));
       $("#pembayaran_pembelian").val(tandaPemisahTitik(jumlah_kas_masuk));
 
+
+      if (nilai_akhir == 0) {
+        
+             $('#nama_suplier').prop('disabled', false).trigger("chosen:updated");
+      };
+
     $.post("hapus_tbs_retur_pembelian_faktur.php",{id:id,kode_barang:kode_barang,no_faktur_pembelian:no_faktur_pembelian},function(data){
 
     $("#kode_barang").focus();
@@ -1491,6 +1498,7 @@ $(document).on('click','.btn-hapus-tbs',function(e){
     $.post("cek_tbs_retur_pembelian_faktur.php",{session_id: "<?php echo $session_id; ?>"},function(data){
         if (data == 0) {
              $("#ppn").attr("disabled", false);
+             $('#nama_suplier').prop('disabled', false).trigger("chosen:updated");
         }
     });
 
@@ -1869,6 +1877,22 @@ $(function() {
 </script>
  <!-- Potongan Hutang Faktur -->
 
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $.get("cek_suplier_retur_beli.php", function(data){
+
+      if (data != 0) {
+
+        $('#nama_suplier').val(data);
+        $('#nama_suplier').prop('disabled', true).trigger("chosen:updated");
+
+      };
+
+    });
+
+  });
+</script>
 
 <!-- memasukan file footer.php -->
 <?php include 'footer.php'; ?>

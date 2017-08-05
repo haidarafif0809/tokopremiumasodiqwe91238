@@ -61,7 +61,7 @@ $otoritas_hapus = mysqli_num_rows($pilih_akses_otoritas_hapus);
 
     if ($otoritas_hapus > 0) {
 
-    		$query_user = $db->query("SELECT COUNT(id) AS jumlah_data FROM user WHERE otoritas = '$row[id]' ");
+    		$query_user = $db->query("SELECT COUNT(id) AS jumlah_data FROM user WHERE otoritas = '$row[id]' OR otoritas = '$row[nama]' ");
     		$data_user = mysqli_fetch_array($query_user);
 
     		if ($data_user['jumlah_data'] > 0) {

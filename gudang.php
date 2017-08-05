@@ -164,7 +164,7 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 
 <div class="table-responsive">
 <span id="table-baru">
-<table id="table_gudang" class="table table-bordered">
+<table id="table_gudang" class="table table-bordered table-sm">
 		<thead>
 			<th style="background-color: #4CAF50; color: white"> Kode Gudang </th>
 			<th style="background-color: #4CAF50; color: white"> Nama Gudang </th>
@@ -209,31 +209,35 @@ echo '<th style="background-color: #4CAF50; color: white"> Hapus </th>';
 
 		$.post('proses_tambah_gudang.php',{kode_gudang:kode_gudang,nama_gudang:nama_gudang},function(data){
 
-		if (data != '') {
-		$("#kode_gudang").val('');
-		$("#nama_gudang").val('');
-		$("#myModal").modal("hide");
-		$('#table_gudang').DataTable().destroy();
-		var dataTable = $('#table_gudang').DataTable( {
-          "processing": true,
-          "serverSide": true,
-          "ajax":{
-            url :"datatable_gudang.php", // json datasource
-           
-            type: "post",  // method  , by default get
-            error: function(){  // error handling
-              $(".employee-grid-error").html("");
-              $("#table_gudang").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-              $("#employee-grid_processing").css("display","none");
-            }
-        },
-            
-            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                $(nRow).attr('class','tr-id-'+aData[3]+'');
-            },
-        });
-
+		if (data == 1) {
+      alert ("Kode Gudang "+kode_gudang+" Sudah Ada, Silakan Input Kode Lain !");
+      $("#kode_gudang").focus();
+      $("#kode_gudang").val('');
 		}
+    else{
+          $("#kode_gudang").val('');
+          $("#nama_gudang").val('');
+          $("#myModal").modal("hide");
+          $('#table_gudang').DataTable().destroy();
+          var dataTable = $('#table_gudang').DataTable( {
+                "processing": true,
+                "serverSide": true,
+                "ajax":{
+                  url :"datatable_gudang.php", // json datasource
+                 
+                  type: "post",  // method  , by default get
+                  error: function(){  // error handling
+                    $(".employee-grid-error").html("");
+                    $("#table_gudang").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                    $("#employee-grid_processing").css("display","none");
+                  }
+              },
+                  
+                  "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                      $(nRow).attr('class','tr-id-'+aData[3]+'');
+                  },
+              });
+    }
 		
 		
 		});

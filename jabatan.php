@@ -174,7 +174,7 @@ th {
 
 <div class="table-responsive"><!-- membuat agar ada garis pada tabel, disetiap kolom -->
 <span id="table_baru">
-<table id="table_jabatan" class="table table-bordered">
+<table id="table_jabatan" class="table table-bordered table-sm">
 		<thead> 
 			
 			<th style='background-color: #4CAF50; color:white'> Nama Jabatan </th>

@@ -53,11 +53,22 @@ $pilih_akses_otoritas = $db->query("SELECT gudang_hapus FROM otoritas_master_dat
 $otoritas = mysqli_num_rows($pilih_akses_otoritas);
 
     if ($otoritas > 0) {
-$nestedData[] = "<button class='btn btn-danger btn-hapus btn-sm' data-id='". $row['id'] ."' data-gudang='". $row['kode_gudang'] ."'> <i class='fa fa-trash'> </i> Hapus </button>";
+        $query_row = $db->query("SELECT gudang FROM pembelian WHERE gudang = '$row[kode_gudang]' ");
+        $jumlah_row = mysqli_num_rows($query_row);
+
+        $query_row_penjulan = $db->query("SELECT gudang FROM penjualan WHERE gudang = '$row[kode_gudang]' ");
+        $jumlah_row_penjulan = mysqli_nums($query_row_penjulan);
+
+         if ($jumlah_row == 0 AND $jumlah_row_penjulan == 0){
+          $nestedData[] = "<button class='btn btn-danger btn-hapus btn-sm' data-id='". $row['id'] ."' data-gudang='". $row['kode_gudang'] ."'> <i class='fa fa-trash'> </i> Hapus </button>";
+        }
+        else{
+          $nestedData[] = "<p style='color:red;'>Sudah Terpakai</p>";
+        } 
       }
         $nestedData[] = $row["id"];
         $data[] = $nestedData;
-      }
+}
 
 
 

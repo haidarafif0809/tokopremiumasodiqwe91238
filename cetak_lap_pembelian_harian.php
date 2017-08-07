@@ -10,7 +10,7 @@ include 'db.php';
   $query1 = $db->query("SELECT * FROM perusahaan ");
   $data1 = mysqli_fetch_array($query1);
 
-  $perintah = $db->query("SELECT id, tanggal FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' GROUP BY tanggal");
+  $perintah = $db->query("SELECT id, tanggal FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' GROUP BY tanggal ORDER BY tanggal DESC");
 
   $query_row = $db->query("SELECT tanggal FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
   $jumlah_sum_row = mysqli_num_rows($query_row);

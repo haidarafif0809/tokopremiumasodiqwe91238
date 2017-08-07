@@ -410,40 +410,18 @@ var nama = $("#suplier").val();
 								}
 								else {
 
-												// cek namanya
-			 $.post('cek_nama_suplier.php',{nama:nama}, function(data){
+									$.post("updatesuplier.php",{nama:nama,alamat:alamat,no_telp:no_telp,id:id},function(data){
 
-			 if(data == 1){
-			 alert('Nama Suplier '+nama+' Sudah Ada!');
-			    $("#edit_suplier").focus();
-			    $("#edit_suplier").val(as);
+										$(".alert").show('fast');
+										$("#table_baru").load('tabel-suplier.php');
 
-			 }
-			else
-			{
-
-			// ptoses updatenya
-			$.post("updatesuplier.php",{nama:nama,alamat:alamat,no_telp:no_telp,id:id},function(data){
-											
-											$(".alert").show('fast');
-											$("#table_baru").load('tabel-suplier.php');
-											
-											setTimeout(tutupalert, 2000);
-											$(".modal").modal("hide");
-										
-											
-											
-											});
-			// Finish Proses
-			}
-
-			}); // end post dari cek nama
-
-				}
-
-				function tutupmodal() {
-								
-								}	
+										setTimeout(tutupalert, 2000);
+										$(".modal").modal("hide");
+									});
+								}
+									function tutupmodal() {
+									
+									}	
 								});
 								
 								

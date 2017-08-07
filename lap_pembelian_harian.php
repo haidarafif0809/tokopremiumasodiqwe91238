@@ -30,7 +30,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
                   <div class="form-group"> 
 
-                  <input type="text" name="sampai_tanggal" id="sampai_tanggal" class="form-control tanggal_cari" placeholder="Sampai Tanggal" value="<?php echo date("Y/m/d"); ?>" required="">
+                  <input type="text" name="sampai_tanggal" id="sampai_tanggal" class="form-control tanggal_cari" placeholder="Sampai Tanggal" value="<?php echo date("Y-m-d"); ?>" required="">
                   </div>
 
                   <button type="submit" name="submit" id="submit" class="btn btn-primary" > <i class="fa fa-eye"></i> Tampil </button>
@@ -40,7 +40,7 @@ tr:nth-child(even){background-color: #f2f2f2}
  <br>
  <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="result">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 					<thead>
 					<th style="background-color: #4CAF50; color: white;"> Tanggal </th>
 					<th style="background-color: #4CAF50; color: white;"> Jumlah Transaksi </th>
@@ -63,7 +63,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 	<div class="card card-block">
 
 <div class="table-responsive">
- <table id="table_lap_pembelian_harian" class="table table-bordered">
+ <table id="table_lap_pembelian_harian" class="table table-bordered table-sm">
 					<thead>
 					<th style="background-color: #4CAF50; color: white;"> Tanggal </th>
 					<th style="background-color: #4CAF50; color: white;"> Jumlah Transaksi </th>

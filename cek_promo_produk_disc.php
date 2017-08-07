@@ -12,15 +12,9 @@ $idtbs = mysqli_fetch_array($querytbs);
 $sub = $idtbs['sub_tp'];
 $syarat = $idtbs['syarat_belanja'];
 if ($sub >= $syarat){
-
   echo 1;
 }
-else {
-echo 0;
-}
-        //Untuk Memutuskan Koneksi Ke Database
 
-        mysqli_close($db); 
+mysqli_close($db); 
 
- ?>
-
+?>

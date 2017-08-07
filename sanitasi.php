@@ -23,6 +23,12 @@ $rpp = $rp;
 return $rpp;
 }
 
+function hapus_koma_dua($rupiah){
+$rp = str_replace(",00", "",$rupiah);
+$rpp = $rp;
+return $rpp;
+}
+
 function gantiTitik($rupiah){
 $koma = str_replace(",",".",$rupiah);
 $titik = $koma;

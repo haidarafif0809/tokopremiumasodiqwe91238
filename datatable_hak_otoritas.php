@@ -60,7 +60,18 @@ $pilih_akses_otoritas_hapus = $db->query("SELECT hak_otoritas_hapus FROM otorita
 $otoritas_hapus = mysqli_num_rows($pilih_akses_otoritas_hapus);
 
     if ($otoritas_hapus > 0) {
-			$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-otoritas='". $row['nama'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
+
+    		$query_user = $db->query("SELECT COUNT(id) AS jumlah_data FROM user WHERE otoritas = '$row[id]' OR otoritas = '$row[nama]' ");
+    		$data_user = mysqli_fetch_array($query_user);
+
+    		if ($data_user['jumlah_data'] > 0) {
+    			$nestedData[] = "<p style='color:red;' align='center'>X</p>";
+    		}else{
+
+    		$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-otoritas='". $row['nama'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
+				
+    		}
+
 	}
 
 $pilih_akses_otoritas_edit = $db->query("SELECT hak_otoritas_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_edit = '1'");

@@ -55,7 +55,18 @@ $jabatan_hapus = mysqli_num_rows($pilih_akses_jabatan_hapus);
 
     if ($jabatan_hapus > 0){
 
-			$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-jabatan='". $row['nama'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
+		$query_user = $db->query("SELECT jabatan FROM user WHERE jabatan = '$row[id]' ");
+		$jumlah_user = mysqli_num_rows($query_user);
+
+			if ($jumlah_user == 0){
+				
+				$nestedData[] = "<button class='btn btn-danger btn-hapus btn-sm' data-id='". $row['id'] ."' data-jabatan='". $row['nama'] ."'> <i class='fa fa-trash'> </i> Hapus </button>";
+
+			}
+			else{
+				$nestedData[] = "<p style='color:red;'>Sudah Terpakai</p>";
+			}
+
 		}
 
 $pilih_akses_jabatan_edit = $db->query("SELECT jabatan_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND jabatan_edit = '1'");
@@ -63,7 +74,7 @@ $jabatan_edit = mysqli_num_rows($pilih_akses_jabatan_edit);
 
 
     if ($jabatan_edit > 0){ 
-			$nestedData[] = "<button class='btn btn-info btn-edit' data-jabatan='". $row['nama'] ."' data-id='". $row['id'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button>";
+			$nestedData[] = "<button class='btn btn-info btn-edit btn-sm' data-jabatan='". $row['nama'] ."' data-id='". $row['id'] ."'> <i class='fa fa-edit'> </i> Edit </button>";
 			}
 				$nestedData[] = $row["id"];
 				$data[] = $nestedData;

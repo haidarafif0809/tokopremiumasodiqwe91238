@@ -105,7 +105,7 @@ include 'db.php';
 </div><!-- end of modal edit data  -->
 
 <div id="modal_detail" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
@@ -307,12 +307,10 @@ if ($kas_keluar['kas_keluar_hapus'] > 0) {
 		var no_faktur = $("#hapus_no_faktur").val();
 
 		$.post("hapus_kas_keluar.php",{id:id,no_faktur:no_faktur},function(data){
-		if (data != "") {
 
 		$("#modal_hapus").modal('hide');
 		$(".tr-id-"+id).remove();
-		
-		}
+
 		
 		});
 		

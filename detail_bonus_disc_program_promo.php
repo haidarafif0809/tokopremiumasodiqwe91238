@@ -304,6 +304,29 @@ $kode_program = stringdoang($_GET['kode']);
      var harga_disc = $("#harga_disc").val();
      var satuan = $("#satuan").val();
 
+     $.post('periksa_promo_produk.php',{id_produk:id_produk,id_program:id_program}, function(data){
+      if (data == 1) {
+                      alert("Anda Tidak Bisa Menambahkan Produk '"+nama_produk+"', Karena Produk Tersebut Sudah Ada Di Promo Free Produk !");
+                       $("#kode_barang_edit").val('');
+                       $("#nama_produk").val('');
+                       $("#kode_barang_edit").focus();
+                    }
+                    else{  
+
+               $.post('cek_kode_bonus_disc_produk.php',{id_produk:id_produk}, function(data){
+                  if(data == 1){
+                    alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+                    $("#kode_barang").val('');
+                    $("#kode_barang").trigger('chosen:updated');
+                    $("#kode_barang").trigger('chosen:open');
+                    $("#id_produk").val('');
+                  }//penutup if
+                          
+                });////penutup $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data)
+
+             }
+      }); // penutup $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json)
+
       if (id_program == '') {
         alert("Silakan isikan program promo terlebih dahulu.");
         $("#nama_program").val('');
@@ -396,6 +419,32 @@ $(document).on('click', '.edit', function (e) {
     var qty_max = $("#qty_max_edit").val();
     var satuan = $("#satuan_edit").val();
     var harga_disc = $("#harga_disc_edit").val();
+
+        $.post('periksa_promo_produk.php',{id_produk:id_produk,id_program:id_program}, function(data){
+                    if (data == 1) {
+                      alert("Anda Tidak Bisa Menambahkan Produk '"+nama_produk+"', Karena Produk Tersebut Sudah Ada Di Promo Free Produk !");
+                       $("#kode_barang_edit").val('');
+                       $("#nama_produk").val('');
+                       $("#kode_barang_edit").focus();
+                    }
+                    else{  
+
+               $.post('cek_kode_bonus_disc_produk.php',{id_produk:id_produk}, function(data){
+                  if(data == 1){
+                    alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
+                    $("#kode_barang").val('');
+                    $("#kode_barang").trigger('chosen:updated');
+                    $("#kode_barang").trigger('chosen:open');
+                    $("#id_produk").val('');
+                  }//penutup if
+                          
+                });////penutup $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data)
+
+             }
+
+            }); // penutup $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json)
+
+
     if (id_program == '') {
         alert("Silakan isikan program promo terlebih dahulu.");
         $("#id_program_edit").val('');

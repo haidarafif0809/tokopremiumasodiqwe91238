@@ -2,6 +2,7 @@
 /* Database connection start */
 include 'sanitasi.php';
 include 'db.php';
+include 'persediaan.function.php';
 
 /* Database connection end */
 
@@ -70,10 +71,7 @@ while( $row=mysqli_fetch_array($query) ) {
     $nestedData[] = $row["nama_barang"];
 
     // mencari jumlah Barang
-    $select = $db->query("SELECT SUM(sisa) AS jumlah_barang FROM hpp_masuk WHERE kode_barang = '$row[kode_barang]'");
-    $ambil_sisa = mysqli_fetch_array($select);
-
-    $stok_barang = $ambil_sisa['jumlah_barang'];
+    $stok_barang = cekStokHpp($row['kode_barang']);
 
     if ($row['berkaitan_dgn_stok'] == 'Jasa') {
         $nestedData[] =  "0";

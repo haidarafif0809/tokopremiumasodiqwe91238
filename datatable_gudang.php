@@ -15,20 +15,20 @@ $columns = array(
 
 
 // getting total number records without any search
-$sql = "SELECT *";
-$sql.="FROM gudang ";
+$sql =" SELECT id, kode_gudang, nama_gudang, default_set";
+$sql.=" FROM gudang ";
 $query=mysqli_query($conn, $sql) or die("datatable_fee_faktur.php: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
 
-$sql = "SELECT *";
-$sql.="FROM gudang WHERE 1=1";
+$sql =" SELECT id, kode_gudang, nama_gudang, default_set";
+$sql.=" FROM gudang WHERE 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
 
-  $sql.=" AND ( nama LIKE '".$requestData['search']['value']."%' "; 
+  $sql.=" AND ( nama_gudang LIKE '".$requestData['search']['value']."%' "; 
   $sql.=" OR kode_gudang LIKE '".$requestData['search']['value']."%' )";
 
 }
@@ -53,11 +53,22 @@ $pilih_akses_otoritas = $db->query("SELECT gudang_hapus FROM otoritas_master_dat
 $otoritas = mysqli_num_rows($pilih_akses_otoritas);
 
     if ($otoritas > 0) {
-$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-gudang='". $row['kode_gudang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
+        $query_row = $db->query("SELECT gudang FROM pembelian WHERE gudang = '$row[kode_gudang]' ");
+        $jumlah_row = mysqli_num_rows($query_row);
+
+        $query_row_penjulan = $db->query("SELECT gudang FROM penjualan WHERE gudang = '$row[kode_gudang]' ");
+        $jumlah_row_penjulan = mysqli_nums($query_row_penjulan);
+
+         if ($jumlah_row == 0 AND $jumlah_row_penjulan == 0){
+          $nestedData[] = "<button class='btn btn-danger btn-hapus btn-sm' data-id='". $row['id'] ."' data-gudang='". $row['kode_gudang'] ."'> <i class='fa fa-trash'> </i> Hapus </button>";
+        }
+        else{
+          $nestedData[] = "<p style='color:red;'>Sudah Terpakai</p>";
+        } 
       }
         $nestedData[] = $row["id"];
         $data[] = $nestedData;
-      }
+}
 
 
 

@@ -31,7 +31,7 @@ $columns = array(
 // getting total number records without any search
 $sql =" SELECT tp.id, tp.harga_produk, tp.kode_parcel, tp.id_produk, tp.jumlah_produk, b.kode_barang, b.nama_barang, b.satuan, s.nama";
 $sql.=" FROM tbs_parcel tp INNER JOIN barang b ON tp.id_produk = b.id INNER JOIN satuan s ON b.satuan = s.id";
-$sql.=" WHERE tp.kode_parcel = '$kode_parcel'";
+$sql.=" WHERE tp.kode_parcel = '$kode_parcel' AND (tp.no_faktur = '' OR tp.no_faktur IS NULL)";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
@@ -40,7 +40,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 $sql =" SELECT tp.id, tp.harga_produk, tp.kode_parcel, tp.id_produk, tp.jumlah_produk, b.kode_barang, b.nama_barang, b.satuan, s.nama";
 $sql.=" FROM tbs_parcel tp INNER JOIN barang b ON tp.id_produk = b.id INNER JOIN satuan s ON b.satuan = s.id";
-$sql.=" WHERE tp.kode_parcel = '$kode_parcel'";
+$sql.=" WHERE tp.kode_parcel = '$kode_parcel' AND (tp.no_faktur = '' OR tp.no_faktur IS NULL)";
 
     $sql.=" AND (b.kode_barang LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR b.nama_barang LIKE '".$requestData['search']['value']."%' ";
@@ -62,15 +62,15 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
   $nestedData=array(); 
 
-      $jumlah_produk_tampil = koma($row["jumlah_produk"],3);
+      $jumlah_produk_tampil = koma($row["jumlah_produk"],2);
       $dibelakang_koma = substr($jumlah_produk_tampil, -4);
       $total_hpp = hitungHppProduk($row['kode_barang']);
       
       if ($dibelakang_koma == ",000") {
-          $jumlah_produk_tampil = hapus_koma($row["jumlah_produk"],3);
+          $jumlah_produk_tampil = hapus_koma($row["jumlah_produk"],2);
        }
        else{
-          $jumlah_produk_tampil = koma($row["jumlah_produk"],3);
+          $jumlah_produk_tampil = koma($row["jumlah_produk"],2);
        }
 
       $total_produk_yg_dibutuhkan = $jumlah_parcel * $row["jumlah_produk"];
@@ -80,7 +80,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
       $nestedData[] = '<p style="width:50">'.$row["kode_barang"].'</p>';
       $nestedData[] = '<p style="width:250">'.$row["nama_barang"].'</p>';
 
-      $nestedData[] = "<p style='font-size:15px; width:50' class='edit-jumlah' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_produk_tampil."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_produk'],3)."' class='input_jumlah' data-id='".$row['id']."' data-id-produk='".$row['id_produk']."' autofocus='' data-kode='".$row['kode_barang']."' data-satuan='".$row['satuan']."' data-harga='".$row['harga_produk']."' data-nama-barang='".$row['nama_barang']."'> </p>";
+      $nestedData[] = "<p style='font-size:15px; width:50' class='edit-jumlah' data-id='".$row['id']."' data-kode-barang-input='".$row['kode_barang']."'> <span id='text-jumlah-".$row['id']."'>".$jumlah_produk_tampil."</span> <input type='hidden' id='input-jumlah-".$row['id']."' value='".koma($row['jumlah_produk'],2)."' class='input_jumlah' data-id='".$row['id']."' data-id-produk='".$row['id_produk']."' autofocus='' data-kode='".$row['kode_barang']."' data-satuan='".$row['satuan']."' data-harga='".$row['harga_produk']."' data-nama-barang='".$row['nama_barang']."'> </p>";
 
       $nestedData[] = gantiKoma($total_produk_yg_dibutuhkan);
 

@@ -87,6 +87,49 @@ tr:nth-child(even){background-color: #f2f2f2}
  <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom jumlah jika ingin mengedit.</i></h6>
 </div>
 
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(document).on('blur','#jumlah_barang', function(){
+
+			var id_barang = $("#id_barang").val();
+			var kode_barang = $("#kode_barang").val();
+			var jumlah = $(this).val();
+			var jenis_edit = "jumlah";
+
+			$.post("cek_setting_diskon.php",{jenis_edit:jenis_edit,id_barang:id_barang,kode_barang:kode_barang,jumlah:jumlah}, function(data){
+
+				if (data == 1) {
+					alert("Jumlah Barang yang anda masukan untuk produk ini sudah ada");
+					$('#jumlah_barang').val('');
+					$('#jumlah_barang').focus();
+				};
+
+			});
+
+		});
+
+
+		$(document).on('blur','#potongan', function(){
+
+			var id_barang = $("#id_barang").val();
+			var kode_barang = $("#kode_barang").val();
+			var potongan = $(this).val();
+			var jenis_edit = "potongan";
+
+			$.post("cek_setting_diskon.php",{jenis_edit:jenis_edit,id_barang:id_barang,kode_barang:kode_barang,potongan:potongan}, function(data){
+
+				if (data == 1) {
+					alert("Potongan yang anda masukan untuk produk ini sudah ada");
+					$('#potongan').val('');
+					$('#potongan').focus();
+				};
+
+			});
+		});
+
+	});
+</script>
+
 
 <script type="text/javascript">
 	$(document).ready(function(){

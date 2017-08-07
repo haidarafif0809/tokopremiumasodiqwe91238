@@ -6,7 +6,7 @@ include 'sanitasi.php';
 include 'db.php';
 
 
-$query = $db->query("SELECT id, kode_daftar_akun, nama_daftar_akun FROM daftar_akun WHERE tipe_akun = 'Kas & Bank'  ");
+$query = $db->query("SELECT id, kode_daftar_akun, nama_daftar_akun FROM daftar_akun WHERE tipe_akun = 'Kas & Bank' ORDER BY kode_daftar_akun ASC ");
 
 
 
@@ -101,7 +101,6 @@ $kas_edit = mysqli_fetch_array($pilih_akses_kas_edit);
 		{
 			echo "<tr>
       <td>". $data['nama_daftar_akun'] ."</td>";
-
             
 // MENCARI JUMLAH KAS
             $query0 = $db->query("SELECT SUM(debit) - SUM(kredit) AS total_kas FROM jurnal_trans WHERE kode_akun_jurnal = '$data[kode_daftar_akun]'");

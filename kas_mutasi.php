@@ -346,7 +346,7 @@ if ($kas_mutasi['kas_mutasi_edit'] > 0) {
 		data = data.replace(/\s+/g, '');
 
 			
-			$("#jumlah_kas1").val(tandaPemisahTitik(data));
+			$("#jumlah_kas1").val(data);
 			});
 			
 			});

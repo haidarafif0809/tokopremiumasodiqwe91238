@@ -63,10 +63,10 @@ else{
 		$kode_parcel = stringdoang($_POST['kode_parcel']);
 }
 
-$insert_perakitan_parcel = $db->prepare("INSERT INTO perakitan_parcel (no_faktur, kode_parcel, nama_parcel, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, jumlah_parcel, user_input, tanggal, jam) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$insert_perakitan_parcel = $db->prepare("INSERT INTO perakitan_parcel (no_faktur, kode_parcel, nama_parcel, harga_parcel, harga_parcel_2, harga_parcel_3, harga_parcel_4, harga_parcel_5, harga_parcel_6, harga_parcel_7, estimasi_hpp, jumlah_parcel, user_input, tanggal, jam) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-$insert_perakitan_parcel->bind_param("sssiiiiiiiisss",
-$no_faktur, $kode_parcel, $nama_parcel, $harga_parcel_1, $harga_parcel_2, $harga_parcel_3, $harga_parcel_4, $harga_parcel_5, $harga_parcel_6, $harga_parcel_7, $jumlah_parcel, $nama_petugas, $tanggal_sekarang, $jam_sekarang);
+$insert_perakitan_parcel->bind_param("sssiiiiiiiiisss",
+$no_faktur, $kode_parcel, $nama_parcel, $harga_parcel_1, $harga_parcel_2, $harga_parcel_3, $harga_parcel_4, $harga_parcel_5, $harga_parcel_6, $harga_parcel_7, $estimasi_hpp, $jumlah_parcel, $nama_petugas, $tanggal_sekarang, $jam_sekarang);
 
 
 $nama_parcel = stringdoang($_POST['nama_parcel']);
@@ -78,6 +78,7 @@ $harga_parcel_5 = angkadoang($_POST['harga_parcel_5']);
 $harga_parcel_6 = angkadoang($_POST['harga_parcel_6']);
 $harga_parcel_7 = angkadoang($_POST['harga_parcel_7']);
 $jumlah_parcel = angkadoang($_POST['jumlah_parcel']);
+$estimasi_hpp = angkadoang($_POST['estimasi_hpp']);
 $nama_petugas = $_SESSION['nama'];
         
 $insert_perakitan_parcel->execute();

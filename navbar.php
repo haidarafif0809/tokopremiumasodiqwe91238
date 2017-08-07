@@ -119,9 +119,11 @@ if ($lihat['gudang_lihat'] > 0){
                                 echo '<li><a href="gudang.php" class="waves-effect">Gudang</a></li>';
 }
 
+/*
 if ($lihat['grup_akun_lihat'] > 0){
                                 echo '<li><a href="daftar_group_akun.php" class="waves-effect">Group Akun</a></li>';
 }
+*/
 
 if ($lihat['jabatan_lihat'] > 0){                               
                                 echo '<li><a href="jabatan.php" class="waves-effect">Jabatan</a></li>';

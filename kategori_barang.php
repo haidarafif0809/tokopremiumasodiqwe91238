@@ -211,17 +211,25 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 		
 		$.post('proses_tambah_kategori.php',{nama:nama},function(data){
 
-		if (data != '') {
-		$("#nama_kategori").val('');
-		$(".alert").show('fast');
-		$('#table_kategori_barang').DataTable().draw();
-		setTimeout(tutupalert, 2000);
-		$(".modal").modal("hide");
+		if (data == 1) {
+			alert ("Nama Kategori "+nama+" Sudah Ada, Silakan Input Nama Lain !");
+			$("#nama_kategori").val('');
+			$("#nama_kategori").focus();
+		}
+		else{
+
+			$("#nama_kategori").val('');
+			$(".alert").show('fast');
+			var table_kategori_barang = $('#table_kategori_barang').DataTable();
+				table_kategori_barang.draw();
+			setTimeout(tutupalert, 2000);
+			$(".modal").modal("hide");
+
 		}
 		
 		
-		});										
-									}
+		});
+	}
 
 		function tutupmodal() {
 		
@@ -252,11 +260,9 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 
 		$.post("hapus_kategori.php",{id:id},function(data){
 
-		if (data != "") {
-		$("#table_baru").load('tabel-kategori.php');
+		var table_kategori_barang = $('#table_kategori_barang').DataTable();
+			table_kategori_barang.draw();
 		$("#modal_hapus").modal('hide');
-		
-		}
 
 		
 		});
@@ -289,7 +295,8 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 		$.post("update_kategori.php",{id:id,nama:nama},function(data){
 		if (data == 1) {
 		$(".alert").show('fast');
-		$('#table_kategori_barang').DataTable().draw();
+		var table_kategori_barang = $('#table_kategori_barang').DataTable();
+			table_kategori_barang.draw();
 		setTimeout(tutupalert, 2000);
 		$(".modal").modal("hide");
 		}

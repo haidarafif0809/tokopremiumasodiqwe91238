@@ -447,7 +447,7 @@ th {
 <div class="table-responsive">
           
 <span id="table_baru">
-    <table id="tableuser" class="table table-bordered">
+    <table id="tableuser" class="table table-bordered table-sm">
 
         <!-- membuat nama kolom tabel -->
         <thead>
@@ -567,22 +567,22 @@ include 'db.php';
 $pilih_akses_barang_hapus = $db->query("SELECT item_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_hapus = '1'");
 $barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
 
+            $query_hpp_masuk = $db->query("SELECT no_faktur FROM hpp_masuk WHERE kode_barang = '$data1[kode_barang]'  ");
+            $data_hpp_masuk = mysqli_num_rows($query_hpp_masuk);
 
-    if ($barang_hapus > 0 AND ($ambil_sisa['jumlah_barang'] == '0' OR $ambil_sisa['jumlah_barang'] == ''))     
+            $query_hpp_keluar = $db->query("SELECT no_faktur FROM hpp_keluar WHERE kode_barang = '$data1[kode_barang]'");
+            $data_hpp_keluar = mysqli_num_rows($query_hpp_keluar);
 
-            {
+    if ($barang_hapus > 0 AND $data_hpp_masuk == 0 AND $data_hpp_keluar == 0 ){
          
             echo "
 			<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."'  data-nama='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
         }
         else
         {
-            echo "<td>Tidak Bisa Dihapus</td>";
+            echo "<td style='color:red;' align='center'>X</td>";
         }
 
-
-
-include 'db.php';
 
 $pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
 $barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
@@ -599,9 +599,6 @@ $barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
             }
 
     }
-
-
-include 'db.php';
 
 $pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
 $barang_edit = mysqli_num_rows($pilih_akses_barang_edit);

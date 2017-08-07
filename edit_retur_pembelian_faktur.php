@@ -964,6 +964,7 @@ else
     $("#pembayaran_pembelian").val(tandaPemisahTitik(jumlah_kas_masuk));
 
 
+    $('#nama_suplier').prop('disabled', true).trigger("chosen:updated");
     $.post("proses_tbs_edit_retur_pembelian_faktur.php",{no_faktur_retur:no_faktur_retur,kode_barang:kode_barang,jumlah_retur:jumlah_retur,satuan_produk:satuan_produk,nama_barang:nama_barang,no_faktur_pembelian:no_faktur2,harga:harga,potongan1:potongan1,tax1:tax1,satuan_beli:satuan_beli},function(info) {
 
 
@@ -1485,6 +1486,10 @@ $(document).on('click','.btn-hapus-tbs',function(e){
       $("#potongan_pembelian").val(tandaPemisahTitik(diskon_per_faktur));
       $("#pembayaran_pembelian").val(tandaPemisahTitik(jumlah_kas_masuk));
 
+      if (total_akhir == 0) {
+
+         $('#nama_suplier').prop('disabled', false).trigger("chosen:updated");
+      };
 
 
     $.post("hapus_tbs_retur_pembelian_faktur.php",{id:id,kode_barang:kode_barang,no_faktur_pembelian:no_faktur_pembelian},function(data){
@@ -2146,7 +2151,23 @@ $(document).ready(function(){
 
 
 
+<script type="text/javascript">
+  $(document).ready(function(){
 
+    var nofaktur_rb = $("#nofaktur_rb").val();
+    $.post("cek_suplier_retur_beli_edit.php",{nofaktur_rb:nofaktur_rb}, function(data){
+
+      if (data != 0) {
+
+        $('#nama_suplier').val(data);
+        $('#nama_suplier').prop('disabled', true).trigger("chosen:updated");
+
+      };
+
+    });
+
+  });
+</script>
 
 <!-- memasukan file footer.php -->
 <?php include 'footer.php'; ?>

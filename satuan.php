@@ -47,7 +47,7 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 
 					<div class="form-group">
 					<label> Satuan </label><br>
-					<input type="text" name="nama" id="nama_satuan" class="form-control" autocomplete="off" required="" >
+					<input type="text" name="nama" id="nama_satuan" class="form-control" autocomplete="off" >
 					</div>
 
      
@@ -191,42 +191,39 @@ th {
 
 
 //fungsi untuk menambahkan data
-		$("#submit_tambah").click(function(){
+		$(document).on('click','#submit_tambah',function(){
 		var nama = $("#nama_satuan").val();
-
-
-		$("#nama_satuan").val('');
-
 
 		if (nama == ""){
 			alert("Nama Harus Diisi");
+			$("#nama_satuan").val('');
 		}
-	
 		else{
 
-		$.post('prosessatuan.php',{nama:nama},function(data){
+			$.post("cek_nama_satuan.php",{nama:nama},function(post){
+				if (post == 1) {
+					alert("Satuan yang anda masukan sudah ada!!");					
+					$("#nama_satuan").val('');					
+					$("#nama_satuan").focus();
+				}else{
 
-		if (data != '') {
-		$("#nama_satuan").val('');
-		$(".alert").show('fast');
-		$("#table-baru").load('tabel-satuan.php');
-		
-		setTimeout(tutupalert, 2000);
-		$(".modal").modal("hide");
+						$.post('prosessatuan.php',{nama:nama},function(data){
+
+						$("#nama_satuan").val('');
+						$(".alert").show('fast');
+						$(".modal").modal("hide");						
+						
+						var table_satuan = $('#table_satuan').DataTable();
+						table_satuan.draw();
+						});
+				};
+			});
+
 		}
-		
-		
-		});
-		}
-		
-		
-		function tutupmodal() {
-		
-		}
-		});
+
+});
 
 // end fungsi tambah data
-
 
 	
 //fungsi hapus data 

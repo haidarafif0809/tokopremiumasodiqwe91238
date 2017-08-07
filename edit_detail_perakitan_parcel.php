@@ -48,6 +48,16 @@ $ambil_parcel = mysqli_fetch_array($data_parcel);
       </div>
 
       <div class="col-sm-2">
+        <label>Jumlah Parcel</label>
+        <input style="height:15px;" type="text" class="form-control" name="jumlah_parcel" autocomplete="off" id="jumlah_parcel" placeholder="JUMLAH PARCEL" value="<?php echo $ambil_parcel['jumlah_parcel']; ?>">
+      </div>
+
+      <div class="col-sm-2">
+        <label>Estimasi Hpp</label>
+        <input style="height:15px;" type="text" class="form-control" name="estimasi_hpp" autocomplete="off" id="estimasi_hpp" readonly="" placeholder="ESTIMASI HPP">
+      </div>
+
+      <div class="col-sm-2">
         <label>Harga 1</label>
         <input style="height:15px;" type="text" class="form-control" name="harga_parcel_1" autocomplete="off" id="harga_parcel_1" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 1" value = '<?php echo $ambil_parcel['harga_parcel'] ?>'>
       </div>
@@ -61,10 +71,6 @@ $ambil_parcel = mysqli_fetch_array($data_parcel);
         <label>Harga 3</label>
         <input style="height:15px;" type="text" class="form-control" name="harga_parcel_3" autocomplete="off" id="harga_parcel_3" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 3" value = '<?php echo $ambil_parcel['harga_parcel_3'] ?>'>
       </div>
-
-    </div>
-
-    <div class="row">
 
       <div class="col-sm-2">
         <label>Harga 4</label>
@@ -84,11 +90,6 @@ $ambil_parcel = mysqli_fetch_array($data_parcel);
       <div class="col-sm-2">
         <label>Harga 7</label>
         <input style="height:15px;" type="text" class="form-control" name="harga_parcel_7" autocomplete="off" id="harga_parcel_7" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" placeholder="LEVEL 7" value = '<?php echo $ambil_parcel['harga_parcel_7'] ?>'>
-      </div>
-
-      <div class="col-sm-2">
-        <label>Jumlah Parcel</label>
-        <input style="height:15px;" type="text" class="form-control" name="jumlah_parcel" autocomplete="off" id="jumlah_parcel" placeholder="JUMLAH PARCEL" value="<?php echo $ambil_parcel['jumlah_parcel']; ?>">
       </div>
 
       <div class="col-sm-2">
@@ -251,6 +252,9 @@ $ambil_parcel = mysqli_fetch_array($data_parcel);
                               <th style='background-color: #4CAF50; color: white'> Kode Produk </th>
                               <th style='background-color: #4CAF50; color: white'> Nama Produk</th>
                               <th style='background-color: #4CAF50; color: white'> Jumlah Produk </th>
+                              <th style='background-color: #4CAF50; color: white'> Total Produk </th>
+                              <th style='background-color: #4CAF50; color: white'> Hpp Produk </th>
+                              <th style='background-color: #4CAF50; color: white'> Total Hpp </th>
                               <th style='background-color: #4CAF50; color: white'> Satuan Produk</th>
                               <th style='background-color: #4CAF50; color: white'> Hapus Produk</th>
                           
@@ -321,6 +325,8 @@ $(document).ready(function(){
               url :"data_tbs_parcel_edit.php", // json datasource
                "data": function ( d ) {
                   d.kode_parcel = $("#kode_parcel").val();
+                  d.jumlah_parcel = $("#jumlah_parcel").val();
+                  d.no_faktur = $("#no_faktur").val();
                   // d.custom = $('#myInput').val();
                   // etc
               },
@@ -524,8 +530,45 @@ $(document).on('click', '.pilih-parcel', function (e) {
 </script>
 -->
 
+<script type="text/javascript">
+$(document).ready(function(){
+    var kode_parcel = $("#kode_parcel").val();
+    var jumlah_parcel = $("#jumlah_parcel").val();
+    if (jumlah_parcel == "") {
+      jumlah_parcel = 0;
+    }
 
+    var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+        tabel_tbs_parcel.draw();
+    $("#span_tbs").show();
 
+    $.post("cek_estimasi_hpp_edit.php", {kode_parcel:kode_parcel, jumlah_parcel:jumlah_parcel}, function(data){
+        $("#estimasi_hpp"). val(tandaPemisahTitik(data));
+    });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $(document).on('keyup','#jumlah_parcel',function(e){    
+
+    var kode_parcel = $("#kode_parcel").val();
+    var jumlah_parcel = $("#jumlah_parcel").val();
+    if (jumlah_parcel == "") {
+      jumlah_parcel = 0;
+    }
+
+    var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+        tabel_tbs_parcel.draw();
+    $("#span_tbs").show();
+
+    $.post("cek_estimasi_hpp_edit.php", {kode_parcel:kode_parcel, jumlah_parcel:jumlah_parcel}, function(data){
+        $("#estimasi_hpp"). val(tandaPemisahTitik(data));
+    });
+
+  });
+});
+</script>
 
 
 <script>
@@ -540,7 +583,6 @@ $("#submit_produk").click(function(){
   var nama_barang = $("#nama_barang").val();
   var nama_parcel = $("#nama_parcel").val();
   var jumlah_barang = gantiTitik($("#jumlah_barang").val());
-  var jumlah_parcel = $("#jumlah_parcel").val();
   var jumlah_parcel = $("#jumlah_parcel").val();
   var no_faktur = $("#no_faktur").val();
   var nama_parcel = $("#nama_parcel").val();
@@ -602,6 +644,10 @@ if (nama_parcel == "") {
 
               $("#span_tbs").show();
 
+            $.post("cek_estimasi_hpp.php", {kode_parcel:kode_parcel, jumlah_parcel:jumlah_parcel}, function(data){
+                $("#estimasi_hpp"). val(tandaPemisahTitik(data));
+            });
+
       }
 
     });
@@ -635,6 +681,7 @@ $("#simpan_produk").click(function(){
     var nama_parcel = $("#nama_parcel").val();
     var tanggal = $("#tanggal").val();
     var no_faktur = $("#no_faktur").val();
+    var estimasi_hpp = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#estimasi_hpp").val()))));
     var harga_parcel_1 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_1").val()))));
     var harga_parcel_2 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_2").val()))));
     var harga_parcel_3 = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_parcel_3").val()))));
@@ -669,7 +716,7 @@ if (nama_parcel == "") {
             $("#alert_berhasil").show();
             $("#transaksi_baru").show();
 
-            $.post("proses_simpan_parcel_edit.php",{no_faktur:no_faktur,kode_parcel:kode_parcel, nama_parcel:nama_parcel, tanggal:tanggal, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel},function(data) {
+            $.post("proses_simpan_parcel_edit.php",{no_faktur:no_faktur,kode_parcel:kode_parcel, nama_parcel:nama_parcel, tanggal:tanggal, harga_parcel_1:harga_parcel_1, harga_parcel_2:harga_parcel_2, harga_parcel_3:harga_parcel_3, harga_parcel_4:harga_parcel_4, harga_parcel_5:harga_parcel_5, harga_parcel_6:harga_parcel_6, harga_parcel_7:harga_parcel_7,jumlah_parcel:jumlah_parcel,estimasi_hpp:estimasi_hpp},function(data) {
 
               $("#nama_barang").val('');
               $("#kode_barang").val('');
@@ -796,6 +843,7 @@ $(document).on('blur','.input_jumlah',function(e){
   var kode_barang = $(this).attr("data-kode");
   var harga_produk = $(this).attr("data-harga");
   var nama_barang = $(this).attr("data-nama-barang");
+  var stok_tbs = $(this).attr("data-stok-tbs");
   var jumlah_lama = $("#text-jumlah-"+id+"").text();
   var jumlah_baru = $(this).val();
   var kode_parcel = $("#kode_parcel").val();
@@ -818,7 +866,7 @@ $(document).on('blur','.input_jumlah',function(e){
   {
 
 
-    $.getJSON('cek_stok_produk_parcel.php',{jumlah_parcel:jumlah_parcel,kode_barang:kode_barang, jumlah_baru:jumlah_baru, id_produk:id_produk, jumlah_lama:jumlah_lama}, function(json){
+    $.getJSON('cek_stok_produk_parcel_edit.php',{jumlah_parcel:jumlah_parcel,kode_barang:kode_barang, jumlah_baru:jumlah_baru, id_produk:id_produk, jumlah_lama:jumlah_lama, stok_tbs:stok_tbs}, function(json){
 
         var jumlah_produk = json.jenis_hpp;
         var jumlah_parcel_yg_bisa_dibuat = json.jenis_transaksi;
@@ -851,7 +899,10 @@ $(document).on('blur','.input_jumlah',function(e){
           $("#input-jumlah-"+id+"").attr("type", "hidden");
 
           $.post("update_jumlah_produk_parcel.php",{jumlah_lama:jumlah_lama,id_produk:id_produk,jumlah_baru:jumlah_baru, kode_parcel:kode_parcel, harga_produk:harga_produk},function(){
+            var tabel_tbs_parcel = $('#tabel_tbs_parcel').DataTable();
+              tabel_tbs_parcel.draw();
 
+            $("#span_tbs").show()
           });
 
       }

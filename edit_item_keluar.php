@@ -682,9 +682,12 @@ $(document).ready(function(){
 
              if (data < 0) {
 
-             alert ("Jumlah Yang Di Masukan Melebihi Stok !");
-
-             $("#input-jumlah-"+id).val($("#text-jumlah-"+id).text());
+              alert ("Jumlah Yang Di Masukan Melebihi Stok !");
+              
+              $("#input-jumlah-"+id+"").attr("type", "hidden");
+              $("#input-jumlah-"+id+"").val(jumlah_lama);
+              $("#text-jumlah-"+id+"").text(jumlah_lama);
+              $("#text-jumlah-"+id+"").show();
             
 
            }

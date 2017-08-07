@@ -68,44 +68,8 @@
 
 					<div class="form-group">
 					<label> Tipe Akun </label><br>
-					<select name="tipe_akun" id="tipe_akun" class="form-control chosen" required="" >
-
-
-					<option value=""></option>	
-
-					<option>Akun Header</option>
-					<option>Kas & Bank</option>	
-					<option>Piutang Dagang</option>	
-					<option>Piutang Non Dagang</option>	
-					<option>Persediaan</option>	
-					<option>Investasi Portofolio</option>	
-					<option>Pajak Dibayar Dimuka</option>	
-					<option>Beban Bayar Dimuka</option>	
-					<option>Aktiva Tetap</option>	
-					<option>Akumulasi Penyusutan</option>	
-					<option>Hutang Dagang</option>	
-					<option>Pendapatan Diterima Dimuka</option>	
-					<option>Beban YMH Dibayar</option>	
-					<option>Hutang Pajak</option>	
-					<option>Hutang Bank Jangka Pendek</option>	
-					<option>Hutang Bukan Bank Jangka Pendek</option>	
-					<option>Hutang Non Dagang</option>	
-					<option>Ekuitas</option>
-					<option>Pendapatan Penjualan</option>		
-					<option>Pendapatan Diluar Usaha</option>	
-					<option>Harga Pokok Penjualan</option>	
-					<option>Beban Administrasi dan Umum</option>
-					<option>Beban Penjualan</option>
-					<option>Beban Pemansaran</option>
-					<option>Beban Operasional</option>
-					<option>Beban Diluar Usaha</option>
-					<option>Bunga Pinjaman</option>
-					<option>Hutang Bank Jangka Panjang</option>
-					<option>Hutang Bukan Bank Jangka Panjang</option>
-					<option>Deviden</option>
-					<option>Beban Pajak Penghasilan</option>
-
-					</select>
+					<input type="text" name="tipe_akun" id="tipe_akun" class="form-control" value="Akun Header" autocomplete="off" required="" readonly="">
+					
 					</div>
 
    

@@ -3,6 +3,7 @@
 
  include 'db.php';
  include 'sanitasi.php';
+ include 'persediaan.function.php';
  include 'header.php';
  include 'navbar.php';
  
@@ -44,8 +45,6 @@
       <th> Nama Lengkap </th>
       <th> Alamat </th>
       <th> Jabatan </th>
-      <th> Otoritas </th>
-      <th> Status </th>
 
       
     </thead>
@@ -53,16 +52,14 @@
     <tbody>
     <?php
 
-      $perintah0 = $db->query("SELECT * FROM user");
+      $perintah0 = $db->query("SELECT u.id,u.username,u.nama,u.alamat,j.nama AS jabatan FROM user u LEFT JOIN jabatan j ON u.jabatan = j.id ");
       while ($data1 = mysqli_fetch_array($perintah0))
       {
-      echo "<tr  class='pilih' data-petugas='". $data1['id'] ."'>
+      echo "<tr  class='pilih' data-petugas='". $data1['id'] ."' data-petugas1='". $data1['nama'] ."'>
       <td>". $data1['username'] ."</td>
       <td>". $data1['nama'] ."</td>
       <td>". $data1['alamat'] ."</td>
       <td>". $data1['jabatan'] ."</td>
-      <td>". $data1['otoritas'] ."</td>
-      <td>". $data1['status'] ."</td>
 
       </tr>";
       }
@@ -88,8 +85,9 @@
 <form action="proses_fee_produk.php" method="post">
           <div class="form-group">
           <label> Nama Petugas </label><br>
-          <input type="text" name="nama_petugas" id="nama_petugas" placeholder="Nama Petugas" class="form-control" readonly="">
+          <input type="text" name="nama_petugas1" id="nama_petugas1" placeholder="Nama Petugas" class="form-control" readonly="">
           </div>
+          <input type="hidden" name="nama_petugas" id="nama_petugas" placeholder="Nama Petugas" class="form-control" readonly="">
 </form>
 
 <br><br>
@@ -115,16 +113,12 @@
 
         <thead> <!-- untuk memberikan nama pada kolom tabel -->
         
-        <th> Kode Barang </th>
+            <th> Kode Barang </th>
             <th> Nama Barang </th>
             <th> Harga Beli </th>
             <th> Harga Jual </th>
             <th> Jumlah Barang </th>
             <th> Satuan </th>
-            <th> Kategori </th>
-            <th> Status </th>
-            <th> Suplier </th>
-            <th> Foto </th>
         
         </thead> <!-- tag penutup tabel -->
         
@@ -146,69 +140,9 @@
             <td>". $data1['kode_barang'] ."</td>
             <td>". $data1['nama_barang'] ."</td>
             <td>". rp($data1['harga_beli']) ."</td>
-            <td>". rp($data1['harga_jual']) ."</td>";
-            
-            
-// mencari jumlah Barang
-            $query0 = $db->query("SELECT SUM(jumlah_barang) AS jumlah_pembelian FROM detail_pembelian WHERE kode_barang = '$data1[kode_barang]'");
-            $cek0 = mysqli_fetch_array($query0);
-            $jumlah_pembelian = $cek0['jumlah_pembelian'];
-
-            $query1 = $db->query("SELECT SUM(jumlah) AS jumlah_item_masuk FROM detail_item_masuk WHERE kode_barang = '$data1[kode_barang]'");
-            $cek1 = mysqli_fetch_array($query1);
-            $jumlah_item_masuk = $cek1['jumlah_item_masuk'];
-
-            $query2 = $db->query("SELECT SUM(jumlah_retur) AS jumlah_retur_penjualan FROM detail_retur_penjualan WHERE kode_barang = '$data1[kode_barang]'");
-            $cek2 = mysqli_fetch_array($query2);
-            $jumlah_retur_penjualan = $cek2['jumlah_retur_penjualan'];
-
-            $query20 = $db->query("SELECT SUM(jumlah_awal) AS jumlah_stok_awal FROM stok_awal WHERE kode_barang = '$data1[kode_barang]'");
-            $cek20 = mysqli_fetch_array($query20);
-            $jumlah_stok_awal = $cek20['jumlah_stok_awal'];
-
-            $query200 = $db->query("SELECT SUM(selisih_fisik) AS jumlah_fisik FROM detail_stok_opname WHERE kode_barang = '$data1[kode_barang]'");
-            $cek200 = mysqli_fetch_array($query200);
-            $jumlah_fisik = $cek200['jumlah_fisik'];
-//total barang 1
-            $total_1 = $jumlah_pembelian + $jumlah_item_masuk + $jumlah_retur_penjualan + $jumlah_stok_awal + $jumlah_fisik;
-
-
- 
-
-            $query3 = $db->query("SELECT SUM(jumlah_barang) AS jumlah_penjualan FROM detail_penjualan WHERE kode_barang = '$data1[kode_barang]'");
-            $cek3 = mysqli_fetch_array($query3);
-            $jumlah_penjualan = $cek3['jumlah_penjualan'];
-
-
-            $query4 = $db->query("SELECT SUM(jumlah) AS jumlah_item_keluar FROM detail_item_keluar WHERE kode_barang = '$data1[kode_barang]'");
-            $cek4 = mysqli_fetch_array($query4);
-            $jumlah_item_keluar = $cek4['jumlah_item_keluar'];
-
-            $query5 = $db->query("SELECT SUM(jumlah_retur) AS jumlah_retur_pembelian FROM detail_retur_pembelian WHERE kode_barang = '$data1[kode_barang]'");
-            $cek5 = mysqli_fetch_array($query5);
-            $jumlah_retur_pembelian = $cek5['jumlah_retur_pembelian'];
-
-
- 
-
-
-
-//total barang 2
-            $total_2 = $jumlah_penjualan + $jumlah_item_keluar + $jumlah_retur_pembelian;
-
-            $stok_barang = $total_1 - $total_2;
-            
-            
-            
-            
-            
-            echo "<td>". $stok_barang ."</td>
+            <td>". rp($data1['harga_jual']) ."</td>
+            <td>". CekStokHpp($data1['kode_barang'])."</td>
             <td>". $data1['satuan'] ."</td>
-            <td>". $data1['kategori'] ."</td>
-            <td>". $data1['status'] ."</td>
-            <td>". $data1['suplier'] ."</td>
-            
-            <td><img src='save_picture/". $data1['foto'] ."' height='20px' width='40px' ></td>
             </tr>";
       
          }
@@ -301,6 +235,7 @@ $(document).ready(function(){
 // jika dipilih, nim akan masuk ke input dan modal di tutup
   $(document).on('click', '.pilih', function (e) {
   document.getElementById("nama_petugas").value = $(this).attr('data-petugas');
+  document.getElementById("nama_petugas1").value = $(this).attr('data-petugas1');
 
   $('#myModal').modal('hide');
   });

@@ -53,8 +53,8 @@ if ($data_query_tbs_bonus_penjualan < 1 && $total_syarat_disc >= 0 && $keteranga
     'qty_max' => $data_promo_disc_produk['qty_max'],
     'id_program' => $data_promo_disc_produk['id_program']
    );
-  //echo json_encode($promo_disc_produk);
-  echo 1;
+  echo json_encode($data_promo_disc_produk['id_program']);
+
 }
 else if ($data_query_tbs_bonus_penjualan < 1 && $jumlah_data_tbs_penjualan_innerjoin > 0 && $keterangan == ""){
 //FREE
@@ -68,10 +68,8 @@ else if ($data_query_tbs_bonus_penjualan < 1 && $jumlah_data_tbs_penjualan_inner
     'syarat_belanja' => $data_tbs_penjualan_innerjoin['syarat_belanja'],
     'id_program' => $data_tbs_penjualan_innerjoin['id_program']
    );
-  //echo json_encode($promo_free_produk);
-  echo 2;
+  echo json_encode($data_tbs_penjualan_innerjoin['id_program']);
 }
-
 
 
         //Untuk Memutuskan Koneksi Ke Database

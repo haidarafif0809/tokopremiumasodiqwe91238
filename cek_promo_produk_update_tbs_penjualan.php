@@ -30,12 +30,12 @@ while ($data_program_free = mysqli_fetch_array($select_program_free)){
 
     if($data_query_tbs['subtotal'] >= $syarat_belanja){
 
-  $query_bonus_free = $db->query("SELECT COUNT(id) AS jumlah FROM promo_free_produk WHERE nama_program = '$program' AND qty != '0'");
+        $query_bonus_free = $db->query("SELECT COUNT(id) AS jumlah FROM promo_free_produk WHERE nama_program = '$program' AND qty != '0'");
 
-	$data_free = mysqli_num_rows($query_bonus_free);
-	$nomor_free = $nomor_free + $data_free['jumlah'];
+      	$data_free = mysqli_num_rows($query_bonus_free);
+      	$nomor_free = $nomor_free + $data_free['jumlah'];
 
-	}
+	  }
   }
 }
 
@@ -50,12 +50,12 @@ while ($data_program_diskon = mysqli_fetch_array($select_program_diskon)){
     
     if($subtotal >= $syarat_belanja){
 
-$query_bonus_diskon = $db->query("SELECT COUNT(id) AS jumlah FROM promo_disc_produk  WHERE nama_program = '$program' AND qty_max != '0'");
-	$data_diskon = mysqli_fetch_array($query_bonus_diskon);
-	$nomor_diskon = $nomor_diskon + $data_diskon['jumlah'];
+      $query_bonus_diskon = $db->query("SELECT COUNT(id) AS jumlah FROM promo_disc_produk  WHERE nama_program = '$program' AND qty_max != '0'");
+	    $data_diskon = mysqli_fetch_array($query_bonus_diskon);
+	    $nomor_diskon = $nomor_diskon + $data_diskon['jumlah'];
 
 
-	}
+	  }
   }
 
 $nomor_diskon;

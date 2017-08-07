@@ -322,15 +322,16 @@ $query = $db->query("SELECT * FROM pembayaran_hutang ORDER BY id DESC");
   </div>
 
 
-<div class="form-group col-sm-3">
-          <input type="text" name="potongan" id="potongan_penjualan" class="form-control" placeholder="Potongan" autocomplete="off">
-</div>
+
 
   <div class="form-group col-sm-3">
     <input type="text" class="form-control" name="jumlah_bayar"  onkeydown="return numbersonly(this, event);" id="jumlah_bayar" placeholder="Jumlah Bayar" autocomplete="off">
   </div>
 
 
+<div class="form-group col-sm-3">
+          <input type="text" name="potongan" id="potongan_penjualan" class="form-control" placeholder="Potongan" autocomplete="off">
+</div>
 
 <div class="form-group">
   <input type="hidden" name="total" id="total" class="form-control" value="" required="">
@@ -467,6 +468,33 @@ $(document).ready(function(){
 });
 
 </script>
+
+
+<script type="text/javascript">
+    $(document).on('keyup', '#potongan_penjualan', function (e) {
+    var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kredit").val()))));
+    var jumlah_bayar = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_bayar").val()))));
+    if (jumlah_bayar == "") {
+      jumlah_bayar = 0;
+    }
+    var potongan_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
+
+    var tot_jumlah_plus_potongan_penjualan = parseInt(jumlah_bayar) + parseInt(potongan_penjualan);
+
+      var hasil = parseInt(tot_jumlah_plus_potongan_penjualan) - parseInt(kredit);
+          console.log(hasil);
+        if (hasil > 0 ){
+        alert("Jumlah Bayar Anda Melebihi Sisa");
+        $("#potongan_penjualan").val('');
+        $("#jumlah_bayar").val('');
+        $("#jumlah_bayar").focus();
+
+        }
+
+    });
+</script>
+
+
 <!-- untuk memasukan perintah javascript -->
 <script type="text/javascript">
 
@@ -509,7 +537,7 @@ $(document).ready(function(){
       var jumlah_bayar = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_bayar").val()))));
 
       var a = cara_bayar - jumlah_bayar;
-      var hasil = jumlah_bayar - kredit;
+      var hasil = (jumlah_bayar + potongan) - kredit;
         
         if (total == '') 
         {
@@ -527,11 +555,10 @@ $(document).ready(function(){
       $("#totalbayar").val('');
       $("#jumlah_bayar").val('');
       
-      if (hasil > 0 )
-      {
-
-      alert("Jumlah Bayar Anda Melebihi Sisa");
-      
+      if (hasil > 0 ){
+        alert("Jumlah Bayar Anda Melebihi Sisa");
+        $("#jumlah_bayar").val('');
+        $("#jumlah_bayar").focus();
       }
       
       else if (jumlah_bayar == ""){
@@ -615,7 +642,9 @@ $("#nomorfaktur_pembayaran").val(data);
       </script>
 
 
-
+<script type="text/javascript">
+  
+</script>
 
 
 

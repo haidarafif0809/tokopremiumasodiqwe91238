@@ -4110,15 +4110,30 @@ $("#potongan_persen").keyup(function(){
           biaya_adm = 0.00;
         }*/
 
-      var ambil_semula = parseFloat(total.replace(',','.')) /*+ parseFloat(biaya_adm.replace(',','.'));parseFloat(tax_rp)*/
+        var ambil_semula = parseFloat(total.replace(',','.')) /*+ parseFloat(biaya_adm.replace(',','.'));parseFloat(tax_rp)*/
         var sisa_potongan = parseFloat(total.replace(',','.')) - parseFloat(potongan_penjualan);
+        var hasil_akhir = parseFloat(sisa_potongan) /*+ parseFloat(biaya_adm.replace(',','.'));parseFloat(tax_rp)*/
+
+        var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+        if(pembayaran == ''){
+        pembayaran = 0;
+        }
+        var sisa = pembayaran - hasil_akhir;
+        var sisa_kredit = hasil_akhir - pembayaran;
 
 
-             /*var t_tax = ((parseFloat(sisa_potongan.replace(',','.')) * parseFloat(tax.replace(',','.'))) / 100);*/
-             var hasil_akhir = parseFloat(sisa_potongan) /*+ parseFloat(biaya_adm.replace(',','.'));parseFloat(tax_rp)*/
+        if (sisa < 0  ){
+          $("#kredit").val(sisa_kredit);
+          $("#sisa_pembayaran_penjualan").val('0');
+          $("#tanggal_jt").attr("disabled", false);
+        }
+        else{
+          $("#sisa_pembayaran_penjualan").val(sisa);
+          $("#kredit").val('0');
+          $("#tanggal_jt").attr("disabled", true);
+        }
 
-
-         $("#total1").val(hasil_akhir.format(2, 3, '.', ','));
+        $("#total1").val(hasil_akhir.format(2, 3, '.', ','));
         $("#potongan_penjualan").val(potongan_penjualan.format(2, 3, '.', ','));
         
         if (potongan_persen > 100.00) {
@@ -4207,6 +4222,25 @@ $("#potongan_penjualan").keyup(function(){
              var hasil_akhir = parseFloat(sisa_potongan) /*+ parseFloat(biaya_adm.replace(',','.')); + parseFloat(t_tax,10);*/
         }
         
+        var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+        if(pembayaran == ''){
+        pembayaran = 0;
+        }
+        var sisa = pembayaran - hasil_akhir;
+        var sisa_kredit = hasil_akhir - pembayaran;
+
+
+        if (sisa < 0  ){
+          $("#kredit").val(sisa_kredit);
+          $("#sisa_pembayaran_penjualan").val('0');
+          $("#tanggal_jt").attr("disabled", false);
+        }
+        else{
+          $("#sisa_pembayaran_penjualan").val(sisa);
+          $("#kredit").val('0');
+          $("#tanggal_jt").attr("disabled", true);
+        }
+
         $("#total1").val(hasil_akhir.format(2, 3, '.', ','));
         
 

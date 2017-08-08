@@ -413,13 +413,13 @@ else{
     <?php 
 
     if ($data_otoritas['set_timbangan'] == '1'){
-        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="set_timbangan" checked="">
-        <label for="checkbox21">Lihat</label> <br>';
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2134" name="set_timbangan" checked="">
+        <label for="checkbox2134">Lihat</label> <br>';
     }
 
     else{
-        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="set_timbangan">
-        <label for="checkbox21">Lihat</label> <br>';  
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2134" name="set_timbangan">
+        <label for="checkbox2134">Lihat</label> <br>';  
     }
 
      ?>
@@ -449,13 +449,13 @@ else{
     <?php 
 
     if ($data_otoritas['penetapan_petugas_lihat'] == '1'){
-        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="set_penetapan_petugas_lihat" checked="">
-        <label for="checkbox21">Lihat</label> <br>';
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2111" name="set_penetapan_petugas_lihat" checked="">
+        <label for="checkbox2111">Lihat</label> <br>';
     }
 
     else{
-        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="set_penetapan_petugas_lihat">
-        <label for="checkbox21">Lihat</label> <br>';  
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2111" name="set_penetapan_petugas_lihat">
+        <label for="checkbox2111">Lihat</label> <br>';  
     }
 
      ?>
@@ -467,13 +467,13 @@ else{
     <?php 
 
     if ($data_otoritas['printer_lihat'] == '1'){
-        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="printer_lihat" checked="">
-        <label for="checkbox21">Lihat</label> <br>';
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21222" name="printer_lihat" checked="">
+        <label for="checkbox21222">Lihat</label> <br>';
     }
 
     else{
-        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21" name="printer_lihat">
-        <label for="checkbox21">Lihat</label> <br>';  
+        echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21222" name="printer_lihat">
+        <label for="checkbox21222">Lihat</label> <br>';  
     }
 
      ?>
@@ -2373,13 +2373,13 @@ else{
 <?php 
 
 if ($data_otoritas['kas_keluar_edit'] == '1'){
-    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox115" name="kas_keluar_edit" checked="">
-    <label for="checkbox115">Edit</label> <br>';
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox11511" name="kas_keluar_edit" checked="">
+    <label for="checkbox11511">Edit</label> <br>';
 }
 
 else{
-    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox115" name="kas_keluar_edit">
-    <label for="checkbox115">Edit</label> <br>';  
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox11511" name="kas_keluar_edit">
+    <label for="checkbox11511">Edit</label> <br>';  
 }
 
  ?>

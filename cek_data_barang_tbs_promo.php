@@ -35,7 +35,7 @@ while ($data_program_free = mysqli_fetch_array($select_program_free)){
     	if($data_query_tbs['subtotal'] < $syarat_belanja){
 
 
-			$query_tbs_bonus = $db->query("SELECT kode_produk, nama_produk FROM tbs_bonus_penjualan WHERE keterangan = 'Free' GROUP BY kode_produk ");
+			$query_tbs_bonus = $db->query("SELECT kode_produk, nama_produk FROM tbs_bonus_penjualan WHERE keterangan = 'Gratis' GROUP BY kode_produk ");
 			while($data_tbs_bonus = mysqli_fetch_array($query_tbs_bonus)){
 			
 

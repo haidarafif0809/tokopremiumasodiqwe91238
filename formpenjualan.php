@@ -134,32 +134,6 @@ $session_id = session_id();
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- Modal Untuk Confirm PESAN alert-->
 <div id="modal_promo_alert" class="modal " role="dialog">
   <div class="modal-dialog modal-lg">
@@ -2924,7 +2898,6 @@ $("#form_barcode").submit(function(){
 $(document).on('click','.btn-hapus-tbs',function(e){
 
     
-      var subtotal_faktur = $("#total2").val();
       var nama_barang = $(this).attr("data-barang");
       var id = $(this).attr("data-id");
       var kode_barang = $(this).attr("data-kode-barang");
@@ -2968,6 +2941,7 @@ if (pesan_alert == true) {
       $("#kredit").val('');
       $("#sisa_pembayaran_penjualan").val('');
     
+
     $.post("hapustbs_penjualan.php",{id:id,kode_barang:kode_barang},function(data){
     var total_akhir1 = parseFloat(data);
 
@@ -3032,32 +3006,7 @@ if (pesan_alert == true) {
       $("#total2").val(total_akhir1.format(2, 3, '.', ','));  
       $("#total1").val(total_akhir.format(2, 3, '.', ','));
           
-
-//Awal Cek dahulu PROMO BONUS YANG AKAN DI HAPUS TBS NYA
-$.post('cek_data_barang_tbs_promo.php',{kode_barang:kode_barang,subtotal:subtotal},function(free){
-
-      if(free.status > 0){
-
-            $("#tbody-barang-promo-hapus").find("tr").remove();
-
-              $.each(free.barang, function(i, item) {
-
-                $("#kode-"+free.barang[i].kode_barang).remove();
-
-                 var tr_barang = "<tr id='kode-"+free.barang[i].kode_barang+"'><td>"+ free.barang[i].kode_barang+"</td><td>"+ free.barang[i].nama_barang+"</td></tr>"
-                  
-                $("#tbody-barang-promo-hapus").prepend(tr_barang);
-
-                $("#modal_promo_produk_hapus").modal('show');
-                $("#status_modal_hapus").val('3');
-
-
-             });
-          $("#hapus_data_promo_tidak_memenuhi").attr('data-id',id);
-
-      }//if status dari cek status free
-});
-//Akhir Cek dahulu PROMO BONUS YANG AKAN DI HAPUS TBS NYA
+///zzzzzzzzzzzzzzzzzzzzzzzzzz
 
 
         
@@ -3146,11 +3095,49 @@ $.post('cek_data_barang_tbs_promo.php',{kode_barang:kode_barang,subtotal:subtota
 
 
 
+
+    //Awal Cek dahulu PROMO BONUS YANG AKAN DI HAPUS TBS NYA
+    $.get("cek_program_promo.php",function(program){
+      if (program == 1) {
+        
+          var subtotal_faktur = $("#total2").val();
+
+        $.post('cek_data_barang_tbs_promo_hapus.php',{subtotal_faktur:subtotal_faktur},function(free){
+
+          if(free.status > 0){
+
+                $("#tbody-barang-promo-hapus").find("tr").remove();
+
+                  $.each(free.barang, function(i, item) {
+
+                    $("#kode-"+free.barang[i].kode_barang).remove();
+
+                     var tr_barang = "<tr id='kode-"+free.barang[i].kode_barang+"'><td>"+ free.barang[i].kode_barang+"</td><td>"+ free.barang[i].nama_barang+"</td></tr>"
+                      
+                    $("#tbody-barang-promo-hapus").prepend(tr_barang);
+
+                    $("#modal_promo_produk_hapus").modal('show');
+                    $("#status_modal_hapus").val('3');
+
+
+                 });
+             // $("#hapus_data_promo_tidak_memenuhi").attr('data-id',id);
+
+          }//if status dari cek status free
+        });
+      }
+    });
+    //Akhir Cek dahulu PROMO BONUS YANG AKAN DI HAPUS TBS NYA
+
+
+
+
 }
-else {
+else{
     
-    }
+}
 //end hapus ajax
+
 
 });
 
@@ -5912,7 +5899,7 @@ $(document).ready(function(){
   var harga_jual_bonus = $(this).attr('data-harga-bonus');
   var harga_awal = $(this).attr('data-harga-jual');
   var satuan = $(this).attr('data-satuan');
-  var keterangan = 'Free';
+  var keterangan = 'Gratis';
 
   $.post("cek_data_barang_tbs_bonus.php",{kode_barang:kode_barang},function(data){
     if (data == 1) {
@@ -6033,9 +6020,9 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).on('click', '#hapus_data_promo_tidak_memenuhi', function (e) {
   
-  var id = $(this).attr("data-id");
+  //var id = $(this).attr("data-id");
   var kode_barang = $("#kode_barang").val();
-  var jumlah_lama = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-jumlah-"+id+"").text()))));
+  //var jumlah_lama = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-jumlah-"+id+"").text()))));
   var subtotal = $("#total2").val();
 
 
@@ -6065,6 +6052,7 @@ $(document).on('click', '#hapus_data_promo_tidak_memenuhi', function (e) {
       alert("Data Produk Bonus Tidak Terhapus !!");
       $("#promo_hapus_no").val('2');
       $("#promo_hapus_yes").val('');
+      $("#status_modal_hapus").val('');
 
         $("#text-jumlah-"+id+"").show();
         $("#input-jumlah-"+id+"").attr("type", "hidden");

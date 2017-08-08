@@ -7,8 +7,7 @@ header("Content-type:application/json");
 
 $status_hapus = 0;
 
-$kode_barang = $_POST['kode_barang'];
-$subtotal = $_POST['subtotal'];
+$subtotal = $_POST['subtotal_faktur'];
 $subtotal = hapus_koma_dua($subtotal);
 $subtotal = angkadoang($subtotal);
 
@@ -17,15 +16,6 @@ $tanggal_sekarang = date('Y-m-d');
 
 $arr = array();
 $arr_diskon = array();   
-
-if($subtotal == '' OR $subtotal = 0){
-
-	$query_hapus_tbs_bonus_penjualan_disk = $db->query("DELETE FROM tbs_bonus_penjualan WHERE session_id = '$session_id' AND (keterangan = 'Gratis' OR keterangan = 'Diskon')");
-	
-	$status_hapus = $status_hapus + 1;
-
-}
-
 
 $select_program_free = $db->query("SELECT id,jenis_bonus,syarat_belanja FROM program_promo WHERE batas_akhir >= '$tanggal_sekarang' AND jenis_bonus = 'Free Produk' ");
 while ($data_program_free = mysqli_fetch_array($select_program_free)){
@@ -48,14 +38,20 @@ while ($data_program_free = mysqli_fetch_array($select_program_free)){
 			while($data_tbs_bonus = mysqli_fetch_array($query_tbs_bonus)){
 			
 
+				$temp = array(
+					"kode_barang" => $data_tbs_bonus['kode_produk'],
+					"nama_barang" => $data_tbs_bonus['nama_produk']
+				);
 
-			$query_hapus_tbs_bonus_penjualan_disk = $db->query("DELETE FROM tbs_bonus_penjualan WHERE kode_produk = '$data_tbs_bonus[kode_produk]' AND session_id = '$session_id' AND keterangan = 'Gratis'");
-
+				array_push($arr, $temp);
 				$status_hapus = $status_hapus + 1;
 
 				
 
 			}
+      		//$query_hapus_tbs_bonus_penjualan_free = $db->query("DELETE FROM tbs_bonus_penjualan WHERE kode_produk = '$tampilan_free[kode_barang]' ");
+
+      		//echo 0;
     	}
   }
 }
@@ -77,9 +73,13 @@ while ($data_program_diskon = mysqli_fetch_array($select_program_diskon)){
 			$query_tbs_bonus_diskon = $db->query("SELECT kode_produk, nama_produk FROM tbs_bonus_penjualan WHERE keterangan = 'Diskon' GROUP BY kode_produk");
 			while($data_tbs_bonus_diskon = mysqli_fetch_array($query_tbs_bonus_diskon)){
 
+				
+					$temp_diskon = array(
+						"kode_barang" => $data_tbs_bonus_diskon['kode_produk'],
+						"nama_barang" => $data_tbs_bonus_diskon['nama_produk']
+					);
 
-				$query_hapus_tbs_bonus_penjualan_disk = $db->query("DELETE FROM tbs_bonus_penjualan WHERE kode_produk = '$data_diskon[kode_barang]' AND session_id = '$session_id' AND keterangan = 'Diskon' ");
-
+					array_push($arr_diskon, $temp_diskon);
 					$status_hapus = $status_hapus + 1 ;
 				
 
@@ -87,8 +87,9 @@ while ($data_program_diskon = mysqli_fetch_array($select_program_diskon)){
 			}
 
 
-         // 
-
+         // $query_hapus_tbs_bonus_penjualan_disk = $db->query("DELETE FROM tbs_bonus_penjualan WHERE kode_produk = '$data_diskon[kode_barang]' ");
+          
+         // echo 0;
 
                     
       
@@ -96,12 +97,12 @@ while ($data_program_diskon = mysqli_fetch_array($select_program_diskon)){
 }
 
 
-if($status_hapus > 0){
-	echo 1;
-}
-else{
-	echo 0;
-}
+	$gabungan_barang_free_diskon = array_merge($arr_diskon, $arr);
+
+	$show = json_encode($gabungan_barang_free_diskon);
+  
+	echo '{ "status": "'.$status_hapus.'" ,"barang": '.$show.'}';
+
 
 
 

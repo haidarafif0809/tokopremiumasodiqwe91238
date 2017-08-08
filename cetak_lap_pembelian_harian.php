@@ -4,28 +4,23 @@ include 'sanitasi.php';
 include 'db.php';
 
 
-$dari_tanggal = stringdoang($_GET['dari_tanggal']);
-$sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
+  $dari_tanggal = stringdoang($_GET['dari_tanggal']);
+  $sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
 
-    $query1 = $db->query("SELECT * FROM perusahaan ");
-    $data1 = mysqli_fetch_array($query1);
+  $query1 = $db->query("SELECT * FROM perusahaan ");
+  $data1 = mysqli_fetch_array($query1);
 
-$perintah = $db->query("SELECT tanggal FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' GROUP BY tanggal");
+  $perintah = $db->query("SELECT id, tanggal FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' GROUP BY tanggal ORDER BY tanggal DESC");
 
-$perintah11 = $db->query("SELECT * FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$data11 = mysqli_num_rows($perintah11);
+  $query_row = $db->query("SELECT tanggal FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
+  $jumlah_sum_row = mysqli_num_rows($query_row);
 
-$perintah210 = $db->query("SELECT SUM(total) AS total_total FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
+  $query_sum = $db->query("SELECT SUM(total) AS t_total, SUM(nilai_kredit) AS t_kredit FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
+  $data_sum = mysqli_fetch_array($query_sum);
+  $total_sum = $data_sum['t_total'];
+  $kredit_sum = $data_sum['t_kredit'];
 
-$data210 = mysqli_fetch_array($perintah210);
-
-$total_total = $data210['total_total'];
-
-$perintah212 = $db->query("SELECT SUM(kredit) AS total_kredit FROM pembelian WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$data212 = mysqli_fetch_array($perintah212);
-$total_kredit = $data212['total_kredit'];
-
-$total_bayar = $total_total - $total_kredit;
+  $bayar_sum = $total_sum - $kredit_sum;
 
  ?>
 
@@ -67,7 +62,7 @@ $total_bayar = $total_total - $total_kredit;
     <br>
 
 
- <table id="tableuser" class="table table-hover">
+ <table id="tableuser" class="table table-bordered table-sm">
             <thead>
                   <th> Tanggal </th>                  
                   <th> Jumlah Transaksi </th>
@@ -84,56 +79,41 @@ $total_bayar = $total_total - $total_kredit;
           while ($data = mysqli_fetch_array($perintah))
           {
           //menampilkan data
-            $perintah1 = $db->query("SELECT * FROM pembelian WHERE tanggal = '$data[tanggal]'");
-            $data1 = mysqli_num_rows($perintah1);
+          $query_row = $db->query("SELECT tanggal FROM pembelian WHERE tanggal = '$data[tanggal]'");
+          $jumlah_row = mysqli_num_rows($query_row);
 
-            $perintah2 = $db->query("SELECT SUM(total) AS t_total FROM pembelian WHERE tanggal = '$data[tanggal]'");
-            $data2 = mysqli_fetch_array($perintah2);
-            $t_total = $data2['t_total'];
-
-            $perintah21 = $db->query("SELECT SUM(kredit) AS t_kredit FROM pembelian WHERE tanggal = '$data[tanggal]'");
-            $data21 = mysqli_fetch_array($perintah21);
-            $t_kredit = $data21['t_kredit'];
-
-            $t_bayar = $t_total - $t_kredit;
+          $perintah2 = $db->query("SELECT SUM(total) AS t_total, SUM(nilai_kredit) AS t_kredit FROM pembelian WHERE tanggal = '$data[tanggal]'");
+          $data2 = mysqli_fetch_array($perintah2);
+          $t_total = $data2['t_total'];
+          $t_kredit = $data2['t_kredit'];
+          $t_bayar = $t_total - $t_kredit;
 
           echo "<tr>
           <td>". $data['tanggal'] ."</td>
-          <td>". $data1."</td>
+          <td>". $jumlah_row."</td>
           <td>". rp($t_total) ."</td>
           <td>". rp($t_bayar) ."</td>
           <td>". rp($t_kredit) ."</td>
           </tr>";
           }
 
-                  //Untuk Memutuskan Koneksi Ke Database
-                  
-                  mysqli_close($db); 
-                  
-          ?>
+          echo "<tr>
+          <td style='color:red'>TOTAL</td>
+          <td style='color:red'>". $jumlah_sum_row."</td>
+          <td style='color:red'>". rp($total_sum) ."</td>
+          <td style='color:red'>". rp($bayar_sum) ."</td>
+          <td style='color:red'>". rp($kredit_sum) ."</td>
+          </tr>";
+
+//Untuk Memutuskan Koneksi Ke Database
+mysqli_close($db);
+
+?>
           
             </tbody>
 
       </table>
-      <hr>
 </div>
-</div>
-<br>
-
-<div class="container">
- <table class="table table-hover">
-  <tbody>
-
-      <tr>
-          <td>TOTAL :</td>
-          <td align="left"><?php echo $data11; ?></td>
-          <td align="left"><?php echo rp($total_total); ?></td>
-          <td align="left"><?php echo rp($total_bayar); ?></td>
-          <td align="left"><?php echo rp($total_kredit); ?></td>
-      </tr>
-                 
-  </tbody>
-  </table>
 </div>
 
  <script>

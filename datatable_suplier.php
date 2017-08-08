@@ -51,7 +51,15 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 
 
     	if ($suplier_hapus > 0){
-			$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-suplier='". $row['nama'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
+			$query_row = $db->query("SELECT suplier FROM pembelian WHERE suplier = '$row[id]' ");
+			$jumlah_row = mysqli_num_rows($query_row);
+
+			 if ($jumlah_row == 0){
+				$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-suplier='". $row['nama'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
+			}
+			else{
+				$nestedData[] = "<p style='color:red;'>Sudah Terpakai</p>";
+			}			
 		}
 		
 	//edit

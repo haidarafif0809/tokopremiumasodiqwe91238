@@ -110,7 +110,7 @@ $total_tax = $data_sum_dari_detail_pembaelian['sum_tax'];
           <td style='color:red' align='right'>-</td>
           <td style='color:red' align='right'>".rp($total_potongan)."</td>
           <td style='color:red' align='right'>".rp($total_tax)."</td>
-          <td style='color:red' align='right'>".($total_akhir)."</td>
+          <td style='color:red' align='right'>".rp($total_akhir)."</td>
           <td style='color:red' align='right'>-</td>
           </tr>";
          //Untuk Memutuskan Koneksi Ke Database       

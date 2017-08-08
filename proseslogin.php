@@ -15,7 +15,7 @@
    $nama = $data['nama'];
 
 
-   $id_otoritas =  $db->query("SELECT id FROM hak_otoritas WHERE nama = '$data[otoritas]'");
+   $id_otoritas =  $db->query("SELECT id FROM hak_otoritas WHERE id = '$data[otoritas]'");
    $data0 = mysqli_fetch_array($id_otoritas);   
    $otoritas_id = $data0['id'];
 

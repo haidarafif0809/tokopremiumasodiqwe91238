@@ -649,12 +649,12 @@ else{
 
 if ($data_otoritas['order_lihat'] == '1'){
     echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="ordercheckbox17" name="order_lihat" checked="">
-    <label for="checkbox17">Lihat</label> <br>';
+    <label for="ordercheckbox17">Lihat</label> <br>';
 }
 
 else{
     echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="ordercheckbox17" name="order_lihat">
-    <label for="checkbox17">Lihat</label> <br>';  
+    <label for="ordercheckbox17">Lihat</label> <br>';  
 }
 
  ?>

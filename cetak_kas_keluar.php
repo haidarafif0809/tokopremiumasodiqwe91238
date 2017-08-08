@@ -69,7 +69,7 @@ $queryedit = $db->query("SELECT id,user_edit,jumlah,user_edit,waktu_edit,no_fakt
             <?php
                 while ($datacet = mysqli_fetch_array($querycet))
                 {
-                  $perintah1 = $db->query("SELECT km.id, km.no_faktur, km.keterangan, km.ke_akun, km.dari_akun, km.jumlah, km.tanggal, km.jam, km.user, da.nama_daftar_akun FROM detail_kas_keluar km INNER JOIN daftar_akun da ON km.ke_akun = da.kode_daftar_akun WHERE no_faktur = '$no_faktur'");
+                  $perintah1 = $db->query("SELECT km.id, km.no_faktur, km.keterangan, km.ke_akun, km.dari_akun, km.jumlah, km.tanggal, km.jam, km.user, da.nama_daftar_akun FROM detail_kas_keluar km INNER JOIN daftar_akun da ON km.dari_akun = da.kode_daftar_akun WHERE no_faktur = '$no_faktur'");
                   $data1 = mysqli_fetch_array($perintah1);
 
                   echo "<tr>

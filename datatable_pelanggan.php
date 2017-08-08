@@ -56,22 +56,23 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 			$nestedData[] = $row['e_mail'];
 			$nestedData[] = $row['wilayah'];
 			
-
-
-include 'db.php';
-
 $pilih_akses_pelanggan_hapus = $db->query("SELECT pelanggan_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND pelanggan_hapus = '1'");
 $pelanggan_hapus = mysqli_num_rows($pilih_akses_pelanggan_hapus);
 
 
     if ($pelanggan_hapus > 0){
 
+					$query_row = $db->query("SELECT kode_pelanggan FROM penjualan WHERE kode_pelanggan = '$row[id]' ");
+					$jumlah_row = mysqli_num_rows($query_row);
 
-			$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-pelanggan='". $row['nama_pelanggan'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
+					 if ($jumlah_row == 0){
+						$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='". $row['id'] ."' data-pelanggan='". $row['nama_pelanggan'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
+					}
+					else{
+						$nestedData[] = "<p style='color:red;'>Sudah Terpakai</p>";
+					}
 
 		}
-
-include 'db.php';
 
 $pilih_akses_pelanggan_edit = $db->query("SELECT pelanggan_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND pelanggan_edit = '1'");
 $pelanggan_edit = mysqli_num_rows($pilih_akses_pelanggan_edit);

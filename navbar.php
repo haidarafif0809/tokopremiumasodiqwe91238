@@ -419,11 +419,6 @@ if ($lihat['laporan_lihat'] > 0){
                         </div>
                     </li>';
 }
-
-
- if ($lihat['kas_lihat'] > 0){
-                echo '<li><a href="kas.php" class="waves-effect"> <i class="fa fa-money"></i> Posisi Kas </a></li>';
-}
 ?>
 
 <?php 
@@ -474,6 +469,13 @@ if ($lihat['setting_lihat'] > 0){
                           echo ' </ul>
                         </div>
                     </li>';
+}
+
+
+
+
+ if ($lihat['kas_lihat'] > 0){
+                echo '<li><a href="kas.php" class="waves-effect"> <i class="fa fa-money"></i> Posisi Kas </a></li>';
 }
  ?>  
 

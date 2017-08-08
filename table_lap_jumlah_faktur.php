@@ -2,7 +2,6 @@
 /* Database connection start */
 include 'sanitasi.php';
 include 'db.php';
-include 'persediaan.function.php';
 
 /* Database connection end */
 

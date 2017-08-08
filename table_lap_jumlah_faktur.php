@@ -5,9 +5,6 @@ include 'db.php';
 
 /* Database connection end */
 
-$nama_petugas = stringdoang($_POST['nama_petugas']);
-$dari_tanggal = stringdoang($_POST['dari_tanggal']);
-$sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
 $jumlah_data = 0;
 
 // storing  request (ie, get/post) global array to a variable  
@@ -16,11 +13,17 @@ $requestData= $_REQUEST;
 $columns = array( 
 // datatable column index  => database column name
 
+
       0 => 'nama',
       1 => 'no_faktur',
-      2 => 'jumlah_fee',
-      3 => 'tanggal',
-      4 => 'jam'
+      2 => 'kode_produk',
+      3 => 'nama_produk',
+      4 => 'jumlah_fee',
+      5 => 'tanggal',
+      6 => 'jam'
+
+
+
 );
 
 // getting total number records without any search
@@ -29,13 +32,12 @@ $columns = array(
 
 $sql =" SELECT u.nama,lp.nama_petugas,lp.no_faktur,lp.jumlah_fee,lp.tanggal,lp.jam ";
 $sql.=" FROM laporan_fee_faktur lp LEFT JOIN user u ON lp.nama_petugas = u.id ";
-$sql.=" WHERE lp.nama_petugas = '$nama_petugas' AND lp.tanggal >= '$dari_tanggal' AND lp.tanggal <= '$sampai_tanggal'";
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
 if( !empty($requestData['search']['value']) ) {   
 
-    $sql.=" AND (u.nama LIKE '".$requestData['search']['value']."%'";  
-    $sql.=" OR lp.no_faktur LIKE '".$requestData['search']['value']."%' )";
+    $sql.=" WHERE (u.nama LIKE '".$requestData['search']['value']."%'";  
+    $sql.=" OR lp.no_faktur LIKE '".$requestData['search']['value']."%'  )";
 
 }
 

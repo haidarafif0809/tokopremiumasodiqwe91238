@@ -2,7 +2,6 @@
 /* Database connection start */
 include 'sanitasi.php';
 include 'db.php';
-include 'persediaan.function.php';
 
 /* Database connection end */
 
@@ -17,11 +16,13 @@ $requestData= $_REQUEST;
 $columns = array( 
 // datatable column index  => database column name
 
-    0=>'id', 
-    1=>'id_parcel',
-    2=>'id_produk',
-    3=>'jumlah_produk'
-
+      0 => 'nama',
+      1 => 'no_faktur',
+      2 => 'kode_produk',
+      3 => 'nama_produk',
+      4 => 'jumlah_fee',
+      5 => 'tanggal',
+      6 => 'jam'
 );
 
 // getting total number records without any search

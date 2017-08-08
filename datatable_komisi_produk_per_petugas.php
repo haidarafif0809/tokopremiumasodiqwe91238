@@ -16,7 +16,7 @@ $query0 = $db->query("SELECT SUM(jumlah_fee) AS total_fee FROM laporan_fee_faktu
 $cek0 = mysqli_fetch_array($query0);
 $total_fee2 = rp($cek0['total_fee']);
 
-$total_komisi = ($total_fee1) + ($total_fee2);
+$total_komisi = ($cek0['total_fee']) + ($cek01['total_fee']);
 
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
@@ -80,7 +80,7 @@ $nestedData=array();
         $nestedData[] = "<b style='color: black;'>$dari_tanggal s/d $sampai_tanggal</b>";
         $nestedData[] = "<b style='color: black;'></b>";
         $nestedData[] = "<b style='color: black;'>Total Seluruh :</b>";
-        $nestedData[] = "<b style='color: black;'>$total_komisi</b>";
+        $nestedData[] = "<b style='color: black;'>".rp($total_komisi)."</b>";
 	$nestedData[] = $row['id'];
 	$data[] = $nestedData;
 

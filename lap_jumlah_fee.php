@@ -31,8 +31,8 @@ include 'db.php';
 <button type="button" class="btn btn-danger btn-md" id="cari_petugas" data-toggle="modal" data-target="#myModal"><i class="fa fa-search"> </i> Cari Petugas</button>
         <br><br>
         <!-- Tampilan Modal -->
-        <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div id="myModal" class="modal" role="dialog">
+        <div class="modal-dialog modal-m">
         
         <!-- Isi Modal-->
         <div class="modal-content">
@@ -51,34 +51,10 @@ include 'db.php';
       <th> Nama Lengkap </th>
       <th> Alamat </th>
       <th> Jabatan </th>
-      <th> Otoritas </th>
-      <th> Status </th>
 
       
     </thead>
     
-    <tbody>
-    <?php
-
-      $perintah0 = $db->query("SELECT * FROM user");
-      while ($data1 = mysqli_fetch_array($perintah0))
-      {
-      echo "<tr  class='pilih' data-petugas='". $data1['nama'] ."'>
-      <td>". $data1['username'] ."</td>
-      <td>". $data1['nama'] ."</td>
-      <td>". $data1['alamat'] ."</td>
-      <td>". $data1['jabatan'] ."</td>
-      <td>". $data1['otoritas'] ."</td>
-      <td>". $data1['status'] ."</td>
-
-      </tr>";
-      }
-
-//Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
-    ?>
-    </tbody>
-
   </table>
 </div>
 </span>
@@ -100,8 +76,9 @@ mysqli_close($db);
               
                   <div class="form-group"> 
 
-                  <input type="text" name="nama_petugas" id="nama_petugas" class="form-control" placeholder="Nama Petugas" required="">
-                  </div>                  
+                  <input type="text" name="nama_petugas1" id="nama_petugas1" class="form-control" placeholder="Nama Petugas" required="">
+                  </div>   
+                  <input type="hidden" name="nama_petugas" id="nama_petugas" class="form-control" placeholder="Nama Petugas" required="">               
 
                   <div class="form-group"> 
 
@@ -208,9 +185,11 @@ return false;
 </script>
 -->
 
+
+
 <script type="text/javascript" language="javascript" >
    $(document).ready(function() {
-        var dataTable = $('#table_petugas_fee').DataTable( {
+        var dataTable = $('#tableuser').DataTable( {
           "processing": true,
           "serverSide": true,
           "ajax":{
@@ -218,7 +197,7 @@ return false;
             type: "post",  // method  , by default get
             error: function(){  // error handling
               $(".employee-grid-error").html("");
-              $("#table_petugas_fee").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+              $("#tableuser").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
               $("#employee-grid_processing").css("display","none");
               
             }
@@ -231,9 +210,7 @@ return false;
               $(nRow).attr('data-petugas', aData[1]);
               $(nRow).attr('alamat', aData[2]);
               $(nRow).attr('jabatan', aData[3]);
-              $(nRow).attr('otoritas', aData[4]);
-              $(nRow).attr('status', aData[5]);
-              $(nRow).attr('data-petugas-value', aData[6]);
+              $(nRow).attr('data-petugas-id', aData[4]);
           },
 
         });    
@@ -245,7 +222,8 @@ return false;
 <script type="text/javascript">
 // jika dipilih, nim akan masuk ke input dan modal di tutup
   $(document).on('click', '.pilih', function (e) {
-  document.getElementById("nama_petugas").value = $(this).attr('data-petugas');
+  document.getElementById("nama_petugas").value = $(this).attr('data-petugas-id');
+  document.getElementById("nama_petugas1").value = $(this).attr('data-petugas');
 
   $('#myModal').modal('hide');
   });

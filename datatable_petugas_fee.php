@@ -14,9 +14,7 @@ $columns = array(
 	1 => 'nama',
 	2 => 'alamat',
 	3 => 'jabatan',
-	4 => 'otoritas',
-  	5 => 'status',
-	6 => 'id'
+	4 => 'id'
 );
 
 // getting total number records without any search
@@ -43,14 +41,12 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData=array(); 
 
-	  $nestedData[] = $row['username'];
-    $nestedData[] = $row['nama'];
-    $nestedData[] = $row['alamat'];
-    $nestedData[] = $row['jabtan'];
-    $nestedData[] = $row['otoritas'];
-    $nestedData[] = $row['status'];
-	  $nestedData[] = $row['id'];
-	  $data[] = $nestedData;
+		$nestedData[] = $row['username'];
+		$nestedData[] = $row['nama'];
+		$nestedData[] = $row['alamat'];
+		$nestedData[] = $row['jabtan'];
+		$nestedData[] = $row['id'];
+		$data[] = $nestedData;
 }
 
 

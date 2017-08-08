@@ -1,82 +1,79 @@
-<?php 
-
+<?php include 'session_login.php';
+/* Database connection start */
 include 'sanitasi.php';
 include 'db.php';
+include 'persediaan.function.php';
 
+/* Database connection end */
 
 $nama_petugas = stringdoang($_POST['nama_petugas']);
 $dari_tanggal = stringdoang($_POST['dari_tanggal']);
 $sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
+$jumlah_data = 0;
+
+// storing  request (ie, get/post) global array to a variable  
+$requestData= $_REQUEST;
+
+$columns = array( 
+// datatable column index  => database column name
+
+      0 => 'nama',
+      1 => 'no_faktur',
+      2 => 'jumlah_fee',
+      3 => 'tanggal',
+      4 => 'jam'
+);
+
+// getting total number records without any search
 
 
-//menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM laporan_fee_faktur WHERE nama_petugas = '$nama_petugas' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
 
-$query0 = $db->query("SELECT SUM(jumlah_fee) AS total_fee FROM laporan_fee_faktur WHERE nama_petugas = '$nama_petugas' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek0 = mysqli_fetch_array($query0);
-$total_fee = $cek0['total_fee'];
+$sql =" SELECT u.nama,lp.nama_petugas,lp.no_faktur,lp.jumlah_fee,lp.tanggal,lp.jam ";
+$sql.=" FROM laporan_fee_faktur lp LEFT JOIN user u ON lp.nama_petugas = u.id ";
+$sql.=" WHERE lp.nama_petugas = '$nama_petugas' AND lp.tanggal >= '$dari_tanggal' AND lp.tanggal <= '$sampai_tanggal'";
+
+$query = mysqli_query($conn, $sql) or die("eror 1");
+if( !empty($requestData['search']['value']) ) {   
+
+    $sql.=" AND (u.nama LIKE '".$requestData['search']['value']."%'";  
+    $sql.=" OR lp.no_faktur LIKE '".$requestData['search']['value']."%' )";
+
+}
+
+$query=mysqli_query($conn, $sql) or die("eror 2");
+$totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
+        
+$sql.=" ORDER BY lp.id ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+
+/* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */    
+$query=mysqli_query($conn, $sql) or die("eror 3");
+
+
+$data = array();
+while( $row=mysqli_fetch_array($query) ) {  // preparing an array
+  $nestedData=array(); 
+
+      $jumlah_data = $jumlah_data + 1;
+
+      $nestedData[] = $row['nama'];
+      $nestedData[] = $row['no_faktur'];
+      $nestedData[] = rp($row['jumlah_fee']);
+      $nestedData[] = tanggal($row['tanggal']);
+      $nestedData[] = $row['jam'];
+      $data[] = $nestedData;
+}
+
+$totalData = $jumlah_data;
+$totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
+
+$json_data = array(
+            "draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+            "recordsTotal"    => intval( $totalData ),  // total number of records
+            "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
+            "data"            => $data
+            // total data array
+            );
+
+echo json_encode($json_data);  // send data as json format
 
  ?>
-
- <style>
-      
-      tr:nth-child(even){background-color: #f2f2f2}
-      
-</style>
-
-<div class="card card-block">
-
-<div class="table-responsive">
- <table id="tableuser" class="table table-bordered">
-            <thead>
-                  <th> Nama Petugas </th>
-                  <th> Nomor Faktur </th>
-                  <th> Jumlah Komisi </th>
-                  <th> Tanggal </th>
-                  <th> Jam </th>
-                  
-            </thead>
-            
-            <tbody>
-            <?php
-
-                  //menyimpan data sementara yang ada pada $perintah
-                  while ($data1 = mysqli_fetch_array($perintah))
-
-                  {
-                  
-                  echo "<tr class='pilih' data-petugas='". $data1['nama_petugas'] ."'>
-                  <td>". $data1['nama_petugas'] ."</td>
-                  <td>". $data1['no_faktur'] ."</td>
-                  <td>". rp($data1['jumlah_fee']) ."</td>
-                  <td>". tanggal($data1['tanggal']) ."</td>
-                  <td>". $data1['jam'] ."</td>
-                  </tr>";
-                  }
-
-                  //Untuk Memutuskan Koneksi Ke Database
-                  mysqli_close($db);   
-
-            ?>
-            </tbody>
-
-      </table>
-</div>
-
-
-      <a href='cetak_lap_fee_faktur.php?nama_petugas=<?php echo $nama_petugas; ?>&dari_tanggal=<?php echo $dari_tanggal; ?>&sampai_tanggal=<?php echo $sampai_tanggal; ?>' class='btn btn-success'><i class='fa fa-print'> </i> Cetak Komisi / Faktur </a>
-
-
-</div>
-      <h3 style="color: red"> Total Komisi / Faktur Dari <?php echo tanggal($dari_tanggal); ?> s/d <?php echo tanggal($sampai_tanggal); ?> : <b><?php echo rp($total_fee); ?></b></h3>
-
-
-<script>
-// untuk memunculkan data tabel 
-$(document).ready(function(){
-    $('.table').DataTable();
-
-
-});
-  
-</script>

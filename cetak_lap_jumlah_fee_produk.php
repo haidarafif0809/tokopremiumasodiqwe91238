@@ -125,7 +125,7 @@ WHERE lp.nama_petugas = '$nama_petugas' AND lp.tanggal >= '$dari_tanggal' AND lp
  <table>
   <tbody>
 
-      <tr><td width="75%"><b>Jumlah Komisi Petugas</b></td> <td> &nbsp;:&nbsp;</td> <td> <?php echo $total_fee; ?> </td></tr>
+      <tr><td width="75%"><b>Jumlah Komisi Petugas</b></td> <td> &nbsp;:&nbsp;</td> <td> <?php echo rp($total_fee); ?> </td></tr>
 
   </tbody>
   </table>

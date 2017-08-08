@@ -6,19 +6,19 @@ include 'db.php';
 
 
 
-$nama_petugas = $_GET['nama_petugas'];
-$dari_tanggal = $_GET['dari_tanggal'];
-$sampai_tanggal = $_GET['sampai_tanggal'];
+$nama_petugas = angkadoang($_GET['nama_petugas']);
+$petugas = stringdoang($_GET['petugas']);
+$dari_tanggal = stringdoang($_GET['dari_tanggal']);
+$sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
+$total_fee = angkadoang($_GET['total_fee']);
 
-    $query0 = $db->query("SELECT * FROM laporan_fee_faktur WHERE nama_petugas = '$nama_petugas' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-    $data0 = mysqli_fetch_array($query0);
+    $query10 = $db->query("SELECT u.nama,lp.nama_petugas,lp.no_faktur,lp.jumlah_fee,lp.tanggal,lp.jam FROM laporan_fee_faktur lp 
+      LEFT JOIN user u ON lp.nama_petugas = u.id WHERE lp.nama_petugas = '$nama_petugas' AND lp.tanggal >= '$dari_tanggal' AND lp.tanggal <= '$sampai_tanggal'");
 
     $query1 = $db->query("SELECT * FROM perusahaan ");
     $data1 = mysqli_fetch_array($query1);
 
-    $query10 = $db->query("SELECT SUM(jumlah_fee) AS total_fee FROM laporan_fee_faktur WHERE nama_petugas = '$nama_petugas' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-    $cek0 = mysqli_fetch_array($query10);
-    $total_fee = $cek0['total_fee'];
+
     
  ?>
 
@@ -44,8 +44,8 @@ $sampai_tanggal = $_GET['sampai_tanggal'];
 <table>
   <tbody>
   
-      <tr><td  width="40%">Nama Petugas</td> <td> :&nbsp;</td> <td> <?php echo $data0['nama_petugas']; ?></td></tr>
-      <tr><td  width="40%">Tanggal</td> <td> :&nbsp;</td> <td> <?php echo tanggal($data0['tanggal']); ?> </td>
+      <tr><td  width="40%">Nama Petugas</td> <td> :&nbsp;</td> <td> <?php echo $petugas; ?></td></tr>
+      <tr><td  width="40%">Tanggal</td> <td> :&nbsp;</td> <td> <?php echo tanggal(date('Y-m-d')); ?> </td>
       </tr>
       <tr><td  width="40%">Periode</td> <td> :&nbsp;</td> <td> <?php echo tanggal($dari_tanggal); ?> s/d <?php echo tanggal($sampai_tanggal); ?> </td></tr>
       <tr><td  width="40%">User</td> <td> :&nbsp;</td> <td> <?php echo $_SESSION['user_name']; ?> </td></tr>
@@ -70,23 +70,16 @@ $sampai_tanggal = $_GET['sampai_tanggal'];
                   <th> Jumlah Komisi </th>
                   <th> Tanggal </th>
                   <th> Jam </th>
-
-
-                  <?php 
-
-                  
-                  ?>
                   
             </thead>
             
             <tbody>
             <?php
-                $query10 = $db->query("SELECT * FROM laporan_fee_faktur WHERE nama_petugas = '$nama_petugas' ");
                 while ($data10 = mysqli_fetch_array($query10))
                 {
                   
                   echo "<tr>
-                  <td>". $data10['nama_petugas'] ."</td>
+                  <td>". $data10['nama'] ."</td>
                   <td>". $data10['no_faktur'] ."</td>
                   <td>". $data10['jumlah_fee'] ."</td>
                   <td>". tanggal($data10['tanggal']) ."</td>

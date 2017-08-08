@@ -7,8 +7,6 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-//menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM laporan_fee_faktur");
 
  ?>
 
@@ -17,7 +15,7 @@ $perintah = $db->query("SELECT * FROM laporan_fee_faktur");
 <a href="lap_jumlah_fee_faktur_petugas.php" class="btn btn-info"> <i class="fa fa-list"> </i> KOMISI / PETUGAS</a><br><br>
 
 <div class="table-responsive">
-<table id="tableuser" class="table table-bordered">
+<table id="table-lap" class="table table-bordered">
             <thead>
                   <th style="background-color: #4CAF50; color: white;"> Nama Petugas </th>
                   <th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
@@ -25,53 +23,40 @@ $perintah = $db->query("SELECT * FROM laporan_fee_faktur");
                   <th style="background-color: #4CAF50; color: white;"> Tanggal </th>
                   <th style="background-color: #4CAF50; color: white;"> Jam </th>
 
-
-                  <?php 
-
-                  
-                  ?>
-                  
             </thead>
             
-            <tbody>
-            <?php
-
-                  //menyimpan data sementara yang ada pada $perintah
-                  while ($data1 = mysqli_fetch_array($perintah))
-
-                  {
-                  
-                  echo "<tr>
-                  <td>". $data1['nama_petugas'] ."</td>
-                  <td>". $data1['no_faktur'] ."</td>
-                  <td>". rp($data1['jumlah_fee']) ."</td>
-                  <td>". tanggal($data1['tanggal']) ."</td>
-                  <td>". $data1['jam'] ."</td>
-                  </tr>";
-                  }
-
-                  //Untuk Memutuskan Koneksi Ke Database
-                  mysqli_close($db);   
-            ?>
-            </tbody>
-
-      </table>
-
 </div>
 </div>
 
             <script>
-            
             $(document).ready(function(){
-            $('#tableuser').DataTable();
+
+               $('#table-lap').DataTable().destroy();
+
+                      var dataTable = $('#table-lap').DataTable( {
+                      "processing": true,
+                      "serverSide": true,
+                      "info":     true,
+                      "language": {
+                    "emptyTable":     "My Custom Message On Empty Table"
+                      },
+                      "ajax":{
+                        url :"table_lap_jumlah_faktur.php", // json datasource
+                        type: "post",  // method  , by default get
+                        error: function(){  // error handling
+                          $(".tbody").html("");
+                          $("#table-lap").append('<tbody class="tbody"><tr><th colspan="3"></th></tr></tbody>');
+                          $("#table-lap_processing").css("display","none");
+                          
+                        }
+                      }
+                
+
+
+                    });
+
             });
             </script>
-
-
-
-
-
-
 <?php 
 include 'footer.php';
  ?>

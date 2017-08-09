@@ -22,14 +22,14 @@ $columns = array(
 
 // getting total number records without any search
 $sql ="SELECT pel.kode_pelanggan,pel.nama_pelanggan,p.id,p.no_faktur_retur,p.tanggal,p.kode_pelanggan,p.total,p.potongan,p.tax,p.tunai ";
-$sql.="FROM retur_penjualan p INNER JOIN pelanggan pel ON p.kode_pelanggan = pel.kode_pelanggan ";
+$sql.="FROM retur_penjualan p LEFT JOIN pelanggan pel ON p.kode_pelanggan = pel.id ";
 $query=mysqli_query($conn, $sql) or die("datatable_lap_retur_penjualan.php: get employees");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 
 $sql ="SELECT pel.kode_pelanggan,pel.nama_pelanggan,p.id,p.no_faktur_retur,p.tanggal,p.kode_pelanggan,p.total,p.potongan,p.tax,p.tunai ";
-$sql.="FROM retur_penjualan p INNER JOIN pelanggan pel ON p.kode_pelanggan = pel.kode_pelanggan AND 1=1";
+$sql.="FROM retur_penjualan p LEFT JOIN pelanggan pel ON p.kode_pelanggan = pel.id AND 1=1";
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 
 	$sql.=" AND ( pel.nama_pelanggan LIKE '".$requestData['search']['value']."%' ";

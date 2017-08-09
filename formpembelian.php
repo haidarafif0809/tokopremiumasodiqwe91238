@@ -15,6 +15,10 @@ $data_default_ppn = mysqli_fetch_array($query_default_ppn);
 $default_ppn = $data_default_ppn['setting_ppn'];
 $nilai_ppn = $data_default_ppn['nilai_ppn'];
 
+
+$query_setting_antrian_order = $db->query("SELECT setting_tampil FROM setting_antrian");
+$data_setting_antrian_order = mysqli_fetch_array($query_setting_antrian_order);
+
 ?>
 
 
@@ -264,7 +268,15 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
     </div>
         <button type="submit" id="submit_barcode" class="btn btn-primary" style="font-size:15px" ><i class="fa fa-barcode"></i> Submit Barcode</button> ||  
         <button type="button" class="btn btn-info" id="cari_produk_pembelian" accesskey="s" data-toggle="modal" data-target="#myModal"><i class='fa fa-search'> </i> Cari Produk (F1)</button>
+
+        <?php 
+
+        if ($data_setting_antrian_order['setting_tampil'] == 'Tampil')
+        {
+        ?>
         <button type="button" id="daftar_order" class="btn btn-purple" data-toggle="modal"><i class='fa  fa-search'></i> Cari Order (F6) </button>  
+
+        <?php } ?>
   </form>
 
 
@@ -363,6 +375,11 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
 <!--TABEl TBS PEMBELIAN AJAX -->
                 <h6 style="text-align: left ; color: red"><i> * Klik 2x pada kolom Jumlah Barang jika ingin mengedit.</i></h6>
                 <h6 style="text-align: left ;"><i><b> * Short Key (F2) untuk mencari Kode Produk atau Nama Produk.</b></i></h6>
+        <?php 
+
+        if ($data_setting_antrian_order['setting_tampil'] == 'Tampil')
+        {
+        ?>
 
 <button class="btn btn-warning" id="btnOrder" type="button" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Order Pembelian</button>
@@ -370,7 +387,8 @@ Order Pembelian</button>
 <button class="btn btn-purple" id="btnOrderClose" type="button" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample" style="display: none"><i class='fa fa-list-ol'> </i>
 Order Pembelian</button>
 
-
+        
+        <?php } ?>
 
 <span id="OrderPembelian" style="display: none">
     <div class="row">

@@ -15,6 +15,9 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
 
 $session_id = session_id();
 
+$query_setting_antrian_order = $db->query("SELECT setting_tampil FROM setting_antrian");
+$data_setting_antrian_order = mysqli_fetch_array($query_setting_antrian_order);
+
  ?>
 
 
@@ -321,7 +324,13 @@ Number.prototype.format = function(n, x, s, c) {
 </div>
      
 <button type="button" id="cari_produk_penjualan" class="btn btn-info " style="height:45px;"  data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
+<?php 
+
+if ($data_setting_antrian_order['setting_tampil'] == 'Tampil')
+{
+?>
 <button type="button" id="daftar_order" class="btn btn-success" style="height:45px;" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
+
 
 <button class="btn btn-purple" style="height:45px; display: none" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Antrian  </button>
@@ -329,8 +338,11 @@ Antrian  </button>
 <button class="btn btn-warning" id="btnOrder" style="height:45px;" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Order </button>
 
+<?php } ?>
 
 <button class="btn btn-deep-purple btn-sm"  style="height:45px; width: 45px" type="button" id="tombol-warning"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+
+
 
 <button class="btn btn-indigo btn-sm" type="button" id="tombol-purpel" style="display: none; height:45px; width: 45px"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
 <div style="display: none" id="span-colapse">
@@ -435,13 +447,6 @@ Order </button>
 
   <form class="form-inline" method="post ">
 
-<?php 
-$hud = $db->query("SELECT setting_tampil FROM setting_antrian");
-$my = mysqli_fetch_array($hud);
-
-if ($my['setting_tampil'] == 'Tampil')
-{
-?>
 
 </p>  
 </form>
@@ -451,6 +456,11 @@ tr:nth-child(even){background-color: #f2f2f2}
 </style>
 
 </div>
+<?php 
+
+if ($data_setting_antrian_order['setting_tampil'] == 'Tampil')
+{
+?>
 
 <div class="collapse" id="collapseExample">
  <table id="tableuser" class="table-border table-sm">

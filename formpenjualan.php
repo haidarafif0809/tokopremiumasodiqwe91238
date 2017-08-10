@@ -3679,12 +3679,10 @@ else{
              $("#cetak_tunai_besar").show('');
              $("#span_tbs").hide();
              $("#sss").collapse('hide');
-             $("#kd_pelanggan").val('');
-             $("#kd_pelanggan").trigger("chosen:open");
              $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
              $("#total1").val('');
              $("#pembayaran_penjualan").val('');
-             $("#sisa_pembayaran_penjualan").val('');
+            $("#sisa_pembayaran_penjualan").val('');
              $("#kredit").val('');
 
     
@@ -3847,8 +3845,6 @@ alert("Silakan Bayar Piutang");
             $("#sisa_pembayaran_penjualan").val('');
             $("#kredit").val('');
             $("#span_tbs").hide();
-            $("#kd_pelanggan").val('');
-            $("#kd_pelanggan").trigger("chosen:open");
             $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true}); 
             $("#sss").collapse('hide');
 
@@ -3989,9 +3985,6 @@ alert("Silakan Bayar Piutang");
                              $("#tanggal_jt").val('');
                              $("#cetak_piutang").show();
                              $("#tax").val('');
-                             
-                             $("#kd_pelanggan").val('');
-                             $("#kd_pelanggan").trigger("chosen:open");
                              $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"}); 
                              
                              
@@ -5810,7 +5803,7 @@ $('#tabel_tbs_penjualan').DataTable().destroy();
             $("#biaya_admin_select").trigger("chosen:updated");
             $("#biaya_admin_persen").val(''); 
             $("#kode_barang").val('');
-            $("#kd_pelanggan").trigger("chosen:open");
+            $("#kode_barang").trigger("chosen:open");
             $("#biaya_adm").val('');
             $("#level_harga").val('harga_1');
             $("#keterangan").val('');

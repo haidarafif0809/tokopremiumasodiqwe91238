@@ -76,18 +76,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 </div> <!--/ responsive-->
 
 <span id="table_tampil" style="display: none;">
-      <td width="70%">Jumlah Item :&nbsp;  <span id="jumlah_item"></span></td><br>
-
-      <td  width="70%">Total Subtotal :&nbsp; Rp. <span id="total_subtotal"></span></td><br>
-
-      <td  width="70%">Total Potongan :&nbsp; Rp. <span id="total_potongan"></span></td><br>
-
-      <td width="70%">Total Pajak :&nbsp; Rp. <span id="total_pajak"></span></td><br>
-      
-      <td  width="70%">Total Akhir :&nbsp; Rp. <span id="total_akhir"></span></td><br>
-
-      <td  width="70%">Total Kredit :&nbsp; Rp. <span id="total_kredit"></span></td><br>
-
+     
   	<div class="card card-block">
 
 		<div class="table-responsive">
@@ -132,6 +121,14 @@ tr:nth-child(even){background-color: #f2f2f2}
   $(function() {
   $( ".tanggal_cari" ).pickadate({ selectYears: 100, format: 'yyyy-mm-dd'});
   });
+
+
+  Number.prototype.format = function(n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
   // /PICKERDATE
 </script>
 
@@ -142,13 +139,19 @@ tr:nth-child(even){background-color: #f2f2f2}
       		var sampai_tanggal = $("#sampai_tanggal").val();
 
       		$.getJSON('ambil_total_seluruh.php',{dari_tanggal:dari_tanggal,sampai_tanggal:sampai_tanggal},function(json){
+            var jumlah_item = json.jml_item;
+            var total_subtotal = json.total_subtotal;
+            var total_potongan = json.total_potongan;
+            var total_tax = json.total_tax;
+            var total_subtotal = json.total_subtotal;
+            var total_kredit = json.total_kredit;
 
-      $("#jumlah_item").html(tandaPemisahTitik(json.jml_item));
-      $("#total_subtotal").html(tandaPemisahTitik(json.total_subtotal));
-      $("#total_potongan").html(tandaPemisahTitik(json.total_potongan));
-      $("#total_pajak").html(tandaPemisahTitik(json.total_tax));
-      $("#total_akhir").html(tandaPemisahTitik(json.total_subtotal));
-      $("#total_kredit").html(tandaPemisahTitik(json.total_kredit));
+      $("#jumlah_item").html(jumlah_item);
+      $("#total_subtotal").html(total_subtotal);
+      $("#total_potongan").html(total_potongan);
+      $("#total_pajak").html(total_tax);
+      $("#total_akhir").html(total_subtotal);
+      $("#total_kredit").html(total_kredit);
   });
 
       		if (dari_tanggal == '') {

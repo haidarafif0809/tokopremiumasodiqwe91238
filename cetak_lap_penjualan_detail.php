@@ -1,4 +1,4 @@
-<?php 
+<?php include 'session_login.php';
 include 'header.php';
 include 'sanitasi.php';
 include 'db.php';
@@ -10,41 +10,12 @@ $sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
     $query1 = $db->query("SELECT * FROM perusahaan ");
     $data1 = mysqli_fetch_array($query1);
 
-//menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
 
-
-//menampilkan seluruh data yang ada pada tabel penjualan
-$perintah0 = $db->query("SELECT * FROM detail_penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$data0 = mysqli_fetch_array($perintah0);
-
-
-
-$query01 = $db->query("SELECT SUM(potongan) AS total_potongan FROM detail_penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek01 = mysqli_fetch_array($query01);
-$total_potongan = $cek01['total_potongan'];
-
-$query20 = $db->query("SELECT SUM(tax) AS total_tax FROM detail_penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek20 = mysqli_fetch_array($query20);
-$total_tax = $cek20['total_tax'];
-
-$query30 = $db->query("SELECT SUM(kredit) AS total_kredit FROM penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek30 = mysqli_fetch_array($query30);
-$total_kredit = $cek30['total_kredit'];
-
-$query15 = $db->query("SELECT SUM(subtotal) AS total_subtotal FROM 
-detail_penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek15 = mysqli_fetch_array($query15);
-$t_subtotal = $cek15['total_subtotal'];
-
-$query011 = $db->query("SELECT SUM(jumlah_barang) AS total_barang FROM
-detail_penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
-$cek011 = mysqli_fetch_array($query011);
-$t_barang = $cek011['total_barang'];
-
-
-
-
+$total_jumlah = 0;
+$total_harga = 0;
+$total_subtotal = 0;
+$total_potongan = 0;
+$total_tax = 0;
 
 
  ?>
@@ -85,22 +56,34 @@ $t_barang = $cek011['total_barang'];
     <br>
 
 
- <table id="tableuser" class="table table-hover">
-            <thead>
-                  <th> Nomor Faktur </th>                  
-                  <th> Tanggal </th>
-                  <th> Kode Pelanggan</th>
-                  <th> Nama Pelanggan </th>
-                  <th> </th>
-                  <th> </th>
+  <table id="table_lap_penjualan_detail" class="table table-bordered">
+              <thead>
+              <th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
+              <th style="background-color: #4CAF50; color: white;"> Kode Barang </th>
+              <th style="background-color: #4CAF50; color: white;"> Nama Barang </th>
+              <th style="background-color: #4CAF50; color: white;"> Jumlah Barang </th>
+              <th style="background-color: #4CAF50; color: white;"> Satuan </th>
+              <th style="background-color: #4CAF50; color: white;"> Harga </th>
+              <th style="background-color: #4CAF50; color: white;"> Subtotal </th>
+              <th style="background-color: #4CAF50; color: white;"> Potongan </th>
+              <th style="background-color: #4CAF50; color: white;"> Tax </th>
+          <?php 
+                 if ($_SESSION['otoritas'] == 'Pimpinan')
+                 {
+                 echo "<th style='background-color: #4CAF50; color: white;'> Hpp </th>";
+                 }
+          ?>
 
-                                    
+              
+              <th style="background-color: #4CAF50; color: white;"> Sisa Barang </th>
+              <th style="background-color: #4CAF50; color: white;"> Status </th>
+              
+        </thead>                                  
             </thead>
             
             <tbody>
             <?php
-
-                  $perintah009 = $db->query("SELECT s.nama,dp.tanggal,dp.no_faktur,dp.kode_barang,dp.nama_barang,dp.jumlah_barang,dp.satuan,dp.harga,dp.subtotal,dp.potongan,dp.tax,dp.hpp,dp.sisa FROM detail_penjualan dp INNER JOIN satuan s ON dp.satuan = s.id WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal'");
+                  $perintah009 = $db->query("SELECT s.nama,dp.id,p.status,dp.no_faktur,dp.kode_barang,dp.nama_barang,dp.jumlah_barang,dp.satuan,dp.harga,dp.subtotal,dp.potongan,dp.tax,dp.hpp,dp.sisa FROM detail_penjualan dp LEFT JOIN satuan s ON dp.satuan = s.id LEFT JOIN penjualan p ON dp.no_faktur = p.no_faktur WHERE dp.tanggal >= '$dari_tanggal' AND dp.tanggal <= '$sampai_tanggal' ORDER BY dp.no_faktur DESC ");
                   while ($data11 = mysqli_fetch_array($perintah009))
 
                   {
@@ -116,45 +99,55 @@ $t_barang = $cek011['total_barang'];
                   $jumlah_barang = $data11['jumlah_barang'];
                 }
 
+                $total_jumlah = $jumlah_barang + $total_jumlah;
+              $total_harga = $data11['harga'] + $total_harga;
+              $total_subtotal = $data11['subtotal'] + $total_subtotal;
+              $total_potongan = $data11['potongan'] + $total_potongan;
+              $total_tax = $data11['tax'] + $total_tax;
 
-                        ///menampilkan seluruh data yang ada pada tabel penjualan
-                        $perintah123 = $db->query("SELECT * FROM penjualan WHERE no_faktur = '$data11[no_faktur]'");
-                        $data123 = mysqli_fetch_array($perintah123);
+          //menampilkan data
+          echo "<tr>
+          <td>".$data11['no_faktur']."
+          <td>".$data11['kode_barang']."</td>
+          <td>".$data11['nama_barang']."</td>
+          <td>".koma($jumlah_barang,3)."</td>
+          <td>".$data11['nama']."</td>
+          <td>".koma($data11['harga'],2)."</td>
+          <td>".koma($data11['subtotal'],2)."</td>
+          <td>".koma($data11['potongan'],2)."</td>
+          <td>".koma($data11['tax'],2)."</td>";
 
-                        $perintah1234 = $db->query("SELECT * FROM pelanggan");
-                        $data1234 = mysqli_fetch_array($perintah1234);
-                        
+        if ($_SESSION['otoritas'] == 'Pimpinan'){
 
-                        $query0 = $db->query("SELECT SUM(jumlah_barang) AS total_barang FROM detail_penjualan WHERE no_faktur = '$data11[no_faktur]'");
-                        $cek0 = mysqli_fetch_array($query0);
-                        $total_barang = $cek0['total_barang'];
-                        
-                        
-                        $query10 = $db->query("SELECT SUM(subtotal) AS total_subtotal FROM detail_penjualan WHERE no_faktur = '$data11[no_faktur]'");
-                        $cek10 = mysqli_fetch_array($query10);
-                        $total_subtotal = $cek10['total_subtotal'];
+                echo "<td>".koma($data11['hpp'],2)."</td>";
+        }
 
-                        echo "<tr>
-                        <td>". $data11['no_faktur'] ."<br><br><u><i>Kode Barang</i></u><br>". $data11['kode_barang'] ."<br><br><br><b><br> <b>Potongan :</b>  </td>
-                        
-                        <td>". $data11['tanggal'] ." <br><br><u><i>Nama Barang</i></u><br>". $data11['nama_barang'] ."<br><br><br><b><br>". rp($data11['potongan']) ."</td>
-                        
-                        <td>". $data123['kode_pelanggan'] ." <br><br><br><br><br><b><br><br>Pajak :</td>  <td>". $data1234['nama_pelanggan'] ." <br><br><i><u>Jumlah</u>&nbsp;&nbsp;<u>Satuan</u></i><br>". koma($jumlah_barang,2) ." &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ". $data11['nama'] ."<br>.........................<br> ". koma($total_barang,2) ."<b><br><b><br>". rp($data11['tax']) ."</td>
-                        <td><br><br><i><u>Harga</u>&nbsp;&nbsp;<u>Pot.</u><br>". rp($data11['harga']) ."&nbsp;&nbsp;&nbsp;". koma($data11['potongan'],2) ."<b><br><b><br><b><br><b><br>Total Akhir :</td>
-                        <td><br><br><i><u>Total</u><br>". rp($data11['subtotal']) ." <br>.........................<br> ". rp($total_subtotal) ."<b><br><b><br>". rp($total_subtotal) ."</td>
+          echo "<td>".$data11['sisa']."</td>
+          <td>".$data11['status']."</td>";
+                     
 
-                  </tr>";
+                  "</tr>";
 
 
                   }
 
-                          //Untuk Memutuskan Koneksi Ke Database
-                          
-                          mysqli_close($db); 
-        
-        
+            //Untuk Memutuskan Koneksi Ke Database
+            mysqli_close($db); 
             ?>
-            </tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td style='color:red;'><?php echo koma($total_jumlah,3);?></td>
+          <td></td>
+          <td style='color:red;'><?php echo koma($total_harga,2);?></td>
+          <td style='color:red;'><?php echo koma($total_subtotal,2);?></td>
+          <td style='color:red;'><?php echo koma($total_potongan,2);?></td>
+          <td style='color:red;'><?php echo koma($total_tax,2);?></td>
+          <td></td>
+          <td></td>
+</tr>
+        </tbody>
 
       </table>
       <hr>
@@ -165,32 +158,6 @@ $t_barang = $cek011['total_barang'];
 <div class="col-sm-7">
 </div>
 
-
-<div class="col-sm-2">
-<h4><b>Total Keseluruhan :</b></h4>
-</div>
-
-
-<div class="col-sm-3">
-        
-  <table>
-  <tbody>
-
-      <tr><td width="70%">Jumlah Item</td> <td> :&nbsp; </td> <td> <?php echo koma($t_barang,2); ?> </td></tr>
-      <tr><td  width="70%">Total Subtotal</td> <td> :&nbsp;Rp. </td> <td> <?php echo rp($t_subtotal); ?> </td>
-      </tr>
-      <tr><td  width="70%">Total Potongan</td> <td> :&nbsp;Rp. </td> <td> <?php echo rp($total_potongan); ?></td></tr>
-      <tr><td width="70%">Total Pajak</td> <td> :&nbsp;Rp. </td> <td> <?php echo rp($total_tax); ?> </td></tr>
-      <tr><td  width="70%">Total Akhir</td> <td> :&nbsp;Rp. </td> <td> <?php echo rp($t_subtotal); ?> </td>
-      </tr>
-      <tr><td  width="70%">Total Kredit</td> <td> :&nbsp;Rp. </td> <td> <?php echo rp($total_kredit); ?></td></tr>
-            
-  </tbody>
-  </table>
-  <br>
-
-
-     </div>
 
  <script>
 $(document).ready(function(){

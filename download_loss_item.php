@@ -34,29 +34,29 @@ $bulan_sekarang = date('m');
         <tbody>
         <?php
 
-          $get_detail = $db->query("SELECT kode_barang FROM detail_penjualan WHERE MONTH(tanggal) = '$bulan_sekarang' GROUP BY kode_barang");
+           $get_detail = $db->query("SELECT p.kode_barang, SUM(p.jumlah_barang) AS jumlah, s.nama, p.nama_barang FROM detail_penjualan p LEFT JOIN satuan s ON p.satuan = s.id WHERE MONTH(p.tanggal) = '$bulan' GROUP BY p.kode_barang ORDER BY p.id DESC ");
           while ($get_data = mysqli_fetch_array($get_detail))
             {
 
-            $kode_now = $get_data['kode_barang'];
+                  $query_detail = $db->query("SELECT COUNT(kode_barang) AS jumlah_data FROM detail_penjualan WHERE kode_barang = '$get_data[kode_barang]' AND MONTH(tanggal) = '$bulan_sekarang' ");
+                  $data_detail = mysqli_fetch_array($query_detail);
 
-            $select_data = $db->query("SELECT p.kode_barang, SUM(p.jumlah_barang) AS jumlah, s.nama, p.nama_barang FROM detail_penjualan p LEFT JOIN satuan s ON p.satuan = s.id WHERE MONTH(p.tanggal) = '$bulan' AND p.kode_barang != '$kode_now' GROUP BY p.kode_barang");
+                  if ($data_detail['jumlah_data'] == 0) {
 
-            while ($out = mysqli_fetch_array($select_data))
-            {
-                //menampilkan data
-            echo "<tr>
-                <td>". $out['kode_barang'] ."</td>
-                <td>". $out['nama_barang'] ."</td>
-                <td>". $out['nama'] ."</td>
-                <td>". $out['jumlah'] ."</td>
-            <tr>";
+                      //menampilkan data
+                  echo "<tr>
+                      <td>". $get_data['kode_barang'] ."</td>
+                      <td>". $get_data['nama_barang'] ."</td>
+                      <td>". $get_data['nama'] ."</td>
+                      <td>". rp($get_data['jumlah']) ."</td>
+                  <tr>";
 
+                }     
             }
-          }     
                     //Untuk Memutuskan Koneksi Ke Database
                     
                     mysqli_close($db); 
+                    
                     
         ?>
         </tbody>

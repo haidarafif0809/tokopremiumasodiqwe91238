@@ -127,18 +127,18 @@ if ($pembelian['retur_pembelian_hapus'] > 0) {
 ?>
 
 			<th style='background-color: #4CAF50; color:white'> Cetak </th>
-			<th style='background-color: #4CAF50; color:white'> Nomor Faktur Retur </th>
-			<th style='background-color: #4CAF50; color:white'> Nama Suplier </th>
-			<th style='background-color: #4CAF50; color:white'> Total </th>
-			<th style='background-color: #4CAF50; color:white'> Potongan </th>
-			<th style='background-color: #4CAF50; color:white'> Tax </th>
+			<th style='background-color: #4CAF50; color:white'> Faktur Retur </th>
+			<th style='background-color: #4CAF50; color:white'> Suplier </th>
+			<th style='background-color: #4CAF50; color:white'> Total Retur </th>
+			<th style='background-color: #4CAF50; color:white'> Potong Hutang </th>
+			<th style='background-color: #4CAF50; color:white'> Kas </th>
+			<th style='background-color: #4CAF50; color:white'> Diskon </th>
+			<th style='background-color: #4CAF50; color:white'> Pajak </th>
 			<th style='background-color: #4CAF50; color:white'> Tanggal </th>
 			<th style='background-color: #4CAF50; color:white'> Jam </th>
 			<th style='background-color: #4CAF50; color:white'> User Buat </th>
 			<th style='background-color: #4CAF50; color:white'> User Edit </th>
 			<th style='background-color: #4CAF50; color:white'> Tanggal Edit</th>
-			<th style='background-color: #4CAF50; color:white'> Tunai </th>
-			<th style='background-color: #4CAF50; color:white'> Kembalian </th>
 			
 		</thead>
 	</table>

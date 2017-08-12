@@ -82,7 +82,7 @@ if ($pembelian['retur_pembelian_hapus'] > 0) {
 
 			$nestedData[] = $row['no_faktur_retur'];
 			$nestedData[] = $row['nama'];
-			$nestedData[] = rp($row['total_bayar']);
+			$nestedData[] = rp($row['total']);
 			$nestedData[] = rp($row['potongan_hutang']);
 			$nestedData[] = rp($row['total']);
 			$nestedData[] = rp($row['potongan']);

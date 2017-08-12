@@ -1,1 +1,9 @@
-Tangggal
+Table 		:
+				- retur_penjualan 			> total_bayar, potongan_piutang (kolom)
+				- retur_pembayaran_piutang	> Table baru (Cek di Online atau GIt Toko Premium)
+Trigger		:
+				- detail_retur_penjualan (After - Delete) -> ada tambahan triggernya (cek di DB Online)
+Programmer	: 
+				- RindangRamadhan
+Tanggal		:
+				- 12 Agustus 2017

@@ -8,9 +8,6 @@ include 'sanitasi.php';
 include 'db.php';
 
 
-//menampilkan seluruh data yang ada pada tabel pembelian dalan DB
-$perintah = $db->query("SELECT p.nama_pelanggan,rp.id,p.kode_pelanggan AS code_card,rp.no_faktur_retur,rp.kode_pelanggan,rp.total,rp.potongan,rp.tax,rp.tanggal,rp.jam,rp.user_buat,rp.user_edit,rp.tanggal_edit,rp.tunai,rp.sisa FROM retur_penjualan rp INNER JOIN pelanggan p ON rp.kode_pelanggan = p.id ");
-
 ?>
 
 
@@ -142,119 +139,84 @@ tr:nth-child(even){background-color: #f2f2f2}
 </style>
 
 <div class="table-responsive">
-<span id="tabel_baru">
-<table id="tableuser" class="table table-bordered">
-		<thead>
-			<th style='background-color: #4CAF50; color:white'> Detail </th>
+	<span id="tabel_baru">
+		<table id="table_retur_penjualan" class="table table-bordered table-sm">
+			<thead>
+				<th style='background-color: #4CAF50; color:white'> Detail </th>
 
-<?php
-if ($retur_penjualan['retur_penjualan_edit'] > 0) {
-    	echo "<th style='background-color: #4CAF50; color:white'> Edit </th>";
-   }
-?>
+				<?php
+				if ($retur_penjualan['retur_penjualan_edit'] > 0) {
+				    	echo "<th style='background-color: #4CAF50; color:white'> Edit </th>";
+				   }
+				?>
 
-<?php
-if ($retur_penjualan['retur_penjualan_hapus'] > 0) {
-    	echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
-   }
-?>
-			
-			
-			<th style='background-color: #4CAF50; color:white'> Cetak </th>
-			<th style='background-color: #4CAF50; color:white'> Nomor Faktur Retur </th>
-			<th style='background-color: #4CAF50; color:white'> Kode Pelanggan </th>
-			<th style='background-color: #4CAF50; color:white'> Total </th>
-			<th style='background-color: #4CAF50; color:white'> Potongan </th>
-			<th style='background-color: #4CAF50; color:white'> Tax </th>
-			<th style='background-color: #4CAF50; color:white'> Tanggal </th>
-			<th style='background-color: #4CAF50; color:white'> Jam </th>
-			<th style='background-color: #4CAF50; color:white'> User Buat </th>
-			<th style='background-color: #4CAF50; color:white'> User Edit </th>
-			<th style='background-color: #4CAF50; color:white'> Tanggal Edit</th>
-			<th style='background-color: #4CAF50; color:white'> Tunai </th>
-			<th style='background-color: #4CAF50; color:white'> Kembalian </th>
+				<?php
+				if ($retur_penjualan['retur_penjualan_hapus'] > 0) {
+				    	echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
+				   }
+				?>
 
-		</thead>
+				<th style='background-color: #4CAF50; color:white'> Cetak </th>
+				<th style='background-color: #4CAF50; color:white'> Faktur Retur </th>
+				<th style='background-color: #4CAF50; color:white'> Kode Pelanggan </th>
+				<th style='background-color: #4CAF50; color:white'> Total Retur </th>
+				<th style='background-color: #4CAF50; color:white'> Potong Piutang </th>
+				<th style='background-color: #4CAF50; color:white'> Potongan </th>
+				<th style='background-color: #4CAF50; color:white'> Tax </th>
+				<th style='background-color: #4CAF50; color:white'> Tanggal </th>
+				<th style='background-color: #4CAF50; color:white'> Jam </th>
+				<th style='background-color: #4CAF50; color:white'> User Buat </th>
+				<th style='background-color: #4CAF50; color:white'> User Edit </th>
+				<th style='background-color: #4CAF50; color:white'> Tanggal Edit</th>
+				<th style='background-color: #4CAF50; color:white'> Tunai </th>
+				<th style='background-color: #4CAF50; color:white'> Kembalian </th>
+			</thead>
 
-		
-		<tbody>
-		<?php
-
-			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
-			{
-				//menampilkan data
-			echo "<tr class='tr-id-".$data1['id']."'>
-
-			<td> <button class='btn btn-info detail' no_faktur_retur='". $data1['no_faktur_retur'] ."' ><span class='glyphicon glyphicon-th-list'></span> Detail </button> </td>";
-
-if ($retur_penjualan['retur_penjualan_edit'] > 0) {
-
-			echo "<td> <a href='proses_edit_retur_penjualan.php?no_faktur_retur=". $data1['no_faktur_retur']."' class='btn btn-success'> <span class='glyphicon glyphicon-edit'></span> Edit </a> </td>";
-		}
-
-
-if ($retur_penjualan['retur_penjualan_hapus'] > 0) {
-
-$pilih = $db->query("SELECT no_faktur FROM hpp_masuk WHERE no_faktur = '$data1[no_faktur_retur]' AND sisa != jumlah_kuantitas");
-$row_alert = mysqli_num_rows($pilih);
-
-	if ($row_alert > 0) {
-		
-
-		echo "<td> <button class='btn btn-danger btn-alert' data-id='". $data1['id'] ."' data-faktur='". $data1['no_faktur_retur'] ."' data-pelanggan='". $data1['kode_pelanggan'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>  </td>";
-	} 
-
-	else {
-
-		echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."' data-faktur='". $data1['no_faktur_retur'] ."' data-pelanggan='". $data1['kode_pelanggan'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>  </td>";
-	}
-
-
-			
-}
-			
-			echo "<td> <a href='cetak_lap_retur_penjualan.php?no_faktur_retur=".$data1['no_faktur_retur']."' class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print'> </span> Cetak Retur</a> </td>
-
-			<td>". $data1['no_faktur_retur'] ."</td>
-			<td>". $data1['code_card'] ." ". $data1['nama_pelanggan'] ."</td>
-			<td>". rp($data1['total']) ."</td>
-			<td>". rp($data1['potongan']) ."</td>
-			<td>". rp($data1['tax']) ."</td>
-			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['jam'] ."</td>
-			<td>". $data1['user_buat'] ."</td>
-			<td>". $data1['user_edit'] ."</td>
-			<td>". $data1['tanggal_edit'] ."</td>
-			<td>". rp($data1['tunai']) ."</td>
-			<td>". rp($data1['sisa']) ."</td>
-			
-			</tr>";
-			}
-			
-			//Untuk Memutuskan Koneksi Ke Database
-			mysqli_close($db);   
-		?>
-		</tbody>
-
-	</table>
-</span>
-		</div>
+		</table>
+	</span>
+</div>
 <br>
 	<button type="submit" id="submit_close" class="glyphicon glyphicon-remove btn btn-danger" style="display:none"></button> 
 		<span id="demo"> </span>
 </div><!--end of container-->
 		
+<script type="text/javascript">
+	$(document).ready(function(){
+			$('#table_retur_penjualan').DataTable().destroy();
+			
+          var dataTable = $('#table_retur_penjualan').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"datatable_retur_penjualan.php", // json datasource
+            type: "post",  // method  , by default get
+            error: function(){  // error handling
+              $(".employee-grid-error").html("");
+              $("#table_retur_penjualan").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+              $("#employee-grid_processing").css("display","none");
+            }
+        },
+            
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('class','tr-id-'+aData[16]+'');
+            },
+
+        });
+
+        $("form").submit(function(){
+        return false;
+        });
+		
+		});
+		
+</script>
 
 		<!--menampilkan detail penjualan-->
 		<script>
 		
-		$(document).ready(function(){
-		$('#tableuser').DataTable();
-		});
+		$(document).ready(function(){		
 		
-		
-		$(".detail").click(function(){
+		$(document).on('click','.detail',function(e){
 		var no_faktur_retur = $(this).attr('no_faktur_retur');
 		
 		
@@ -263,10 +225,13 @@ $row_alert = mysqli_num_rows($pilih);
 		$.post('detail_retur_penjualan.php',{no_faktur_retur:no_faktur_retur},function(info) {
 		
 		$("#modal-detail").html(info);
-		
+
+				var table_retur_penjualan = $('#table_retur_penjualan').DataTable();
+              		table_retur_penjualan.draw();		
 		
 		});
 		
+		});
 		});
 		
 		</script>
@@ -274,7 +239,7 @@ $row_alert = mysqli_num_rows($pilih);
 				<script type="text/javascript">
 				
 				//fungsi hapus data 
-				$(".btn-hapus").click(function(){
+				$(document).on('click','.btn-hapus',function(e){
 				var kode_pelanggan = $(this).attr("data-pelanggan");
 				var no_faktur_retur = $(this).attr("data-faktur");
 				var id = $(this).attr("data-id");
@@ -300,6 +265,9 @@ $row_alert = mysqli_num_rows($pilih);
 				$(".tr-id-"+id).remove();
 				
 				}
+
+				var table_retur_penjualan = $('#table_retur_penjualan').DataTable();
+              		table_retur_penjualan.draw();
 				
 				});
 				

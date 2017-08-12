@@ -1,170 +1,136 @@
-<?php 
-
+<?php include 'session_login.php';
+/* Database connection start */
 include 'sanitasi.php';
 include 'db.php';
+include 'persediaan.function.php';
 
+$kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
 $no_faktur_retur = stringdoang($_POST['no_faktur_retur']);
+/* Database connection end */
 
-?>
-
-<div class="table-responsive">
-<table id="tableuser" class="table table-bordered">
-    <thead> <!-- untuk memberikan nama pada kolom tabel -->
-      
-      <th> Nomor Faktur </th>
-      <th> Kode Pelanggan </th>
-      <th> Kode Barang </th>
-      <th> Nama Barang </th>
-      <th> Jumlah Jual </th>
-
-      <th> Satuan </th>
-      <th> Harga Barang  </th>
-      <th> Subtotal </th>
-      <th> Potongan </th>
-      <th> Tax </th>
-      <th> Sisa Barang </th>
-      
-    </thead> <!-- tag penutup tabel -->
-    
-    <tbody> <!-- tag pembuka tbody, yang digunakan untuk menampilkan data yang ada di database --> 
-    <?php
-
-
-      $kode_pelanggan = $_POST['kode_pelanggan'];
-
-// menampilkan data dari 3 tabel
-$perintah = $db->query("SELECT b.id AS id_produk ,dp.no_faktur, dp.tanggal, dp.kode_barang, dp.nama_barang, dp.jumlah_barang, dp.satuan AS satuan_jual, dp.harga, dp.subtotal, dp.potongan, dp.tax, dp.status, dp.sisa, p.kode_pelanggan, pl.nama_pelanggan, dp.asal_satuan, b.satuan AS satuan_barang , ss.nama AS satuan_real , st.nama AS satuan_asli FROM detail_penjualan dp LEFT JOIN penjualan p ON dp.no_faktur = p.no_faktur LEFT JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan LEFT JOIN barang b ON dp.kode_barang = b.kode_barang LEFT JOIN satuan ss ON dp.satuan = ss.id LEFT JOIN satuan st ON b.satuan = st.id WHERE p.kode_pelanggan = '$kode_pelanggan' GROUP BY dp.no_faktur, dp.kode_barang");
-
- 
-
-
-while ($data = mysqli_fetch_array($perintah))
-{
-
-
-//harga tabel penjualan
-$harga_penjualan = $data['harga'];
-//no faktur jual
-$no_faktur_jual = $data['no_faktur'];
-// kode barang
-$kode_barang = $data['kode_barang'];
-
-// sisa barang hpp keluar
-$select_sisa = $db->query("SELECT SUM(sisa_barang) AS sisa_barang FROM hpp_keluar WHERE no_faktur = '$data[no_faktur]'");
-$data1 = mysqli_fetch_array($select_sisa);
-$sisa_barang_hpp = $data1['sisa_barang'];
-
-// jumlah retur tbs retur
-$select_jumlah_tbs = $db->query("SELECT SUM(jumlah_retur) AS jumlah_retur_tbs, satuan FROM tbs_retur_penjualan WHERE no_faktur_retur = '$no_faktur_retur' AND no_faktur_penjualan = '$no_faktur_jual' ");
-$data2 = mysqli_fetch_array($select_jumlah_tbs);
-$jumlah_retur_tbs = $data2['jumlah_retur_tbs'];
-
-
-// jumlah retur detail retur
-$select_jumlah_detail = $db->query("SELECT SUM(jumlah_retur) AS jumlah_retur_detail FROM detail_retur_penjualan WHERE no_faktur_retur = '$no_faktur_retur' AND no_faktur_penjualan = '$no_faktur_jual' ");
-$data3 = mysqli_fetch_array($select_jumlah_detail);
-$jumlah_retur_detail = $data3['jumlah_retur_detail'];
-
-// konversi dari satuan konversi
-$select_konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE id_satuan = '$data[satuan_jual]'");
-$data4 = mysqli_fetch_array($select_konversi);
-$jumlah_konversi = $data4['konversi'];
+// storing  request (ie, get/post) global array to a variable  
+$requestData= $_REQUEST;
 
 
 
-// jika jumlah retur tbs != 0
-if ($jumlah_retur_tbs != '') {
- 
-        //jumlah tbs sebenarnya
-        if ($data2['satuan'] == $data['satuan_barang']) {
+$columns = array( 
+// datatable column index  => database column name
 
-          $jumlah_tbs = $jumlah_retur_tbs;
-        }
-        else{
-          $jumlah_tbs = $jumlah_retur_tbs * $jumlah_konversi;
-        } 
+    0=>'id_produk', 
+    1=>'nama',
+    2=>'harga_konversi',
+    3=>'no_faktur',
+    4=>'tanggal',
+    5=>'kode_barang', 
+    6=>'nama_barang',
+    7=>'jumlah_barang',
+    8=>'satuan',
+    9=>'harga',
+    10=>'subtotal', 
+    11=>'potongan',
+    12=>'tax',
+    13=>'status',
+    14=>'sisa', 
+    15=>'kode_pelanggan',
+    16=>'nama_pelanggan',
+    17=>'asal_satuan',
+    18=>'sisa_barang',
+    19=>'id',
 
-} // END if ($jumlah_retur_tbs != '')
-else
-{
-  $jumlah_tbs = 0;
-}
 
-//sisa barang sebenarnya
-$sisa_barang_sebenarnya = ($sisa_barang_hpp + $jumlah_retur_detail) - $jumlah_tbs;
-// data konfersi kosong run under
-if ($jumlah_konversi == '')
-      {
-  
-          $penentu_satuan = 1;
-      }
-      else
-      {
-      $penentu_satuan = $sisa_barang_sebenarnya % $jumlah_konversi;
-      }
-//sisa barang yang tampil pada modal
-if ($data['satuan_barang'] == $data['satuan_jual']) {
-        $sisa_barang_tampil = $sisa_barang_sebenarnya;
-        $satuan_tampil = $data['satuan_jual'];
-        $harga_tampil = $data['harga'];
-        $jumlah_tampil = $data['jumlah_barang'];
+);
+// getting total number records without any search
+$sql =" SELECT b.id AS id_produk , ss.nama AS satuan_asal ,dp.harga_konversi,dp.no_faktur, dp.tanggal, dp.kode_barang, dp.nama_barang, dp.jumlah_barang, dp.satuan, dp.harga, dp.subtotal, dp.potongan, dp.tax, dp.status, dp.sisa, p.kode_pelanggan, pl.nama_pelanggan, dp.asal_satuan, SUM(hk.sisa_barang) as sisa_barang ,s.nama ";
+$sql.=" FROM detail_penjualan dp INNER JOIN hpp_keluar hk ON dp.no_faktur = hk.no_faktur AND dp.kode_barang = hk.kode_barang INNER JOIN penjualan p ON dp.no_faktur = p.no_faktur INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id INNER JOIN satuan s ON dp.satuan = s.id
+      INNER JOIN satuan ss ON dp.asal_satuan = ss.id  INNER JOIN barang b ON dp.kode_barang = b.kode_barang ";
+$sql.=" WHERE hk.sisa_barang > '0' AND p.kode_pelanggan = '$kode_pelanggan' GROUP BY dp.no_faktur, dp.kode_barang ";
+
+$query = mysqli_query($conn, $sql) or die("eror 1");
+$totalData = mysqli_num_rows($query);
+$totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
+
+if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
+$sql =" SELECT b.id AS id_produk , ss.nama AS satuan_asal ,dp.harga_konversi,dp.no_faktur, dp.tanggal, dp.kode_barang, dp.nama_barang, dp.jumlah_barang, dp.satuan, dp.harga, dp.subtotal, dp.potongan, dp.tax, dp.status, dp.sisa, p.kode_pelanggan, pl.nama_pelanggan, dp.asal_satuan, SUM(hk.sisa_barang) as sisa_barang ,s.nama ";
+$sql.=" FROM detail_penjualan dp INNER JOIN hpp_keluar hk ON dp.no_faktur = hk.no_faktur AND dp.kode_barang = hk.kode_barang INNER JOIN penjualan p ON dp.no_faktur = p.no_faktur INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id INNER JOIN satuan s ON dp.satuan = s.id
+      INNER JOIN satuan ss ON dp.asal_satuan = ss.id  INNER JOIN barang b ON dp.kode_barang = b.kode_barang ";
+$sql.=" WHERE hk.sisa_barang > '0' AND p.kode_pelanggan = '$kode_pelanggan' GROUP BY dp.no_faktur, dp.kode_barang ";
+
+    $sql.=" AND ( dp.kode_barang LIKE '".$requestData['search']['value']."%'";  
+    $sql.=" OR dp.nama_barang LIKE '".$requestData['search']['value']."%' "; 
+    $sql.=" OR dp.no_faktur LIKE '".$requestData['search']['value']."%' "; 
+    $sql.=" OR s.nama LIKE '".$requestData['search']['value']."%' ) ";
 
 }
 
-else{
+$query=mysqli_query($conn, $sql) or die("eror 2");
+$totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
         
-        if ($penentu_satuan == 0) {
-           $harga_tampil = $data['harga'] * $jumlah_konversi;
-           $sisa_barang_tampil = $sisa_barang_sebenarnya / $jumlah_konversi;
-           $satuan_tampil = $data['satuan_jual']; 
-           $jumlah_tampil = $data['jumlah_barang'] /  $jumlah_konversi; 
-        }//end if ($penentu_satuan == 0)
-        else
-        {
-          $sisa_barang_tampil = $sisa_barang_sebenarnya;
-          $satuan_tampil = $data['satuan_barang'];
-          $harga_tampil = $data['harga'];
-          $jumlah_tampil = $data['jumlah_barang'];
+$sql.=" ORDER BY dp.kode_barang DESC LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 
-        }
+/* $requestData['order'][0]['column'] contains colmun index, $requestData['order'][0]['dir'] contains order such as asc/desc  */    
+$query=mysqli_query($conn, $sql) or die("eror 3");
 
-}// end else
 
-        // menampilkan data
-      echo "<tr class='pilih' data-kode='". $data['kode_barang'] ."' nama-barang='". $data['nama_barang'] ."' satuan='". $satuan_tampil ."' no_faktur='". $no_faktur_jual ."' harga='". $harga_tampil ."' jumlah-barang='". $data['jumlah_barang'] ."' sisa='". $sisa_barang_tampil ."' id_produk='". $data['id_produk'] ."'  asal_satuan ='".$data['satuan_barang']."' harga_pcs = ".$data['harga']." >
+$data = array();
 
-      <td>". $data['no_faktur'] ."</td>
-      <td>". $data['kode_pelanggan'] ." </td>
-      <td>". $data['kode_barang'] ."</td>
-      <td>". $data['nama_barang'] ."</td>
-      <td>".  $jumlah_tampil."</td>
-      <td>". $data['satuan_real'] ."</td>
-      <td>". rp($harga_tampil) ."</td>
-      <td>". rp($data['subtotal']) ."</td>
-      <td>". rp($data['potongan']) ."</td>
-      <td>". rp($data['tax']) ."</td>";
 
-// untuk bedakan satuan dalam sisa barang
-if ($penentu_satuan == 0)
-{
-       echo "<td>". $sisa_barang_tampil ." ". $data['satuan_real']."</td>";
+while( $row=mysqli_fetch_array($query) ) {
 
+    $konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE id_satuan = '$row[satuan]' AND kode_produk = '$row[kode_barang]'");
+    $data_konversi = mysqli_fetch_array($konversi);
+    $num_rows = mysqli_num_rows($konversi);
+
+    if ($num_rows > 0) {
+        $sisa = $row['sisa_barang'] % $data_konversi['konversi'];
+        $harga = $row['harga_konversi'];
+    }
+    else{
+        $sisa = $row['sisa_barang'];
+        $harga = $row['harga'];
+    }
+
+    if ($sisa == 0) {
+        $harga = rp($harga);
+        $konversi = $row['sisa_barang'] / $data_konversi['konversi']." ".$row['nama'];
+        $satuan = $row['satuan'];
+    }
+    else{
+        $harga = rp($row['harga']);
+        $konversi = koma($row['sisa_barang'],2)." ".$row['satuan_asal'];
+        $satuan = $row['asal_satuan'];
+    }
+
+    $nestedData=array(); 
+
+        $nestedData[] = $row["no_faktur"];
+        $nestedData[] = $row["kode_barang"];
+        $nestedData[] = $row["nama_barang"];
+        $nestedData[] = $row["nama"];
+        $nestedData[] = $harga;
+        $nestedData[] = koma($row["potongan"],2);
+        $nestedData[] = koma($row["tax"],2);
+        $nestedData[] = koma($row["subtotal"],2);
+        $nestedData[] = $konversi;
+        $nestedData[] = rp($row['harga']);
+        $nestedData[] = $row['asal_satuan'];
+        $nestedData[] = $satuan;
+        $nestedData[] = $row['jumlah_barang'];
+        $nestedData[] = $row['id_produk'];
+        $nestedData[] = $sisa;
+    
+    $data[] = $nestedData;
+        
 }
-else
-{
-     echo "<td>". $sisa_barang_tampil ." ". $data['satuan_asli']."</td>
-      </tr>";
-} // END untuk bedakan satuan dalam sisa barang
 
 
-} //end while
-    ?>
-    </tbody> <!--tag penutup tbody-->
 
-  </table> <!-- tag penutup table-->
-  </div>
-  <script type="text/javascript">
-  $(function () {
-  $("#tableuser").dataTable();
-  });
-</script>
+$json_data = array(
+            "draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+            "recordsTotal"    => intval( $totalData ),  // total number of records
+            "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
+            "data"            => $data   // total data array
+            );
+
+echo json_encode($json_data);  // send data as json format
+
+ ?>

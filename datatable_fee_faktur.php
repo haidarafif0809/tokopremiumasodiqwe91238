@@ -65,7 +65,7 @@ $pilih_akses_fee_fak_edit = $db->query("SELECT komisi_faktur_edit FROM otoritas_
 $fee_fak_edit = mysqli_num_rows($pilih_akses_fee_fak_edit);
     if ($fee_fak_edit > 0) { 	
 
-			$nestedData[] = "<button class='btn btn-success btn-edit' data-prosentase='". $row['jumlah_prosentase'] ."' data-nominal='". $row['jumlah_uang'] ."' data-id='". $row['id'] ."' > <span class='glyphicon glyphicon-edit'> </span> Edit </button>  </td>";
+			$nestedData[] = "<button class='btn btn-success btn-edit btn-sm' data-prosentase='". $row['jumlah_prosentase'] ."' data-nominal='". $row['jumlah_uang'] ."' data-id='". $row['id'] ."' > <span class='glyphicon glyphicon-edit'> </span> Edit </button>  </td>";
 }
 
 
@@ -74,7 +74,7 @@ $pilih_akses_fee_faktur_hapus = $db->query("SELECT komisi_faktur_hapus FROM otor
 $fee_faktur_hapus = mysqli_num_rows($pilih_akses_fee_faktur_hapus);
 
     if ($fee_faktur_hapus > 0) { 
-			$nestedData[] = "<button class='btn btn-danger btn-hapus' data-id='".$row['id']."' data-petugas='". $row['nama_petugas'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
+			$nestedData[] = "<button class='btn btn-danger btn-hapus btn-sm' data-id='".$row['id']."' data-petugas='". $row['nama_petugas'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button>";
 			}
 				$nestedData[] = $row["id"];
 				$data[] = $nestedData;

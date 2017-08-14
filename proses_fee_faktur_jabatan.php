@@ -6,11 +6,11 @@
 
 $jabatan = stringdoang($_POST['jabatan']);
 
-$query = $db->query("SELECT * FROM user WHERE jabatan = '$jabatan'");
+$query = $db->query("SELECT id FROM user WHERE jabatan = '$jabatan'");
 while ($cek = mysqli_fetch_array($query)){
-$nama = $cek['nama'];
+$nama = $cek['id'];
 
-    $query1 = $db->query("SELECT * FROM fee_faktur WHERE nama_petugas = '$cek[nama]'");
+    $query1 = $db->query("SELECT nama_petugas FROM fee_faktur WHERE nama_petugas = '$cek[id]'");
     $cek1 = mysqli_fetch_array($query1);
     $nama_petugas_fee = $cek1['nama_petugas'];
 
@@ -54,8 +54,4 @@ $nama = $cek['nama'];
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   
-
-
-
-
-    ?>
+?>

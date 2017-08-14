@@ -4,7 +4,7 @@ include 'db.php';
 
 $kode_barang = $_POST['kode_barang'];
 
-$query = $db->query("SELECT * FROM barang WHERE kode_barang = '$kode_barang'");
+$query = $db->query("SELECT kode_barang FROM barang WHERE kode_barang = '$kode_barang'");
 $jumlah = mysqli_num_rows($query);
 
 

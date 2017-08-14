@@ -45,11 +45,11 @@
 					 <?php 
 
     
-    $query = $db->query("SELECT * FROM jabatan ");
+    $query = $db->query("SELECT id,nama FROM jabatan ");
     while($data = mysqli_fetch_array($query))
     {
     
-    echo "<option>".$data['nama'] ."</option>";
+    echo "<option value='".$data['id']."' >".$data['nama'] ."</option>";
     }
     
 //Untuk Memutuskan Koneksi Ke Database

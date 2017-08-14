@@ -56,7 +56,7 @@
       $perintah0 = $db->query("SELECT * FROM user");
       while ($data1 = mysqli_fetch_array($perintah0))
       {
-      echo "<tr  class='pilih' data-petugas='". $data1['nama'] ."'>
+      echo "<tr  class='pilih' data-petugas='". $data1['id'] ."' data-petugas-tampil='".$data1['nama']."'>
       <td>". $data1['username'] ."</td>
       <td>". $data1['nama'] ."</td>
       <td>". $data1['alamat'] ."</td>
@@ -95,6 +95,7 @@ mysqli_close($db);
           <input type="text" name="nama_petugas" id="nama_petugas" placeholder="Nama Petugas" class="form-control" readonly="">
           </div>
 
+ <input type="hidden" name="nama_petugas_hidden" id="nama_petugas_hidden" placeholder="Nama Petugas" class="form-control" readonly="">
 
 
 <span id="prosentase">
@@ -145,7 +146,8 @@ $(document).ready(function(){
 
 // jika dipilih, nim akan masuk ke input dan modal di tutup
   $(document).on('click', '.pilih', function (e) {
-  document.getElementById("nama_petugas").value = $(this).attr('data-petugas');
+  document.getElementById("nama_petugas_hidden").value = $(this).attr('data-petugas');
+  document.getElementById("nama_petugas").value = $(this).attr('data-petugas-tampil');
 
   $('#myModal').modal('hide');
   });
@@ -160,7 +162,7 @@ $(document).ready(function(){
    //perintah javascript yang diambil dari form proses_bayar_beli.php dengan id=form_beli
   $("#tambah_fee").click(function(){
 
-       var nama_petugas = $("#nama_petugas").val();
+       var nama_petugas = $("#nama_petugas_hidden").val();
        var jumlah_prosentase = $("#jumlah_prosentase").val();
        var jumlah_nominal = $("#jumlah_nominal").val();
        

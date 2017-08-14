@@ -209,8 +209,9 @@ $fee_faktur_hapus = mysqli_num_rows($pilih_akses_fee_faktur_hapus);
     var id = $("#id_hapus").val();
     $.post("hapus_fee_faktur.php",{id:id},function(data){
 
+   var table_fee_faktur = $('#table_fee_faktur').DataTable();
+                table_fee_faktur.draw();
     
-    $("#tabel_baru").load('tabel-fee-faktur.php');
     $("#modal_hapus").modal('hide');
     
    
@@ -243,8 +244,9 @@ $fee_faktur_hapus = mysqli_num_rows($pilih_akses_fee_faktur_hapus);
 
     $.post("update_fee_faktur.php",{jumlah_prosentase:prosentase,jumlah_uang:nominal,id:id},function(data){
     if (data != '') {
+      var table_fee_faktur = $('#table_fee_faktur').DataTable();
+                table_fee_faktur.draw();
     $(".alert").show('fast');
-    $("#tabel_baru").load('tabel-fee-faktur.php');
      $("#modal_edit").modal('hide');
 
     

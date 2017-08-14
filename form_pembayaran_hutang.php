@@ -313,25 +313,25 @@ $query = $db->query("SELECT * FROM pembayaran_hutang ORDER BY id DESC");
 <div class="row">
   <div class="col-sm-8">
 
-<div class="form-group col-sm-3">
-  <input type="text" class="form-control" name="no_faktur_pembelian" id="nomorfakturbeli" placeholder="Nomor Faktur Beli" readonly="">
+<div class="form-group col-sm-2">
+  <input type="text" class="form-control" name="no_faktur_pembelian" id="nomorfakturbeli" placeholder="Faktur Beli" readonly="">
   </div>
   
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <input type="text" class="form-control" name="kredit" id="kredit" placeholder="Kredit" readonly="">
   </div>
 
 
 
+<div class="form-group col-sm-2">
+      <input type="text" name="potongan" id="potongan_penjualan" onkeydown="return numbersonly(this, event);" class="form-control" placeholder="Diskon" autocomplete="off">
+</div>
 
-  <div class="form-group col-sm-3">
+
+  <div class="form-group col-sm-2">
     <input type="text" class="form-control" name="jumlah_bayar"  onkeydown="return numbersonly(this, event);" id="jumlah_bayar" placeholder="Jumlah Bayar" autocomplete="off">
   </div>
 
-
-<div class="form-group col-sm-3">
-          <input type="text" name="potongan" id="potongan_penjualan" class="form-control" placeholder="Potongan" autocomplete="off">
-</div>
 
 <div class="form-group">
   <input type="hidden" name="total" id="total" class="form-control" value="" required="">
@@ -348,7 +348,9 @@ $query = $db->query("SELECT * FROM pembayaran_hutang ORDER BY id DESC");
 
 <input value="<?php echo $data01['id']; ?>" type="hidden" name="suplier" id="n_suplier" class="form-control" required="" >
 
+<div class="form-group col-sm-3">
 <button type="submit" id="submit_tambah" class="btn btn-success"> <i class='fa fa-plus'> </i>Tambah </button>
+</div>
 
 </form>
 <br><br>
@@ -471,29 +473,25 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
-    $(document).on('keyup', '#potongan_penjualan', function (e) {
-    var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kredit").val()))));
-    var jumlah_bayar = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_bayar").val()))));
-    if (jumlah_bayar == "") {
-      jumlah_bayar = 0;
-    }
-    var potongan_penjualan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
+// untuk memunculkan jumlah kas secara otomatis
+  $(document).ready(function(){
+    $("#potongan_penjualan").keyup(function(){
+      var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kredit").val()))));
+      var potongan_hutang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
+      var sisa_kredit = parseInt(kredit) - parseInt(potongan_hutang);
 
-    var tot_jumlah_plus_potongan_penjualan = parseInt(jumlah_bayar) + parseInt(potongan_penjualan);
-
-      var hasil = parseInt(tot_jumlah_plus_potongan_penjualan) - parseInt(kredit);
-          console.log(hasil);
-        if (hasil > 0 ){
-        alert("Jumlah Bayar Anda Melebihi Sisa");
-        $("#potongan_penjualan").val('');
-        $("#jumlah_bayar").val('');
-        $("#jumlah_bayar").focus();
-
-        }
-
+      if (sisa_kredit < 0) {
+        alert("Diskon Melebihi Total Kredit !");
+        $("#jumlah_bayar").val(tandaPemisahTitik(kredit));
+        $("#potongan_penjualan").val(tandaPemisahTitik(0));
+      }
+      else{
+        $("#jumlah_bayar").val(tandaPemisahTitik(sisa_kredit));
+      }
+      
     });
+  });
 </script>
-
 
 <!-- untuk memasukan perintah javascript -->
 <script type="text/javascript">
@@ -502,6 +500,7 @@ $(document).ready(function(){
   $(document).on('click', '.pilih', function (e) {
   document.getElementById("nomorfakturbeli").value = $(this).attr('no-faktur');
   document.getElementById("kredit").value = $(this).attr('kredit');
+  document.getElementById("jumlah_bayar").value = $(this).attr('kredit');
   document.getElementById("total").value = $(this).attr('total');
   document.getElementById("tanggal_jt").value = $(this).attr('tanggal_jt');
 
@@ -521,14 +520,14 @@ $(document).ready(function(){
   
    $("#submit_tambah").click(function(){
       
-      var kredit = $("#kredit").val();
+      var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kredit").val()))));
       var suplier = $("#nama_suplier").val();
       var tanggal_jt = $("#tanggal_jt").val();
       var session_id = $("#session_id").val();
       var tanggal = $("#tanggal").val();
       var cara_bayar = $("#jumlah1").val();
       var total1 = $("#total").val();
-      var potongan = $("#potongan_penjualan").val();
+      var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
       var total_kredit = kredit - potongan;
       var potongan1 = $("#potongan1").val();
       var faktur = $("#faktur").val();
@@ -536,9 +535,9 @@ $(document).ready(function(){
       var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#totalbayar").val()))));
       var jumlah_bayar = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_bayar").val()))));
 
-      var a = cara_bayar - jumlah_bayar;
-      var hasil = (jumlah_bayar + potongan) - kredit;
-        
+      var a = parseInt(cara_bayar) - parseInt(jumlah_bayar);
+      var hasil = parseInt(kredit) - (parseInt(jumlah_bayar) + parseInt(potongan));
+
         if (total == '') 
         {
           total = 0;
@@ -555,8 +554,8 @@ $(document).ready(function(){
       $("#totalbayar").val('');
       $("#jumlah_bayar").val('');
       
-      if (hasil > 0 ){
-        alert("Jumlah Bayar Anda Melebihi Sisa");
+      if (hasil < 0){
+        alert("Jumlah Bayar Anda Melebihi Total Kredit");
         $("#jumlah_bayar").val('');
         $("#jumlah_bayar").focus();
       }
@@ -665,7 +664,7 @@ $("#nomorfaktur_pembayaran").val(data);
    var total_bayar = $("#totalbayar").val();
    var total_bayar1 = $("#totalbayar1").val();
    var n_suplier = $("#n_suplier").val();
-   var potongan = $("#potongan_penjualan").val();
+   var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
    var potongan1 = $("#potongan1").val();
    var faktur = $("#faktur").val();
      

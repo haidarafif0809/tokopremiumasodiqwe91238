@@ -2335,8 +2335,6 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
         $("#span_tbs").show()
         $("#btnRujukLab").show()
         $('#pembayaran_penjualan').val('');
-        $('#potongan_penjualan').val('');
-        $('#potongan_persen').val('');
 
 // END DATATABLE AJAX END DATATABLE AJAX TBS PENJUALAN
 });
@@ -5371,7 +5369,8 @@ $(document).ready(function(){
     shortcut.add("f2", function() {
         // Do something
 
-        $("#kode_barang").focus();
+        $("#kode_barang").trigger('chosen:update');
+        $("#kode_barang").trigger('chosen:open');
 
     });
 

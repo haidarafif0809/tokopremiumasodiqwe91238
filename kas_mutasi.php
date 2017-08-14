@@ -604,17 +604,18 @@ $(document).ready(function(){
 
 		var jumlah_baru = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#edit_jumlah").val()))));
 		var tanggal = $("#tanggal_edit").val();
-		var jumlah = $("#edit_jumlah_lama").val();
+		var jumlah = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#edit_jumlah_lama").val()))));
 		var ke_akun = $("#edit_ke_akun").val();
 		var dari_akun = $("#edit_dari_akun").val();
 		var keterangan = $("#edit_keterangan").val();
 		var id = $("#id_edit").val();
 		var no_faktur = $("#faktur_edit").val();
-		var sisa_kas = $("#sisa_kas").val();
+		var sisa_kas = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#sisa_kas").val()))));
 		var jumlah_t = parseInt(jumlah_baru,10);
 		    sisa_kas = parseInt(sisa_kas,10) + parseInt(jumlah,10);
 
 		var total_j = parseInt(sisa_kas,10) - parseInt(jumlah_t,10);
+
 
 		if (total_j < 0) {
 			alert("Total Kas Tidak Mencukupi !!");

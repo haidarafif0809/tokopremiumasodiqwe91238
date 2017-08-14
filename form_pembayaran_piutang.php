@@ -207,10 +207,10 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
   
   <div class="col-sm-8">
 <div class="form-group col-sm-2">
-  <input type="text" class="form-control" name="no_faktur_penjualan" id="nomorfakturbeli" placeholder="Nomor Faktur Jual" readonly="">
+  <input type="text" class="form-control" name="no_faktur_penjualan" id="nomorfakturbeli" placeholder="Faktur Jual" readonly="">
   </div>
   
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <input type="text" class="form-control" name="kredit" id="kredit" placeholder="Kredit" readonly="">
   </div>
 
@@ -218,15 +218,15 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
 
 
   <div class="form-group col-sm-2">
-          <input type="text" name="potongan" id="potongan_penjualan" class="form-control" placeholder="Potongan" autocomplete="off">
+          <input type="text" name="potongan" id="potongan_penjualan" onkeydown="return numbersonly(this, event);" class="form-control" placeholder="Diskon" autocomplete="off">
   </div>
 
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <input type="text" class="form-control" name="jumlah_bayar" onkeydown="return numbersonly(this, event);" id="jumlah_bayar" placeholder="Jumlah Bayar" autocomplete="off">
   </div>
 
 
-  <div class="form-group col-sm-2">
+  <div class="form-group col-sm-3">
   <button type="submit" id="submit_tambah" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah </button>
   </div>
 
@@ -503,12 +503,6 @@ $("#nomorfaktur_pembayaran").val(data);
  });
     //modal baru
 
-
-
-      $.get('no_faktur_retur_jl.php', function(data) {
-   /*optional stuff to do after getScript */ 
-$("#nomorfakturbeli").val(data);
- });
 //menyembunyikan notif berhasil
      $("#alert_berhasil").hide();
     /* Act on the event */
@@ -732,6 +726,27 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
   });
 
 
+</script>
+
+<script type="text/javascript">
+// untuk memunculkan jumlah kas secara otomatis
+  $(document).ready(function(){
+    $("#potongan_penjualan").keyup(function(){
+      var kredit = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#kredit").val()))));
+      var potongan_piutang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_penjualan").val()))));
+      var sisa_kredit = parseInt(kredit) - parseInt(potongan_piutang);
+
+      if (sisa_kredit < 0) {
+        alert("Diskon Melebihi Total Kredit !");
+        $("#jumlah_bayar").val(tandaPemisahTitik(kredit));
+        $("#potongan_penjualan").val(tandaPemisahTitik(0));
+      }
+      else{
+        $("#jumlah_bayar").val(tandaPemisahTitik(sisa_kredit));
+      }
+      
+    });
+  });
 </script>
 
 <script type="text/javascript">

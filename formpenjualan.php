@@ -5950,7 +5950,7 @@ $(document).ready(function(){
         }
         else{
 
-          $("#modal_semua_bonus").modal('hide');
+          //$("#modal_semua_bonus").modal('hide');
           $("#tbs_bonus_penjualan").show();
 
               //Table Ajax Bonus
@@ -6016,7 +6016,15 @@ $(document).ready(function(){
         }
         else{
 
-          $("#modal_semua_bonus").modal('hide');
+          $.get("cek_subtotal_bonus_diskon.php",function(data){
+        
+              var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+              var hasil = parseFloat(total.replace(',','.')) + parseFloat(data);
+
+                $("#total1").val(hasil.format(2, 3, '.', ','));
+                $("#total2").val(hasil.format(2, 3, '.', ','));
+          });
+          //$("#modal_semua_bonus").modal('hide');
           $("#tbs_bonus_penjualan").show();
 
               //Table Ajax Bonus

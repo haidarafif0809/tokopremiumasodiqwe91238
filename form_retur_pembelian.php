@@ -860,7 +860,13 @@ $(document).ready(function(){
   var potong_hutang = $("#potong_hutang"). val();
   var no_faktur_hutang = $("#no_faktur_hutang"). val();
   var no_faktur_hutang_hidden = $("#no_faktur_hutang_hidden"). val();
-
+  if (potong_hutang == '') {
+    potong_hutang = 0;
+  };
+  if (pembayaran_pembelian == '') {
+    pembayaran_pembelian = 0;
+  };
+  
 if (total == "")
  {
 
@@ -875,7 +881,7 @@ alert("Suplier Harus Di Isi");
 
  }
 
- else if (pembayaran_pembelian == "" || pembayaran_pembelian == 0){
+ else if (pembayaran_pembelian == "" && potong_hutang == 0){
   alert("Pembayaran / Kas Tidak Boleh Koosong");
 
  }

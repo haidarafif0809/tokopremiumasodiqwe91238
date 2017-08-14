@@ -540,18 +540,18 @@ $data_tbs = mysqli_num_rows($tbs);
 
 <div class="row">
 
-  <div class="col-sm-3">
+  <div class="col-sm-3" style="display: none">
       <label><b> Tax (%) </b></label><br>
       <input style="height: 20px" type="text" name="tax" id="tax" class="form-control" value="<?php echo $hasil_tax; ?>"  placeholder="Tax" data-pajak="" autocomplete="off">
   </div>
 
-    <div class="col-sm-4">
+    <div class="col-sm-6">
       <label><b> Potong Hutang </b></label><br>
       <input style="height: 20px" type="text" name="potong_hutang" id="potong_hutang" class="form-control" value="<?php echo rp($total_pot_hutang); ?>" placeholder="Nilai Hutang" readonly="">
   </div>
 
 
-  <div class="col-sm-5">
+  <div class="col-sm-6">
       <label><b> Total Akhir </b></label><br>
       <!--readonly = agar tek yang ada kolom total tidak bisa diubah hanya bisa dibaca-->
       <b> <input style="height: 20px; font-size: 25px;" type="text" name="total" id="total_retur_pembelian" class="form-control" placeholder="Total Akhir" readonly="" > </b>

@@ -8,11 +8,11 @@ include 'db.php';
 $no_faktur_retur = $_SESSION['no_faktur_retur'];
 
 
-    $query0 = $db->query("SELECT p.nama_pelanggan,rp.id,rp.kode_pelanggan,rp.no_faktur_retur,rp.kode_pelanggan,rp.total,rp.potongan,rp.tax,rp.tanggal,rp.jam,rp.user_buat,rp.user_edit,rp.tanggal_edit,rp.tunai,rp.sisa FROM retur_penjualan rp INNER JOIN pelanggan p ON rp.kode_pelanggan = p.id WHERE rp.no_faktur_retur = '$no_faktur_retur' ");
+    $query0 = $db->query("SELECT p.nama_pelanggan,rp.id,rp.kode_pelanggan,rp.no_faktur_retur,rp.kode_pelanggan,rp.total,rp.potongan,rp.tax,rp.tanggal,rp.jam,rp.user_buat,rp.user_edit,rp.tanggal_edit,rp.tunai,rp.sisa, rp.potongan_piutang FROM retur_penjualan rp INNER JOIN pelanggan p ON rp.kode_pelanggan = p.id WHERE rp.no_faktur_retur = '$no_faktur_retur' ");
     $data0 = mysqli_fetch_array($query0);
 
-    $query1 = $db->query("SELECT * FROM perusahaan ");
-    $data1 = mysqli_fetch_array($query1);
+    $query1 = $db->query("SELECT foto, nama_perusahaan, alamat_perusahaan, no_telp FROM perusahaan ");
+    $data_perusahaan = mysqli_fetch_array($query1);
 
     $query2 = $db->query("SELECT SUM(subtotal) as j_subtotal FROM detail_retur_penjualan WHERE no_faktur_retur = '$no_faktur_retur' ");
     $data2 = mysqli_fetch_array($query2);
@@ -31,15 +31,15 @@ $no_faktur_retur = $_SESSION['no_faktur_retur'];
     <div class="row"><!--row1-->
         <div class="col-sm-2">
         <br><br>
-                <img src='save_picture/<?php echo $data1['foto']; ?>' class='img-rounded' alt='Cinque Terre' width='160' height='140`'> 
+                <img src='save_picture/<?php echo $data_perusahaan['foto']; ?>' class='img-rounded' alt='Cinque Terre' width='160' height='140`'> 
         </div><!--penutup colsm2-->
 
-        <div class="col-sm-4">
+        <div class="col-sm-6">
                  <h3> <b> BUKTI RETUR PENJUALAN </b></h3>
                  <hr>
-                 <h4> <b> <?php echo $data1['nama_perusahaan']; ?> </b> </h4> 
-                 <p> <?php echo $data1['alamat_perusahaan']; ?> </p> 
-                 <p> No.Telp:<?php echo $data1['no_telp']; ?> </p> 
+                 <h4> <b> <?php echo $data_perusahaan['nama_perusahaan']; ?> </b> </h4> 
+                 <p> <?php echo $data_perusahaan['alamat_perusahaan']; ?> </p> 
+                 <p> No.Telp:<?php echo $data_perusahaan['no_telp']; ?> </p> 
                  
         </div><!--penutup colsm4-->
 
@@ -50,18 +50,10 @@ $no_faktur_retur = $_SESSION['no_faktur_retur'];
     <tr><td>No Faktur</td> <td>:&nbsp;</td><td><?php echo $data0['no_faktur_retur']; ?></td></tr>
     <tr><td>Tanggal</td> <td>:&nbsp;</td><td><?php echo tanggal($data0['tanggal']);?></td></tr>
     <tr><td>Kode Pelanggan</td> <td>:&nbsp;</td><td><?php echo $data0['nama_pelanggan']; ?></td></tr>
+    <tr><td>Petugas</td> <td>:&nbsp;</td><td><?php echo $_SESSION['nama'] ?></td></tr>
 
   </tbody>
 </table>      
-                 
-        </div><!--penutup colsm4-->
-
-        <div class="col-sm-2">
-                <br><br><br><br><br>
-                User: <?php echo $_SESSION['user_name']; ?>  <br>
-
-        </div><!--penutup colsm4-->
-
 
         
     </div><!--penutup row1-->
@@ -141,6 +133,7 @@ mysqli_close($db);
 <table>
   <tbody>
     <tr><td>Subtotal</td> <td>:&nbsp;</td><td><?php echo rp($j_subtotal); ?></td></tr>
+    <tr><td>Potong Piutang</td> <td>:&nbsp;</td><td><?php echo rp($data0['potongan_piutang']); ?></td></tr>
     <tr><td>Total Akhir</td> <td>:&nbsp;</td><td><?php echo rp($data0['total']); ?></td></tr>
     <tr><td>Tunai</td> <td>:&nbsp;</td><td><?php echo rp($data0['tunai']); ?></td></tr>
     <tr><td>Kembalian</td> <td>:&nbsp;</td><td><?php echo rp($data0['sisa']); ?></td></tr>

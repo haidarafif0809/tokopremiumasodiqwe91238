@@ -58,19 +58,35 @@ $no_faktur_retur = $nomor."/RJ/".$data_bulan_terakhir."/".$tahun_terakhir;
 
  }
 
+    $no_faktur_piutang = $_POST['no_faktur_piutang'];
+    $no_faktur_piutang_hidden = stringdoang($_POST['no_faktur_piutang_hidden']);
+    $total = angkadoang($_POST['total']);   
+    $potong_piutang = angkadoang($_POST['potong_piutang']);
 
+    if ($no_faktur_piutang_hidden != "") {
 
+      foreach ($no_faktur_piutang as $no_faktur_piutang) {
+        $piutang = $db->query("SELECT kredit FROM penjualan WHERE no_faktur = '$no_faktur_piutang'");
+        $data_piutang = mysqli_fetch_array($piutang);
+      } // END foreach ($no_faktur_piutang as $no_faktur_piutang)
+        
+    }
 
-
+    if ($potong_piutang >= $total) {
+      $total_setelah_dipotong_piutang = 0;
+    }
+    else{
+      $total_setelah_dipotong_piutang = $total - $potong_piutang;
+    }
 
   // buat prepared statements
         $stmt = $db->prepare("INSERT INTO retur_penjualan (no_faktur_retur, tanggal, jam, kode_pelanggan,
-                total, potongan, tax, user_buat, cara_bayar, tunai, sisa, ppn)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+                total, potongan, tax, user_buat, cara_bayar, tunai, sisa, ppn, total_bayar, potongan_piutang)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
   // hubungkan "data" dengan prepared statements
-        $stmt->bind_param("ssssiiissiis", 
-        $no_faktur_retur, $tanggal_sekarang, $jam_sekarang, $kode_pelanggan , $total, $potongan, $tax_jadi, $user_buat, $cara_bayar, $pembayaran, $sisa, $ppn_input);        
+        $stmt->bind_param("ssssiiissiisii", 
+        $no_faktur_retur, $tanggal_sekarang, $jam_sekarang, $kode_pelanggan , $total_setelah_dipotong_piutang, $potongan, $tax_jadi, $user_buat, $cara_bayar, $pembayaran, $sisa, $ppn_input, $total, $potong_piutang);        
 
   // siapkan "data" query
     $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
@@ -97,12 +113,12 @@ $no_faktur_retur = $nomor."/RJ/".$data_bulan_terakhir."/".$tahun_terakhir;
     
 
     if (!$stmt) {
-   die('Query Error : '.$db->errno.
-   ' - '.$db->error);
-}
-else {
+      die('Query Error : '.$db->errno.
+       ' - '.$db->error);
+    }
+    else {
 
-}
+    }
 
 
     $potongan = angkadoang($_POST['potongan']);
@@ -138,7 +154,113 @@ else {
 
     }
 
+  $potong_piutang = angkadoang($_POST['potong_piutang']);    
 
+  $sub_total = $db->query("SELECT SUM(subtotal) AS sub_total FROM detail_retur_penjualan WHERE no_faktur_retur = '$no_faktur_retur'");
+  $data_sub = mysqli_fetch_array($sub_total);
+
+  $diskon_pajak = $db->query("SELECT potongan, tax FROM retur_penjualan WHERE no_faktur_retur = '$no_faktur_retur'");
+  $data_diskon_pajak = mysqli_fetch_array($diskon_pajak);
+  $pajak = $data_diskon_pajak['tax'];
+  $diskon = $data_diskon_pajak['potongan'];
+
+  $subtotal_detail = ($data_sub['sub_total'] - $diskon) + $pajak;
+
+  if ($total >= $potong_piutang) {
+     $sub_akhir = $potong_piutang;
+  }
+  else{
+     $sub_akhir = $subtotal_detail;
+  }
+
+// UPDATE PENJUALAN PIUTANG RETUR <START>
+
+if ($no_faktur_piutang_hidden != "") {
+
+while ($sub_akhir > 0) {
+
+
+
+$no_faktur_piutang = $_POST['no_faktur_piutang'];
+
+
+foreach ($no_faktur_piutang as $no_faktur_piutang) {
+
+  $piutang = $db->query("SELECT kredit FROM penjualan WHERE no_faktur = '$no_faktur_piutang'");
+  $data_piutang_per_faktur = mysqli_fetch_array($piutang);
+
+  if ($sub_akhir == $data_piutang_per_faktur['kredit']) {
+
+
+
+    $update_penjualan_total = $db->query("UPDATE penjualan SET kredit = kredit - $sub_akhir WHERE no_faktur = '$no_faktur_piutang'");
+    $update_penjualan_lunas = $db->query("UPDATE penjualan SET status = 'Lunas' WHERE kredit = 0 AND no_faktur = '$no_faktur_piutang'");
+
+    $query2 = "INSERT INTO retur_pembayaran_piutang (no_faktur_retur, no_faktur_piutang, kredit_penjualan_lama) VALUES ('$no_faktur_retur','$no_faktur_piutang', '$sub_akhir')";     
+
+        if ($db->query($query2) === TRUE) {
+                
+            } 
+            else {
+            echo "Error: " . $query2 . "<br>" . $db->error;
+            }
+
+
+    $sub_akhir = 0;
+    
+  }// END if ($sub_akhir == $potong_piutang)
+
+  elseif ($sub_akhir > $data_piutang_per_faktur['kredit']) {
+
+
+
+
+    $update_penjualan_total = $db->query("UPDATE penjualan SET kredit = '0' WHERE no_faktur = '$no_faktur_piutang'");
+    $update_penjualan_lunas = $db->query("UPDATE penjualan SET status = 'Lunas' WHERE kredit = 0 AND no_faktur = '$no_faktur_piutang'");
+
+    $query2 = "INSERT INTO retur_pembayaran_piutang (no_faktur_retur, no_faktur_piutang, kredit_penjualan_lama) VALUES ('$no_faktur_retur','$no_faktur_piutang', '$data_piutang_per_faktur[kredit]')";     
+
+        if ($db->query($query2) === TRUE) {
+                
+            } 
+            else {
+            echo "Error: " . $query2 . "<br>" . $db->error;
+            }
+
+
+    $sub_akhir = $sub_akhir - $data_piutang_per_faktur['kredit'];
+
+  }// END if ($sub_akhir > $potong_piutang)
+
+  elseif ($sub_akhir < $data_piutang_per_faktur['kredit']) {
+
+
+    $update_penjualan_total = $db->query("UPDATE penjualan SET kredit = kredit - $sub_akhir WHERE no_faktur = '$no_faktur_piutang'");
+    $update_penjualan_lunas = $db->query("UPDATE penjualan SET status = 'Lunas' WHERE kredit = 0 AND no_faktur = '$no_faktur_piutang'");
+
+    $query2 = "INSERT INTO retur_pembayaran_piutang (no_faktur_retur, no_faktur_piutang, kredit_penjualan_lama) VALUES ('$no_faktur_retur','$no_faktur_piutang', '$sub_akhir')";     
+
+        if ($db->query($query2) === TRUE) {
+                
+            } 
+            else {
+            echo "Error: " . $query2 . "<br>" . $db->error;
+            }
+
+    $sub_akhir = 0;
+
+  }// END if ($sub_akhir < $potong_piutang)
+
+
+  
+
+} // END foreach
+
+}// END while ($sub_akhir > 0)
+
+  } // END if ($no_faktur_piutang != "") 
+
+// UPDATE PENJUALAN PIUTANG RETUR </FINISH>
 
 $select_setting_akun = $db->query("SELECT * FROM setting_akun");
 $ambil_setting = mysqli_fetch_array($select_setting_akun);
@@ -147,8 +269,8 @@ $sum_tax_tbs = $db->query("SELECT SUM(tax) AS total_tax FROM tbs_retur_penjualan
 $jumlah_tax = mysqli_fetch_array($sum_tax_tbs);
 $total_tax = $jumlah_tax['total_tax'];
 
-    $select_kode_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$kode_pelanggan'");
-    $ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
+$select_kode_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE id = '$kode_pelanggan'");
+$ambil_kode_pelanggan = mysqli_fetch_array($select_kode_pelanggan);
 
 $select = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_masuk WHERE no_faktur = '$no_faktur_retur'");
 $ambil = mysqli_fetch_array($select);
@@ -157,8 +279,8 @@ $total_hpp = $ambil['total_hpp'];
 
 $ppn_input = stringdoang($_POST['ppn_input']);
    
-   $persediaan = $total_hpp;
-   $total_akhir = $total;
+$persediaan = $total_hpp;
+$total_akhir = $total_setelah_dipotong_piutang;
 
 
 
@@ -170,12 +292,6 @@ $ppn_input = stringdoang($_POST['ppn_input']);
 //HPP    
       $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Penjualan - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[hpp_penjualan]', '0', '$total_hpp', 'Retur Penjualan', '$no_faktur_retur','1', '$user_buat')");
 
-
- //KAS
-        $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Penjualan - $ambil_kode_pelanggan[nama_pelanggan]', '$cara_bayar', '0', '$total_akhir', 'Retur Penjualan', '$no_faktur_retur','1', '$user_buat')");
-
-
-
 if ($ppn_input == "Non") {  
 
  
@@ -185,7 +301,7 @@ if ($ppn_input == "Non") {
 
 
  //Total Penjualan
-        $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Penjualan - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[total_penjualan]', '$total_penjualan', '0', 'Penjualan', '$no_faktur_retur','1', '$user_buat')");
+        $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Penjualan - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[total_penjualan]', '$total_penjualan', '0', 'Retur Penjualan', '$no_faktur_retur','1', '$user_buat')");
 
 } 
 
@@ -202,7 +318,7 @@ if ($pajak != "" || $pajak != 0 ) {
       }
 
  //Total Penjualan
-        $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Penjualan - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[total_penjualan]', '$total_penjualan', '0', 'Penjualan', '$no_faktur_retur','1', '$user_buat')");
+        $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Penjualan - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[total_penjualan]', '$total_penjualan', '0', 'Retur Penjualan', '$no_faktur_retur','1', '$user_buat')");
 
 
 
@@ -222,18 +338,46 @@ if ($pajak != "" || $pajak != 0 ) {
       
 
  //Total Penjualan
-        $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Penjualan - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[total_penjualan]', '$total_penjualan', '0', 'Penjualan', '$no_faktur_retur','1', '$user_buat')");
+        $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Penjualan - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[total_penjualan]', '$total_penjualan', '0', 'Retur Penjualan', '$no_faktur_retur','1', '$user_buat')");
 
 
 }
+
+
+
+
+ //KAS
+        $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Penjualan - $ambil_kode_pelanggan[nama_pelanggan]', '$cara_bayar', '0', '$total_akhir', 'Retur Penjualan', '$no_faktur_retur','1', '$user_buat')");
+
+
+    //JIKA RETUR DENGAN POTONG PIUTANG
+    if ($no_faktur_piutang_hidden != "") {
+
+
+        if ($total >= $potong_piutang) {
+           $retur_piutang = $potong_piutang;  
+        }
+        else{
+           $retur_piutang = $total;
+        }
+
+
+      //PIUTANG DAGANG
+        $insert_jurnal = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Penjualan - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[kredit_retur_jual]', '0','$retur_piutang', 'Retur Penjualan', '$no_faktur_retur','1', '$user_buat')");
+        /*
+        Tidak dipakai karena, jika retur potong piutang.. Jurnal nya  -> piutang pada Persediaan (Pak Iwan)
+
+         //RETUR piutang
+                $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat,user_edit) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Pembelian - $ambil_suplier[nama]', '$ambil_setting[bayar_piutang_retur]','0','$retur_piutang','Retur Pembelian', '$no_faktur_retur','1', '$user_buat','')");
+        */  
+
+    }
 
 
 if ($potongan != "" || $potongan != 0 ) {
 //POTONGAN
         $insert_juranl = $db->query("INSERT INTO jurnal_trans (nomor_jurnal,waktu_jurnal,keterangan_jurnal,kode_akun_jurnal,debit,kredit,jenis_transaksi,no_faktur,approved,user_buat) VALUES ('".no_jurnal()."', '$tanggal_sekarang $jam_sekarang', 'Retur Penjualan - $ambil_kode_pelanggan[nama_pelanggan]', '$ambil_setting[potongan_retur_jual]', '0', '$potongan', 'Retur Penjualan', '$no_faktur_retur','1', '$user_buat')");
 }
-
-
 
 
     $query3 = $db->query("DELETE  FROM tbs_retur_penjualan WHERE session_id = '$session_id'");

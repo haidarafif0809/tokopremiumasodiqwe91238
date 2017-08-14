@@ -276,8 +276,7 @@ foreach ($no_faktur_hutang as $no_faktur_hutang) {
 $select_suplier = $db->query("SELECT id,nama FROM suplier WHERE id = '$nama_suplier'");
 $ambil_suplier = mysqli_fetch_array($select_suplier);
     
-$select_setting_akun = $db->query("SELECT hutang
-bayar_hutang_retur, persediaan, pajak_retur_beli FROM setting_akun");
+$select_setting_akun = $db->query("SELECT hutang, bayar_hutang_retur, persediaan, pajak_retur_beli FROM setting_akun");
 $ambil_setting = mysqli_fetch_array($select_setting_akun);
 
 $sum_tax_tbs = $db->query("SELECT SUM(tax) AS total_tax FROM tbs_retur_pembelian WHERE session_id = '$session_id'");

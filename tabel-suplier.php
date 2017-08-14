@@ -58,11 +58,18 @@ $suplier_hapus = mysqli_num_rows($pilih_akses_suplier_hapus);
 
 
     if ($suplier_hapus > 0){
+
+			$query_row = $db->query("SELECT suplier FROM pembelian WHERE suplier = '$data[id]' ");
+			$jumlah_row = mysqli_num_rows($query_row);
+
+		if ($jumlah_row == 0){
 			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-suplier='". $data['nama'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-			}
+		}
+		else{
+			echo "<td> <p style='color:red;'>Sudah Terpakai</p> </td>";
+		}
+	}
 
-
-include 'db.php';
 
 $pilih_akses_suplier_edit = $db->query("SELECT suplier_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND suplier_edit = '1'");
 $suplier_edit = mysqli_num_rows($pilih_akses_suplier_edit);

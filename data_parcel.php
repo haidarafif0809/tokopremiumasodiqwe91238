@@ -542,7 +542,7 @@ $(document).ready(function(){
           },
              "fnCreatedRow": function( nRow, aData, iDataIndex ) {
 
-              $(nRow).attr('class','tr-id-'+aData[15]+'');         
+              $(nRow).attr('class','tr-id-'+aData[16]+'');         
 
           }
         });

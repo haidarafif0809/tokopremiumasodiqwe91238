@@ -30,7 +30,7 @@ $columns = array(
 
 // getting total number records without any search
 $sql = "SELECT b.id,s.nama,b.kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.satuan,b.kategori,b.suplier, b.berkaitan_dgn_stok, k.nama_kategori ";
-$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id INNER JOIN kategori k ON b.kategori = k.id WHERE b.berkaitan_dgn_stok = 'Barang'";
+$sql.=" FROM barang b INNER JOIN satuan s ON b.satuan = s.id INNER JOIN kategori k ON b.kategori = k.id WHERE b.berkaitan_dgn_stok = 'Barang' AND b.status = 'Aktif'";
 
 
 $query = mysqli_query($conn, $sql) or die("eror 1");
@@ -40,7 +40,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
 $sql = " SELECT b.id,s.nama,b.kode_barang,b.nama_barang,b.satuan,b.harga_beli,b.satuan,b.kategori,b.suplier, b.berkaitan_dgn_stok, k.nama_kategori ";
 $sql.="  FROM barang b INNER JOIN satuan s ON b.satuan = s.id INNER JOIN kategori k ON b.kategori = k.id";
-$sql.=" WHERE 1=1 AND b.berkaitan_dgn_stok = 'Barang'";
+$sql.=" WHERE 1=1 AND b.berkaitan_dgn_stok = 'Barang' AND b.status = 'Aktif'";
 
     $sql.=" AND (b.kode_barang LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR b.nama_barang LIKE '".$requestData['search']['value']."%' ";

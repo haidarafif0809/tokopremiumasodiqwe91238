@@ -63,7 +63,7 @@ $no_faktur_retur = $_SESSION['no_faktur_retur'];
 <br>
 <div class="container">
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
         <thead>
 
            <th> Kode Barang </th>
@@ -91,7 +91,7 @@ $no_faktur_retur = $_SESSION['no_faktur_retur'];
             echo "<tr>
                 <td>". $data5['kode_barang'] ."</td>
                 <td>". $data5['nama_barang'] ."</td>
-                <td>". koma($data5['jumlah_retur'],3) ."</td>
+                <td>". koma($data5['jumlah_retur'],2) ."</td>
                 <td>". $data5['nama'] ."</td>
                 <td>". rp($data5['harga']) ."</td>
                 <td>". rp($data5['potongan']) ."</td>
@@ -119,7 +119,7 @@ mysqli_close($db);
 
 <table>
   <tbody>
-    <tr><td>Jumlah Retur</td> <td>:&nbsp;</td><td><?php echo koma($j_retur,3); ?></td></tr>
+    <tr><td>Jumlah Retur</td> <td>:&nbsp;</td><td><?php echo koma($j_retur,2); ?></td></tr>
     <tr><td>Potongan</td> <td>:&nbsp;</td><td><?php echo rp($data0['potongan']); ?></td></tr>
     <tr><td>Pajak</td> <td>:&nbsp;</td><td><?php echo rp($data0['tax']); ?></td></tr>
 

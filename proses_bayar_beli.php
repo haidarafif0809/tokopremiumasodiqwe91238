@@ -301,57 +301,78 @@ if ($potongan != "" || $potongan != 0 ) {
 // tutup statements
 
 }
-    $query = $db->query("SELECT * FROM tbs_pembelian WHERE session_id = '$session_id'");
-    while ($data = mysqli_fetch_array($query))
-    {
 
-      $query_barang = ("SELECT harga FROM barang WHERE kode_barang = '$data[kode_barang]' ");
+    $query = $db->query("SELECT * FROM tbs_pembelian WHERE session_id = '$session_id'");
+    while ($data = mysqli_fetch_array($query)){
+
+      $query_barang = $db->query("SELECT harga_beli,satuan FROM barang WHERE kode_barang = '$data[kode_barang]' ");
       $data_barang = mysqli_fetch_array($query_barang);
 
 
-      if ($data['harga'] != $data_barang['harga']){
+      if($data['harga'] != $data_barang['harga_beli']){
 
-      //UPDATE CACHE 
-        // membuat objek cache
-      $cache = new Cache();
-      // setting default cache 
-      $cache->setCache('produk');
-      // hapus cache
-      $cache->eraseAll();
+        //Cek apakah barang tersebut memiliki Konversi ?
+        $query_cek_satuan_konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]'");
+        $data_jumlah_konversi = mysqli_fetch_array($query_cek_satuan_konversi);
+        $data_jumlah = mysqli_num_rows($query_cek_satuan_konversi);
 
-         $query_update_harga_beli  = $db->query("UPDATE barang SET harga_beli = '$data[harga]' WHERE kode_barang = '$data[kode_barang]'");
-    
-    $query_update_barang_cache = $db->query("SELECT * FROM barang ");
-    while ($data_update = $query_update_barang_cache->fetch_array()) {
-      # code...
-    // store an array
-        $cache->store($data_update['kode_barang'], array(
-      'kode_barang' => $data_update['kode_barang'],
-      'nama_barang' => $data_update['nama_barang'],
-      'harga_beli' => $data_update['harga_beli'],
-      'harga_jual' => $data_update['harga_jual'],
-      'harga_jual2' => $data_update['harga_jual2'],
-      'harga_jual3' => $data_update['harga_jual3'],
-      'harga_jual4' => $data_update['harga_jual4'],
-      'harga_jual5' => $data_update['harga_jual5'],
-      'harga_jual6' => $data_update['harga_jual6'],
-      'harga_jual7' => $data_update['harga_jual7'],
-      'kategori' => $data_update['kategori'],
-      'suplier' => $data_update['suplier'],
-      'limit_stok' => $data_update['limit_stok'],
-      'over_stok' => $data_update['over_stok'],
-      'berkaitan_dgn_stok' => $data_update['berkaitan_dgn_stok'],
-      'tipe_barang' => $data_update['tipe_barang'],
-      'status' => $data_update['status'],
-      'satuan' => $data_update['satuan'],
-      'id' => $data_update['id'],
-          ));
+
+        if($data_jumlah > 0){
+          $hasil_konversi = $data['harga'] / $data_jumlah_konversi['konversi'];
+          //Jika Iya maka ambil harga setelah di bagi dengan jumlah barang yang sebenarnya di konversi !!
+          $harga_beli_sebenarnya = $hasil_konversi;
+          //Update Harga Pokok pada konversi
+          $query_update_harga_konversi  = $db->query("UPDATE satuan_konversi SET harga_pokok = '$data[harga]' WHERE kode_produk = '$data[kode_barang]'");
+         
+        }
+        else{
+          //Jika Tidak ambil harga yang sebenarnya dari TBS !!
+          $harga_beli_sebenarnya = $data['harga'];
+        }
+
+          //UPDATE CACHE 
+              // membuat objek cache
+            $cache = new Cache();
+            // setting default cache 
+            $cache->setCache('produk');
+            // hapus cache
+            $cache->eraseAll();
+
+            $query_update_harga_beli  = $db->query("UPDATE barang SET harga_beli = '$harga_beli_sebenarnya' WHERE kode_barang = '$data[kode_barang]'");
+          
+          $query_update_barang_cache = $db->query("SELECT * FROM barang ");
+          while ($data_update = $query_update_barang_cache->fetch_array()) {
+            # code...
+          // store an array
+              $cache->store($data_update['kode_barang'], array(
+            'kode_barang' => $data_update['kode_barang'],
+            'nama_barang' => $data_update['nama_barang'],
+            'harga_beli' => $data_update['harga_beli'],
+            'harga_jual' => $data_update['harga_jual'],
+            'harga_jual2' => $data_update['harga_jual2'],
+            'harga_jual3' => $data_update['harga_jual3'],
+            'harga_jual4' => $data_update['harga_jual4'],
+            'harga_jual5' => $data_update['harga_jual5'],
+            'harga_jual6' => $data_update['harga_jual6'],
+            'harga_jual7' => $data_update['harga_jual7'],
+            'kategori' => $data_update['kategori'],
+            'suplier' => $data_update['suplier'],
+            'limit_stok' => $data_update['limit_stok'],
+            'over_stok' => $data_update['over_stok'],
+            'berkaitan_dgn_stok' => $data_update['berkaitan_dgn_stok'],
+            'tipe_barang' => $data_update['tipe_barang'],
+            'status' => $data_update['status'],
+            'satuan' => $data_update['satuan'],
+            'id' => $data_update['id'],
+                ));
+            }
+        $cache->retrieveAll();
+        //UPDATE CACHE 
+
       }
-  $cache->retrieveAll();
-  //UPDATE CACHE 
 
 
-      }
+
 
       $pilih_konversi = $db->query("SELECT sk.konversi * $data[jumlah_barang] AS jumlah_konversi, sk.harga_pokok / sk.konversi AS harga_konversi, sk.id_satuan, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.id_produk = b.id  WHERE sk.id_satuan = '$data[satuan]' AND sk.kode_produk = '$data[kode_barang]'");
       $data_konversi = mysqli_fetch_array($pilih_konversi);

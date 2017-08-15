@@ -327,8 +327,9 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
                        $("#nama_produk").val('');
                        $("#kode_barang").focus();
                     }
-                    else{  
-                    $.post('cek_kode_bonus_free_produk.php',{id_produk:id_produk}, function(data){
+         });
+
+        $.post('cek_kode_bonus_free_produk.php',{id_produk:id_produk}, function(data){
                     if(data == 1){
                     alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
                     $("#kode_barang").val('');
@@ -338,8 +339,7 @@ if ($produk_promo['program_promo_free_tambah'] > 0) {
                   }//penutup if
                           
                 });////penutup $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data)
-            }
-        });
+
 
       if (id_program == '') {
         alert("Silakan isikan program promo terlebih dahulu.");

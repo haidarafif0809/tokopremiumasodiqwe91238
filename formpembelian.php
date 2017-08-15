@@ -1309,7 +1309,7 @@ $(document).ready(function(){
     else{
     
     //Cek untuk perubahan harga beli
-    $.post("cek_perubahan_harga_pembelian.php",{total_1:total_1},function(hasil){
+    $.post("cek_perubahan_harga_pembelian.php",function(hasil){
       if(hasil == 1){
         var pesan_alert = confirm("Harga Barang melebihi harga jual, yakin akan merubah harga beli tersebut? ");
       }
@@ -1474,7 +1474,7 @@ $(document).ready(function(){
       else{
     
       //Cek untuk perubahan harga beli
-      $.post("cek_perubahan_harga_pembelian.php",{total_1:total_1},function(hasil){
+      $.post("cek_perubahan_harga_pembelian.php",function(hasil){
         if(hasil == 1){
           var pesan_alert = confirm("Harga Barang melebihi harga jual, yakin akan merubah harga beli tersebut? ");
         }

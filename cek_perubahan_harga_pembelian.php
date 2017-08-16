@@ -10,30 +10,25 @@
 
 				//Cek apakah barang tersebut memiliki Konversi ?
 		        $query_cek_satuan_konversi = $db->query("SELECT konversi,harga_pokok FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]'");
+		        $data_tampil_konvers = mysqli_fetch_array($query_cek_satuan_konversi);
 		        $data_jumlah = mysqli_num_rows($query_cek_satuan_konversi);
 
 		        if($data_jumlah > 0){
+		        		if($data['harga'] != $data_tampil_konvers['harga_pokok']){
+				        		if($data['harga'] > $data_tampil_konvers['harga_pokok']){
+									echo 1; // ada perubahan harga di atas harga sebelumnya
 
+				        		}
+				        		else{
 
- 					$query_konv = $db->query("SELECT konversi,harga_pokok FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]' AND harga_pokok > '$data[harga]'");
-		       		$data_konv = mysqli_num_rows($query_konv);
+									echo 2; // ada perubahan di bawah harga sebelumnya
+				        		}
 
-				      if($data_konv > 0){
-				         echo 1; // ada perubahan harga di atas harga sebelumnya
-				      }
-				      else{
+			        	}
+			        	else{
+			        		echo 3; // tidak ada perubahan harga 
+			        	}
 
-	 						$query_konv_minus = $db->query("SELECT konversi,harga_pokok FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]' AND harga_pokok < '$data[harga]'");
-			       			$data_konv_minus = mysqli_num_rows($query_konv_minus);
-			       			
-			       			if($data_konv_minus > 0){
-					         	echo 2; // ada perubahan di bawah harga sebelumnya
-					      	}
-					      	else{
-					      		echo 3;// tidak ada perubahan harga beli apapun
-					      	}
-
-				      }
 
 		        }
 		        else{
@@ -47,7 +42,7 @@
 
 						if($data_produk['harga_beli'] != $harga_tbs){
 
-							if($data_produk['harga_jual'] < $harga_tbs){
+							if($harga_tbs > $data_produk['harga_jual']){
 								echo 1; // ada perubahan harga di atas harga sebelumnya
 							}
 							else{

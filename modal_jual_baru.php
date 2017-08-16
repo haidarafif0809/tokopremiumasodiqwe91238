@@ -51,14 +51,14 @@ $sql = "SELECT s.nama,b.kode_barang,b.tipe_barang,b.nama_barang,b.harga_beli,b.h
 $sql.=" FROM barang b LEFT JOIN satuan s ON b.satuan = s.id LEFT JOIN kategori k ON b.kategori = k.id ";
 $sql.=" WHERE b.status = 'Aktif'";
 
-    $sql.=" b.kode_barang LIKE '".$requestData['search']['value']."%'";  
+    $sql.=" AND (b.kode_barang LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR b.nama_barang LIKE '".$requestData['search']['value']."%' ";
     $sql.=" OR b.berkaitan_dgn_stok LIKE '".$requestData['search']['value']."%'";   
     $sql.=" OR b.satuan LIKE '".$requestData['search']['value']."%' ";
     $sql.=" OR k.nama_kategori LIKE '".$requestData['search']['value']."%'";  
     $sql.=" OR b.suplier LIKE '".$requestData['search']['value']."%' ";
     $sql.=" OR b.limit_stok LIKE '".$requestData['search']['value']."%'";   
-    $sql.=" OR b.tipe_barang LIKE '".$requestData['search']['value']."%' ";
+    $sql.=" OR b.tipe_barang LIKE '".$requestData['search']['value']."%' )";
 
 }
 

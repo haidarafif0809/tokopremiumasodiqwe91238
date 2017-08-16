@@ -121,7 +121,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
 
 
 
-    <div id="myModal" class="modal fade" role="dialog">
+<div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
             <div class="modal-content">
@@ -133,12 +133,17 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
 
                     <form enctype="multipart/form-data" role="form" action="prosesbarang.php" method="post">
 
-                        <div class="form-group">
-                            <label> Kode Barang </label>
+                         <div class="form-group">
+                            <label>Barcode </label>
+                            <br>
+                            <input type="text" placeholder="Barcode" name="barcode" id="barcode" class="form-control" autocomplete="off" required="">
+                        </div>
+
+                         <div class="form-group">
+                            <label>Kode Barang </label>
                             <br>
                             <input type="text" placeholder="Kode Barang" name="kode_barang" id="kode_barang" class="form-control" autocomplete="off" required="">
                         </div>
-
 
 
                         <div class="form-group">
@@ -146,10 +151,45 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <br>
                             <input type="text" placeholder="Nama Barang" name="nama_barang" id="nama_barang" class="form-control" autocomplete="off" required="">
                         </div>
+
+
+                            <div class="form-group">
+                            <label> Golongan Produk </label>
+                            <br>
+                            <select type="text" name="golongan_produk" class="form-control" required="">
+                            <option value=""> -- SILAHKAN PILIH -- </option>
+                            <option> Barang </option>
+                            <option> Jasa </option>
+                            </select>
+                            </div>
+
+
+                           
+
+                                    <div class="form-group">
+                                    <label> Kategori Produk </label>
+                                    <br>
+                                    <select type="text" name="kategori_obat" id="kategori_obat" class="form-control" required="">
+                                    <option value=""> -- SILAHKAN PILIH -- </option>
+                                    <?php 
+                                    
+                                    $ambil_kategori_2 = $db->query("SELECT id,nama_kategori FROM kategori");
+                                    while($data_kategori = mysqli_fetch_array($ambil_kategori_2))
+                                    {
+                                    
+                                    echo "<option value='".$data_kategori['id']."'>".$data_kategori['nama_kategori'] ."</option>";
+                                    
+                                    }
+                                    
+                                    ?>
+                                    </select>
+                                    </div>
+
+
                         <div class="form-group">
                             <label> Harga Beli </label>
                             <br>
-                            <input type="text" placeholder="Harga Beli" name="harga_beli" id="harga_beli" class="form-control" autocomplete="off" required="">
+                            <input type="text" placeholder="Harga Beli" name="harga_beli" id="harga_beli" class="form-control" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label> Harga Jual Level 1</label>
@@ -161,29 +201,49 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <br>
                             <input type="text" placeholder="Harga Jual Level 2" name="harga_jual_2" id="harga_jual2" class="form-control" autocomplete="off">
                         </div>
+
                         <div class="form-group">
                             <label> Harga Jual Level 3</label>
                             <br>
                             <input type="text" placeholder="Harga Jual Level 3" name="harga_jual_3" id="harga_jual3" class="form-control" autocomplete="off">
                         </div>
+
                         <div class="form-group">
+                            <label> Harga Jual Level 4</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 4" name="harga_jual_4" id="harga_jual4" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 5</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 5" name="harga_jual_5" id="harga_jual5" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 6</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 6" name="harga_jual_6" id="harga_jual6" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 7</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 7" name="harga_jual_7" id="harga_jual7" class="form-control" autocomplete="off">
+                        </div>
+
+                   <div class="form-group">
                             <label> Satuan </label>
                             <br>
                             <select type="text" name="satuan" class="form-control" required="">
-					
                             <?php 
-                            
                             // memasukan file db.php
-                            include 'db.php';
-                            
+                           
                             // menampilkan seluruh data yang ada di tabel satuan
-                            $query = $db->query("SELECT * FROM satuan ");
+                            $query = $db->query("SELECT id,nama FROM satuan ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
                             {
                             
-                            echo "<option>".$data['nama'] ."</option>";
+                            echo "<option value='".$data['id']."'>".$data['nama'] ."</option>";
                             }
                             
                             
@@ -191,25 +251,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             </select>
                             </div>
 
- <div class="form-group">
-                            <label> Kategori </label>
-                            <br>
-                            <select type="text" name="kategori" class="form-control" required="">
-                            <option value=""> -- SILAHKAN PILIH -- </option>
-<?php 
-
-$ambil_kategori = $db->query("SELECT * FROM kategori");
-
-    while($data_kategori = mysqli_fetch_array($ambil_kategori))
-    {
-    
-    echo "<option>".$data_kategori['nama_kategori'] ."</option>";
-
-    }
-
- ?>
-                            </select>
-                            </div>
+                            
 
                         <div class="form-group" style="display: none">
                             <label> Gudang </label>
@@ -220,10 +262,9 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
                             <?php 
                             
                             // memasukan file db.php
-                            include 'db.php';
-                            
+                     
                             // menampilkan seluruh data yang ada di tabel satuan
-                            $query = $db->query("SELECT * FROM gudang ");
+                            $query = $db->query("SELECT kode_gudang , nama_gudang FROM gudang ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
@@ -249,25 +290,20 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
                             </select>
                             </div>
 
-                            <div class="form-group">
-                            <label> Tipe </label>
-                            <br>
-                            <select type="text" name="tipe" class="form-control" required="">
-                            <option value=""> -- SILAHKAN PILIH -- </option>
-                            <option> Barang </option>
-                            <option> Jasa </option>
-                            </select>
-                            </div>
+                       
+
+
+
 
                             <div class="form-group">
                             <label> Suplier </label>
                             <br>
                             <select type="text" name="suplier" class="form-control">                            
                             <?php 
-                            include 'db.php';
+                  
                             
                             // menampilkan data yang ada pada tabel suplier
-                            $query = $db->query("SELECT * FROM suplier ");
+                            $query = $db->query("SELECT nama FROM suplier ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
@@ -291,7 +327,6 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
                             <br>
                             <input type="text" placeholder="Over Stok" name="over_stok" id="over_stok" class="form-control" autocomplete="off">
                         </div>
-
                             
                             
                             
@@ -301,7 +336,7 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
 
 
 <!-- membuat tombol submit -->
-<button type="submit" name="submit" value="submit" class="btn btn-info">Tambah</button>
+<button type="submit" name="submit" value="submit" id="tambah" class="btn btn-info">Tambah</button>
 </form>
 </div>
 
@@ -316,6 +351,7 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
 
 </div>
 </div>
+<!-- penutup modal tambah -->
 
 
 <div id="my_Modal" class="modal fade" role="dialog">
@@ -643,30 +679,107 @@ $(document).ready(function() {
 </script>
 
 
+    <script type="text/javascript">
+            $(document).on('blur', '#barcode', function (e) {
+
+                var barcode = $(this).val();
+
+                if (barcode != '') {
+                  $.post("cek_barcode_satuan_konversi.php",{barcode:barcode},function(data){
+
+                      if (data == 1) {
+                        alert("Barcode yang sudah yang anda masukan sudah ada!");
+                        $("#barcode").focus();
+                        $("#barcode").val('');
+                        };
+                  });
+
+                };
+
+
+                
+                });
+
+             $(document).on('blur', '#kode_barang', function (e) {
+
+                var barcode = $(this).val();
+
+                if (barcode != '') {
+                  $.post("cek_barcode_satuan_konversi.php",{barcode:barcode},function(data){
+
+                      if (data == 1) {
+                        alert("Kode Barang sudah yang anda masukan sudah ada!");
+                        $("#kode_barang").focus();
+                        $("#kode_barang").val('');
+                        };
+                  });
+
+                };
+
+
+                
+                });
+
+    </script>
+
+
 <script type="text/javascript">
+    $(document).ready(function(){
+        $('#tipe_produk').change(function(){
+            var tipe_produk = $('#tipe_produk').val();
 
-               $(document).ready(function(){
-               $("#kode_barang").blur(function(){
-               var kode_barang = $("#kode_barang").val();
+            
+             if(tipe_produk == 'Jasa')
+             {
+                $("#golongan_obat").attr("disabled", true);
+                $("#kategori_obat").attr("disabled", true);
+                $("#jenis_obat").attr("disabled", true);
+                $("#harga_beli").attr("disabled", true);
+                $("#limit_stok").attr("disabled", true);
+                $("#over_stok").attr("disabled", true);
+            }
 
-              $.post('cek_kode_barang.php',{kode_barang:$(this).val()}, function(data){
-                
-                if(data == 1){
+            else{
 
-                    alert ("Kode Barang Sudah Ada");
-                    $("#kode_barang").val('');
-                }
-                else {
-                    
-                }
-              });
-                
-               });
-               });
+                $("#golongan_obat").attr("disabled", false);
+                $("#kategori_obat").attr("disabled", false);
+                $("#jenis_obat").attr("disabled", false);
+                $("#harga_beli").attr("disabled", false);
+                $("#limit_stok").attr("disabled", false);
+                $("#over_stok").attr("disabled", false);
 
+            }
+            
+            
+        });
+        });
+</script>                            
+
+
+<script type="text/javascript">
+   $("#tambah").click(function(){
+
+var harga_beli = $("#harga_beli").val();
+var harga_jual1 = $("#harga_jual").val();
+var harga_jual2 = $("#harga_jual2").val();
+var harga_jual3 = $("#harga_jual3").val();
+var harga_jual4 = $("#harga_jual4").val();
+var harga_jual5 = $("#harga_jual5").val();
+var harga_jual6 = $("#harga_jual6").val();
+var harga_jual7 = $("#harga_jual7").val();
+
+
+if (harga_jual1 < harga_beli)
+{
+    alert("Harga Jual 1 lebih kecil dari harga beli");
+}
+
+   
+   });
 </script>
 
-                             
+
+                       
 
                              <script type="text/javascript">
                                  

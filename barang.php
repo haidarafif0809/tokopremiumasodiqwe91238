@@ -318,6 +318,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
 
 </div>
 </div>
+<!-- penutup modal tambah -->
 
 
 <div id="my_Modal" class="modal fade" role="dialog">
@@ -552,7 +553,7 @@ th {
                   $.post("cek_barcode_satuan_konversi.php",{barcode:barcode},function(data){
 
                       if (data == 1) {
-                        alert("Barcode yang anda masukan sudah ada!");
+                        alert("Barcode yang sudah yang anda masukan sudah ada!");
                         $("#barcode").focus();
                         $("#barcode").val('');
                         };
@@ -563,6 +564,27 @@ th {
 
                 
                 });
+
+             $(document).on('blur', '#kode_barang', function (e) {
+
+                var barcode = $(this).val();
+
+                if (barcode != '') {
+                  $.post("cek_barcode_satuan_konversi.php",{barcode:barcode},function(data){
+
+                      if (data == 1) {
+                        alert("Kode Barang sudah yang anda masukan sudah ada!");
+                        $("#kode_barang").focus();
+                        $("#kode_barang").val('');
+                        };
+                  });
+
+                };
+
+
+                
+                });
+
     </script>
 
 
@@ -599,31 +621,6 @@ th {
 </script>
 
 <script type="text/javascript">
-
-               $(document).ready(function(){
-               $("#kode_barang").blur(function(){
-               var kode_barang = $("#kode_barang").val();
-
-              $.post('cek_kode_barang.php',{kode_barang:$(this).val()}, function(data){
-                
-                if(data == 1){
-
-                    alert ("Kode Barang Sudah Ada");
-                    $("#kode_barang").val('');
-                }
-                else {
-                    
-                }
-              });
-                
-               });
-               });
-
-</script>
-
-                             
-
-                             <script type="text/javascript">
                                  
 //fungsi hapus data 
                                 $(document).on('click', '.btn-hapus', function (e) {

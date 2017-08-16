@@ -2335,8 +2335,6 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
         $("#span_tbs").show()
         $("#btnRujukLab").show()
         $('#pembayaran_penjualan').val('');
-        $('#potongan_penjualan').val('');
-        $('#potongan_persen').val('');
 
 // END DATATABLE AJAX END DATATABLE AJAX TBS PENJUALAN
 });
@@ -5371,7 +5369,8 @@ $(document).ready(function(){
     shortcut.add("f2", function() {
         // Do something
 
-        $("#kode_barang").focus();
+        $("#kode_barang").trigger('chosen:update');
+        $("#kode_barang").trigger('chosen:open');
 
     });
 
@@ -5951,7 +5950,7 @@ $(document).ready(function(){
         }
         else{
 
-          $("#modal_semua_bonus").modal('hide');
+          //$("#modal_semua_bonus").modal('hide');
           $("#tbs_bonus_penjualan").show();
 
               //Table Ajax Bonus
@@ -6017,7 +6016,15 @@ $(document).ready(function(){
         }
         else{
 
-          $("#modal_semua_bonus").modal('hide');
+          $.get("cek_subtotal_bonus_diskon.php",function(data){
+        
+              var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+              var hasil = parseFloat(total.replace(',','.')) + parseFloat(data);
+
+                $("#total1").val(hasil.format(2, 3, '.', ','));
+                $("#total2").val(hasil.format(2, 3, '.', ','));
+          });
+          //$("#modal_semua_bonus").modal('hide');
           $("#tbs_bonus_penjualan").show();
 
               //Table Ajax Bonus

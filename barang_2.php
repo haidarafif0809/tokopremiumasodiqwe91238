@@ -87,7 +87,6 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
 </div><!--div class="container 1"-->
 
 
-
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
@@ -100,8 +99,19 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
 
                     <form enctype="multipart/form-data" role="form" action="prosesbarang.php" method="post">
 
+                         <div class="form-group">
+                            <label>Barcode </label>
+                            <br>
+                            <input type="text" placeholder="Barcode" name="barcode" id="barcode" class="form-control" autocomplete="off" required="">
+                        </div>
 
-                       
+                         <div class="form-group">
+                            <label>Kode Barang </label>
+                            <br>
+                            <input type="text" placeholder="Kode Barang" name="kode_barang" id="kode_barang" class="form-control" autocomplete="off" required="">
+                        </div>
+
+
                         <div class="form-group">
                             <label>Nama Barang </label>
                             <br>
@@ -120,67 +130,26 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             </div>
 
 
-                            <div class="form-group">
-                            <label> Tipe Produk </label>
-                            <br>
-                            <select type="text" id="tipe_produk" name="tipe" class="form-control" required="">
-                            <option value=""> -- SILAHKAN PILIH -- </option>
-                            <option value="Barang"> Barang </option>
-                            <option value="Jasa"> Jasa </option>
-                            <option value="Alat"> Alat </option>
-                            <option value="BHP"> BHP </option>
-                            <option value="Obat Obatan"> Obat-obatan </option>
-                            </select>
-                            </div>
-
-
-                            <div class="form-group">
-                            <label for="sel1">Jenis Obat</label>
-                            <select class="form-control" id="jenis_obat" name="jenis_obat" autocomplete="off">
-                            <option value="">Silakan Pilih</option>
-                            <?php
-                            $query = $db->query("SELECT nama FROM jenis");       
-                            while ( $data = mysqli_fetch_array($query)) {
-                            echo "<option value='".$data['nama']."'>".$data['nama']."</option>";
-                            }
-                            ?>
-                            </select>
-                            </div>
-
+                           
 
                                     <div class="form-group">
-                                    <label> Kategori Obat </label>
+                                    <label> Kategori Produk </label>
                                     <br>
                                     <select type="text" name="kategori_obat" id="kategori_obat" class="form-control" required="">
                                     <option value=""> -- SILAHKAN PILIH -- </option>
                                     <?php 
                                     
-                                    $ambil_kategori = $db->query("SELECT nama_kategori FROM kategori");
-                                    
-                                    while($data_kategori = mysqli_fetch_array($ambil_kategori))
+                                    $ambil_kategori_2 = $db->query("SELECT id,nama_kategori FROM kategori");
+                                    while($data_kategori = mysqli_fetch_array($ambil_kategori_2))
                                     {
                                     
-                                    echo "<option>".$data_kategori['nama_kategori'] ."</option>";
+                                    echo "<option value='".$data_kategori['id']."'>".$data_kategori['nama_kategori'] ."</option>";
                                     
                                     }
                                     
                                     ?>
                                     </select>
                                     </div>
-
-                            <div class="form-group">
-                            <label> Golongan Obat </label>
-                            <br>
-                            <select type="text" id="golongan_obat" name="golongan_obat" class="form-control">
-                            <option value=""> -- SILAHKAN PILIH -- </option>
-                            <option value="Obat Keras"> Obat Keras </option>
-                            <option value="Obat Bebas"> Obat Bebas </option>
-                            <option value="Obat Bebas"> Obat Bebas Terbatas </option>
-                            <option value="Obat Psikotropika"> Obat Psikotropika </option>
-                            <option value="Narkotika"> Narkotika </option>
-                            </select>
-                            </div>
-
 
 
                         <div class="form-group">
@@ -232,16 +201,15 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <select type="text" name="satuan" class="form-control" required="">
                             <?php 
                             // memasukan file db.php
-                       
-                            
+                           
                             // menampilkan seluruh data yang ada di tabel satuan
-                            $query = $db->query("SELECT id, nama FROM satuan ");
+                            $query = $db->query("SELECT id,nama FROM satuan ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
                             {
                             
-                            echo "<option value='".$data['id']."' >".$data['nama'] ."</option>";
+                            echo "<option value='".$data['id']."'>".$data['nama'] ."</option>";
                             }
                             
                             
@@ -258,10 +226,11 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <option value=""> -- SILAHKAN PILIH -- </option>
                     
                             <?php 
-                   
                             
+                            // memasukan file db.php
+                     
                             // menampilkan seluruh data yang ada di tabel satuan
-                            $query = $db->query("SELECT kode_gudang ,nama_gudang FROM gudang ");
+                            $query = $db->query("SELECT kode_gudang , nama_gudang FROM gudang ");
                             
                             // menyimpan data sementara yang ada pada $query
                             while($data = mysqli_fetch_array($query))
@@ -297,7 +266,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <br>
                             <select type="text" name="suplier" class="form-control">                            
                             <?php 
-                    
+                  
                             
                             // menampilkan data yang ada pada tabel suplier
                             $query = $db->query("SELECT nama FROM suplier ");
@@ -325,12 +294,15 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <input type="text" placeholder="Over Stok" name="over_stok" id="over_stok" class="form-control" autocomplete="off">
                         </div>
                             
+                            
+                            
+                            
 
                        
 
 
 <!-- membuat tombol submit -->
-<button type="submit" name="submit" value="usbmit" class="btn btn-info">Tambah</button>
+<button type="submit" name="submit" value="submit" id="tambah" class="btn btn-info">Tambah</button>
 </form>
 </div>
 
@@ -345,6 +317,8 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
 
 </div>
 </div>
+<!-- penutup modal tambah -->
+
 
 
 <div id="my_Modal" class="modal fade" role="dialog">
@@ -524,6 +498,51 @@ th {
 
 </div><!-- penutup tag div clas="container 3" -->
 
+
+    <script type="text/javascript">
+            $(document).on('blur', '#barcode', function (e) {
+
+                var barcode = $(this).val();
+
+                if (barcode != '') {
+                  $.post("cek_barcode_satuan_konversi.php",{barcode:barcode},function(data){
+
+                      if (data == 1) {
+                        alert("Barcode yang sudah yang anda masukan sudah ada!");
+                        $("#barcode").focus();
+                        $("#barcode").val('');
+                        };
+                  });
+
+                };
+
+
+                
+                });
+
+             $(document).on('blur', '#kode_barang', function (e) {
+
+                var barcode = $(this).val();
+
+                if (barcode != '') {
+                  $.post("cek_barcode_satuan_konversi.php",{barcode:barcode},function(data){
+
+                      if (data == 1) {
+                        alert("Kode Barang sudah yang anda masukan sudah ada!");
+                        $("#kode_barang").focus();
+                        $("#kode_barang").val('');
+                        };
+                  });
+
+                };
+
+
+                
+                });
+
+    </script>
+
+
 <script type="text/javascript">
     $(document).ready(function(){
         $('#tipe_produk').change(function(){
@@ -575,6 +594,28 @@ th {
                });
                });
 
+</script>
+
+<script type="text/javascript">
+   $("#tambah").click(function(){
+
+var harga_beli = $("#harga_beli").val();
+var harga_jual1 = $("#harga_jual").val();
+var harga_jual2 = $("#harga_jual2").val();
+var harga_jual3 = $("#harga_jual3").val();
+var harga_jual4 = $("#harga_jual4").val();
+var harga_jual5 = $("#harga_jual5").val();
+var harga_jual6 = $("#harga_jual6").val();
+var harga_jual7 = $("#harga_jual7").val();
+
+
+if (harga_jual1 < harga_beli)
+{
+    alert("Harga Jual 1 lebih kecil dari harga beli");
+}
+
+   
+   });
 </script>
 
                              

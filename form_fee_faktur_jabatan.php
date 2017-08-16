@@ -125,15 +125,16 @@ mysqli_close($db);
 
  	$.post("proses_fee_faktur_jabatan.php",{jumlah_prosentase:jumlah_prosentase,jumlah_uang:jumlah_nominal,jabatan:jabatan},function(info){
 
-$("#alert").html(info);
+    $("#alert").html(info);
 
     $("#alert_berhasil").show();
     $("#alert_gagal").show();
      $("#jumlah_prosentase").val('');
      $("#jumlah_nominal").val('');
      $("#jabatan").val('');
-
-    
+     $("#prosentase").show();
+     $("#nominal").show();
+     $("#jumlah_prosentase").focus();
        
    });
 

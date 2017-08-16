@@ -193,9 +193,9 @@ $("#alert").html(info);
      $("#jumlah_prosentase").val('');
      $("#jumlah_nominal").val('');
      $("#nama_petugas").val('');
-
-    
-       
+     $("#prosentase").show();
+      $("#nominal").show();
+       $("#jumlah_prosentase").val();
    });
 
 

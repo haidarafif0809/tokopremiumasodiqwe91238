@@ -16,6 +16,7 @@ $total_harga = 0;
 $total_subtotal = 0;
 $total_potongan = 0;
 $total_tax = 0;
+$total_sisa = 0;
 
 
  ?>
@@ -104,6 +105,7 @@ $total_tax = 0;
               $total_subtotal = $data11['subtotal'] + $total_subtotal;
               $total_potongan = $data11['potongan'] + $total_potongan;
               $total_tax = $data11['tax'] + $total_tax;
+              $total_sisa = $data11['sisa'] + $total_sisa;
 
           //menampilkan data
           echo "<tr>
@@ -122,8 +124,8 @@ $total_tax = 0;
                 echo "<td>".koma($data11['hpp'],2)."</td>";
         }
 
-          echo "<td>".$data11['sisa']."</td>
-          <td>".$data11['status']."</td>";
+          echo "<td>".koma($data11['sisa'],3)."</td>
+                <td>".$data11['status']."</td>";
                      
 
                   "</tr>";
@@ -144,7 +146,7 @@ $total_tax = 0;
           <td style='color:red;'><?php echo koma($total_subtotal,2);?></td>
           <td style='color:red;'><?php echo koma($total_potongan,2);?></td>
           <td style='color:red;'><?php echo koma($total_tax,2);?></td>
-          <td></td>
+          <td style='color:red;'><?php echo koma($total_sisa,2);?></td>
           <td></td>
 </tr>
         </tbody>

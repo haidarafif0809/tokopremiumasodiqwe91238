@@ -11,7 +11,7 @@ $sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
     $data1 = mysqli_fetch_array($query1);
 
 //menampilkan seluruh data yang ada pada tabel pembayaran_piutang
-$perintah = $db->query("SELECT p.nama_pelanggan,pp.nama_suplier,pp.no_faktur_pembayaran,pp.tanggal,pp.dari_kas,pp.total FROM pembayaran_piutang pp LEFT JOIN pelanggan p ON pp.nama_suplier = p.id WHERE pp.tanggal >= '$dari_tanggal' AND pp.tanggal <= '$sampai_tanggal'");
+$perintah = $db->query("SELECT p.nama_pelanggan,pp.nama_suplier,pp.no_faktur_pembayaran,pp.tanggal,pp.dari_kas,pp.total, da.nama_daftar_akun FROM pembayaran_piutang pp INNER JOIN pelanggan p ON pp.nama_suplier = p.id INNER JOIN daftar_akun da ON pp.dari_kas = da.kode_daftar_akun WHERE pp.tanggal >= '$dari_tanggal' AND pp.tanggal <= '$sampai_tanggal'");
 
 
 //menampilkan seluruh data yang ada pada tabel pembayaran_piutang
@@ -87,14 +87,14 @@ $total_akhir = $cek02['total_akhir'];
 
                   {
 
-                    $perintah0 = $db->query("SELECT * FROM detail_pembayaran_piutang WHERE no_faktur_pembayaran = '$data11[no_faktur_pembayaran]'");
+                    $perintah0 = $db->query("SELECT potongan FROM detail_pembayaran_piutang WHERE no_faktur_pembayaran = '$data11[no_faktur_pembayaran]'");
                     $data0 = mysqli_fetch_array($perintah0);
       
                   echo "<tr>
                   <td>". $data11['no_faktur_pembayaran'] ."</td>
                   <td>". $data11['tanggal'] ."</td>
                   <td>". $data11['nama_suplier'] ." ". $data11['nama_pelanggan'] ."</td>
-                  <td>". $data11['dari_kas'] ."</td>
+                  <td>". $data11['nama_daftar_akun'] ."</td>
                   <td>". rp($data0['potongan']) ."</td>
                   <td>". rp($data11['total']) ."</td>
                   </tr>";

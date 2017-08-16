@@ -106,7 +106,7 @@ if ($data['jenis_hpp'] == '1')
         
       }
       else if ($data['jenis_transaksi'] == 'Retur Penjualan') {
-        $ambil_pelanggan = $db->query("SELECT rp.kode_pelanggan, p.nama_pelanggan FROM retur_penjualan rp INNER JOIN  pelanggan p ON rp.kode_pelanggan = p.kode_pelanggan WHERE rp.no_faktur_retur = '$data[no_faktur]' ");
+        $ambil_pelanggan = $db->query("SELECT rp.kode_pelanggan, p.nama_pelanggan FROM retur_penjualan rp INNER JOIN  pelanggan p ON rp.kode_pelanggan = p.id WHERE rp.no_faktur_retur = '$data[no_faktur]' ");
         $data_pelanggan = mysqli_fetch_array($ambil_pelanggan);
         $nama_pelanggan = $data_pelanggan['nama_pelanggan'];
         echo "<td> ".$data['jenis_transaksi']." (".$nama_pelanggan.") </td>";
@@ -195,7 +195,7 @@ else
         
       }
       else if ($data['jenis_transaksi'] == 'Penjualan') {
-        $ambil_pelanggan = $db->query("SELECT p.kode_pelanggan, pl.nama_pelanggan FROM penjualan p INNER JOIN  pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE p.no_faktur = '$data[no_faktur]' ");
+        $ambil_pelanggan = $db->query("SELECT p.kode_pelanggan, pl.nama_pelanggan FROM penjualan p INNER JOIN  pelanggan pl ON p.kode_pelanggan = pl.id WHERE p.no_faktur = '$data[no_faktur]' ");
         $data_pelanggan = mysqli_fetch_array($ambil_pelanggan);
         $nama_pelanggan = $data_pelanggan['nama_pelanggan'];
         echo "<td> ".$data['jenis_transaksi']." (".$nama_pelanggan.") </td>";

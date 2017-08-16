@@ -36,7 +36,7 @@ tr:nth-child(even){background-color: #f2f2f2}
    while($data = mysqli_fetch_array($query))      
       {
       echo "<tr class='tr-id-".$data['id']."'>";
-    echo "<td style='font-size:15px;background-color:#90caf9;cursor:pointer;' align='left' class='edit-timbangan' data-id='".$data['id']."' > <span id='text-jumlah-".$data['id']."'>".$data['kode_flag']."</span> <input type='hidden' id='input-jumlah-".$data['id']."' value='".$data['kode_flag']."' class='input_jumlah_jual' data-id='".$data['id']."' autofocus=''> </td>";
+    echo "<td style='font-size:15px;background-color:#90caf9;cursor:pointer;' align='left' class='edit-timbangan' data-id='".$data['id']."' > <span id='text-jumlah-".$data['id']."'>".$data['kode_flag']."</span> <input type='hidden' id='input-jumlah-".$data['id']."' value='".$data['kode_flag']."' data-kode='".$data['kode_flag']."' name='jumlah' class='input_jumlah_jual' data-id='".$data['id']."' autofocus=''> </td>";
 
      echo"</tr>";
       }
@@ -47,6 +47,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 </span>
 
       <h6 style="text-align: left ; color: red"><i> * Klik 2x pada  Kolom  jika ingin mengedit.</i></h6>
+      <h6 style="text-align: left ; color: red"><i> * Kode Flag harus 2 Karakter.</i></h6>
 
 </div><!--CONTAINER-->
 
@@ -69,17 +70,42 @@ $(document).ready(function(){
 
                           $(document).on('blur','.input_jumlah_jual',function(e){
 
-                                    var id = $(this).attr("data-id");
+                                    var id = $(this).attr("data-id");                                    
+                                    var teks =  document.getElementById("input-jumlah-"+id+"").value.length;
                                     var input_tampil = $(this).val();
+                                    var kode_lama = $("#input-jumlah-"+id).attr("data-kode");
 
-
-                                    $.post("update_setting_timbangan.php",{id:id,input_tampil:input_tampil},function(data){
+                                    if (teks < 2) {
                                     
-                                    $("#text-jumlah-"+id+"").show();
-                                    $("#text-jumlah-"+id+"").text(input_tampil);
-                                    $("#input-jumlah-"+id+"").attr("type", "hidden"); 
+                                      alert("Kode flag harus 2 Karakter!!");
+                                        $("#text-jumlah-"+id+"").show();
+                                        $("#text-jumlah-"+id+"").text(kode_lama);
+                                        $("#input-jumlah-"+id+"").attr("type", "hidden");
+                                        $("#input-jumlah-"+id+"").attr("data-kode", kode_lama); 
+                                        $("#input-jumlah-"+id+"").val(kode_lama);
 
-                                    });
+                                    }else if (teks > 2) {
+
+                                      alert("Kode flag harus 2 Karakter!!");
+                                        $("#text-jumlah-"+id+"").show();
+                                        $("#text-jumlah-"+id+"").text(kode_lama);
+                                        $("#input-jumlah-"+id+"").attr("type", "hidden");
+                                        $("#input-jumlah-"+id+"").attr("data-kode", kode_lama); 
+                                        $("#input-jumlah-"+id+"").val(kode_lama);
+
+                                    }else{
+                                        $.post("update_setting_timbangan.php",{id:id,input_tampil:input_tampil},function(data){
+                                        
+                                        $("#text-jumlah-"+id+"").show();
+                                        $("#text-jumlah-"+id+"").text(input_tampil);
+                                        $("#input-jumlah-"+id+"").attr("type", "hidden");
+                                        $("#input-jumlah-"+id+"").attr("data-kode", input_tampil); 
+                                        $("#input-jumlah-"+id+"").val(input_tampil);
+
+                                        });
+                                    }
+
+
                                  });
      </script>
 <!--FOOTER-->

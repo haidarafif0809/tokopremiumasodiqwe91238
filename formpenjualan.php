@@ -15,6 +15,9 @@ $nilai_ppn = $data_default_ppn['nilai_ppn'];
 
 $session_id = session_id();
 
+$query_setting_antrian_order = $db->query("SELECT setting_tampil FROM setting_antrian");
+$data_setting_antrian_order = mysqli_fetch_array($query_setting_antrian_order);
+
  ?>
 
 
@@ -321,7 +324,13 @@ Number.prototype.format = function(n, x, s, c) {
 </div>
      
 <button type="button" id="cari_produk_penjualan" class="btn btn-info " style="height:45px;"  data-toggle="modal" data-target="#myModal"><i class='fa  fa-search'></i> Cari (F1)  </button> 
+<?php 
+
+if ($data_setting_antrian_order['setting_tampil'] == 'Tampil')
+{
+?>
 <button type="button" id="daftar_order" class="btn btn-success" style="height:45px;" data-toggle="modal" data-target="#modal_order"><i class='fa  fa-search'></i> Cari Order (F6) </button>
+
 
 <button class="btn btn-purple" style="height:45px; display: none" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Antrian  </button>
@@ -329,8 +338,11 @@ Antrian  </button>
 <button class="btn btn-warning" id="btnOrder" style="height:45px;" type="button" data-toggle="collapse" data-target="#sss" aria-expanded="false" aria-controls="collapseExample"><i class='fa fa-list-ol'> </i>
 Order </button>
 
+<?php } ?>
 
 <button class="btn btn-deep-purple btn-sm"  style="height:45px; width: 45px" type="button" id="tombol-warning"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+
+
 
 <button class="btn btn-indigo btn-sm" type="button" id="tombol-purpel" style="display: none; height:45px; width: 45px"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
 <div style="display: none" id="span-colapse">
@@ -435,13 +447,6 @@ Order </button>
 
   <form class="form-inline" method="post ">
 
-<?php 
-$hud = $db->query("SELECT setting_tampil FROM setting_antrian");
-$my = mysqli_fetch_array($hud);
-
-if ($my['setting_tampil'] == 'Tampil')
-{
-?>
 
 </p>  
 </form>
@@ -451,6 +456,11 @@ tr:nth-child(even){background-color: #f2f2f2}
 </style>
 
 </div>
+<?php 
+
+if ($data_setting_antrian_order['setting_tampil'] == 'Tampil')
+{
+?>
 
 <div class="collapse" id="collapseExample">
  <table id="tableuser" class="table-border table-sm">
@@ -2325,8 +2335,6 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:tr
         $("#span_tbs").show()
         $("#btnRujukLab").show()
         $('#pembayaran_penjualan').val('');
-        $('#potongan_penjualan').val('');
-        $('#potongan_persen').val('');
 
 // END DATATABLE AJAX END DATATABLE AJAX TBS PENJUALAN
 });
@@ -3669,12 +3677,10 @@ else{
              $("#cetak_tunai_besar").show('');
              $("#span_tbs").hide();
              $("#sss").collapse('hide');
-             $("#kd_pelanggan").val('');
-             $("#kd_pelanggan").trigger("chosen:open");
              $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
              $("#total1").val('');
              $("#pembayaran_penjualan").val('');
-             $("#sisa_pembayaran_penjualan").val('');
+            $("#sisa_pembayaran_penjualan").val('');
              $("#kredit").val('');
 
     
@@ -3837,8 +3843,6 @@ alert("Silakan Bayar Piutang");
             $("#sisa_pembayaran_penjualan").val('');
             $("#kredit").val('');
             $("#span_tbs").hide();
-            $("#kd_pelanggan").val('');
-            $("#kd_pelanggan").trigger("chosen:open");
             $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true}); 
             $("#sss").collapse('hide');
 
@@ -3979,9 +3983,6 @@ alert("Silakan Bayar Piutang");
                              $("#tanggal_jt").val('');
                              $("#cetak_piutang").show();
                              $("#tax").val('');
-                             
-                             $("#kd_pelanggan").val('');
-                             $("#kd_pelanggan").trigger("chosen:open");
                              $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"}); 
                              
                              
@@ -4110,15 +4111,30 @@ $("#potongan_persen").keyup(function(){
           biaya_adm = 0.00;
         }*/
 
-      var ambil_semula = parseFloat(total.replace(',','.')) /*+ parseFloat(biaya_adm.replace(',','.'));parseFloat(tax_rp)*/
+        var ambil_semula = parseFloat(total.replace(',','.')) /*+ parseFloat(biaya_adm.replace(',','.'));parseFloat(tax_rp)*/
         var sisa_potongan = parseFloat(total.replace(',','.')) - parseFloat(potongan_penjualan);
+        var hasil_akhir = parseFloat(sisa_potongan) /*+ parseFloat(biaya_adm.replace(',','.'));parseFloat(tax_rp)*/
+
+        var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+        if(pembayaran == ''){
+        pembayaran = 0;
+        }
+        var sisa = pembayaran - hasil_akhir;
+        var sisa_kredit = hasil_akhir - pembayaran;
 
 
-             /*var t_tax = ((parseFloat(sisa_potongan.replace(',','.')) * parseFloat(tax.replace(',','.'))) / 100);*/
-             var hasil_akhir = parseFloat(sisa_potongan) /*+ parseFloat(biaya_adm.replace(',','.'));parseFloat(tax_rp)*/
+        if (sisa < 0  ){
+          $("#kredit").val(sisa_kredit);
+          $("#sisa_pembayaran_penjualan").val('0');
+          $("#tanggal_jt").attr("disabled", false);
+        }
+        else{
+          $("#sisa_pembayaran_penjualan").val(sisa);
+          $("#kredit").val('0');
+          $("#tanggal_jt").attr("disabled", true);
+        }
 
-
-         $("#total1").val(hasil_akhir.format(2, 3, '.', ','));
+        $("#total1").val(hasil_akhir.format(2, 3, '.', ','));
         $("#potongan_penjualan").val(potongan_penjualan.format(2, 3, '.', ','));
         
         if (potongan_persen > 100.00) {
@@ -4207,6 +4223,25 @@ $("#potongan_penjualan").keyup(function(){
              var hasil_akhir = parseFloat(sisa_potongan) /*+ parseFloat(biaya_adm.replace(',','.')); + parseFloat(t_tax,10);*/
         }
         
+        var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+        if(pembayaran == ''){
+        pembayaran = 0;
+        }
+        var sisa = pembayaran - hasil_akhir;
+        var sisa_kredit = hasil_akhir - pembayaran;
+
+
+        if (sisa < 0  ){
+          $("#kredit").val(sisa_kredit);
+          $("#sisa_pembayaran_penjualan").val('0');
+          $("#tanggal_jt").attr("disabled", false);
+        }
+        else{
+          $("#sisa_pembayaran_penjualan").val(sisa);
+          $("#kredit").val('0');
+          $("#tanggal_jt").attr("disabled", true);
+        }
+
         $("#total1").val(hasil_akhir.format(2, 3, '.', ','));
         
 
@@ -5334,7 +5369,8 @@ $(document).ready(function(){
     shortcut.add("f2", function() {
         // Do something
 
-        $("#kode_barang").focus();
+        $("#kode_barang").trigger('chosen:update');
+        $("#kode_barang").trigger('chosen:open');
 
     });
 
@@ -5766,7 +5802,7 @@ $('#tabel_tbs_penjualan').DataTable().destroy();
             $("#biaya_admin_select").trigger("chosen:updated");
             $("#biaya_admin_persen").val(''); 
             $("#kode_barang").val('');
-            $("#kd_pelanggan").trigger("chosen:open");
+            $("#kode_barang").trigger("chosen:open");
             $("#biaya_adm").val('');
             $("#level_harga").val('harga_1');
             $("#keterangan").val('');
@@ -5914,7 +5950,7 @@ $(document).ready(function(){
         }
         else{
 
-          $("#modal_semua_bonus").modal('hide');
+          //$("#modal_semua_bonus").modal('hide');
           $("#tbs_bonus_penjualan").show();
 
               //Table Ajax Bonus
@@ -5980,7 +6016,15 @@ $(document).ready(function(){
         }
         else{
 
-          $("#modal_semua_bonus").modal('hide');
+          $.get("cek_subtotal_bonus_diskon.php",function(data){
+        
+              var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
+              var hasil = parseFloat(total.replace(',','.')) + parseFloat(data);
+
+                $("#total1").val(hasil.format(2, 3, '.', ','));
+                $("#total2").val(hasil.format(2, 3, '.', ','));
+          });
+          //$("#modal_semua_bonus").modal('hide');
           $("#tbs_bonus_penjualan").show();
 
               //Table Ajax Bonus

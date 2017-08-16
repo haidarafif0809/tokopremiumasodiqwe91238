@@ -519,9 +519,11 @@ $(document).on('click', '.edit', function (e) {
                        $("#nama_produk").val('');
                        $("#kode_barang_edit").focus();
                     }
-                    else{  
 
-               $.post('cek_kode_bonus_disc_produk.php',{id_produk:id_produk}, function(data){
+              }); // penutup $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json)
+
+
+            $.post('cek_kode_bonus_disc_produk.php',{id_produk:id_produk}, function(data){
                   if(data == 1){
                     alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
                     $("#kode_barang_edit").val('');
@@ -532,9 +534,9 @@ $(document).on('click', '.edit', function (e) {
                           
                 });////penutup $.post('cek_kode_produk_program_promo.php',{id_produk:id_produk}, function(data)
 
-             }
 
-            }); // penutup $.getJSON('lihat_nama_produk_promo.php',{kode_produk:kode_produk}, function(json)
+
+
       });// END if (kode_produk != '')
   }
 

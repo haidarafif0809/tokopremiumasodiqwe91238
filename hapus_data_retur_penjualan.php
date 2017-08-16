@@ -33,7 +33,7 @@ $insert_retur_penjualan = $db->query("INSERT INTO history_retur_penjualan (no_fa
 $detail_retur_penjualan = $db->query("SELECT * FROM detail_retur_penjualan WHERE no_faktur_retur = '$no_faktur_retur'");
 while($data_detail_retur_penjualan = mysqli_fetch_array($detail_retur_penjualan)){
 
-      $insert_retur_penjualan = "INSERT INTO history_detail_retur_penjualan (no_faktur_retur, no_faktur_penjualan, tanggal, jam, waktu, kode_barang, nama_barang, jumlah_beli, jumlah_retur, harga, subtotal, potongan, tax, user_hapus) VALUES ('$no_faktur_retur', '$data_detail_retur_penjualan[no_faktur_penjualan]', '$data_detail_retur_penjualan[tanggal]', '$data_detail_retur_penjualan[jam]', '$data_detail_retur_penjualan[waktu]', '$data_detail_retur_penjualan[kode_barang]', '$data_detail_retur_penjualan[nama_barang]', '$data_detail_retur_penjualan[jumlah_beli]', '$data_detail_retur_penjualan[jumlah_retur]', '$data_detail_retur_penjualan[harga]', '$data_detail_retur_penjualan[subtotal]', '$data_detail_retur_penjualan[potongan]', '$data_detail_retur_penjualan[tax]', '$user')";
+      $insert_retur_penjualan = "INSERT INTO history_detail_retur_penjualan (no_faktur_retur, no_faktur_penjualan, tanggal, jam, kode_barang, nama_barang, jumlah_beli, jumlah_retur, harga, subtotal, potongan, tax, user_hapus) VALUES ('$no_faktur_retur', '$data_detail_retur_penjualan[no_faktur_penjualan]', '$data_detail_retur_penjualan[tanggal]', '$data_detail_retur_penjualan[jam]', '$data_detail_retur_penjualan[kode_barang]', '$data_detail_retur_penjualan[nama_barang]', '$data_detail_retur_penjualan[jumlah_beli]', '$data_detail_retur_penjualan[jumlah_retur]', '$data_detail_retur_penjualan[harga]', '$data_detail_retur_penjualan[subtotal]', '$data_detail_retur_penjualan[potongan]', '$data_detail_retur_penjualan[tax]', '$user')";
 
 if ($db->query($insert_retur_penjualan) === TRUE) {
     
@@ -55,6 +55,9 @@ else
 {
 	
 	}
+
+// Jurnalnya dihapus disini, karena kalo ditrigger pembelian nya jadi gak update
+$delete = $db->query("DELETE FROM jurnal_trans WHERE no_faktur = '$no_faktur_retur' ");
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

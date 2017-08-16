@@ -7,6 +7,13 @@ include 'sanitasi.php';
 $dari_tanggal = stringdoang($_POST['dari_tanggal']);
 $sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
 
+
+$total_jumlah = 0;
+$total_harga = 0;
+$total_subtotal = 0;
+$total_potongan = 0;
+$total_tax = 0;
+
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
 
@@ -70,20 +77,27 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 					        $jumlah_barang = $row['jumlah_barang'];
 					      }
 
+
+					      $total_jumlah = $jumlah_barang + $total_jumlah;
+						  $total_harga = $row['harga'] + $total_harga;
+						  $total_subtotal = $row['subtotal'] + $total_subtotal;
+						  $total_potongan = $row['potongan'] + $total_potongan;
+						  $total_tax = $row['tax'] + $total_tax;
+
 					//menampilkan data
 					$nestedData[] = $row['no_faktur'];
 					$nestedData[] = $row['kode_barang'];
 					$nestedData[] = $row['nama_barang'];
-					$nestedData[] = $jumlah_barang;
+					$nestedData[] = koma($jumlah_barang,3);
 					$nestedData[] = $row['nama'];
-					$nestedData[] = rp($row['harga']);
-					$nestedData[] = rp($row['subtotal']);
-					$nestedData[] = rp($row['potongan']);
-					$nestedData[] = rp($row['tax']);
+					$nestedData[] = koma($row['harga'],2);
+					$nestedData[] = koma($row['subtotal'],2);
+					$nestedData[] = koma($row['potongan'],2);
+					$nestedData[] = koma($row['tax'],2);
 
         if ($_SESSION['otoritas'] == 'Pimpinan'){
 
-                $nestedData[] = rp($row['hpp']);
+                $nestedData[] = koma($row['hpp'],2);
         }
 
 					$nestedData[] = $row['sisa'];
@@ -92,6 +106,21 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 				$data[] = $nestedData;
 			}
 
+$nestedData=array(); 
+					$nestedData[] = "<p></p>";
+					$nestedData[] = "<p></p>";
+					$nestedData[] = "<p></p>";
+					$nestedData[] = "<p style='color:red;'>".koma($total_jumlah,3)."</p>";
+					$nestedData[] = "<p></p>";
+					$nestedData[] = "<p style='color:red;'>".koma($total_harga,2)."</p>";
+					$nestedData[] = "<p style='color:red;'>".koma($total_subtotal,2)."</p>";
+					$nestedData[] = "<p style='color:red;'>".koma($total_potongan,2)."</p>";
+					$nestedData[] = "<p style='color:red;'>".koma($total_tax,2)."</p>";
+					$nestedData[] = "<p></p>";
+					$nestedData[] = "<p></p>";
+					$nestedData[] = "<p></p>";
+
+$data[] = $nestedData;
 
 
 $json_data = array(

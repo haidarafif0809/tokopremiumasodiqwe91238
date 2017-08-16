@@ -14,9 +14,9 @@ $sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
 $query02 = $db->query("SELECT SUM(pen.tunai) AS tunai_penjualan,SUM(pen.total) AS total_akhir, SUM(pen.kredit) AS total_kredit,SUM(dpp.jumlah_bayar) + SUM(dpp.potongan) AS ambil_total_bayar FROM penjualan pen LEFT JOIN detail_pembayaran_piutang dpp ON pen.no_faktur = dpp.no_faktur_penjualan WHERE pen.tanggal >= '$dari_tanggal' AND pen.tanggal <= '$sampai_tanggal' AND pen.kredit != 0 ");
 $cek02 = mysqli_fetch_array($query02);
 $total_akhir = $cek02['total_akhir'];
-$total_kredit = $cek02['total_kredit'];
 
 $total_bayar = $cek02['tunai_penjualan'] +  $cek02['ambil_total_bayar'];
+$total_kredit = $cek02['total_kredit'] - $total_bayar;
 
 
 
@@ -84,12 +84,13 @@ $query0232 = $db->query("SELECT SUM(jumlah_bayar) + SUM(potongan) AS total_bayar
 $kel_bayar = mysqli_fetch_array($query0232);
 $num_rows = mysqli_num_rows($query0232);
 
-$sum_dp = $db->query("SELECT SUM(tunai) AS tunai_penjualan FROM penjualan WHERE no_faktur = '$data11[no_faktur]' ");
+$sum_dp = $db->query("SELECT SUM(tunai) AS tunai_penjualan,nilai_kredit FROM penjualan WHERE no_faktur = '$data11[no_faktur]' ");
 $data_sum = mysqli_fetch_array($sum_dp);
 $Dp = $data_sum['tunai_penjualan'];
 
-
 $tot_bayar = $kel_bayar['total_bayar'] + $Dp;
+$sisa_kredit = $data_sum['nilai_kredit'] - $tot_bayar;
+
 
                   $query_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE id = '$data11[kode_pelanggan]' ");
                   $data_pelanggan = mysqli_fetch_array($query_pelanggan);
@@ -109,7 +110,7 @@ $tot_bayar = $kel_bayar['total_bayar'] + $Dp;
                   {
                     echo 0;
                   }
-                  echo "<td align='right' >". rp($data11['kredit']) ."</td>
+                  echo "<td align='right' >". rp($sisa_kredit) ."</td>
                   </tr>";
 
 

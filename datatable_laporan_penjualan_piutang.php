@@ -6,14 +6,14 @@ include 'db.php';
 $dari_tanggal = stringdoang($_POST['dari_tanggal']);
 $sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
 
-  $query02 = $db->query("SELECT SUM(pen.tunai) AS tunai_penjualan,SUM(pen.total) AS total_akhir, SUM(pen.kredit) AS total_kredit ,SUM(dpp.jumlah_bayar) + SUM(dpp.potongan) AS ambil_total_bayar FROM penjualan pen LEFT JOIN detail_pembayaran_piutang dpp ON pen.no_faktur = dpp.no_faktur_penjualan WHERE pen.tanggal >= '$dari_tanggal' AND pen.tanggal <= '$sampai_tanggal' AND pen.kredit != 0 ");
+  $query02 = $db->query("SELECT SUM(pen.tunai) AS tunai_penjualan,SUM(pen.total) AS total_akhir, SUM(pen.nilai_kredit) AS total_kredit ,SUM(dpp.jumlah_bayar) + SUM(dpp.potongan) AS ambil_total_bayar FROM penjualan pen LEFT JOIN detail_pembayaran_piutang dpp ON pen.no_faktur = dpp.no_faktur_penjualan WHERE pen.tanggal >= '$dari_tanggal' AND pen.tanggal <= '$sampai_tanggal' AND pen.kredit != 0 ");
 
 // LOGIKA UNTUK  UNTUK AMBIL  BERDASARKAN KONSUMEN DAN SALES (QUERY TAMPIL AWAL)
 
 $cek02 = mysqli_fetch_array($query02);
 $total_akhir = $cek02['total_akhir'];
-$total_kredit = $cek02['total_kredit'];
 $total_bayar = $cek02['tunai_penjualan'] +  $cek02['ambil_total_bayar'];
+$total_kredit = $cek02['total_kredit'] - $total_bayar;
 
 
 // storing  request (ie, get/post) global array to a variable  
@@ -70,13 +70,16 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 $query0232 = $db->query("SELECT SUM(jumlah_bayar) + SUM(potongan) AS total_bayar FROM detail_pembayaran_piutang WHERE no_faktur_penjualan = '$row[no_faktur]' ");
 $kel_bayar = mysqli_fetch_array($query0232);
 
-$sum_dp = $db->query("SELECT SUM(tunai) AS tunai_penjualan FROM penjualan WHERE no_faktur = '$row[no_faktur]' ");
+$sum_dp = $db->query("SELECT SUM(tunai) AS tunai_penjualan,nilai_kredit FROM penjualan WHERE no_faktur = '$row[no_faktur]' ");
 $data_sum = mysqli_fetch_array($sum_dp);
 $Dp = $data_sum['tunai_penjualan'];
 
 $num_rows = mysqli_num_rows($query0232);
 
 $tot_bayar = $kel_bayar['total_bayar'] + $Dp;
+
+$total_kredit = $data_sum['nilai_kredit'] - $tot_bayar;
+
 
 $query_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE id = '$row[kode_pelanggan]' ");
 $data_pelanggan = mysqli_fetch_array($query_pelanggan);
@@ -99,7 +102,7 @@ $data_pelanggan = mysqli_fetch_array($query_pelanggan);
 
       }
 
-      $nestedData[] =  "<p align='right'>".rp($row['kredit'])."</p>";
+      $nestedData[] =  "<p align='right'>".rp($sisa_kredit)."</p>";
 
   $data[] = $nestedData;
 }

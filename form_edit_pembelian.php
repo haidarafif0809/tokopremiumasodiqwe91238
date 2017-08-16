@@ -1102,9 +1102,18 @@ $("#form_barcode").submit(function(){
     var jumlah_barang = $("#jumlah_barang").val();
     var harga = $("#harga_produk").val();
     var harga_baru = $("#harga_baru").val();
+    if (harga == harga_baru) {
+      harga = harga;
+
+    }
+    else{
+      harga = harga_baru;
+    }
     var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
     var jumlahbarang = $("#jumlahbarang").val();
-    var satuan = $("#satuan_produk").val();
+    //var satuan = $("#satuan_produk").val();
+    var satuan = $("#satuan_konversi").val();
+
     var kode_gudang = $("#kode_gudang").val();
     var ppn = $("#ppn").val();
     var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_pembelian").val()))));
@@ -1114,54 +1123,49 @@ $("#form_barcode").submit(function(){
     var tax = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax1").val()))));
     var pot_fakt_per = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
     var pot_fakt_rp = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_pembelian").val()))));
-        if (tax == '') {
+    
+    if (tax == '') {
       tax = 0;
     };
 
 
-    if (subtotal == '') 
-    {
-    subtotal = 0;
+    if (subtotal == '') {
+      subtotal = 0;
     } 
       
-        if (potongan == '') 
-          {
-             potongan = 0;
-          }
-
-        else
-          {
-            var pos = potongan.search("%");
-           if (pos > 0) 
-            {
+    if (potongan == '') {
+      potongan = 0;
+    }
+    else{
+      
+      var pos = potongan.search("%");
+      if (pos > 0){
                var potongan_persen = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
                potongan_persen = potongan_persen.replace("%","");
                potongan = jumlah_barang * harga * potongan_persen / 100 ;
-            };
-          }
+      };
+    }
 
 
     if (ppn == 'Exclude') {  
-         var total1 = parseInt(jumlah_barang,10) * parseInt(harga,10) - parseInt(potongan,10);
-         var total_tax_exclude = parseInt(total1,10) * parseInt(tax,10) / 100;
-         var total = parseInt(total1,10) + parseInt(Math.round(total_tax_exclude,10));
+        var total1 = parseInt(jumlah_barang,10) * parseInt(harga,10) - parseInt(potongan,10);
+        var total_tax_exclude = parseInt(total1,10) * parseInt(tax,10) / 100;
+        var total = parseInt(total1,10) + parseInt(Math.round(total_tax_exclude,10));
     }
-    else
-    {
+    else{
         var total = parseInt(jumlah_barang,10) * parseInt(harga,10) - parseInt(potongan,10);
     }
 
     var total_akhir1 = parseInt(subtotal,10) + parseInt(total,10);    
 
 
-  if (pot_fakt_per == '0%') {
+    if (pot_fakt_per == '0%') {
       var potongaaan = pot_fakt_rp;
       var potongaaan = parseInt(potongaaan,10) / parseInt(total_akhir1,10) * 100;
       var pot_pers = parseInt(pot_fakt_rp,10) / parseInt(total_akhir1,10) * 100; 
       var total_akhir = parseInt(total_akhir1,10) - parseInt(pot_fakt_rp,10);
     }
-
-  else if(pot_fakt_rp == 0){
+    else if(pot_fakt_rp == 0){
       var potongaaan = pot_fakt_per;
       var pos = potongaaan.search("%");
       var potongan_persen = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(potongaaan))));
@@ -1171,8 +1175,7 @@ $("#form_barcode").submit(function(){
      var total_akhir = parseInt(total_akhir1,10) - parseInt(Math.round(potongaaan,10));
      var pot_pers = parseInt(potongaaan,10) / parseInt(total_akhir1,10) * 100;
     }
-     
-  else if(pot_fakt_rp != 0 && pot_fakt_rp != 0){
+    else if(pot_fakt_rp != 0 && pot_fakt_rp != 0){
       var potongaaan = pot_fakt_per;
       var pos = potongaaan.search("%");
       var potongan_persen = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah(potongaaan))));
@@ -1191,10 +1194,12 @@ $("#form_barcode").submit(function(){
       var pot_pers = parseInt(potongaaan,10) / parseInt(total_akhir1,10) * 100;
     }
 
-      var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_pembelian").val()))));
+    var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_pembelian").val()))));
+    
       if(pembayaran == ''){
-      pembayaran = 0;
+        pembayaran = 0;
       }
+
       var sisa = pembayaran - total_akhir;
       var sisa_kredit = total_akhir - pembayaran;
 
@@ -1219,35 +1224,32 @@ $("#form_barcode").submit(function(){
      $("#harga_produk").val('');
      $("#harga_baru").val('');
 
-  if (kode_barang == ''){
-  alert("Kode Barang Harus Diisi");
-  }
-  else if (jumlah_barang == ''){
-  alert("Jumlah Barang Harus Diisi");
-  }
-  else if (jumlah_barang == 0){
-  alert("Jumlah Barang Tidak Boleh 0");
-  }
-  else if (suplier == ''){
-  alert("Suplier Harus Dipilih");
-  $("#nama_suplier").trigger('chosen:open');
-  }
-    else if (kode_gudang == ''){
-  alert("Kode Gudang Harus Diisi");
-  $("#kode_gudang").trigger('chosen:open');
-  }
-    else if (ppn == ''){
-  alert("PPN Harus Diisi");
-  $("#ppn").trigger('chosen:open');
+      if (kode_barang == ''){
+        alert("Kode Barang Harus Diisi");
+      }
+      else if (jumlah_barang == ''){
+        alert("Jumlah Barang Harus Diisi");
+      }
+      else if (jumlah_barang == 0){
+        alert("Jumlah Barang Tidak Boleh 0");
+      }
+      else if (suplier == ''){
+        alert("Suplier Harus Dipilih");
+        $("#nama_suplier").trigger('chosen:open');
+      }
+      else if (kode_gudang == ''){
+        alert("Kode Gudang Harus Diisi");
+        $("#kode_gudang").trigger('chosen:open');
+      }
+      else if (ppn == ''){
+        alert("PPN Harus Diisi");
+        $("#ppn").trigger('chosen:open');
 
-  }    else if (tax > 100){
-  alert("Tax Tidak Boleh Lebih Dari 100%");
-  }
-
-
-  
-  else {
-
+      }
+      else if (tax > 100){
+        alert("Tax Tidak Boleh Lebih Dari 100%");
+      }
+      else {
 
         $("#potongan_pembelian").val(Math.round(potongaaan,10));
         $("#potongan_persen").val(Math.round(pot_pers));
@@ -1255,56 +1257,54 @@ $("#form_barcode").submit(function(){
         $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
         $("#submit_produk").hide();
 
-    $.post("proses_tbs_pembelian_edit.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,satuan:satuan,ppn:ppn,tax:tax},function(data){
-      
-      $("#tbody").prepend(data);
-      $("#kode_barang").trigger('chosen:updated');
-      $("#ppn").attr("disabled", true);
-      $("#nama_barang").val('');
-      $("#kode_barang").val('');
-      $("#kode_barang").trigger('chosen:updated');
-      $("#jumlah_barang").val('');
-      $("#tax1").val('');  
-      $("#harga_produk").val('');
-      $("#harga_baru").val(''); 
 
-    });
+        $.post("proses_tbs_pembelian_edit.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,satuan:satuan,ppn:ppn,tax:tax},function(data){
+          
+          $("#tbody").prepend(data);
+          $("#kode_barang").trigger('chosen:updated');
+          $("#ppn").attr("disabled", true);
+          $("#nama_barang").val('');
+          $("#kode_barang").val('');
+          $("#kode_barang").trigger('chosen:updated');
+          $("#jumlah_barang").val('');
+          $("#tax1").val('');  
+          $("#harga_produk").val('');
+          $("#harga_baru").val(''); 
 
-    $('#tabel_tbs_pembelian').DataTable().destroy();
-    var dataTable = $('#tabel_tbs_pembelian').DataTable( {
-      "processing": true,
-      "serverSide": true,
-      "ajax":{
-        url :"data_tbs_pembelian_edit.php", // json datasource
-        "data": function ( d ) {
-          d.no_faktur = $("#nomorfaktur").val();
-          // d.custom = $('#myInput').val();
-          // etc
-        },
-         
-         type: "post",  // method  , by default get
-         error: function(){  // error handling
-           $(".employee-grid-error").html("");
-           $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-           $("#employee-grid_processing").css("display","none");
-           }
-      },
-        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-           $(nRow).attr('class','tr-id-'+aData[11]+'');
-         }
-    });
-}
+        });
+
+        $('#tabel_tbs_pembelian').DataTable().destroy();
+        var dataTable = $('#tabel_tbs_pembelian').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"data_tbs_pembelian_edit.php", // json datasource
+            "data": function ( d ) {
+              d.no_faktur = $("#nomorfaktur").val();
+              // d.custom = $('#myInput').val();
+              // etc
+            },
+             
+             type: "post",  // method  , by default get
+             error: function(){  // error handling
+               $(".employee-grid-error").html("");
+               $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+               $("#employee-grid_processing").css("display","none");
+               }
+          },
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+               $(nRow).attr('class','tr-id-'+aData[11]+'');
+             }
+        });
+
+      }
     
       
   });
               
      $("form").submit(function(){
-     return false;
+      return false;
      });
-
-
-     
-      
 </script>
 
 
@@ -2067,30 +2067,31 @@ $(document).ready(function(){
 </script>
 
 <script>
-
 // untuk memunculkan jumlah kas secara otomatis
-  $(document).ready(function(){
+$(document).ready(function(){
+  $("#pembayaran_pembelian").keyup(function(){
+    
+    var jumlah = $("#pembayaran_pembelian").val();
+    var jumlah_kas = $("#jumlah1").val();
+    var sisa = jumlah_kas - jumlah;
+    var carabayar1 = $("#carabayar1").val();
 
+    if (sisa < 0 || carabayar1 == ""){
 
-$("#pembayaran_pembelian").keyup(function(){
-      var jumlah = $("#pembayaran_pembelian").val();
-      var jumlah_kas = $("#jumlah1").val();
-      var sisa = jumlah_kas - jumlah;
-      var carabayar1 = $("#carabayar1").val();
-
-       if (sisa < 0 || carabayar1 == "") 
-
-      {
-          $("#submit").hide();
+        $("#submit").hide();
+        $("#pembayaran_pembelian").val(0);
+        $("#potongan_pembelian").val('');
+        $("#potongan_persen").val('');
+        $("#tax").val('');
         alert("Jumlah Kas Tidak Mencukupi Atau Kolom Cara Bayar Masih Kosong");
 
-      }
-      else {
+    }
+    else {
         $("#submit").show();
-      }
-});
+    }
 
   });
+});
 </script>
 
 <script type="text/javascript">
@@ -2968,12 +2969,13 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
   $(document).on('click', '#batal', function (e) {
-    var no_faktur = $("#nomorfaktur").val();
 
-    var pesan_alert = confirm("Apakah Anda Yakin Ingin Membatalkan Pembelian "+no_faktur+" ?");
+    var no_faktur = $("#nomorfaktur").val();
+    var pesan_alert = confirm("Apakah Anda Yakin Ingin Membatalkan Edit Pembelian "+no_faktur+" ?");
+
     if (pesan_alert == true) {
         
-        $.get("batal_pembelian.php",{no_faktur:no_faktur},function(data){
+        $.post("batal_edit_pembelian.php",{no_faktur:no_faktur},function(data){
             
             $("#total_pembelian1").val('0');
             $("#potongan_pembelian").val('0');
@@ -2982,6 +2984,7 @@ $(document).ready(function(){
             $("#pembayaran_pembelian").val('0');
             $("#sisa_pembayaran_pembelian").val('0');
             $("#kredit").val('0');
+
            var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
            tabel_tbs_pembelian.draw();
 
@@ -2991,6 +2994,8 @@ $(document).ready(function(){
               $("#OrderPembelian").hide();
               $("#btnOrder").show();
               $("#btnOrderClose").hide();
+          
+          window.location.href="pembelian.php";
 
         });
     } 
@@ -3000,7 +3005,7 @@ $(document).ready(function(){
     }
 
   });
-  });
+});
 </script>
 
 

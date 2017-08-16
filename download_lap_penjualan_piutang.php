@@ -85,7 +85,8 @@ $total_bayar = $data_sum_dari_penjualan['tunai_penjualan'] +  $data_sum_dari_det
             <tbody>
             <?php
 
-          $perintah009 = $db->query("SELECT id,tanggal,tanggal_jt, DATEDIFF(DATE(NOW()), tanggal) AS usia_piutang ,no_faktur,kode_pelanggan,total,jam,sales,status,potongan,tax,sisa,kredit FROM penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' AND kredit != 0 ORDER BY tanggal DESC ");
+          $perintah009 = $db->query("SELECT id,tanggal,tanggal_jt, DATEDIFF(DATE(NOW()), tanggal) AS usia_piutang ,no_faktur,kode_pelanggan,
+            ,jam,sales,status,potongan,tax,sisa,kredit,nilai_kredit FROM penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' AND kredit != 0 ORDER BY tanggal DESC ");
                   while ($data11 = mysqli_fetch_array($perintah009))
 
                   {
@@ -100,7 +101,7 @@ $Dp = $data_sum['tunai_penjualan'];
 
 
 $tot_bayar = $kel_bayar['total_bayar'] + $Dp;
-$sisa_kredit = $data_sum['nilai_kredit'] - $tot_bayar;
+$sisa_kredit = $data11['nilai_kredit'] - $tot_bayar;
 
                   $query_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE id = '$data11[kode_pelanggan]' ");
                   $data_pelanggan = mysqli_fetch_array($query_pelanggan);
@@ -119,10 +120,16 @@ $sisa_kredit = $data_sum['nilai_kredit'] - $tot_bayar;
                   }
                   else
                   {
-                    echo 0;
+                      echo "<td>0</td>";
                   }
-                  echo "<td align='right' >". rp($sisa_kredit) ."</td>
-                  </tr>";
+
+                if ($sisa_kredit < 0 ) {
+                # code...
+                     echo "<td>0</td>";
+                  }
+                else {
+                  echo "<td align='right' >".rp($sisa_kredit)."</p>";
+                }
 
 
                   }

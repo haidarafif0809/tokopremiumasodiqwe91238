@@ -13,6 +13,7 @@ $total_harga = 0;
 $total_subtotal = 0;
 $total_potongan = 0;
 $total_tax = 0;
+$total_sisa = 0;
 
 // storing  request (ie, get/post) global array to a variable  
 $requestData= $_REQUEST;
@@ -83,6 +84,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 						  $total_subtotal = $row['subtotal'] + $total_subtotal;
 						  $total_potongan = $row['potongan'] + $total_potongan;
 						  $total_tax = $row['tax'] + $total_tax;
+						  $total_sisa = $row['sisa'] + $total_sisa;
 
 					//menampilkan data
 					$nestedData[] = $row['no_faktur'];
@@ -100,10 +102,10 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
                 $nestedData[] = koma($row['hpp'],2);
         }
 
-					$nestedData[] = $row['sisa'];
+					$nestedData[] = koma($row['sisa'],3);
 					$nestedData[] = $row['status'];
-				$nestedData[] = $row["id"];
-				$data[] = $nestedData;
+					$nestedData[] = $row["id"];
+					$data[] = $nestedData;
 			}
 
 $nestedData=array(); 
@@ -116,7 +118,7 @@ $nestedData=array();
 					$nestedData[] = "<p style='color:red;'>".koma($total_subtotal,2)."</p>";
 					$nestedData[] = "<p style='color:red;'>".koma($total_potongan,2)."</p>";
 					$nestedData[] = "<p style='color:red;'>".koma($total_tax,2)."</p>";
-					$nestedData[] = "<p></p>";
+					$nestedData[] = "<p style='color:red;'>".koma($total_sisa,3)."</p>";
 					$nestedData[] = "<p></p>";
 					$nestedData[] = "<p></p>";
 

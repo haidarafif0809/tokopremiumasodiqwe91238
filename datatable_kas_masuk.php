@@ -52,10 +52,8 @@ $data = array();
 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 	$nestedData=array(); 
 
-			$pilih_akses_kas_masuk = $db->query("SELECT * FROM otoritas_kas_masuk WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+		$pilih_akses_kas_masuk = $db->query("SELECT * FROM otoritas_kas_masuk WHERE id_otoritas = '$_SESSION[otoritas_id]'");
 		$kas_masuk = mysqli_fetch_array($pilih_akses_kas_masuk);
-
-		
 
 			//menampilkan data
 			$nestedData[] = $row['no_faktur'];			
@@ -74,8 +72,23 @@ if ($kas_masuk['kas_masuk_edit'] > 0) {
 			$nestedData[] = "<a href='proses_edit_data_kas_masuk.php?no_faktur=". $row['no_faktur']."&nama_daftar_akun=". $row['nama_daftar_akun']."' class='btn btn-success'> <i class='fa fa-edit'></i> </a> ";
 		}
 
-if ($kas_masuk['kas_masuk_hapus'] > 0) {
-			$nestedData[] = "<button class=' btn btn-danger btn-hapus' data-id='". $row['id'] ."' no-faktur='". $row['no_faktur'] ."'> <i class='fa fa-trash'></i> </button>";
+		if ($kas_masuk['kas_masuk_hapus'] > 0) {
+
+			// cek jumlah kas 
+			$query_jurnal = $db->query("SELECT SUM(debit) - SUM(kredit) AS total_kas FROm jurnal_trans WHERE kode_akun_jurnal = '$row[ke_akun]' ");
+			$data_jurnal = mysqli_fetch_array($query_jurnal);
+
+			// total kas
+			$total_kas = $data_jurnal['total_kas'] - $row['jumlah'];
+
+			if ($total_kas >= 0) {
+				
+				$nestedData[] = "<button class=' btn btn-danger btn-hapus' data-id='". $row['id'] ."' no-faktur='". $row['no_faktur'] ."'> <i class='fa fa-trash'></i> </button>";
+			}else{
+			$nestedData[] = "<p style='color:red;' align='center'><i class='fa fa-close fa-3x'></i></p>";
+			}
+
+
 		}
 				$nestedData[] = $row["id"];
 				$data[] = $nestedData;

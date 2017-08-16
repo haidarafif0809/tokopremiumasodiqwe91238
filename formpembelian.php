@@ -1757,33 +1757,29 @@ $(document).ready(function(){
 <script>
 
 // untuk memunculkan jumlah kas secara otomatis
-  $(document).ready(function(){
+$(document).ready(function(){
+  $("#pembayaran_pembelian").keyup(function(){
+    var jumlah = $("#pembayaran_pembelian").val();
+    var jumlah_kas = $("#jumlah1").val();
+    var sisa = jumlah_kas - jumlah;
+    var carabayar1 = $("#carabayar1").val();
 
-
-$("#pembayaran_pembelian").keyup(function(){
-      var jumlah = $("#pembayaran_pembelian").val();
-      var jumlah_kas = $("#jumlah1").val();
-      var sisa = jumlah_kas - jumlah;
-      var carabayar1 = $("#carabayar1").val();
-
-       if (sisa < 0 || carabayar1 == "")
-
-      {
-          $("#submit").hide();
-          $("#pembayaran_pembelian").val('');
-          $("#potongan_pembelian").val('');
-          $("#potongan_persen").val('');
-          $("#tax").val('');
+    if (sisa < 0 || carabayar1 == ""){
+        
+        $("#submit").hide();
+        $("#pembayaran_pembelian").val(0);
+        $("#potongan_pembelian").val('');
+        $("#potongan_persen").val('');
+        $("#tax").val('');
 
         alert("Jumlah Kas Tidak Mencukupi Atau Kolom Cara Bayar Masih Kosong");
 
-      }
-      else {
+    }
+    else {
         $("#submit").show();
-      }
-});
-
+    }
   });
+});
 </script>
 
 <script type="text/javascript">

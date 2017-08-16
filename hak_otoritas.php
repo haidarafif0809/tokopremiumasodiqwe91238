@@ -319,24 +319,10 @@ $otoritas_edit = mysqli_num_rows($pilih_akses_otoritas_edit);
 		$.post("hapus_otoritas.php",{id:id},function(data){
 
 		if (data != "") {
-			$('#table_hak_otoritas').DataTable().destroy();
-			var dataTable = $('#table_hak_otoritas').DataTable( {
-          "processing": true,
-          "serverSide": true,
-          "ajax":{
-            url :"datatable_hak_otoritas.php", // json datasource
-            type: "post",  // method  , by default get
-            error: function(){  // error handling
-              $(".employee-grid-error").html("");
-              $("#table_hak_otoritas").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-              $("#employee-grid_processing").css("display","none");
-              
-            }
-          },
-            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-              $(nRow).attr('class','tr-id-'+aData[4]+'');
-            },
-        });		$("#modal_hapus").modal('hide');
+		var table_hak_otoritas = $('#table_hak_otoritas').DataTable();
+		table_hak_otoritas.draw();	
+
+		$("#modal_hapus").modal('hide');
 		
 		}
 
@@ -362,86 +348,55 @@ $otoritas_edit = mysqli_num_rows($pilih_akses_otoritas_edit);
 		var nama = $("#otoritas_edit").val();
 		var id = $("#id_edit").val();
 
+
+
 		if (nama == ""){
 			alert("Nama Harus Diisi");
 		}
+
 		else {
 
-		$.post("update_otoritas.php",{id:id,nama:nama},function(data){
-		if (data != '') {
-		$(".alert").show('fast');
-		$('#table_hak_otoritas').DataTable().destroy();
-var dataTable = $('#table_hak_otoritas').DataTable( {
-          "processing": true,
-          "serverSide": true,
-          "ajax":{
-            url :"datatable_hak_otoritas.php", // json datasource
-            type: "post",  // method  , by default get
-            error: function(){  // error handling
-              $(".employee-grid-error").html("");
-              $("#table_hak_otoritas").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-              $("#employee-grid_processing").css("display","none");
-              
-            }
-          },
-            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-              $(nRow).attr('class','tr-id-'+aData[4]+'');
-            },
-        });		
-		setTimeout(tutupalert, 2000);
-		$(".modal").modal("hide");
-		}
-		
-		
+			$.post('cek_nama_otoritas.php',{nama:nama}, function(data){
+                
+             if(data == 1){
+                    alert ("Otoritas Sudah Ada");
+                    $("#otoritas_edit").val('');
+             }
+             else {
+				$.post("update_otoritas.php",{id:id,nama:nama},function(data){
+				if (data != '') {
+				$(".alert").show('fast');
+				var table_hak_otoritas = $('#table_hak_otoritas').DataTable();
+				table_hak_otoritas.draw();
+
+				setTimeout(tutupalert, 2000);
+				$(".modal").modal("hide");
+				}
+			});
+
+		 	}
+
 		});
+
 		}
 									
 	
 		});
 		
-
-
 //end function edit data
 
-		$('form').submit(function(){
-		
+		$('form').submit(function(){	
 		return false;
 		});
 		
-		});
-		
-		
-		
+});
 
 		function tutupalert() {
 		$(".alert").hide("fast")
 		}
-		
-
-
 </script>
 
 
-<script type="text/javascript">
-	$("#otoritas_edit").keyup(function(){
-		var nama_otoritas = $("#otoritas_edit").val();
-
-
-		 $.post('cek_nama_otoritas.php',{nama:nama_otoritas}, function(data){
-                
-                if(data == 1){
-
-                    alert ("Otoritas Sudah Ada");
-                    $("#otoritas_edit").val('');
-                }
-                else {
-                    
-                }
-
-	});
-	});
-
-</script>
 
 
 

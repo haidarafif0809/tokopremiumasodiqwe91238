@@ -1309,7 +1309,7 @@ $(document).ready(function(){
     else{
     
     //Cek untuk perubahan harga beli
-    $.post("cek_perubahan_harga_pembelian.php",{total_1:total_1},function(hasil){
+    $.post("cek_perubahan_harga_pembelian.php",function(hasil){
       if(hasil == 1){
         var pesan_alert = confirm("Harga Barang melebihi harga jual, yakin akan merubah harga beli tersebut? ");
       }
@@ -1347,6 +1347,34 @@ $(document).ready(function(){
 
          });
 
+      //Table TBS AJAX
+        $('#tabel_tbs_pembelian').DataTable().destroy();
+        var dataTable = $('#tabel_tbs_pembelian').DataTable( {
+          "processing": true,
+          "serverSide": true,
+          "ajax":{
+            url :"data_tbs_pembelian.php", // json datasource
+            "data": function ( d ) {
+              d.session_id = $("#session_id").val();
+              // d.custom = $('#myInput').val();
+              // etc
+            },
+
+             type: "post",  // method  , by default get
+             error: function(){  // error handling
+               $(".employee-grid-error").html("");
+               $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+               $("#employee-grid_processing").css("display","none");
+               }
+          },
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+               $(nRow).attr('class','tr-id-'+aData[11]+'');
+             }
+        });
+
+        var table_tbs_order = $('#table_tbs_order').DataTable();
+            table_tbs_order.draw();
+        //Akhir Table TBS AJAX
       }
       else{
 
@@ -1446,7 +1474,7 @@ $(document).ready(function(){
       else{
     
       //Cek untuk perubahan harga beli
-      $.post("cek_perubahan_harga_pembelian.php",{total_1:total_1},function(hasil){
+      $.post("cek_perubahan_harga_pembelian.php",function(hasil){
         if(hasil == 1){
           var pesan_alert = confirm("Harga Barang melebihi harga jual, yakin akan merubah harga beli tersebut? ");
         }
@@ -1474,16 +1502,42 @@ $(document).ready(function(){
           $("#sisa_pembayaran_pembelian").val('');
           $("#tanggal_jt").val('');
 
-      $("#pembayaran_pembelian").val('');
-      $("#sisa_pembayaran_pembelian").val('');
-      $("#kredit").val('');
-      $("#tanggal_jt").val('');
-
-
+          $("#pembayaran_pembelian").val('');
+          $("#sisa_pembayaran_pembelian").val('');
+          $("#kredit").val('');
+          $("#tanggal_jt").val('');
 
           }); //akhir proses bayar beli pada HUTANG !!
 
+          //Ajax table TBS !!
+            $('#tabel_tbs_pembelian').DataTable().destroy();
+            var dataTable = $('#tabel_tbs_pembelian').DataTable( {
+              "processing": true,
+              "serverSide": true,
+              "ajax":{
+                url :"data_tbs_pembelian.php", // json datasource
+                "data": function ( d ) {
+                  d.session_id = $("#session_id").val();
+                  // d.custom = $('#myInput').val();
+                  // etc
+                },
 
+                 type: "post",  // method  , by default get
+                 error: function(){  // error handling
+                   $(".employee-grid-error").html("");
+                   $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
+                   $("#employee-grid_processing").css("display","none");
+                   }
+              },
+                "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                   $(nRow).attr('class','tr-id-'+aData[11]+'');
+                 }
+            });
+
+            var table_tbs_order = $('#table_tbs_order').DataTable();
+                table_tbs_order.draw();
+          //Ajax table TBS !!
+                
         }
         else{
 
@@ -1703,33 +1757,29 @@ $(document).ready(function(){
 <script>
 
 // untuk memunculkan jumlah kas secara otomatis
-  $(document).ready(function(){
+$(document).ready(function(){
+  $("#pembayaran_pembelian").keyup(function(){
+    var jumlah = $("#pembayaran_pembelian").val();
+    var jumlah_kas = $("#jumlah1").val();
+    var sisa = jumlah_kas - jumlah;
+    var carabayar1 = $("#carabayar1").val();
 
-
-$("#pembayaran_pembelian").keyup(function(){
-      var jumlah = $("#pembayaran_pembelian").val();
-      var jumlah_kas = $("#jumlah1").val();
-      var sisa = jumlah_kas - jumlah;
-      var carabayar1 = $("#carabayar1").val();
-
-       if (sisa < 0 || carabayar1 == "")
-
-      {
-          $("#submit").hide();
-          $("#pembayaran_pembelian").val('');
-          $("#potongan_pembelian").val('');
-          $("#potongan_persen").val('');
-          $("#tax").val('');
+    if (sisa < 0 || carabayar1 == ""){
+        
+        $("#submit").hide();
+        $("#pembayaran_pembelian").val(0);
+        $("#potongan_pembelian").val('');
+        $("#potongan_persen").val('');
+        $("#tax").val('');
 
         alert("Jumlah Kas Tidak Mencukupi Atau Kolom Cara Bayar Masih Kosong");
 
-      }
-      else {
+    }
+    else {
         $("#submit").show();
-      }
-});
-
+    }
   });
+});
 </script>
 
 <script type="text/javascript">

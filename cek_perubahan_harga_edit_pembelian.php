@@ -7,48 +7,55 @@
  		$query = $db->query("SELECT harga,kode_barang,jumlah_barang,satuan FROM tbs_pembelian WHERE no_faktur = '$no_faktur'");
     	while ($data = mysqli_fetch_array($query)){
 
-     		$query_barang = $db->query("SELECT harga_beli,satuan,harga_jual FROM barang WHERE kode_barang = '$data[kode_barang]'");
-      		$data_barang = mysqli_fetch_array($query_barang);
+				//Cek apakah barang tersebut memiliki Konversi ?
+		        $query_cek_satuan_konversi = $db->query("SELECT konversi,harga_pokok FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]'");
+		        $data_tampil_konvers = mysqli_fetch_array($query_cek_satuan_konversi);
+		        $data_jumlah = mysqli_num_rows($query_cek_satuan_konversi);
 
-			//Cek apakah barang tersebut memiliki Konversi ?
-	        $query_cek_satuan_konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]'");
-	        $data_jumlah_konversi = mysqli_fetch_array($query_cek_satuan_konversi);
-	        $data_jumlah = mysqli_num_rows($query_cek_satuan_konversi);
+		        if($data_jumlah > 0){
+		        		if($data['harga'] != $data_tampil_konvers['harga_pokok']){
+				        		if($data['harga'] > $data_tampil_konvers['harga_pokok']){
+									echo 1; // ada perubahan harga di atas harga sebelumnya
 
-	        if($data_jumlah > 0){
+				        		}
+				        		else{
 
-		        if($data_jumlah_konversi['konversi'] == ''){
-		        	$jumlah_konversi = 0;
+									echo 2; // ada perubahan di bawah harga sebelumnya
+				        		}
+
+			        	}
+			        	else{
+			        		echo 3; // tidak ada perubahan harga 
+			        	}
+
+
 		        }
 		        else{
-		        	$jumlah_konversi = $data_jumlah_konversi['konversi'];
-		        }
 
-		        $hasil_konversi = $data['harga'] / $jumlah_konversi;
-		        $hasil = round($hasil_konversi);
-	          	
-	          	$harga_beli_sebenarnya = $hasil; //Hasil akhir
-	          	                         
-	          	//Jika Iya maka ambil harga setelah di bagi dengan jumlah barang yang sebenarnya di konversi !!
-			      if($harga_beli_sebenarnya > $data_barang['harga_jual']){
-			         echo 1;
-			      }
-			      else{
-			      	echo 2;
-			      }
+		        	//Barang yang tidak Terkonversi di periksa di sini !!
 
-	        }
-	        else{
-				//Jika Tidak ambil harga yang sebenarnya dari TBS !!
-	          	$harga_beli_sebenarnya = $data['harga'];
-		      	if($harga_beli_sebenarnya > $data_barang['harga_jual']){
-		      		echo 1;
-		      	}
-		      	else{
-		      		echo 2;
-		      	}
-	        }
-	        
-	    }
+					$harga_tbs = $data['harga'];
 
+					$query_produk = $db->query("SELECT kode_barang,harga_beli,harga_jual FROM barang WHERE kode_barang = '$data[kode_barang]'");
+					while($data_produk = mysqli_fetch_array($query_produk)){
+
+						if($data_produk['harga_beli'] != $harga_tbs){
+
+							if($harga_tbs > $data_produk['harga_jual']){
+								echo 1; // ada perubahan harga di atas harga sebelumnya
+							}
+							else{
+								echo 2; // ada perubahan di bawah harga sebelumnya
+							}
+						}
+						else{
+
+							echo 3; // tidak ada perubahan harga 
+						}
+
+					}
+
+	    		}
+	       }
+	   
  ?>

@@ -51,7 +51,7 @@ $columns = array(
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY TAMPIL AWAL)
 
 // getting total number records without any search
-$sql =" SELECT id,tanggal,tanggal_jt, DATEDIFF(DATE(NOW()), tanggal) AS usia_piutang ,no_faktur,kode_pelanggan,total,jam,status,potongan,tax,sisa,kredit ";
+$sql =" SELECT id,tanggal,tanggal_jt, DATEDIFF(DATE(NOW()), tanggal) AS usia_piutang ,no_faktur,kode_pelanggan,total,jam,status,potongan,tax,sisa,kredit,nilai_kredit ";
 $sql.=" FROM penjualan dp WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' AND kredit != 0  ";
 
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY TAMPIL AWAL)
@@ -61,7 +61,7 @@ $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY PENCARIAN DATATABLE)
-$sql =" SELECT id,tanggal,tanggal_jt, DATEDIFF(DATE(NOW()), tanggal) AS usia_piutang ,no_faktur,kode_pelanggan,total,jam,status,potongan,tax,sisa,kredit ";
+$sql =" SELECT id,tanggal,tanggal_jt, DATEDIFF(DATE(NOW()), tanggal) AS usia_piutang ,no_faktur,kode_pelanggan,total,jam,status,potongan,tax,sisa,kredit,nilai_kredit ";
 $sql.=" FROM penjualan dp WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' AND kredit != 0  ";
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY PENCARIAN DATATABLE)
 
@@ -94,7 +94,7 @@ $num_rows = mysqli_num_rows($query0232);
 
 $tot_bayar = $kel_bayar['total_bayar'] + $Dp;
 
-$sisa_kredit  = $data_sum['nilai_kredit'] - $tot_bayar;
+$sisa_kredit  = $row['nilai_kredit'] - $tot_bayar;
 
 
 $query_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE id = '$row[kode_pelanggan]' ");
@@ -114,11 +114,17 @@ $data_pelanggan = mysqli_fetch_array($query_pelanggan);
       }
       else
       {
-      	$nestedData[] = "0";
+      	$nestedData[] = "<p>0</p>";
 
       }
 
-      $nestedData[] =  "<p align='right'>".rp($sisa_kredit)."</p>";
+      if ($sisa_kredit < 0 ) {
+        # code...
+         $nestedData[] = 0;
+      }
+      else {
+        $nestedData[] = "<p align='right'> ".rp($sisa_kredit)."</p>";
+      }
 
   $data[] = $nestedData;
 }

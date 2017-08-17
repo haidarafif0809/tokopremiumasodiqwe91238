@@ -16,7 +16,7 @@
 
 
     if ( $harga != $harga_baru) {
-          $query00 = $db->query("UPDATE barang SET harga_beli = '$harga_baru' WHERE kode_barang = '$kode_barang'");
+          //$query00 = $db->query("UPDATE barang SET harga_beli = '$harga_baru' WHERE kode_barang = '$kode_barang'");
           $harga_beli = $harga_baru;
     }
 

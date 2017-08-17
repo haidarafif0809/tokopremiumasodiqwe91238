@@ -77,7 +77,7 @@ $data_tbs = mysqli_num_rows($tbs);
  ?>
 
 <!--membuat tampilan form agar terlihat rapih dalam satu tempat-->
-<div class="container">
+<div style="padding-left: 15%; padding-right: 15%">
 
           <h3> <u>FORM EDIT RETUR PEMBELIAN NON FAKTUR</u> </h3><br> 
 <!--membuat agar tabel berada dalam baris tertentu-->

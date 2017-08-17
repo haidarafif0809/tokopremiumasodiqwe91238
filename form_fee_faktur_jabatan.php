@@ -125,15 +125,16 @@ mysqli_close($db);
 
  	$.post("proses_fee_faktur_jabatan.php",{jumlah_prosentase:jumlah_prosentase,jumlah_uang:jumlah_nominal,jabatan:jabatan},function(info){
 
-$("#alert").html(info);
+    $("#alert").html(info);
 
     $("#alert_berhasil").show();
     $("#alert_gagal").show();
      $("#jumlah_prosentase").val('');
      $("#jumlah_nominal").val('');
      $("#jabatan").val('');
-
-    
+     $("#prosentase").show();
+     $("#nominal").show();
+     $("#jumlah_prosentase").focus();
        
    });
 
@@ -161,6 +162,9 @@ $("#alert").html(info);
       var jumlah_prosentase = $("#jumlah_prosentase").val();
       var jumlah_nominal = $("#jumlah_norminal").val();
       
+
+      $("#alert_berhasil").hide();
+      $("#alert_gagal").hide();
       if (jumlah_prosentase > 100)
       {
 
@@ -183,7 +187,9 @@ $("#alert").html(info);
       });
 
 
-              $("#jumlah_nominal").keyup(function(){
+      $("#jumlah_nominal").keyup(function(){
+            $("#alert_berhasil").hide();
+            $("#alert_gagal").hide();
               var jumlah_nominal = $("#jumlah_nominal").val();
               var jumlah_prosentase = $("#jumlah_prosentase").val();
               
@@ -195,13 +201,9 @@ $("#alert").html(info);
               else
               {
               $("#prosentase").hide();
-              }
+              }      
               
-              
-              
-              });
-     
-
+      });
   </script>
 
 

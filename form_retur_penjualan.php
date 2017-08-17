@@ -21,7 +21,7 @@ $session_id = session_id();
  ?>
 
 <!--membuat tampilan form agar terlihat rapih dalam satu tempat-->
-<div style="padding-left: 25%; padding-right: 22%">
+<div style="padding-left: 15%; padding-right: 15%">
 
 
           <h3> <u>FORM RETUR PENJUALAN</u> </h3><br> 
@@ -264,7 +264,7 @@ $session_id = session_id();
     <input type="hidden" id="harga_pcs" name="harga_pcs" class="form-control" value="" required="" placeholder="harga_pcs">    
     <input type="hidden" id="satuan_pcs" name="satuan_pcs" class="form-control" value="" required="" placeholder="satuan_pcs">
     <input type="hidden" name="session_id" id="session_id" class="form-control" value="<?php echo $session_id; ?>" placeholder="session_id">
-    <input type="text" name="no_faktur_piutang_hidden" id="no_faktur_piutang_hidden" class="form-control" readonly="" placeholder="no_faktur_piutang_hidden">
+    <input type="hidden" name="no_faktur_piutang_hidden" id="no_faktur_piutang_hidden" class="form-control" readonly="" placeholder="no_faktur_piutang_hidden">
     <input type="hidden" id="no_faktur2" name="no_faktur_penjualan" class="form-control" = required="" placeholder="no_faktur2">
     <input type="hidden" name="jumlah_beli" class="form-control" placeholder="jumlah_beli">
     <input type="hidden" id="sisabarang" name="sisa" class="form-control" value="" placeholder="sisabarang">

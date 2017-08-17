@@ -76,7 +76,7 @@ $data_tbs = mysqli_num_rows($tbs);
       </script>
 
 <!--membuat tampilan form agar terlihat rapih dalam satu tempat-->
-<div style="padding-left: 25%; padding-right: 22%">
+<div style="padding-left: 15%; padding-right: 15%">
 
 
 <!--membuat agar tabel berada dalam baris tertentu-->

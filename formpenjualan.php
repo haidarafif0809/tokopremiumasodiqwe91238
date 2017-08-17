@@ -2569,8 +2569,15 @@ if (pot_fakt_rp == ""  || pot_fakt_rp == 0,00 ) {
 
 var tax_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
 
-if (pot_fakt_per == 0){
-    var potongaaan = pot_fakt_rp;
+if (pot_fakt_per == 0.00){
+    
+      if (pot_fakt_rp == 0.00) {
+              var potongaaan = pot_fakt_rp;
+      }
+      else{
+            var potongaaan = parseFloat(total_akhir1) * parseFloat(pot_fakt_per) / 100;
+      }
+
     var pot_fakt_per = parseFloat(potongaaan.replace(",",".")) / parseFloat(total_akhir1) * 100;
 
     if (pot_fakt_rp == 0.00 ){   
@@ -2589,15 +2596,22 @@ if (pot_fakt_per == 0){
     }
      //end hitung pajak
         
-    var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax));
+    var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax)) - parseFloat(potongaaan);
 }//END pot_fakt_per == 0
+
 else if(pot_fakt_rp == 0){
 
     var potongaaan = pot_fakt_per;
     var pos = potongaaan.search("%");
     var potongan_persen = potongaaan;
     var potongan_persen = potongan_persen.replace("%","");
-    var potongaaan = parseFloat(total_akhir1) * parseFloat(potongan_persen.replace(',','.')) / 100;
+
+    if (pot_fakt_per == 0.00) { 
+           var potongaaan = pot_fakt_rp; 
+      } 
+      else{ 
+           var potongaaan = parseFloat(total_akhir1) * parseFloat(potongan_persen) / 100;
+      } 
 
     if (pot_fakt_rp == 0.00 ){  
       var total_akhier = parseFloat(total_akhir1);
@@ -2614,7 +2628,7 @@ else if(pot_fakt_rp == 0){
       var hasil_tax = 0;
     }
     //end hitung pajak
-    var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax));
+    var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax)) - parseFloat(potongaaan);
 
 }//end pot_fakt_rp == 0
 else if(pot_fakt_rp != 0 && pot_fakt_per != 0){
@@ -2639,7 +2653,7 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0){
       var hasil_tax = 0;
     }
     //end hitung pajak
-    var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax));
+    var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax)) - parseFloat(potongaaan);
 
  }//pot_fakt_rp != 0 && pot_fakt_per != 0
 
@@ -2744,7 +2758,7 @@ var total_akhir1 = parseFloat(data);
 
 
   var pot_fakt_per = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
-   if (pot_fakt_per == "" || pot_fakt_per == 0,00 || pot_fakt_rp == 0  ) 
+   if (pot_fakt_per == "" || pot_fakt_per == 0,00 || pot_fakt_per == 0  ) 
       {
         pot_fakt_per = 0.00;
       }
@@ -2759,8 +2773,14 @@ var total_akhir1 = parseFloat(data);
    var tax_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
 
 
-    if (pot_fakt_per == 0) {
-      var potongaaan = pot_fakt_rp;
+    if (pot_fakt_per == 0.00) {
+
+      if (pot_fakt_rp == 0.00) {
+              var potongaaan = pot_fakt_rp;
+      }
+      else{
+            var potongaaan = parseFloat(total_akhir1) * parseFloat(pot_fakt_per) / 100;
+      }
 
       var pot_fakt_per = parseFloat(potongaaan) / parseFloat(total_akhir1) * 100;
 
@@ -2773,33 +2793,42 @@ if (pot_fakt_rp == 0.00 )
   }
 else
   {
-    var total_akhier = parseFloat(total_akhir1) /*+ parseFloat(biaya_adm.replace(',','.'))*/ - parseFloat(pot_fakt_rp.replace(',','.'));
+    var total_akhier = parseFloat(total_akhir1) /*+ parseFloat(biaya_adm.replace(',','.'))*/ - parseFloat(pot_fakt_rp);
   }
 // prhitungan total akhir
 
 
-//Hitung pajak
-if (tax_faktur != 0 ) 
-      {
+      //Hitung pajak
+      if (tax_faktur != 0 ) 
+          {
         var hasil_tax = parseFloat(total_akhier) * parseFloat(tax_faktur) / 100;
-      }
- else
-    {
+       }
+        else{
         var hasil_tax = 0;
-    }
-//end hitung pajak
+        }
+      //end hitung pajak
    
-    var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax));
+    var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax)) - parseFloat(potongaaan,2);
 
 
-    }
+    } 
+    //penutup      if (pot_fakt_per == 0.00) {
+
     else if(pot_fakt_rp == 0.00)
     {
       var potongaaan = pot_fakt_per;
       var pos = potongaaan.search("%");
       var potongan_persen = potongaaan;
        var   potongan_persen = potongan_persen.replace("%","");
-     var potongaaan = parseFloat(total_akhir1) * parseFloat(potongan_persen.replace(',','.')) / 100;
+
+       if (pot_fakt_per == 0.00) { 
+           var potongaaan = pot_fakt_rp; 
+      } 
+      else{ 
+           var potongaaan = parseFloat(total_akhir1) * parseFloat(potongan_persen) / 100;
+      } 
+
+     
 
 // prhitungan total akhir
    if (pot_fakt_rp == 0 )
@@ -2821,7 +2850,7 @@ else
         var hasil_tax = 0;
         }
 //end hitung pajak
-   var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax));
+   var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax)) - parseFloat(potongaaan,2);
 
     }
      else if(pot_fakt_rp != 0.00 && pot_fakt_per != 0.00)
@@ -2852,7 +2881,7 @@ else
         }
 //end hitung pajak
 
-    var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax));
+    var total_akhir = parseFloat(total_akhier) + parseFloat(Math.round(hasil_tax)) - parseFloat(potongaaan);
 
     }
 
@@ -2918,7 +2947,7 @@ $(document).on('click','.btn-hapus-tbs',function(e){
     var subtotal_tbs = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total2").val()))));
     
   var pot_fakt_per = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
-   if (pot_fakt_per == "" || pot_fakt_per == 0,00 || pot_fakt_rp == 0  ) {
+   if (pot_fakt_per == "" || pot_fakt_per == 0,00 || pot_fakt_per == 0  ) {
         pot_fakt_per = 0.00;
       }
 
@@ -2938,12 +2967,7 @@ $(document).on('click','.btn-hapus-tbs',function(e){
 var pesan_alert = confirm("Apakah Anda Yakin Ingin Menghapus "+nama_barang+""+ "?");
 if (pesan_alert == true) {
 
-      if (pot_fakt_rp == 0.00){
-        $("#potongan_penjualan").val();
-      }
-      else{    
-        $("#potongan_penjualan").val(potongaaan.format(2, 3, '.', ','));
-      }
+
     
       $("#pembayaran_penjualan").val('');
       $("#kredit").val('');
@@ -3014,7 +3038,17 @@ if (pesan_alert == true) {
       $("#total2").val(total_akhir1.format(2, 3, '.', ','));  
       $("#total1").val(total_akhir.format(2, 3, '.', ','));
           
+
+      if (pot_fakt_rp == 0.00){
+        $("#potongan_penjualan").val();
+      }
+      else{    
+        $("#potongan_penjualan").val(potongaaan);
+      }
 ///zzzzzzzzzzzzzzzzzzzzzzzzzz
+
+ var tabel_tbs_penjualan = $('#tabel_tbs_penjualan').DataTable();
+                        tabel_tbs_penjualan.draw();
 
 
         
@@ -3090,8 +3124,7 @@ if (pesan_alert == true) {
 
 
 
-                        var tabel_tbs_penjualan = $('#tabel_tbs_penjualan').DataTable();
-                        tabel_tbs_penjualan.draw();
+                       
 
                
           $("#kode_barang").chosen().val('');
@@ -3287,7 +3320,8 @@ $('form').submit(function(){
  if (pot_fakt_per == 0.00) 
     {
 
-      var potongaaan = pot_fakt_rp;
+              var potongaaan = parseFloat(pot_fakt_rp,2);
+  
 
       var pot_fakt_per = parseFloat(potongaaan,2) / parseFloat(total_akhir1,2) * 100;
 
@@ -3300,7 +3334,7 @@ $('form').submit(function(){
       }
       else
       {
-          var total_akhier = parseFloat(total_akhir1,2) /*+ parseFloat(biaya_adm.replace(',','.'),2)*/ - parseFloat(pot_fakt_rp.replace(',','.'),2);
+          var total_akhier = parseFloat(total_akhir1,2) /*+ parseFloat(biaya_adm.replace(',','.'),2)*/ - parseFloat(potongaaan,2);
       }
 //mendapatkan total akhir
 
@@ -3317,7 +3351,7 @@ $('form').submit(function(){
 //end hitung pajak
     
     var total_akhir = parseFloat(total_akhier,2) + parseFloat(hasil_tax,2);
-
+    console.log(1);
 
     }//end  if (pot_fakt_per == 0.00) 
 
@@ -3327,15 +3361,21 @@ else if(pot_fakt_rp == 0.00)
       var pos = potongaaan.search("%");
       var potongan_persen = potongaaan;
       var   potongan_persen = potongan_persen.replace("%","");
-      var potongaaan = parseFloat(total_akhir1.replace(',','.'),2) * parseFloat(potongan_persen.replace(',','.'),2) / 100;
+      if (pot_fakt_per == 0.00){
+              var potongaaan = parseFloat(total_akhir1,2);
+      }
+      else{
+              var potongaaan = parseFloat(total_akhir1,2) * parseFloat(potongan_persen) / 100;
+      }
+
 
       if ( pot_fakt_rp == 0.00) 
       {
-          var total_akhier = parseFloat(total_akhir1.replace(',','.'),2);
+          var total_akhier = parseFloat(total_akhir1,2);
       }
       else
       {
-          var total_akhier = parseFloat(total_akhir1.replace(',','.'),2) /*+ parseFloat(biaya_adm.replace(',','.'),2)*/ - parseFloat(potongaaan,2);
+          var total_akhier = parseFloat(total_akhir1,2) /*+ parseFloat(biaya_adm.replace(',','.'),2)*/ - parseFloat(potongaaan,2);
       }
 
 //Hitung pajak
@@ -3349,7 +3389,10 @@ else if(pot_fakt_rp == 0.00)
      }
 //end hitung pajak
   
-   var total_akhir = parseFloat(total_akhier,2) + parseFloat(hasil_tax,2);
+   var total_akhir = parseFloat(total_akhier,2) + parseFloat(hasil_tax,2) - parseFloat(potongaaan,2);
+
+    console.log(2);
+
 
     }// else if(pot_fakt_rp == 0.00)
 
@@ -3383,6 +3426,8 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
     //end hitung pajak
 
     var total_akhir = parseFloat(total_akhier,2) + parseFloat(hasil_tax,2);
+
+    console.log(3);
 
     }//end else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
 
@@ -3426,13 +3471,14 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
  //pengambilan data form pembayaran
       $("#total1").val(total_akhir.format(2, 3, '.', ','));
       $("#total2").val(total_akhir1.format(2, 3, '.', ','));
+
  if (pot_fakt_rp == 0.00)
       {
         $("#potongan_penjualan").val();
       }
       else
       {
-        $("#potongan_penjualan").val(potongaaan.format(2, 3, '.', ','));
+        $("#potongan_penjualan").val(potongaaan);
       }
       $("#tax_rp").val(hasil_tax.format(2, 3, '.', ','));
  //pengambilan data form pembayaran
@@ -3514,8 +3560,9 @@ $.get("cek_program_promo.php",function(program){
       }
       else
       {
-        $("#potongan_penjualan").val(potongaaan.format(2, 3, '.', ','));
+        $("#potongan_penjualan").val(potongaaan);
       }
+
       $("#total1").val(total_akhir.format(2, 3, '.', ','));
       $("#total2").val(total_akhir1.format(2, 3, '.', ','));
       $("#tax_rp").val(hasil_tax.format(2, 3, '.', ','));

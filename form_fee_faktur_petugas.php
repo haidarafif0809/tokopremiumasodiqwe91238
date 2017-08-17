@@ -220,7 +220,7 @@ $("#alert").html(info);
       var jumlah_nominal = $("#jumlah_nominal").val();
       
             $("#alert_berhasil").hide();
-
+            $("#alert_gagal").hide();
 
       if (jumlah_prosentase > 100)
       {
@@ -247,7 +247,9 @@ $("#alert").html(info);
       $("#jumlah_nominal").keyup(function(){
 
               $("#alert_berhasil").hide();
+              $("#alert_gagal").hide();
 
+              
               var jumlah_nominal = $("#jumlah_nominal").val();
               var jumlah_prosentase = $("#jumlah_prosentase").val();
               

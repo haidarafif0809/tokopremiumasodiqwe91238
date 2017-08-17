@@ -35,8 +35,8 @@ $columns = array(
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY TAMPIL AWAL)
 
 // getting total number records without any search
-$sql =" SELECT id,tanggal,tanggal_jt, DATEDIFF(DATE(NOW()), tanggal) AS usia_piutang ,no_faktur,kode_pelanggan,total,jam,status,potongan,tax,sisa,kredit ";
-$sql.=" FROM penjualan dp WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' AND kredit != 0  ";
+$sql =" SELECT p.id,p.tanggal,p.tanggal_jt, DATEDIFF(DATE(NOW()), p.tanggal) AS usia_piutang ,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.status,p.potongan,p.tax,p.sisa,p.kredit, pl.nama_pelanggan";
+$sql.=" FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal' AND p.kredit != 0  ";
 
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY TAMPIL AWAL)
 
@@ -45,14 +45,15 @@ $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY PENCARIAN DATATABLE)
-$sql =" SELECT id,tanggal,tanggal_jt, DATEDIFF(DATE(NOW()), tanggal) AS usia_piutang ,no_faktur,kode_pelanggan,total,jam,status,potongan,tax,sisa,kredit ";
-$sql.=" FROM penjualan dp WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' AND kredit != 0  ";
+$sql =" SELECT p.id,p.tanggal,p.tanggal_jt, DATEDIFF(DATE(NOW()), p.tanggal) AS usia_piutang ,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.status,p.potongan,p.tax,p.sisa,p.kredit, pl.nama_pelanggan";
+$sql.=" FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal' AND p.kredit != 0  ";
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY PENCARIAN DATATABLE)
 
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-$sql.=" AND ( no_faktur LIKE '".$requestData['search']['value']."%' ";
-$sql.=" OR tanggal LIKE '".$requestData['search']['value']."%'  )";
+$sql.=" AND ( p.no_faktur LIKE '".$requestData['search']['value']."%' ";
+$sql.=" OR p.tanggal LIKE '".$requestData['search']['value']."%' ";
+$sql.=" OR pl.nama_pelanggan LIKE '".$requestData['search']['value']."%' )";
 	
 }
 
@@ -78,12 +79,8 @@ $num_rows = mysqli_num_rows($query0232);
 
 $tot_bayar = $kel_bayar['total_bayar'] + $Dp;
 
-$query_pelanggan = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE id = '$row[kode_pelanggan]' ");
-$data_pelanggan = mysqli_fetch_array($query_pelanggan);
-
       $nestedData[] = $row['no_faktur'];
-
-      $nestedData[] = $data_pelanggan['nama_pelanggan'];
+      $nestedData[] = $row['nama_pelanggan'];
       $nestedData[] = $row['tanggal'];
       $nestedData[] = $row['tanggal_jt'];
       $nestedData[] =  "<p align='right'>".rp($row['usia_piutang'])." Hari</p>";

@@ -101,31 +101,15 @@
 <script type="text/javascript">
   
         $(document).ready(function(){
-        $("#kode_barang").blur(function(){
+        $("#kode_barang").change(function(){
 
           var kode_barang = $(this).val();
-          var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
           
-          if (kode_barang != '')
-          {
-
-      $.getJSON('lihat_nama_barang.php',{kode_barang:kode_barang}, function(json){
-      
-      if (json == null)
-      {
-        
-        $('#id_produk').val('');
-       
-      }
-
-      else 
-      {
-        $('#id_produk').val(json.id);
-        
-      }
-                                              
-        });   
-}
+          if (kode_barang != ''){
+            $.post("lihat_nama_barang.php",{kode_barang:kode_barang},function(data){
+              $('#id_produk').val(data);
+            });   
+          }
 
         });
         });     

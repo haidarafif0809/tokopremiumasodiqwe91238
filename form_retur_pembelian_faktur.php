@@ -20,7 +20,7 @@ $session_id = session_id();
  ?>
 
 <!--membuat tampilan form agar terlihat rapih dalam satu tempat-->
-<div class="container">
+<div style="padding-left: 15%; padding-right: 15%">
 
           <h3> <u>FORM RETUR PEMBELIAN FAKTUR</u> </h3><br>
 <!--membuat agar tabel berada dalam baris tertentu-->

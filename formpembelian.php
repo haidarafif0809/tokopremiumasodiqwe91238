@@ -1310,13 +1310,11 @@ $(document).ready(function(){
     
     //Cek untuk perubahan harga beli
     $.post("cek_perubahan_harga_pembelian.php",function(hasil){
-      if(hasil == 1){
-          var pesan_alert = confirm("Harga Barang melebihi harga jual, yakin akan merubah harga beli tersebut? ");
-      }
-      else if(hasil == 2){
+
+     if(hasil > 0){
           var pesan_alert = confirm("Ada perubahan pada harga beli, anda yakin ?");
       }
-      else if(hasil == 3){
+      else if(hasil == 0){
           var pesan_alert = confirm("Harga beli produk tidak ada perubahan, lanjutkan transaksi ?");
       }
 
@@ -1352,29 +1350,8 @@ $(document).ready(function(){
          });
 
       //Table TBS AJAX
-        $('#tabel_tbs_pembelian').DataTable().destroy();
-        var dataTable = $('#tabel_tbs_pembelian').DataTable( {
-          "processing": true,
-          "serverSide": true,
-          "ajax":{
-            url :"data_tbs_pembelian.php", // json datasource
-            "data": function ( d ) {
-              d.session_id = $("#session_id").val();
-              // d.custom = $('#myInput').val();
-              // etc
-            },
-
-             type: "post",  // method  , by default get
-             error: function(){  // error handling
-               $(".employee-grid-error").html("");
-               $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-               $("#employee-grid_processing").css("display","none");
-               }
-          },
-            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-               $(nRow).attr('class','tr-id-'+aData[11]+'');
-             }
-        });
+         var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
+           tabel_tbs_pembelian.draw();
 
         var table_tbs_order = $('#table_tbs_order').DataTable();
             table_tbs_order.draw();
@@ -1384,32 +1361,6 @@ $(document).ready(function(){
 
       }// akhir else if pada alert true
     }); //akhir cek perubahan harga pembelian
-
-
-      //Table TBS AJAX
-        $('#tabel_tbs_pembelian').DataTable().destroy();
-        var dataTable = $('#tabel_tbs_pembelian').DataTable( {
-          "processing": true,
-          "serverSide": true,
-          "ajax":{
-            url :"data_tbs_pembelian.php", // json datasource
-            "data": function ( d ) {
-              d.session_id = $("#session_id").val();
-              // d.custom = $('#myInput').val();
-              // etc
-            },
-
-             type: "post",  // method  , by default get
-             error: function(){  // error handling
-               $(".employee-grid-error").html("");
-               $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-               $("#employee-grid_processing").css("display","none");
-               }
-          },
-            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-               $(nRow).attr('class','tr-id-'+aData[11]+'');
-             }
-        });
 
         var table_tbs_order = $('#table_tbs_order').DataTable();
             table_tbs_order.draw();
@@ -1479,15 +1430,14 @@ $(document).ready(function(){
     
       //Cek untuk perubahan harga beli
       $.post("cek_perubahan_harga_pembelian.php",function(hasil){
-        if(hasil == 1){
-            var pesan_alert = confirm("Harga Barang melebihi harga jual, yakin akan merubah harga beli tersebut? ");
-        }
-        else if(hasil == 2){
-            var pesan_alert = confirm("Ada perubahan pada harga beli, anda yakin ?");
-        }
-        else if(hasil == 3){
-            var pesan_alert = confirm("Harga beli produk tidak ada perubahan, lanjutkan transaksi ?");
-        }
+
+     if(hasil > 0){
+          var pesan_alert = confirm("Ada perubahan pada harga beli, anda yakin ?");
+      }
+      else if(hasil == 0){
+          var pesan_alert = confirm("Harga beli produk tidak ada perubahan, lanjutkan transaksi ?");
+      }
+
         
         if (pesan_alert == true) {
 
@@ -1517,29 +1467,8 @@ $(document).ready(function(){
           }); //akhir proses bayar beli pada HUTANG !!
 
           //Ajax table TBS !!
-            $('#tabel_tbs_pembelian').DataTable().destroy();
-            var dataTable = $('#tabel_tbs_pembelian').DataTable( {
-              "processing": true,
-              "serverSide": true,
-              "ajax":{
-                url :"data_tbs_pembelian.php", // json datasource
-                "data": function ( d ) {
-                  d.session_id = $("#session_id").val();
-                  // d.custom = $('#myInput').val();
-                  // etc
-                },
-
-                 type: "post",  // method  , by default get
-                 error: function(){  // error handling
-                   $(".employee-grid-error").html("");
-                   $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-                   $("#employee-grid_processing").css("display","none");
-                   }
-              },
-                "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                   $(nRow).attr('class','tr-id-'+aData[11]+'');
-                 }
-            });
+         var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
+           tabel_tbs_pembelian.draw();
 
             var table_tbs_order = $('#table_tbs_order').DataTable();
                 table_tbs_order.draw();
@@ -1551,30 +1480,9 @@ $(document).ready(function(){
         }// akhir else if pada alert true
         }); //akhir cek perubahan harga pembelian
 
-          //Ajax table TBS !!
-            $('#tabel_tbs_pembelian').DataTable().destroy();
-            var dataTable = $('#tabel_tbs_pembelian').DataTable( {
-              "processing": true,
-              "serverSide": true,
-              "ajax":{
-                url :"data_tbs_pembelian.php", // json datasource
-                "data": function ( d ) {
-                  d.session_id = $("#session_id").val();
-                  // d.custom = $('#myInput').val();
-                  // etc
-                },
-
-                 type: "post",  // method  , by default get
-                 error: function(){  // error handling
-                   $(".employee-grid-error").html("");
-                   $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-                   $("#employee-grid_processing").css("display","none");
-                   }
-              },
-                "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                   $(nRow).attr('class','tr-id-'+aData[11]+'');
-                 }
-            });
+      //Table TBS AJAX
+         var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
+           tabel_tbs_pembelian.draw();
 
             var table_tbs_order = $('#table_tbs_order').DataTable();
                 table_tbs_order.draw();

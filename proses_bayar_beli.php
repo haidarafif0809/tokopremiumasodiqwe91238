@@ -309,6 +309,39 @@ if ($potongan != "" || $potongan != 0 ) {
       $data_barang = mysqli_fetch_array($query_barang);
 
 
+
+      $pilih_konversi = $db->query("SELECT sk.konversi * $data[jumlah_barang] AS jumlah_konversi, sk.harga_pokok / sk.konversi AS harga_konversi, sk.id_satuan, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.id_produk = b.id  WHERE sk.id_satuan = '$data[satuan]' AND sk.kode_produk = '$data[kode_barang]'");
+      $data_konversi = mysqli_fetch_array($pilih_konversi);
+
+      if ($data_konversi['harga_konversi'] != 0 || $data_konversi['harga_konversi'] != "") {
+        $harga = $data_konversi['harga_konversi'];
+         $jumlah_barang = $data_konversi['jumlah_konversi'];
+        $satuan = $data_konversi['satuan'];
+      }
+      else{
+        $harga = $data['harga'];
+        $jumlah_barang = $data['jumlah_barang'];
+        $satuan = $data['satuan'];
+      }
+       
+
+        $query2 = "INSERT INTO detail_pembelian (no_faktur, no_faktur_order, tanggal, jam, waktu, kode_barang, nama_barang, jumlah_barang, asal_satuan, satuan, harga, subtotal, potongan, tax, sisa) VALUES ('$no_faktur','$data[no_faktur_order]','$tanggal_sekarang','$jam_sekarang','$waktu','$data[kode_barang]','$data[nama_barang]','$jumlah_barang', '$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]','$jumlah_barang')";
+
+        if ($db->query($query2) === TRUE) {
+        } 
+
+        else {
+        echo "Error: " . $query2 . "<br>" . $db->error;
+        }
+
+        $update_order = "UPDATE pembelian_order SET status_order = 'Di Beli' WHERE no_faktur_order = '$data[no_faktur_order]'";
+
+        if ($db->query($update_order) === TRUE) {
+        }
+        else {
+          echo "Error: " . $update_order . "<br>" . $db->error;
+        }
+
       if($data['harga'] != $data_barang['harga_beli']){
 
         //Cek apakah barang tersebut memiliki Konversi ?
@@ -342,7 +375,7 @@ if ($potongan != "" || $potongan != 0 ) {
           
           $query_update_barang_cache = $db->query("SELECT * FROM barang ");
           while ($data_update = $query_update_barang_cache->fetch_array()) {
-            # code...
+         
           // store an array
               $cache->store($data_update['kode_barang'], array(
             'kode_barang' => $data_update['kode_barang'],
@@ -370,41 +403,6 @@ if ($potongan != "" || $potongan != 0 ) {
         //UPDATE CACHE 
 
       }
-
-
-
-
-      $pilih_konversi = $db->query("SELECT sk.konversi * $data[jumlah_barang] AS jumlah_konversi, sk.harga_pokok / sk.konversi AS harga_konversi, sk.id_satuan, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.id_produk = b.id  WHERE sk.id_satuan = '$data[satuan]' AND sk.kode_produk = '$data[kode_barang]'");
-      $data_konversi = mysqli_fetch_array($pilih_konversi);
-
-      if ($data_konversi['harga_konversi'] != 0 || $data_konversi['harga_konversi'] != "") {
-        $harga = $data_konversi['harga_konversi'];
-         $jumlah_barang = $data_konversi['jumlah_konversi'];
-        $satuan = $data_konversi['satuan'];
-      }
-      else{
-        $harga = $data['harga'];
-        $jumlah_barang = $data['jumlah_barang'];
-        $satuan = $data['satuan'];
-      }
-       
-
-        $query2 = "INSERT INTO detail_pembelian (no_faktur, no_faktur_order, tanggal, jam, waktu, kode_barang, nama_barang, jumlah_barang, asal_satuan, satuan, harga, subtotal, potongan, tax, sisa) VALUES ('$no_faktur','$data[no_faktur_order]','$tanggal_sekarang','$jam_sekarang','$waktu','$data[kode_barang]','$data[nama_barang]','$jumlah_barang', '$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]','$jumlah_barang')";
-
-        if ($db->query($query2) === TRUE) {
-        } 
-
-        else {
-        echo "Error: " . $query2 . "<br>" . $db->error;
-        }
-
-        $update_order = "UPDATE pembelian_order SET status_order = 'Di Beli' WHERE no_faktur_order = '$data[no_faktur_order]'";
-
-        if ($db->query($update_order) === TRUE) {
-        }
-        else {
-        echo "Error: " . $update_order . "<br>" . $db->error;
-        }
         
     }
 

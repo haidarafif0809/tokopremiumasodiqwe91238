@@ -272,7 +272,55 @@ if ($potongan != "" || $potongan != 0 ) {
             while ($data = mysqli_fetch_array($query12))
             {
 
+            $select_hpp_keluar = $db->query("SELECT jumlah_kuantitas FROM hpp_keluar WHERE no_faktur_hpp_masuk = '$nomor_faktur' AND kode_barang = '$data[kode_barang]'");
+            $data_hpp_keluar = mysqli_fetch_array($select_hpp_keluar);
+            $jumlah_keluar = $data_hpp_keluar['jumlah_kuantitas'];
+            
+            $select_hpp_masuk = $db->query("SELECT * FROM hpp_masuk WHERE no_faktur = '$nomor_faktur' AND kode_barang = '$data[kode_barang]' AND sisa != jumlah_kuantitas ");
+            $row_hpp_masuk = mysqli_num_rows($select_hpp_masuk);
 
+            if ($row_hpp_masuk == 0) {
+
+
+            $delete_detail_pembelian = $db->query("DELETE FROM detail_pembelian WHERE no_faktur = '$nomor_faktur' AND kode_barang = '$data[kode_barang]'");
+            
+            $pilih_konversi = $db->query("SELECT  sk.konversi * $data[jumlah_barang] AS jumlah_konversi, sk.harga_pokok * $data[jumlah_barang] / sk.konversi AS harga_konversi, sk.id_satuan, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.id_produk = b.id  WHERE sk.id_satuan = '$data[satuan]' AND kode_produk = '$data[kode_barang]'");
+            $data_konversi = mysqli_fetch_array($pilih_konversi);
+            
+            if ($data_konversi['harga_konversi'] != 0 || $data_konversi['harga_konversi'] != "") {
+            $harga = $data_konversi['harga_konversi'];
+            $jumlah_barang = $data_konversi['jumlah_konversi'];
+            $satuan = $data_konversi['satuan'];
+            $sisa_barang = $jumlah_barang - $jumlah_keluar;
+            }
+            else{
+            $harga = $data['harga'];
+            $jumlah_barang = $data['jumlah_barang'];
+            $satuan = $data['satuan'];
+            $sisa_barang = $jumlah_barang - $jumlah_keluar;
+            }
+
+            $query2 = "INSERT INTO detail_pembelian (no_faktur, no_faktur_order, tanggal, jam, waktu, kode_barang, nama_barang, jumlah_barang, asal_satuan, satuan, harga, subtotal, potongan, tax, sisa) 
+            VALUES ('$nomor_faktur','$data[no_faktur_order]','$tanggal','$jam_sekarang','$waktu','$data[kode_barang]','$data[nama_barang]','$jumlah_barang', '$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]','$sisa_barang')";
+
+                if ($db->query($query2) === TRUE) {
+                } 
+                else {
+                     echo "Error: " . $query2 . "<br>" . $db->error;
+                 }
+
+            $update_order = "UPDATE pembelian_order SET status_order = 'Di Beli' WHERE no_faktur_order = '$data[no_faktur_order]'";
+
+                if ($db->query($update_order) === TRUE) {
+                }
+                else {
+                echo "Error: " . $update_order . "<br>" . $db->error;
+                }
+            
+            }
+            
+
+            
                 //Query untuk Update Harga pada barang !!
                 $query_barang = $db->query("SELECT harga_beli,satuan FROM barang WHERE kode_barang = '$data[kode_barang]' ");
                 $data_barang = mysqli_fetch_array($query_barang);
@@ -340,77 +388,6 @@ if ($potongan != "" || $potongan != 0 ) {
 
                 }
                 //Akhir Query untuk Update Jarga Barang !!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            $select_hpp_keluar = $db->query("SELECT jumlah_kuantitas FROM hpp_keluar WHERE no_faktur_hpp_masuk = '$nomor_faktur' AND kode_barang = '$data[kode_barang]'");
-            $data_hpp_keluar = mysqli_fetch_array($select_hpp_keluar);
-            $jumlah_keluar = $data_hpp_keluar['jumlah_kuantitas'];
-            
-            $select_hpp_masuk = $db->query("SELECT * FROM hpp_masuk WHERE no_faktur = '$nomor_faktur' AND kode_barang = '$data[kode_barang]' AND sisa != jumlah_kuantitas ");
-            $row_hpp_masuk = mysqli_num_rows($select_hpp_masuk);
-
-            if ($row_hpp_masuk == 0) {
-
-
-            $delete_detail_pembelian = $db->query("DELETE FROM detail_pembelian WHERE no_faktur = '$nomor_faktur' AND kode_barang = '$data[kode_barang]'");
-            
-            $pilih_konversi = $db->query("SELECT  sk.konversi * $data[jumlah_barang] AS jumlah_konversi, sk.harga_pokok * $data[jumlah_barang] / sk.konversi AS harga_konversi, sk.id_satuan, b.satuan FROM satuan_konversi sk INNER JOIN barang b ON sk.id_produk = b.id  WHERE sk.id_satuan = '$data[satuan]' AND kode_produk = '$data[kode_barang]'");
-            $data_konversi = mysqli_fetch_array($pilih_konversi);
-            
-            if ($data_konversi['harga_konversi'] != 0 || $data_konversi['harga_konversi'] != "") {
-            $harga = $data_konversi['harga_konversi'];
-            $jumlah_barang = $data_konversi['jumlah_konversi'];
-            $satuan = $data_konversi['satuan'];
-            $sisa_barang = $jumlah_barang - $jumlah_keluar;
-            }
-            else{
-            $harga = $data['harga'];
-            $jumlah_barang = $data['jumlah_barang'];
-            $satuan = $data['satuan'];
-            $sisa_barang = $jumlah_barang - $jumlah_keluar;
-            }
-
-            $query2 = "INSERT INTO detail_pembelian (no_faktur, no_faktur_order, tanggal, jam, waktu, kode_barang, nama_barang, jumlah_barang, asal_satuan, satuan, harga, subtotal, potongan, tax, sisa) 
-            VALUES ('$nomor_faktur','$data[no_faktur_order]','$tanggal','$jam_sekarang','$waktu','$data[kode_barang]','$data[nama_barang]','$jumlah_barang', '$satuan','$data[satuan]','$harga','$data[subtotal]','$data[potongan]','$data[tax]','$sisa_barang')";
-
-                if ($db->query($query2) === TRUE) {
-                } 
-                else {
-                     echo "Error: " . $query2 . "<br>" . $db->error;
-                 }
-
-            $update_order = "UPDATE pembelian_order SET status_order = 'Di Beli' WHERE no_faktur_order = '$data[no_faktur_order]'";
-
-                if ($db->query($update_order) === TRUE) {
-                }
-                else {
-                echo "Error: " . $update_order . "<br>" . $db->error;
-                }
-            
-            }
- 
         }
             
             $perintah2 = $db->query("DELETE FROM tbs_pembelian WHERE no_faktur = '$nomor_faktur'");

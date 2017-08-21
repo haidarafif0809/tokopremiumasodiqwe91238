@@ -1276,6 +1276,9 @@ $("#form_barcode").submit(function(){
 
               //awal proses insert ke TBS 
                  
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+
                 $("#potongan_pembelian").val(Math.round(potongaaan,10));
                     $("#potongan_persen").val(Math.round(pot_pers));
                     $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
@@ -1308,6 +1311,9 @@ $("#form_barcode").submit(function(){
               else{
              //awal proses insert ke TBS 
                  
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+
                 $("#potongan_pembelian").val(Math.round(potongaaan,10));
                     $("#potongan_persen").val(Math.round(pot_pers));
                     $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
@@ -1343,6 +1349,9 @@ $("#form_barcode").submit(function(){
 
               //awal proses insert ke TBS 
                  
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+
                 $("#potongan_pembelian").val(Math.round(potongaaan,10));
                     $("#potongan_persen").val(Math.round(pot_pers));
                     $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
@@ -1367,8 +1376,6 @@ $("#form_barcode").submit(function(){
                   //AKHIR proses insert ke TBS 
 
           } // akhir else jika harga sama dengan ahrga sebelumnya
-
-
        
 
         $('#tabel_tbs_pembelian').DataTable().destroy();

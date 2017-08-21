@@ -1219,6 +1219,8 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
           
           if (pesan_alert == true) {
 
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
           //awal proses insert ke TBS 
           $.post("prosestbspembelian.php",{session_id:session_id,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,tax:tax,satuan:satuan,ppn:ppn,tax:tax},function(data){
 
@@ -1253,6 +1255,10 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
       } //if selisih harga
       else{
       //awal proses insert ke TBS 
+      
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+
           $.post("prosestbspembelian.php",{session_id:session_id,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,tax:tax,satuan:satuan,ppn:ppn,tax:tax},function(data){
 
             var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
@@ -1288,7 +1294,9 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
     else{ // else jika harga sama dengan ahrga sebelumnya 
 
 
-      //awal proses insert ke TBS 
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+          //awal proses insert ke TBS 
           $.post("prosestbspembelian.php",{session_id:session_id,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,tax:tax,satuan:satuan,ppn:ppn,tax:tax},function(data){
 
             var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();

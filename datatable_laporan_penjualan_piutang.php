@@ -51,7 +51,7 @@ $columns = array(
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY TAMPIL AWAL)
 
 // getting total number records without any search
-$sql =" SELECT p.id,p.tanggal,p.tanggal_jt, DATEDIFF(DATE(NOW()), p.tanggal) AS usia_piutang ,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.status,p.potongan,p.tax,p.sisa,p.kredit, pl.nama_pelanggan";
+$sql =" SELECT p.id,p.tanggal,p.tanggal_jt, DATEDIFF(DATE(NOW()), p.tanggal) AS usia_piutang ,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.status,p.potongan,p.tax,p.sisa,p.kredit, pl.nama_pelanggan,p.nilai_kredit";
 $sql.=" FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal' AND p.kredit != 0  ";
 
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY TAMPIL AWAL)
@@ -61,7 +61,7 @@ $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY PENCARIAN DATATABLE)
-$sql =" SELECT p.id,p.tanggal,p.tanggal_jt, DATEDIFF(DATE(NOW()), p.tanggal) AS usia_piutang ,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.status,p.potongan,p.tax,p.sisa,p.kredit, pl.nama_pelanggan";
+$sql =" SELECT p.id,p.tanggal,p.tanggal_jt, DATEDIFF(DATE(NOW()), p.tanggal) AS usia_piutang ,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.status,p.potongan,p.tax,p.sisa,p.kredit, pl.nama_pelanggan,p.nilai_kredit";
 $sql.=" FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.id WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal' AND p.kredit != 0  ";
 // LOGIKA UNTUK FILTER BERDASARKAN KONSUMEN DAN SALES (QUERY PENCARIAN DATATABLE)
 
@@ -94,6 +94,7 @@ $Dp = $data_sum['tunai_penjualan'];
 $num_rows = mysqli_num_rows($query0232);
 
 $tot_bayar = $kel_bayar['total_bayar'] + $Dp;
+$sisa_kredit = $row['nilai_kredit'] - $tot_bayar;
 
       $nestedData[] = $row['no_faktur'];
       $nestedData[] = $row['nama_pelanggan'];

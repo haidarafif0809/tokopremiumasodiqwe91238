@@ -135,14 +135,17 @@ $sisa_kredit = $data11['nilai_kredit'] - $tot_bayar;
                   }
 
 
-    echo "<td><p style='color:red'> TOTAL </p></td>
+    echo "
+    <tr>
+    <td><p style='color:red'> TOTAL </p></td>
       <td><p style='color:red'> - </p></td>
       <td><p style='color:red'> - </p></td>
       <td><p style='color:red'> - </p></td>
       <td><p style='color:red' align='right'> - </p></td>
       <td><p style='color:red' align='right' > ".rp($total_akhir)." </p></td>
       <td><p style='color:red' align='right' > ".rp($total_bayar)." </p></td>
-      <td><p style='color:red' align='right' > ".rp($total_kredit)." </p></td>";              
+      <td><p style='color:red' align='right' > ".rp($total_kredit)." </p></td>
+      </tr>";              
 
 
 //Untuk Memutuskan Koneksi Ke Database

@@ -1305,6 +1305,32 @@ $("#form_barcode").submit(function(){
                   $("#submit_produk").show();
                 }//akhir breakert dari else pesan alert selisih harga      
               } //if selisih harga
+              else{
+             //awal proses insert ke TBS 
+                 
+                $("#potongan_pembelian").val(Math.round(potongaaan,10));
+                    $("#potongan_persen").val(Math.round(pot_pers));
+                    $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
+                    $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
+                    $("#submit_produk").hide();
+
+
+                    $.post("proses_tbs_pembelian_edit.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,satuan:satuan,ppn:ppn,tax:tax},function(data){
+                      
+                      $("#tbody").prepend(data);
+                      $("#kode_barang").trigger('chosen:updated');
+                      $("#ppn").attr("disabled", true);
+                      $("#nama_barang").val('');
+                      $("#kode_barang").val('');
+                      $("#kode_barang").trigger('chosen:updated');
+                      $("#jumlah_barang").val('');
+                      $("#tax1").val('');  
+                      $("#harga_produk").val('');
+                      $("#harga_baru").val(''); 
+
+                    });
+                  //AKHIR proses insert ke TBS 
+              }
             } //if perubahan harga alert true
             else{ // else perubahan harga 
                   $("#harga_baru").val(harga_awal);

@@ -195,7 +195,7 @@
               $data_c = $c->retrieveAll();
 
               foreach ($data_c as $key) {
-                echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_beli'].'"  satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" over_stok="'.$key['over_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+                echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_beli'].'" harga_jual="'.$key['harga_jual'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" over_stok="'.$key['over_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
               }
             ?>
         </select>
@@ -1912,7 +1912,7 @@ else
     var kode_barang = $(this).val();
     var no_faktur = $("#nomorfaktur").val();
     var nama_barang = $('#opt-produk-'+kode_barang).attr("nama-barang");
-    var harga_jual = $('#opt-produk-'+kode_barang).attr("harga");
+    var harga_jual = $('#opt-produk-'+kode_barang).attr("harga_jual");
     var jumlah_barang = $('#opt-produk-'+kode_barang).attr("jumlah-barang");
     var satuan = $('#opt-produk-'+kode_barang).attr("satuan");
     var kategori = $('#opt-produk-'+kode_barang).attr("kategori");

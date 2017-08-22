@@ -13,3 +13,11 @@ Table 		:  	setting_diskon_jumlah
 Programmer 	:  	Riko Pernando
 
 Tanggal 	: 	Selasa, 22 Agustus 2017.
+
+Table		: 	history_detail_item_keluar
+
+Programmer	: 	Riko Pernando
+
+Tanggal 	: 	Selasa, 22 Agustus 2017.
+
+Trigger 	: CREATE TRIGGER `delete_detail_item_keluar` AFTER INSERT ON `history_detail_item_keluar` FOR EACH ROW DELETE FROM detail_item_keluar WHERE no_faktur = new.no_faktur;

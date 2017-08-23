@@ -23,7 +23,7 @@ include 'db.php';
           $query = $db->query("SELECT id,nama_kategori  FROM kategori");
           while($data = mysqli_fetch_array($query))
           {
-          echo "<option value='".$data['nama_kategori']."'>".$data['nama_kategori'] ."</option>";
+          echo "<option value='".$data['id']."'>".$data['nama_kategori'] ."</option>";
           }      
           ?>
          </select>

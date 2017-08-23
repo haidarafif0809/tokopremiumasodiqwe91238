@@ -1023,19 +1023,8 @@ $(document).on('click', '#submit_produk', function (e) {
   }else{
     var harga = harga_produk;
   };
-
-
-    $.getJSON("cek_setting_diskon_jumlah.php?jumlah_barang="+jumlah_barang+"&kode_barang="+kode_barang+"&id_produk="+id_produk+"&satuan_konversi="+satuan_konversi, function(info){                                  
-
-      if (info.potongan == 0) {
-
-          var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
+     var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
           
-          }else{
-          var potongan = info.potongan;
-          }
-
-
     //potongan
     if (potongan == ''){
       potongan = 0;
@@ -1252,7 +1241,6 @@ else{
 
     }
   } 
-});
 });
 
     $("#formtambahproduk").submit(function(){

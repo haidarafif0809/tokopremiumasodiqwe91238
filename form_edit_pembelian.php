@@ -195,7 +195,7 @@
               $data_c = $c->retrieveAll();
 
               foreach ($data_c as $key) {
-                echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_beli'].'"  satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" over_stok="'.$key['over_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
+                echo '<option id="opt-produk-'.$key['kode_barang'].'" value="'.$key['kode_barang'].'" data-kode="'.$key['kode_barang'].'" nama-barang="'.$key['nama_barang'].'" harga="'.$key['harga_beli'].'" harga_jual="'.$key['harga_jual'].'" satuan="'.$key['satuan'].'" kategori="'.$key['kategori'].'" status="'.$key['status'].'" suplier="'.$key['suplier'].'" limit_stok="'.$key['limit_stok'].'" over_stok="'.$key['over_stok'].'" ber-stok="'.$key['berkaitan_dgn_stok'].'" tipe_barang="'.$key['tipe_barang'].'" id-barang="'.$key['id'].'" > '. $key['kode_barang'].' ( '.$key['nama_barang'].' ) </option>';
               }
             ?>
         </select>
@@ -239,6 +239,9 @@
         <input type="hidden" id="satuan_produk" name="satuan" class="form-control" value="" required="">
         <input type="hidden" id="id_produk" name="id_produk" class="form-control" value="" required="">
 <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN --> <!--BAGIAN HIDDEN -->
+
+<!-- UNTUK PERINGTAN AJIKA HARGA BELI YANG DIUBAH LEBI BESAR DARI HARGA JUAL -->
+<input type="hidden" id="harga_jual" name="harga_jual" class="form-control" placeholder="Harga Jual" required="">
 
     </div><!--END ROW id="formtambahproduk" -->     
 
@@ -1109,6 +1112,8 @@ $("#form_barcode").submit(function(){
     else{
       harga = harga_baru;
     }
+    var harga_jual = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#harga_jual").val()))));
+
     var potongan = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan1").val()))));
     var jumlahbarang = $("#jumlahbarang").val();
     //var satuan = $("#satuan_produk").val();
@@ -1215,14 +1220,14 @@ $("#form_barcode").submit(function(){
       }
 
 
-     $("#jumlah_barang").val(''); 
+     /*$("#jumlah_barang").val(''); 
      $("#potongan1").val('');   
      $("#tax1").val('');
      $("#nama_barang").val('');
      $("#kode_barang").val('');
      $("#kode_barang").trigger('chosen:updated');
      $("#harga_produk").val('');
-     $("#harga_baru").val('');
+     $("#harga_baru").val('');*/
 
       if (kode_barang == ''){
         alert("Kode Barang Harus Diisi");
@@ -1251,27 +1256,127 @@ $("#form_barcode").submit(function(){
       }
       else {
 
-        $("#potongan_pembelian").val(Math.round(potongaaan,10));
-        $("#potongan_persen").val(Math.round(pot_pers));
-        $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
-        $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
-        $("#submit_produk").hide();
+
+        var harga_awal = $("#harga_produk").val();
+        var harga_terbaru = $("#harga_baru").val();
+
+            
+        if(harga_awal != harga_terbaru){
+
+              var pesan_alert = confirm("Ada perubahan Harga, Tetap Lanjutkan ?");
+                  
+              if (pesan_alert == true) {
+
+                var selisih_harga = parseInt(harga_jual,10) - parseInt(harga,10);
+              
+                if (selisih_harga < 0) {
+                var pesan_alert = confirm("Total Harga '"+nama_barang+"' Lebih Besar Dari Harga Jual. Tetap Lanjutkan ?");
+                  
+                  if (pesan_alert == true) {
+
+              //awal proses insert ke TBS 
+                 
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+
+                $("#potongan_pembelian").val(Math.round(potongaaan,10));
+                    $("#potongan_persen").val(Math.round(pot_pers));
+                    $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
+                    $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
+                    $("#submit_produk").hide();
 
 
-        $.post("proses_tbs_pembelian_edit.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,satuan:satuan,ppn:ppn,tax:tax},function(data){
-          
-          $("#tbody").prepend(data);
-          $("#kode_barang").trigger('chosen:updated');
-          $("#ppn").attr("disabled", true);
-          $("#nama_barang").val('');
-          $("#kode_barang").val('');
-          $("#kode_barang").trigger('chosen:updated');
-          $("#jumlah_barang").val('');
-          $("#tax1").val('');  
-          $("#harga_produk").val('');
-          $("#harga_baru").val(''); 
+                    $.post("proses_tbs_pembelian_edit.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,satuan:satuan,ppn:ppn,tax:tax},function(data){
+                      
+                      $("#tbody").prepend(data);
+                      $("#kode_barang").trigger('chosen:updated');
+                      $("#ppn").attr("disabled", true);
+                      $("#nama_barang").val('');
+                      $("#kode_barang").val('');
+                      $("#kode_barang").trigger('chosen:updated');
+                      $("#jumlah_barang").val('');
+                      $("#tax1").val('');  
+                      $("#harga_produk").val('');
+                      $("#harga_baru").val(''); 
 
-        });
+                    });
+                  //AKHIR proses insert ke TBS 
+
+                } //breakert IF pesan alert selisih harga
+                else{ // breaket elese pesan alert selisih harga
+                  $("#harga_baru").val(harga_awal);
+                  $("#submit_produk").show();
+                }//akhir breakert dari else pesan alert selisih harga      
+              } //if selisih harga
+              else{
+             //awal proses insert ke TBS 
+                 
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+
+                $("#potongan_pembelian").val(Math.round(potongaaan,10));
+                    $("#potongan_persen").val(Math.round(pot_pers));
+                    $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
+                    $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
+                    $("#submit_produk").hide();
+
+
+                    $.post("proses_tbs_pembelian_edit.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,satuan:satuan,ppn:ppn,tax:tax},function(data){
+                      
+                      $("#tbody").prepend(data);
+                      $("#kode_barang").trigger('chosen:updated');
+                      $("#ppn").attr("disabled", true);
+                      $("#nama_barang").val('');
+                      $("#kode_barang").val('');
+                      $("#kode_barang").trigger('chosen:updated');
+                      $("#jumlah_barang").val('');
+                      $("#tax1").val('');  
+                      $("#harga_produk").val('');
+                      $("#harga_baru").val(''); 
+
+                    });
+                  //AKHIR proses insert ke TBS 
+              }
+            } //if perubahan harga alert true
+            else{ // else perubahan harga 
+                  $("#harga_baru").val(harga_awal);
+                  $("#submit_produk").show();
+
+            } // akhir else perubahan harga
+          } // if harga awal tidak sama dengan harga baru
+          else{ // else jika harga sama dengan ahrga sebelumnya 
+
+
+              //awal proses insert ke TBS 
+                 
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+            $('#opt-produk-'+kode_barang).attr("harga",harga);
+
+                $("#potongan_pembelian").val(Math.round(potongaaan,10));
+                    $("#potongan_persen").val(Math.round(pot_pers));
+                    $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
+                    $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
+                    $("#submit_produk").hide();
+
+
+                    $.post("proses_tbs_pembelian_edit.php",{no_faktur:no_faktur,kode_barang:kode_barang,nama_barang:nama_barang,jumlah_barang:jumlah_barang,harga:harga,harga_baru:harga_baru,potongan:potongan,satuan:satuan,ppn:ppn,tax:tax},function(data){
+                      
+                      $("#tbody").prepend(data);
+                      $("#kode_barang").trigger('chosen:updated');
+                      $("#ppn").attr("disabled", true);
+                      $("#nama_barang").val('');
+                      $("#kode_barang").val('');
+                      $("#kode_barang").trigger('chosen:updated');
+                      $("#jumlah_barang").val('');
+                      $("#tax1").val('');  
+                      $("#harga_produk").val('');
+                      $("#harga_baru").val(''); 
+
+                    });
+                  //AKHIR proses insert ke TBS 
+
+          } // akhir else jika harga sama dengan ahrga sebelumnya
+       
 
         $('#tabel_tbs_pembelian').DataTable().destroy();
         var dataTable = $('#tabel_tbs_pembelian').DataTable( {
@@ -1296,6 +1401,12 @@ $("#form_barcode").submit(function(){
                $(nRow).attr('class','tr-id-'+aData[11]+'');
              }
         });
+
+
+
+
+
+
 
       }
     
@@ -1391,21 +1502,6 @@ $("#form_barcode").submit(function(){
       alert("Silakan Bayar Hutang");
     }
     else if (jumlah_bayar_lama == 0){
-    
-      //Cek untuk perubahan harga beli
-      $.post("cek_perubahan_harga_edit_pembelian.php",{no_faktur:no_faktur},function(hasil){
-        if(hasil == 1){
-            var pesan_alert = confirm("Harga Barang melebihi harga jual, yakin akan merubah harga beli tersebut? ");
-        }
-        else if(hasil == 2){
-            var pesan_alert = confirm("Ada perubahan pada harga beli, anda yakin ?");
-        }
-        else if(hasil == 3){
-            var pesan_alert = confirm("Harga beli produk tidak ada perubahan, lanjutkan transaksi ?");
-        }
-
-        if (pesan_alert == true) {
-
 
           $("#pembayaran").hide();
           $("#batal").hide();
@@ -1448,41 +1544,7 @@ $("#form_barcode").submit(function(){
               var table_tbs_order = $('#table_tbs_order').DataTable();
               table_tbs_order.draw();
             //Akhir Ajax Table
-        }
-        else{
-
-        }// akhir else if pada alert true
-      });
-      //akhir cek perubahan harga pembelian
-
-          //Ajax Table
-           $('#tabel_tbs_pembelian').DataTable().destroy();
-              var dataTable = $('#tabel_tbs_pembelian').DataTable( {
-                "processing": true,
-                "serverSide": true,
-                "ajax":{
-                  url :"data_tbs_pembelian_edit.php", // json datasource
-                  "data": function ( d ) {
-                    d.no_faktur = $("#nomorfaktur").val();
-                    // d.custom = $('#myInput').val();
-                    // etc
-                  },
-                   
-                   type: "post",  // method  , by default get
-                   error: function(){  // error handling
-                     $(".employee-grid-error").html("");
-                     $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-                     $("#employee-grid_processing").css("display","none");
-                     }
-                },
-                  "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                     $(nRow).attr('class','tr-id-'+aData[11]+'');
-                   }
-              });
-
-              var table_tbs_order = $('#table_tbs_order').DataTable();
-              table_tbs_order.draw();
-            //Akhir Ajax Table
+   
             
               $("#OrderPembelian").hide();
               $("#btnOrder").show();
@@ -1561,23 +1623,7 @@ $("#hutang").click(function(){
       alert ("Tanggal Jatuh Tempo Harus Di Isi");
     }
     else if (jumlah_bayar_lama == 0 || x <= total){
-    
-      //Cek untuk perubahan harga beli
-      $.post("cek_perubahan_harga_edit_pembelian.php",{no_faktur:no_faktur},function(hasil){
-        if(hasil == 1){
-            var pesan_alert = confirm("Harga Barang melebihi harga jual, yakin akan merubah harga beli tersebut? ");
-        }
-        else if(hasil == 2){
-            var pesan_alert = confirm("Ada perubahan pada harga beli, anda yakin ?");
-        }
-        else if(hasil == 3){
-            var pesan_alert = confirm("Harga beli produk tidak ada perubahan, lanjutkan transaksi ?");
-        }
-        
-        if (pesan_alert == true) {
-
-
-
+  
             $("#pembayaran").hide();
             $("#batal").hide();
             $("#hutang").hide();
@@ -1623,41 +1669,6 @@ $("#hutang").click(function(){
               table_tbs_order.draw();
             // Akhir Ajax Table
       
-        }
-        else{
-
-        }// akhir else if pada alert true
-      });
-      //akhir cek perubahan harga pembelian
-            
-            //Ajax Table TBS !!
-              $('#tabel_tbs_pembelian').DataTable().destroy();
-              var dataTable = $('#tabel_tbs_pembelian').DataTable( {
-                "processing": true,
-                "serverSide": true,
-                "ajax":{
-                  url :"data_tbs_pembelian_edit.php", // json datasource
-                  "data": function ( d ) {
-                    d.no_faktur = $("#nomorfaktur").val();
-                    // d.custom = $('#myInput').val();
-                    // etc
-                  },
-                   
-                   type: "post",  // method  , by default get
-                   error: function(){  // error handling
-                     $(".employee-grid-error").html("");
-                     $("#tabel_tbs_pembelian").append('<tbody class="employee-grid-error"><tr><th colspan="3">Data Tidak Ditemukan.. !!</th></tr></tbody>');
-                     $("#employee-grid_processing").css("display","none");
-                     }
-                },
-                  "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                     $(nRow).attr('class','tr-id-'+aData[11]+'');
-                   }
-              });
-
-              var table_tbs_order = $('#table_tbs_order').DataTable();
-              table_tbs_order.draw();
-            // Akhir Ajax Table
             
               $("#OrderPembelian").hide();
               $("#btnOrder").show();
@@ -1901,7 +1912,7 @@ else
     var kode_barang = $(this).val();
     var no_faktur = $("#nomorfaktur").val();
     var nama_barang = $('#opt-produk-'+kode_barang).attr("nama-barang");
-    var harga_jual = $('#opt-produk-'+kode_barang).attr("harga");
+    var harga_jual = $('#opt-produk-'+kode_barang).attr("harga_jual");
     var jumlah_barang = $('#opt-produk-'+kode_barang).attr("jumlah-barang");
     var satuan = $('#opt-produk-'+kode_barang).attr("satuan");
     var kategori = $('#opt-produk-'+kode_barang).attr("kategori");
@@ -1931,6 +1942,7 @@ else
     $("#limit_stok").val(limit_stok);
     $("#ber_stok").val(ber_stok);
     $("#id_produk").val(id_barang);
+    $("#harga_jual").val(harga_jual);
 
 if (ber_stok == 'Barang') {
 

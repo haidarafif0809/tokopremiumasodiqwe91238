@@ -272,98 +272,6 @@ if ($potongan != "" || $potongan != 0 ) {
             while ($data = mysqli_fetch_array($query12))
             {
 
-
-                //Query untuk Update Harga pada barang !!
-                $query_barang = $db->query("SELECT harga_beli,satuan FROM barang WHERE kode_barang = '$data[kode_barang]' ");
-                $data_barang = mysqli_fetch_array($query_barang);
-
-
-                if($data['harga'] != $data_barang['harga_beli']){
-
-                    //Cek apakah barang tersebut memiliki Konversi ?
-                    $query_cek_satuan_konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]'");
-                    $data_jumlah_konversi = mysqli_fetch_array($query_cek_satuan_konversi);
-                    $data_jumlah = mysqli_num_rows($query_cek_satuan_konversi);
-
-
-                    if($data_jumlah > 0){
-                      $hasil_konversi = $data['harga'] / $data_jumlah_konversi['konversi'];
-                      //Jika Iya maka ambil harga setelah di bagi dengan jumlah barang yang sebenarnya di konversi !!
-                      $harga_beli_sebenarnya = $hasil_konversi;
-                      //Update Harga Pokok pada konversi
-                      $query_update_harga_konversi  = $db->query("UPDATE satuan_konversi SET harga_pokok = '$data[harga]' WHERE kode_produk = '$data[kode_barang]'");
-                     
-                    }
-                    else{
-                      //Jika Tidak ambil harga yang sebenarnya dari TBS !!
-                      $harga_beli_sebenarnya = $data['harga'];
-                    }
-
-                      //UPDATE CACHE 
-                          // membuat objek cache
-                        $cache = new Cache();
-                        // setting default cache 
-                        $cache->setCache('produk');
-                        // hapus cache
-                        $cache->eraseAll();
-
-                        $query_update_harga_beli  = $db->query("UPDATE barang SET harga_beli = '$harga_beli_sebenarnya' WHERE kode_barang = '$data[kode_barang]'");
-                      
-                      $query_update_barang_cache = $db->query("SELECT * FROM barang ");
-                      while ($data_update = $query_update_barang_cache->fetch_array()) {
-                        # code...
-                      // store an array
-                          $cache->store($data_update['kode_barang'], array(
-                        'kode_barang' => $data_update['kode_barang'],
-                        'nama_barang' => $data_update['nama_barang'],
-                        'harga_beli' => $data_update['harga_beli'],
-                        'harga_jual' => $data_update['harga_jual'],
-                        'harga_jual2' => $data_update['harga_jual2'],
-                        'harga_jual3' => $data_update['harga_jual3'],
-                        'harga_jual4' => $data_update['harga_jual4'],
-                        'harga_jual5' => $data_update['harga_jual5'],
-                        'harga_jual6' => $data_update['harga_jual6'],
-                        'harga_jual7' => $data_update['harga_jual7'],
-                        'kategori' => $data_update['kategori'],
-                        'suplier' => $data_update['suplier'],
-                        'limit_stok' => $data_update['limit_stok'],
-                        'over_stok' => $data_update['over_stok'],
-                        'berkaitan_dgn_stok' => $data_update['berkaitan_dgn_stok'],
-                        'tipe_barang' => $data_update['tipe_barang'],
-                        'status' => $data_update['status'],
-                        'satuan' => $data_update['satuan'],
-                        'id' => $data_update['id'],
-                            ));
-                        }
-                    $cache->retrieveAll();
-                    //UPDATE CACHE 
-
-                }
-                //Akhir Query untuk Update Jarga Barang !!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             $select_hpp_keluar = $db->query("SELECT jumlah_kuantitas FROM hpp_keluar WHERE no_faktur_hpp_masuk = '$nomor_faktur' AND kode_barang = '$data[kode_barang]'");
             $data_hpp_keluar = mysqli_fetch_array($select_hpp_keluar);
             $jumlah_keluar = $data_hpp_keluar['jumlah_kuantitas'];
@@ -410,7 +318,74 @@ if ($potongan != "" || $potongan != 0 ) {
                 }
             
             }
- 
+            
+
+            
+                //Query untuk Update Harga pada barang !!
+                $query_barang = $db->query("SELECT harga_beli,satuan FROM barang WHERE kode_barang = '$data[kode_barang]' ");
+                $data_barang = mysqli_fetch_array($query_barang);
+
+
+                if($data['harga'] != $data_barang['harga_beli']){
+
+                    //Cek apakah barang tersebut memiliki Konversi ?
+                    $query_cek_satuan_konversi = $db->query("SELECT konversi FROM satuan_konversi WHERE kode_produk = '$data[kode_barang]' AND id_satuan = '$data[satuan]'");
+                    $data_jumlah_konversi = mysqli_fetch_array($query_cek_satuan_konversi);
+                    $data_jumlah = mysqli_num_rows($query_cek_satuan_konversi);
+
+
+                    if($data_jumlah > 0){
+                      $hasil_konversi = $data['harga'] / $data_jumlah_konversi['konversi'];
+                      //Jika Iya maka ambil harga setelah di bagi dengan jumlah barang yang sebenarnya di konversi !!
+                      $harga_beli_sebenarnya = $hasil_konversi;
+                      //Update Harga Pokok pada konversi
+                      $query_update_harga_konversi  = $db->query("UPDATE satuan_konversi SET harga_pokok = '$data[harga]' WHERE kode_produk = '$data[kode_barang]'");
+                     
+                    }
+                    else{
+                      //Jika Tidak ambil harga yang sebenarnya dari TBS !!
+                      $harga_beli_sebenarnya = $data['harga'];
+                    }
+
+                      //UPDATE HARGA BARANG 
+                        $query_update_harga_beli  = $db->query("UPDATE barang SET harga_beli = '$harga_beli_sebenarnya' WHERE kode_barang = '$data[kode_barang]'");
+                      
+                    // UPDATE CACHE
+                    $query_id_barang = $db->query("SELECT * FROM barang WHERE kode_barang = '$data[kode_barang]'");  
+                    $data_id_barang = mysqli_fetch_array($query_id_barang);  
+              
+                     // setup 'default' cache  
+                        $c = new Cache();  
+                        $c->setCache('produk');  
+                      
+                        $c->store($data['kode_barang'], array(     
+                          'kode_barang' => $data_id_barang['kode_barang'],
+                          'nama_barang' => $data_id_barang['nama_barang'],  
+                          'harga_beli' => $data_id_barang['harga_beli'],  
+                          'harga_jual' => $data_id_barang['harga_jual'],  
+                          'harga_jual2' => $data_id_barang['harga_jual2'],  
+                          'harga_jual3' => $data_id_barang['harga_jual3'],  
+                          'harga_jual4' => $data_id_barang['harga_jual4'],  
+                          'harga_jual5' => $data_id_barang['harga_jual5'],  
+                          'harga_jual6' => $data_id_barang['harga_jual6'],  
+                          'harga_jual7' => $data_id_barang['harga_jual7'],     
+                          'kategori' => $data_id_barang['kategori'],  
+                          'suplier' => $data_id_barang['suplier'],  
+                          'limit_stok' => $data_id_barang['limit_stok'],  
+                          'over_stok' => $data_id_barang['over_stok'],  
+                          'berkaitan_dgn_stok' => $data_id_barang['berkaitan_dgn_stok'],  
+                          'tipe_barang' => $data_id_barang['tipe_barang'],  
+                          'status' => $data_id_barang['status'],  
+                          'gudang' => $data_id_barang['gudang'], 
+                          'satuan' => $data_id_barang['satuan'],  
+                          'id' => $data_id_barang['id'] ,  
+                      
+                      
+                        ));  
+                    // AKHIR UPDATE CHACHE
+
+                }
+                //Akhir Query untuk Update Jarga Barang !!
         }
             
             $perintah2 = $db->query("DELETE FROM tbs_pembelian WHERE no_faktur = '$nomor_faktur'");

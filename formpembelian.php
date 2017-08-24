@@ -1215,7 +1215,7 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
         var selisih_harga = parseInt(harga_jual,10) - parseInt(harga,10);
       
         if (selisih_harga < 0) {
-        var pesan_alert = confirm("Total Harga '"+nama_barang+"' Lebih Besar Dari Harga Jual. Tetap Lanjutkan ?");
+          var pesan_alert = confirm("Total Harga '"+nama_barang+"' Lebih Besar Dari Harga Jual. Tetap Lanjutkan ?");
           
           if (pesan_alert == true) {
 
@@ -1240,6 +1240,25 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
             $("#potongan_persen").val(Math.round(pot_pers));
             $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
             $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
+                  //AWAL PERHITUNGAN PEMBAYARAN 
+                  var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_pembelian").val()))));
+                  var sisa = pembayaran - total_akhir;
+                  var sisa_kredit = total_akhir - pembayaran;
+
+                  if (sisa < 0  ){
+
+                     $("#kredit").val(sisa_kredit);
+                     $("#sisa_pembayaran_pembelian").val('0');
+                     $("#tanggal_jt").attr("disabled", false);
+                  }
+                  else{
+
+                    $("#sisa_pembayaran_pembelian").val(sisa);
+                    $("#kredit").val('0');
+                    $("#tanggal_jt").attr("disabled", true);
+                  }
+
+                  //AKHIR PERHITUNGAN PEMBAYARAN
             $("#jumlah_barang").val('');
             $("#potongan1").val('');
             $("#submit_produk").hide()
@@ -1277,6 +1296,25 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
             $("#potongan_persen").val(Math.round(pot_pers));
             $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
             $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
+                  //AWAL PERHITUNGAN PEMBAYARAN 
+                  var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_pembelian").val()))));
+                  var sisa = pembayaran - total_akhir;
+                  var sisa_kredit = total_akhir - pembayaran;
+
+                  if (sisa < 0  ){
+
+                     $("#kredit").val(sisa_kredit);
+                     $("#sisa_pembayaran_pembelian").val('0');
+                     $("#tanggal_jt").attr("disabled", false);
+                  }
+                  else{
+
+                    $("#sisa_pembayaran_pembelian").val(sisa);
+                    $("#kredit").val('0');
+                    $("#tanggal_jt").attr("disabled", true);
+                  }
+
+                  //AKHIR PERHITUNGAN PEMBAYARAN
             $("#jumlah_barang").val('');
             $("#potongan1").val('');
             $("#submit_produk").hide()
@@ -1315,6 +1353,25 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
             $("#potongan_persen").val(Math.round(pot_pers));
             $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
             $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
+                  //AWAL PERHITUNGAN PEMBAYARAN 
+                  var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_pembelian").val()))));
+                  var sisa = pembayaran - total_akhir;
+                  var sisa_kredit = total_akhir - pembayaran;
+
+                  if (sisa < 0  ){
+
+                     $("#kredit").val(sisa_kredit);
+                     $("#sisa_pembayaran_pembelian").val('0');
+                     $("#tanggal_jt").attr("disabled", false);
+                  }
+                  else{
+
+                    $("#sisa_pembayaran_pembelian").val(sisa);
+                    $("#kredit").val('0');
+                    $("#tanggal_jt").attr("disabled", true);
+                  }
+
+                  //AKHIR PERHITUNGAN PEMBAYARAN
             $("#jumlah_barang").val('');
             $("#potongan1").val('');
             $("#submit_produk").hide()
@@ -1326,7 +1383,6 @@ var subtotal_murni = parseInt(jumlah_barang) * parseInt(harga_baru);
   }
 
 });
-
 
 $("form").submit(function(){
      return false;
@@ -1947,6 +2003,26 @@ $(document).on('click', '.btn-hapus-tbs', function (e) {
       $("#total_pembelian1").val(tandaPemisahTitik(total_akhir));
       $("#potongan_pembelian").val(tandaPemisahTitik(diskon_faktur));
 
+                  //AWAL PERHITUNGAN PEMBAYARAN 
+                  var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_pembelian").val()))));
+                  var sisa = pembayaran - total_akhir;
+                  var sisa_kredit = total_akhir - pembayaran;
+
+                  if (sisa < 0  ){
+
+                     $("#kredit").val(sisa_kredit);
+                     $("#sisa_pembayaran_pembelian").val('0');
+                     $("#tanggal_jt").attr("disabled", false);
+                  }
+                  else{
+
+                    $("#sisa_pembayaran_pembelian").val(sisa);
+                    $("#kredit").val('0');
+                    $("#tanggal_jt").attr("disabled", true);
+                  }
+
+                  //AKHIR PERHITUNGAN PEMBAYARAN
+                  
       $.post("hapustbs_pembelian.php",{id:id},function(data){
       if (data == 'sukses') {
 
@@ -2479,6 +2555,26 @@ $.post('cek_kode_barang_tbs_pembelian.php',{kode_barang:kode_barang,session_id:s
                                       $("#potongan_pembelian").val(Math.round(diskon_faktur));
 
 
+                                        //AWAL PERHITUNGAN PEMBAYARAN 
+                                        var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_pembelian").val()))));
+                                        var sisa = pembayaran - sub_akhir;
+                                        var sisa_kredit = sub_akhir - pembayaran;
+
+                                        if (sisa < 0  ){
+
+                                           $("#kredit").val(sisa_kredit);
+                                           $("#sisa_pembayaran_pembelian").val('0');
+                                           $("#tanggal_jt").attr("disabled", false);
+                                        }
+                                        else{
+
+                                          $("#sisa_pembayaran_pembelian").val(sisa);
+                                          $("#kredit").val('0');
+                                          $("#tanggal_jt").attr("disabled", true);
+                                        }
+
+                                        //AKHIR PERHITUNGAN PEMBAYARAN
+                  
                                        $.post("update_pesanan_barang_beli.php",{harga:harga,jumlah_lama:jumlah_lama,jumlah_tax:jumlah_tax,potongan:potongan,id:id,jumlah_baru:jumlah_baru,kode_barang:kode_barang,sub_tampil:sub_tampil},function(){
 
                                       });
@@ -2488,7 +2584,7 @@ $.post('cek_kode_barang_tbs_pembelian.php',{kode_barang:kode_barang,session_id:s
                                     
 
                                     $("#kode_barang").trigger('chosen:open');
-                                    $("#pembayaran_pembelian").val("");
+                                    //$("#pembayaran_pembelian").val("");
 
                                   }
 

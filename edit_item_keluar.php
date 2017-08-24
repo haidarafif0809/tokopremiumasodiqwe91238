@@ -8,7 +8,7 @@ include 'db.php';
 include 'sanitasi.php';
 
 
-$no_faktur = $_GET['no_faktur'];
+$no_faktur = stringdoang($_GET['no_faktur']);
 //menampilkan seluruh data yang ada pada tabel pembelian
 $perintah = $db->query("SELECT * FROM item_keluar WHERE no_faktur = '$no_faktur'");
 $ambil = mysqli_fetch_array($perintah);   
@@ -200,7 +200,7 @@ mysqli_close($db);
       <b><input type="hidden" name="total" id="total_item_keluar" class="form-control" placeholder="Total" readonly="" style="height: 25px; width:90%; font-size:20px;" ></b>
 
       <label>Keterangan </label><br>
-      <textarea name="keterangan" id="keterangan" class="form-control" ></textarea>
+      <textarea name="keterangan" id="keterangan" class="form-control" ><?php echo $ambil['keterangan']; ?></textarea>
 
       <br>
 

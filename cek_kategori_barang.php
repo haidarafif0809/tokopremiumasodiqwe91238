@@ -1,5 +1,6 @@
 <?php 
 include 'db.php';
+include 'sanitasi.php';
 
 $kategori = $_POST['kategori'];
 

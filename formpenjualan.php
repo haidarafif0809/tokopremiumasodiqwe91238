@@ -2892,6 +2892,30 @@ else
 // perhitungan rupiah total akhir
     $("#total1").val(total_akhir.format(2, 3, '.', ','));
     $("#total2").val(total_akhir1.format(2, 3, '.', ','));
+
+//AWAL PERHITUNGAN JUMLAH BAYAR   
+    var pembayaran =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+    if(pembayaran == ''){
+      pembayaran = 0;
+    }
+        
+    var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total1").val()))));
+    var sisa = pembayaran - parseFloat(total.replace(',','.'));
+    var sisa_kredit = parseFloat(total.replace(',','.')) - pembayaran; 
+
+    if (sisa < 0 ){
+        $("#kredit").val(sisa_kredit.format(2, 3, '.', ','));
+        $("#sisa_pembayaran_penjualan").val('0');
+        $("#tanggal_jt").attr("disabled", false);
+        
+    }
+    else{
+        $("#sisa_pembayaran_penjualan").val(sisa.format(2, 3, '.', ','));
+        $("#kredit").val('0');
+        $("#tanggal_jt").attr("disabled", true);
+    } 
+//AKHIR PERHITUNGAN JUMLAH BAYAR
+
 // perhitungan rupiah total akhir
  if (pot_fakt_rp == 0.00)
       {

@@ -1036,7 +1036,26 @@ $(document).on('click', '#submit_barcode', function (e) {
         $("#potongan_persen").val(Math.round(pot_pers));
         $("#total_pembelian").val(tandaPemisahTitik(Math.round(total_akhir)));
         $("#total_pembelian1").val(tandaPemisahTitik(total_akhir1));
+        
+              //AWAL PERHITUNGAN PEMBAYARAN 
+                  var pembayaran = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_pembelian").val()))));
+                  var sisa = pembayaran - total_akhir;
+                  var sisa_kredit = total_akhir - pembayaran;
 
+                  if (sisa < 0  ){
+
+                     $("#kredit").val(sisa_kredit);
+                     $("#sisa_pembayaran_pembelian").val('0');
+                     $("#tanggal_jt").attr("disabled", false);
+                  }
+                  else{
+
+                    $("#sisa_pembayaran_pembelian").val(sisa);
+                    $("#kredit").val('0');
+                    $("#tanggal_jt").attr("disabled", true);
+                  }
+              //AKHIR PERHITUNGAN PEMBAYARAN
+                  
             // datatable ajax pembaruan
                 var tabel_tbs_pembelian = $('#tabel_tbs_pembelian').DataTable();
                     tabel_tbs_pembelian.draw();

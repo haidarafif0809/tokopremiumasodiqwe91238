@@ -18,15 +18,16 @@ $tanggal_sekarang = date('Y-m-d');
 $arr = array();
 $arr_diskon = array();   
 
+/*
 if($subtotal == '' OR $subtotal = 0){
 
 	$query_hapus_tbs_bonus_penjualan_disk = $db->query("DELETE FROM tbs_bonus_penjualan WHERE session_id = '$session_id'");
 	
 	$status_hapus = $status_hapus + 1;
 
-}
+}*/
 
-
+//GRATIS PROMO
 $select_program_free = $db->query("SELECT id,jenis_bonus,syarat_belanja FROM program_promo WHERE batas_akhir >= '$tanggal_sekarang' AND jenis_bonus = 'Free Produk' ");
 while ($data_program_free = mysqli_fetch_array($select_program_free)){
 
@@ -50,11 +51,14 @@ while ($data_program_free = mysqli_fetch_array($select_program_free)){
 
 			$query_hapus_tbs_bonus_penjualan_disk = $db->query("DELETE FROM tbs_bonus_penjualan WHERE kode_produk = '$data_tbs_bonus[kode_produk]' AND session_id = '$session_id' AND keterangan = 'Gratis'");
 
-				$status_hapus = $status_hapus + 1;
+			$status_hapus = $status_hapus + 1;
 
 				
 
 			}
+    	}
+    	else{
+
     	}
   }
 }
@@ -84,6 +88,9 @@ while ($data_program_diskon = mysqli_fetch_array($select_program_diskon)){
 
 
 			}
+    }
+    else{
+
     }      
 }
 

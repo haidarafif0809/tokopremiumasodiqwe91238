@@ -2892,6 +2892,30 @@ else
 // perhitungan rupiah total akhir
     $("#total1").val(total_akhir.format(2, 3, '.', ','));
     $("#total2").val(total_akhir1.format(2, 3, '.', ','));
+
+//AWAL PERHITUNGAN JUMLAH BAYAR   
+    var pembayaran =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+    if(pembayaran == ''){
+      pembayaran = 0;
+    }
+        
+    var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total1").val()))));
+    var sisa = pembayaran - parseFloat(total.replace(',','.'));
+    var sisa_kredit = parseFloat(total.replace(',','.')) - pembayaran; 
+
+    if (sisa < 0 ){
+        $("#kredit").val(sisa_kredit.format(2, 3, '.', ','));
+        $("#sisa_pembayaran_penjualan").val('0');
+        $("#tanggal_jt").attr("disabled", false);
+        
+    }
+    else{
+        $("#sisa_pembayaran_penjualan").val(sisa.format(2, 3, '.', ','));
+        $("#kredit").val('0');
+        $("#tanggal_jt").attr("disabled", true);
+    } 
+//AKHIR PERHITUNGAN JUMLAH BAYAR
+
 // perhitungan rupiah total akhir
  if (pot_fakt_rp == 0.00)
       {
@@ -2969,9 +2993,9 @@ if (pesan_alert == true) {
 
 
     
-      $("#pembayaran_penjualan").val('');
+      /*$("#pembayaran_penjualan").val('');
       $("#kredit").val('');
-      $("#sisa_pembayaran_penjualan").val('');
+      $("#sisa_pembayaran_penjualan").val('');*/
     
 
     $.post("hapustbs_penjualan.php",{id:id,kode_barang:kode_barang},function(data){
@@ -3037,7 +3061,29 @@ if (pesan_alert == true) {
 
       $("#total2").val(total_akhir1.format(2, 3, '.', ','));  
       $("#total1").val(total_akhir.format(2, 3, '.', ','));
-          
+
+//AWAL PERHITUNGAN JUMLAH BAYAR   
+    var pembayaran =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+    if(pembayaran == ''){
+      pembayaran = 0;
+    }
+        
+    var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total1").val()))));
+    var sisa = pembayaran - parseFloat(total.replace(',','.'));
+    var sisa_kredit = parseFloat(total.replace(',','.')) - pembayaran; 
+
+    if (sisa < 0 ){
+        $("#kredit").val(sisa_kredit.format(2, 3, '.', ','));
+        $("#sisa_pembayaran_penjualan").val('0');
+        $("#tanggal_jt").attr("disabled", false);
+        
+    }
+    else{
+        $("#sisa_pembayaran_penjualan").val(sisa.format(2, 3, '.', ','));
+        $("#kredit").val('0');
+        $("#tanggal_jt").attr("disabled", true);
+    } 
+//AKHIR PERHITUNGAN JUMLAH BAYAR     
 
       if (pot_fakt_rp == 0.00){
         $("#potongan_penjualan").val();
@@ -3463,6 +3509,28 @@ else if(pot_fakt_rp != 0 && pot_fakt_per != 0)
       $("#total1").val(total_akhir.format(2, 3, '.', ','));
       $("#total2").val(total_akhir1.format(2, 3, '.', ','));
 
+//AWAL PERHITUNGAN JUMLAH BAYAR   
+    var pembayaran =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+    if(pembayaran == ''){
+      pembayaran = 0;
+    }
+        
+    var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total1").val()))));
+    var sisa = pembayaran - parseFloat(total.replace(',','.'));
+    var sisa_kredit = parseFloat(total.replace(',','.')) - pembayaran; 
+
+    if (sisa < 0 ){
+        $("#kredit").val(sisa_kredit.format(2, 3, '.', ','));
+        $("#sisa_pembayaran_penjualan").val('0');
+        $("#tanggal_jt").attr("disabled", false);
+        
+    }
+    else{
+        $("#sisa_pembayaran_penjualan").val(sisa.format(2, 3, '.', ','));
+        $("#kredit").val('0');
+        $("#tanggal_jt").attr("disabled", true);
+    } 
+//AKHIR PERHITUNGAN JUMLAH BAYAR
  if (pot_fakt_rp == 0.00)
       {
         $("#potongan_penjualan").val();
@@ -3557,6 +3625,30 @@ $.get("cek_program_promo.php",function(program){
       $("#total1").val(total_akhir.format(2, 3, '.', ','));
       $("#total2").val(total_akhir1.format(2, 3, '.', ','));
       $("#tax_rp").val(hasil_tax.format(2, 3, '.', ','));
+
+//AWAL PERHITUNGAN JUMLAH BAYAR   
+    var pembayaran =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+    if(pembayaran == ''){
+      pembayaran = 0;
+    }
+        
+    var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total1").val()))));
+    var sisa = pembayaran - parseFloat(total.replace(',','.'));
+    var sisa_kredit = parseFloat(total.replace(',','.')) - pembayaran; 
+
+    if (sisa < 0 ){
+        $("#kredit").val(sisa_kredit.format(2, 3, '.', ','));
+        $("#sisa_pembayaran_penjualan").val('0');
+        $("#tanggal_jt").attr("disabled", false);
+        
+    }
+    else{
+        $("#sisa_pembayaran_penjualan").val(sisa.format(2, 3, '.', ','));
+        $("#kredit").val('0');
+        $("#tanggal_jt").attr("disabled", true);
+    } 
+//AKHIR PERHITUNGAN JUMLAH BAYAR
+
       $("#kode_barang").focus();
 //pengambilan data untuk form pembayaran
 
@@ -4584,38 +4676,36 @@ if (diskon == 0,00 || diskon == '' )
 
 
 
-        <script>
-        //SCRIPT KEYUP JUMLAH BAYARNYA
-        $(document).ready(function(){
-        $("#pembayaran_penjualan").keyup(function(){
-        var pembayaran =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
-        var total =   bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total1").val()))));
-        var sisa = parseFloat(pembayaran.replace(',','.')) - parseFloat(total.replace(',','.'));
-        var sisa_kredit = parseFloat(total.replace(',','.')) - parseFloat(pembayaran.replace(',','.')); 
+<script>
+//SCRIPT KEYUP JUMLAH BAYARNYA
+$(document).ready(function(){
+  $("#pembayaran_penjualan").keyup(function(){
+    
+    var pembayaran =  bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#pembayaran_penjualan").val()))));
+    if(pembayaran == ''){
+      pembayaran = 0;
+    }
+        
+    var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total1").val()))));
+    var sisa = pembayaran - parseFloat(total.replace(',','.'));
+    var sisa_kredit = parseFloat(total.replace(',','.')) - pembayaran; 
 
-
-        if (sisa < 0 )
-        {
+    if (sisa < 0 ){
         $("#kredit").val(sisa_kredit.format(2, 3, '.', ','));
         $("#sisa_pembayaran_penjualan").val('0');
         $("#tanggal_jt").attr("disabled", false);
         
-        }
-        
-        else  
-        {
+    }
+    else{
         $("#sisa_pembayaran_penjualan").val(sisa.format(2, 3, '.', ','));
         $("#kredit").val('0');
         $("#tanggal_jt").attr("disabled", true);
-        
-        } 
-        
-        
-        });
+    } 
         
         
-        });
-        </script>
+  });         
+});
+</script>
 
 
  

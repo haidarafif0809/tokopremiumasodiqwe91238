@@ -62,7 +62,7 @@ $no_faktur = $_GET['no_faktur'];
 
             $total_item = $total_item + $jumlah_barang;
            
-           echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. $jumlah_barang .'</td>  <td style="padding:3px"> '. rp($harga) .'</td>  <td style="padding:3px"> '. rp($data2['subtotal']) . ' </td></tr>';
+           echo '<tr><td width:"50%"> '. $data2['nama_barang'] .' </td> <td style="padding:3px"> '. $jumlah_barang .'</td>  <td style="padding:3px"> '. rp($harga) .'</td> </tr>';
            
            }
            
@@ -77,7 +77,6 @@ mysqli_close($db);
  <table>
   <tbody>
       <tr><td  width="50%">Total Item</td> <td> :</td> <td> <?php echo $total_item; ?> </td></tr>
-      <tr><td width="50%">Total Penjualan</td> <td> :</td> <td><?php echo rp($data0['total']); ?> </tr>         
 
   </tbody>
 </table>

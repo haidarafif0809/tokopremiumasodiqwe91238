@@ -312,21 +312,21 @@ $select = $db->query("SELECT kode_grup_akun, nama_grup_akun FROM grup_akun WHERE
 $total_biaya = 0;
 while($data = mysqli_fetch_array($select))
 {
-	echo "<h4><b>". $data['kode_grup_akun'] ." ".$data['nama_grup_akun'] ." </b></h4>";
+  echo "<h4><b>". $data['kode_grup_akun'] ." ".$data['nama_grup_akun'] ." </b></h4>";
 
-	$subtotal_biaya = 0;
+  $subtotal_biaya = 0.00;
 
 $select_grup_akun = $db->query("SELECT kode_grup_akun, nama_grup_akun FROM grup_akun WHERE kategori_akun = 'Biaya' AND tipe_akun = 'Akun Header' AND parent= '$data[kode_grup_akun]' ");
 while ($datagrup_akun = mysqli_fetch_array($select_grup_akun))
 {
-	echo "<h4 style='padding-left:25px'><b>" .$datagrup_akun['kode_grup_akun']." ".$datagrup_akun['nama_grup_akun'] ."</b></h4>";
+  echo "<h4 style='padding-left:25px'><b>" .$datagrup_akun['kode_grup_akun']." ".$datagrup_akun['nama_grup_akun'] ."</b></h4>";
 
 $select_daftar_akun = $db->query("SELECT da.kode_daftar_akun, da.nama_daftar_akun, SUM(j.debit) - SUM(j.kredit) AS total FROM daftar_akun da INNER JOIN jurnal_trans j  ON da.kode_daftar_akun = j.kode_akun_jurnal WHERE da.kategori_akun = 'Biaya' AND da.tipe_akun = 'Beban Operasional' AND da.grup_akun= '$datagrup_akun[kode_grup_akun]' AND date(j.waktu_jurnal) >= '$dari_tanggal' AND date(j.waktu_jurnal) <= '$sampai_tanggal' GROUP BY j.kode_akun_jurnal ");
 
 while ($datadaftar_akun = mysqli_fetch_array($select_daftar_akun))
 {
 
-if ($datadaftar_akun['total'] < 0 ) {
+if ($datadaftar_akun['total'] < 0.00 ) {
   echo "
  <table>
   <tbody>
@@ -347,34 +347,19 @@ echo "
   }
 
 
-	$subtotal_biaya = $subtotal_biaya + $datadaftar_akun['total'];
+  $subtotal_biaya = $subtotal_biaya + $datadaftar_akun['total'];
 
 }
 
-if ($subtotal_biaya < 0) {
-  echo "
- <table>
-  <tbody>
-    <tr><td width='100%'><h4 style='padding-left:25px'><b>TOTAL ".$datagrup_akun['nama_grup_akun'] ." </h4></td> <td> <h4><b>  (".rp($subtotal_biaya).")</b></h4>  </td></tr>
-  </tbody>
-</table>
-";
-}
-else {
-  echo "
- <table>
-  <tbody>
-    <tr><td width='100%'><h4 style='padding-left:25px'><b>TOTAL ".$datagrup_akun['nama_grup_akun'] ." </h4></td> <td> <h4><b>  ".rp($subtotal_biaya)."</b></h4>  </td></tr>
-  </tbody>
-</table>
-";
-}
+}//PENUTUP WHILE BIAYA AKUN DARI AKUN HEADER
 
 
-	$total_biaya = $total_biaya + $subtotal_biaya;
-}
+//TOTAL SELURUH BIAYA 
 
-if ($total_biaya < 0) {
+  $total_biaya = $total_biaya + $subtotal_biaya;
+
+
+if ($total_biaya < 0.00) {
  echo "
  <table>
   <tbody>
@@ -393,6 +378,8 @@ else {
 ";
 }
 
+
+//PENUTUP WHILE BIAYA HEADER
 
 
 } //while BIAYA

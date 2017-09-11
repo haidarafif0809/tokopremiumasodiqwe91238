@@ -66,7 +66,7 @@ $select_daftar_akun = $db->query("SELECT da.grup_akun, da.kode_daftar_akun, da.n
 while ($datadaftar_akun = mysqli_fetch_array($select_daftar_akun))
 {
 
-if ($datadaftar_akun['total'] < 0) {
+if ($datadaftar_akun['total'] < 0.00) {
 
   echo "
  <table>
@@ -92,7 +92,7 @@ $total_pendapatan_jual = $total_pendapatan_jual  + $datadaftar_akun['total'];
 
 }
 
-if ($total_pendapatan_jual < 0) {
+if ($total_pendapatan_jual < 0.00) {
 
   echo "
  <table>
@@ -120,7 +120,7 @@ else{
 $total_pendapatan = $total_pendapatan + $total_pendapatan_jual;
 }
 
-if ($total_pendapatan < 0) {
+if ($total_pendapatan < 0.00) {
 
   echo "
  <table>
@@ -172,7 +172,7 @@ $select_daftar_akun = $db->query("SELECT da.kode_daftar_akun, da.nama_daftar_aku
 while ($datadaftar_akun = mysqli_fetch_array($select_daftar_akun))
 {
 
-if ($datadaftar_akun['total'] < 0) {
+if ($datadaftar_akun['total'] < 0.00) {
 
   echo "
  <table>
@@ -199,7 +199,7 @@ $subtotal_hpp = $subtotal_hpp + $datadaftar_akun['total'];
 }
 
 
-if ($subtotal_hpp < 0) {
+if ($subtotal_hpp < 0.00) {
 
   echo "
  <table>
@@ -226,7 +226,7 @@ $total_hpp = $total_hpp + $subtotal_hpp;
 
 }
 
-if ($total_hpp < 0) {
+if ($total_hpp < 0.00) {
 
   echo "
  <table>
@@ -255,7 +255,7 @@ else{
 
 
 $laba_kotor = $total_pendapatan - $total_hpp;
-if ($laba_kotor < 0) {
+if ($laba_kotor < 0.00) {
 
   echo "
  <table>
@@ -288,7 +288,7 @@ while($data = mysqli_fetch_array($select))
 {
   echo "<h4><b>". $data['kode_grup_akun'] ." ".$data['nama_grup_akun'] ." </b></h4>";
 
-  $subtotal_biaya = 0;
+  $subtotal_biaya = 0.00;
 
 $select_grup_akun = $db->query("SELECT kode_grup_akun, nama_grup_akun FROM grup_akun WHERE kategori_akun = 'Biaya' AND tipe_akun = 'Akun Header' AND parent= '$data[kode_grup_akun]' ");
 while ($datagrup_akun = mysqli_fetch_array($select_grup_akun))
@@ -300,7 +300,7 @@ $select_daftar_akun = $db->query("SELECT da.kode_daftar_akun, da.nama_daftar_aku
 while ($datadaftar_akun = mysqli_fetch_array($select_daftar_akun))
 {
 
-if ($datadaftar_akun['total'] < 0 ) {
+if ($datadaftar_akun['total'] < 0.00 ) {
   echo "
  <table>
   <tbody>
@@ -325,30 +325,15 @@ echo "
 
 }
 
-if ($subtotal_biaya < 0) {
-  echo "
- <table>
-  <tbody>
-    <tr><td width='100%'><h4 style='padding-left:25px'><b>TOTAL ".$datagrup_akun['nama_grup_akun'] ." </h4></td> <td> <h4><b>  (".rp($subtotal_biaya).")</b></h4>  </td></tr>
-  </tbody>
-</table>
-";
-}
-else {
-  echo "
- <table>
-  <tbody>
-    <tr><td width='100%'><h4 style='padding-left:25px'><b>TOTAL ".$datagrup_akun['nama_grup_akun'] ." </h4></td> <td> <h4><b>  ".rp($subtotal_biaya)."</b></h4>  </td></tr>
-  </tbody>
-</table>
-";
-}
+}//PENUTUP WHILE BIAYA AKUN DARI AKUN HEADER
 
+
+//TOTAL SELURUH BIAYA 
 
   $total_biaya = $total_biaya + $subtotal_biaya;
-}
 
-if ($total_biaya < 0) {
+
+if ($total_biaya < 0.00) {
  echo "
  <table>
   <tbody>
@@ -368,13 +353,15 @@ else {
 }
 
 
+//PENUTUP WHILE BIAYA HEADER
+
 
 } //while BIAYA
 
 
 $laba_rugi = $laba_kotor - $total_biaya;
 
-if ($laba_rugi < 0) {
+if ($laba_rugi < 0.00) {
   echo "
  <table>
   <tbody>

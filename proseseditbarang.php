@@ -67,8 +67,7 @@ $data_id_barang = mysqli_fetch_array($query_id_barang);
       'over_stok' => $over_stok,  
       'berkaitan_dgn_stok' => $tipe,  
       'tipe_barang' => $tipe,  
-      'status' => $status,  
-      'gudang' => $gudang, 
+      'status' => $status,
       'satuan' => $satuan,  
       'id' => $data_id_barang['id'] ,  
   

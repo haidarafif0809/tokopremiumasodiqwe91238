@@ -69,7 +69,7 @@ $data_id_barang = mysqli_fetch_array($query_id_barang);
       'tipe_barang' => $tipe,  
       'status' => $status,
       'satuan' => $satuan,  
-      'id' => $data_id_barang['id'] ,  
+      'id' => $id ,  
   
   
     ));  

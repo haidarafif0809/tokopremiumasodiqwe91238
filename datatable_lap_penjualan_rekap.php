@@ -16,7 +16,7 @@ $total_sisa = 0;
 $total_kredit = 0;
 
 
-	$query_sum_total = $db->query("SELECT SUM(tunai) as tunai,SUM(total) as total,SUM(potongan) as potongan ,SUM(tax) as tax,SUM(sisa) as sisa,SUM(kredit) as kredit FROM penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' ");
+	$query_sum_total = $db->query("SELECT SUM(tunai) as tunai,SUM(total) as total,SUM(potongan) as potongan ,SUM(tax) as tax,SUM(sisa) as sisa,SUM(nilai_kredit) as kredit FROM penjualan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' ");
 
 	$data_sum_total = mysqli_fetch_array($query_sum_total);
 	
@@ -53,14 +53,14 @@ $columns = array(
 
 // getting total number records without any search
 
-$sql = " SELECT pel.nama_pelanggan,pel.kode_pelanggan AS code_card,p.id,p.tanggal,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit,p.tunai ";
+$sql = " SELECT pel.nama_pelanggan,pel.kode_pelanggan AS code_card,p.id,p.tanggal,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.nilai_kredit,p.tunai ";
 $sql.="FROM penjualan p INNER JOIN pelanggan pel ON p.kode_pelanggan = pel.id WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal' ";
 
 $query=mysqli_query($conn, $sql) or die("eror 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 	
-$sql = " SELECT pel.nama_pelanggan,pel.kode_pelanggan AS code_card,p.id,p.tanggal,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.kredit,p.tunai ";
+$sql = " SELECT pel.nama_pelanggan,pel.kode_pelanggan AS code_card,p.id,p.tanggal,p.no_faktur,p.kode_pelanggan,p.total,p.jam,p.user,p.status,p.potongan,p.tax,p.sisa,p.nilai_kredit,p.tunai ";
 $sql.="FROM penjualan p INNER JOIN pelanggan pel ON p.kode_pelanggan = pel.id WHERE p.tanggal >= '$dari_tanggal' AND p.tanggal <= '$sampai_tanggal' ";
 
 
@@ -103,7 +103,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 				$nestedData[] = "<p align='right'>".rp($row['total'])."</p>";
 				$nestedData[] = "<p align='right'>".rp($row['tunai'])."</p>";
 				$nestedData[] = "<p align='right'>".rp($row['sisa'])."</p>";
-				$nestedData[] = "<p align='right'>".rp($row['kredit'])."</p>";
+				$nestedData[] = "<p align='right'>".rp($row['nilai_kredit'])."</p>";
 				$nestedData[] = $row["id"];
 				$data[] = $nestedData;
 			}
